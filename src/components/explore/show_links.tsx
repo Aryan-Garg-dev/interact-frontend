@@ -11,7 +11,7 @@ interface Props {
 const Links = ({ links, title = 'Links' }: Props) => {
   return (
     <div>
-      {links && links.length > 0 ? (
+      {links && links.length > 0 && (
         <div className="w-full flex flex-col gap-2 relative">
           <div className="text-lg font-semibold">{title}</div>
           <div className="w-full flex gap-4 justify-start flex-wrap">
@@ -27,8 +27,6 @@ const Links = ({ links, title = 'Links' }: Props) => {
             })}
           </div>
         </div>
-      ) : (
-        <></>
       )}
     </div>
   );

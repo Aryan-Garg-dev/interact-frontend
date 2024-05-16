@@ -59,7 +59,7 @@ const SignUp = () => {
     } else if (!/^[a-z]/.test(trimmedUsername)) {
       Toaster.error('Username must start with a letter');
       return;
-    } else if (!/^([a-z][a-z0-9_]{4,})$/.test(trimmedUsername)) {
+    } else if (!/^([a-z][a-z0-9_]{2,})$/.test(trimmedUsername)) {
       Toaster.error('Username can only contain letters, numbers, and underscores');
       return;
     }

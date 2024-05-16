@@ -8,7 +8,6 @@ import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 import NewPost from '@/sections/home/new_post';
-import ProfileCard from '@/sections/home/profile_card';
 import { navbarOpenSelector } from '@/slices/feedSlice';
 import RePostComponent from '@/components/home/repost';
 import Image from 'next/image';
@@ -69,7 +68,7 @@ const Feed = () => {
 
   return (
     <div className={`w-full max-md:w-[95%] max-md:mx-auto flex ${open ? 'gap-2' : 'gap-12'} transition-ease-out-500`}>
-      {clickedOnNewPost ? <NewPost setFeed={setFeed} setShow={setClickedOnNewPost} /> : <></>}
+      {clickedOnNewPost && <NewPost setFeed={setFeed} setShow={setClickedOnNewPost} />}
       {/* Create a New Post */}
       <div className="w-full max-lg:w-[80vw] max-md:px-0 max-md:w-screen flex flex-col gap-2">
         <div

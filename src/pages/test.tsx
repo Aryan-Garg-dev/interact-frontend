@@ -1,61 +1,66 @@
-import { useEffect, useState } from 'react';
-import generateRandomProfilePicture from '@/utils/generate_profile_picture';
-import Image from 'next/image';
-import { GetServerSidePropsContext } from 'next/types';
+// components/DraggableList.tsx
+import { useState } from 'react';
+import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
-const Home = () => {
-  const [downloadLink, setDownloadLink] = useState<string | null>(null);
+interface DraggableListProps {
+  items: string[];
+}
 
-  useEffect(() => {
-    const width = 1080;
-    const height = 1080;
+const DraggableList: React.FC<DraggableListProps> = ({ items }) => {
+  const [listItems, setListItems] = useState<string[]>(items);
 
-    generateRandomProfilePicture(width, height)
-      .then(imageFile => {
-        // Create a data URL for the download link
-        const url = URL.createObjectURL(imageFile);
+  const onDragEnd = (result: DropResult) => {
+    if (!result.destination) return;
 
-        // Set the download link in the state
-        setDownloadLink(url);
-      })
-      .catch(error => console.error('Error generating gradient image:', error));
-  }, []);
+    const newItems = [...listItems];
+    const [removed] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index, 0, removed);
+    setListItems(newItems);
+  };
 
   return (
-    <div>
-      <Image className="w-[90vh] h-[90vh]" height={10000} width={10000} src={String(downloadLink)} alt="" />
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="droppable">
+        {provided => (
+          <div {...provided.droppableProps} ref={provided.innerRef}>
+            {listItems.map((item, index) => (
+              <Draggable key={index} draggableId={index.toString()} index={index}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    style={{
+                      padding: '8px',
+                      marginBottom: '4px',
+                      backgroundColor: snapshot.isDragging ? 'lightgreen' : 'lightblue',
+                      ...provided.draggableProps.style,
+                    }}
+                  >
+                    {item}
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
+  );
+};
 
-      {downloadLink && (
-        <div>
-          <p>Generated Gradient Image:</p>
-          <a href={downloadLink} download="gradient_image.png">
-            Download Gradient Image
-          </a>
-        </div>
-      )}
+const App: React.FC = () => {
+  const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
 
-      <style jsx>{`
-        canvas {
-          border: 1px solid #000;
-        }
-      `}</style>
+  return (
+    <div className="w-[100vw] h-[100vh] relative">
+      <div className="w-1/2 absolute translate-x-1/2 translate-y-1/2">
+        <DraggableList items={items} />
+        <div>hello</div>
+      </div>
     </div>
   );
 };
 
-export const getServerSideProps = async (context: GetServerSidePropsContext) => {
-  if (process.env.NODE_ENV != 'development') {
-    return {
-      redirect: {
-        permanent: true,
-        destination: '/home',
-      },
-      props: {},
-    };
-  }
-  return {
-    props: {},
-  };
-};
-
-export default Home;
+export default App;

@@ -39,7 +39,7 @@ const Posts = () => {
       .then(res => {
         if (res.statusCode === 200) {
           const addedPosts = [...posts, ...res.data.posts];
-          if (addedPosts.length === posts.length) setHasMore(false);
+          if (addedPosts.length === posts.length || res.data.posts?.length < 10) setHasMore(false);
           setPosts(addedPosts);
           setPage(prev => prev + 1);
           setLoading(false);

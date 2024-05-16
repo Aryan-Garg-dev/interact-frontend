@@ -28,7 +28,7 @@ const OrganisationHistoryWrapper = ({ children, history }: Props) => {
           </Link>
           <div className="text-xxs">{getDisplayTime(history.createdAt, false)}</div>
         </div>
-        <div className="text-sm flex">- {children}</div>
+        <div className="text-sm flex gap-1">- {children}</div>
       </div>
     </>
   );

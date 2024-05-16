@@ -207,7 +207,7 @@ const Post = ({
             <div className="text-xs font-normal text-gray-500">@{post.user.username}</div>
           </Link>
           <div className="flex-center gap-2 text-xs text-gray-400">
-            {post.isEdited ? <div>(edited)</div> : <></>}
+            {post.isEdited && <div>(edited)</div>}
             <div>{moment(post.postedAt).fromNow()}</div>
             {clickedOnEdit || (post.userID == loggedInUser.id && isRepost) ? (
               <></>

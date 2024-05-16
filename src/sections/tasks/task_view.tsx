@@ -17,6 +17,7 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import UserHoverCard from '@/components/common/user_hover_card';
+import ToolTip from '@/components/utils/tooltip';
 
 interface Props {
   task: Task;
@@ -226,12 +227,10 @@ const Task = ({
         {isAssignedUser(user.id) &&
           (task.isCompleted ? (
             <div className="w-full flex justify-center gap-2 border-t-[1px] pt-4 border-[#34343479]">
-              <div className="w-fit text-xl font-semibold text-gradient">Not Completed?</div>
-              <span
-                onClick={toggleComplete}
-                className="text-lg cursor-pointer hover-underline-animation after:bg-dark_primary_btn"
-              >
-                Mark incomplete
+              <div></div>
+              <span onClick={toggleComplete} className="relative group cursor-pointer">
+                <ToolTip content="Mark Incomplete" />
+                <div className="text-xl font-semibold text-gradient"> Not Completed?</div>
               </span>
             </div>
           ) : (

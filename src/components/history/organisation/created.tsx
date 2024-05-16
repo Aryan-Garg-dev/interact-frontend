@@ -1,5 +1,6 @@
 import { OrganizationHistory } from '@/types';
 import OrganizationHistoryWrapper from '@/wrappers/organisation_history';
+import { ArrowUpRight } from '@phosphor-icons/react';
 import Link from 'next/link';
 import React from 'react';
 
@@ -46,13 +47,14 @@ const Created = ({ history }: Props) => {
     case 6:
       return (
         <OrganizationHistoryWrapper history={history}>
-          <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            Created a Post:{' '}
-            <Link target="_blank" href={'/explore/post/' + history.post?.id} className="line-clamp-1 font-semibold">
-              {history.post?.content}
-            </Link>{' '}
-            🎉
-          </div>
+          <Link
+            target="_blank"
+            href={'/explore/post/' + history.post?.id}
+            className="w-fit bg-priority_low px-1 rounded-md flex-center gap-2"
+          >
+            Created a New Post!
+            <ArrowUpRight weight="bold" />
+          </Link>
         </OrganizationHistoryWrapper>
       );
     case 9:

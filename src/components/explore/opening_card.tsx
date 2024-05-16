@@ -50,7 +50,7 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
 
       <div className="w-[calc(100%-140px)] flex flex-col gap-2">
         <div className="w-5/6 flex flex-col gap-1">
-          <div className="font-bold text-2xl max-lg:text-lg text-gradient">{opening.title}</div>
+          <div className="font-bold text-2xl max-lg:text-lg text-gradient line-clamp-1">{opening.title}</div>
           <div className="font-medium text-lg max-lg:text-sm">
             {org ? (
               <span className="w-fit flex-center gap-1">
@@ -63,7 +63,7 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
         </div>
 
         {opening.tags.length > 0 && (
-          <div className="w-full flex flex-wrap gap-2">
+          <div className="w-full flex flex-wrap gap-1">
             {opening.tags &&
               opening.tags // Splicing causes array mutation
                 .filter((tag, index) => {
@@ -73,15 +73,15 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
                   return (
                     <div
                       key={tag}
-                      className="flex-center p-1 font-primary text-xs dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg"
+                      className="flex-center px-2 py-1 font-primary text-xs dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg"
                     >
                       {tag}
                     </div>
                   );
                 })}
             {opening.tags.length - 3 > 0 && (
-              <div className="flex-center p-2 font-primary text-xs dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-xl">
-                + {opening.tags.length - 3}
+              <div className="flex-center px-2 py-1 font-primary text-xs dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg">
+                +{opening.tags.length - 3}
               </div>
             )}
           </div>

@@ -326,3 +326,8 @@ html {
     transform: translateX(-25%);
   }
 }
+
+[data-rbd-draggable-id] { 
+  left: auto !important; 
+  top: auto !important; 
+}
