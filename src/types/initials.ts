@@ -229,6 +229,7 @@ export const initialApplication: Application = {
   content: '',
   resume: '',
   links: [],
+  score: -1,
   createdAt: new Date(),
 };
 

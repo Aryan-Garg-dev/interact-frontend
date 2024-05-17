@@ -14,6 +14,7 @@ import { initialApplication } from '@/types/initials';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import { useSelector } from 'react-redux';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
+import moment from 'moment';
 
 interface Props {
   applicationIndex: number;
@@ -175,20 +176,16 @@ const ApplicationView = ({
 
   return (
     <>
-      {clickedOnAccept ? (
+      {clickedOnAccept && (
         <ConfirmDelete
           setShow={setClickedOnAccept}
           handleDelete={handleAccept}
           title="Confirm Accept?"
           subtitle="You can later add/remove users from your project"
         />
-      ) : (
-        <></>
       )}
-      {clickedOnReject ? (
+      {clickedOnReject && (
         <ConfirmDelete setShow={setClickedOnReject} handleDelete={handleReject} title="Confirm Reject?" />
-      ) : (
-        <></>
       )}
       <div className="sticky max-lg:fixed top-[158px] bg-white max-lg:top-navbar max-lg:right-0 w-[55%] max-lg:w-full max-h-[70vh] max-lg:max-h-screen max-lg:h-base max-lg:z-50 max-lg:backdrop-blur-2xl max-lg:backdrop-brightness-90 overflow-y-auto flex flex-col justify-between gap-8 p-8 font-primary dark:text-white border-[1px] max-lg:border-0 border-primary_btn  dark:border-dark_primary_btn rounded-lg max-lg:rounded-none z-10">
         <div className="w-full flex flex-col gap-10 max-lg:gap-8">
@@ -256,19 +253,17 @@ const ApplicationView = ({
               </div>
             </div>
           </div>
-          {application.email != '' ? (
+          {application.email != '' && (
             <div className="max-lg:w-3/5 max-md:w-full max-lg:text-center max-lg:mx-auto">
               Shared Email:{' '}
               <Link href={`mailto:${application.email}`} className="font-medium">
                 {application.email}
               </Link>
             </div>
-          ) : (
-            <></>
           )}
 
           <div className="max-lg:w-3/5 max-md:w-full max-lg:text-center max-lg:mx-auto">{application.content}</div>
-          {application.resume && application.resume != '' ? (
+          {application.resume && application.resume != '' && (
             <Link
               href={`${APPLICATION_RESUME_URL}/${application.resume}`}
               target="_blank"
@@ -276,12 +271,14 @@ const ApplicationView = ({
             >
               View Resume
             </Link>
-          ) : (
-            <></>
           )}
         </div>
 
-        {application.status == 0 || application.status == 1 ? (
+        <div className="w-fit h-fit text-xs underline underline-offset-4">
+          Submitted {moment(application.createdAt).fromNow()}
+        </div>
+
+        {(application.status == 0 || application.status == 1) && (
           <div className="w-full flex justify-center gap-12 max-lg:gap-4 border-t-[1px] border-primary_btn pt-4">
             <div
               onClick={() => setClickedOnAccept(true)}
@@ -306,8 +303,6 @@ const ApplicationView = ({
               {application.status == 0 ? 'Shortlist' : 'Shortlisted'}
             </div>
           </div>
-        ) : (
-          <></>
         )}
       </div>
     </>

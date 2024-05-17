@@ -60,7 +60,7 @@ const ProfileCompletion = () => {
           <div className="absolute text-gradient text-3xl top-[15px] right-[34px] opacity-0 group-hover:opacity-100 transition-ease-300">
             X
           </div>
-          <div className=" text-gradient opacity-100 group-hover:opacity-0 transition-all ease-in-out group-hover:duration-300 duration-0">
+          <div className="text-gradient opacity-100 group-hover:opacity-0 transition-all ease-in-out group-hover:duration-300 duration-0">
             {completionPercentage}%
           </div>
         </div>

@@ -268,6 +268,7 @@ export interface Application {
   content: string;
   resume: string;
   links: string[];
+  score: number;
   createdAt: Date;
 }
 

@@ -25,6 +25,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
   const [links, setLinks] = useState<string[]>([]);
   const [includeEmail, setIncludeEmail] = useState(false);
   const [includeResume, setIncludeResume] = useState(false);
+  const [yoe, setYoe] = useState(0);
 
   const user = useSelector(userSelector);
   let profilePic = user.profilePic;
@@ -56,7 +57,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
     }
     const toaster = Toaster.startLoad('Applying to Opening...');
 
-    const formData = { content, links, includeEmail, includeResume };
+    const formData = { content, links, includeEmail, includeResume, yoe };
 
     const URL = org ? `/org/${opening.organizationID}/applications/${opening.id}` : `${APPLICATION_URL}/${opening.id}`;
 
@@ -133,9 +134,23 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
               />
             </div>
             <div className="w-1/2 max-lg:w-full h-full flex flex-col justify-between max-lg:gap-2 max-lg:pb-8">
-              <div className="w-full flex flex-col gap-2">
-                <div className="text-xs ml-1 font-medium uppercase text-gray-500">Links ({links.length || 0}/3)</div>
-                <Links links={links} setLinks={setLinks} maxLinks={3} />
+              <div className="w-full flex flex-col gap-4">
+                <div className="w-full flex flex-col gap-2">
+                  <div className="text-xs ml-1 font-medium uppercase text-gray-500">Links ({links.length || 0}/3)</div>
+                  <Links links={links} setLinks={setLinks} maxLinks={3} />
+                </div>
+                <div className="w-full flex flex-col gap-2">
+                  <div className="text-xs ml-1 font-medium uppercase text-gray-500">Years of Experience</div>
+                  <input
+                    value={yoe}
+                    onChange={el => {
+                      const val = Number(el.target.value);
+                      if (val >= 0 && val <= 10) setYoe(val);
+                    }}
+                    type="number"
+                    className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
+                  />
+                </div>
               </div>
 
               <div className="w-full flex flex-col gap-2 max-md:pt-8">
