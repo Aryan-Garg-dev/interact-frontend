@@ -67,13 +67,12 @@ const InvitationCard = ({ invitation, project, setProject, org = false }: Props)
           <div className="grow flex flex-col gap-2">
             <div className="text-2xl font-semibold">{invitation.user.name}</div>
             <div className="font-medium">{invitation.title}</div>
-            <div className="font-medium">{'Member'}</div>
           </div>
           <div className="text-lg font-medium pr-4 cursor-default">{getInvitationStatus(invitation.status)}</div>
         </div>
 
         <div className="w-full flex items-center justify-between text-sm">
-          <div className="text-gray-400">Sent {moment(invitation.createdAt).format('DD MMM YYYY')}</div>
+          <div className="text-sm text-gray-400">Sent on {moment(invitation.createdAt).format('DD MMM YYYY')}</div>
           {invitation.status == 0 && (project.userID == user.id || user.managerProjects.includes(project.id)) && (
             <div onClick={() => setClickedOnWithdraw(true)} className="text-primary_danger cursor-pointer">
               Withdraw Invitation

@@ -54,7 +54,7 @@ const Applications = () => {
       ) : (
         <>
           {applications.length > 0 ? (
-            <div className="w-[50vw] max-lg:w-screen max-lg:px-6 mx-auto flex flex-col gap-4 py-2">
+            <div className="w-[50vw] max-lg:w-screen max-lg:px-6 mx-auto flex flex-col gap-4 py-8">
               {applications.map(application => {
                 return (
                   <Link

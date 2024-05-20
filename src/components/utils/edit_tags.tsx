@@ -163,7 +163,7 @@ const Tags = ({
           </Droppable>
         </DragDropContext> */}
 
-        {tags.length < maxTags ? (
+        {tags.length < maxTags && (
           <input
             type="text"
             className="grow text-sm border-[1px] bg-transparent border-transparent rounded-md px-3 py-2 outline-none"
@@ -172,11 +172,11 @@ const Tags = ({
             onChange={handleTagInputChange}
             onKeyDown={handleTagInputKeyDown}
           />
-        ) : (
-          <></>
         )}
       </div>
-      {suggestions ? <TagSuggestions tags={tags} setTags={setTags} maxTags={maxTags} /> : <></>}
+      {suggestions && (
+        <TagSuggestions match={tagInput} setMatch={setTagInput} tags={tags} setTags={setTags} maxTags={maxTags} />
+      )}
     </>
   );
 };

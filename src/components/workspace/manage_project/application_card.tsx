@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import { Application } from '@/types';
-import getApplicationStatus from '@/utils/funcs/get_application_status';
 import { initialAchievement } from '@/types/initials';
 import { Check, Plus, X } from '@phosphor-icons/react';
-import moment from 'moment';
 import ToolTip from '@/components/utils/tooltip';
 
 interface Props {
@@ -101,7 +99,9 @@ const ApplicationCard = ({
             border: 'none',
           }}
         />
-        <div className="text-gradient text-2xl font-semibold">{(application.score * 100).toFixed(2)}%</div>
+        {application.score != -1 && (
+          <div className="text-gradient text-2xl font-semibold">{(application.score * 100).toFixed(2)}%</div>
+        )}
       </div>
     </div>
   );

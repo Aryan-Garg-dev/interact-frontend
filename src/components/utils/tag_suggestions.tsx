@@ -3,27 +3,31 @@ import { CaretCircleLeft, CaretCircleRight } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 
 interface Props {
+  match?: string;
+  setMatch?: React.Dispatch<React.SetStateAction<string>>;
   tags: string[];
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
   maxTags?: number;
 }
 
-const TagSuggestions = ({ tags, setTags, maxTags = 5 }: Props) => {
+const TagSuggestions = ({ match = '', setMatch, tags, setTags, maxTags = 5 }: Props) => {
   const [page, setPage] = useState(1);
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
 
   const limit = 20;
-  const totalPages = Math.ceil(skill_suggestions.length / limit);
 
-  const getCurrentPageItems = () => {
+  const getCurrentPageItems = (arr: string[]) => {
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + limit;
-    return skill_suggestions.slice(startIndex, endIndex);
+
+    setTotalPages(Math.ceil(arr.length / limit));
+    return arr.slice(startIndex, endIndex);
   };
 
   useEffect(() => {
-    setSuggestions(getCurrentPageItems());
-  }, [page]);
+    setSuggestions(getCurrentPageItems(skill_suggestions.filter(el => el.match(match))));
+  }, [match, page]);
 
   return (
     <div className="w-full flex flex-col gap-2 mt-2">
@@ -54,7 +58,10 @@ const TagSuggestions = ({ tags, setTags, maxTags = 5 }: Props) => {
           ) : (
             <div
               key={suggestion}
-              onClick={() => setTags(prev => [...prev, suggestion])}
+              onClick={() => {
+                if (setMatch) setMatch('');
+                setTags(prev => [...prev, suggestion]);
+              }}
               className="border-[1px] border-primary_black rounded-lg px-2 py-1 text-xs cursor-pointer"
             >
               {suggestion}

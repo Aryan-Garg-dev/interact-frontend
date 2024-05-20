@@ -138,7 +138,7 @@ const EditProject = ({ projectToEdit, setShow, setProjectToEdit, setProjects, or
           <TextArea label="Project Description" val={description} setVal={setDescription} maxLength={1000} />
           <Tags label="Project Tags" tags={tags} setTags={setTags} maxTags={10} required={true} />
           <Links label="Project Links" links={links} setLinks={setLinks} maxLinks={5} />
-          <Checkbox label="Keep this Project Private" val={isPrivate} setVal={setIsPrivate} />
+          {/* <Checkbox label="Keep this Project Private" val={isPrivate} setVal={setIsPrivate} /> */}
           <PrimaryButton label="Edit Project" onClick={handleSubmit} width="40" />
         </div>
       </div>

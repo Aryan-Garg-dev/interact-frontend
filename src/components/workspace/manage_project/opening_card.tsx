@@ -74,7 +74,7 @@ const OpeningCard = ({ opening, project, setProject, org = false }: Props) => {
         <EditOpening setShow={setClickedOnEdit} opening={opening} project={project} setProject={setProject} org={org} />
       )}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
-      <div className="w-full bg-gray-100 hover:bg-white dark:hover:bg-transparent dark:bg-transparent font-primary dark:text-white border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-8 max-md:p-4 flex items-center gap-12 max-md:gap-4 transition-ease-300">
+      <div className="w-full bg-gray-100 hover:bg-white dark:hover:bg-transparent dark:bg-transparent font-primary dark:text-white border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-4 flex items-center gap-4 max-md:gap-4 transition-ease-300">
         <Image
           crossOrigin="anonymous"
           width={50}
@@ -86,15 +86,19 @@ const OpeningCard = ({ opening, project, setProject, org = false }: Props) => {
           blurDataURL={project.blurHash || 'no-hash'}
         />
 
-        <div className="grow flex flex-col gap-4 max-md:gap-2">
-          <div className="flex items-start justify-between">
-            <div className="w-5/6 flex flex-col gap-1">
-              <div className="font-bold text-2xl max-md:text-lg text-gradient">{opening.title}</div>
-              {/* <div className="text-lg max-md:text-sm">{project.title}</div> */}
-              <div className="text-sm text-gray-500">{moment(opening.createdAt).fromNow()}</div>
-              <div className="text-sm mt-2">
-                {opening.noApplications} Application{opening.noApplications == 1 ? '' : 's'}
-              </div>
+        <div className="w-full h-full flex items-start justify-between">
+          <div className="w-5/6 flex flex-col gap-1">
+            <div className="font-bold text-3xl max-md:text-lg text-gradient line-clamp-1">{opening.title}</div>
+            {/* <div className="text-lg max-md:text-sm">{project.title}</div> */}
+            <div className="text-xs text-gray-500 mb-8">{moment(opening.createdAt).fromNow()}</div>
+
+            <div className="w-fit flex-center gap-2 mb-1">
+              {opening.noApplications > 0 && (
+                <div className="text-sm">
+                  {opening.noApplications} Application{opening.noApplications == 1 ? '' : 's'}
+                </div>
+              )}
+
               {hasAccess &&
                 (opening.noApplications > 0 ? (
                   <Link
@@ -109,18 +113,18 @@ const OpeningCard = ({ opening, project, setProject, org = false }: Props) => {
                   </div>
                 ))}
             </div>
-            <div className="flex gap-3">
-              {hasAccess && <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={24} />}
-              {hasAccess && (
-                <TrashSimple
-                  onClick={() => setClickedOnDelete(true)}
-                  className="cursor-pointer"
-                  size={24}
-                  color="#ea333e"
-                  weight="fill"
-                />
-              )}
-            </div>
+          </div>
+          <div className="flex gap-3">
+            {hasAccess && <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={24} />}
+            {hasAccess && (
+              <TrashSimple
+                onClick={() => setClickedOnDelete(true)}
+                className="cursor-pointer"
+                size={24}
+                color="#ea333e"
+                weight="fill"
+              />
+            )}
           </div>
         </div>
       </div>

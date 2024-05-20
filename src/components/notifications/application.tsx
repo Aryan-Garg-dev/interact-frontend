@@ -18,10 +18,8 @@ const Application = ({ notification }: Props) => {
       applied for the opening of {notification.opening.title} at
       <span>
         {' '}
-        <Link className="font-bold" href={`/workspace/opening/${notification.opening.id}`}>
-          {notification.notificationType == 20
-            ? notification.opening.organization?.title
-            : notification.opening.project?.title}
+        <Link className="font-bold" href={`/workspace/manage/applications/${notification.opening.id}`}>
+          {notification.notificationType == 20 ? notification.opening.organization?.title : notification.project?.title}
         </Link>
       </span>
     </NotificationWrapper>

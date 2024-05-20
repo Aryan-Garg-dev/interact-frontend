@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import OrgSidebar from '@/components/common/org_sidebar';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
+import Protect from '@/utils/wrappers/protect';
 
 interface Props {
   oid: string;
@@ -185,7 +186,7 @@ const Applications = ({ oid }: Props) => {
   );
 };
 
-export default WidthCheck(NonOrgOnlyAndProtect(Applications));
+export default WidthCheck(Protect(Applications));
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { oid } = context.query;

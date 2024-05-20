@@ -8,6 +8,7 @@ import InvitationCard from '@/components/workspace/manage_project/invitation_car
 import AddCollaborators from '@/sections/workspace/manage_project/add_collaborators';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
 import { ORG_MANAGER } from '@/config/constants';
+import NoCollaborators from '@/components/fillers/collaborators';
 
 interface Props {
   project: Project;
@@ -22,11 +23,11 @@ const Collaborators = ({ project, setProject, org = false }: Props) => {
   const user = useSelector(userSelector);
 
   return (
-    <div className="w-[50vw] max-lg:w-screen mx-auto flex flex-col gap-8">
+    <div className="w-[50vw] max-lg:w-screen mx-auto flex flex-col gap-6">
       {clickedOnAddCollaborator && (
         <AddCollaborators setShow={setClickedOnAddCollaborator} project={project} setProject={setProject} org={org} />
       )}
-      <div className="w-taskbar max-lg:w-[95%] h-taskbar mx-auto flex gap-2 font-primary text-gray-200 text-lg">
+      <div className="w-full max-lg:w-[95%] h-taskbar flex gap-2 font-primary text-gray-200 text-lg">
         {(project.userID == user.id ||
           user.managerProjects.includes(project.id) ||
           (org && checkOrgAccess(ORG_MANAGER))) && (
@@ -59,37 +60,41 @@ const Collaborators = ({ project, setProject, org = false }: Props) => {
         </div>
       </div>
 
-      {clickedOnInvitations
-        ? project.invitations && (
-            <div className="w-full flex flex-col gap-2 max-lg:px-4 pb-4">
-              {project.invitations.map(invitation => {
-                return (
-                  <InvitationCard
-                    key={invitation.id}
-                    invitation={invitation}
-                    project={project}
-                    setProject={setProject}
-                    org={org}
-                  />
-                );
-              })}
-            </div>
-          )
-        : project.memberships && (
-            <div className="w-full flex flex-col gap-2 max-lg:px-4 pb-4">
-              {project.memberships.map(membership => {
-                return (
-                  <CollaboratorCard
-                    key={membership.id}
-                    membership={membership}
-                    project={project}
-                    setProject={setProject}
-                    org={org}
-                  />
-                );
-              })}
-            </div>
-          )}
+      {clickedOnInvitations ? (
+        project.invitations && project.invitations.length > 0 ? (
+          <div className="w-full flex flex-col gap-2 max-lg:px-4 pb-4">
+            {project.invitations.map(invitation => {
+              return (
+                <InvitationCard
+                  key={invitation.id}
+                  invitation={invitation}
+                  project={project}
+                  setProject={setProject}
+                  org={org}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <NoCollaborators />
+        )
+      ) : project.memberships && project.memberships.length > 0 ? (
+        <div className="w-full flex flex-col gap-2 max-lg:px-4 pb-4">
+          {project.memberships.map(membership => {
+            return (
+              <CollaboratorCard
+                key={membership.id}
+                membership={membership}
+                project={project}
+                setProject={setProject}
+                org={org}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <NoCollaborators />
+      )}
     </div>
   );
 };

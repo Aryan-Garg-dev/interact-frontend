@@ -2,7 +2,7 @@ import NoUserItems from '@/components/fillers/user_items';
 import PostComponent from '@/components/home/post';
 import RePostComponent from '@/components/home/repost';
 import { SERVER_ERROR } from '@/config/errors';
-import { EXPLORE_URL } from '@/config/routes';
+import { EXPLORE_URL, POST_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Post } from '@/types';
 import Toaster from '@/utils/toaster';
@@ -12,6 +12,8 @@ import PostsLoader from '@/components/loaders/posts';
 import Masonry from 'react-masonry-css';
 import Loader from '@/components/common/loader';
 import Mascot from '@/components/fillers/mascot';
+import { userSelector } from '@/slices/userSlice';
+import { useSelector } from 'react-redux';
 
 interface Props {
   userID: string;
@@ -24,9 +26,14 @@ const Posts = ({ userID, org = false }: Props) => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
+  const user = useSelector(userSelector);
+
   const getPosts = () => {
     setLoading(true);
-    const URL = `${EXPLORE_URL}/users/posts/${userID}?page=${page}&limit=${10}`;
+    const URL =
+      user.id == userID
+        ? `${POST_URL}/me?page=${page}&limit=${10}`
+        : `${EXPLORE_URL}/users/posts/${userID}?page=${page}&limit=${10}`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {

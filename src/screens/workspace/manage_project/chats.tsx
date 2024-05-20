@@ -12,6 +12,7 @@ import { initialGroupChat } from '@/types/initials';
 import EditChat from '@/sections/workspace/manage_project/edit_chat';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
+import NoChats from '@/components/fillers/project_chats';
 
 interface Props {
   project: Project;
@@ -44,18 +45,12 @@ const Chats = ({ project }: Props) => {
   }, [project.id]);
 
   return (
-    <div className="w-full flex flex-col gap-6 px-2 pb-6">
-      {clickedOnAddChat ? (
-        <>
-          <NewChat setShow={setClickedOnAddChat} project={project} setChats={setChats} />
-        </>
-      ) : (
-        <></>
-      )}
-      {project.userID == user.id || user.managerProjects.includes(project.id) ? (
+    <div className="w-[50vw] max-lg:w-screen mx-auto flex flex-col gap-6">
+      {clickedOnAddChat && <NewChat setShow={setClickedOnAddChat} project={project} setChats={setChats} />}
+      {(project.userID == user.id || user.managerProjects.includes(project.id)) && (
         <div
           onClick={() => setClickedOnAddChat(true)}
-          className="w-taskbar max-md:w-taskbar_md h-taskbar mx-auto text-gray-400 dark:text-gray-200 bg-white dark:bg-gradient-to-l dark:from-dark_primary_gradient_start dark:to-dark_primary_gradient_end px-4 max-md:px-2 py-3 rounded-lg cursor-pointer border-gray-300 border-[1px] dark:border-0 shadow-md hover:shadow-lg transition-ease-300 dark:hover:shadow-outer dark:shadow-outer flex justify-between items-center"
+          className="w-full max-md:w-taskbar_md h-taskbar text-gray-400 dark:text-gray-200 bg-white dark:bg-gradient-to-l dark:from-dark_primary_gradient_start dark:to-dark_primary_gradient_end px-4 max-md:px-2 py-3 rounded-lg cursor-pointer border-gray-300 border-[1px] dark:border-0 shadow-md hover:shadow-lg transition-ease-300 dark:hover:shadow-outer dark:shadow-outer flex justify-between items-center"
         >
           <div className="flex gap-2 items-center pl-2">
             <div className="font-primary dark:text-gray-200 text-lg">Create a new Chat</div>
@@ -66,44 +61,36 @@ const Chats = ({ project }: Props) => {
             weight="regular"
           />
         </div>
-      ) : (
-        <></>
       )}
 
       {loading ? (
         <Loader />
-      ) : (
-        <>
-          {chats ? (
-            <div className="flex justify-evenly px-4 pb-4">
-              <div className={`${clickedOnEditChat ? 'w-[40%]' : 'w-[720px]'} max-md:w-full flex flex-col gap-4`}>
-                {chats.map(chat => {
-                  return (
-                    <ChatCard
-                      key={chat.id}
-                      chat={chat}
-                      setClickedOnEditChat={setClickedOnEditChat}
-                      clickedEditChat={clickedEditChat}
-                      setClickedEditChat={setClickedEditChat}
-                    />
-                  );
-                })}
-              </div>
-              {clickedOnEditChat ? (
-                <EditChat
-                  chat={clickedEditChat}
-                  project={project}
-                  setStateChats={setChats}
-                  setShow={setClickedOnEditChat}
+      ) : chats && chats.length > 0 ? (
+        <div className="flex justify-evenly px-4 pb-4">
+          <div className={`${clickedOnEditChat ? 'w-[40%]' : 'w-[720px]'} max-md:w-full flex flex-col gap-4`}>
+            {chats.map(chat => {
+              return (
+                <ChatCard
+                  key={chat.id}
+                  chat={chat}
+                  setClickedOnEditChat={setClickedOnEditChat}
+                  clickedEditChat={clickedEditChat}
+                  setClickedEditChat={setClickedEditChat}
                 />
-              ) : (
-                <></>
-              )}
-            </div>
-          ) : (
-            <></>
+              );
+            })}
+          </div>
+          {clickedOnEditChat && (
+            <EditChat
+              chat={clickedEditChat}
+              project={project}
+              setStateChats={setChats}
+              setShow={setClickedOnEditChat}
+            />
           )}
-        </>
+        </div>
+      ) : (
+        <NoChats />
       )}
     </div>
   );

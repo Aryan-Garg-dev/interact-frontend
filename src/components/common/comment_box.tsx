@@ -231,9 +231,16 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
               </div>
             </div>
           ))}
+          {comments.length < item.noComments && (
+            <div className="w-full text-center pt-4 text-sm">
+              Comments are do not follow the guidelines are flagged.
+            </div>
+          )}
         </InfiniteScroll>
+      ) : item.noComments == 0 ? (
+        <div className="w-fit mx-auto text-xl"> {item.noComments} No Comments Yet :)</div>
       ) : (
-        <div className="w-fit mx-auto text-xl">No Comments Yet :)</div>
+        <div className="w-full text-center pt-4 text-sm">Comments are do not follow the guidelines are flagged.</div>
       )}
     </div>
   );

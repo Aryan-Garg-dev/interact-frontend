@@ -7,12 +7,12 @@ import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import ProjectView from '@/sections/workspace/project_view';
 import NewProject from '@/sections/workspace/new_project';
-import { Plus } from '@phosphor-icons/react';
 import { userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
 import NoProjects from '@/components/fillers/your_projects';
 import { navbarOpenSelector } from '@/slices/feedSlice';
 import { SERVER_ERROR } from '@/config/errors';
+import NewButton from '@/components/buttons/new_btn';
 
 const YourProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -69,18 +69,7 @@ const YourProjects = () => {
   return (
     <div className="w-full px-2">
       {clickedOnNewProject && <NewProject setShow={setClickedOnNewProject} setProjects={setProjects} />}
-
-      <div
-        onClick={() => setClickedOnNewProject(true)}
-        className="w-taskbar max-md:w-taskbar_md h-taskbar mx-auto text-gray-400 dark:text-gray-200 bg-white dark:bg-gradient-to-l dark:from-dark_primary_gradient_start dark:to-dark_primary_gradient_end px-4 max-md:px-2 py-3 rounded-lg cursor-pointer shadow-md hover:shadow-lg transition-ease-300 border-gray-300 border-[1px] dark:border-0 dark:hover:shadow-outer dark:shadow-outer flex justify-between items-center"
-      >
-        <div className="font-primary dark:text-gray-200 text-lg pl-2">Create a new project</div>
-        <Plus
-          size={36}
-          className="flex-center rounded-full hover:bg-primary_comp_hover dark:hover:bg-[#e9e9e933] p-2 transition-ease-300"
-          weight="regular"
-        />
-      </div>
+      <NewButton show={!clickedOnNewProject} onClick={() => setClickedOnNewProject(true)} />
       {loading ? (
         <Loader />
       ) : (
