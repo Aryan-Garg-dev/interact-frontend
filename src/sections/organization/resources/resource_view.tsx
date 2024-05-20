@@ -344,7 +344,7 @@ const ResourceView = ({
                 </>
               )}
 
-              <div className="text-xs font-medium text-gray-400 mt-2">
+              <div className="text-xs font-medium text-gray-400 mt-48">
                 Created {moment(resourceBucket.createdAt).fromNow()}
               </div>
             </div>
@@ -382,7 +382,7 @@ const ResourceView = ({
                   ))}
                 </table>
               ) : (
-                <Mascot message={'"Currently, this bucket is empty. Please check back later for updates.'} />
+                <Mascot message="The bucket is empty, check back later for updates!" />
               )}
             </div>
           </div>

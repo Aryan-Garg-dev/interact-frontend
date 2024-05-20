@@ -9,7 +9,7 @@ export default function Mascot({ message }: Props) {
       <div className="mascot w-fit scale-75 -mb-48">
         <div className="mascot flex flex-col justify-center items-center relative">
           <div
-            className="mascot-hat w-[6rem] h-[4.5rem] bg-[#FE8C05] flex justify-center border-4 border-black relative top-8"
+            className="mascot-hat w-[6rem] h-[4.5rem] bg-[#FE8C05] flex justify-center border-4 border-black relative top-4"
             style={{
               borderRadius: '20px',
               borderTopLeftRadius: '50%',

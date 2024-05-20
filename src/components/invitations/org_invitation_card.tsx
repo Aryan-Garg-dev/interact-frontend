@@ -127,7 +127,6 @@ const OrgInvitationCard = ({ invitation, setInvitations }: Props) => {
         <div className="grow flex flex-col gap-2">
           <div className="text-3xl font-bold text-gradient">{invitation.organization.title}</div>
           <div className="font-semibold">{invitation.title}</div>
-          <div className="font-medium">{'Member'}</div>
           <div className="text-xs">Invited {moment(invitation.createdAt).format('DD MMM YYYY')}</div>
         </div>
         {invitation.status == 0 ? (

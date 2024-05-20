@@ -79,34 +79,20 @@ const Personal = () => {
     <div className="w-full flex flex-col gap-2 p-2">
       {loading ? (
         <Loader />
+      ) : !new URLSearchParams(window.location.search).get('search') ? (
+        chats.length > 0 ? (
+          chats.map(chat => {
+            return <PersonalChatCard key={chat.id} chat={chat} setChats={setChats} />;
+          })
+        ) : (
+          <NoPersonalChats />
+        )
+      ) : filteredChats.length > 0 ? (
+        filteredChats.map(chat => {
+          return <PersonalChatCard key={chat.id} chat={chat} setChats={setChats} />;
+        })
       ) : (
-        <>
-          {!new URLSearchParams(window.location.search).get('search') ? (
-            <>
-              {chats.length > 0 ? (
-                <>
-                  {chats.map(chat => {
-                    return <PersonalChatCard key={chat.id} chat={chat} setChats={setChats} />;
-                  })}
-                </>
-              ) : (
-                <NoPersonalChats />
-              )}
-            </>
-          ) : (
-            <>
-              {filteredChats.length > 0 ? (
-                <>
-                  {filteredChats.map(chat => {
-                    return <PersonalChatCard key={chat.id} chat={chat} setChats={setChats} />;
-                  })}
-                </>
-              ) : (
-                <NoChats />
-              )}
-            </>
-          )}
-        </>
+        <NoChats />
       )}
     </div>
   );

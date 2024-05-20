@@ -10,7 +10,7 @@ import NewPostImages from '@/components/home/new_post_images';
 import NewPostHelper from '@/components/home/new_post_helper';
 import { Announcement, Poll, Post, User } from '@/types';
 import { useWindowWidth } from '@react-hook/window-size';
-import { currentOrgIDSelector } from '@/slices/orgSlice';
+import { currentOrgIDSelector, currentOrgSelector } from '@/slices/orgSlice';
 import getHandler from '@/handlers/get_handler';
 
 interface Props {
@@ -29,6 +29,7 @@ const NewPost = ({ setShow, setFeed, org = false }: Props) => {
   const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
   const user = useSelector(userSelector);
+  const currentOrg = useSelector(currentOrgSelector);
 
   useEffect(() => {
     document.documentElement.style.overflowY = 'hidden';
@@ -191,13 +192,13 @@ const NewPost = ({ setShow, setFeed, org = false }: Props) => {
               width={50}
               height={50}
               alt="user"
-              src={`${USER_PROFILE_PIC_URL}/${user.profilePic || 'default.jpg'}`}
+              src={`${USER_PROFILE_PIC_URL}/${org ? currentOrg.coverPic : user.profilePic || 'default.jpg'}`}
             />
             <div className="grow flex flex-col gap-4">
               <div className="flex justify-between items-center">
                 <div className="flex flex-col">
-                  <div className="text-2xl font-semibold">{user.name}</div>
-                  <div className="text-sm">@{user.username}</div>
+                  <div className="text-2xl font-semibold">{org ? currentOrg.title : user.name}</div>
+                  {!org && <div className="text-sm">@{user.username}</div>}
                 </div>
                 <div
                   onClick={handleSubmit}

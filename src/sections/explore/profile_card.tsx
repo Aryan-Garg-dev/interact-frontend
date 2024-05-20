@@ -91,12 +91,10 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
             src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
             className="rounded-full max-lg:mx-auto w-48 h-48 cursor-default"
           />
-          {user.isOrganization ? (
+          {user.isOrganization && (
             <div className="w-12 h-12 rounded-full absolute top-0 right-0 glassMorphism flex-center shadow-lg">
               <Buildings size={24} />
             </div>
-          ) : (
-            <></>
           )}
         </div>
 
@@ -127,7 +125,7 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
         <div className="w-full h-[1px] border-t-[1px] border-gray-400 border-dashed"></div>
 
         <div className="w-full flex flex-col gap-8 mt-2">
-          {user.tags && user.tags.length > 0 ? (
+          {user.tags && user.tags.length > 0 && (
             <div className="w-full flex flex-col gap-2">
               <div className="text-sm ml-1 font-medium uppercase text-gray-500">
                 {user.isOrganization ? 'Tags' : 'Skills'}
@@ -153,11 +151,9 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
                   })}
               </div>
             </div>
-          ) : (
-            <></>
           )}
 
-          {user.links && user.links.length > 0 ? (
+          {user.links && user.links.length > 0 && (
             <div className="w-full flex flex-col gap-2">
               <div className="text-sm ml-1 font-medium uppercase text-gray-500">Links</div>
               <div
@@ -181,8 +177,6 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
                   })}
               </div>
             </div>
-          ) : (
-            <></>
           )}
         </div>
         <div className="dark:text-white w-fit absolute max-lg:mt-8 max-lg:static top-4 right-4 flex gap-2">

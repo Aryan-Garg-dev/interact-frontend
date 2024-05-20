@@ -25,8 +25,14 @@ const Request = () => {
     const URL = `${MESSAGING_URL}/personal`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      setChats(sortChats(res.data.requests || []));
-      setFilteredChats(res.data.requests || []);
+      const requests: Chat[] = res.data.requests || [];
+      setChats(sortChats(requests));
+      setFilteredChats(requests);
+
+      const newChats = [];
+      for (const chat of requests) if (!currentChats.includes(chat.id)) newChats.push(chat.id);
+
+      if (newChats.length > 0) socketService.setupChats([...currentChats, ...newChats]);
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -63,34 +69,20 @@ const Request = () => {
     <div className="w-full flex flex-col gap-2 p-2">
       {loading ? (
         <Loader />
+      ) : !new URLSearchParams(window.location.search).get('search') ? (
+        chats.length > 0 ? (
+          chats.map(chat => {
+            return <PersonalChatCard key={chat.id} chat={chat} setChats={setChats} />;
+          })
+        ) : (
+          <NoChats />
+        )
+      ) : filteredChats.length > 0 ? (
+        filteredChats.map(chat => {
+          return <PersonalChatCard key={chat.id} chat={chat} setChats={setChats} />;
+        })
       ) : (
-        <>
-          {!new URLSearchParams(window.location.search).get('search') ? (
-            <>
-              {chats.length > 0 ? (
-                <>
-                  {chats.map(chat => {
-                    return <PersonalChatCard key={chat.id} chat={chat} setChats={setChats} />;
-                  })}
-                </>
-              ) : (
-                <NoChats />
-              )}
-            </>
-          ) : (
-            <>
-              {filteredChats.length > 0 ? (
-                <>
-                  {filteredChats.map(chat => {
-                    return <PersonalChatCard key={chat.id} chat={chat} setChats={setChats} />;
-                  })}
-                </>
-              ) : (
-                <NoChats />
-              )}
-            </>
-          )}
-        </>
+        <NoChats />
       )}
     </div>
   );

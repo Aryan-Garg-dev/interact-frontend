@@ -1,5 +1,6 @@
 import { SERVER_ERROR } from '@/config/errors';
 import { MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import socketService from '@/config/ws';
 import postHandler from '@/handlers/post_handler';
 import { setPersonalChatSlices, userSelector } from '@/slices/userSlice';
 import { User } from '@/types';
@@ -17,6 +18,7 @@ const SendMessage = ({ user, setShow }: Props) => {
   const [message, setMessage] = useState('');
 
   const chatSlices = useSelector(userSelector).personalChatSlices;
+  const currentChats = useSelector(userSelector).chats;
 
   const dispatch = useDispatch();
 
@@ -43,8 +45,9 @@ const SendMessage = ({ user, setShow }: Props) => {
     };
     const res = await postHandler(URL, formData);
     if (res.statusCode === 201) {
-      const chatID = res.data.chat.id;
+      const chatID = res.data.chat?.id;
       dispatch(setPersonalChatSlices([...chatSlices, { chatID, userID: user.id }]));
+      socketService.setupChats([...currentChats, ...chatID]);
 
       const MESSAGE_URL = `${MESSAGING_URL}/content/`;
       const messageFormData = {

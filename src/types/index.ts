@@ -356,8 +356,6 @@ export interface Chat {
   latestMessage: Message;
   lastReadMessageByCreatingUserID: string;
   lastReadMessageByAcceptingUserID: string;
-  lastReadMessageByCreatingUser: Message;
-  lastReadMessageByAcceptingUser: Message;
   accepted: boolean;
   blockedByCreatingUser: boolean;
   blockedByAcceptingUser: boolean;

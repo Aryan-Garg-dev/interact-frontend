@@ -309,8 +309,6 @@ export const initialChat: Chat = {
   latestMessage: initialMessage,
   lastReadMessageByAcceptingUserID: '',
   lastReadMessageByCreatingUserID: '',
-  lastReadMessageByCreatingUser: initialMessage,
-  lastReadMessageByAcceptingUser: initialMessage,
   accepted: false,
   blockedByCreatingUser: false,
   blockedByAcceptingUser: false,

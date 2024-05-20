@@ -126,61 +126,43 @@ const PersonalChat = () => {
 
   const messagesByDate = groupBy(messages, message => new Date(message.createdAt).toLocaleDateString());
 
-  useEffect(() => {
-    document.documentElement.style.overflowY = 'hidden';
-    document.documentElement.style.height = '100vh';
-
-    return () => {
-      document.documentElement.style.overflowY = 'auto';
-      document.documentElement.style.height = 'auto';
-    };
-  }, []);
-
   return (
     <div className="w-full h-full bg-gray-100 dark:bg-transparent border-2 max-lg:border-0 border-primary_btn dark:border-dark_primary_btn rounded-lg max-lg:rounded-none p-3 relative max-lg:backdrop-blur-2xl max-lg:z-50">
       {chatID == '' ? (
         <></>
+      ) : loading ? (
+        <Loader />
+      ) : clickedOnInfo ? (
+        <ChatInfo chat={chat} setShow={setClickedOnInfo} setChat={setChat} />
       ) : (
         <>
-          {loading ? (
-            <Loader />
-          ) : clickedOnInfo ? (
-            <ChatInfo chat={chat} setShow={setClickedOnInfo} setChat={setChat} />
-          ) : (
-            <>
-              <ChatHeader chat={chat} setClickedOnInfo={setClickedOnInfo} />
-              <div className="w-full h-[calc(100%-72px)] max-h-full flex flex-col gap-6 overflow-hidden">
-                <ScrollableFeed>
-                  {Object.keys(messagesByDate)
-                    .reverse()
-                    .map(date => {
-                      return <MessageGroup key={date} date={date} messages={messagesByDate[date]} chat={chat} />;
-                    })}
-                  {typingStatus.chatID == chat.id && typingStatus.user.id !== '' && typingStatus.user.id != userID ? (
-                    <div className="w-fit dark:text-white text-sm cursor-default border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-xl px-4 py-2">
-                      {typingStatus.user.username} is typing...
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-                </ScrollableFeed>
+          <ChatHeader chat={chat} setClickedOnInfo={setClickedOnInfo} />
+          <div className="w-full h-[calc(100%-72px)] max-h-full flex flex-col gap-6 overflow-hidden">
+            <ScrollableFeed>
+              {Object.keys(messagesByDate)
+                .reverse()
+                .map(date => {
+                  return <MessageGroup key={date} date={date} messages={messagesByDate[date]} chat={chat} />;
+                })}
+              {typingStatus.chatID == chat.id && typingStatus.user.id !== '' && typingStatus.user.id != userID && (
+                <div className="w-fit dark:text-white text-sm cursor-default border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-xl px-4 py-2">
+                  {typingStatus.user.username} is typing...
+                </div>
+              )}
+            </ScrollableFeed>
+          </div>
+          <div className="flex w-[calc(100%-16px)] max-lg:w-[99%] items-end gap-2 absolute max-lg:sticky bottom-2 right-1/2 translate-x-1/2 max-lg:translate-x-0">
+            {chat.accepted || chat.createdByID == userID ? (
+              <ChatTextarea chat={chat} />
+            ) : (
+              <div
+                onClick={handleAccept}
+                className="w-full h-12 rounded-md dark:text-white font-primary flex-center text-xl font-medium bg-primary_comp dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active cursor-pointer transition-ease-300"
+              >
+                Accept Chat
               </div>
-              <div className="flex w-[calc(100%-16px)] max-lg:w-[99%] items-end gap-2 absolute max-lg:sticky bottom-2 right-1/2 translate-x-1/2 max-lg:translate-x-0">
-                {chat.accepted || chat.createdByID == userID ? (
-                  <ChatTextarea chat={chat} />
-                ) : (
-                  <>
-                    <div
-                      onClick={handleAccept}
-                      className="w-full h-12 rounded-md dark:text-white font-primary flex-center text-xl font-medium bg-primary_comp dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active cursor-pointer transition-ease-300"
-                    >
-                      Accept Chat
-                    </div>
-                  </>
-                )}
-              </div>
-            </>
-          )}
+            )}
+          </div>
         </>
       )}
     </div>

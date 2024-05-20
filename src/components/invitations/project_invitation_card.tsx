@@ -115,7 +115,6 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
             {invitation.project.title}
           </Link>
           <div className="font-semibold">{invitation.title}</div>
-          <div className="font-medium">{'Member'}</div>
           <div className="text-xs">Invited {moment(invitation.createdAt).format('DD MMM YYYY')}</div>
         </div>
         {invitation.status == 0 ? (

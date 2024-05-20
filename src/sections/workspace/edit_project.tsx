@@ -139,7 +139,9 @@ const EditProject = ({ projectToEdit, setShow, setProjectToEdit, setProjects, or
           <Tags label="Project Tags" tags={tags} setTags={setTags} maxTags={10} required={true} />
           <Links label="Project Links" links={links} setLinks={setLinks} maxLinks={5} />
           {/* <Checkbox label="Keep this Project Private" val={isPrivate} setVal={setIsPrivate} /> */}
-          <PrimaryButton label="Edit Project" onClick={handleSubmit} width="40" />
+          <div className="w-full flex max-lg:justify-center justify-end">
+            <PrimaryButton label="Edit Project" onClick={handleSubmit} width="40" />
+          </div>
         </div>
       </div>
       <div
