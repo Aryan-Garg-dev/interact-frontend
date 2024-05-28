@@ -26,9 +26,9 @@ const LowerOpening = ({ opening, org = false }: Props) => {
   const user = useSelector(userSelector);
   return (
     <>
-      {noUserClick ? <SignUp setShow={setNoUserClick} /> : <></>}
-      {clickedOnShare ? <ShareOpening setShow={setClickedOnShare} opening={opening} org={org} /> : <></>}
-      {clickedOnReport ? <Report openingID={opening.id} setShow={setClickedOnReport} /> : <></>}
+      {noUserClick && <SignUp setShow={setNoUserClick} />}
+      {clickedOnShare && <ShareOpening setShow={setClickedOnShare} opening={opening} org={org} />}
+      {clickedOnReport && <Report openingID={opening.id} setShow={setClickedOnReport} />}
 
       <div className="flex gap-4 items-center">
         {org

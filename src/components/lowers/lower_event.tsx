@@ -97,7 +97,9 @@ const LowerEvent = ({ event, numLikes, setNumLikes }: Props) => {
             className="flex items-center gap-2 p-2 rounded-lg hover:shadow-2xl transition-ease-300 cursor-pointer"
           >
             <HeartStraight
-              className={`cursor-pointer max-md:w-6 max-md:h-6 ${liked ? 'text-heart_filled' : 'text-black'}`}
+              className={`cursor-pointer max-md:w-6 max-md:h-6 ${
+                liked ? 'text-heart_filled' : 'text-black'
+              } transition-ease-300`}
               size={24}
               weight={liked ? 'fill' : 'regular'}
             />

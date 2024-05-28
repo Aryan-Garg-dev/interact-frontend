@@ -4,7 +4,6 @@ import deleteHandler from '@/handlers/delete_handler';
 import getHandler from '@/handlers/get_handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLikes, setProjectBookmarks, userIDSelector, userSelector } from '@/slices/userSlice';
-// import clickedOnSharePost from './clickedOnShare_project';
 import BookmarkSimple from '@phosphor-icons/react/dist/icons/BookmarkSimple';
 import Export from '@phosphor-icons/react/dist/icons/Export';
 import ChatTeardrop from '@phosphor-icons/react/dist/icons/ChatTeardrop';
@@ -148,24 +147,20 @@ const LowerProject = ({ project }: Props) => {
 
   return (
     <>
-      {noUserClick ? <SignUp setShow={setNoUserClick} /> : <></>}
-      {clickedOnBookmark ? (
+      {noUserClick && <SignUp setShow={setNoUserClick} />}
+      {clickedOnBookmark && (
         <BookmarkProject setShow={setClickedOnBookmark} project={project} setBookmark={setBookmark} />
-      ) : (
-        <></>
       )}
-      {clickedOnComment ? (
+      {clickedOnComment && (
         <CommentProject
           setShow={setClickedOnComment}
           project={project}
           numComments={numComments}
           setNoComments={setNumComments}
         />
-      ) : (
-        <></>
       )}
-      {clickedOnShare ? <ShareProject setShow={setClickedOnShare} project={project} /> : <></>}
-      {clickedOnReport ? <Report projectID={project.id} setShow={setClickedOnReport} /> : <></>}
+      {clickedOnShare && <ShareProject setShow={setClickedOnShare} project={project} />}
+      {clickedOnReport && <Report projectID={project.id} setShow={setClickedOnReport} />}
 
       <div className="flex flex-col gap-12 max-lg:gap-2 max-lg:flex-row">
         <BookmarkSimple
@@ -186,10 +181,11 @@ const LowerProject = ({ project }: Props) => {
             if (userID == '') setNoUserClick(true);
             else likeHandler();
           }}
-          className="cursor-pointer max-lg:w-6 max-lg:h-6"
+          className={`cursor-pointer max-md:w-6 max-md:h-6 ${
+            liked ? 'text-heart_filled' : 'text-black opacity-60'
+          } transition-ease-300`}
           size={32}
           weight={liked ? 'fill' : 'regular'}
-          fill={liked ? '#fe251b' : '#000000'}
         />
         <Export
           onClick={() => {
@@ -208,7 +204,7 @@ const LowerProject = ({ project }: Props) => {
           className="cursor-pointer max-lg:w-6 max-lg:h-6"
           size={32}
         />
-        {project.userID != user.id ? (
+        {project.userID != user.id && (
           <WarningCircle
             onClick={() => {
               if (userID == '') setNoUserClick(true);
@@ -217,8 +213,6 @@ const LowerProject = ({ project }: Props) => {
             className="cursor-pointer max-lg:w-6 max-lg:h-6"
             size={32}
           />
-        ) : (
-          <></>
         )}
       </div>
     </>

@@ -145,24 +145,18 @@ const LowerPost = ({ post, setFeed, isRepost = false }: Props) => {
 
   return (
     <>
-      {noUserClick ? <SignUp setShow={setNoUserClick} /> : <></>}
-      {clickedOnBookmark ? (
-        <BookmarkPost setShow={setClickedOnBookmark} post={post} setBookmark={setBookmark} />
-      ) : (
-        <></>
-      )}
-      {clickedOnComment ? (
+      {noUserClick && <SignUp setShow={setNoUserClick} />}
+      {clickedOnBookmark && <BookmarkPost setShow={setClickedOnBookmark} post={post} setBookmark={setBookmark} />}
+      {clickedOnComment && (
         <CommentPost
           setShow={setClickedOnComment}
           post={post}
           numComments={numComments}
           setNoComments={setNumComments}
         />
-      ) : (
-        <></>
       )}
-      {clickedOnShare ? <SharePost setShow={setClickedOnShare} post={post} /> : <></>}
-      {clickedOnRePost ? <RePost setFeed={setFeed} setShow={setClickedOnRePost} post={post} /> : <></>}
+      {clickedOnShare && <SharePost setShow={setClickedOnShare} post={post} />}
+      {clickedOnRePost && <RePost setFeed={setFeed} setShow={setClickedOnRePost} post={post} />}
       <div className={`w-full flex flex-col gap-1 ${isRepost ? 'justify-start' : ''}`}>
         <div className={`flex gap-3 max-md:gap-3 ${isRepost ? 'w-fit scale-100' : ''}`}>
           <HeartStraight
@@ -170,7 +164,9 @@ const LowerPost = ({ post, setFeed, isRepost = false }: Props) => {
               if (userID == '') setNoUserClick(true);
               else likeHandler();
             }}
-            className={`cursor-pointer max-md:w-6 max-md:h-6 ${liked ? 'text-heart_filled' : 'text-black opacity-60'}`}
+            className={`cursor-pointer max-md:w-6 max-md:h-6 ${
+              liked ? 'text-heart_filled' : 'text-black opacity-60'
+            } transition-ease-300`}
             size={24}
             weight={liked ? 'fill' : 'regular'}
           />
@@ -183,7 +179,7 @@ const LowerPost = ({ post, setFeed, isRepost = false }: Props) => {
             size={24}
             weight="regular"
           />
-          {post.userID != user.id && !post.rePost ? (
+          {post.userID != user.id && !post.rePost && (
             <Repeat
               onClick={() => {
                 if (userID == '') setNoUserClick(true);
@@ -193,8 +189,6 @@ const LowerPost = ({ post, setFeed, isRepost = false }: Props) => {
               size={24}
               weight="regular"
             />
-          ) : (
-            <></>
           )}
           <Export
             onClick={() => {

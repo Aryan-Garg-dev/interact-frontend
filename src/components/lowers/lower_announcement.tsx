@@ -69,18 +69,16 @@ const LowerAnnouncement = ({ announcement, setFeed }: Props) => {
 
   return (
     <>
-      {noUserClick ? <SignUp setShow={setNoUserClick} /> : <></>}
-      {clickedOnComment ? (
+      {noUserClick && <SignUp setShow={setNoUserClick} />}
+      {clickedOnComment && (
         <CommentAnnouncement
           setShow={setClickedOnComment}
           announcement={announcement}
           numComments={numComments}
           setNoComments={setNumComments}
         />
-      ) : (
-        <></>
       )}
-      {clickedOnShare ? <ShareAnnouncement setShow={setClickedOnShare} announcement={announcement} /> : <></>}
+      {clickedOnShare && <ShareAnnouncement setShow={setClickedOnShare} announcement={announcement} />}
 
       <div className="w-full flex flex-col gap-2">
         <div className="flex gap-3 max-md:gap-3">
@@ -89,7 +87,9 @@ const LowerAnnouncement = ({ announcement, setFeed }: Props) => {
               if (userID == '') setNoUserClick(true);
               else likeHandler();
             }}
-            className={`cursor-pointer max-md:w-6 max-md:h-6 ${liked ? 'text-heart_filled' : 'text-black opacity-60'}`}
+            className={`cursor-pointer max-md:w-6 max-md:h-6 ${
+              liked ? 'text-heart_filled' : 'text-black opacity-60'
+            } transition-ease-300`}
             size={24}
             weight={liked ? 'fill' : 'regular'}
           />

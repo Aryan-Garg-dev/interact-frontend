@@ -3,7 +3,7 @@ import { Comment } from '@/types';
 import { Trash } from '@phosphor-icons/react';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import LowerComment from '../lowers/lower_comment';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
@@ -18,6 +18,8 @@ interface Props {
 }
 
 const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
+  const [clickedOnReply, setClickedOnReply] = useState(false);
+
   const loggedInUser = useSelector(userSelector);
 
   //TODO add confirm delete
@@ -55,7 +57,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
             className={`rounded-full ${comment.isRepliedComment ? 'w-6 h-6' : 'w-8 h-8'} cursor-pointer`}
           />
         </Link>
-        <div className="h-full w-[1px] bg-black rounded-lg opacity-25"></div>
+        {clickedOnReply && <div className="h-full w-[1px] bg-black rounded-lg opacity-25"></div>}
       </div>
 
       <div className="grow flex flex-col gap-1">
@@ -74,9 +76,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
           </div>
           {comment.userID == loggedInUser.id && (
             <Trash
-              onClick={() => {
-                deleteComment(comment.id);
-              }}
+              onClick={() => deleteComment(comment.id)}
               className="cursor-pointer mr-1 max-md:w-4 max-md:h-4 transition-all ease-in-out duration-200 hover:scale-110"
               size={20}
               weight="regular"
@@ -87,7 +87,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
           <div className="w-fit bg-primary_comp dark:bg-dark_primary_comp_hover px-4 py-2 max-md:px-2 max-md:py-1 text-sm max-md:text-xs rounded-xl max-md:rounded-lg">
             {comment.content}
           </div>
-          <LowerComment comment={comment} />
+          <LowerComment comment={comment} clickedOnReply={clickedOnReply} setClickedOnReply={setClickedOnReply} />
         </div>
       </div>
     </div>

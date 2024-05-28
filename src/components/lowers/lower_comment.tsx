@@ -18,13 +18,14 @@ import CommentComponent from '../common/comment';
 
 interface Props {
   comment: Comment;
+  clickedOnReply: boolean;
+  setClickedOnReply: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LowerComment = ({ comment }: Props) => {
+const LowerComment = ({ comment, clickedOnReply, setClickedOnReply }: Props) => {
   const [liked, setLiked] = useState(false);
   const [numLikes, setNumLikes] = useState(comment.noLikes);
   const [numReplies, setNumReplies] = useState(comment.noReplies);
-  const [clickedOnReply, setClickedOnReply] = useState(false);
   const [noUserClick, setNoUserClick] = useState(false);
   const [mutex, setMutex] = useState(false);
 
@@ -134,9 +135,9 @@ const LowerComment = ({ comment }: Props) => {
       {noUserClick && <SignUp setShow={setNoUserClick} />}
       <div className="w-full flex flex-col gap-2">
         <div className="w-full flex items-center justify-between">
-          <div className="flex gap-6 max-md:gap-3">
-            <div className="flex-center gap-1 text-sm opacity-60">
-              {numLikes}
+          <div className="flex gap-4 max-md:gap-3">
+            <div className="flex-center gap-1">
+              <div className="text-sm opacity-60">{numLikes}</div>
               <HeartStraight
                 onClick={() => {
                   if (user.id == '') setNoUserClick(true);
@@ -144,21 +145,23 @@ const LowerComment = ({ comment }: Props) => {
                 }}
                 className={`cursor-pointer max-md:w-6 max-md:h-6 ${
                   liked ? 'text-heart_filled' : 'text-black opacity-60'
-                }`}
+                } transition-ease-300`}
                 size={18}
                 weight={liked ? 'fill' : 'regular'}
               />
             </div>
-            <div className="flex-center gap-1 text-sm opacity-60">
-              {numReplies}
+            <div className="flex-center gap-1">
+              <div className="text-sm opacity-60">{numReplies}</div>
               <Repeat
                 onClick={() => {
                   if (user.id == '') setNoUserClick(true);
                   else setClickedOnReply(prev => !prev);
                 }}
-                className="cursor-pointer max-md:w-6 max-md:h-6 opacity-60"
+                className={`cursor-pointer max-md:w-6 max-md:h-6 ${
+                  clickedOnReply ? 'text-blue-500' : 'text-black opacity-60'
+                } transition-ease-300`}
                 size={18}
-                weight="regular"
+                weight={clickedOnReply ? 'duotone' : 'regular'}
               />
             </div>
           </div>
@@ -204,7 +207,7 @@ const LowerComment = ({ comment }: Props) => {
                     key={comment.id}
                     comment={comment}
                     setComments={setReplies}
-                    setNoComments={setNumLikes}
+                    setNoComments={setNumReplies}
                   />
                 ))}
                 {replies.length % limit == 0 && hasMore ? (
@@ -217,7 +220,7 @@ const LowerComment = ({ comment }: Props) => {
                 ) : (
                   replies.length < comment.noReplies && (
                     <div className="w-full text-center pt-4 text-sm">
-                      Comments are do not follow the guidelines are flagged.
+                      Comments which do not follow the guidelines are flagged.
                     </div>
                   )
                 )}
@@ -226,7 +229,7 @@ const LowerComment = ({ comment }: Props) => {
               <div className="w-fit mx-auto text-sm"> No Replies Yet :)</div>
             ) : (
               <div className="w-full text-center pt-4 text-sm">
-                Comments are do not follow the guidelines are flagged.
+                Comments which do not follow the guidelines are flagged.
               </div>
             )}
           </div>

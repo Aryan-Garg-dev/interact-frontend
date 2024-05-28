@@ -158,7 +158,7 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
           ) : (
             comments.length < item.noComments && (
               <div className="w-full text-center pt-4 text-sm">
-                Comments are do not follow the guidelines are flagged.
+                Comments which do not follow the guidelines are flagged.
               </div>
             )
           )}
@@ -166,7 +166,7 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
       ) : item.noComments == 0 ? (
         <div className="w-fit mx-auto text-xl"> No Comments Yet :)</div>
       ) : (
-        <div className="w-full text-center pt-4 text-sm">Comments are do not follow the guidelines are flagged.</div>
+        <div className="w-full text-center pt-4 text-sm">Comments which do not follow the guidelines are flagged.</div>
       )}
     </div>
   );
