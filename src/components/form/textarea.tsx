@@ -22,7 +22,7 @@ const TextArea = ({ label, val, setVal, maxLength, placeholder, required = false
       <textarea
         value={val}
         onChange={el => setVal(el.target.value)}
-        maxLength={2500}
+        maxLength={maxLength}
         className="w-full min-h-[80px] max-h-80 bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
         placeholder={placeholder}
         style={styles}

@@ -66,18 +66,16 @@ const LowerEvent = ({ event, numLikes, setNumLikes }: Props) => {
 
   return (
     <>
-      {noUserClick ? <SignUp setShow={setNoUserClick} /> : <></>}
-      {clickedOnComment ? (
+      {noUserClick && <SignUp setShow={setNoUserClick} />}
+      {clickedOnComment && (
         <CommentEvent
           setShow={setClickedOnComment}
           event={event}
           numComments={numComments}
           setNoComments={setNumComments}
         />
-      ) : (
-        <></>
       )}
-      {clickedOnShare ? <ShareEvent setShow={setClickedOnShare} event={event} /> : <></>}
+      {clickedOnShare && <ShareEvent setShow={setClickedOnShare} event={event} />}
       <div className="w-full flex items-center justify-between flex-wrap">
         <div className="flex items-center gap-2 cursor-default">
           <Eye size={24} />

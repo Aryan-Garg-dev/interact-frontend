@@ -170,9 +170,7 @@ const LowerPost = ({ post, setFeed, isRepost = false }: Props) => {
               if (userID == '') setNoUserClick(true);
               else likeHandler();
             }}
-            className={`cursor-pointer max-md:w-6 max-md:h-6 ${
-              liked ? 'text-heart_filled' : 'text-[#000000] opacity-60'
-            }`}
+            className={`cursor-pointer max-md:w-6 max-md:h-6 ${liked ? 'text-heart_filled' : 'text-black opacity-60'}`}
             size={24}
             weight={liked ? 'fill' : 'regular'}
           />

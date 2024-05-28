@@ -1,24 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
-// import LowerComment from '@/components/common/lowerComment';
 import { COMMENT_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import Toaster from '@/utils/toaster';
-import Cookies from 'js-cookie';
 import Image from 'next/image';
 import { Announcement, Comment, Event, Post, Project } from '@/types';
-import deleteHandler from '@/handlers/delete_handler';
-import moment from 'moment';
 import getHandler from '@/handlers/get_handler';
-import Loader from '@/components/common/loader';
-import Link from 'next/link';
 import { userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
 import postHandler from '@/handlers/post_handler';
-import Trash from '@phosphor-icons/react/dist/icons/Trash';
 import socketService from '@/config/ws';
-
 import { SERVER_ERROR } from '@/config/errors';
 import CommentsLoader from '../loaders/comments';
+import CommentComponent from './comment';
 
 interface Props {
   type: string;
@@ -35,15 +27,15 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
 
   const [commentBody, setCommentBody] = useState('');
 
-  const userID = Cookies.get('id');
+  const limit = 10;
 
   useEffect(() => {
     getComments();
   }, [item]);
 
   const getComments = async () => {
-    //TODO add pagination
-    const URL = `${COMMENT_URL}/${type}/${item.id}?page=${page}&limit=${100}`;
+    setLoading(true);
+    const URL = `${COMMENT_URL}/${type}/${item.id}?page=${page}&limit=${limit}`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode == 200) {
@@ -109,29 +101,7 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
     }
   };
 
-  //TODO add confirm delete
-  const deleteComment = async (commentID: string) => {
-    const toaster = Toaster.startLoad('Deleting Comment');
-    const URL = `${COMMENT_URL}/${commentID}`;
-    const res = await deleteHandler(URL);
-    if (res.statusCode == 204) {
-      Toaster.stopLoad(toaster, 'Comment Deleted', 1);
-      const newComments: Comment[] = [];
-      comments.forEach(comment => {
-        if (comment.id !== commentID) newComments.push(comment);
-      });
-      setComments(newComments);
-      setNoComments(prev => prev - 1);
-    } else {
-      if (res.data.message != '') Toaster.stopLoad(toaster, res.data.message, 0);
-      else {
-        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-      }
-    }
-  };
-
   const loggedInUser = useSelector(userSelector);
-  const profilePic = loggedInUser.profilePic;
 
   return (
     <div className="w-full h-full overflow-y-auto flex flex-col over p-4 font-primary gap-4 max-md:px-4">
@@ -142,9 +112,9 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
           width={50}
           height={50}
           alt="user"
-          src={`${USER_PROFILE_PIC_URL}/${profilePic}`}
+          src={`${USER_PROFILE_PIC_URL}/${loggedInUser.profilePic}`}
         />
-        <div className="w-full flex justify-between max-md:flex-col relative max-md:gap-2 max-md:items-end">
+        <div className="w-full flex justify-between gap-3 max-md:flex-col relative max-md:gap-2 max-md:items-end">
           <textarea
             value={commentBody}
             onChange={el => {
@@ -157,88 +127,44 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
             placeholder={`Comment on this ${type}`}
           />
           <div
-            className="h-fit text-sm max-md:text-xs dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-md py-2 px-3  flex-center cursor-pointer max-md:h-10 max-md:w-fit transition-ease-300"
+            className="w-1/6 h-fit text-sm max-md:text-xs dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-md py-2 px-3  flex-center cursor-pointer max-md:h-10 max-md:w-fit transition-ease-300"
             onClick={submitHandler}
           >
             Comment
           </div>
         </div>
       </div>
-      {loading ? (
+      {loading && page == 1 ? (
         <CommentsLoader />
       ) : comments.length > 0 ? (
-        <InfiniteScroll
-          dataLength={comments.length}
-          next={getComments}
-          hasMore={hasMore}
-          loader={<Loader />}
-          className="w-full flex flex-col gap-4"
-        >
+        <div className="w-full flex flex-col gap-4">
           {comments.map(comment => (
-            <div key={comment.id} className="flex flex-col gap-2">
-              <div className="w-full flex justify-between items-center">
-                <div className="flex gap-2">
-                  <Link
-                    href={`${
-                      comment.user.username != loggedInUser.username
-                        ? `/explore/user/${comment.user.username}`
-                        : '/profile'
-                    }`}
-                    className="rounded-full"
-                  >
-                    <Image
-                      crossOrigin="anonymous"
-                      width={50}
-                      height={50}
-                      alt={'User Pic'}
-                      src={`${USER_PROFILE_PIC_URL}/${comment.user.profilePic}`}
-                      className={'rounded-full w-8 h-8 cursor-pointer'}
-                    />
-                  </Link>
-                  <div className="flex flex-col">
-                    <Link
-                      href={`${
-                        comment.user.username != loggedInUser.username
-                          ? `/explore/user/${comment.user.username}`
-                          : '/profile'
-                      }`}
-                      className="text-base font-medium"
-                    >
-                      @{comment.user.username}
-                    </Link>
-                    <div className="flex gap-1 items-center">
-                      <div className="text-xs max-md:text-xxs">•</div>
-                      <div className="text-xs max-md:text-xxs">{moment(comment.createdAt).fromNow()}</div>
-                    </div>
-                  </div>
-                </div>
-                {comment.userID == userID && (
-                  <Trash
-                    onClick={() => {
-                      deleteComment(comment.id);
-                    }}
-                    className="cursor-pointer mr-1 max-md:w-4 max-md:h-4 transition-all ease-in-out duration-200 hover:scale-110"
-                    size={20}
-                    weight="regular"
-                  />
-                )}
-              </div>
-              <div className="pl-10">
-                <div className="w-fit bg-primary_comp dark:bg-dark_primary_comp_hover px-4 py-2 max-md:px-2 max-md:py-1 text-sm max-md:text-xs rounded-xl max-md:rounded-lg">
-                  {comment.content}
-                </div>
-                {/* <LowerComment comment={comment} type={type} /> */}
-              </div>
-            </div>
+            <CommentComponent
+              key={comment.id}
+              comment={comment}
+              setComments={setComments}
+              setNoComments={setNoComments}
+            />
           ))}
-          {comments.length < item.noComments && (
-            <div className="w-full text-center pt-4 text-sm">
-              Comments are do not follow the guidelines are flagged.
+          {loading ? (
+            <CommentsLoader />
+          ) : comments.length % limit == 0 && hasMore ? (
+            <div
+              onClick={getComments}
+              className="w-fit mx-auto pt-4 text-xs text-gray-700 font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
+            >
+              Load More
             </div>
+          ) : (
+            comments.length < item.noComments && (
+              <div className="w-full text-center pt-4 text-sm">
+                Comments are do not follow the guidelines are flagged.
+              </div>
+            )
           )}
-        </InfiniteScroll>
+        </div>
       ) : item.noComments == 0 ? (
-        <div className="w-fit mx-auto text-xl"> {item.noComments} No Comments Yet :)</div>
+        <div className="w-fit mx-auto text-xl"> No Comments Yet :)</div>
       ) : (
         <div className="w-full text-center pt-4 text-sm">Comments are do not follow the guidelines are flagged.</div>
       )}

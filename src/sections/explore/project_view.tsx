@@ -114,7 +114,7 @@ const ProjectView = ({
                 className={'w-10 h-10 rounded-full cursor-default absolute top-0 left-0 z-10'}
               />
             </div>
-            {clickedProjectIndex != 0 ? (
+            {clickedProjectIndex != 0 && (
               <div
                 onClick={() => {
                   setClickedProjectIndex(prev => prev - 1);
@@ -124,8 +124,6 @@ const ProjectView = ({
               >
                 <CaretLeft size={24} weight="bold" />
               </div>
-            ) : (
-              <></>
             )}
           </div>
 
@@ -226,22 +224,20 @@ const ProjectView = ({
 
                 <div className="text-sm">
                   {project.description.length > 200 ? (
-                    <>
-                      {clickedOnReadMore ? (
-                        project.description
-                      ) : (
-                        <>
-                          {project.description.substring(0, 200)}
-                          <span
-                            onClick={() => setClickedOnReadMore(true)}
-                            className="text-xs italic opacity-60 cursor-pointer"
-                          >
-                            {' '}
-                            Read More...
-                          </span>
-                        </>
-                      )}
-                    </>
+                    clickedOnReadMore ? (
+                      project.description
+                    ) : (
+                      <>
+                        {project.description.substring(0, 200)}
+                        <span
+                          onClick={() => setClickedOnReadMore(true)}
+                          className="text-xs italic opacity-60 cursor-pointer"
+                        >
+                          {' '}
+                          Read More...
+                        </span>
+                      </>
+                    )
                   ) : (
                     project.description
                   )}
@@ -299,7 +295,7 @@ const ProjectView = ({
             )}
           </div>
           <div className="lg:hidden fixed bottom-3 w-full flex justify-between px-3">
-            {clickedProjectIndex != 0 ? (
+            {clickedProjectIndex != 0 && (
               <div
                 onClick={() => {
                   setClickedProjectIndex(prev => prev - 1);
@@ -309,10 +305,8 @@ const ProjectView = ({
               >
                 <CaretLeft size={24} weight="bold" />
               </div>
-            ) : (
-              <></>
             )}
-            {clickedProjectIndex != projectSlugs.length - 1 ? (
+            {clickedProjectIndex != projectSlugs.length - 1 && (
               <div
                 onClick={() => {
                   setClickedProjectIndex(prev => prev + 1);
@@ -322,8 +316,6 @@ const ProjectView = ({
               >
                 <CaretRight size={24} weight="bold" />
               </div>
-            ) : (
-              <></>
             )}
           </div>
         </div>

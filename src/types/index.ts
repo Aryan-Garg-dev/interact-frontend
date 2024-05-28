@@ -247,8 +247,11 @@ export interface Comment {
   post: Post;
   projectID: string;
   project: Project;
+  parentCommentID: string;
+  isRepliedComment: boolean;
   content: string;
   noLikes: number;
+  noReplies: number;
   likedBy: string[];
   createdAt: Date;
 }
