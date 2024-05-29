@@ -33,7 +33,7 @@ interface Props {
   clamp?: boolean;
 }
 
-const Post = ({
+const PostComponent = ({
   post,
   showLowerPost = true,
   showImage = true,
@@ -129,7 +129,7 @@ const Post = ({
       onClick={() => setClickedOnOptions(false)}
       className={`w-full relative bg-white dark:bg-transparent font-primary flex gap-1 rounded-lg dark:rounded-none dark:text-white border-gray-300 border-[1px] dark:border-x-0 dark:border-t-0 dark:border-dark_primary_btn ${
         !isRepost ? 'dark:border-b-[1px] p-4' : 'dark:border-b-0 p-2'
-      }`}
+      } animate-fade_third`}
     >
       {noUserClick && <SignUp setShow={setNoUserClick} />}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
@@ -311,4 +311,4 @@ const Post = ({
   );
 };
 
-export default Post;
+export default PostComponent;

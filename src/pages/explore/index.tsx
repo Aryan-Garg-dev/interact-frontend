@@ -27,7 +27,7 @@ const Explore = () => {
     <BaseWrapper title="Explore | Interact">
       <Sidebar index={2} />
       <MainWrapper>
-        <div className="w-full max-lg:w-full flex flex-col items-center gap-4 transition-ease-out-500 pt-20 pb-base_padding">
+        <div className="w-full max-lg:w-full flex flex-col items-center gap-4 transition-ease-out-500 pt-24 pb-base_padding">
           <TabMenu
             items={['Projects', 'Openings', 'Users', 'Organisations', 'Events']}
             active={active}

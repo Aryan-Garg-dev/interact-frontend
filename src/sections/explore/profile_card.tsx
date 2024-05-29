@@ -81,7 +81,7 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
         />
       )}
 
-      <div className="w-[400px] max-lg:w-2/3 max-md:w-[90%] overflow-y-auto overflow-x-hidden pb-4 max-lg:mx-auto font-primary mt-base_padding max-lg:mb-12 ml-base_padding h-fit flex flex-col gap-4 dark:text-white items-center pt-12 max-lg:pb-8 max-lg:pt-4 px-4 max-lg:px-12 max-md:px-4 bg-[#ffffff2d] dark:bg-[#84478023] backdrop-blur-md shadow-md dark:shadow-none border-[1px] border-gray-300 dark:border-dark_primary_btn max-lg:bg-transparent relative rounded-md z-10">
+      <div className="w-[400px] max-lg:w-2/3 max-md:w-[90%] overflow-y-auto overflow-x-hidden pb-4 max-lg:mx-auto font-primary mt-base_padding max-lg:mb-12 ml-base_padding h-fit flex flex-col gap-4 dark:text-white items-center pt-12 max-lg:pb-8 max-lg:pt-4 px-4 max-lg:px-12 max-md:px-4 bg-[#ffffff2d] dark:bg-[#84478023] backdrop-blur-md shadow-md dark:shadow-none border-[1px] border-gray-300 dark:border-dark_primary_btn max-lg:bg-transparent relative rounded-md z-10 animate-reveal">
         <div className="relative w-48 h-48 rounded-full">
           <Image
             crossOrigin="anonymous"

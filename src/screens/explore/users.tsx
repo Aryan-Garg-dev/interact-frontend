@@ -54,7 +54,7 @@ const Users = () => {
     fetchUsers(new URLSearchParams(window.location.search).get('search'));
   }, [window.location.search]);
   return (
-    <div className="w-full flex flex-col gap-6 pt-2">
+    <div className="w-full flex flex-col gap-6">
       {loading ? (
         <Loader />
       ) : (

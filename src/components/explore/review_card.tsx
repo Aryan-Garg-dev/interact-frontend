@@ -55,11 +55,11 @@ const ReviewCard = ({ review, setReviews }: Props) => {
 
   return (
     <>
-      {clickedOnDelete ? <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} /> : <></>}
-      {clickedOnReport ? <Report setShow={setClickedOnReport} reviewID={review.id} /> : <></>}
+      {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
+      {clickedOnReport && <Report setShow={setClickedOnReport} reviewID={review.id} />}
       <div
         key={review.id}
-        className="w-full flex flex-col gap-4 bg-white relative group hover:shadow-xl p-6 rounded-xl transition-ease-300"
+        className="w-full flex flex-col gap-4 bg-white relative group hover:shadow-xl p-6 rounded-xl transition-ease-300 animate-fade_third"
       >
         {user.id == review.userID ? (
           <div
@@ -68,19 +68,19 @@ const ReviewCard = ({ review, setReviews }: Props) => {
           >
             <Trash onClick={() => setClickedOnDelete(true)} className="cursor-pointer" size={18} />
           </div>
-        ) : user.organizationMemberships
+        ) : (
+          user.organizationMemberships
             .filter(m => m.role == ORG_MANAGER)
             .map(m => m.organizationID)
             .includes(review.organizationID) ||
-          (user.isOrganization && currentOrgID == review.organizationID) ? (
-          <div
-            onClick={el => setClickedOnReport(true)}
-            className=" hover:shadow-lg text-gray-500 text-xxs px-2 py-1 flex gap-2 absolute opacity-0 group-hover:opacity-100 top-2 right-2 transition-ease-300 rounded-lg "
-          >
-            <WarningCircle className="cursor-pointer" size={18} />
-          </div>
-        ) : (
-          <></>
+          (user.isOrganization && currentOrgID == review.organizationID && (
+            <div
+              onClick={el => setClickedOnReport(true)}
+              className=" hover:shadow-lg text-gray-500 text-xxs px-2 py-1 flex gap-2 absolute opacity-0 group-hover:opacity-100 top-2 right-2 transition-ease-300 rounded-lg "
+            >
+              <WarningCircle className="cursor-pointer" size={18} />
+            </div>
+          ))
         )}
 
         <div className="w-full flex justify-between items-center">

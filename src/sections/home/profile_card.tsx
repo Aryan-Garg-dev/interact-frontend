@@ -42,12 +42,12 @@ const ProfileCard = () => {
 
   return (
     <>
-      {clickedOnFollowers ? <Connections type="followers" user={user} setShow={setClickedOnFollowers} /> : <></>}
-      {clickedOnFollowing ? <Connections type="following" user={user} setShow={setClickedOnFollowing} /> : <></>}
+      {clickedOnFollowers && <Connections type="followers" user={user} setShow={setClickedOnFollowers} />}
+      {clickedOnFollowing && <Connections type="following" user={user} setShow={setClickedOnFollowing} />}
       {loading ? (
         <ProfileCardLoader />
       ) : (
-        <div className="w-full h-fit flex flex-col gap-2 bg-white rounded-lg pb-4">
+        <div className="w-full h-fit flex flex-col gap-2 bg-white rounded-lg pb-4 animate-reveal">
           <div className="relative">
             <div className="relative">
               <Link

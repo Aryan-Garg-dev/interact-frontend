@@ -38,7 +38,7 @@ const EventCard = ({
     <Link
       href={`/explore/event/${event.id}`}
       target="_blank"
-      className={`w-${size} rounded-xl hover:shadow-xl transition-ease-out-500`}
+      className={`w-${size} rounded-xl hover:shadow-xl transition-ease-out-500 animate-fade_third`}
     >
       <div className="w-full relative group">
         <div className="flex gap-1 top-2 right-2 absolute bg-white text-gray-500 text-xxs px-2 py-1 rounded-lg">

@@ -19,7 +19,7 @@ const OrgCard = ({ user }: Props) => {
     <Link
       href={`/explore/organisation/${user.username}`}
       target="_blank"
-      className="w-72 max-md:w-4/5 flex flex-col gap-2 rounded-xl bg-white font-primary hover:shadow-xl transition-ease-300"
+      className="w-72 max-md:w-4/5 flex flex-col gap-2 rounded-xl bg-white font-primary hover:shadow-xl transition-ease-300 animate-fade_third"
     >
       <div className="w-full relative">
         <Image

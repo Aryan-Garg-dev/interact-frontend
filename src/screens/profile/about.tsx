@@ -5,13 +5,12 @@ import React from 'react';
 
 interface Props {
   profile: Profile;
-  organisation?: Organization;
   org?: boolean;
 }
 
-const About = ({ profile, organisation = initialOrganization, org = false }: Props) => {
+const About = ({ profile, org = false }: Props) => {
   return (
-    <div className="w-[640px] max-md:w-screen text-primary_black mx-auto flex flex-col gap-4 max-md:px-6 pb-8">
+    <div className="w-[640px] max-md:w-screen text-primary_black mx-auto flex flex-col gap-4 max-md:px-6 pb-8 animate-fade_third">
       {!org && (
         <>
           <div className="w-full flex flex-col gap-2">

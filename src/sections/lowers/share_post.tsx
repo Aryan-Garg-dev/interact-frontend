@@ -1,3 +1,4 @@
+import CopyClipboardButton from '@/components/buttons/copy_clipboard_btn';
 import Loader from '@/components/common/loader';
 import PostComponent from '@/components/home/post';
 import { SERVER_ERROR } from '@/config/errors';
@@ -135,18 +136,21 @@ const SharePost = ({ post, setShow }: Props) => {
                 })}
               </div>
               <div className="w-full flex flex-col gap-1">
-                <textarea
-                  className="bg-primary_comp dark:bg-[#ffe1fc22] text-sm focus:outline-none p-2 rounded-xl min-h-[6rem] max-h-64"
-                  placeholder="Add a message"
-                  value={message}
-                  onChange={el => setMessage(el.target.value)}
-                />
-                <div
-                  onClick={handleSubmit}
-                  className="w-full text-center py-2 rounded-lg border-[1px] bg-primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active border-[#ffe1fc10] dark:hover:bg-[#ffe1fc10] cursor-pointer transition-ease-200"
-                >
-                  Send Message
+                <div className="w-full flex flex-col gap-1">
+                  <textarea
+                    className="bg-primary_comp dark:bg-[#ffe1fc22] text-sm focus:outline-none p-2 rounded-xl min-h-[6rem] max-h-64"
+                    placeholder="Add a message"
+                    value={message}
+                    onChange={el => setMessage(el.target.value)}
+                  />
+                  <div
+                    onClick={handleSubmit}
+                    className="w-full text-center py-2 rounded-lg border-[1px] bg-primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active border-[#ffe1fc10] dark:hover:bg-[#ffe1fc10] cursor-pointer transition-ease-200"
+                  >
+                    Send Message
+                  </div>
                 </div>
+                <CopyClipboardButton url={`explore/post/${post.id}`} />
               </div>
             </>
           ) : (

@@ -98,11 +98,9 @@ const OrgInvitationCard = ({ invitation, setInvitations }: Props) => {
   };
 
   return (
-    <div className="w-full font-primary bg-white dark:bg-transparent dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-md flex max-md:flex-col items-center justify-start gap-6 p-6 transition-ease-300">
-      {clickedOnReject ? (
+    <div className="w-full font-primary bg-white dark:bg-transparent dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-md flex max-md:flex-col items-center justify-start gap-6 p-6 transition-ease-300 animate-fade_third">
+      {clickedOnReject && (
         <ConfirmDelete setShow={setClickedOnReject} handleDelete={handleReject} title="Confirm Reject?" />
-      ) : (
-        <></>
       )}
       <Link
         onClick={() => dispatch(setExploreTab(3))}

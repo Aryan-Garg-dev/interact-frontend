@@ -44,11 +44,11 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
 
   return (
     <>
-      {clickedOnDelete ? <ConfirmDelete handleDelete={handleDelete} setShow={setClickedOnDelete} /> : <></>}
+      {clickedOnDelete && <ConfirmDelete handleDelete={handleDelete} setShow={setClickedOnDelete} />}
       <div
         className={`w-full max-w-3xl mx-auto bg-white flex gap-1 p-4 border-[1px] border-gray-300 rounded-xl ${
           hoverShadow ? 'hover:shadow-xl' : ''
-        } transition-ease-300 z-[1]`}
+        } transition-ease-300 z-[1] animate-fade_third`}
       >
         <Link
           href={`/explore/organisation/${organisation.user.username}`}

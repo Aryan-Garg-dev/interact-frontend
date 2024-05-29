@@ -109,66 +109,58 @@ const AnnouncementCard = ({ announcement, setAnnouncements }: Props) => {
   return (
     <div
       onClick={() => setClickedOnOptions(false)}
-      className="w-full max-w-3xl mx-auto relative overflow-clip bg-white font-primary flex gap-1 rounded-lg border-gray-300 border-[1px] dark:border-b-[1px] p-4"
+      className="w-full max-w-3xl mx-auto relative overflow-clip bg-white font-primary flex gap-1 rounded-lg border-gray-300 border-[1px] dark:border-b-[1px] p-4 animate-fade_third"
     >
-      {noUserClick ? <SignUp setShow={setNoUserClick} /> : <></>}
-      {clickedOnDelete ? <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} /> : <></>}
-      {clickedOnReport ? <Report postID={announcement.id} setShow={setClickedOnReport} /> : <></>}
-      {clickedOnOptions ? (
-        <>
-          {clickedOnEdit ? (
-            <></>
-          ) : (
-            <div className="w-1/4 h-fit flex flex-col bg-gray-100 bg-opacity-75 dark:bg-transparent absolute top-12 right-2 rounded-xl glassMorphism text-sm p-2 z-10 animate-fade_third">
-              {checkParticularOrgAccess(ORG_SENIOR, announcement.organization) && (
-                <div
-                  onClick={() => setClickedOnEdit(true)}
-                  className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] transition-ease-100 rounded-lg cursor-pointer"
-                >
-                  Edit
-                </div>
-              )}
-              {checkParticularOrgAccess(ORG_SENIOR, announcement.organization) && (
-                <div
-                  onClick={el => {
-                    el.stopPropagation();
-                    setClickedOnDelete(true);
-                  }}
-                  className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg cursor-pointer"
-                >
-                  Delete
-                </div>
-              )}
-              {!checkParticularOrgAccess(ORG_SENIOR, announcement.organization) && (
-                <div
-                  onClick={el => {
-                    el.stopPropagation();
-                    if (userID == '') setNoUserClick(true);
-                    else setClickedOnReport(true);
-                  }}
-                  className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg cursor-pointer"
-                >
-                  Report
-                </div>
-              )}
-
-              {!checkParticularOrgAccess(ORG_MEMBER, announcement.organization) && (
-                <div
-                  onClick={el => {
-                    el.stopPropagation();
-                    if (userID == '') setNoUserClick(true);
-                    else setClickedOnReport(true);
-                  }}
-                  className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg cursor-pointer"
-                >
-                  Report
-                </div>
-              )}
+      {noUserClick && <SignUp setShow={setNoUserClick} />}
+      {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
+      {clickedOnReport && <Report postID={announcement.id} setShow={setClickedOnReport} />}
+      {clickedOnOptions && !clickedOnEdit && (
+        <div className="w-1/4 h-fit flex flex-col bg-gray-100 bg-opacity-75 dark:bg-transparent absolute top-12 right-2 rounded-xl glassMorphism text-sm p-2 z-10 animate-fade_third">
+          {checkParticularOrgAccess(ORG_SENIOR, announcement.organization) && (
+            <div
+              onClick={() => setClickedOnEdit(true)}
+              className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] transition-ease-100 rounded-lg cursor-pointer"
+            >
+              Edit
             </div>
           )}
-        </>
-      ) : (
-        <></>
+          {checkParticularOrgAccess(ORG_SENIOR, announcement.organization) && (
+            <div
+              onClick={el => {
+                el.stopPropagation();
+                setClickedOnDelete(true);
+              }}
+              className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg cursor-pointer"
+            >
+              Delete
+            </div>
+          )}
+          {!checkParticularOrgAccess(ORG_SENIOR, announcement.organization) && (
+            <div
+              onClick={el => {
+                el.stopPropagation();
+                if (userID == '') setNoUserClick(true);
+                else setClickedOnReport(true);
+              }}
+              className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg cursor-pointer"
+            >
+              Report
+            </div>
+          )}
+
+          {!checkParticularOrgAccess(ORG_MEMBER, announcement.organization) && (
+            <div
+              onClick={el => {
+                el.stopPropagation();
+                if (userID == '') setNoUserClick(true);
+                else setClickedOnReport(true);
+              }}
+              className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg cursor-pointer"
+            >
+              Report
+            </div>
+          )}
+        </div>
       )}
       <Link
         href={

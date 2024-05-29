@@ -13,7 +13,7 @@ interface Props {
   handleDelete: (bookmarkID: string) => Promise<void>;
 }
 
-const OpeningBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDelete }: Props) => {
+const OpeningBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit, handleDelete }: Props) => {
   let count = 0;
   const [clickedOnSettings, setClickedOnSettings] = useState(false);
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
@@ -27,8 +27,8 @@ const OpeningBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDe
     if (status == 1) setClickedOnEdit(false);
   };
   return (
-    <div className="w-96 max-md:w-80 max-md:h-[28rem] h-108 font-primary dark:text-white">
-      {clickedOnDelete ? (
+    <div className="w-96 max-md:w-80 max-md:h-[28rem] h-108 font-primary dark:text-white animate-fade_third">
+      {clickedOnDelete && (
         <ConfirmDelete
           setShow={setClickedOnDelete}
           handleDelete={async () => {
@@ -36,8 +36,6 @@ const OpeningBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDe
             setClickedOnDelete(false);
           }}
         />
-      ) : (
-        <></>
       )}
       <div
         onClick={() => {
@@ -56,7 +54,7 @@ const OpeningBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDe
           >
             •••
           </div>
-          {clickedOnSettings ? (
+          {clickedOnSettings && (
             <div className="w-1/2 h-fit rounded-2xl glassMorphism dark:text-white p-2">
               <div
                 onClick={el => {
@@ -78,91 +76,82 @@ const OpeningBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDe
                 Delete
               </div>
             </div>
-          ) : (
-            <></>
           )}
         </div>
-        {bookmark.openingItems ? (
-          <>
-            {bookmark.openingItems.length == 0 ? (
+        {bookmark.openingItems &&
+          (bookmark.openingItems.length == 0 ? (
+            <div className="p-2">
+              <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+            </div>
+          ) : bookmark.openingItems.length == 1 ? (
+            bookmark.openingItems[0].opening.project?.coverPic ? (
               <div className="p-2">
-                <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+                <Image
+                  crossOrigin="anonymous"
+                  className="w-full h-[368px] max-md:h-[304px] rounded-md object-cover"
+                  width={500}
+                  height={500}
+                  alt=""
+                  src={`${PROJECT_PIC_URL}/${bookmark.openingItems[0].opening.project.coverPic}`}
+                  placeholder="blur"
+                  blurDataURL={bookmark.openingItems[0].opening.project.blurHash || 'no-hash'}
+                />
               </div>
-            ) : bookmark.openingItems.length == 1 ? (
-              <>
-                {bookmark.openingItems[0].opening.project?.coverPic ? (
-                  <div className="p-2">
-                    <Image
-                      crossOrigin="anonymous"
-                      className="w-full h-[368px] max-md:h-[304px] rounded-md object-cover"
-                      width={500}
-                      height={500}
-                      alt=""
-                      src={`${PROJECT_PIC_URL}/${bookmark.openingItems[0].opening.project.coverPic}`}
-                      placeholder="blur"
-                      blurDataURL={bookmark.openingItems[0].opening.project.blurHash || 'no-hash'}
-                    />
-                  </div>
-                ) : bookmark.openingItems[0].opening.organization?.user.profilePic ? (
-                  <div className="p-2">
-                    <Image
-                      crossOrigin="anonymous"
-                      className="w-full h-[368px] max-md:h-[304px] rounded-md object-cover"
-                      width={500}
-                      height={500}
-                      alt=""
-                      src={`${USER_PROFILE_PIC_URL}/${bookmark.openingItems[0].opening.organization?.user.profilePic}`}
-                    />
-                  </div>
-                ) : (
-                  <div className="p-2">
-                    <div className="w-full h-96 max-md:h-80 bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
-                  </div>
-                )}
-              </>
+            ) : bookmark.openingItems[0].opening.organization?.user.profilePic ? (
+              <div className="p-2">
+                <Image
+                  crossOrigin="anonymous"
+                  className="w-full h-[368px] max-md:h-[304px] rounded-md object-cover"
+                  width={500}
+                  height={500}
+                  alt=""
+                  src={`${USER_PROFILE_PIC_URL}/${bookmark.openingItems[0].opening.organization?.user.profilePic}`}
+                />
+              </div>
             ) : (
-              <div className="w-full h-96 max-md:h-80 flex flex-wrap gap-2 p-2 items-center justify-center">
-                {bookmark.openingItems.map(openingItem => {
-                  if (
-                    count >= 4 ||
-                    (!openingItem.opening.project?.coverPic && !openingItem.opening.organization?.user.profilePic)
-                  ) {
-                    return <></>;
-                  }
-                  count++;
-                  return openingItem.opening.project?.coverPic ? (
-                    <Image
-                      key={openingItem.openingID}
-                      crossOrigin="anonymous"
-                      className="w-[48%] h-[49%] object-cover rounded-md"
-                      width={500}
-                      height={500}
-                      alt=""
-                      src={`${PROJECT_PIC_URL}/${openingItem.opening.project.coverPic}`}
-                      placeholder="blur"
-                      blurDataURL={openingItem.opening.project.blurHash || 'no-hash'}
-                    />
-                  ) : (
-                    <Image
-                      key={openingItem.openingID}
-                      crossOrigin="anonymous"
-                      className="w-[48%] h-[49%] object-cover rounded-md"
-                      width={500}
-                      height={500}
-                      alt=""
-                      src={`${USER_PROFILE_PIC_URL}/${openingItem.opening.organization?.user.profilePic}`}
-                    />
-                  );
-                })}
-                {[...Array(4 - count)].map((_, index) => (
-                  <div key={index} className="w-[48%] h-[49%] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
-                ))}
+              <div className="p-2">
+                <div className="w-full h-96 max-md:h-80 bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
               </div>
-            )}
-          </>
-        ) : (
-          <></>
-        )}
+            )
+          ) : (
+            <div className="w-full h-96 max-md:h-80 flex flex-wrap gap-2 p-2 items-center justify-center">
+              {bookmark.openingItems.map(openingItem => {
+                if (
+                  count >= 4 ||
+                  (!openingItem.opening.project?.coverPic && !openingItem.opening.organization?.user.profilePic)
+                ) {
+                  return <></>;
+                }
+                count++;
+                return openingItem.opening.project?.coverPic ? (
+                  <Image
+                    key={openingItem.openingID}
+                    crossOrigin="anonymous"
+                    className="w-[48%] h-[49%] object-cover rounded-md"
+                    width={500}
+                    height={500}
+                    alt=""
+                    src={`${PROJECT_PIC_URL}/${openingItem.opening.project.coverPic}`}
+                    placeholder="blur"
+                    blurDataURL={openingItem.opening.project.blurHash || 'no-hash'}
+                  />
+                ) : (
+                  <Image
+                    key={openingItem.openingID}
+                    crossOrigin="anonymous"
+                    className="w-[48%] h-[49%] object-cover rounded-md"
+                    width={500}
+                    height={500}
+                    alt=""
+                    src={`${USER_PROFILE_PIC_URL}/${openingItem.opening.organization?.user.profilePic}`}
+                  />
+                );
+              })}
+              {[...Array(4 - count)].map((_, index) => (
+                <div key={index} className="w-[48%] h-[49%] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+              ))}
+            </div>
+          ))}
       </div>
       <div className="w-full flex flex-col p-4">
         {clickedOnEdit ? (
@@ -187,4 +176,4 @@ const OpeningBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDe
   );
 };
 
-export default OpeningBookmark;
+export default OpeningBookmarkComponent;

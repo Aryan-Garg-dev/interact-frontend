@@ -13,7 +13,7 @@ interface Props {
   handleDelete: (bookmarkID: string) => Promise<void>;
 }
 
-const EventBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDelete }: Props) => {
+const EventBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit, handleDelete }: Props) => {
   let count = 0;
   const [clickedOnSettings, setClickedOnSettings] = useState(false);
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
@@ -29,7 +29,7 @@ const EventBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDele
 
   return (
     <div className="w-96 h-108 max-md:w-80 max-md:h-[28rem] font-primary dark:text-white">
-      {clickedOnDelete ? (
+      {clickedOnDelete && (
         <ConfirmDelete
           setShow={setClickedOnDelete}
           handleDelete={async () => {
@@ -37,8 +37,6 @@ const EventBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDele
             setClickedOnDelete(false);
           }}
         />
-      ) : (
-        <></>
       )}
 
       <div
@@ -58,7 +56,7 @@ const EventBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDele
           >
             •••
           </div>
-          {clickedOnSettings ? (
+          {clickedOnSettings && (
             <div className="w-1/2 h-fit rounded-2xl glassMorphism dark:text-white p-2">
               <div
                 onClick={el => {
@@ -80,64 +78,58 @@ const EventBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDele
                 Delete
               </div>
             </div>
-          ) : (
-            <></>
           )}
         </div>
         {bookmark.eventItems ? (
-          <>
-            {bookmark.eventItems.length == 0 ? (
+          bookmark.eventItems.length == 0 ? (
+            <div className="p-2">
+              <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+            </div>
+          ) : bookmark.eventItems.length == 1 ? (
+            bookmark.eventItems[0].event.coverPic ? (
               <div className="p-2">
-                <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+                <Image
+                  crossOrigin="anonymous"
+                  className="w-full h-[368px] max-md:h-[304px] rounded-md object-cover"
+                  width={500}
+                  height={500}
+                  alt=""
+                  src={`${EVENT_PIC_URL}/${bookmark.eventItems[0].event.coverPic}`}
+                  placeholder="blur"
+                  blurDataURL={bookmark.eventItems[0].event.blurHash}
+                />
               </div>
-            ) : bookmark.eventItems.length == 1 ? (
-              <>
-                {bookmark.eventItems[0].event.coverPic ? (
-                  <div className="p-2">
-                    <Image
-                      crossOrigin="anonymous"
-                      className="w-full h-[368px] max-md:h-[304px] rounded-md object-cover"
-                      width={500}
-                      height={500}
-                      alt=""
-                      src={`${EVENT_PIC_URL}/${bookmark.eventItems[0].event.coverPic}`}
-                      placeholder="blur"
-                      blurDataURL={bookmark.eventItems[0].event.blurHash}
-                    />
-                  </div>
-                ) : (
-                  <div className="p-2">
-                    <div className="w-full h-96 max-md:h-80 bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
-                  </div>
-                )}
-              </>
             ) : (
-              <div className="w-full h-96 max-md:h-80 flex flex-wrap gap-2 p-2 items-center justify-center">
-                {bookmark.eventItems.map(eventItem => {
-                  if (count >= 4 || !eventItem.event.coverPic) {
-                    return <></>;
-                  }
-                  count++;
-                  return (
-                    <Image
-                      key={eventItem.eventID}
-                      crossOrigin="anonymous"
-                      className="w-[48%] h-[49%] object-cover rounded-md"
-                      width={500}
-                      height={500}
-                      alt=""
-                      src={`${EVENT_PIC_URL}/${eventItem.event.coverPic}`}
-                      placeholder="blur"
-                      blurDataURL={eventItem.event.blurHash}
-                    />
-                  );
-                })}
-                {[...Array(4 - count)].map((_, index) => (
-                  <div key={index} className="w-[48%] h-[49%] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
-                ))}
+              <div className="p-2">
+                <div className="w-full h-96 max-md:h-80 bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
               </div>
-            )}
-          </>
+            )
+          ) : (
+            <div className="w-full h-96 max-md:h-80 flex flex-wrap gap-2 p-2 items-center justify-center">
+              {bookmark.eventItems.map(eventItem => {
+                if (count >= 4 || !eventItem.event.coverPic) {
+                  return <></>;
+                }
+                count++;
+                return (
+                  <Image
+                    key={eventItem.eventID}
+                    crossOrigin="anonymous"
+                    className="w-[48%] h-[49%] object-cover rounded-md"
+                    width={500}
+                    height={500}
+                    alt=""
+                    src={`${EVENT_PIC_URL}/${eventItem.event.coverPic}`}
+                    placeholder="blur"
+                    blurDataURL={eventItem.event.blurHash}
+                  />
+                );
+              })}
+              {[...Array(4 - count)].map((_, index) => (
+                <div key={index} className="w-[48%] h-[49%] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+              ))}
+            </div>
+          )
         ) : (
           <div className="p-2">
             <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
@@ -167,4 +159,4 @@ const EventBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDele
   );
 };
 
-export default EventBookmark;
+export default EventBookmarkComponent;

@@ -104,7 +104,7 @@ const ProjectCard = ({
           setClickedProjectIndex(index);
         }}
         onMouseLeave={() => setClickedOnSettings(false)}
-        className={`w-${size} h-${size} max-lg:w-56 max-lg:h-56 max-md:w-72 max-md:h-72 rounded-lg relative group cursor-pointer transition-ease-out-500`}
+        className={`w-${size} h-${size} max-lg:w-56 max-lg:h-56 max-md:w-72 max-md:h-72 rounded-lg relative group cursor-pointer transition-ease-out-500 animate-fade_third`}
       >
         <div className="w-full h-full absolute top-0 hidden group-hover:flex justify-between gap-4 text-white animate-fade_third z-[6] rounded-lg p-2">
           {(project.userID == user.id || user.editorProjects.includes(project.id)) && (

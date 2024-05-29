@@ -58,26 +58,22 @@ const Events = () => {
     <div className="w-full flex flex-col gap-6 pt-2">
       {loading ? (
         <Loader />
+      ) : events.length > 0 ? (
+        <InfiniteScroll
+          className={`w-full ${
+            open ? 'px-2 gap-4' : 'px-8 gap-8'
+          } pb-12 flex flex-wrap justify-center transition-ease-out-500`}
+          dataLength={events.length}
+          next={() => fetchEvents(new URLSearchParams(window.location.search).get('search'))}
+          hasMore={hasMore}
+          loader={<Loader />}
+        >
+          {events.map(event => {
+            return <EventCard key={event.id} event={event} size={96} />;
+          })}
+        </InfiniteScroll>
       ) : (
-        <>
-          {events.length > 0 ? (
-            <InfiniteScroll
-              className={`w-full ${
-                open ? 'px-2 gap-4' : 'px-8 gap-8'
-              } pb-12 flex flex-wrap justify-center transition-ease-out-500`}
-              dataLength={events.length}
-              next={() => fetchEvents(new URLSearchParams(window.location.search).get('search'))}
-              hasMore={hasMore}
-              loader={<Loader />}
-            >
-              {events.map(event => {
-                return <EventCard key={event.id} event={event} size={96} />;
-              })}
-            </InfiniteScroll>
-          ) : (
-            <NoSearch />
-          )}
-        </>
+        <NoSearch />
       )}
     </div>
   );

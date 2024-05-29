@@ -13,7 +13,7 @@ interface Props {
   handleDelete: (bookmarkID: string) => Promise<void>;
 }
 
-const PostBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDelete }: Props) => {
+const PostBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit, handleDelete }: Props) => {
   let count = 0;
   const [clickedOnSettings, setClickedOnSettings] = useState(false);
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
@@ -27,8 +27,8 @@ const PostBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDelet
     if (status == 1) setClickedOnEdit(false);
   };
   return (
-    <div className="w-96 h-108 max-md:w-80 max-md:h-[28rem] font-primary dark:text-white">
-      {clickedOnDelete ? (
+    <div className="w-96 h-108 max-md:w-80 max-md:h-[28rem] font-primary dark:text-white animate-fade_third">
+      {clickedOnDelete && (
         <ConfirmDelete
           setShow={setClickedOnDelete}
           handleDelete={async () => {
@@ -36,8 +36,6 @@ const PostBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDelet
             setClickedOnDelete(false);
           }}
         />
-      ) : (
-        <></>
       )}
       <div
         onClick={() => {
@@ -56,7 +54,7 @@ const PostBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDelet
           >
             •••
           </div>
-          {clickedOnSettings ? (
+          {clickedOnSettings && (
             <div className="w-1/2 h-fit rounded-2xl glassMorphism dark:text-white p-2">
               <div
                 onClick={el => {
@@ -78,63 +76,54 @@ const PostBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDelet
                 Delete
               </div>
             </div>
-          ) : (
-            <></>
           )}
         </div>
-        {bookmark.postItems ? (
-          <>
-            {bookmark.postItems.length == 0 ? (
+        {bookmark.postItems &&
+          (bookmark.postItems.length == 0 ? (
+            <div className="p-2">
+              <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+            </div>
+          ) : bookmark.postItems.length == 1 ? (
+            bookmark.postItems[0].post.images && bookmark.postItems[0].post.images.length > 0 ? (
               <div className="p-2">
-                <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+                <Image
+                  crossOrigin="anonymous"
+                  className="w-full h-[368px] max-md:h-[304px] rounded-md object-cover"
+                  width={500}
+                  height={500}
+                  alt=""
+                  src={`${POST_PIC_URL}/${bookmark.postItems[0].post.images[0]}`}
+                />
               </div>
-            ) : bookmark.postItems.length == 1 ? (
-              <>
-                {bookmark.postItems[0].post.images && bookmark.postItems[0].post.images.length > 0 ? (
-                  <div className="p-2">
-                    <Image
-                      crossOrigin="anonymous"
-                      className="w-full h-[368px] max-md:h-[304px] rounded-md object-cover"
-                      width={500}
-                      height={500}
-                      alt=""
-                      src={`${POST_PIC_URL}/${bookmark.postItems[0].post.images[0]}`}
-                    />
-                  </div>
-                ) : (
-                  <div className="p-2">
-                    <div className="w-full h-96 max-md:h-80 bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
-                  </div>
-                )}
-              </>
             ) : (
-              <div className="w-full h-96 max-md:h-80 flex flex-wrap gap-2 p-2 items-center justify-center">
-                {bookmark.postItems.map(postItem => {
-                  if (count >= 4 || !postItem.post.images || postItem.post.images.length === 0) {
-                    return <></>;
-                  }
-                  count++;
-                  return (
-                    <Image
-                      key={postItem.postID}
-                      crossOrigin="anonymous"
-                      className="w-[48%] h-[49%] object-cover rounded-md"
-                      width={500}
-                      height={500}
-                      alt=""
-                      src={`${POST_PIC_URL}/${postItem.post.images[0]}`}
-                    />
-                  );
-                })}
-                {[...Array(4 - count)].map((_, index) => (
-                  <div key={index} className="w-[48%] h-[49%] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
-                ))}
+              <div className="p-2">
+                <div className="w-full h-96 max-md:h-80 bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
               </div>
-            )}
-          </>
-        ) : (
-          <></>
-        )}
+            )
+          ) : (
+            <div className="w-full h-96 max-md:h-80 flex flex-wrap gap-2 p-2 items-center justify-center">
+              {bookmark.postItems.map(postItem => {
+                if (count >= 4 || !postItem.post.images || postItem.post.images.length === 0) {
+                  return <></>;
+                }
+                count++;
+                return (
+                  <Image
+                    key={postItem.postID}
+                    crossOrigin="anonymous"
+                    className="w-[48%] h-[49%] object-cover rounded-md"
+                    width={500}
+                    height={500}
+                    alt=""
+                    src={`${POST_PIC_URL}/${postItem.post.images[0]}`}
+                  />
+                );
+              })}
+              {[...Array(4 - count)].map((_, index) => (
+                <div key={index} className="w-[48%] h-[49%] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+              ))}
+            </div>
+          ))}
       </div>
       <div className="w-full flex flex-col p-4">
         {clickedOnEdit ? (
@@ -159,4 +148,4 @@ const PostBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDelet
   );
 };
 
-export default PostBookmark;
+export default PostBookmarkComponent;

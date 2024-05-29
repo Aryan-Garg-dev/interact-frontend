@@ -13,7 +13,7 @@ interface Props {
   handleDelete: (bookmarkID: string) => Promise<void>;
 }
 
-const ProjectBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDelete }: Props) => {
+const ProjectBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit, handleDelete }: Props) => {
   let count = 0;
   const [clickedOnSettings, setClickedOnSettings] = useState(false);
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
@@ -28,8 +28,8 @@ const ProjectBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDe
   };
 
   return (
-    <div className="w-96 h-108 max-md:w-80 max-md:h-[28rem] font-primary dark:text-white">
-      {clickedOnDelete ? (
+    <div className="w-96 h-108 max-md:w-80 max-md:h-[28rem] font-primary dark:text-white animate-fade_third">
+      {clickedOnDelete && (
         <ConfirmDelete
           setShow={setClickedOnDelete}
           handleDelete={async () => {
@@ -37,8 +37,6 @@ const ProjectBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDe
             setClickedOnDelete(false);
           }}
         />
-      ) : (
-        <></>
       )}
 
       <div
@@ -58,7 +56,7 @@ const ProjectBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDe
           >
             •••
           </div>
-          {clickedOnSettings ? (
+          {clickedOnSettings && (
             <div className="w-1/2 h-fit rounded-2xl glassMorphism dark:text-white p-2">
               <div
                 onClick={el => {
@@ -80,64 +78,58 @@ const ProjectBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDe
                 Delete
               </div>
             </div>
-          ) : (
-            <></>
           )}
         </div>
         {bookmark.projectItems ? (
-          <>
-            {bookmark.projectItems.length == 0 ? (
+          bookmark.projectItems.length == 0 ? (
+            <div className="p-2">
+              <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+            </div>
+          ) : bookmark.projectItems.length == 1 ? (
+            bookmark.projectItems[0].project.coverPic ? (
               <div className="p-2">
-                <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+                <Image
+                  crossOrigin="anonymous"
+                  className="w-full h-[368px] max-md:h-[304px] rounded-md object-cover"
+                  width={500}
+                  height={500}
+                  alt=""
+                  src={`${PROJECT_PIC_URL}/${bookmark.projectItems[0].project.coverPic}`}
+                  placeholder="blur"
+                  blurDataURL={bookmark.projectItems[0].project.blurHash || 'no-hash'}
+                />
               </div>
-            ) : bookmark.projectItems.length == 1 ? (
-              <>
-                {bookmark.projectItems[0].project.coverPic ? (
-                  <div className="p-2">
-                    <Image
-                      crossOrigin="anonymous"
-                      className="w-full h-[368px] max-md:h-[304px] rounded-md object-cover"
-                      width={500}
-                      height={500}
-                      alt=""
-                      src={`${PROJECT_PIC_URL}/${bookmark.projectItems[0].project.coverPic}`}
-                      placeholder="blur"
-                      blurDataURL={bookmark.projectItems[0].project.blurHash || 'no-hash'}
-                    />
-                  </div>
-                ) : (
-                  <div className="p-2">
-                    <div className="w-full h-96 max-md:h-80 bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
-                  </div>
-                )}
-              </>
             ) : (
-              <div className="w-full h-96 max-md:h-80 flex flex-wrap gap-2 p-2 items-center justify-center">
-                {bookmark.projectItems.map(projectItem => {
-                  if (count >= 4 || !projectItem.project.coverPic) {
-                    return <></>;
-                  }
-                  count++;
-                  return (
-                    <Image
-                      key={projectItem.projectID}
-                      crossOrigin="anonymous"
-                      className="w-[48%] h-[49%] object-cover rounded-md"
-                      width={500}
-                      height={500}
-                      alt=""
-                      src={`${PROJECT_PIC_URL}/${projectItem.project.coverPic}`}
-                      placeholder="blur"
-                      blurDataURL={projectItem.project.blurHash || 'no-hash'}
-                    />
-                  );
-                })}
-                {[...Array(4 - count)].map((_, index) => (
-                  <div key={index} className="w-[48%] h-[49%] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
-                ))}
+              <div className="p-2">
+                <div className="w-full h-96 max-md:h-80 bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
               </div>
-            )}
-          </>
+            )
+          ) : (
+            <div className="w-full h-96 max-md:h-80 flex flex-wrap gap-2 p-2 items-center justify-center">
+              {bookmark.projectItems.map(projectItem => {
+                if (count >= 4 || !projectItem.project.coverPic) {
+                  return <></>;
+                }
+                count++;
+                return (
+                  <Image
+                    key={projectItem.projectID}
+                    crossOrigin="anonymous"
+                    className="w-[48%] h-[49%] object-cover rounded-md"
+                    width={500}
+                    height={500}
+                    alt=""
+                    src={`${PROJECT_PIC_URL}/${projectItem.project.coverPic}`}
+                    placeholder="blur"
+                    blurDataURL={projectItem.project.blurHash || 'no-hash'}
+                  />
+                );
+              })}
+              {[...Array(4 - count)].map((_, index) => (
+                <div key={index} className="w-[48%] h-[49%] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+              ))}
+            </div>
+          )
         ) : (
           <div className="p-2">
             <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
@@ -167,4 +159,4 @@ const ProjectBookmark = ({ bookmark, setClick, setBookmark, handleEdit, handleDe
   );
 };
 
-export default ProjectBookmark;
+export default ProjectBookmarkComponent;

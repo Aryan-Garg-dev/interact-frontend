@@ -56,27 +56,23 @@ const Organisations = () => {
   }, [window.location.search]);
 
   return (
-    <div className="w-full flex flex-col gap-6 pt-2">
+    <div className="w-full flex flex-col gap-6">
       {loading ? (
         <Loader />
+      ) : users.length > 0 ? (
+        <InfiniteScroll
+          className="w-full px-8 pt-2 pb-12 mx-auto flex flex-wrap gap-8 justify-center"
+          dataLength={users.length}
+          next={() => fetchUsers(new URLSearchParams(window.location.search).get('search'))}
+          hasMore={hasMore}
+          loader={<Loader />}
+        >
+          {users.map(user => {
+            return <OrgCard key={user.id} user={user} />;
+          })}
+        </InfiniteScroll>
       ) : (
-        <>
-          {users.length > 0 ? (
-            <InfiniteScroll
-              className="w-full px-8 pt-2 pb-12 mx-auto flex flex-wrap gap-8 justify-center"
-              dataLength={users.length}
-              next={() => fetchUsers(new URLSearchParams(window.location.search).get('search'))}
-              hasMore={hasMore}
-              loader={<Loader />}
-            >
-              {users.map(user => {
-                return <OrgCard key={user.id} user={user} />;
-              })}
-            </InfiniteScroll>
-          ) : (
-            <NoSearch />
-          )}
-        </>
+        <NoSearch />
       )}
     </div>
   );

@@ -24,7 +24,7 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
         opening.id == clickedOpening?.id
           ? 'bg-white dark:bg-[#ffffff2b]'
           : 'hover:bg-gray-100 dark:hover:bg-transparent'
-      } font-primary dark:text-white border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-4 flex items-center gap-4 transition-ease-300 cursor-pointer`}
+      } font-primary dark:text-white border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-4 flex items-center gap-4 transition-ease-300 cursor-pointer animate-fade_third`}
     >
       {org ? (
         <Image
@@ -66,7 +66,7 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
           <div className="w-full flex flex-wrap gap-1">
             {opening.tags &&
               opening.tags // Splicing causes array mutation
-                .filter((tag, index) => {
+                .filter((_, index) => {
                   return index >= 0 && index < 3;
                 })
                 .map(tag => {

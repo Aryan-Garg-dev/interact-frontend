@@ -64,7 +64,7 @@ const OpeningView = ({ opening, setShow, setOpening, org = false, showBack = fal
       <div
         className={`sticky max-md:fixed top-[152px] bg-white dark:bg-transparent max-md:top-navbar max-md:right-0 ${
           fullWeight ? 'w-full' : 'w-[55%]'
-        } max-md:w-full h-[70vh] max-md:max-h-screen max-md:h-base z-20 max-lg:z-50 max-md:backdrop-blur-2xl max-md:backdrop-brightness-90 overflow-y-auto flex flex-col gap-6 justify-between max-md:gap-8 px-12 py-10 max-md:p-8 font-primary dark:text-white border-[1px] max-md:border-0 border-primary_btn  dark:border-dark_primary_btn rounded-lg max-md:rounded-none max-md:animate-fade_third`}
+        } max-md:w-full h-[70vh] max-md:max-h-screen max-md:h-base z-20 max-lg:z-50 max-md:backdrop-blur-2xl max-md:backdrop-brightness-90 overflow-y-auto flex flex-col gap-6 justify-between max-md:gap-8 px-12 py-10 max-md:p-8 font-primary dark:text-white border-[1px] max-md:border-0 border-primary_btn  dark:border-dark_primary_btn rounded-lg max-md:rounded-none animate-fade_third`}
       >
         <div className="w-full flex flex-col gap-6">
           <div className="flex flex-col gap-2 max-md:gap-6">
