@@ -249,6 +249,7 @@ export interface Comment {
   project: Project;
   parentCommentID: string;
   isRepliedComment: boolean;
+  level: number;
   content: string;
   noLikes: number;
   noReplies: number;

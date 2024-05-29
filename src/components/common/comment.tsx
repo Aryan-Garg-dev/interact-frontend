@@ -57,7 +57,11 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
             className={`rounded-full ${comment.isRepliedComment ? 'w-6 h-6' : 'w-8 h-8'} cursor-pointer`}
           />
         </Link>
-        {clickedOnReply && <div className="h-full w-[1px] bg-black rounded-lg opacity-25"></div>}
+        <div
+          className={`h-full w-[1px] bg-black rounded-lg ${
+            clickedOnReply ? 'opacity-25' : 'opacity-5'
+          } transition-ease-300`}
+        ></div>
       </div>
 
       <div className="grow flex flex-col gap-1">
@@ -78,7 +82,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
             <Trash
               onClick={() => deleteComment(comment.id)}
               className="cursor-pointer mr-1 max-md:w-4 max-md:h-4 transition-all ease-in-out duration-200 hover:scale-110"
-              size={20}
+              size={18}
               weight="regular"
             />
           )}

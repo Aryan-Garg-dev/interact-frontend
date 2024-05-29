@@ -137,7 +137,7 @@ const LowerComment = ({ comment, clickedOnReply, setClickedOnReply }: Props) => 
         <div className="w-full flex items-center justify-between">
           <div className="flex gap-4 max-md:gap-3">
             <div className="flex-center gap-1">
-              <div className="text-sm opacity-60">{numLikes}</div>
+              {numLikes > 0 && <div className="text-sm opacity-60">{numLikes}</div>}
               <HeartStraight
                 onClick={() => {
                   if (user.id == '') setNoUserClick(true);
@@ -150,20 +150,22 @@ const LowerComment = ({ comment, clickedOnReply, setClickedOnReply }: Props) => 
                 weight={liked ? 'fill' : 'regular'}
               />
             </div>
-            <div className="flex-center gap-1">
-              <div className="text-sm opacity-60">{numReplies}</div>
-              <Repeat
-                onClick={() => {
-                  if (user.id == '') setNoUserClick(true);
-                  else setClickedOnReply(prev => !prev);
-                }}
-                className={`cursor-pointer max-md:w-6 max-md:h-6 ${
-                  clickedOnReply ? 'text-blue-500' : 'text-black opacity-60'
-                } transition-ease-300`}
-                size={18}
-                weight={clickedOnReply ? 'duotone' : 'regular'}
-              />
-            </div>
+            {comment.level != 5 && (
+              <div className="flex-center gap-1">
+                {numReplies > 0 && <div className="text-sm opacity-60">{numReplies}</div>}
+                <Repeat
+                  onClick={() => {
+                    if (user.id == '') setNoUserClick(true);
+                    else setClickedOnReply(prev => !prev);
+                  }}
+                  className={`cursor-pointer max-md:w-6 max-md:h-6 ${
+                    clickedOnReply ? 'text-blue-500' : 'text-black opacity-60'
+                  } transition-ease-300`}
+                  size={18}
+                  weight={clickedOnReply ? 'duotone' : 'regular'}
+                />
+              </div>
+            )}
           </div>
           <div className="text-xs max-md:text-xxs">• {moment(comment.createdAt).fromNow()}</div>
         </div>

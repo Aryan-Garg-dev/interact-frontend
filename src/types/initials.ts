@@ -206,12 +206,16 @@ export const initialComment: Comment = {
   user: initialUser,
   content: '',
   noLikes: 0,
+  noReplies: 0,
   createdAt: new Date(),
   likedBy: [],
   postID: '',
   post: initialPost,
   projectID: '',
   project: initialProject,
+  parentCommentID: '',
+  isRepliedComment: false,
+  level: 1,
 };
 
 export const initialApplication: Application = {
