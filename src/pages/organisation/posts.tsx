@@ -5,7 +5,6 @@ import OrgSidebar from '@/components/common/org_sidebar';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
-import Post from '@/components/home/post';
 import NewPost from '@/sections/home/new_post';
 import { Info, Plus } from '@phosphor-icons/react';
 import { EXPLORE_URL } from '@/config/routes';
@@ -22,6 +21,7 @@ import Loader from '@/components/common/loader';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import AccessTree from '@/components/organization/access_tree';
 import NoPosts from '@/components/fillers/posts';
+import { Post } from '@/types';
 
 const Posts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
