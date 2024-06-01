@@ -1,10 +1,8 @@
-import Checkbox from '@/components/form/checkbox';
 import Input from '@/components/form/input';
 import Links from '@/components/form/links';
 import Select from '@/components/form/select';
 import Tags from '@/components/form/tags';
 import TextArea from '@/components/form/textarea';
-
 import CoverPic from '@/components/utils/new_cover';
 import { SERVER_ERROR } from '@/config/errors';
 import { PROJECT_URL } from '@/config/routes';
@@ -209,7 +207,7 @@ const NewProject = ({ setShow, setProjects }: Props) => {
       </div>
       <div
         onClick={() => setShow(false)}
-        className="bg-backdrop w-screen h-screen max-lg:w-[105vw] max-lg:h-[105vh] fixed top-0 left-0 animate-fade_third z-20"
+        className="bg-backdrop w-screen h-screen backdrop-blur-md max-lg:w-[105vw] max-lg:h-[105vh] fixed top-0 left-0 animate-fade_third z-20"
       ></div>
     </>
   );

@@ -104,7 +104,7 @@ const ResourceView = ({
             else return r;
           })
         );
-      if (setClickedResourceBucket) setClickedResourceBucket(resourceBucket);
+      if (setClickedResourceBucket) setClickedResourceBucket(bucket);
       setClickedOnEdit(false);
       Toaster.stopLoad(toaster, 'Resource Bucket Edited', 1);
     } else {
@@ -210,9 +210,6 @@ const ResourceView = ({
                         weight="regular"
                         onClick={() => setClickedOnEdit(true)}
                       />
-                      {
-                        //TODO add common toolkit Icon
-                      }
                       {/* <div
                         className={`${
                           showEditTip ? 'block' : 'hidden'

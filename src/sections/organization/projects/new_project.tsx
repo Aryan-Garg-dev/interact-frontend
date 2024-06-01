@@ -411,7 +411,7 @@ const NewProject = ({ setShow, setProjects }: Props) => {
       </div>
       <div
         onClick={() => setShow(false)}
-        className="bg-backdrop w-screen h-screen max-lg:w-[105vw] max-lg:h-[105vh] fixed top-0 left-0 animate-fade_third z-20"
+        className="bg-backdrop w-screen h-screen backdrop-blur-md max-lg:w-[105vw] max-lg:h-[105vh] fixed top-0 left-0 animate-fade_third z-20"
       ></div>
     </>
   );

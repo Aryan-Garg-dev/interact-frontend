@@ -72,43 +72,39 @@ const YourProjects = () => {
       <NewButton show={!clickedOnNewProject} onClick={() => setClickedOnNewProject(true)} />
       {loading ? (
         <Loader />
-      ) : (
-        <>
-          {projects.length > 0 ? (
-            <div
-              className={`w-full grid ${
-                navbarOpen ? 'grid-cols-3 px-12 gap-12' : 'grid-cols-4 px-12 gap-8'
-              } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 max-md:px-4 max-md:justify-items-center py-8 transition-ease-out-500`}
-            >
-              {clickedOnProject && (
-                <ProjectView
-                  projectSlugs={projects.map(project => project.slug)}
-                  clickedProjectIndex={clickedProjectIndex}
-                  setClickedProjectIndex={setClickedProjectIndex}
-                  setClickedOnProject={setClickedOnProject}
-                  fadeIn={fadeIn}
-                  setFadeIn={setFadeIn}
-                  setProjects={setProjects}
-                />
-              )}
-              {projects.map((project, index) => {
-                return (
-                  <ProjectCard
-                    key={project.id}
-                    index={index}
-                    size="[24vw]"
-                    project={project}
-                    setProjects={setProjects}
-                    setClickedOnProject={setClickedOnProject}
-                    setClickedProjectIndex={setClickedProjectIndex}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <NoProjects setClickedOnNewProject={setClickedOnNewProject} />
+      ) : projects.length > 0 ? (
+        <div
+          className={`w-full grid ${
+            navbarOpen ? 'grid-cols-3 px-12 gap-12' : 'grid-cols-4 px-12 gap-8'
+          } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 max-md:px-4 max-md:justify-items-center py-8 transition-ease-out-500`}
+        >
+          {clickedOnProject && (
+            <ProjectView
+              projectSlugs={projects.map(project => project.slug)}
+              clickedProjectIndex={clickedProjectIndex}
+              setClickedProjectIndex={setClickedProjectIndex}
+              setClickedOnProject={setClickedOnProject}
+              fadeIn={fadeIn}
+              setFadeIn={setFadeIn}
+              setProjects={setProjects}
+            />
           )}
-        </>
+          {projects.map((project, index) => {
+            return (
+              <ProjectCard
+                key={project.id}
+                index={index}
+                size="[24vw]"
+                project={project}
+                setProjects={setProjects}
+                setClickedOnProject={setClickedOnProject}
+                setClickedProjectIndex={setClickedProjectIndex}
+              />
+            );
+          })}
+        </div>
+      ) : (
+        <NoProjects setClickedOnNewProject={setClickedOnNewProject} />
       )}
     </div>
   );

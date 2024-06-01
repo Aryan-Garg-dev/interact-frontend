@@ -10,7 +10,7 @@ const NewButton = ({ show = true, onClick }: Props) => {
   return (
     <button
       onClick={onClick}
-      className={`fixed bottom-5 max-md:bottom-[110px] right-5 max-md:right-[10px] z-50 ${
+      className={`fixed bottom-5 max-md:bottom-[110px] right-5 max-md:right-[10px] z-10 ${
         show ? 'opacity-100' : 'opacity-0'
       } hover:scale-110 transition-ease-500 cursor-pointer`}
     >

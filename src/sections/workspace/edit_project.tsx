@@ -1,5 +1,4 @@
 import PrimaryButton from '@/components/buttons/primary_btn';
-import Checkbox from '@/components/form/checkbox';
 import Input from '@/components/form/input';
 import Links from '@/components/form/links';
 import Select from '@/components/form/select';
@@ -14,7 +13,7 @@ import { userSelector } from '@/slices/userSlice';
 import { Project } from '@/types';
 import categories from '@/utils/categories';
 import Toaster from '@/utils/toaster';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 interface Props {
@@ -125,6 +124,16 @@ const EditProject = ({ projectToEdit, setShow, setProjectToEdit, setProjects, or
     setMutex(false);
   };
 
+  useEffect(() => {
+    document.documentElement.style.overflowY = 'hidden';
+    document.documentElement.style.height = '100vh';
+
+    return () => {
+      document.documentElement.style.overflowY = 'auto';
+      document.documentElement.style.height = 'auto';
+    };
+  }, []);
+
   return (
     <>
       <div className="fixed top-12 max-lg:top-20 w-[953px] max-lg:w-5/6 h-[680px] max-lg:h-5/6 backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex max-lg:flex-col justify-between rounded-lg max-lg:rounded-md p-8 pb-2 gap-8 max-lg:gap-4 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_black  dark:border-dark_primary_btn right-1/2 translate-x-1/2 shadow-2xl animate-fade_third z-30">
@@ -146,7 +155,7 @@ const EditProject = ({ projectToEdit, setShow, setProjectToEdit, setProjects, or
       </div>
       <div
         onClick={() => setShow(false)}
-        className="bg-backdrop w-screen h-screen max-lg:backdrop-blur-sm fixed top-0 left-0 animate-fade_third z-20"
+        className="bg-backdrop w-screen h-screen backdrop-blur-sm max-lg:backdrop-blur-sm fixed top-0 left-0 animate-fade_third z-20"
       ></div>
     </>
   );
