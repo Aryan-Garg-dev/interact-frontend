@@ -5,6 +5,7 @@ interface Props {
   tags: string[];
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
   maxTags?: number;
+  maxLength?: number;
   suggestions?: boolean;
   onboardingDesign?: boolean;
   borderStyle?: string;
@@ -17,6 +18,7 @@ const Tags = ({
   tags,
   setTags,
   maxTags = 5,
+  maxLength = 20,
   onboardingDesign = false,
   suggestions = false,
   borderStyle = 'solid',
@@ -167,7 +169,7 @@ const Tags = ({
           <input
             type="text"
             className="grow text-sm border-[1px] bg-transparent border-transparent rounded-md px-3 py-2 outline-none"
-            maxLength={20}
+            maxLength={maxLength}
             value={tagInput}
             onChange={handleTagInputChange}
             onKeyDown={handleTagInputKeyDown}

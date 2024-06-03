@@ -95,7 +95,14 @@ const NewPoll = ({ orgID, setPolls, setShow, organisation }: Props) => {
 
         <div className="w-full flex flex-col gap-2">
           <div>Add Options for the Poll ({options.length}/10)</div>
-          <Tags tags={options} setTags={setOptions} maxTags={10} borderStyle="dashed" lowerOnly={false} />
+          <Tags
+            tags={options}
+            setTags={setOptions}
+            maxTags={10}
+            maxLength={50}
+            borderStyle="dashed"
+            lowerOnly={false}
+          />
         </div>
 
         <div className="w-full flex flex-col gap-4 lg:flex-row justify-between items-center">

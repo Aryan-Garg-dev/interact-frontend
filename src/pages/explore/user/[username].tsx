@@ -62,7 +62,7 @@ const User = ({ username }: Props) => {
   }, [user]);
 
   return (
-    <BaseWrapper title={`${user.name} | Interact`}>
+    <BaseWrapper title={`${user.name}`}>
       {loggedInUser.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={2} />}
       <MainWrapper>
         <div className="w-full flex max-lg:flex-col transition-ease-out-500 font-primary">

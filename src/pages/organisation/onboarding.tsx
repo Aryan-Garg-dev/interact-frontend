@@ -153,7 +153,7 @@ const Onboarding = () => {
   return (
     <>
       <Head>
-        <title>Onboarding | Interact</title>
+        <title>Onboarding</title>
       </Head>
       <div className="w-screen h-screen">
         {!clickedOnBuild ? (

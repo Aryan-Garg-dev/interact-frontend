@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import moment from 'moment';
-import { Announcement, Organization, Poll, Post } from '@/types';
+import { Organization, Poll } from '@/types';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import { SERVER_ERROR } from '@/config/errors';
@@ -65,7 +65,7 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
           />
         </Link>
 
-        <div className="grow max-w-[94%] max-md:max-w-[85%] flex flex-col gap-2">
+        <div className="w-[calc(100%-32px)] flex flex-col gap-2">
           <div className="w-full flex justify-between items-center">
             <Link
               href={

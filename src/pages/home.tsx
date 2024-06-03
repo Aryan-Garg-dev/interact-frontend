@@ -28,7 +28,7 @@ const Home = () => {
   }, []);
 
   return (
-    <BaseWrapper title="Home | Interact">
+    <BaseWrapper title="Home">
       <Sidebar index={1} />
       <MainWrapper>
         {onboarding && user.id != '' && <Onboarding />}

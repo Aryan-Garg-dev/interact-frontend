@@ -20,7 +20,7 @@ interface Props {
   setPolls?: React.Dispatch<React.SetStateAction<Poll[] | (Poll | Announcement)[] | (Post | Poll | Announcement)[]>>;
 }
 
-const Option = ({ option, totalVotes, orgID, pollID, setPolls }: Props) => {
+const OptionComponent = ({ option, totalVotes, orgID, pollID, setPolls }: Props) => {
   const [isVoted, setIsVoted] = useState(false);
 
   const user = useSelector(userSelector);
@@ -171,4 +171,4 @@ const Option = ({ option, totalVotes, orgID, pollID, setPolls }: Props) => {
   );
 };
 
-export default Option;
+export default OptionComponent;

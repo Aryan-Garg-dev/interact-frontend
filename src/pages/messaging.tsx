@@ -64,7 +64,7 @@ const Messaging = () => {
   }, []);
 
   return (
-    <BaseWrapper title="Messaging | Interact">
+    <BaseWrapper title="Messaging">
       {user.isOrganization ? <OrgSidebar index={-1} /> : <Sidebar index={-1} />}
       <MainWrapper>
         <div

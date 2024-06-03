@@ -12,6 +12,7 @@ import { Buildings, CalendarBlank, Certificate, Envelope, MapPin, PencilSimple, 
 import fuzzysort from 'fuzzysort';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import isMobilePhone from 'validator/lib/isMobilePhone';
 
 interface Props {
   profile: Profile;
@@ -51,6 +52,10 @@ const About = ({ profile, setUser, org = false }: Props) => {
   const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleSubmit = async (field: string) => {
+    if (field == 'phoneNo' && !isMobilePhone(phoneNo)) {
+      Toaster.error('Enter a valid phone number');
+      return;
+    }
     if (mutex) return;
     setMutex(true);
 
@@ -364,6 +369,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
                 <input
                   value={phoneNo}
                   type="string"
+                  maxLength={10}
                   onChange={el => setPhoneNo(el.target.value)}
                   className="w-fit text-primary_black focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 text-sm font-medium bg-transparent"
                 />

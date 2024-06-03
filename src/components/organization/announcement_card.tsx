@@ -181,7 +181,7 @@ const AnnouncementCard = ({ announcement, setAnnouncements }: Props) => {
         />
       </Link>
 
-      <div className="grow max-w-[94%] max-md:max-w-[85%] flex flex-col gap-2">
+      <div className="w-[calc(100%-32px)] flex flex-col gap-2">
         <div className="w-full h-fit flex justify-between">
           <Link
             href={

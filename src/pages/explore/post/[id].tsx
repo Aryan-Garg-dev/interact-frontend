@@ -48,7 +48,7 @@ const Post = ({ id }: Props) => {
   }, []);
 
   return (
-    <BaseWrapper title="Post | Interact">
+    <BaseWrapper title="Post">
       {user.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={2} />}
       <MainWrapper>
         <div className="w-[50vw] pt-6 mx-auto max-lg:w-full flex max-md:flex-col transition-ease-out-500 font-primary">

@@ -51,7 +51,7 @@ const Invitations = () => {
     fetchInvitations();
   }, []);
   return (
-    <BaseWrapper title="Invitations | Interact">
+    <BaseWrapper title="Invitations">
       <Sidebar index={5} />
       <MainWrapper>
         <div

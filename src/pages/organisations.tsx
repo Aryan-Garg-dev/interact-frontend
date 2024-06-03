@@ -95,7 +95,7 @@ const Organizations = () => {
   };
 
   return (
-    <BaseWrapper title="Organizations | Interact">
+    <BaseWrapper title="Organizations">
       <Sidebar index={10} />
       <MainWrapper>
         <div className="w-full flex flex-col gap-8 px-32 py-10">

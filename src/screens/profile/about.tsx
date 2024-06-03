@@ -1,5 +1,4 @@
-import { Organization, Profile } from '@/types';
-import { initialOrganization } from '@/types/initials';
+import { Profile } from '@/types';
 import { Buildings, CalendarBlank, Certificate, Envelope, MapPin, Phone } from '@phosphor-icons/react';
 import React from 'react';
 

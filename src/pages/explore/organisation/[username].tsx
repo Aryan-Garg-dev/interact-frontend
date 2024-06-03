@@ -104,7 +104,7 @@ const User = ({ username }: Props) => {
   }, [username]);
 
   return (
-    <BaseWrapper title={`${user.name} | Interact`}>
+    <BaseWrapper title={`${user.name}`}>
       {loggedInUser.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={2} />}
       <MainWrapper>
         {clickedOnShare &&

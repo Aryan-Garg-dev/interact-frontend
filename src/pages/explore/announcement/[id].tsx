@@ -48,7 +48,7 @@ const Announcement = ({ id }: Props) => {
   }, []);
 
   return (
-    <BaseWrapper title={`${announcement.title} | Interact`}>
+    <BaseWrapper title={`${announcement.title}`}>
       {user.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={2} />}
       <MainWrapper>
         <div className="w-[50vw] pt-6 mx-auto max-lg:w-full max-lg:px-4 flex max-md:flex-col transition-ease-out-500 font-primary">

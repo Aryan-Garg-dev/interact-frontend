@@ -145,7 +145,7 @@ const Profile = () => {
   };
 
   return (
-    <BaseWrapper title="Profile | Interact">
+    <BaseWrapper title="Profile">
       <Sidebar index={7} />
       <MainWrapper>
         <div className="w-full max-lg:w-full flex max-lg:flex-col transition-ease-out-500 font-primary">

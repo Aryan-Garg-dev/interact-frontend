@@ -32,7 +32,7 @@ const Settings = () => {
     }
   };
   return (
-    <BaseWrapper title="Settings | Interact">
+    <BaseWrapper title="Settings">
       <Sidebar index={9} />
       <MainWrapper>
         <div className="w-3/4 max-md:w-full mx-auto dark:text-white flex flex-col gap-2 px-8 max-md:px-4 py-6 font-primary relative transition-ease-out-500">

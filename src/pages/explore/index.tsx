@@ -24,7 +24,7 @@ const Explore = () => {
     if (user.isOrganization) window.location.replace('/organisation/explore');
   }, []);
   return (
-    <BaseWrapper title="Explore | Interact">
+    <BaseWrapper title="Explore">
       <Sidebar index={2} />
       <MainWrapper>
         <div className="w-full max-lg:w-full flex flex-col items-center gap-4 transition-ease-out-500 pt-24 pb-base_padding">

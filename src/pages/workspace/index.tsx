@@ -13,7 +13,7 @@ import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 const Workspace = () => {
   const active = useSelector(workspaceTabSelector);
   return (
-    <BaseWrapper title="Workspace | Interact">
+    <BaseWrapper title="Workspace">
       <Sidebar index={3} />
       <MainWrapper>
         <div className="w-full flex flex-col items-center gap-4 pt-20 pb-base_padding">

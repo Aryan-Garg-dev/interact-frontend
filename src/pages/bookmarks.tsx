@@ -14,7 +14,7 @@ import Events from '@/screens/bookmarks/events';
 const Bookmarks = () => {
   const active = useSelector(bookmarksTabSelector);
   return (
-    <BaseWrapper title="Bookmarks | Interact">
+    <BaseWrapper title="Bookmarks">
       <Sidebar index={6} />
       <MainWrapper>
         <div className="w-full flex flex-col items-center gap-4 py-20">

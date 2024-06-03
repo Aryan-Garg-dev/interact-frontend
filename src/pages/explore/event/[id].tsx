@@ -268,7 +268,7 @@ const Event = ({ id }: Props) => {
   );
 
   return (
-    <BaseWrapper title={`${event.title} | Interact`}>
+    <BaseWrapper title={`${event.title}`}>
       {user.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={2} />}
       <MainWrapper>
         {clickedOnChat &&
