@@ -5,7 +5,7 @@ import { configSelector, setUpdatingLikes } from '@/slices/configSlice';
 import { setLikes, userSelector } from '@/slices/userSlice';
 import { Event } from '@/types';
 import Semaphore from '@/utils/semaphore';
-import { Eye, CursorClick, HeartStraight, ChatCircleText, Export } from '@phosphor-icons/react';
+import { Eye, HeartStraight, ChatCircleText, Export } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SignUp from '../common/signup_box';

@@ -5,13 +5,13 @@ import getHandler from '@/handlers/get_handler';
 import { useSelector } from 'react-redux';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useState, useEffect } from 'react';
-import NewOpening from '@/sections/organization/openings/new_opening';
+import NewMeeting from '@/sections/organization/meetings/new_meeting';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
 import { Info, Plus } from '@phosphor-icons/react';
-import { ORG_MANAGER } from '@/config/constants';
-import NoOpenings from '@/components/fillers/openings';
-import OpeningCard from '@/components/organization/opening_card';
-import { Opening } from '@/types';
+import { ORG_SENIOR } from '@/config/constants';
+// import NoMeetings from '@/components/fillers/meetings';
+import MeetingCard from '@/components/organization/meeting_card';
+import { Meeting } from '@/types';
 import Toaster from '@/utils/toaster';
 import Loader from '@/components/common/loader';
 import { SERVER_ERROR } from '@/config/errors';
@@ -20,10 +20,10 @@ import AccessTree from '@/components/organization/access_tree';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 
-const Openings = () => {
+const Meetings = () => {
   const [loading, setLoading] = useState(true);
-  const [clickedOnNewOpening, setClickedOnNewOpening] = useState(false);
-  const [openings, setOpenings] = useState<Opening[]>([]);
+  const [clickedOnNewMeeting, setClickedOnNewMeeting] = useState(false);
+  const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
@@ -31,13 +31,13 @@ const Openings = () => {
 
   const currentOrg = useSelector(currentOrgSelector);
 
-  const getOpenings = async () => {
-    const URL = `/org/${currentOrg.id}/org_openings?page=${page}&limit=${10}`;
+  const getMeetings = async () => {
+    const URL = `/org/${currentOrg.id}/meetings?page=${page}&limit=${10}`;
     const res = await getHandler(URL);
     if (res.statusCode === 200) {
-      const addedOpenings = [...openings, ...(res.data.openings || [])];
-      if (addedOpenings.length === openings.length) setHasMore(false);
-      setOpenings(addedOpenings);
+      const addedMeetings = [...meetings, ...(res.data.meetings || [])];
+      if (addedMeetings.length === meetings.length) setHasMore(false);
+      setMeetings(addedMeetings);
       setPage(prev => prev + 1);
       setLoading(false);
     } else {
@@ -49,23 +49,21 @@ const Openings = () => {
     }
   };
   useEffect(() => {
-    getOpenings();
+    getMeetings();
   }, []);
 
   return (
-    <BaseWrapper title={`Openings | ${currentOrg.title}`}>
-      <OrgSidebar index={15} />
+    <BaseWrapper title={`Meetings | ${currentOrg.title}`}>
+      <OrgSidebar index={16} />
       <MainWrapper>
-        {clickedOnNewOpening && (
-          <NewOpening setShow={setClickedOnNewOpening} openings={openings} setOpenings={setOpenings} />
-        )}
-        {clickedOnInfo && <AccessTree type="opening" setShow={setClickedOnInfo} />}
+        {clickedOnNewMeeting && <NewMeeting setShow={setClickedOnNewMeeting} setMeetings={setMeetings} />}
+        {/* {clickedOnInfo && <AccessTree type="meeting" setShow={setClickedOnInfo} />} */}
         <div className="w-full flex justify-between items-center p-base_padding">
-          <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Openings</div>
+          <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Meetings</div>
           <div className="flex items-center gap-2">
-            {checkOrgAccess(ORG_MANAGER) && (
+            {checkOrgAccess(ORG_SENIOR) && (
               <Plus
-                onClick={() => setClickedOnNewOpening(prev => !prev)}
+                onClick={() => setClickedOnNewMeeting(prev => !prev)}
                 size={42}
                 className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
                 weight="regular"
@@ -82,24 +80,25 @@ const Openings = () => {
 
         {loading ? (
           <Loader />
-        ) : openings.length > 0 ? (
+        ) : meetings.length > 0 ? (
           <InfiniteScroll
-            dataLength={openings.length}
-            next={getOpenings}
+            dataLength={meetings.length}
+            next={getMeetings}
             hasMore={hasMore}
             loader={<Loader />}
             className="w-full flex flex-wrap gap-4 justify-between px-base_padding"
           >
-            {openings.map(opening => {
-              return <OpeningCard key={opening.id} opening={opening} setOpenings={setOpenings} />;
+            {meetings.map(meeting => {
+              return <MeetingCard key={meeting.id} meeting={meeting} setMeetings={setMeetings} />;
             })}
           </InfiniteScroll>
         ) : (
-          <NoOpenings width="2/3" />
+          <></>
+          //   <NoMeetings width="2/3" />
         )}
       </MainWrapper>
     </BaseWrapper>
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Openings));
+export default WidthCheck(OrgMembersOnlyAndProtect(Meetings));

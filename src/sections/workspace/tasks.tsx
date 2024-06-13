@@ -4,7 +4,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL, PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
-import Gavel from '@phosphor-icons/react/dist/icons/Gavel';
+import { Gavel } from '@phosphor-icons/react';
 import { userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
 import moment from 'moment';

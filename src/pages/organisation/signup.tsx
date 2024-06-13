@@ -1,8 +1,6 @@
 import React from 'react';
 import { ReactSVG } from 'react-svg';
-import ArrowRight from '@phosphor-icons/react/dist/icons/ArrowRight';
-import Eye from '@phosphor-icons/react/dist/icons/Eye';
-import EyeClosed from '@phosphor-icons/react/dist/icons/EyeClosed';
+import { ArrowRight, Eye, EyeClosed, Info } from '@phosphor-icons/react';
 import { useState } from 'react';
 import Toaster from '@/utils/toaster';
 import Cookies from 'js-cookie';
@@ -19,7 +17,6 @@ import socketService from '@/config/ws';
 import isEmail from 'validator/lib/isEmail';
 import isStrongPassword from 'validator/lib/isStrongPassword';
 import { SERVER_ERROR } from '@/config/errors';
-import Info from '@phosphor-icons/react/dist/icons/Info';
 import StrongPassInfo from '@/components/common/strong_pass_info';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import { setCurrentOrg } from '@/slices/orgSlice';

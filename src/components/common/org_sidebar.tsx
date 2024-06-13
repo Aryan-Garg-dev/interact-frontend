@@ -15,6 +15,7 @@ import {
   Wrench,
   BookOpenText,
   EnvelopeSimpleOpen,
+  VideoConference,
 } from '@phosphor-icons/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { navbarOpenSelector } from '@/slices/feedSlice';
@@ -142,6 +143,15 @@ const OrgSidebar = ({ index }: Props) => {
             org={true}
             title="Openings"
             icon={<EnvelopeSimpleOpen size={24} />}
+            active={active}
+            setActive={setActive}
+            open={open}
+          />
+          <SidebarItem
+            index={16}
+            org={true}
+            title="Meetings"
+            icon={<VideoConference size={24} />}
             active={active}
             setActive={setActive}
             open={open}

@@ -9,8 +9,12 @@ interface Props {
 
 const Checkbox = ({ label, val, setVal, required = false }: Props) => {
   return (
-    <label className="flex w-fit cursor-pointer select-none items-center text-sm gap-2">
-      {label && <div className="font-semibold">Keep this Project Private {required && '*'}</div>}
+    <label className="w-full flex justify-between cursor-pointer select-none items-center text-sm gap-2 border-[1px] border-gray-400 rounded-lg p-2">
+      {label && (
+        <div className="text-base font-medium text-gray-500">
+          {label} {required && '*'}
+        </div>
+      )}
       <div className="relative">
         <input type="checkbox" checked={val} onChange={() => setVal(prev => !prev)} className="sr-only" />
         <div

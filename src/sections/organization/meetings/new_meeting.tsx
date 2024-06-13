@@ -1,0 +1,280 @@
+import { ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import postHandler from '@/handlers/post_handler';
+import { Meeting, User } from '@/types';
+import Toaster from '@/utils/toaster';
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import { MagnifyingGlass } from '@phosphor-icons/react';
+import { SERVER_ERROR } from '@/config/errors';
+import moment from 'moment';
+import { currentOrgIDSelector } from '@/slices/orgSlice';
+import { useSelector } from 'react-redux';
+import PrimaryButton from '@/components/buttons/primary_btn';
+import Input from '@/components/form/input';
+import TextArea from '@/components/form/textarea';
+import Tags from '@/components/form/tags';
+import Time from '@/components/form/time';
+import Checkbox from '@/components/form/checkbox';
+import getHandler from '@/handlers/get_handler';
+import Loader from '@/components/common/loader';
+import { userIDSelector } from '@/slices/userSlice';
+import { initialMeeting } from '@/types/initials';
+
+interface Props {
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  setMeetings?: React.Dispatch<React.SetStateAction<Meeting[]>>;
+}
+
+const NewMeeting = ({ setShow, setMeetings }: Props) => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [isOnline, setIsOnline] = useState(true);
+  const [isOpenForMembers, setIsOpenForMembers] = useState(false);
+  const [allowExternalParticipants, setAllowExternalParticipants] = useState(false);
+
+  const [users, setUsers] = useState<User[]>([]);
+  const [search, setSearch] = useState('');
+
+  const [status, setStatus] = useState(0);
+  const [mutex, setMutex] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [meeting, setMeeting] = useState(initialMeeting);
+
+  const userID = useSelector(userIDSelector);
+
+  const fetchUsers = async (search: string, abortController?: AbortController) => {
+    setLoading(true);
+    const URL = `${ORG_URL}/${currentOrgID}/meetings/non-participants/?search=${search}&limit=${10}&isOpenForMembers=${isOpenForMembers}&allowExternalParticipants=${allowExternalParticipants}`;
+
+    const res = await getHandler(URL, abortController?.signal);
+    if (res.statusCode == 200) {
+      const userData: User[] = res.data.users || [];
+      setUsers(userData.filter(u => u.id != userID));
+      setLoading(false);
+    } else {
+      if (res.status != -1) {
+        if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
+        else Toaster.error(SERVER_ERROR, 'error_toaster');
+      }
+    }
+  };
+  const handleClickUser = (user: User) => {
+    if (selectedUsers.includes(user)) {
+      setSelectedUsers(prev => prev.filter(u => u.id != user.id));
+    } else {
+      setSelectedUsers(prev => [...prev, user]);
+    }
+  };
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    fetchUsers(search, abortController);
+
+    return () => {
+      abortController.abort();
+    };
+  }, [search]);
+
+  const currentOrgID = useSelector(currentOrgIDSelector);
+
+  const meetingDetailsValidator = () => {
+    if (title.trim() == '') {
+      Toaster.error('Enter Title');
+      return false;
+    }
+
+    const start = moment(startTime);
+    const end = moment(endTime);
+
+    if (start.isBefore(moment())) {
+      Toaster.error('Enter A Valid Start Time');
+      return false;
+    }
+    if (end.isBefore(start)) {
+      Toaster.error('Enter A Valid End Time');
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    if (title.trim().length == 0) {
+      Toaster.error('Title cannot be empty');
+      return;
+    }
+
+    if (mutex) return;
+    setMutex(true);
+
+    const toaster = Toaster.startLoad('Creating a new meeting');
+
+    const URL = `${ORG_URL}/${currentOrgID}/meetings`;
+
+    const formData = {
+      title,
+      description,
+      tags,
+      startTime: moment(startTime).format('YYYY-MM-DDTHH:mm:ss[Z]'),
+      endTime: moment(endTime).format('YYYY-MM-DDTHH:mm:ss[Z]'),
+      isOnline,
+      isOpenForMembers,
+      allowExternalParticipants,
+    };
+
+    const res = await postHandler(URL, formData);
+    if (res.statusCode === 201) {
+      if (setMeetings) setMeetings(prev => [...prev, res.data.meeting]);
+      setMeeting(res.data.meeting);
+      if (!isOnline || (isOpenForMembers && !allowExternalParticipants)) setShow(false);
+      else fetchUsers('');
+      Toaster.stopLoad(toaster, 'New Meeting Added!', 1);
+      return 1;
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else {
+        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+      }
+      setMutex(false);
+      return 0;
+    }
+  };
+
+  const handleAddParticipants = async () => {
+    const toaster = Toaster.startLoad('Adding Participants');
+
+    const URL = `${ORG_URL}/${currentOrgID}/meetings/participants/${meeting.id}`;
+
+    const formData = {
+      userIDs: selectedUsers.map(u => u.id),
+    };
+
+    const res = await postHandler(URL, formData);
+    if (res.statusCode === 200) {
+      setShow(false);
+      Toaster.stopLoad(toaster, 'Participants Added!', 1);
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else {
+        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+      }
+    }
+  };
+
+  return (
+    <>
+      <div className="fixed top-16 max-md:top-20 w-[640px] max-md:w-5/6 backdrop-blur-2xl bg-white flex flex-col gap-4 rounded-lg p-10 max-md:p-5 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
+        <div className="text-3xl max-md:text-xl font-semibold">
+          {status == 0 ? 'Meeting Details' : status == 1 ? 'Select Users' : 'Review Details'}
+        </div>
+        <div className="w-full max-h-[540px] overflow-y-auto flex flex-col gap-4">
+          {status == 0 ? (
+            <div className="w-full flex flex-col gap-4">
+              <Input label="Meeting Title" val={title} setVal={setTitle} maxLength={50} required={true} />
+              <TextArea label="Meeting Description" val={description} setVal={setDescription} maxLength={500} />
+              <Tags label="Meeting Tags" tags={tags} setTags={setTags} maxTags={5} />
+              <div className="w-full flex justify-between gap-4">
+                <div className="w-1/2">
+                  <Time label="Start Time" val={startTime} setVal={setStartTime} required={true} />
+                </div>
+                <div className="w-1/2">
+                  <Time label="End Time" val={endTime} setVal={setEndTime} required={true} />
+                </div>
+              </div>
+              <Checkbox label="Is the Meeting Online?" val={isOnline} setVal={setIsOnline} />
+              {isOnline && (
+                <>
+                  <Checkbox
+                    label="Is the Meeting Open for all Members?"
+                    val={isOpenForMembers}
+                    setVal={setIsOpenForMembers}
+                  />
+                  <Checkbox
+                    label="Do you want to allow External Participants?"
+                    val={allowExternalParticipants}
+                    setVal={setAllowExternalParticipants}
+                  />
+                </>
+              )}
+            </div>
+          ) : (
+            <>
+              <div className="w-full h-12 flex items-center px-4 gap-4 dark:bg-dark_primary_comp_hover rounded-md">
+                <MagnifyingGlass size={24} />
+                <input
+                  className="grow bg-transparent focus:outline-none font-medium"
+                  placeholder="Search"
+                  value={search}
+                  onChange={el => setSearch(el.target.value)}
+                />
+              </div>
+              <div className="w-full flex-1 flex flex-col gap-2 overflow-y-auto">
+                {loading ? (
+                  <Loader />
+                ) : (
+                  users.map(user => {
+                    return (
+                      <div
+                        key={user.id}
+                        onClick={() => handleClickUser(user)}
+                        className={`w-full flex gap-2 rounded-lg p-2 ${
+                          selectedUsers.includes(user)
+                            ? 'dark:bg-dark_primary_comp_active bg-primary_comp_hover'
+                            : 'dark:bg-dark_primary_comp hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
+                        } cursor-pointer transition-ease-200`}
+                      >
+                        <Image
+                          crossOrigin="anonymous"
+                          width={50}
+                          height={50}
+                          alt={'User Pic'}
+                          src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                          className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
+                        />
+                        <div className="w-5/6 flex flex-col">
+                          <div className="text-lg font-bold">{user.name}</div>
+                          <div className="text-sm dark:text-gray-200">@{user.username}</div>
+                          {user.tagline && user.tagline != '' && <div className="text-sm mt-2">{user.tagline}</div>}
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </>
+          )}
+        </div>
+        <div className="w-full flex justify-end">
+          {status == 0 ? (
+            <PrimaryButton
+              onClick={async () => {
+                const checker = meetingDetailsValidator();
+                if (checker) {
+                  const res = await handleSubmit();
+                  if (res == 1) setStatus(prev => prev + 1);
+                }
+              }}
+              label="Submit"
+              animateIn={false}
+              disabled={mutex}
+            />
+          ) : (
+            <PrimaryButton onClick={handleAddParticipants} label="Submit" animateIn={false} />
+          )}
+        </div>
+      </div>
+
+      <div
+        onClick={() => setShow(false)}
+        className="bg-backdrop w-screen h-screen fixed top-0 left-0 animate-fade_third z-20"
+      ></div>
+    </>
+  );
+};
+
+export default NewMeeting;

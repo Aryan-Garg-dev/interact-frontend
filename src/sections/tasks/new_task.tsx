@@ -95,9 +95,7 @@ const NewTask = ({
       return false;
     }
 
-    const deadline = moment(description);
-
-    if (deadline.isBefore(moment())) {
+    if (moment(deadline).isBefore(moment())) {
       Toaster.error('Enter A Valid Deadline');
       return false;
     }
@@ -156,7 +154,7 @@ const NewTask = ({
         <div className="w-full h-[420px] flex flex-col gap-4">
           {status == 0 ? (
             <div className="w-full flex flex-col gap-4">
-              <Input label="Task Title" val={title} setVal={setTitle} maxLength={25} required={true} />
+              <Input label="Task Title" val={title} setVal={setTitle} maxLength={50} required={true} />
               <TextArea label="Task Description" val={description} setVal={setDescription} maxLength={500} />
               <Tags label="Task Tags" tags={tags} setTags={setTags} maxTags={5} />
               <Select label="Task Priority" val={priority} setVal={setPriority} options={['low', 'medium', 'high']} />

@@ -11,6 +11,7 @@ import {
   GroupChatMembership,
   GroupChatMessage,
   Invitation,
+  Meeting,
   Membership,
   Message,
   Opening,
@@ -486,4 +487,25 @@ export const initialResourceFile: ResourceFile = {
   user: initialUser,
   isFileUploaded: false,
   createdAt: new Date(),
+};
+
+export const initialMeeting: Meeting = {
+  id: '',
+  dyteID: '',
+  title: '',
+  description: '',
+  tags: [],
+  startTime: new Date(),
+  endTime: new Date(),
+  isOnline: false,
+  isOpenForMembers: false,
+  isLive: false,
+  allowExternalParticipants: false,
+  organizationID: '',
+  organization: initialOrganization,
+  userID: '',
+  user: initialUser,
+  participants: [],
+  createdAt: new Date(),
+  sessions: [],
 };
