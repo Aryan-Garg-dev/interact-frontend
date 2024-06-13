@@ -13,7 +13,7 @@ const getCompletionPercentage = (task: Task) => {
       percentage = (completedSubtasks / task.subTasks.length) * 100;
     }
   }
-  return percentage;
+  return parseFloat(percentage.toFixed(2));
 };
 
 export default getCompletionPercentage;
