@@ -497,6 +497,7 @@ export const initialMeeting: Meeting = {
   tags: [],
   startTime: new Date(),
   endTime: new Date(),
+  frequency: 'none',
   isOnline: false,
   isOpenForMembers: false,
   isLive: false,

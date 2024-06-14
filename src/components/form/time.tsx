@@ -7,9 +7,10 @@ interface Props {
   required?: boolean;
   styles?: React.CSSProperties;
   onChange?: (el: React.ChangeEvent<HTMLInputElement>) => void;
+  includeDate?: boolean;
 }
 
-const Time = ({ label, val, setVal, required = false, onChange, styles }: Props) => {
+const Time = ({ label, val, setVal, required = false, onChange, styles, includeDate = true }: Props) => {
   return (
     <div>
       {label && (
@@ -21,7 +22,7 @@ const Time = ({ label, val, setVal, required = false, onChange, styles }: Props)
       <input
         value={val}
         onChange={onChange ? onChange : el => setVal(el.target.value)}
-        type="datetime-local"
+        type={includeDate ? 'datetime-local' : 'time'}
         className="w-full bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
         style={styles}
       />

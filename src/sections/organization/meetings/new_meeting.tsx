@@ -19,6 +19,7 @@ import getHandler from '@/handlers/get_handler';
 import Loader from '@/components/common/loader';
 import { userIDSelector } from '@/slices/userSlice';
 import { initialMeeting } from '@/types/initials';
+import Select from '@/components/form/select';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,6 +35,8 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
   const [isOnline, setIsOnline] = useState(true);
   const [isOpenForMembers, setIsOpenForMembers] = useState(false);
   const [allowExternalParticipants, setAllowExternalParticipants] = useState(false);
+  const [frequency, setFrequency] = useState('none');
+  const [isReoccurring, setIsReoccurring] = useState(false);
 
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
@@ -97,6 +100,14 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
     }
     if (end.isBefore(start)) {
       Toaster.error('Enter A Valid End Time');
+      return false;
+    }
+
+    const duration = moment.duration(end.diff(start));
+    const hours = duration.asHours();
+
+    if (hours > 5) {
+      Toaster.error('Meetings cannot be longer than 5 hours');
       return false;
     }
 
@@ -168,7 +179,7 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
 
   return (
     <>
-      <div className="fixed top-16 max-md:top-20 w-[640px] max-md:w-5/6 backdrop-blur-2xl bg-white flex flex-col gap-4 rounded-lg p-10 max-md:p-5 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
+      <div className="fixed top-12 max-md:top-20 w-[640px] max-md:w-5/6 backdrop-blur-2xl bg-white flex flex-col gap-6 rounded-lg p-10 max-md:p-5 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
         <div className="text-3xl max-md:text-xl font-semibold">
           {status == 0 ? 'Meeting Details' : status == 1 ? 'Select Users' : 'Review Details'}
         </div>
@@ -178,15 +189,36 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
               <Input label="Meeting Title" val={title} setVal={setTitle} maxLength={50} required={true} />
               <TextArea label="Meeting Description" val={description} setVal={setDescription} maxLength={500} />
               <Tags label="Meeting Tags" tags={tags} setTags={setTags} maxTags={5} />
+              <Checkbox label="Is the Meeting Reoccurring?" val={isReoccurring} setVal={setIsReoccurring} />
+              {isReoccurring && (
+                <Select
+                  label="Frequency"
+                  val={frequency}
+                  setVal={setFrequency}
+                  options={['daily', 'weekly', 'monthly']}
+                />
+              )}
               <div className="w-full flex justify-between gap-4">
                 <div className="w-1/2">
-                  <Time label="Start Time" val={startTime} setVal={setStartTime} required={true} />
+                  <Time
+                    label="Start Time"
+                    val={startTime}
+                    setVal={setStartTime}
+                    required={true}
+                    includeDate={!isReoccurring || (isReoccurring && frequency != 'daily')}
+                  />
                 </div>
                 <div className="w-1/2">
-                  <Time label="End Time" val={endTime} setVal={setEndTime} required={true} />
+                  <Time
+                    label="Expected End Time"
+                    val={endTime}
+                    setVal={setEndTime}
+                    required={true}
+                    includeDate={!isReoccurring || (isReoccurring && frequency != 'daily')}
+                  />
                 </div>
               </div>
-              <Checkbox label="Is the Meeting Online?" val={isOnline} setVal={setIsOnline} />
+              {/* <Checkbox label="Is the Meeting Online?" val={isOnline} setVal={setIsOnline} /> */}
               {isOnline && (
                 <>
                   <Checkbox

@@ -16,11 +16,11 @@ interface Props {
 const MeetingCard = ({ meeting, setMeetings }: Props) => {
   return (
     <Link
-      href={`/explore/event/${meeting.id}`}
-      target="_blank"
-      className="w-72 rounded-xl hover:shadow-xl transition-ease-out-500 animate-fade_third"
+      href={'/organisation/meetings/' + meeting.id}
+      className="w-full flex flex-col gap-1 bg-white rounded-xl hover:shadow-xl transition-ease-out-500 animate-fade_third p-2"
     >
-      {meeting.title}
+      <div className="text-xl font-medium"> {meeting.title}</div>
+      <div className="line-clamp-1">{meeting.description}</div>
     </Link>
   );
 };
