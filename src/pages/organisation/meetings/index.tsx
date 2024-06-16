@@ -19,6 +19,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import AccessTree from '@/components/organization/access_tree';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import WidthCheck from '@/utils/wrappers/widthCheck';
+import Mascot from '@/components/fillers/mascot';
 
 const Meetings = () => {
   const [loading, setLoading] = useState(true);
@@ -78,6 +79,15 @@ const Meetings = () => {
           </div>
         </div>
 
+        <div className="w-[calc(100%-48px)] h-16 bg-white rounded-xl mx-auto border-gray-400 flex font-semibold text-primary_black mb-2">
+          <div className="w-1/6 flex-center">Title</div>
+          <div className="w-1/6 flex-center">Status</div>
+          <div className="w-1/6 flex-center">Tags</div>
+          <div className="w-1/6 flex-center">Frequency</div>
+          <div className="w-1/6 flex-center">Access</div>
+          <div className="w-1/6 flex-center">Details</div>
+        </div>
+
         {loading ? (
           <Loader />
         ) : meetings.length > 0 ? (
@@ -93,8 +103,7 @@ const Meetings = () => {
             })}
           </InfiniteScroll>
         ) : (
-          <></>
-          //   <NoMeetings width="2/3" />
+          <Mascot message="No meetings scheduled yet." />
         )}
       </MainWrapper>
     </BaseWrapper>

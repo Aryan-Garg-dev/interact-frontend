@@ -498,6 +498,8 @@ export const initialMeeting: Meeting = {
   startTime: new Date(),
   endTime: new Date(),
   frequency: 'none',
+  day: '',
+  date: -1,
   isOnline: false,
   isOpenForMembers: false,
   isLive: false,

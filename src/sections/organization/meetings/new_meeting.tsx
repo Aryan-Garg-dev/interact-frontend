@@ -35,7 +35,9 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
   const [isOnline, setIsOnline] = useState(true);
   const [isOpenForMembers, setIsOpenForMembers] = useState(false);
   const [allowExternalParticipants, setAllowExternalParticipants] = useState(false);
-  const [frequency, setFrequency] = useState('none');
+  const [frequency, setFrequency] = useState('daily');
+  const [date, setDate] = useState(1);
+  const [day, setDay] = useState('Monday');
   const [isReoccurring, setIsReoccurring] = useState(false);
 
   const [users, setUsers] = useState<User[]>([]);
@@ -120,6 +122,11 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
       return;
     }
 
+    if (tags.length == 0) {
+      Toaster.error('Tags cannot be empty');
+      return;
+    }
+
     if (mutex) return;
     setMutex(true);
 
@@ -131,8 +138,11 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
       title,
       description,
       tags,
-      startTime: moment(startTime).format('YYYY-MM-DDTHH:mm:ss[Z]'),
-      endTime: moment(endTime).format('YYYY-MM-DDTHH:mm:ss[Z]'),
+      startTime: isReoccurring ? startTime : moment(startTime).format('YYYY-MM-DDTHH:mm:ss[Z]'),
+      endTime: isReoccurring ? endTime : moment(endTime).format('YYYY-MM-DDTHH:mm:ss[Z]'),
+      frequency: isReoccurring ? frequency : 'none',
+      day: isReoccurring ? day : '',
+      date: isReoccurring ? date : -1,
       isOnline,
       isOpenForMembers,
       allowExternalParticipants,
@@ -179,16 +189,16 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
 
   return (
     <>
-      <div className="fixed top-12 max-md:top-20 w-[640px] max-md:w-5/6 backdrop-blur-2xl bg-white flex flex-col gap-6 rounded-lg p-10 max-md:p-5 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
-        <div className="text-3xl max-md:text-xl font-semibold">
+      <div className="fixed top-12 max-md:top-20 w-[640px] max-md:w-5/6 backdrop-blur-2xl bg-white flex flex-col gap-6 rounded-lg px-2 py-10 max-md:p-5 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
+        <div className="text-3xl max-md:text-xl font-semibold px-8">
           {status == 0 ? 'Meeting Details' : status == 1 ? 'Select Users' : 'Review Details'}
         </div>
-        <div className="w-full max-h-[540px] overflow-y-auto flex flex-col gap-4">
+        <div className="w-full max-h-[540px] overflow-y-auto flex flex-col gap-4 px-8">
           {status == 0 ? (
             <div className="w-full flex flex-col gap-4">
               <Input label="Meeting Title" val={title} setVal={setTitle} maxLength={50} required={true} />
               <TextArea label="Meeting Description" val={description} setVal={setDescription} maxLength={500} />
-              <Tags label="Meeting Tags" tags={tags} setTags={setTags} maxTags={5} />
+              <Tags label="Meeting Tags" tags={tags} setTags={setTags} maxTags={5} required={true} />
               <Checkbox label="Is the Meeting Reoccurring?" val={isReoccurring} setVal={setIsReoccurring} />
               {isReoccurring && (
                 <Select
@@ -205,7 +215,7 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
                     val={startTime}
                     setVal={setStartTime}
                     required={true}
-                    includeDate={!isReoccurring || (isReoccurring && frequency != 'daily')}
+                    includeDate={!isReoccurring}
                   />
                 </div>
                 <div className="w-1/2">
@@ -214,10 +224,26 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
                     val={endTime}
                     setVal={setEndTime}
                     required={true}
-                    includeDate={!isReoccurring || (isReoccurring && frequency != 'daily')}
+                    includeDate={!isReoccurring}
                   />
                 </div>
               </div>
+              {isReoccurring && frequency == 'weekly' && (
+                <Select
+                  label="Day of Week"
+                  val={day}
+                  setVal={setDay}
+                  options={['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']}
+                />
+              )}
+              {isReoccurring && frequency == 'monthly' && (
+                <Select
+                  label="Day of Month"
+                  val={date}
+                  setVal={setDate}
+                  options={Array.from({ length: 30 }, (_, i) => i + 1)}
+                />
+              )}
               {/* <Checkbox label="Is the Meeting Online?" val={isOnline} setVal={setIsOnline} /> */}
               {isOnline && (
                 <>

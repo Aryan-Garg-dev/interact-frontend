@@ -627,6 +627,8 @@ export interface Meeting {
   startTime: Date;
   endTime: Date;
   frequency: string;
+  day: string;
+  date: number;
   isOnline: boolean;
   isOpenForMembers: boolean;
   isLive: boolean;
