@@ -17,7 +17,7 @@ import TextArea from '@/components/form/textarea';
 import Select from '@/components/form/select';
 import Time from '@/components/form/time';
 import Tags from '@/components/form/tags';
-import { getFormattedTime } from '@/utils/funcs/time';
+import { getFormattedTime, getInputFieldFormatTime } from '@/utils/funcs/time';
 // import ReactMarkdown from 'react-markdown';
 // import remarkGfm from 'remark-gfm';
 
@@ -33,7 +33,7 @@ const EditSubTask = ({ setShow, subTask, task, setTasks, setFilteredTasks }: Pro
   const [title, setTitle] = useState(subTask.title);
   const [description, setDescription] = useState(subTask.description);
   const [tags, setTags] = useState<string[]>(subTask.tags || []);
-  const [deadline, setDeadline] = useState(getFormattedTime(subTask.deadline.toISOString()));
+  const [deadline, setDeadline] = useState(getInputFieldFormatTime(subTask.deadline));
   const [priority, setPriority] = useState<PRIORITY>(subTask.priority);
 
   const [users, setUsers] = useState<User[]>([]);
@@ -101,8 +101,7 @@ const EditSubTask = ({ setShow, subTask, task, setTasks, setFilteredTasks }: Pro
 
     if (title != subTask.title) formData.append('title', title);
     if (description != subTask.description) formData.append('description', description);
-    if (!moment(deadline).isSame(moment(subTask.deadline), 'day'))
-      formData.append('deadline', getFormattedTime(deadline));
+    if (!moment(deadline).isSame(moment(subTask.deadline))) formData.append('deadline', getFormattedTime(deadline));
     if (isArrEdited(tags, subTask.tags)) tags.forEach(tag => formData.append('tags', tag));
     if (priority != task.priority) formData.append('priority', priority);
 

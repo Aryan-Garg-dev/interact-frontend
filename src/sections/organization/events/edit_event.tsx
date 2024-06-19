@@ -18,7 +18,7 @@ import TextArea from '@/components/form/textarea';
 import Tags from '@/components/form/tags';
 import Links from '@/components/form/links';
 import PrimaryButton from '@/components/buttons/primary_btn';
-import { getFormattedTime } from '@/utils/funcs/time';
+import { getFormattedTime, getInputFieldFormatTime } from '@/utils/funcs/time';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,8 +33,8 @@ const EditEvent = ({ setShow, event, setEvents }: Props) => {
   const [tags, setTags] = useState<string[]>(event.tags || []);
   const [links, setLinks] = useState<string[]>(event.links || []);
   const [location, setLocation] = useState(event.location);
-  const [startTime, setStartTime] = useState(getFormattedTime(event.startTime.toISOString()));
-  const [endTime, setEndTime] = useState(getFormattedTime(event.endTime.toISOString()));
+  const [startTime, setStartTime] = useState(getInputFieldFormatTime(event.startTime));
+  const [endTime, setEndTime] = useState(getInputFieldFormatTime(event.endTime));
   const [image, setImage] = useState<File>();
 
   const [mutex, setMutex] = useState(false);
