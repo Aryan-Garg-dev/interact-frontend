@@ -20,6 +20,7 @@ import Loader from '@/components/common/loader';
 import { userIDSelector } from '@/slices/userSlice';
 import { initialMeeting } from '@/types/initials';
 import Select from '@/components/form/select';
+import { getFormattedTime } from '@/utils/funcs/time';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -138,8 +139,8 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
       title,
       description,
       tags,
-      startTime: isReoccurring ? startTime : moment(startTime).format('YYYY-MM-DDTHH:mm:ss[Z]'),
-      endTime: isReoccurring ? endTime : moment(endTime).format('YYYY-MM-DDTHH:mm:ss[Z]'),
+      startTime: isReoccurring ? startTime : getFormattedTime(startTime),
+      endTime: isReoccurring ? endTime : getFormattedTime(endTime),
       frequency: isReoccurring ? frequency : 'none',
       day: isReoccurring ? day : '',
       date: isReoccurring ? date : -1,
@@ -150,7 +151,7 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
 
     const res = await postHandler(URL, formData);
     if (res.statusCode === 201) {
-      if (setMeetings) setMeetings(prev => [...prev, res.data.meeting]);
+      if (setMeetings) setMeetings(prev => [res.data.meeting, ...prev]);
       setMeeting(res.data.meeting);
       if (!isOnline || (isOpenForMembers && !allowExternalParticipants)) setShow(false);
       else fetchUsers('');
@@ -307,7 +308,7 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
             </>
           )}
         </div>
-        <div className="w-full flex justify-end">
+        <div className="w-full flex justify-end px-8">
           {status == 0 ? (
             <PrimaryButton
               onClick={async () => {

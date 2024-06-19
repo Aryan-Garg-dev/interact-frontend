@@ -22,6 +22,7 @@ import Time from '@/components/form/time';
 import TextArea from '@/components/form/textarea';
 import Tags from '@/components/form/tags';
 import Links from '@/components/form/links';
+import { getFormattedTime } from '@/utils/funcs/time';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -182,8 +183,8 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
     links.forEach(link => formData.append('links', link));
     formData.append('category', category);
     formData.append('location', location == '' ? 'Online' : location);
-    formData.append('startTime', moment(startTime).format('YYYY-MM-DDTHH:mm:ss[Z]'));
-    formData.append('endTime', moment(endTime).format('YYYY-MM-DDTHH:mm:ss[Z]'));
+    formData.append('startTime', getFormattedTime(startTime));
+    formData.append('endTime', getFormattedTime(endTime));
     if (image) formData.append('coverPic', image);
 
     const URL = `${ORG_URL}/${currentOrg.id}/events`;

@@ -81,7 +81,7 @@ const Meeting = ({ id }: Props) => {
   useEffect(() => {
     const now = moment();
     setStatus(
-      meeting.isLive || (moment(meeting.startTime).isAfter(now) && moment(meeting.endTime).isBefore(now))
+      meeting.isLive || (moment(meeting.startTime).isBefore(now) && moment(meeting.endTime).isAfter(now))
         ? 'Live'
         : meeting.frequency == 'none'
         ? moment(meeting.startTime).isBefore(now)
@@ -89,7 +89,7 @@ const Meeting = ({ id }: Props) => {
           : 'Scheduled'
         : 'Scheduled'
     );
-  }, []);
+  }, [meeting]);
 
   useEffect(() => {
     getMeeting();
@@ -107,14 +107,14 @@ const Meeting = ({ id }: Props) => {
           {loading ? (
             <Loader />
           ) : (
-            <div className="w-full flex flex-col gap-2">
+            <div className="w-full flex flex-col gap-6">
               <div className="w-full flex flex-col gap-3">
                 <div className="w-full flex flex-col gap-1">
                   <div className="w-full flex items-center justify-between flex-wrap">
                     <div className="text-4xl font-medium">{meeting.title}</div>
                     <button
                       disabled={status != 'Live'}
-                      // onClick={handleJoinMeeting}
+                      onClick={handleJoinMeeting}
                       className="w-40 text-lg text-center font-medium px-4 py-2 bg-white disabled:hover:bg-white hover:bg-blue-50 active:bg-blue-100 text-primary_text transition-ease-500 rounded-lg cursor-pointer animate-fade_third disabled:opacity-50 disabled:hover:bg-primary_comp disabled:cursor-default"
                     >
                       {status == 'Live' ? 'Join Meet' : 'Not Live'}
@@ -182,7 +182,7 @@ const Meeting = ({ id }: Props) => {
                 {meeting.frequency == 'none' ? (
                   <div className="flex flex-col gap-3">
                     <div>Start Time: {moment(meeting.startTime).format('HH:mm A, ddd MMM DD')}</div>
-                    <div>Expected End Time: {moment(meeting.startTime).format('HH:mm A, ddd MMM DD')}</div>
+                    <div>Expected End Time: {moment(meeting.endTime).format('HH:mm A, ddd MMM DD')}</div>
                   </div>
                 ) : (
                   <div className="flex flex-col gap-3">
@@ -243,7 +243,7 @@ const Meeting = ({ id }: Props) => {
                     ) : !meeting.isOpenForMembers ? (
                       <Mascot message="No Users yet." />
                     ) : (
-                      <Mascot message="No External User Invited yet." />
+                      meeting.allowExternalParticipants && <Mascot message="No External User Invited yet." />
                     )}
                   </div>
                 )}

@@ -20,6 +20,7 @@ import TextArea from '@/components/form/textarea';
 import Select from '@/components/form/select';
 import Time from '@/components/form/time';
 import Tags from '@/components/form/tags';
+import { getFormattedTime } from '@/utils/funcs/time';
 // import ReactMarkdown from 'react-markdown';
 // import remarkGfm from 'remark-gfm';
 
@@ -45,7 +46,7 @@ const EditTask = ({
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
   const [tags, setTags] = useState<string[]>(task.tags || []);
-  const [deadline, setDeadline] = useState(moment(task.deadline).format('YYYY-MM-DDTHH:mm'));
+  const [deadline, setDeadline] = useState(getFormattedTime(task.deadline.toISOString()));
   const [priority, setPriority] = useState<PRIORITY>(task.priority);
 
   const [users, setUsers] = useState<User[]>([]);

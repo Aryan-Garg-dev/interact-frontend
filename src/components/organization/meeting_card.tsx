@@ -14,7 +14,7 @@ const MeetingCard = ({ meeting, setMeetings }: Props) => {
   useEffect(() => {
     const now = moment();
     setStatus(
-      meeting.isLive || (moment(meeting.startTime).isAfter(now) && moment(meeting.endTime).isBefore(now))
+      meeting.isLive || (moment(meeting.startTime).isBefore(now) && moment(meeting.endTime).isAfter(now))
         ? 'Live'
         : meeting.frequency == 'none'
         ? moment(meeting.startTime).isBefore(now)
@@ -88,7 +88,15 @@ const MeetingCard = ({ meeting, setMeetings }: Props) => {
           'Session is live'
         ) : (
           <>
-            <div className="text-xs">{meeting.frequency == 'none' ? 'Held on' : 'Next Session on'}</div>
+            <div className="text-xs">
+              {status == 'Live'
+                ? 'Started At'
+                : meeting.frequency == 'none'
+                ? status == 'Scheduled'
+                  ? 'Scheduled on'
+                  : 'Held on'
+                : 'Next Session on'}
+            </div>
             <div>{getNextSessionTime(meeting)}</div>
           </>
         )}
