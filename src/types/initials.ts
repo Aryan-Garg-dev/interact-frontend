@@ -410,6 +410,8 @@ export const initialTask: Task = {
   isCompleted: false,
   projectID: '',
   project: initialProject,
+  organization: initialOrganization,
+  organizationID: '',
   priority: 'low',
 };
 
