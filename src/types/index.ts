@@ -430,7 +430,9 @@ export type PRIORITY = 'low' | 'medium' | 'high';
 export interface Task {
   id: string;
   projectID: string;
-  project: Project;
+  project: Project | undefined;
+  organizationID: string;
+  organization: Organization | undefined;
   deadline: Date;
   title: string;
   description: string;
@@ -639,6 +641,7 @@ export interface Meeting {
   user: User;
   participants: User[];
   createdAt: Date;
+  nextSessionTime: Date;
   sessions: Session[];
 }
 

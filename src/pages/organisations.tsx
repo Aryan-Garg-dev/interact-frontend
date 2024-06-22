@@ -37,6 +37,14 @@ const Organizations = () => {
         if (res.statusCode === 200) {
           const organizationMemberships: OrganizationMembership[] = res.data.memberships || [];
           setMemberships(organizationMemberships);
+
+          const { oid } = router.query;
+          if (oid && oid != '') {
+            const filteredMemberships = organizationMemberships.filter(m => m.organizationID == oid);
+            if (filteredMemberships.length == 1) {
+              handleClick(filteredMemberships[0]);
+            }
+          }
         } else Toaster.error(res.data.message, 'error_toaster');
       })
       .catch(err => {

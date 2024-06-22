@@ -1,13 +1,13 @@
 import { Meeting } from '@/types';
 import moment from 'moment';
 
-export const getNextSessionTime = (meeting: Meeting, end: boolean = false): string => {
+const FORMAT = 'hh:mm A, ddd MMM DD';
+
+export const getNextSessionTime = (meeting: Meeting, end: boolean = false, format: string = FORMAT): string => {
   const now = moment();
   const time = end ? moment(meeting.endTime) : moment(meeting.startTime);
 
   let nextSessionTime: moment.Moment;
-
-  const format = 'HH:mm A, ddd MMM DD';
 
   switch (meeting.frequency.toLowerCase()) {
     case 'none':

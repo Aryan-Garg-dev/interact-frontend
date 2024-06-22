@@ -510,5 +510,6 @@ export const initialMeeting: Meeting = {
   user: initialUser,
   participants: [],
   createdAt: new Date(),
+  nextSessionTime: new Date(),
   sessions: [],
 };

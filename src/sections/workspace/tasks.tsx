@@ -113,13 +113,12 @@ const Tasks = ({ project, setShow, setClickedOnNewTask, org = false }: Props) =>
                       href={`/${org ? 'organisation/projects' : 'workspace'}/tasks/${project.slug}`}
                       key={task.id}
                       className="relative"
+                      target="_blank"
                     >
-                      {userInTask(user.id, task) ? (
+                      {userInTask(user.id, task) && (
                         <div className="absolute right-2 top-0 -translate-y-1/2 text-xs bg-primary_comp_hover backdrop-blur-sm rounded-lg py-1 px-2">
                           assigned to you
                         </div>
-                      ) : (
-                        <></>
                       )}
                       <div className="w-full flex flex-col gap-2 rounded-lg p-4 border-gray-800 border-dotted border-2">
                         <div className="w-full flex justify-between items-center">
