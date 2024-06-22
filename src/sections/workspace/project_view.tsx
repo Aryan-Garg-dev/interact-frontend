@@ -145,24 +145,24 @@ const ProjectView = ({
     const abortController = new AbortController();
     fetchProject(abortController);
 
-    router.replace({
-      pathname: router.pathname,
-      query: { ...router.query, project: projectSlugs[clickedProjectIndex] },
-    });
+    // router.replace({
+    //   pathname: router.pathname,
+    //   query: { ...router.query, project: projectSlugs[clickedProjectIndex] },
+    // });
 
-    return () => {
-      abortController.abort();
+    // return () => {
+    //   abortController.abort();
 
-      const { query } = router;
-      if (router.pathname == '/workspace') {
-        delete query.project;
+    //   const { query } = router;
+    //   if (router.pathname == '/workspace') {
+    //     delete query.project;
 
-        router.push({
-          pathname: router.pathname,
-          query: { ...query },
-        });
-      }
-    };
+    //     router.push({
+    //       pathname: router.pathname,
+    //       query: { ...query },
+    //     });
+    //   }
+    // };
   }, [clickedProjectIndex]);
 
   useEffect(() => {

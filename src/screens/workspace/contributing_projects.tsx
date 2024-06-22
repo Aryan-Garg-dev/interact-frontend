@@ -10,10 +10,13 @@ import NoProjects from '@/components/fillers/contributing_projects';
 import { navbarOpenSelector } from '@/slices/feedSlice';
 import { useSelector } from 'react-redux';
 import { SERVER_ERROR } from '@/config/errors';
+import OrderMenu from '@/components/common/order_menu';
 
 const ContributingProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [order, setOrder] = useState('activity');
+  const [search, setSearch] = useState('');
 
   const [clickedOnProject, setClickedOnProject] = useState(false);
   const [clickedProjectIndex, setClickedProjectIndex] = useState(-1);
@@ -22,14 +25,15 @@ const ContributingProjects = () => {
 
   const navbarOpen = useSelector(navbarOpenSelector);
 
-  const getProjects = () => {
-    const URL = `${WORKSPACE_URL}/contributing`;
+  const getProjects = (abortController: AbortController) => {
+    setLoading(true);
+    const URL = `${WORKSPACE_URL}/contributing?order=${order}&search=${search}`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
           setProjects(res.data.projects || []);
           setLoading(false);
-        } else {
+        } else if (res.status != -1) {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
           else {
             Toaster.error(SERVER_ERROR, 'error_toaster');
@@ -41,11 +45,28 @@ const ContributingProjects = () => {
       });
   };
 
+  let oldAbortController: AbortController | null = null;
   useEffect(() => {
-    getProjects();
-  }, []);
+    const abortController = new AbortController();
+    if (oldAbortController) oldAbortController.abort();
+    oldAbortController = abortController;
+
+    getProjects(abortController);
+    return () => {
+      abortController.abort();
+    };
+  }, [order, search]);
+
   return (
     <div>
+      <OrderMenu
+        orders={['activity', 'most_liked', 'most_viewed', 'latest']}
+        current={order}
+        setState={setOrder}
+        addSearch={true}
+        search={search}
+        setSearch={setSearch}
+      />
       {loading ? (
         <Loader />
       ) : (

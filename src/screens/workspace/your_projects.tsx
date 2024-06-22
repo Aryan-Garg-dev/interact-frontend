@@ -13,10 +13,13 @@ import NoProjects from '@/components/fillers/your_projects';
 import { navbarOpenSelector } from '@/slices/feedSlice';
 import { SERVER_ERROR } from '@/config/errors';
 import NewButton from '@/components/buttons/new_btn';
+import OrderMenu from '@/components/common/order_menu';
 
 const YourProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [order, setOrder] = useState('activity');
+  const [search, setSearch] = useState('');
 
   const [clickedOnProject, setClickedOnProject] = useState(false);
   const [clickedProjectIndex, setClickedProjectIndex] = useState(-1);
@@ -28,10 +31,10 @@ const YourProjects = () => {
   const navbarOpen = useSelector(navbarOpenSelector);
   const user = useSelector(userSelector);
 
-  const getProjects = () => {
+  const getProjects = (abortController: AbortController) => {
     setLoading(true);
-    const URL = `${WORKSPACE_URL}/my`;
-    getHandler(URL)
+    const URL = `${WORKSPACE_URL}/my?order=${order}&search=${search}`;
+    getHandler(URL, abortController.signal)
       .then(res => {
         if (res.statusCode === 200) {
           let projectsData = res.data.projects || [];
@@ -49,7 +52,7 @@ const YourProjects = () => {
             });
           }
           setLoading(false);
-        } else {
+        } else if (res.status != -1) {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
           else {
             Toaster.error(SERVER_ERROR, 'error_toaster');
@@ -64,12 +67,33 @@ const YourProjects = () => {
   useEffect(() => {
     const action = new URLSearchParams(window.location.search).get('action');
     if (action && action == 'new_project') setClickedOnNewProject(true);
-    getProjects();
   }, []);
+
+  let oldAbortController: AbortController | null = null;
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    if (oldAbortController) oldAbortController.abort();
+    oldAbortController = abortController;
+
+    getProjects(abortController);
+    return () => {
+      abortController.abort();
+    };
+  }, [order, search]);
+
   return (
     <div className="w-full px-2">
       {clickedOnNewProject && <NewProject setShow={setClickedOnNewProject} setProjects={setProjects} />}
       <NewButton show={!clickedOnNewProject} onClick={() => setClickedOnNewProject(true)} />
+      <OrderMenu
+        orders={['activity', 'most_liked', 'most_viewed', 'latest']}
+        current={order}
+        setState={setOrder}
+        addSearch={true}
+        search={search}
+        setSearch={setSearch}
+      />
       {loading ? (
         <Loader />
       ) : projects.length > 0 ? (
