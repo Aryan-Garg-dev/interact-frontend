@@ -23,7 +23,7 @@ const OrderMenu = ({
 }: Props) => {
   const [showOrders, setShowOrders] = useState(false);
   return (
-    <div className="w-12 h-12 rounded-lg shadow-l border-gray-300 border-[1px] bg-white gap-1 fixed top-[90px] right-12 z-10">
+    <div className="w-12 h-12 rounded-lg shadow-l border-gray-300 border-[1px] bg-white gap-1 fixed top-[90px] right-12 z-[25]">
       <div onClick={() => setShowOrders(prev => !prev)} className="flex-center p-3 cursor-pointer">
         <Funnel className="w-full h-full " />
       </div>

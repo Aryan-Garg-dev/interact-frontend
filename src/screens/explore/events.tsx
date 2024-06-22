@@ -9,7 +9,6 @@ import EventCard from '@/components/organization/event_card';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
-import { userIDSelector } from '@/slices/userSlice';
 import { navbarOpenSelector } from '@/slices/feedSlice';
 
 const Events = () => {
@@ -17,8 +16,7 @@ const Events = () => {
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-
-  const userID = useSelector(userIDSelector) || '';
+  const [order, setOrder] = useState('trending');
 
   const open = useSelector(navbarOpenSelector);
 
@@ -26,8 +24,8 @@ const Events = () => {
     const URL =
       search && search != ''
         ? `${EXPLORE_URL}/events/trending?${'search=' + search}`
-        : userID != ''
-        ? `${EXPLORE_URL}/events/trending?page=${page}&limit=${10}`
+        : order == 'recommended'
+        ? `${EXPLORE_URL}/events/recommended?page=${page}&limit=${10}`
         : `${EXPLORE_URL}/events/trending?page=${page}&limit=${10}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
