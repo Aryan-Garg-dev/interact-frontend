@@ -14,8 +14,10 @@ const MeetingCard = ({ meeting, setMeetings }: Props) => {
   useEffect(() => {
     const now = moment();
     setStatus(
-      meeting.isLive || (moment(meeting.startTime).isBefore(now) && moment(meeting.endTime).isAfter(now))
+      meeting.isLive
         ? 'Live'
+        : moment(meeting.startTime).isBefore(now) && moment(meeting.endTime).isAfter(now)
+        ? 'Idle'
         : meeting.frequency == 'none'
         ? moment(meeting.startTime).isBefore(now)
           ? 'Ended'

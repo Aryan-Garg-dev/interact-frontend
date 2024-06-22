@@ -59,7 +59,7 @@ const EditEvent = ({ setShow, event, setEvents }: Props) => {
     const end = moment(endTime);
 
     if (end.isBefore(start)) {
-      Toaster.error('Enter A Valid End Time');
+      Toaster.error('End Time cannot be before Start Time');
       return;
     }
 

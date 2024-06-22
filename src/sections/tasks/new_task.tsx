@@ -96,7 +96,7 @@ const NewTask = ({
     }
 
     if (moment(deadline).isBefore(moment())) {
-      Toaster.error('Enter A Valid Deadline');
+      Toaster.error('Deadline cannot be before current time.');
       return false;
     }
 

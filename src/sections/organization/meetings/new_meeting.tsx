@@ -98,11 +98,11 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
     const end = moment(endTime);
 
     if (start.isBefore(moment())) {
-      Toaster.error('Enter A Valid Start Time');
+      Toaster.error('Start Time cannot be before current time.');
       return false;
     }
     if (end.isBefore(start)) {
-      Toaster.error('Enter A Valid End Time');
+      Toaster.error('End Time cannot be before Start Time');
       return false;
     }
 
