@@ -165,7 +165,7 @@ const ProjectCard = ({
           blurDataURL={project.blurHash || 'no-hash'}
         />
         <div className="w-full glassMorphism text-white rounded-b-lg font-primary absolute bottom-0 right-0 flex flex-col px-4 py-2">
-          <div className="text-xl max-lg:text-base max-md:text-xl">{project.title}</div>
+          <div className="text-xl max-lg:text-base max-md:text-xl line-clamp-1">{project.title}</div>
           <div className="w-full flex items-center justify-between">
             {project.userID != user.id ? (
               <div className="text-sm max-lg:text-xs max-md:text-sm">{project.user.name}</div>

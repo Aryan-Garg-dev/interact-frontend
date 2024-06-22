@@ -7,6 +7,7 @@ import FollowBtn from '../common/follow_btn';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import { Buildings, Eye, MapPin, Users } from '@phosphor-icons/react';
+import Tags from '../common/tags';
 
 interface Props {
   user: User;
@@ -50,35 +51,7 @@ const UserCard = ({ user }: Props) => {
         </div>
       </div>
       <div className="w-full h-full flex flex-col justify-between p-4 pt-0 gap-4">
-        <div>
-          {user.tags && user.tags.length > 0 ? (
-            <div className="w-full flex flex-wrap gap-2">
-              {user.tags
-                .filter((_, index) => {
-                  return index >= 0 && index < 3;
-                })
-                .map(tag => {
-                  return (
-                    <div
-                      key={tag}
-                      className="text-gray-600 flex-center px-2 py-1 text-xs border-[1px] border-gray-500 rounded-lg"
-                    >
-                      {tag}
-                    </div>
-                  );
-                })}
-              {user.tags.length - 3 > 0 ? (
-                <div className="text-gray-600 flex-center px-2 py-1 text-xs border-[1px] border-gray-500 rounded-lg">
-                  +{user.tags.length - 3}
-                </div>
-              ) : (
-                <></>
-              )}
-            </div>
-          ) : (
-            <></>
-          )}
-        </div>
+        <div>{user.tags && <Tags tags={user.tags} limit={25} />}</div>
         <div className="w-full flex flex-col gap-4">
           <div className="w-full flex flex-col gap-4">
             <div className="w-full flex flex-col gap-2 px-2 font-medium text-xs text-gray-700">
@@ -95,15 +68,13 @@ const UserCard = ({ user }: Props) => {
               </div>
 
               <div className="w-full flex justify-between flex-wrap gap-2 font-medium text-xs text-gray-700">
-                {user.profile?.school ? (
+                {user.profile?.school && (
                   <div className="flex gap-1 items-center">
                     <Buildings /> <div className="text-xs">{user.profile.school}</div>
                   </div>
-                ) : (
-                  <></>
                 )}
 
-                {user.profile?.location ? (
+                {user.profile?.location && (
                   <div
                     className={`flex gap-1 items-center ${
                       !user.profile || user.profile.school == '' ? 'flex-row-reverse' : ''
@@ -112,14 +83,12 @@ const UserCard = ({ user }: Props) => {
                     <div className="text-xs">{user.profile.location}</div>
                     <MapPin />
                   </div>
-                ) : (
-                  <></>
                 )}
               </div>
             </div>
 
             <div className="border-t-[1px] border-gray-500 border-dashed"></div>
-            {user.tagline != '' ? <div className="text-sm text-gray-600 text-center">{user.tagline}</div> : <></>}
+            {user.tagline != '' && <div className="text-sm text-gray-600 text-center line-clamp-1">{user.tagline}</div>}
           </div>
           {loggedInUser.id != '' && (
             <div

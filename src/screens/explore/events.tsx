@@ -72,7 +72,7 @@ const Events = () => {
           loader={<Loader />}
         >
           {events.map(event => {
-            return <EventCard key={event.id} event={event} size={96} />;
+            return <EventCard key={event.id} event={event} size={84} />;
           })}
         </InfiniteScroll>
       ) : (

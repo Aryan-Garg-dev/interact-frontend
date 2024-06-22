@@ -32,7 +32,7 @@ interface Props {
   id: string;
 }
 
-const Event = ({ id }: Props) => {
+const EventComponent = ({ id }: Props) => {
   const [event, setEvent] = useState(initialEvent);
   const [similarEvents, setSimilarEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -133,65 +133,69 @@ const Event = ({ id }: Props) => {
   );
 
   const AboutHosts = () => (
-    <div className="w-2/5 max-md:w-full flex flex-col gap-6">
+    <div className="w-2/5 bg-white rounded-xl max-md:w-full shadow-lg">
       <Image
         width={500}
         height={280}
         src={`${EVENT_PIC_URL}/${event.coverPic}`}
         alt="Event Picture"
-        className="w-full object-cover rounded-xl"
+        className="w-full object-cover rounded-t-xl"
         placeholder="blur"
         blurDataURL={event.blurHash || 'no-hash'}
       />
-      <LowerEvent event={event} numLikes={eventLikes} setNumLikes={setEventLikes} />
-      <div className="w-full flex flex-col gap-4">
-        <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">HOSTED BY</div>
-        <AboutUser user={event.organization.user} host={true} />
-      </div>
-      {event.coHosts && event.coHosts.length > 0 && (
+      <div className="w-full flex flex-col gap-6 p-2">
+        <LowerEvent event={event} numLikes={eventLikes} setNumLikes={setEventLikes} />
         <div className="w-full flex flex-col gap-4">
-          <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">CO HOSTS</div>
-          <div className="w-full flex flex-col gap-2">
-            {event.coHosts?.map(org => (
-              <AboutUser key={org.id} user={org.user} />
-            ))}
+          <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">HOSTED BY</div>
+          <AboutUser user={event.organization.user} host={true} />
+        </div>
+        {event.coHosts && event.coHosts.length > 0 && (
+          <div className="w-full flex flex-col gap-4">
+            <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">CO HOSTS</div>
+            <div className="w-full flex flex-col gap-2">
+              {event.coHosts?.map(org => (
+                <AboutUser key={org.id} user={org.user} />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-      {event.coordinators && event.coordinators.length > 0 && (
-        <div className="w-full flex flex-col gap-4">
-          <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">COORDINATORS</div>
-          <div className="flex flex-col gap-2">
-            {event.coordinators.map(user => (
-              <AboutUser key={user.id} user={user} />
-            ))}
+        )}
+        {event.coordinators && event.coordinators.length > 0 && (
+          <div className="w-full flex flex-col gap-4">
+            <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">COORDINATORS</div>
+            <div className="flex flex-col gap-2">
+              {event.coordinators.map(user => (
+                <AboutUser key={user.id} user={user} />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-      {event.links && event.links.length > 0 && (
-        <div className="w-full flex flex-col gap-4">
-          <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">MORE ABOUT THE EVENT</div>
-          <div className="w-full flex flex-wrap gap-4">
-            {event.links?.map(link => (
-              <Link key={link} href={link} target="_blank">
-                {getIcon(getDomainName(link), 22, 'regular')}
-              </Link>
-            ))}
-          </div>{' '}
-        </div>
-      )}
-      <div className="w-full flex flex-col gap-1 text-sm">
-        <div
-          onClick={handleChat}
-          className="w-fit font-medium text-primary_black hover:text-gray-600 transition-ease-300 cursor-pointer"
-        >
-          Message the Host
-        </div>
-        <div
-          onClick={() => setClickedOnReport(true)}
-          className="w-fit font-medium text-primary_black hover:text-primary_danger transition-ease-300 cursor-pointer"
-        >
-          Report Event
+        )}
+        {event.links && event.links.length > 0 && (
+          <div className="w-full flex flex-col gap-4">
+            <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">
+              MORE ABOUT THE EVENT
+            </div>
+            <div className="w-full flex flex-wrap gap-4">
+              {event.links?.map(link => (
+                <Link key={link} href={link} target="_blank">
+                  {getIcon(getDomainName(link), 22, 'regular')}
+                </Link>
+              ))}
+            </div>{' '}
+          </div>
+        )}
+        <div className="w-full flex flex-col gap-1 text-sm">
+          <div
+            onClick={handleChat}
+            className="w-fit font-medium text-primary_black hover:text-gray-600 transition-ease-300 cursor-pointer"
+          >
+            Message the Host
+          </div>
+          <div
+            onClick={() => setClickedOnReport(true)}
+            className="w-fit font-medium text-primary_black hover:text-primary_danger transition-ease-300 cursor-pointer"
+          >
+            Report Event
+          </div>
         </div>
       </div>
     </div>
@@ -310,7 +314,7 @@ const Event = ({ id }: Props) => {
   );
 };
 
-export default Event;
+export default EventComponent;
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;

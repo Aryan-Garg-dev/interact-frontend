@@ -212,15 +212,15 @@ const TrendingCard = () => {
                 key={task.id}
                 className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp rounded-lg px-2 py-1 transition-ease-300"
               >
-                <div>
+                <div className="w-[calc(100%-112px)]">
                   <div className="text-lg font-medium line-clamp-1">{task.title}</div>
                   <div className="text-xs line-clamp-1">
                     @{task.project?.title ? task.project.title : task.organization?.title}
                   </div>
                 </div>
                 <div
-                  className={`text-xs ${
-                    moment(task.deadline).isBefore(moment()) ? 'text-primary_danger' : 'text-priority_mid'
+                  className={`w-28 text-xs ${
+                    moment(task.deadline).isBefore(moment()) ? 'text-primary_danger' : 'text-primary_text'
                   }`}
                 >
                   {moment(task.deadline).format('hh:mm A DD MMM')}
@@ -240,11 +240,11 @@ const TrendingCard = () => {
                 key={meeting.id}
                 className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp rounded-lg px-2 py-1 transition-ease-300"
               >
-                <div>
+                <div className="w-[calc(100%-112px)]">
                   <div className="text-lg font-medium line-clamp-1">{meeting.title}</div>
                   <div className="text-xs line-clamp-1">@{meeting.organization.title}</div>
                 </div>
-                <div className="text-xs">{getNextSessionTime(meeting, false, 'hh:mm A DD MMM')}</div>
+                <div className="w-28 text-xs">{getNextSessionTime(meeting, false, 'hh:mm A DD MMM')}</div>
               </Link>
             ))}
           </div>

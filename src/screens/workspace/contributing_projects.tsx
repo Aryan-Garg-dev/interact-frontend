@@ -66,6 +66,7 @@ const ContributingProjects = () => {
         addSearch={true}
         search={search}
         setSearch={setSearch}
+        zIndex={20}
       />
       {loading ? (
         <Loader />

@@ -41,12 +41,10 @@ const UserCard = ({ user, forTrending = false }: Props) => {
               src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
               className={`rounded-full ${!forTrending ? 'w-14 h-14' : 'w-10 h-10'}`}
             />
-            {user.isOrganization ? (
+            {user.isOrganization && (
               <div className="w-6 h-6 rounded-full absolute -top-2 -right-2 glassMorphism flex-center shadow-lg">
                 <Buildings size={12} />
               </div>
-            ) : (
-              <></>
             )}
           </div>
 
@@ -56,15 +54,13 @@ const UserCard = ({ user, forTrending = false }: Props) => {
             </div>
             <div className={`flex gap-4 ${!forTrending ? 'text-sm' : 'text-xs'}`}>
               <div>@{user.username}</div>
-              {!forTrending ? (
+              {!forTrending && (
                 <>
                   <div className="max-md:hidden">•</div>
                   <div className="max-md:hidden">
                     {noFollowers} Follower{noFollowers > 1 ? 's' : ''}
                   </div>
                 </>
-              ) : (
-                <></>
               )}
             </div>
           </div>
@@ -79,10 +75,8 @@ const UserCard = ({ user, forTrending = false }: Props) => {
           </div>
         )}
       </div>
-      {user.tagline && user.tagline != '' ? (
+      {user.tagline && user.tagline != '' && (
         <div className={`w-full ${!forTrending ? 'text-sm pl-16' : 'text-xs pl-12'}`}>{user.tagline}</div>
-      ) : (
-        <></>
       )}
     </Link>
   );

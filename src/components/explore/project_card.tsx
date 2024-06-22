@@ -20,6 +20,7 @@ const ProjectCard = ({ index, project, size = 72, setClickedOnProject, setClicke
     'w-64',
     'w-[22vw]',
     'w-[24vw]',
+    'w-[16vw]',
     'w-56',
     'w-80',
     'h-80',
@@ -28,6 +29,7 @@ const ProjectCard = ({ index, project, size = 72, setClickedOnProject, setClicke
     'h-56',
     'h-[22vw]',
     'h-[24vw]',
+    'h-[16vw]',
   ];
   return (
     <div
@@ -41,8 +43,18 @@ const ProjectCard = ({ index, project, size = 72, setClickedOnProject, setClicke
         {/* <BookmarkSimple size={24}  className="opacity-75" /> */}
       </div>
       <div className="w-full h-full rounded-lg overflow-clip p-4 text-sm backdrop-blur-xl text-white absolute top-0 left-0 bg-gradient-to-b from-[#00000080] z-[5] to-transparent opacity-0 group-hover:opacity-100 transition-ease-300"></div>
-      <div className="w-full h-full rounded-lg overflow-clip p-4 text-sm fade-img backdrop-blur-sm text-white absolute top-0 left-0 z-[5] opacity-0 group-hover:opacity-100 transition-ease-300">
-        <div className="font-bold mb-2">{project.tagline}</div>
+      <div className="w-full h-full flex flex-col gap-2 rounded-lg overflow-clip p-4 text-sm fade-img backdrop-blur-sm text-white absolute top-0 left-0 z-[5] opacity-0 group-hover:opacity-100 transition-ease-300">
+        <div className="font-bold">{project.tagline}</div>
+        <div className="flex flex-wrap gap-2">
+          {project.tags?.map(tag => (
+            <div
+              key={tag}
+              className="flex-center px-2 py-1 border-[1px] border-dashed border-gray-400 text-xs rounded-lg"
+            >
+              {tag}
+            </div>
+          ))}
+        </div>
         <div>{project.description}</div>
       </div>
       <Image
@@ -57,7 +69,7 @@ const ProjectCard = ({ index, project, size = 72, setClickedOnProject, setClicke
         blurDataURL={project.blurHash || 'no-hash'}
       />
       <div className="w-full glassMorphism text-white rounded-b-lg font-primary absolute bottom-0 right-0 flex flex-col px-4 py-2">
-        <div className={`${Number(size) <= 64 ? 'text-base' : size == 72 ? 'text-lg' : 'text-xl'}`}>
+        <div className={`${Number(size) <= 64 ? 'text-base' : size == 72 ? 'text-lg' : 'text-xl'} line-clamp-1`}>
           {project.title}
         </div>
         <div className="w-full flex items-center justify-between">
@@ -67,12 +79,10 @@ const ProjectCard = ({ index, project, size = 72, setClickedOnProject, setClicke
               <Buildings />
             ) : (
               <div className="text-xs">
-                {project.memberships?.length > 0 ? (
+                {project.memberships?.length > 0 && (
                   <>
                     + {project.memberships.length} other{project.memberships.length == 1 ? '' : 's'}
                   </>
-                ) : (
-                  <></>
                 )}
               </div>
             )}
