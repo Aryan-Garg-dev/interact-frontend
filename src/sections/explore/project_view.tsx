@@ -15,6 +15,9 @@ import Link from 'next/link';
 import Links from '@/components/explore/show_links';
 import { useSwipeable } from 'react-swipeable';
 import SimilarProjects from '@/components/explore/similar_projects';
+import { useSelector } from 'react-redux';
+import { userSelector } from '@/slices/userSlice';
+import LowerWorkspaceProject from '@/components/lowers/lower_workspace_project';
 
 interface Props {
   projectSlugs: string[];
@@ -37,6 +40,7 @@ const ProjectView = ({
   const [loading, setLoading] = useState(true);
 
   const [clickedOnReadMore, setClickedOnReadMore] = useState(false);
+  const user = useSelector(userSelector);
 
   const fetchProject = async (abortController: AbortController) => {
     setLoading(true);
@@ -56,6 +60,16 @@ const ProjectView = ({
         }
       }
     }
+  };
+
+  const isProjectMember = (project: Project) => {
+    const projectID = project.id;
+    return (
+      user.memberProjects.includes(projectID) ||
+      user.editorProjects.includes(projectID) ||
+      user.managerProjects.includes(projectID) ||
+      user.ownerProjects.includes(projectID)
+    );
   };
 
   useEffect(() => {
@@ -217,7 +231,11 @@ const ProjectView = ({
                 <div className="flex flex-wrap justify-between items-center gap-2">
                   <div className="font-bold text-4xl text-gradient">{project.title}</div>
                   <div className="lg:hidden w-fit">
-                    <LowerProject project={project} />
+                    {isProjectMember(project) ? (
+                      <LowerWorkspaceProject project={project} />
+                    ) : (
+                      <LowerProject project={project} />
+                    )}
                   </div>
                 </div>
                 <div className="font-semibold text-lg">{project.tagline}</div>
@@ -277,7 +295,11 @@ const ProjectView = ({
             </div>
 
             <div className="max-lg:hidden">
-              <LowerProject project={project} />
+              {isProjectMember(project) ? (
+                <LowerWorkspaceProject project={project} />
+              ) : (
+                <LowerProject project={project} />
+              )}
             </div>
 
             {clickedProjectIndex != projectSlugs.length - 1 ? (
