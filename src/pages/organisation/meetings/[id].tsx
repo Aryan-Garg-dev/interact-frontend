@@ -1,22 +1,26 @@
+import ConfirmDelete from '@/components/common/confirm_delete';
 import Loader from '@/components/common/loader';
 import OrgSidebar from '@/components/common/org_sidebar';
-import UserCard from '@/components/explore/wide_user_card';
-import Mascot from '@/components/fillers/mascot';
-import SessionDetailsTable from '@/components/tables/session_details';
-import SessionTable from '@/components/tables/sessions';
+import PictureList from '@/components/common/picture_list';
+import UsersList from '@/components/common/users_list';
+import SessionDetailsTable from '@/components/tables/meetings/session_details';
+import SessionTable from '@/components/tables/meetings/sessions';
+import { ORG_SENIOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
+import deleteHandler from '@/handlers/delete_handler';
 import getHandler from '@/handlers/get_handler';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { Session } from '@/types';
 import { initialMeeting } from '@/types/initials';
+import checkOrgAccess from '@/utils/funcs/check_org_access';
 import { getNextSessionTime } from '@/utils/funcs/session_details';
 import Toaster from '@/utils/toaster';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
+import { Trash } from '@phosphor-icons/react';
 import moment from 'moment';
 import Image from 'next/image';
-import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -30,9 +34,10 @@ const Meeting = ({ id }: Props) => {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState('Ended');
-  const [tab, setTab] = useState(0);
   const [clickedOnSession, setClickedOnSession] = useState(false);
   const [clickedSessionID, setClickedSessionID] = useState('');
+  const [clickedOnParticipants, setClickedOnParticipants] = useState(false);
+  const [clickedOnDelete, setClickedOnDelete] = useState(false);
 
   const currentOrg = useSelector(currentOrgSelector);
 
@@ -102,6 +107,22 @@ const Meeting = ({ id }: Props) => {
     getSessions();
   }, []);
 
+  const handleDelete = async () => {
+    const toaster = Toaster.startLoad('Deleting Meeting...');
+
+    const URL = `/org/${currentOrg.id}/meetings/${meeting.id}`;
+
+    const res = await deleteHandler(URL);
+    if (res.statusCode === 204) {
+      setClickedOnDelete(false);
+      Toaster.stopLoad(toaster, 'Meeting Deleted', 1);
+      window.location.assign('/organisation/meetings');
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    }
+  };
+
   return (
     <BaseWrapper title={`Meetings | ${currentOrg.title}`}>
       <OrgSidebar index={16} />
@@ -111,6 +132,10 @@ const Meeting = ({ id }: Props) => {
             //TODO back button
           }
           {clickedOnSession && <SessionDetailsTable sessionID={clickedSessionID} setShow={setClickedOnSession} />}
+          {clickedOnParticipants && (
+            <UsersList users={meeting.participants} title="Participants" setShow={setClickedOnParticipants} />
+          )}
+          {clickedOnDelete && <ConfirmDelete handleDelete={handleDelete} setShow={setClickedOnDelete} />}
           {loading ? (
             <Loader />
           ) : (
@@ -119,13 +144,18 @@ const Meeting = ({ id }: Props) => {
                 <div className="w-full flex flex-col gap-1">
                   <div className="w-full flex items-center justify-between flex-wrap">
                     <div className="text-4xl font-medium">{meeting.title}</div>
-                    <button
-                      disabled={status != 'Live'}
-                      onClick={handleJoinMeeting}
-                      className="w-40 text-lg text-center font-medium px-4 py-2 bg-white disabled:hover:bg-white hover:bg-blue-50 active:bg-blue-100 text-primary_text transition-ease-500 rounded-lg cursor-pointer animate-fade_third disabled:opacity-50 disabled:hover:bg-primary_comp disabled:cursor-default"
-                    >
-                      {status == 'Live' ? 'Join Meet' : 'Not Live'}
-                    </button>
+                    <div className="w-fit flex-center gap-4">
+                      {checkOrgAccess(ORG_SENIOR) && (
+                        <Trash onClick={() => setClickedOnDelete(true)} className="cursor-pointer" size={28} />
+                      )}
+                      <button
+                        disabled={status != 'Live' && status != 'Idle'}
+                        onClick={handleJoinMeeting}
+                        className="w-40 text-lg text-center font-medium px-4 py-2 bg-white disabled:hover:bg-white hover:bg-blue-50 active:bg-blue-100 text-primary_text transition-ease-500 rounded-lg cursor-pointer animate-fade_third disabled:opacity-50 disabled:hover:bg-primary_comp disabled:cursor-default"
+                      >
+                        {status == 'Live' || status == 'Idle' ? 'Join Meet' : 'Not Live'}
+                      </button>
+                    </div>
                   </div>
                   <div className="">{meeting.description}</div>
                 </div>
@@ -214,51 +244,26 @@ const Meeting = ({ id }: Props) => {
                   on
                   <span>{moment(meeting.createdAt).format('DD MMMM YYYY')}</span>
                 </div>
-              </div>
-              <div className="w-full flex flex-col gap-3">
-                <div className="w-full h-12 bg-white flex rounded-xl">
-                  <div
-                    onClick={() => setTab(0)}
-                    className={`w-36 h-full flex-center ${
-                      tab === 0 ? 'bg-primary_comp_hover text-primary_text' : 'hover:bg-primary_comp text-gray-500'
-                    } transition-ease-300 cursor-pointer rounded-l-xl`}
-                  >
-                    Sessions
-                  </div>
-                  <div
-                    onClick={() => setTab(1)}
-                    className={`w-36 h-full flex-center ${
-                      tab === 1 ? 'bg-primary_comp_hover text-primary_text' : 'hover:bg-primary_comp text-gray-500'
-                    } transition-ease-300 cursor-pointer`}
-                  >
-                    Allowed Users
-                  </div>
-                </div>
-                {tab == 0 ? (
-                  <div>
-                    {sessions && sessions.length > 0 ? (
-                      <SessionTable
-                        sessions={sessions}
-                        setClickedOnSession={setClickedOnSession}
-                        setClickedSessionID={setClickedSessionID}
-                      />
-                    ) : (
-                      <Mascot message="No Sessions yet." />
-                    )}
-                  </div>
-                ) : (
-                  <div>
-                    {meeting.isOpenForMembers && <div>All Organisation Members are Allowed</div>}
-                    {meeting.participants && meeting.participants.length > 0 ? (
-                      meeting.participants.map(user => <UserCard key={user.id} user={user} />)
-                    ) : !meeting.isOpenForMembers ? (
-                      <Mascot message="No Users yet." />
-                    ) : (
-                      meeting.allowExternalParticipants && <Mascot message="No External User Invited yet." />
-                    )}
+
+                {meeting.participants && meeting.participants.length > 1 && (
+                  <div className="w-fit flex-center gap-1">
+                    Accepted Members:
+                    <span
+                      onClick={() => setClickedOnParticipants(true)}
+                      className="flex-center gap-1 font-medium  cursor-pointer"
+                    >
+                      <PictureList users={meeting.participants} size={6} gap={3} />
+                    </span>
                   </div>
                 )}
               </div>
+              {sessions && sessions.length > 0 && (
+                <SessionTable
+                  sessions={sessions}
+                  setClickedOnSession={setClickedOnSession}
+                  setClickedSessionID={setClickedSessionID}
+                />
+              )}
             </div>
           )}
         </div>

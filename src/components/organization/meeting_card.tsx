@@ -3,13 +3,13 @@ import { Meeting } from '@/types';
 import Link from 'next/link';
 import moment from 'moment';
 import { getNextSessionTime } from '@/utils/funcs/session_details';
+import Tags from '../common/tags';
 
 interface Props {
   meeting: Meeting;
-  setMeetings?: React.Dispatch<React.SetStateAction<Meeting[]>>;
 }
 
-const MeetingCard = ({ meeting, setMeetings }: Props) => {
+const MeetingCard = ({ meeting }: Props) => {
   const [status, setStatus] = useState('Ended');
   useEffect(() => {
     const now = moment();
@@ -42,30 +42,7 @@ const MeetingCard = ({ meeting, setMeetings }: Props) => {
         </div>
       </div>
       <div className="w-1/6 flex-center">
-        {meeting.tags.length > 0 && (
-          <div className="w-full flex flex-wrap gap-1">
-            {meeting.tags &&
-              meeting.tags // Splicing causes array mutation
-                .filter((_, index) => {
-                  return index >= 0 && index < 3;
-                })
-                .map(tag => {
-                  return (
-                    <div
-                      key={tag}
-                      className="flex-center px-2 py-1 font-primary text-xs dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg"
-                    >
-                      {tag}
-                    </div>
-                  );
-                })}
-            {meeting.tags.length - 3 > 0 && (
-              <div className="flex-center px-2 py-1 font-primary text-xs dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg">
-                +{meeting.tags.length - 3}
-              </div>
-            )}
-          </div>
-        )}
+        <Tags tags={meeting.tags} limit={8} />
       </div>
       <div className="w-1/6 flex-center">
         <div

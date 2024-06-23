@@ -99,7 +99,7 @@ const Meetings = () => {
             className="w-full flex flex-col gap-2 px-base_padding pt-2 pb-6"
           >
             {meetings.map(meeting => {
-              return <MeetingCard key={meeting.id} meeting={meeting} setMeetings={setMeetings} />;
+              return <MeetingCard key={meeting.id} meeting={meeting} />;
             })}
           </InfiniteScroll>
         ) : (
