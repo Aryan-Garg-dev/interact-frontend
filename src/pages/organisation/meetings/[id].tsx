@@ -10,6 +10,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
 import getHandler from '@/handlers/get_handler';
+import EditMeeting from '@/sections/organization/meetings/edit_meeting';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { Session } from '@/types';
 import { initialMeeting } from '@/types/initials';
@@ -18,7 +19,7 @@ import { getNextSessionTime } from '@/utils/funcs/session_details';
 import Toaster from '@/utils/toaster';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
-import { Trash } from '@phosphor-icons/react';
+import { Pen, Trash } from '@phosphor-icons/react';
 import moment from 'moment';
 import Image from 'next/image';
 import { GetServerSidePropsContext } from 'next/types';
@@ -37,6 +38,7 @@ const Meeting = ({ id }: Props) => {
   const [clickedOnSession, setClickedOnSession] = useState(false);
   const [clickedSessionID, setClickedSessionID] = useState('');
   const [clickedOnParticipants, setClickedOnParticipants] = useState(false);
+  const [clickedOnEdit, setClickedOnEdit] = useState(false);
   const [clickedOnDelete, setClickedOnDelete] = useState(false);
 
   const currentOrg = useSelector(currentOrgSelector);
@@ -135,6 +137,7 @@ const Meeting = ({ id }: Props) => {
           {clickedOnParticipants && (
             <UsersList users={meeting.participants} title="Participants" setShow={setClickedOnParticipants} />
           )}
+          {clickedOnEdit && <EditMeeting setShow={setClickedOnEdit} meeting={meeting} setMeeting={setMeeting} />}
           {clickedOnDelete && <ConfirmDelete handleDelete={handleDelete} setShow={setClickedOnDelete} />}
           {loading ? (
             <Loader />
@@ -145,6 +148,9 @@ const Meeting = ({ id }: Props) => {
                   <div className="w-full flex items-center justify-between flex-wrap">
                     <div className="text-4xl font-medium">{meeting.title}</div>
                     <div className="w-fit flex-center gap-4">
+                      {checkOrgAccess(ORG_SENIOR) && (
+                        <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={28} />
+                      )}
                       {checkOrgAccess(ORG_SENIOR) && (
                         <Trash onClick={() => setClickedOnDelete(true)} className="cursor-pointer" size={28} />
                       )}
@@ -218,8 +224,8 @@ const Meeting = ({ id }: Props) => {
 
                 {meeting.frequency == 'none' ? (
                   <div className="flex flex-col gap-3">
-                    <div>Start Time: {moment(meeting.startTime).format('HH:mm A, ddd MMM DD')}</div>
-                    <div>Expected End Time: {moment(meeting.endTime).format('HH:mm A, ddd MMM DD')}</div>
+                    <div>Start Time: {moment(meeting.startTime).format('hh:mm A, ddd MMM DD')}</div>
+                    <div>Expected End Time: {moment(meeting.endTime).format('hh:mm A, ddd MMM DD')}</div>
                   </div>
                 ) : (
                   <div className="flex flex-col gap-3">
