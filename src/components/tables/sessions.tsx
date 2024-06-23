@@ -1,4 +1,6 @@
+import { ORG_SENIOR } from '@/config/constants';
 import { Session } from '@/types';
+import checkOrgAccess from '@/utils/funcs/check_org_access';
 import moment from 'moment';
 import React from 'react';
 
@@ -21,10 +23,14 @@ const SessionTable = ({ sessions, setClickedOnSession, setClickedSessionID }: Pr
         <div
           key={session.id}
           onClick={() => {
-            setClickedSessionID(session.id);
-            setClickedOnSession(true);
+            if (checkOrgAccess(ORG_SENIOR)) {
+              setClickedSessionID(session.id);
+              setClickedOnSession(true);
+            }
           }}
-          className="w-full h-12 bg-white hover:bg-slate-100 rounded-xl border-gray-400 flex text-sm text-primary_black cursor-pointer transition-ease-300"
+          className={`w-full h-12 bg-white rounded-xl border-gray-400 flex text-sm text-primary_black ${
+            checkOrgAccess(ORG_SENIOR) ? 'hover:bg-slate-100 cursor-pointer' : 'cursor-default'
+          } transition-ease-300`}
         >
           <div className="w-[30%] flex-center">{session.id}</div>
           <div className="w-[30%] flex-center">{moment(session.startedAt).format('hh:mm A, dddd DD MMMM')}</div>

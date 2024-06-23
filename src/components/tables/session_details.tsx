@@ -69,7 +69,7 @@ const SessionDetailsTable = ({ sessionID, setShow }: Props) => {
     <ModalWrapper setShow={setShow} width={'2/3'} blur={true}>
       <div className="w-full flex items-center gap-4">
         <div className="text-3xl font-semibold">Session Details</div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
           <div className="relative group">
             <ToolTip
               styles={{
@@ -108,7 +108,7 @@ const SessionDetailsTable = ({ sessionID, setShow }: Props) => {
               className="cursor-pointer"
             />
           </div>
-          <div className="relative group">
+          {/* <div className="relative group">
             <ToolTip
               styles={{
                 fontSize: '10px',
@@ -126,7 +126,7 @@ const SessionDetailsTable = ({ sessionID, setShow }: Props) => {
               weight="bold"
               className="cursor-pointer"
             />
-          </div>
+          </div> */}
         </div>
       </div>
       {loading ? (
