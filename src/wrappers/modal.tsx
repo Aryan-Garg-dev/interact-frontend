@@ -9,12 +9,23 @@ interface Props {
   z?: number;
   modalStyles?: React.CSSProperties;
   bgStyles?: React.CSSProperties;
+  blur?: boolean;
 }
 
-const ModalWrapper = ({ children, setShow, width = '1/3', height, top = 32, z = 40, modalStyles, bgStyles }: Props) => {
+const ModalWrapper = ({
+  children,
+  setShow,
+  width = '1/3',
+  height,
+  top = 32,
+  z = 40,
+  modalStyles,
+  bgStyles,
+  blur = false,
+}: Props) => {
   const z_variants = ['z-10', 'z-20', 'z-30', 'z-40', 'z-50'];
   const top_variants = ['top-32', 'top-56', 'top-1/2'];
-  const w_variants = ['w-1/3'];
+  const w_variants = ['w-2/3', 'w-1/2', 'w-1/3'];
   const h_variants = ['h-1/2', 'h-fit'];
 
   return (
@@ -30,7 +41,9 @@ const ModalWrapper = ({ children, setShow, width = '1/3', height, top = 32, z = 
       <div
         onClick={() => setShow(false)}
         style={bgStyles}
-        className={`bg-backdrop w-screen h-screen fixed top-0 right-0 animate-fade_third z-${z}`}
+        className={`bg-backdrop w-screen h-screen ${
+          blur && 'backdrop-blur-sm'
+        } fixed top-0 right-0 animate-fade_third z-${z}`}
       ></div>
     </>
   );

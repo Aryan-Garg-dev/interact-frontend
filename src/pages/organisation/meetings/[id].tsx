@@ -2,6 +2,8 @@ import Loader from '@/components/common/loader';
 import OrgSidebar from '@/components/common/org_sidebar';
 import UserCard from '@/components/explore/wide_user_card';
 import Mascot from '@/components/fillers/mascot';
+import SessionUsersTable from '@/components/tables/session_users';
+import SessionTable from '@/components/tables/sessions';
 import { SERVER_ERROR } from '@/config/errors';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
@@ -29,6 +31,8 @@ const Meeting = ({ id }: Props) => {
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState('Ended');
   const [tab, setTab] = useState(0);
+  const [clickedOnSession, setClickedOnSession] = useState(false);
+  const [clickedSessionID, setClickedSessionID] = useState('');
 
   const currentOrg = useSelector(currentOrgSelector);
 
@@ -106,6 +110,7 @@ const Meeting = ({ id }: Props) => {
           {
             //TODO back button
           }
+          {clickedOnSession && <SessionUsersTable sessionID={clickedSessionID} setShow={setClickedOnSession} />}
           {loading ? (
             <Loader />
           ) : (
@@ -232,7 +237,11 @@ const Meeting = ({ id }: Props) => {
                 {tab == 0 ? (
                   <div>
                     {sessions && sessions.length > 0 ? (
-                      sessions.map(session => <div key={session.id}>{session.id}</div>)
+                      <SessionTable
+                        sessions={sessions}
+                        setClickedOnSession={setClickedOnSession}
+                        setClickedSessionID={setClickedSessionID}
+                      />
                     ) : (
                       <Mascot message="No Sessions yet." />
                     )}
