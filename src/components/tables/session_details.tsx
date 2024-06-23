@@ -8,6 +8,8 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from '../common/loader';
 import moment from 'moment';
+import { ChatCenteredDots, FunnelSimple, Subtitles } from '@phosphor-icons/react';
+import ToolTip from '../utils/tooltip';
 
 interface Props {
   sessionID: string;
@@ -22,7 +24,7 @@ interface Participant {
   role: string;
 }
 
-const SessionUsersTable = ({ sessionID, setShow }: Props) => {
+const SessionDetailsTable = ({ sessionID, setShow }: Props) => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -30,7 +32,7 @@ const SessionUsersTable = ({ sessionID, setShow }: Props) => {
   const currentOrg = useSelector(currentOrgSelector);
 
   const fetchParticipants = async () => {
-    const URL = `/org/${currentOrg.id}/meetings/participants/${sessionID}?page=${page}&limit=10`;
+    const URL = `/org/${currentOrg.id}/meetings/details/${sessionID}?page=${page}&limit=10&type=participants`;
     const res = await getHandler(URL);
     if (res.statusCode === 200) {
       setParticipants(res.data.participants);
@@ -49,9 +51,84 @@ const SessionUsersTable = ({ sessionID, setShow }: Props) => {
     fetchParticipants();
   }, [sessionID]);
 
+  const handleGetDownloadLink = async (detailType: string) => {
+    const URL = `/org/${currentOrg.id}/meetings/details/${sessionID}?page=${page}&limit=10&type=${detailType}`;
+    const res = await getHandler(URL);
+    if (res.statusCode === 200) {
+      alert(res.data.downloadURL);
+      setLoading(false);
+    } else {
+      if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
+      else {
+        Toaster.error(SERVER_ERROR, 'error_toaster');
+      }
+    }
+  };
+
   return (
     <ModalWrapper setShow={setShow} width={'2/3'} blur={true}>
-      <div className="w-full text-3xl font-semibold">Session Details</div>
+      <div className="w-full flex items-center gap-4">
+        <div className="text-3xl font-semibold">Session Details</div>
+        <div className="flex items-center gap-6">
+          <div className="relative group">
+            <ToolTip
+              styles={{
+                fontSize: '10px',
+                padding: '4px',
+                width: '128px',
+                top: '-30px',
+                left: '50%',
+                translate: '-50% 0',
+              }}
+              content="Download Chats"
+            />
+            <ChatCenteredDots
+              onClick={() => handleGetDownloadLink('chats')}
+              size={32}
+              weight="duotone"
+              className="cursor-pointer"
+            />
+          </div>
+          <div className="relative group">
+            <ToolTip
+              styles={{
+                fontSize: '10px',
+                padding: '4px',
+                width: '128px',
+                top: '-30px',
+                left: '50%',
+                translate: '-50% 0',
+              }}
+              content="Download Transcript"
+            />
+            <Subtitles
+              onClick={() => handleGetDownloadLink('transcript')}
+              size={32}
+              weight="duotone"
+              className="cursor-pointer"
+            />
+          </div>
+          <div className="relative group">
+            <ToolTip
+              styles={{
+                fontSize: '10px',
+                padding: '4px',
+                width: '128px',
+                top: '-30px',
+                left: '50%',
+                translate: '-50% 0',
+              }}
+              content="Download Summary"
+            />
+            <FunnelSimple
+              onClick={() => handleGetDownloadLink('summary')}
+              size={32}
+              weight="bold"
+              className="cursor-pointer"
+            />
+          </div>
+        </div>
+      </div>
       {loading ? (
         <Loader />
       ) : (
@@ -81,4 +158,4 @@ const SessionUsersTable = ({ sessionID, setShow }: Props) => {
   );
 };
 
-export default SessionUsersTable;
+export default SessionDetailsTable;

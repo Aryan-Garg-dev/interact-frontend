@@ -2,7 +2,7 @@ import Loader from '@/components/common/loader';
 import OrgSidebar from '@/components/common/org_sidebar';
 import UserCard from '@/components/explore/wide_user_card';
 import Mascot from '@/components/fillers/mascot';
-import SessionUsersTable from '@/components/tables/session_users';
+import SessionDetailsTable from '@/components/tables/session_details';
 import SessionTable from '@/components/tables/sessions';
 import { SERVER_ERROR } from '@/config/errors';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
@@ -110,7 +110,7 @@ const Meeting = ({ id }: Props) => {
           {
             //TODO back button
           }
-          {clickedOnSession && <SessionUsersTable sessionID={clickedSessionID} setShow={setClickedOnSession} />}
+          {clickedOnSession && <SessionDetailsTable sessionID={clickedSessionID} setShow={setClickedOnSession} />}
           {loading ? (
             <Loader />
           ) : (
