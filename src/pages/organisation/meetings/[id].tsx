@@ -267,7 +267,7 @@ const Meeting = ({ id }: Props) => {
 
                 {(!meeting.isOpenForMembers || meeting.allowExternalParticipants) && (
                   <div className="w-fit flex-center gap-1">
-                    Accepted Members:
+                    Accepted Users:
                     {meeting.participants && meeting.participants.length > 0 ? (
                       meeting.participants.length === 1 && meeting.participants[0].id === user.id ? (
                         <span onClick={() => setClickedOnAddParticipants(true)} className="cursor-pointer">

@@ -25,7 +25,7 @@ const OrderMenu = ({
   setSearch,
   zIndex = 25,
   fixed = true,
-  right = false,
+  right = true,
 }: Props) => {
   const [showOrders, setShowOrders] = useState(false);
   return (

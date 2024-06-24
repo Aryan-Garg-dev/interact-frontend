@@ -3,12 +3,12 @@ import { Plus } from '@phosphor-icons/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
-import CollaboratorCard from '@/components/workspace/manage_project/collaborator_card';
-import InvitationCard from '@/components/workspace/manage_project/invitation_card';
 import AddCollaborators from '@/sections/workspace/manage_project/add_collaborators';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
 import { ORG_MANAGER } from '@/config/constants';
 import NoCollaborators from '@/components/fillers/collaborators';
+import CollaboratorsTable from '@/components/tables/projects/collaborators';
+import InvitationsTable from '@/components/tables/projects/invitations';
 
 interface Props {
   project: Project;
@@ -62,36 +62,12 @@ const Collaborators = ({ project, setProject, org = false }: Props) => {
 
       {clickedOnInvitations ? (
         project.invitations && project.invitations.length > 0 ? (
-          <div className="w-full flex flex-col gap-2 max-lg:px-4 pb-4">
-            {project.invitations.map(invitation => {
-              return (
-                <InvitationCard
-                  key={invitation.id}
-                  invitation={invitation}
-                  project={project}
-                  setProject={setProject}
-                  org={org}
-                />
-              );
-            })}
-          </div>
+          <InvitationsTable invitations={project.invitations} project={project} setProject={setProject} org={org} />
         ) : (
           <NoCollaborators />
         )
       ) : project.memberships && project.memberships.length > 0 ? (
-        <div className="w-full flex flex-col gap-2 max-lg:px-4 pb-4">
-          {project.memberships.map(membership => {
-            return (
-              <CollaboratorCard
-                key={membership.id}
-                membership={membership}
-                project={project}
-                setProject={setProject}
-                org={org}
-              />
-            );
-          })}
-        </div>
+        <CollaboratorsTable memberships={project.memberships} project={project} setProject={setProject} org={org} />
       ) : (
         <NoCollaborators />
       )}

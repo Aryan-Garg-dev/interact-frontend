@@ -11,14 +11,15 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import OrgSidebar from '@/components/common/org_sidebar';
-import InvitationCard from '@/components/organization/invitation_card';
 import AddMembers from '@/sections/organization/members/add_members';
-import MemberCard from '@/components/organization/member_card';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
 import { ORG_MANAGER } from '@/config/constants';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import AccessTree from '@/components/organization/access_tree';
+import OrgMembersTable from '@/components/tables/organization/members';
+import Mascot from '@/components/fillers/mascot';
+import OrgInvitationsTable from '@/components/tables/organization/invitations';
 
 const Members = () => {
   const [organization, setOrganization] = useState(initialOrganization);
@@ -89,34 +90,21 @@ const Members = () => {
           ) : (
             <>
               <div className="w-full max-lg:w-screen mx-auto flex flex-col gap-8 px-6">
-                {clickedOnInvitations
-                  ? organization.invitations && (
-                      <div className="w-full flex flex-wrap justify-between gap-4 max-lg:px-4 pb-4">
-                        {organization.invitations.map(invitation => {
-                          return (
-                            <InvitationCard
-                              key={invitation.id}
-                              invitation={invitation}
-                              setOrganization={setOrganization}
-                            />
-                          );
-                        })}
-                      </div>
-                    )
-                  : organization.memberships && (
-                      <div className="w-full flex flex-wrap justify-between gap-4 max-lg:px-4 pb-4">
-                        {organization.memberships.map(membership => {
-                          return (
-                            <MemberCard
-                              key={membership.id}
-                              membership={membership}
-                              organization={organization}
-                              setOrganization={setOrganization}
-                            />
-                          );
-                        })}
-                      </div>
-                    )}
+                {clickedOnInvitations ? (
+                  organization.invitations && organization.invitations.length > 0 ? (
+                    <OrgInvitationsTable invitations={organization.invitations} setOrganization={setOrganization} />
+                  ) : (
+                    <Mascot message="No Invitations yet." />
+                  )
+                ) : organization.memberships && organization.memberships.length > 0 ? (
+                  <OrgMembersTable
+                    memberships={organization.memberships}
+                    organization={organization}
+                    setOrganization={setOrganization}
+                  />
+                ) : (
+                  <Mascot message="No Members yet." />
+                )}
               </div>
             </>
           )}
