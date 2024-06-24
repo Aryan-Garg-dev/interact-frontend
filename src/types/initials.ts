@@ -343,6 +343,8 @@ export const initialInvitation: Invitation = {
   id: '',
   userID: '',
   user: initialUser,
+  senderID: '',
+  sender: initialUser,
   projectID: '',
   project: initialProject,
   organizationID: '',

@@ -53,7 +53,7 @@ const ManageProject = ({ slug }: Props) => {
       <Sidebar index={3} />
       <MainWrapper>
         <div className="w-full flex flex-col items-center gap-4">
-          <div className="w-[50vw] max-lg:w-[75vw] max-md:w-[95%] flex items-start gap-3 p-base_padding pl-0 pt-28">
+          <div className="w-[70vw] max-lg:w-[75vw] max-md:w-[95%] flex items-start gap-3 p-base_padding pl-0 pt-28">
             <div className="text-5xl font-bold dark:text-white font-primary">Manage Project</div>
           </div>
           <TabMenu items={['Openings', 'Collaborators', 'Chats']} active={active} setState={setActive} />

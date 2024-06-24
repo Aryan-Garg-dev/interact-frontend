@@ -399,6 +399,8 @@ export interface Invitation {
   id: string;
   userID: string;
   user: User;
+  senderID: string;
+  sender: User;
   projectID: string;
   project: Project;
   organizationID: string;

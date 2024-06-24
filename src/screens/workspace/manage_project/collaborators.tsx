@@ -23,7 +23,7 @@ const Collaborators = ({ project, setProject, org = false }: Props) => {
   const user = useSelector(userSelector);
 
   return (
-    <div className="w-[50vw] max-lg:w-screen mx-auto flex flex-col gap-6">
+    <div className="w-[70vw] max-lg:w-screen mx-auto flex flex-col gap-6">
       {clickedOnAddCollaborator && (
         <AddCollaborators setShow={setClickedOnAddCollaborator} project={project} setProject={setProject} org={org} />
       )}

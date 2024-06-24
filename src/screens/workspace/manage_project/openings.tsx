@@ -19,7 +19,7 @@ const Openings = ({ project, setProject, org = false }: Props) => {
   const [clickedOnNewOpening, setClickedOnNewOpening] = useState(false);
   const user = useSelector(userSelector);
   return (
-    <div className="w-[50vw] max-lg:w-[75vw] max-md:w-[95%] mx-auto flex flex-col gap-6">
+    <div className="w-[70vw] max-lg:w-[75vw] max-md:w-[95%] mx-auto flex flex-col gap-6">
       {clickedOnNewOpening && (
         <NewOpening setShow={setClickedOnNewOpening} project={project} setProject={setProject} org={org} />
       )}
