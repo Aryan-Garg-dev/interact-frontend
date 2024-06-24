@@ -120,7 +120,7 @@ const Openings = () => {
 
   return (
     <div className="w-full flex flex-col gap-6 py-2">
-      <OrderMenu orders={['trending', 'most_viewed', 'latest']} current={order} setState={setOrder} />
+      <OrderMenu orders={['trending', 'most_viewed', 'latest']} current={order} setState={setOrder} zIndex={30} />
       {loading ? (
         <Loader />
       ) : openings.length > 0 ? (

@@ -241,7 +241,7 @@ const TrendingCard = () => {
                 className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp rounded-lg px-2 py-1 transition-ease-300"
               >
                 <div className="w-[calc(100%-112px)]">
-                  <div className="text-lg font-medium line-clamp-1">{meeting.title}</div>
+                  <div className="font-medium line-clamp-1">{meeting.title}</div>
                   <div className="text-xs line-clamp-1">@{meeting.organization.title}</div>
                 </div>
                 <div className="w-28 text-xs">{getNextSessionTime(meeting, false, 'hh:mm A DD MMM')}</div>
