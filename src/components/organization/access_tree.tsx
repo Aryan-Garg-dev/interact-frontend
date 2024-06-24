@@ -1,7 +1,17 @@
 import { CheckSquare, X } from '@phosphor-icons/react';
 import React, { useEffect } from 'react';
 
-type ACCESS_TYPE = 'post' | 'project' | 'event' | 'task' | 'chat' | 'membership' | 'profile' | 'resource' | 'opening';
+type ACCESS_TYPE =
+  | 'post'
+  | 'project'
+  | 'event'
+  | 'task'
+  | 'chat'
+  | 'membership'
+  | 'profile'
+  | 'resource'
+  | 'opening'
+  | 'meeting';
 
 interface Props {
   type: ACCESS_TYPE;
@@ -355,6 +365,45 @@ const AccessTree = ({ type, setShow }: Props) => {
     },
   ];
 
+  const meetingAccess: Access[] = [
+    {
+      task: 'Join Meetings',
+      canMember: true,
+      canSenior: true,
+      canManager: true,
+    },
+    {
+      task: 'Create Meetings',
+      canMember: false,
+      canSenior: true,
+      canManager: true,
+    },
+    {
+      task: 'Edit Meetings',
+      canMember: false,
+      canSenior: true,
+      canManager: true,
+    },
+    {
+      task: 'Delete Meetings',
+      canMember: false,
+      canSenior: true,
+      canManager: true,
+    },
+    {
+      task: 'Edit Meeting Participants',
+      canMember: false,
+      canSenior: true,
+      canManager: true,
+    },
+    {
+      task: 'View Session Reports',
+      canMember: false,
+      canSenior: true,
+      canManager: true,
+    },
+  ];
+
   const accessArr: Access[] = ((): Access[] => {
     switch (type) {
       case 'post':
@@ -375,6 +424,8 @@ const AccessTree = ({ type, setShow }: Props) => {
         return resourceAccess;
       case 'opening':
         return openingAccess;
+      case 'meeting':
+        return meetingAccess;
       default:
         return [];
     }

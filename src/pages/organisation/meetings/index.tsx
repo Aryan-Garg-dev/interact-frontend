@@ -28,7 +28,7 @@ const Meetings = () => {
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-  const [order, setOrder] = useState('latest');
+  const [order, setOrder] = useState('next_session_time');
 
   const [clickedOnInfo, setClickedOnInfo] = useState(false);
 
@@ -68,7 +68,7 @@ const Meetings = () => {
       <OrgSidebar index={16} />
       <MainWrapper>
         {clickedOnNewMeeting && <NewMeeting setShow={setClickedOnNewMeeting} setMeetings={setMeetings} />}
-        {/* {clickedOnInfo && <AccessTree type="meeting" setShow={setClickedOnInfo} />} */}
+        {clickedOnInfo && <AccessTree type="meeting" setShow={setClickedOnInfo} />}
         <div className="w-full flex justify-between items-center p-base_padding">
           <div className="flex-center gap-2">
             <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Meetings</div>
