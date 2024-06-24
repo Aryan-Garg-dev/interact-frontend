@@ -30,7 +30,7 @@ const CommentAnnouncement = ({ announcement, setShow, numComments, setNoComments
           <X size={24} weight="bold" />
         </div>
         <div className="font-bold text-4xl text-gray-800 dark:text-white">Comments ({numComments})</div>
-        {/* <PostComponent post={post} showLowerPost={false} showImage={false} /> */}
+        
         <CommentBox item={announcement} type="announcement" setNoComments={setNoComments} />
       </div>
       <div

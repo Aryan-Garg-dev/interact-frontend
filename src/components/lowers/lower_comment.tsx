@@ -15,6 +15,7 @@ import postHandler from '@/handlers/post_handler';
 import { SERVER_ERROR } from '@/config/errors';
 import CommentsLoader from '../loaders/comments';
 import CommentComponent from '../common/comment';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 interface Props {
   comment: Comment;
@@ -200,36 +201,23 @@ const LowerComment = ({ comment, clickedOnReply, setClickedOnReply }: Props) => 
                 </div>
               </div>
             </div>
-            {loading && page == 1 ? (
-              <CommentsLoader />
-            ) : replies.length > 0 ? (
-              <div className="w-full flex flex-col gap-4">
-                {replies.map(comment => (
-                  <CommentComponent
-                    key={comment.id}
-                    comment={comment}
-                    setComments={setReplies}
-                    setNoComments={setNumReplies}
-                  />
-                ))}
-                {replies.length % limit == 0 && hasMore ? (
-                  <div
-                    onClick={getReplies}
-                    className="w-fit mx-auto pt-4 text-xs text-gray-700 font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
-                  >
-                    Load More
-                  </div>
-                ) : (
-                  replies.length < comment.noReplies && (
-                    <div className="w-full text-center pt-4 text-sm">
-                      Comments which do not follow the guidelines are flagged.
-                    </div>
-                  )
-                )}
-              </div>
-            ) : comment.noReplies == 0 ? (
-              <div className="w-fit mx-auto text-sm"> No Replies Yet :)</div>
-            ) : (
+            <InfiniteScroll
+              dataLength={replies.length}
+              next={getReplies}
+              hasMore={hasMore}
+              loader={<CommentsLoader />}
+              className="w-full flex flex-col gap-4"
+            >
+              {replies.map(comment => (
+                <CommentComponent
+                  key={comment.id}
+                  comment={comment}
+                  setComments={setReplies}
+                  setNoComments={setNumReplies}
+                />
+              ))}
+            </InfiniteScroll>
+            {replies.length < comment.noReplies && (
               <div className="w-full text-center pt-4 text-sm">
                 Comments which do not follow the guidelines are flagged.
               </div>
@@ -242,3 +230,4 @@ const LowerComment = ({ comment, clickedOnReply, setClickedOnReply }: Props) => 
 };
 
 export default LowerComment;
+
