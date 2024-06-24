@@ -18,6 +18,7 @@ import TextArea from '@/components/form/textarea';
 import Tags from '@/components/form/tags';
 import Links from '@/components/form/links';
 import PrimaryButton from '@/components/buttons/primary_btn';
+import { getFormattedTime, getInputFieldFormatTime } from '@/utils/funcs/time';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,8 +33,8 @@ const EditEvent = ({ setShow, event, setEvents }: Props) => {
   const [tags, setTags] = useState<string[]>(event.tags || []);
   const [links, setLinks] = useState<string[]>(event.links || []);
   const [location, setLocation] = useState(event.location);
-  const [startTime, setStartTime] = useState(moment(event.startTime).format('YYYY-MM-DDTHH:mm'));
-  const [endTime, setEndTime] = useState(moment(event.endTime).format('YYYY-MM-DDTHH:mm'));
+  const [startTime, setStartTime] = useState(getInputFieldFormatTime(event.startTime));
+  const [endTime, setEndTime] = useState(getInputFieldFormatTime(event.endTime));
   const [image, setImage] = useState<File>();
 
   const [mutex, setMutex] = useState(false);
@@ -58,7 +59,7 @@ const EditEvent = ({ setShow, event, setEvents }: Props) => {
     const end = moment(endTime);
 
     if (end.isBefore(start)) {
-      Toaster.error('Enter A Valid End Time');
+      Toaster.error('End Time cannot be before Start Time');
       return;
     }
 
@@ -75,8 +76,8 @@ const EditEvent = ({ setShow, event, setEvents }: Props) => {
     if (isArrEdited(links, event.links)) links.forEach(link => formData.append('links', link));
     if (category != event.category) formData.append('category', category);
     if (location != event.location) formData.append('location', location == '' ? 'Online' : location);
-    if (!start.isSame(event.startTime)) formData.append('startTime', start.format('YYYY-MM-DDTHH:mm:ss[Z]'));
-    if (!end.isSame(event.endTime)) formData.append('endTime', end.format('YYYY-MM-DDTHH:mm:ss[Z]'));
+    if (!start.isSame(event.startTime)) formData.append('startTime', getFormattedTime(startTime));
+    if (!end.isSame(event.endTime)) formData.append('endTime', getFormattedTime(endTime));
     if (image) formData.append('coverPic', image);
 
     const URL = `${ORG_URL}/${currentOrg.id}/events/${event.id}`;

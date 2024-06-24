@@ -53,20 +53,16 @@ const MemberCard = ({ membership, organization, setOrganization }: Props) => {
   };
   return (
     <>
-      {clickedOnEditCollaborator ? (
+      {clickedOnEditCollaborator && (
         <EditMember
           membership={membership}
           organization={organization}
           setShow={setClickedOnEditCollaborator}
           setOrganization={setOrganization}
         />
-      ) : (
-        <></>
       )}
-      {clickedOnRemoveCollaborator ? (
+      {clickedOnRemoveCollaborator && (
         <ConfirmDelete setShow={setClickedOnRemoveCollaborator} handleDelete={handleRemove} title="Confirm Remove?" />
-      ) : (
-        <></>
       )}
 
       <div className="w-[49%] hover:scale-105 font-primary bg-white hover:shadow-xl dark:bg-transparent dark:text-white border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-md flex justify-start gap-6 p-4 transition-ease-300">
@@ -81,11 +77,9 @@ const MemberCard = ({ membership, organization, setOrganization }: Props) => {
         <div className="grow flex flex-col gap-2 pt-1">
           <div className="w-full flex items-center justify-between">
             <div className="text-2xl font-semibold">{membership.user.name}</div>
-            {checkOrgAccess(ORG_MANAGER) && userID != membership.userID ? (
+            {checkOrgAccess(ORG_MANAGER) && userID != membership.userID && (
               // Managers should not have edit access to other managers
               <Pen onClick={() => setClickedOnEditCollaborator(true)} className="cursor-pointer" size={24} />
-            ) : (
-              <></>
             )}
           </div>
           <div className="font-medium">{membership.title}</div>

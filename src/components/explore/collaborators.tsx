@@ -49,9 +49,9 @@ const Collaborators = ({ memberships, workspace = false }: Props) => {
   return (
     <>
       {memberships && memberships.length > 0 && (
-        <div className={`w-full flex flex-col gap-3 relative ${user.id == '' && 'p-2'}`}>
+        <div className={`w-full h-fit flex flex-col gap-3 relative ${user.id == '' && 'p-2'}`}>
           {user.id == '' && (
-            <div className="w-full h-full flex-center flex-col gap-1 absolute top-0 right-0 backdrop-blur-sm">
+            <div className="w-full h-full flex-center flex-col gap-1 absolute top-0 right-0 backdrop-blur-sm z-10">
               <div className="bg-white flex-center gap-1 border-primary_black border-[1px] rounded-lg px-2 py-1">
                 <Lock /> Locked
               </div>
@@ -64,14 +64,6 @@ const Collaborators = ({ memberships, workspace = false }: Props) => {
           {memberships.map(membership => (
             <AboutUser key={membership.id} user={membership.user} role={membership.role} title={membership.title} />
           ))}
-          {/* {memberships.length > 10 && (
-                <div
-                  onClick={() => setClickedOnViewAllMembers(true)}
-                  className="w-fit mx-auto flex-center gap-1 text-sm cursor-pointer"
-                >
-                  View all <ArrowRight />
-                </div>
-              )} */}
         </div>
       )}
     </>

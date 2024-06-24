@@ -430,7 +430,9 @@ export type PRIORITY = 'low' | 'medium' | 'high';
 export interface Task {
   id: string;
   projectID: string;
-  project: Project;
+  project: Project | undefined;
+  organizationID: string;
+  organization: Organization | undefined;
   deadline: Date;
   title: string;
   description: string;
@@ -616,4 +618,38 @@ export interface Announcement {
   isOpen: boolean;
   taggedUsers: User[];
   userID: string; //Dummy for type fixes in comment_box
+}
+
+export interface Meeting {
+  id: string;
+  dyteID: string;
+  title: string;
+  description: string;
+  tags: string[];
+  startTime: Date;
+  endTime: Date;
+  frequency: string;
+  day: string;
+  date: number;
+  isOnline: boolean;
+  isOpenForMembers: boolean;
+  isLive: boolean;
+  allowExternalParticipants: boolean;
+  organizationID: string;
+  organization: Organization;
+  userID: string;
+  user: User;
+  participants: User[];
+  createdAt: Date;
+  nextSessionTime: Date;
+  sessions: Session[];
+}
+
+export interface Session {
+  id: string;
+  meetingID: string;
+  isLive: boolean;
+  startedAt: Date;
+  endedAt: Date;
+  createdAt: Date;
 }

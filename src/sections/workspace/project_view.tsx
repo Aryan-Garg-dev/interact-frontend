@@ -145,24 +145,24 @@ const ProjectView = ({
     const abortController = new AbortController();
     fetchProject(abortController);
 
-    router.replace({
-      pathname: router.pathname,
-      query: { ...router.query, project: projectSlugs[clickedProjectIndex] },
-    });
+    // router.replace({
+    //   pathname: router.pathname,
+    //   query: { ...router.query, project: projectSlugs[clickedProjectIndex] },
+    // });
 
-    return () => {
-      abortController.abort();
+    // return () => {
+    //   abortController.abort();
 
-      const { query } = router;
-      if (router.pathname == '/workspace') {
-        delete query.project;
+    //   const { query } = router;
+    //   if (router.pathname == '/workspace') {
+    //     delete query.project;
 
-        router.push({
-          pathname: router.pathname,
-          query: { ...query },
-        });
-      }
-    };
+    //     router.push({
+    //       pathname: router.pathname,
+    //       query: { ...query },
+    //     });
+    //   }
+    // };
   }, [clickedProjectIndex]);
 
   useEffect(() => {
@@ -316,7 +316,7 @@ const ProjectView = ({
               <Image
                 priority={true}
                 crossOrigin="anonymous"
-                className="w-3/4 max-lg:w-full h-full max-lg:h-96 rounded-tl-md max-lg:rounded-none object-cover"
+                className="w-[calc(100vh-56px)] max-lg:w-full h-full max-lg:h-96 rounded-tl-md max-lg:rounded-none object-cover"
                 src={`${PROJECT_PIC_URL}/${project.coverPic}`}
                 alt="Project Cover"
                 width={10000}
@@ -325,7 +325,7 @@ const ProjectView = ({
                 blurDataURL={project.blurHash || 'no-hash'}
               />
 
-              <div className="w-1/4 max-lg:w-full h-full max-lg:h-fit max-lg:min-h-[calc(100vh-65px-384px)] overflow-y-auto border-gray-300 border-t-[1px] border-r-[1px] dark:border-0 p-4 bg-white dark:bg-dark_primary_comp_hover flex flex-col justify-between gap-4">
+              <div className="w-[calc(100vw-128px-(100vh-56px))] max-lg:w-full h-full max-lg:h-fit max-lg:min-h-[calc(100vh-65px-384px)] overflow-y-auto border-gray-300 border-t-[1px] border-r-[1px] dark:border-0 p-4 bg-white dark:bg-dark_primary_comp_hover flex flex-col justify-between gap-4">
                 <div className="w-full h-fit flex flex-col gap-6">
                   <div className="flex flex-wrap justify-between items-center gap-2">
                     <div className="font-bold text-3xl text-gradient">{project.title}</div>
@@ -376,17 +376,15 @@ const ProjectView = ({
                 </div>
 
                 <div className="w-full mx-auto flex flex-col gap-2 pb-4">
-                  {project.userID == user.id || user.editorProjects.includes(project.id) ? (
+                  {(project.userID == user.id || user.editorProjects.includes(project.id)) && (
                     <div
                       onClick={() => setClickedOnEdit(true)}
                       className="w-full text-lg font-medium border-[1px] border-gray-400 hover:bg-primary_comp_hover active:bg-primary_comp_active  dark:border-dark_primary_btn dark:active:bg-dark_primary_gradient_end py-2 flex-center hover:bg-gradient-to-r dark:hover:from-dark_secondary_gradient_start dark:hover:to-dark_secondary_gradient_end rounded-lg cursor-pointer transition-ease-300"
                     >
                       Edit Project
                     </div>
-                  ) : (
-                    <></>
                   )}
-                  {project.userID == user.id || user.managerProjects.includes(project.id) ? (
+                  {(project.userID == user.id || user.managerProjects.includes(project.id)) && (
                     <Link
                       target="_blank"
                       href={`/workspace/manage/${projectSlugs[clickedProjectIndex]}`}
@@ -394,8 +392,6 @@ const ProjectView = ({
                     >
                       Manage Project
                     </Link>
-                  ) : (
-                    <></>
                   )}
                   {project.userID == user.id ? (
                     <div
@@ -439,7 +435,7 @@ const ProjectView = ({
               <div className="w-10 h-10 rounded-full"></div>
             )}
           </div>
-          {clickedProjectIndex != 0 ? (
+          {clickedProjectIndex != 0 && (
             <div
               onClick={() => {
                 setClickedProjectIndex(prev => prev - 1);
@@ -449,10 +445,8 @@ const ProjectView = ({
             >
               <CaretLeft size={24} weight="bold" />
             </div>
-          ) : (
-            <></>
           )}
-          {clickedProjectIndex != projectSlugs.length - 1 ? (
+          {clickedProjectIndex != projectSlugs.length - 1 && (
             <div
               onClick={() => {
                 setClickedProjectIndex(prev => prev + 1);
@@ -462,8 +456,6 @@ const ProjectView = ({
             >
               <CaretRight size={24} weight="bold" />
             </div>
-          ) : (
-            <></>
           )}
         </div>
       )}

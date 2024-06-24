@@ -67,30 +67,26 @@ const OrgCard = ({ user }: Props) => {
               </div>
             </div>
             <div className="w-full flex justify-between flex-wrap gap-2 font-medium text-xs text-gray-700">
-              {user.organization ? (
+              {user.organization && (
                 <div className="flex gap-1 items-center">
                   <IdentificationBadge />
                   <div>
                     {user.organization?.noMembers} Member{user.organization?.noMembers != 1 ? 's' : ''}
                   </div>
                 </div>
-              ) : (
-                <></>
               )}
 
-              {user.profile?.location ? (
+              {user.profile?.location && (
                 <div className="flex gap-1 items-center">
                   <div className="text-xs">{user.profile.location}</div> <MapPin />
                 </div>
-              ) : (
-                <></>
               )}
             </div>
           </div>
 
           <div className="border-t-[1px] border-gray-500 border-dashed"></div>
 
-          {user.tagline != '' ? <div className="text-sm text-gray-600 text-center">{user.tagline}</div> : <></>}
+          {user.tagline != '' && <div className="text-sm text-gray-600 text-center">{user.tagline}</div>}
         </div>
         {loggedInUser.id != '' && (
           <div

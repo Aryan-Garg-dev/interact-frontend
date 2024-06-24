@@ -19,6 +19,8 @@ import ConfirmDelete from '@/components/common/confirm_delete';
 import deleteHandler from '@/handlers/delete_handler';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import ConfirmOTP from '@/components/common/confirm_otp';
+import { setOrganizationMemberships, userSelector } from '@/slices/userSlice';
+import { useSelector } from 'react-redux';
 
 const Organizations = () => {
   const [memberships, setMemberships] = useState<OrganizationMembership[]>([]);
@@ -26,6 +28,8 @@ const Organizations = () => {
   const [clickedOnConfirmLeave, setClickedOnConfirmLeave] = useState(false);
 
   const [clickedMembership, setClickedMembership] = useState(initialOrganizationMembership);
+
+  const user = useSelector(userSelector);
 
   const router = useRouter();
   const dispatch = useDispatch();
@@ -37,6 +41,14 @@ const Organizations = () => {
         if (res.statusCode === 200) {
           const organizationMemberships: OrganizationMembership[] = res.data.memberships || [];
           setMemberships(organizationMemberships);
+
+          const { oid } = router.query;
+          if (oid && oid != '') {
+            const filteredMemberships = organizationMemberships.filter(m => m.organizationID == oid);
+            if (filteredMemberships.length == 1) {
+              handleClick(filteredMemberships[0]);
+            }
+          }
         } else Toaster.error(res.data.message, 'error_toaster');
       })
       .catch(err => {
@@ -85,6 +97,11 @@ const Organizations = () => {
 
     if (res.statusCode === 204) {
       setMemberships(prev => prev.filter(m => m.id != clickedMembership.id));
+      dispatch(
+        setOrganizationMemberships(
+          user.organizationMemberships.filter(membership => membership.id != clickedMembership.id)
+        )
+      );
       setClickedMembership(initialOrganizationMembership);
       setClickedOnConfirmLeave(false);
       Toaster.stopLoad(toaster, 'Left Organisation', 1);

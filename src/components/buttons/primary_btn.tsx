@@ -14,7 +14,7 @@ const PrimaryButton = ({ label, onClick, animateIn = true, disabled, width = '32
     <button
       disabled={disabled}
       onClick={onClick}
-      className={`w-${width} text-lg text-center font-medium px-4 py-2 border-[1px] border-primary_comp_hover bg-primary_comp hover:bg-primary_comp_hover text-primary_text transition-ease-500 rounded-lg cursor-pointer ${
+      className={`w-${width} text-lg text-center font-medium px-4 py-2 border-[1px] border-primary_comp_hover bg-primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active text-primary_text transition-ease-500 rounded-lg cursor-pointer ${
         animateIn && 'animate-fade_third'
       } disabled:opacity-50 disabled:hover:bg-primary_comp disabled:cursor-default`}
     >

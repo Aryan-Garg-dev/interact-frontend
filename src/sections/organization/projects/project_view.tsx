@@ -318,7 +318,7 @@ const ProjectView = ({
             <div className="w-full h-[calc(100vh-56px)] max-lg:overflow-y-auto shadow-xl flex max-lg:flex-col">
               <Image
                 crossOrigin="anonymous"
-                className="w-3/4 max-lg:w-full h-full max-lg:h-96 rounded-tl-md max-lg:rounded-none object-cover"
+                className="w-[calc(100vh-56px)] max-lg:w-full h-full max-lg:h-96 rounded-tl-md max-lg:rounded-none object-cover"
                 src={`${PROJECT_PIC_URL}/${project.coverPic}`}
                 alt="Project Cover"
                 width={10000}
@@ -326,7 +326,7 @@ const ProjectView = ({
                 placeholder="blur"
                 blurDataURL={project.blurHash || 'no-hash'}
               />
-              <div className="w-1/4 max-lg:w-full h-full max-lg:h-fit max-lg:min-h-[calc(100vh-65px-384px)] overflow-y-auto border-gray-300 border-t-[1px] border-r-[1px] dark:border-0 p-4 bg-white dark:bg-dark_primary_comp_hover flex flex-col justify-between gap-4">
+              <div className="w-[calc(100vw-128px-(100vh-56px))] max-lg:w-full h-full max-lg:h-fit max-lg:min-h-[calc(100vh-65px-384px)] overflow-y-auto border-gray-300 border-t-[1px] border-r-[1px] dark:border-0 p-4 bg-white dark:bg-dark_primary_comp_hover flex flex-col justify-between gap-4">
                 <div className="w-full h-fit flex flex-col gap-4 z-10">
                   <div className="flex flex-wrap justify-between items-center gap-2">
                     <div className="font-bold text-3xl text-gradient">{project.title}</div>

@@ -36,7 +36,6 @@ const Home = () => {
           <div className="w-[70%] max-md:w-full flex flex-col items-center relative">
             {user.id != '' ? (
               <>
-                {/* <TabMenu items={['Feed', 'Discover']} active={active} setReduxState={setHomeTab} /> */}
                 <div className={`w-full ${active === 0 ? 'block' : 'hidden'}`}>
                   <Feed />
                 </div>

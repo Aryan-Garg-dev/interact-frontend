@@ -54,7 +54,7 @@ const SimilarProjects = ({ slug }: Props) => {
       <InfiniteScroll
         className={`w-full flex flex-wrap ${
           projects.length == 1 ? 'justify-start' : 'justify-evenly'
-        } max-md:justify-center gap-3`}
+        } max-md:justify-center gap-4`}
         dataLength={projects.length}
         next={() => fetchProjects()}
         hasMore={hasMore}
@@ -67,7 +67,7 @@ const SimilarProjects = ({ slug }: Props) => {
             checkSet.add(project.id);
             return (
               <Link key={project.id} href={`/explore?pid=${project.slug}`} target="_blank">
-                <ProjectCard index={index} project={project} size={64} />
+                <ProjectCard index={index} project={project} size={'[16vw]'} />
               </Link>
             );
           }

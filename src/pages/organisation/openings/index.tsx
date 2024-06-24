@@ -54,7 +54,7 @@ const Openings = () => {
 
   return (
     <BaseWrapper title={`Openings | ${currentOrg.title}`}>
-      <OrgSidebar index={15}></OrgSidebar>
+      <OrgSidebar index={15} />
       <MainWrapper>
         {clickedOnNewOpening && (
           <NewOpening setShow={setClickedOnNewOpening} openings={openings} setOpenings={setOpenings} />

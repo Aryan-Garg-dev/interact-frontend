@@ -11,6 +11,7 @@ import {
   GroupChatMembership,
   GroupChatMessage,
   Invitation,
+  Meeting,
   Membership,
   Message,
   Opening,
@@ -409,6 +410,8 @@ export const initialTask: Task = {
   isCompleted: false,
   projectID: '',
   project: initialProject,
+  organization: initialOrganization,
+  organizationID: '',
   priority: 'low',
 };
 
@@ -486,4 +489,29 @@ export const initialResourceFile: ResourceFile = {
   user: initialUser,
   isFileUploaded: false,
   createdAt: new Date(),
+};
+
+export const initialMeeting: Meeting = {
+  id: '',
+  dyteID: '',
+  title: '',
+  description: '',
+  tags: [],
+  startTime: new Date(),
+  endTime: new Date(),
+  frequency: 'none',
+  day: '',
+  date: -1,
+  isOnline: false,
+  isOpenForMembers: false,
+  isLive: false,
+  allowExternalParticipants: false,
+  organizationID: '',
+  organization: initialOrganization,
+  userID: '',
+  user: initialUser,
+  participants: [],
+  createdAt: new Date(),
+  nextSessionTime: new Date(),
+  sessions: [],
 };

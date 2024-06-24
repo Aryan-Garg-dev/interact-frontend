@@ -4,7 +4,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL, PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
-import Gavel from '@phosphor-icons/react/dist/icons/Gavel';
+import { Gavel } from '@phosphor-icons/react';
 import { userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
@@ -113,13 +113,12 @@ const Tasks = ({ project, setShow, setClickedOnNewTask, org = false }: Props) =>
                       href={`/${org ? 'organisation/projects' : 'workspace'}/tasks/${project.slug}`}
                       key={task.id}
                       className="relative"
+                      target="_blank"
                     >
-                      {userInTask(user.id, task) ? (
+                      {userInTask(user.id, task) && (
                         <div className="absolute right-2 top-0 -translate-y-1/2 text-xs bg-primary_comp_hover backdrop-blur-sm rounded-lg py-1 px-2">
                           assigned to you
                         </div>
-                      ) : (
-                        <></>
                       )}
                       <div className="w-full flex flex-col gap-2 rounded-lg p-4 border-gray-800 border-dotted border-2">
                         <div className="w-full flex justify-between items-center">

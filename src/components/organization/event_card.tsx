@@ -121,7 +121,7 @@ const EventCard = ({
           {event.organization.title}
         </div>
       </div>
-      <div className="w-full bg-white rounded-b-xl flex p-4">
+      <div className="w-full h-20 bg-white rounded-b-xl flex p-4">
         <div className="w-1/6 flex items-start justify-start mt-1">
           <div className="w-fit flex flex-col items-end">
             <div className={`w-fit ${size == 96 ? 'text-xs' : 'text-xxs'} uppercase transition-ease-out-500`}>
@@ -132,8 +132,8 @@ const EventCard = ({
             </div>
           </div>
         </div>
-        <div className={`w-5/6 ${size == 96 ? 'h-20' : 'h-16'} flex flex-col gap-2 transition-ease-out-500`}>
-          <div className="font-medium">{event.title}</div>
+        <div className={`w-5/6 ${size == 96 ? 'h-20' : 'h-16'} flex flex-col transition-ease-out-500`}>
+          <div className="font-medium text-lg line-clamp-1">{event.title}</div>
           <div className={`${size == 96 ? 'text-sm ' : 'text-xs'} text-gray-500 line-clamp-2 transition-ease-out-500`}>
             {event.tagline}
           </div>

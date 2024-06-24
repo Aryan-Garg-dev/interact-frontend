@@ -5,7 +5,7 @@ import { configSelector, setUpdatingLikes } from '@/slices/configSlice';
 import { setLikes, userSelector } from '@/slices/userSlice';
 import { Event } from '@/types';
 import Semaphore from '@/utils/semaphore';
-import { Eye, CursorClick, HeartStraight, ChatCircleText, Export } from '@phosphor-icons/react';
+import { Eye, HeartStraight, ChatCircleText, Export } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SignUp from '../common/signup_box';
@@ -94,7 +94,7 @@ const LowerEvent = ({ event, numLikes, setNumLikes }: Props) => {
               if (user.id == '') setNoUserClick(true);
               else likeHandler();
             }}
-            className="flex items-center gap-2 p-2 rounded-lg hover:shadow-2xl transition-ease-300 cursor-pointer"
+            className="flex items-center gap-2 p-2 rounded-lg hover:shadow-xl transition-ease-300 cursor-pointer"
           >
             <HeartStraight
               className={`cursor-pointer max-md:w-6 max-md:h-6 ${
@@ -110,7 +110,7 @@ const LowerEvent = ({ event, numLikes, setNumLikes }: Props) => {
               if (user.id == '') setNoUserClick(true);
               else setClickedOnComment(true);
             }}
-            className="flex items-center gap-2 p-2 rounded-lg hover:shadow-2xl transition-ease-300 cursor-pointer"
+            className="flex items-center gap-2 p-2 rounded-lg hover:shadow-xl transition-ease-300 cursor-pointer"
           >
             <ChatCircleText size={24} />
             <div className="text-sm"> {numComments}</div>
@@ -120,12 +120,12 @@ const LowerEvent = ({ event, numLikes, setNumLikes }: Props) => {
               if (user.id == '') setNoUserClick(true);
               else setClickedOnShare(true);
             }}
-            className="flex items-center gap-2 p-2 rounded-lg hover:shadow-2xl transition-ease-300 cursor-pointer"
+            className="flex items-center gap-2 p-2 rounded-lg hover:shadow-xl transition-ease-300 cursor-pointer"
           >
             <Export size={24} />
             <div className="text-sm"> {event.noShares}</div>
           </div>
-          <div className="flex items-center gap-2 p-2 rounded-lg hover:shadow-2xl transition-ease-300 cursor-pointer">
+          <div className="flex items-center gap-2 p-2 rounded-lg hover:shadow-xl transition-ease-300 cursor-pointer">
             <EventBookmarkIcon event={event} size={24} />
           </div>
         </div>

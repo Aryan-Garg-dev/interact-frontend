@@ -9,10 +9,10 @@ interface Props {
 }
 
 const Task = ({ notification }: Props) => {
-  const getType = (): string => {
+  const getTitle = (): string => {
     switch (notification.notificationType) {
       case 11:
-        return 'project';
+        return notification.project.title;
       default:
         return '';
     }
@@ -20,7 +20,7 @@ const Task = ({ notification }: Props) => {
   const getRedirectURL = () => {
     switch (notification.notificationType) {
       case 11:
-        return '/explore?pid=' + notification.project.slug;
+        return '/workspace/tasks/' + notification.project.slug;
       default:
         return '';
     }
@@ -32,13 +32,15 @@ const Task = ({ notification }: Props) => {
           {notification.sender.name}
         </Link>{' '}
       </span>
-      assigned you a task in a
+      assigned you a{' '}
       <span>
         {' '}
-        <Link className="font-bold capitalize" href={getRedirectURL()}>
-          {getType()}
+        <Link className="font-bold" href={getRedirectURL()}>
+          Task
         </Link>
-      </span>
+      </span>{' '}
+      in
+      {' ' + getTitle()}
     </NotificationWrapper>
   );
 };

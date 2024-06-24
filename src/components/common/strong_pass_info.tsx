@@ -1,5 +1,5 @@
 import { CheckSquare, XSquare } from '@phosphor-icons/react';
-import X from '@phosphor-icons/react/dist/icons/X';
+import { X } from '@phosphor-icons/react';
 import React from 'react';
 
 interface Props {

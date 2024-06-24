@@ -36,7 +36,7 @@ interface Props {
   getUserRole: (userID: string) => string;
 }
 
-const Task = ({
+const TaskComponent = ({
   task,
   setShow,
   setClickedTaskID,
@@ -248,4 +248,4 @@ const Task = ({
   );
 };
 
-export default Task;
+export default TaskComponent;

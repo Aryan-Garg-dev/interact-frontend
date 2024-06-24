@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { ReactSVG } from 'react-svg';
-import Eye from '@phosphor-icons/react/dist/icons/Eye';
-import EyeClosed from '@phosphor-icons/react/dist/icons/EyeClosed';
+import { Eye, EyeClosed } from '@phosphor-icons/react';
 import { useState } from 'react';
 import Toaster from '@/utils/toaster';
 import Cookies from 'js-cookie';

@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import moment from 'moment';
 import { Buildings } from '@phosphor-icons/react';
+import Tags from '../common/tags';
 
 interface Props {
   opening: Opening;
@@ -21,10 +22,8 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
         if (setClickedOnOpening) setClickedOnOpening(true);
       }}
       className={`w-full ${
-        opening.id == clickedOpening?.id
-          ? 'bg-white dark:bg-[#ffffff2b]'
-          : 'hover:bg-gray-100 dark:hover:bg-transparent'
-      } font-primary dark:text-white border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-4 flex items-center gap-4 transition-ease-300 cursor-pointer animate-fade_third`}
+        opening.id == clickedOpening?.id ? 'bg-white' : 'hover:bg-gray-100'
+      } font-primary border-[1px] border-primary_btn rounded-lg p-3 flex items-center gap-3 transition-ease-300 cursor-pointer animate-fade_third`}
     >
       {org ? (
         <Image
@@ -33,7 +32,7 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
           height={200}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${opening.organization?.user?.profilePic}`}
-          className={'w-[140px] h-[140px] max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover'}
+          className={'w-[110px] h-[110px] max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover'}
         />
       ) : (
         <Image
@@ -42,7 +41,7 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
           height={200}
           alt={'User Pic'}
           src={`${PROJECT_PIC_URL}/${opening.project?.coverPic}`}
-          className={'w-[140px] h-[140px] max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover'}
+          className={'w-[110px] h-[110px] max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover'}
           placeholder="blur"
           blurDataURL={opening.project?.blurHash || 'no-hash'}
         />
@@ -51,7 +50,8 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
       <div className="w-[calc(100%-140px)] flex flex-col gap-2">
         <div className="w-5/6 flex flex-col gap-1">
           <div className="font-bold text-2xl max-lg:text-lg text-gradient line-clamp-1">{opening.title}</div>
-          <div className="font-medium text-lg max-lg:text-sm">
+          <div className="font-medium text-sm line-clamp-1">
+            @
             {org ? (
               <span className="w-fit flex-center gap-1">
                 {opening.organization?.title} <Buildings />
@@ -61,32 +61,7 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
             )}
           </div>
         </div>
-
-        {opening.tags.length > 0 && (
-          <div className="w-full flex flex-wrap gap-1">
-            {opening.tags &&
-              opening.tags // Splicing causes array mutation
-                .filter((_, index) => {
-                  return index >= 0 && index < 3;
-                })
-                .map(tag => {
-                  return (
-                    <div
-                      key={tag}
-                      className="flex-center px-2 py-1 font-primary text-xs dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg"
-                    >
-                      {tag}
-                    </div>
-                  );
-                })}
-            {opening.tags.length - 3 > 0 && (
-              <div className="flex-center px-2 py-1 font-primary text-xs dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg">
-                +{opening.tags.length - 3}
-              </div>
-            )}
-          </div>
-        )}
-
+        {opening.tags.length > 0 && <Tags tags={opening.tags} />}
         <div className="text-xs opacity-60 max-lg:text-xs">{moment(opening.createdAt).fromNow()}</div>
       </div>
     </div>

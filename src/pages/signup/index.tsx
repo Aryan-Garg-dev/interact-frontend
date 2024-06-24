@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { ReactSVG } from 'react-svg';
-import Eye from '@phosphor-icons/react/dist/icons/Eye';
-import EyeClosed from '@phosphor-icons/react/dist/icons/EyeClosed';
+import { Eye, EyeClosed, Info } from '@phosphor-icons/react';
 import { useState } from 'react';
 import Toaster from '@/utils/toaster';
 import Cookies from 'js-cookie';
@@ -19,7 +18,6 @@ import socketService from '@/config/ws';
 import isEmail from 'validator/lib/isEmail';
 import isStrongPassword from 'validator/lib/isStrongPassword';
 import { SERVER_ERROR } from '@/config/errors';
-import Info from '@phosphor-icons/react/dist/icons/Info';
 import generateRandomProfilePicture from '@/utils/generate_profile_picture';
 import StrongPassInfo from '@/components/common/strong_pass_info';
 import RegistrationButton from '@/components/buttons/registration_btn';

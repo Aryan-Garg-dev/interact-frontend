@@ -11,23 +11,27 @@ import Toaster from '@/utils/toaster';
 import { useWindowWidth } from '@react-hook/window-size';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import OrderMenu from '@/components/common/order_menu';
 
 const Openings = () => {
   const [openings, setOpenings] = useState<Opening[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const [order, setOrder] = useState('trending');
 
   const [clickedOnOpening, setClickedOnOpening] = useState(false);
   const [clickedOpening, setClickedOpening] = useState(initialOpening);
 
   const windowWidth = useWindowWidth();
 
-  const fetchOpenings = async (search: string | null) => {
+  const fetchOpenings = async (search: string | null, initialPage: number | null) => {
     let URL =
       search && search != ''
-        ? `${EXPLORE_URL}/openings/trending?${'search=' + search}`
-        : `${EXPLORE_URL}/openings/trending?page=${page}&limit=${10}`;
+        ? `${EXPLORE_URL}/openings?search=${search}&order=${order}`
+        : order == 'recommended'
+        ? `${EXPLORE_URL}/openings/recommended?page=${initialPage ? initialPage : page}&limit=${10}`
+        : `${EXPLORE_URL}/openings?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
 
     const projectSlug = new URLSearchParams(window.location.search).get('pid');
     if (projectSlug) URL = `${EXPLORE_URL}/openings/${projectSlug}`;
@@ -38,19 +42,36 @@ const Openings = () => {
         setOpenings(res.data.openings || []);
         setHasMore(false);
       } else {
-        const addedOpenings = [...openings, ...(res.data.openings || [])];
-        if (addedOpenings.length === openings.length) setHasMore(false);
-        setOpenings(addedOpenings);
+        if (initialPage == 1) {
+          const openingData = res.data.openings || [];
 
-        if (clickedOnOpening && page == 1) {
-          if (addedOpenings.length > 0) setClickedOpening(addedOpenings[0]);
-          else {
-            setClickedOnOpening(false);
-            setClickedOpening(initialOpening);
+          setOpenings(openingData);
+
+          if (clickedOnOpening) {
+            if (openingData.length > 0) setClickedOpening(openingData[0]);
+            else {
+              setClickedOnOpening(false);
+              setClickedOpening(initialOpening);
+            }
+          } else if (openingData.length > 0 && windowWidth > 640) {
+            setClickedOnOpening(true);
+            setClickedOpening(openingData[0]);
           }
-        } else if (page == 1 && addedOpenings.length > 0 && windowWidth > 640) {
-          setClickedOnOpening(true);
-          setClickedOpening(addedOpenings[0]);
+        } else {
+          const addedOpenings = [...openings, ...(res.data.openings || [])];
+          if (addedOpenings.length === openings.length) setHasMore(false);
+          setOpenings(addedOpenings);
+
+          if (clickedOnOpening && page == 1) {
+            if (addedOpenings.length > 0) setClickedOpening(addedOpenings[0]);
+            else {
+              setClickedOnOpening(false);
+              setClickedOpening(initialOpening);
+            }
+          } else if (page == 1 && addedOpenings.length > 0 && windowWidth > 640) {
+            setClickedOnOpening(true);
+            setClickedOpening(addedOpenings[0]);
+          }
         }
 
         setPage(prev => prev + 1);
@@ -84,10 +105,13 @@ const Openings = () => {
 
   useEffect(() => {
     setPage(1);
+    setOpenings([]);
+    setHasMore(true);
+    setLoading(true);
     const oid = new URLSearchParams(window.location.search).get('oid');
     if (oid && oid != '') fetchOpening(oid);
-    else fetchOpenings(new URLSearchParams(window.location.search).get('search'));
-  }, [window.location.search]);
+    else fetchOpenings(new URLSearchParams(window.location.search).get('search'), 1);
+  }, [window.location.search, order]);
 
   const isOrg = (opening: Opening): boolean => {
     if (opening.organizationID) return true;
@@ -96,6 +120,7 @@ const Openings = () => {
 
   return (
     <div className="w-full flex flex-col gap-6 py-2">
+      <OrderMenu orders={['trending', 'most_viewed', 'latest']} current={order} setState={setOrder} />
       {loading ? (
         <Loader />
       ) : openings.length > 0 ? (
@@ -103,7 +128,7 @@ const Openings = () => {
           <InfiniteScroll
             className={`${clickedOnOpening ? 'w-[480px]' : 'w-[720px]'} max-lg:w-full flex flex-col gap-4`}
             dataLength={openings.length}
-            next={() => fetchOpenings(new URLSearchParams(window.location.search).get('search'))}
+            next={() => fetchOpenings(new URLSearchParams(window.location.search).get('search'), null)}
             hasMore={hasMore}
             loader={<Loader />}
           >

@@ -16,8 +16,8 @@ import WidthCheck from '@/utils/wrappers/widthCheck';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import OrgSidebar from '@/components/common/org_sidebar';
-import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import Protect from '@/utils/wrappers/protect';
+import OrderMenu from '@/components/common/order_menu';
 
 interface Props {
   oid: string;
@@ -103,15 +103,11 @@ const Applications = ({ oid }: Props) => {
                 Filters <SlidersHorizontal size={24} />
               </div>
               {clickedOnFilter && (
-                <div
-                  className={`absolute top-12 right-0 ${
-                    clickedOnApplication ? 'bg-gray-50' : ''
-                  } rounded-md flex flex-col gap-1 animate-fade_third z-50`}
-                >
+                <div className="absolute top-12 right-0 bg-gray-100 rounded-md flex flex-col gap-1 animate-fade_third z-50">
                   <div
                     onClick={() => filterApplications(0)}
                     className={`w-28 p-2 rounded-lg ${
-                      filterStatus == 0 ? 'bg-white ' : 'hover:bg-gray-100'
+                      filterStatus == 0 ? 'bg-white text-primary_text' : 'hover:bg-white'
                     } text-center cursor-default transition-ease-300`}
                   >
                     All
@@ -119,7 +115,7 @@ const Applications = ({ oid }: Props) => {
                   <div
                     onClick={() => filterApplications(2)}
                     className={`w-28 p-2 rounded-lg ${
-                      filterStatus == 2 ? 'bg-white ' : 'hover:bg-gray-100'
+                      filterStatus == 2 ? 'bg-white text-primary_text' : 'hover:bg-white'
                     } text-center cursor-default transition-ease-300`}
                   >
                     Accepted
@@ -127,7 +123,7 @@ const Applications = ({ oid }: Props) => {
                   <div
                     onClick={() => filterApplications(1)}
                     className={`w-28 p-2 rounded-lg ${
-                      filterStatus == 1 ? 'bg-white ' : 'hover:bg-gray-100'
+                      filterStatus == 1 ? 'bg-white text-primary_text' : 'hover:bg-white'
                     } text-center cursor-default transition-ease-300`}
                   >
                     Shortlisted
@@ -135,7 +131,7 @@ const Applications = ({ oid }: Props) => {
                   <div
                     onClick={() => filterApplications(-1)}
                     className={`w-28 p-2 rounded-lg ${
-                      filterStatus == -1 ? 'bg-white ' : 'hover:bg-gray-100'
+                      filterStatus == -1 ? 'bg-white text-primary_text' : 'hover:bg-white'
                     } text-center cursor-default transition-ease-300`}
                   >
                     Rejected

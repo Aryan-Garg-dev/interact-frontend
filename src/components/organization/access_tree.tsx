@@ -1,7 +1,17 @@
 import { CheckSquare, X } from '@phosphor-icons/react';
 import React, { useEffect } from 'react';
 
-type ACCESS_TYPE = 'post' | 'project' | 'event' | 'task' | 'chat' | 'membership' | 'profile' | 'resource' | 'opening';
+type ACCESS_TYPE =
+  | 'post'
+  | 'project'
+  | 'event'
+  | 'task'
+  | 'chat'
+  | 'membership'
+  | 'profile'
+  | 'resource'
+  | 'opening'
+  | 'meeting';
 
 interface Props {
   type: ACCESS_TYPE;
@@ -15,374 +25,92 @@ interface Access {
   canManager: boolean;
 }
 
+const accessDefinitions: Record<ACCESS_TYPE, Access[]> = {
+  post: [
+    { task: "See Organisation's Posts", canMember: true, canSenior: true, canManager: true },
+    { task: 'Add new Posts', canMember: false, canSenior: true, canManager: true },
+    { task: 'Edit Posts', canMember: false, canSenior: true, canManager: true },
+    { task: 'Delete Posts', canMember: false, canSenior: true, canManager: true },
+  ],
+  chat: [
+    { task: "See Organisation's Chats", canMember: true, canSenior: true, canManager: true },
+    { task: 'Add new Chats', canMember: false, canSenior: true, canManager: true },
+    { task: "Edit Chats' Details", canMember: false, canSenior: true, canManager: true },
+    { task: 'Add members to Chats', canMember: false, canSenior: true, canManager: true },
+    { task: 'Remove members from Chats', canMember: false, canSenior: true, canManager: true },
+    { task: 'Delete Chats', canMember: false, canSenior: true, canManager: true },
+  ],
+  event: [
+    { task: "See Organisation's Events", canMember: true, canSenior: true, canManager: true },
+    { task: 'Add new Events', canMember: false, canSenior: true, canManager: true },
+    { task: "Edit Events' Details", canMember: false, canSenior: true, canManager: true },
+    { task: "Change Events' Coordinators", canMember: false, canSenior: true, canManager: true },
+    { task: 'Delete Events', canMember: false, canSenior: true, canManager: true },
+  ],
+  membership: [
+    { task: "See Organisation's Members", canMember: true, canSenior: true, canManager: true },
+    { task: "See Organisation's Invitations", canMember: true, canSenior: true, canManager: true },
+    { task: 'Invite new Members to Org', canMember: false, canSenior: false, canManager: true },
+    { task: 'Withdraw Invitations', canMember: false, canSenior: false, canManager: true },
+    { task: 'Edit Memberships of members', canMember: false, canSenior: false, canManager: true },
+    { task: 'Edit Memberships of other managers', canMember: false, canSenior: false, canManager: false },
+    { task: 'Remove members from Org', canMember: false, canSenior: false, canManager: true },
+    { task: 'Remove other managers from Org', canMember: false, canSenior: false, canManager: false },
+  ],
+  profile: [
+    { task: "See Organisation's Profile", canMember: true, canSenior: true, canManager: true },
+    { task: "Edit Organisation's Details", canMember: false, canSenior: true, canManager: true },
+    { task: "Change Organisation's Name", canMember: false, canSenior: false, canManager: false },
+    { task: 'Delete Organisation', canMember: false, canSenior: false, canManager: false },
+  ],
+  project: [
+    { task: "See Organisation's Projects", canMember: true, canSenior: true, canManager: true },
+    { task: "See Projects' History", canMember: true, canSenior: true, canManager: true },
+    { task: "See Projects' Tasks", canMember: false, canSenior: true, canManager: true },
+    { task: "See Projects' Openings", canMember: false, canSenior: true, canManager: true },
+    { task: 'Add new Projects', canMember: false, canSenior: false, canManager: true },
+    { task: "Edit Projects' Details", canMember: false, canSenior: true, canManager: true },
+    { task: 'Add Openings to Projects', canMember: false, canSenior: true, canManager: true },
+    { task: 'Edit Opening Details of Projects', canMember: false, canSenior: true, canManager: true },
+    { task: 'Invite new external members to Projects', canMember: false, canSenior: false, canManager: true },
+    { task: 'Add org members to Projects', canMember: false, canSenior: false, canManager: true },
+    { task: 'Remove members from Projects', canMember: false, canSenior: false, canManager: true },
+    { task: 'Review Opening Applications', canMember: false, canSenior: false, canManager: true },
+    { task: 'Delete Projects', canMember: false, canSenior: false, canManager: true },
+  ],
+  task: [
+    { task: "See Organisation's Tasks", canMember: true, canSenior: true, canManager: true },
+    { task: 'Add new Tasks', canMember: false, canSenior: true, canManager: true },
+    { task: "Edit Tasks' Details", canMember: false, canSenior: true, canManager: true },
+    { task: "Change Tasks' Users", canMember: false, canSenior: true, canManager: true },
+    { task: 'Delete Tasks', canMember: false, canSenior: true, canManager: true },
+  ],
+  resource: [
+    { task: 'Create Resource Buckets', canMember: false, canSenior: true, canManager: true },
+    { task: 'Edit Resource Buckets', canMember: false, canSenior: true, canManager: true },
+    { task: 'Delete Resource Buckets', canMember: false, canSenior: true, canManager: true },
+  ],
+  opening: [
+    { task: 'Create Openings', canMember: false, canSenior: false, canManager: true },
+    { task: 'Edit Openings', canMember: false, canSenior: false, canManager: true },
+    { task: 'Delete Openings', canMember: false, canSenior: false, canManager: true },
+    { task: 'Handle Applications', canMember: false, canSenior: false, canManager: true },
+  ],
+  meeting: [
+    { task: 'Join Meetings', canMember: true, canSenior: true, canManager: true },
+    { task: 'Create Meetings', canMember: false, canSenior: true, canManager: true },
+    { task: 'Edit Meetings', canMember: false, canSenior: true, canManager: true },
+    { task: 'Delete Meetings', canMember: false, canSenior: true, canManager: true },
+    { task: 'Edit Meeting Participants', canMember: false, canSenior: true, canManager: true },
+    { task: 'View Session Reports', canMember: false, canSenior: true, canManager: true },
+  ],
+};
+
 const AccessTree = ({ type, setShow }: Props) => {
-  const postAccess: Access[] = [
-    {
-      task: "See Organisation's Posts",
-      canMember: true,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Add new Posts',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Edit Posts',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Delete Posts',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-  ];
-
-  const chatAccess: Access[] = [
-    {
-      task: "See Organisation's Chats",
-      canMember: true,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Add new Chats',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: "Edit Chats' Details",
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Add members to Chats',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Remove members from Chats',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Delete Chats',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-  ];
-
-  const eventAccess: Access[] = [
-    {
-      task: "See Organisation's Events",
-      canMember: true,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Add new Events',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: "Edit Events' Details",
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: "Change Events' Coordinators",
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Delete Events',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-  ];
-
-  const membershipAccess: Access[] = [
-    {
-      task: "See Organisation's Members",
-      canMember: true,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: "See Organisation's Invitations",
-      canMember: true,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Invite new Members to Org',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: 'Withdraw Invitations',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: 'Edit Memberships of members',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: 'Edit Memberships of other managers',
-      canMember: false,
-      canSenior: false,
-      canManager: false,
-    },
-    {
-      task: 'Remove members from Org',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: 'Remove other managers from Org',
-      canMember: false,
-      canSenior: false,
-      canManager: false,
-    },
-  ];
-
-  const profileAccess: Access[] = [
-    {
-      task: "See Organisation's Profile",
-      canMember: true,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: "Edit Organisation's Details",
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: "Change Organisation's Name",
-      canMember: false,
-      canSenior: false,
-      canManager: false,
-    },
-    {
-      task: 'Delete Organisation',
-      canMember: false,
-      canSenior: false,
-      canManager: false,
-    },
-  ];
-
-  const projectAccess: Access[] = [
-    {
-      task: "See Organisation's Projects",
-      canMember: true,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: "See Projects' History",
-      canMember: true,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: "See Projects' Tasks",
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: "See Projects' Openings",
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Add new Projects',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: "Edit Projects' Details",
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Add Openings to Projects',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Edit Opening Details of Projects',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Invite new external members to Projects',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: 'Add org members to Projects',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: 'Remove members from Projects',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: 'Review Opening Applications',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: 'Delete Projects',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-  ];
-
-  const taskAccess: Access[] = [
-    {
-      task: "See Organisation's Tasks",
-      canMember: true,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Add new Tasks',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: "Edit Tasks' Details",
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: "Change Tasks' Users",
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Delete Tasks',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-  ];
-
-  const resourceAccess: Access[] = [
-    {
-      task: 'Create Resource Buckets',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Edit Resource Buckets',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-    {
-      task: 'Delete Resource Buckets',
-      canMember: false,
-      canSenior: true,
-      canManager: true,
-    },
-  ];
-
-  const openingAccess: Access[] = [
-    {
-      task: 'Create Openings',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: 'Edit Openings',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: 'Delete Openings',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-    {
-      task: 'Handle Applications',
-      canMember: false,
-      canSenior: false,
-      canManager: true,
-    },
-  ];
-
-  const accessArr: Access[] = ((): Access[] => {
-    switch (type) {
-      case 'post':
-        return postAccess;
-      case 'chat':
-        return chatAccess;
-      case 'event':
-        return eventAccess;
-      case 'membership':
-        return membershipAccess;
-      case 'profile':
-        return profileAccess;
-      case 'project':
-        return projectAccess;
-      case 'task':
-        return taskAccess;
-      case 'resource':
-        return resourceAccess;
-      case 'opening':
-        return openingAccess;
-      default:
-        return [];
-    }
-  })();
+  const accessArr: Access[] = accessDefinitions[type];
 
   const renderChecks = (can: boolean) => {
-    if (can) return <CheckSquare size={20} />;
-    return <X size={20} />;
+    return can ? <CheckSquare size={20} /> : <X size={20} />;
   };
 
   useEffect(() => {
@@ -419,12 +147,12 @@ const AccessTree = ({ type, setShow }: Props) => {
             <div className="w-full text-center mt-8 text-sm font-medium">
               Individual Project Memberships are also taken into account.
             </div>
-          ) : type == 'resource' ? (
-            <div className="w-full text-center mt-8 text-sm font-medium">
-              Individual Resource Bucket Permissions are taken into account.
-            </div>
           ) : (
-            <></>
+            type == 'resource' && (
+              <div className="w-full text-center mt-8 text-sm font-medium">
+                Individual Resource Bucket Permissions are taken into account.
+              </div>
+            )
           )}
         </div>
       </div>

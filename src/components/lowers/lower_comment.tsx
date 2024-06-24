@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Comment } from '@/types';
 import getHandler from '@/handlers/get_handler';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLikes, userIDSelector, userSelector } from '@/slices/userSlice';
+import { setLikes, userSelector } from '@/slices/userSlice';
 import { COMMENT_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import Semaphore from '@/utils/semaphore';
 import { configSelector, setUpdatingLikes } from '@/slices/configSlice';
