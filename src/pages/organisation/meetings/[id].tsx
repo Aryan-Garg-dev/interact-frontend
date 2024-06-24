@@ -2,7 +2,6 @@ import ConfirmDelete from '@/components/common/confirm_delete';
 import Loader from '@/components/common/loader';
 import OrgSidebar from '@/components/common/org_sidebar';
 import PictureList from '@/components/common/picture_list';
-import UsersList from '@/components/common/users_list';
 import SessionDetailsTable from '@/components/tables/meetings/session_details';
 import SessionTable from '@/components/tables/meetings/sessions';
 import { ORG_SENIOR } from '@/config/constants';
@@ -10,8 +9,11 @@ import { SERVER_ERROR } from '@/config/errors';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
 import getHandler from '@/handlers/get_handler';
+import AddMeetingParticipants from '@/sections/organization/meetings/add_participants';
 import EditMeeting from '@/sections/organization/meetings/edit_meeting';
+import ParticipantsList from '@/sections/organization/meetings/view_participants';
 import { currentOrgSelector } from '@/slices/orgSlice';
+import { userSelector } from '@/slices/userSlice';
 import { Session } from '@/types';
 import { initialMeeting } from '@/types/initials';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
@@ -37,10 +39,12 @@ const Meeting = ({ id }: Props) => {
   const [status, setStatus] = useState('Ended');
   const [clickedOnSession, setClickedOnSession] = useState(false);
   const [clickedSessionID, setClickedSessionID] = useState('');
-  const [clickedOnParticipants, setClickedOnParticipants] = useState(false);
+  const [clickedOnViewParticipants, setClickedOnViewParticipants] = useState(false);
+  const [clickedOnAddParticipants, setClickedOnAddParticipants] = useState(false);
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
   const [clickedOnDelete, setClickedOnDelete] = useState(false);
 
+  const user = useSelector(userSelector);
   const currentOrg = useSelector(currentOrgSelector);
 
   const getMeeting = async () => {
@@ -134,8 +138,18 @@ const Meeting = ({ id }: Props) => {
             //TODO back button
           }
           {clickedOnSession && <SessionDetailsTable sessionID={clickedSessionID} setShow={setClickedOnSession} />}
-          {clickedOnParticipants && (
-            <UsersList users={meeting.participants} title="Participants" setShow={setClickedOnParticipants} />
+          {clickedOnAddParticipants ? (
+            <AddMeetingParticipants meeting={meeting} setMeeting={setMeeting} setShow={setClickedOnAddParticipants} />
+          ) : (
+            clickedOnViewParticipants && (
+              <ParticipantsList
+                meeting={meeting}
+                title="Participants"
+                setShow={setClickedOnViewParticipants}
+                setClickedOnAddParticipants={setClickedOnAddParticipants}
+                setMeeting={setMeeting}
+              />
+            )
           )}
           {clickedOnEdit && <EditMeeting setShow={setClickedOnEdit} meeting={meeting} setMeeting={setMeeting} />}
           {clickedOnDelete && <ConfirmDelete handleDelete={handleDelete} setShow={setClickedOnDelete} />}
@@ -251,15 +265,27 @@ const Meeting = ({ id }: Props) => {
                   <span>{moment(meeting.createdAt).format('DD MMMM YYYY')}</span>
                 </div>
 
-                {meeting.participants && meeting.participants.length > 1 && (
+                {(!meeting.isOpenForMembers || meeting.allowExternalParticipants) && (
                   <div className="w-fit flex-center gap-1">
                     Accepted Members:
-                    <span
-                      onClick={() => setClickedOnParticipants(true)}
-                      className="flex-center gap-1 font-medium  cursor-pointer"
-                    >
-                      <PictureList users={meeting.participants} size={6} gap={3} />
-                    </span>
+                    {meeting.participants && meeting.participants.length > 0 ? (
+                      meeting.participants.length === 1 && meeting.participants[0].id === user.id ? (
+                        <span onClick={() => setClickedOnAddParticipants(true)} className="cursor-pointer">
+                          None +
+                        </span>
+                      ) : (
+                        <span
+                          onClick={() => setClickedOnViewParticipants(true)}
+                          className="flex-center gap-1 font-medium cursor-pointer"
+                        >
+                          <PictureList users={meeting.participants} size={6} gap={3} />
+                        </span>
+                      )
+                    ) : (
+                      <span onClick={() => setClickedOnAddParticipants(true)} className="cursor-pointer">
+                        None +
+                      </span>
+                    )}
                   </div>
                 )}
               </div>
