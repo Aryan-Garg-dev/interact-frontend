@@ -20,6 +20,7 @@ import AccessTree from '@/components/organization/access_tree';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import Mascot from '@/components/fillers/mascot';
+import OrderMenu from '@/components/common/order_menu';
 
 const Meetings = () => {
   const [loading, setLoading] = useState(true);
@@ -27,18 +28,23 @@ const Meetings = () => {
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+  const [order, setOrder] = useState('latest');
 
   const [clickedOnInfo, setClickedOnInfo] = useState(false);
 
   const currentOrg = useSelector(currentOrgSelector);
 
-  const getMeetings = async () => {
-    const URL = `/org/${currentOrg.id}/meetings?page=${page}&limit=${10}`;
+  const getMeetings = async (initialPage: number | null) => {
+    const URL = `/org/${currentOrg.id}/meetings?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
     const res = await getHandler(URL);
     if (res.statusCode === 200) {
-      const addedMeetings = [...meetings, ...(res.data.meetings || [])];
-      if (addedMeetings.length === meetings.length) setHasMore(false);
-      setMeetings(addedMeetings);
+      if (initialPage == 1) {
+        setMeetings(res.data.meetings || []);
+      } else {
+        const addedMeetings = [...meetings, ...(res.data.meetings || [])];
+        if (addedMeetings.length === meetings.length) setHasMore(false);
+        setMeetings(addedMeetings);
+      }
       setPage(prev => prev + 1);
       setLoading(false);
     } else {
@@ -50,8 +56,12 @@ const Meetings = () => {
     }
   };
   useEffect(() => {
-    getMeetings();
-  }, []);
+    setPage(1);
+    setMeetings([]);
+    setHasMore(true);
+    setLoading(true);
+    getMeetings(1);
+  }, [order]);
 
   return (
     <BaseWrapper title={`Meetings | ${currentOrg.title}`}>
@@ -60,7 +70,16 @@ const Meetings = () => {
         {clickedOnNewMeeting && <NewMeeting setShow={setClickedOnNewMeeting} setMeetings={setMeetings} />}
         {/* {clickedOnInfo && <AccessTree type="meeting" setShow={setClickedOnInfo} />} */}
         <div className="w-full flex justify-between items-center p-base_padding">
-          <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Meetings</div>
+          <div className="flex-center gap-2">
+            <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Meetings</div>
+            <OrderMenu
+              orders={['next_session_time', 'latest']}
+              current={order}
+              setState={setOrder}
+              fixed={false}
+              right={false}
+            />
+          </div>
           <div className="flex items-center gap-2">
             {checkOrgAccess(ORG_SENIOR) && (
               <Plus
@@ -93,7 +112,7 @@ const Meetings = () => {
         ) : meetings.length > 0 ? (
           <InfiniteScroll
             dataLength={meetings.length}
-            next={getMeetings}
+            next={() => getMeetings(null)}
             hasMore={hasMore}
             loader={<Loader />}
             className="w-full flex flex-col gap-2 px-base_padding pt-2 pb-6"

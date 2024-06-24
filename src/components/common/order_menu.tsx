@@ -11,6 +11,8 @@ interface Props {
   search?: string;
   setSearch?: React.Dispatch<React.SetStateAction<string>>;
   zIndex?: number;
+  fixed?: boolean;
+  right?: boolean;
 }
 
 const OrderMenu = ({
@@ -22,17 +24,25 @@ const OrderMenu = ({
   search,
   setSearch,
   zIndex = 25,
+  fixed = true,
+  right = false,
 }: Props) => {
   const [showOrders, setShowOrders] = useState(false);
   return (
     <div
-      className={`w-12 h-12 rounded-lg shadow-l border-gray-300 border-[1px] bg-white gap-1 fixed top-[90px] right-12 z-[${zIndex}]`}
+      className={`w-12 h-12 rounded-lg shadow-l border-gray-300 border-[1px] bg-white gap-1 ${
+        fixed ? 'fixed top-[90px] right-12' : 'relative'
+      } z-[${zIndex}]`}
     >
       <div onClick={() => setShowOrders(prev => !prev)} className="flex-center p-3 cursor-pointer">
         <Funnel className="w-full h-full " />
       </div>
       {showOrders && (
-        <div className="w-48 h-fit p-2 bg-white flex flex-col gap-1 absolute -bottom-2 right-0 translate-y-full rounded-md border-[1px] border-gray-300 animate-fade_third">
+        <div
+          className={`w-48 h-fit p-2 bg-white flex flex-col gap-1 absolute -bottom-2 ${
+            right ? 'right-0' : 'left-0'
+          } translate-y-full rounded-md border-[1px] border-gray-300 animate-fade_third`}
+        >
           {addSearch && search != undefined && setSearch != undefined && (
             <Input val={search} setVal={setSearch} maxLength={20} placeholder="Search" />
           )}
@@ -46,7 +56,7 @@ const OrderMenu = ({
                   : 'hover:bg-primary_comp text-primary_black'
               } rounded-md p-2 flex-center capitalize transition-ease-300 cursor-pointer`}
             >
-              {order.replace('_', ' ')}
+              {order.replaceAll('_', ' ')}
             </div>
           ))}
         </div>
