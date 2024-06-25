@@ -81,6 +81,7 @@ export interface Membership {
   project: Project;
   userID: string;
   user: User;
+  teams: Team[];
   role: string;
   title: string;
   active: boolean;
@@ -161,6 +162,7 @@ export interface OrganizationMembership {
   organization: Organization;
   userID: string;
   user: User;
+  teams: Team[];
   role: string;
   title: string;
   createdAt: Date;
@@ -173,6 +175,7 @@ export interface Organization {
   title: string;
   memberships: OrganizationMembership[];
   invitations: Invitation[];
+  teams: Team[];
   noMembers: number;
   noEvents: number;
   noProjects: number;
@@ -653,5 +656,16 @@ export interface Session {
   isLive: boolean;
   startedAt: Date;
   endedAt: Date;
+  createdAt: Date;
+}
+
+export interface Team {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  memberships: Membership[];
+  noUsers: number;
+  tags: string[];
   createdAt: Date;
 }

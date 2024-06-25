@@ -28,6 +28,7 @@ import {
   Review,
   SubTask,
   Task,
+  Team,
   User,
 } from '.';
 
@@ -150,6 +151,7 @@ export const initialMembership: Membership = {
   project: initialProject,
   userID: '',
   user: initialUser,
+  teams: [],
   role: '',
   title: '',
   active: false,
@@ -184,6 +186,7 @@ export const initialOrganization: Organization = {
   title: '',
   memberships: [],
   invitations: [],
+  teams: [],
   noEvents: 0,
   noMembers: 0,
   noProjects: 0,
@@ -196,6 +199,7 @@ export const initialOrganizationMembership: OrganizationMembership = {
   organization: initialOrganization,
   userID: '',
   user: initialUser,
+  teams: [],
   role: '',
   title: '',
   createdAt: new Date(),
@@ -516,4 +520,15 @@ export const initialMeeting: Meeting = {
   createdAt: new Date(),
   nextSessionTime: new Date(),
   sessions: [],
+};
+
+export const initialTeam: Team = {
+  id: '',
+  title: '',
+  description: '',
+  color: '#ffffff',
+  memberships: [],
+  noUsers: 0,
+  tags: [],
+  createdAt: new Date(),
 };

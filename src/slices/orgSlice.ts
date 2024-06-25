@@ -1,5 +1,5 @@
 import { RootState } from '@/store';
-import { Organization, OrganizationMembership } from '@/types';
+import { Organization, OrganizationMembership, Team } from '@/types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -8,6 +8,7 @@ interface OrgSlice {
   userID: string;
   title: string;
   coverPic: string;
+  teams: Team[];
 }
 
 interface OrganizationMembershipSlice {
@@ -29,6 +30,7 @@ const initialState: OrgState = {
     userID: '',
     title: '',
     coverPic: 'default.jpg',
+    teams: [],
   },
   currentOrgMembership: {
     id: '',
@@ -48,6 +50,10 @@ export const orgSlice = createSlice({
       state.currentOrg.userID = action.payload.userID;
       state.currentOrg.title = action.payload.title;
       state.currentOrg.coverPic = action.payload.user?.profilePic;
+      state.currentOrg.teams = action.payload.teams || [];
+    },
+    setCurrentOrgTeams: (state, action: PayloadAction<Team[]>) => {
+      state.currentOrg.teams = action.payload;
     },
     setCurrentOrgMembership: (state, action: PayloadAction<OrganizationMembership>) => {
       state.currentOrgMembership.id = action.payload.id;
@@ -62,6 +68,7 @@ export const orgSlice = createSlice({
         userID: '',
         title: '',
         coverPic: '',
+        teams: [],
       };
       state.currentOrgMembership = {
         id: '',
@@ -74,7 +81,7 @@ export const orgSlice = createSlice({
   },
 });
 
-export const { setCurrentOrg, setCurrentOrgMembership, resetCurrentOrg } = orgSlice.actions;
+export const { setCurrentOrg, setCurrentOrgTeams, setCurrentOrgMembership, resetCurrentOrg } = orgSlice.actions;
 
 export default orgSlice.reducer;
 

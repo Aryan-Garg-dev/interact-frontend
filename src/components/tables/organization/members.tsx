@@ -1,3 +1,4 @@
+import ColoredTag from '@/components/common/colored_tag';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import ConfirmOTP from '@/components/common/confirm_otp';
 import { ORG_MANAGER, PROJECT_MANAGER } from '@/config/constants';
@@ -116,8 +117,9 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
       <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold text-primary_black">
         <div className="w-[30%] flex-center">Name</div>
         <div className="w-[20%] flex-center">Title</div>
-        <div className="w-[20%] flex-center">Role</div>
-        <div className="w-[20%] flex-center">Joined At</div>
+        <div className="w-[20%] flex-center">Teams</div>
+        <div className="w-[10%] flex-center">Role</div>
+        <div className="w-[10%] flex-center">Joined At</div>
         {checkOrgAccess(ORG_MANAGER) && <div className="w-[10%] flex-center"></div>}
       </div>
       {memberships.map(membership => (
@@ -140,8 +142,14 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
             </div>
           </div>
           <div className="w-[20%] flex-center">{membership.title}</div>
-          <div className="w-[20%] flex-center">{membership.role}</div>
-          <div className="w-[20%] flex-center">{moment(membership.createdAt).format('DD MMMM, YYYY')}</div>
+          <div className="w-[20%] flex-center">
+            {membership.teams &&
+              membership.teams.length > 0 &&
+              membership.teams.map(team => <ColoredTag key={team.id} tag={team.title} color={team.color} />)}
+          </div>
+
+          <div className="w-[10%] flex-center">{membership.role}</div>
+          <div className="w-[10%] flex-center">{moment(membership.createdAt).format('DD MMMM, YYYY')}</div>
           {checkOrgAccess(ORG_MANAGER) ? (
             <div className="w-[10%] flex-center gap-4">
               {user.id != membership.userID && (
