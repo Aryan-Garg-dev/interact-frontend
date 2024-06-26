@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
-import { currentOrgIDSelector } from '@/slices/orgSlice';
+import { currentOrgSelector, setCurrentOrgTeams } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import { initialTeam } from '@/types/initials';
 import PrimaryButton from '@/components/buttons/primary_btn';
@@ -14,6 +14,7 @@ import Input from '@/components/form/input';
 import TextArea from '@/components/form/textarea';
 import Tags from '@/components/form/tags';
 import Color from '@/components/form/color';
+import { useDispatch } from 'react-redux';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,6 +36,10 @@ const NewTeam = ({ setShow, organization, setOrganization }: Props) => {
 
   const [selectedMemberships, setSelectedMemberships] = useState<OrganizationMembership[]>([]);
   const [team, setTeam] = useState(initialTeam);
+
+  const currentOrg = useSelector(currentOrgSelector);
+
+  const dispatch = useDispatch();
 
   const handleChange = (el: React.ChangeEvent<HTMLInputElement>) => {
     fetchMemberships(el.target.value);
@@ -64,8 +69,6 @@ const NewTeam = ({ setShow, organization, setOrganization }: Props) => {
     }
   };
 
-  const currentOrgID = useSelector(currentOrgIDSelector);
-
   const handleSubmit = async () => {
     if (title.trim().length == 0) {
       Toaster.error('Title cannot be empty');
@@ -77,7 +80,7 @@ const NewTeam = ({ setShow, organization, setOrganization }: Props) => {
 
     const toaster = Toaster.startLoad('Creating a new team');
 
-    const URL = `${ORG_URL}/${currentOrgID}/teams`;
+    const URL = `${ORG_URL}/${currentOrg.id}/teams`;
 
     const formData = {
       title,
@@ -88,7 +91,7 @@ const NewTeam = ({ setShow, organization, setOrganization }: Props) => {
 
     const res = await postHandler(URL, formData);
     if (res.statusCode === 201) {
-      const teamData = res.data.team;
+      const teamData: Team = res.data.team;
       setTeam(teamData);
       setOrganization(prev => {
         return {
@@ -96,6 +99,7 @@ const NewTeam = ({ setShow, organization, setOrganization }: Props) => {
           teams: [...(prev.teams || []), teamData],
         };
       });
+      dispatch(setCurrentOrgTeams([...(currentOrg.teams || []), teamData]));
       Toaster.stopLoad(toaster, 'New Team Added!', 1);
       return 1;
     } else {
@@ -111,10 +115,10 @@ const NewTeam = ({ setShow, organization, setOrganization }: Props) => {
   const handleAddMemberships = async () => {
     const toaster = Toaster.startLoad('Adding Users');
 
-    const URL = `${ORG_URL}/${currentOrgID}/teams/users/${team.id}`;
+    const URL = `${ORG_URL}/${currentOrg.id}/teams/users/${team.id}`;
 
     const users = selectedMemberships.map(membership => membership.user);
-
+    var counter = 0;
     for (const user of users) {
       const formData = {
         userID: user.id,
@@ -122,13 +126,47 @@ const NewTeam = ({ setShow, organization, setOrganization }: Props) => {
       };
 
       const res = await postHandler(URL, formData);
-      if (res.statusCode != 200) {
+      if (res.statusCode == 200) {
+        counter++;
+      } else {
         if (res.data.message) Toaster.stopLoad(toaster, `${user.name}: ${res.data.message}`, 0);
         else {
           Toaster.stopLoad(toaster, SERVER_ERROR, 0);
         }
       }
     }
+
+    const userIDs = users.map(user => user.id);
+
+    setOrganization(prev => {
+      return {
+        ...prev,
+        teams: prev.teams.map(t => {
+          if (t.id == team.id)
+            return {
+              ...t,
+              noUsers: t.noUsers + counter,
+            };
+          return t;
+        }),
+        memberships: prev.memberships.map(m => {
+          if (userIDs.includes(m.userID)) return { ...m, teams: [...(m.teams || []), team] };
+          return m;
+        }),
+      };
+    });
+    dispatch(
+      setCurrentOrgTeams(
+        currentOrg.teams.map(t => {
+          if (t.id == team.id)
+            return {
+              ...t,
+              noUsers: t.noUsers + counter,
+            };
+          return t;
+        })
+      )
+    );
 
     Toaster.stopLoad(toaster, 'Users Added!', 1);
     setShow(false);

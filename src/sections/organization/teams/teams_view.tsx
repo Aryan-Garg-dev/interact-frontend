@@ -17,7 +17,6 @@ interface Props {
 const TeamsView = ({ setShow, organization, setOrganization }: Props) => {
   const [clickedOnNewTeam, setClickedOnNewTeam] = useState(false);
   const [clickedOnViewTeam, setClickedOnViewTeam] = useState(false);
-  const [clickedOnEditTeam, setClickedOnEditTeam] = useState(false);
   const [clickedTeam, setClickedTeam] = useState(initialTeam);
 
   return clickedOnNewTeam ? (

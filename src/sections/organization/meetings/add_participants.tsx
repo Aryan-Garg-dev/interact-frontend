@@ -1,12 +1,12 @@
 import { ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
-import { Meeting, User } from '@/types';
+import { Meeting, OrganizationMembership, Team, User } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
-import { currentOrgIDSelector } from '@/slices/orgSlice';
+import { currentOrgIDSelector, currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import PrimaryButton from '@/components/buttons/primary_btn';
 import getHandler from '@/handlers/get_handler';
@@ -24,14 +24,16 @@ const AddMeetingParticipants = ({ meeting, setShow, setMeeting }: Props) => {
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(false);
+  const [teams, setTeams] = useState<Team[]>([]);
 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
 
   const userID = useSelector(userIDSelector);
+  const currentOrg = useSelector(currentOrgSelector);
 
   const fetchUsers = async (search: string, abortController?: AbortController) => {
     setLoading(true);
-    const URL = `${ORG_URL}/${currentOrgID}/meetings/non-participants/?search=${search}&limit=${10}&isOpenForMembers=${
+    const URL = `${ORG_URL}/${currentOrg.id}/meetings/non-participants/?search=${search}&limit=${10}&isOpenForMembers=${
       meeting.isOpenForMembers
     }&allowExternalParticipants=${meeting.allowExternalParticipants}`;
 
@@ -47,6 +49,23 @@ const AddMeetingParticipants = ({ meeting, setShow, setMeeting }: Props) => {
       }
     }
   };
+
+  const handleClickTeam = async (team: Team) => {
+    const URL = `${ORG_URL}/${currentOrg.id}/teams/${team.id}`;
+    const res = await getHandler(URL);
+    if (res.statusCode == 200) {
+      const memberships: OrganizationMembership[] = res.data.team?.memberships;
+      setSelectedUsers(prev => [...prev, ...memberships.map(m => m.user)]);
+      setTeams(prev => prev.filter(t => t.id != team.id));
+      setLoading(false);
+    } else {
+      if (res.status != -1) {
+        if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
+        else Toaster.error(SERVER_ERROR, 'error_toaster');
+      }
+    }
+  };
+
   const handleClickUser = (user: User) => {
     if (selectedUsers.includes(user)) {
       setSelectedUsers(prev => prev.filter(u => u.id != user.id));
@@ -64,13 +83,12 @@ const AddMeetingParticipants = ({ meeting, setShow, setMeeting }: Props) => {
     };
   }, [search]);
 
-  const currentOrgID = useSelector(currentOrgIDSelector);
   const router = useRouter();
 
   const handleSubmit = async () => {
     const toaster = Toaster.startLoad('Adding Participants');
 
-    const URL = `${ORG_URL}/${currentOrgID}/meetings/participants/${meeting.id}`;
+    const URL = `${ORG_URL}/${currentOrg.id}/meetings/participants/${meeting.id}`;
 
     const formData = {
       userIDs: selectedUsers.map(u => u.id),
@@ -90,6 +108,7 @@ const AddMeetingParticipants = ({ meeting, setShow, setMeeting }: Props) => {
   };
 
   useEffect(() => {
+    setTeams(currentOrg.teams);
     document.documentElement.style.overflowY = 'hidden';
     document.documentElement.style.height = '100vh';
 
@@ -117,33 +136,40 @@ const AddMeetingParticipants = ({ meeting, setShow, setMeeting }: Props) => {
             {loading ? (
               <Loader />
             ) : (
-              users.map(user => {
-                return (
-                  <div
-                    key={user.id}
-                    onClick={() => handleClickUser(user)}
-                    className={`w-full flex gap-2 rounded-lg p-2 ${
-                      selectedUsers.includes(user)
-                        ? 'dark:bg-dark_primary_comp_active bg-primary_comp_hover'
-                        : 'dark:bg-dark_primary_comp hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
-                    } cursor-pointer transition-ease-200`}
-                  >
-                    <Image
-                      crossOrigin="anonymous"
-                      width={50}
-                      height={50}
-                      alt={'User Pic'}
-                      src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-                      className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
-                    />
-                    <div className="w-5/6 flex flex-col">
-                      <div className="text-lg font-bold">{user.name}</div>
-                      <div className="text-sm dark:text-gray-200">@{user.username}</div>
-                      {user.tagline && user.tagline != '' && <div className="text-sm mt-2">{user.tagline}</div>}
-                    </div>
+              <>
+                {/* {teams.map(team => (
+                  <div key={team.id} onClick={() => handleClickTeam(team)}>
+                    {team.title}
                   </div>
-                );
-              })
+                ))} */}
+                {users.map(user => {
+                  return (
+                    <div
+                      key={user.id}
+                      onClick={() => handleClickUser(user)}
+                      className={`w-full flex gap-2 rounded-lg p-2 ${
+                        selectedUsers.includes(user)
+                          ? 'dark:bg-dark_primary_comp_active bg-primary_comp_hover'
+                          : 'dark:bg-dark_primary_comp hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
+                      } cursor-pointer transition-ease-200`}
+                    >
+                      <Image
+                        crossOrigin="anonymous"
+                        width={50}
+                        height={50}
+                        alt={'User Pic'}
+                        src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                        className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
+                      />
+                      <div className="w-5/6 flex flex-col">
+                        <div className="text-lg font-bold">{user.name}</div>
+                        <div className="text-sm dark:text-gray-200">@{user.username}</div>
+                        {user.tagline && user.tagline != '' && <div className="text-sm mt-2">{user.tagline}</div>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
             )}
           </div>
         </div>
