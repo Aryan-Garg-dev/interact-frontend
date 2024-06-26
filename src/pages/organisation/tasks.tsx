@@ -21,6 +21,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Mascot from '@/components/fillers/mascot';
 import NewTask from '@/sections/tasks/new_task';
+import TasksTable from '@/components/tables/tasks';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -133,22 +134,7 @@ const Tasks = () => {
             {loading ? (
               <Loader />
             ) : filteredTasks.length > 0 ? (
-              <div className="flex justify-evenly px-4">
-                <div className={`${clickedOnTask ? 'w-[40%]' : 'w-[720px]'} max-lg:w-[720px] flex flex-col gap-4`}>
-                  {filteredTasks.map((task, i) => {
-                    return (
-                      <TaskCard
-                        key={task.id}
-                        task={task}
-                        index={i}
-                        clickedTaskID={clickedTaskID}
-                        clickedOnTask={clickedOnTask}
-                        setClickedOnTask={setClickedOnTask}
-                        setClickedTaskID={setClickedTaskID}
-                      />
-                    );
-                  })}
-                </div>
+              <div className="w-full flex justify-evenly px-4">
                 {clickedOnTask && (
                   <TaskView
                     taskID={clickedTaskID}
@@ -160,6 +146,11 @@ const Tasks = () => {
                     setClickedTaskID={setClickedTaskID}
                   />
                 )}
+                <TasksTable
+                  tasks={filteredTasks}
+                  setClickedOnTask={setClickedOnTask}
+                  setClickedTaskID={setClickedTaskID}
+                />
               </div>
             ) : (
               <Mascot message="There are no tasks available at the moment." />

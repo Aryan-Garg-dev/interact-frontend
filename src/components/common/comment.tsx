@@ -14,7 +14,7 @@ import { SERVER_ERROR } from '@/config/errors';
 interface Props {
   comment: Comment;
   setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
-  setNoComments: React.Dispatch<React.SetStateAction<number>>;
+  setNoComments?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
@@ -30,7 +30,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
     if (res.statusCode == 204) {
       Toaster.stopLoad(toaster, 'Comment Deleted', 1);
       setComments(prev => prev.filter(c => c.id != commentID));
-      setNoComments(prev => prev - 1);
+      if (setNoComments) setNoComments(prev => prev - 1);
     } else {
       if (res.data.message != '') Toaster.stopLoad(toaster, res.data.message, 0);
       else {

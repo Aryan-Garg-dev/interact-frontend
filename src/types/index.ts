@@ -434,6 +434,8 @@ export type PRIORITY = 'low' | 'medium' | 'high';
 
 export interface Task {
   id: string;
+  userID: string;
+  user: User;
   projectID: string;
   project: Project | undefined;
   organizationID: string;
@@ -446,6 +448,7 @@ export interface Task {
   isCompleted: boolean;
   subTasks: SubTask[];
   priority: PRIORITY;
+  noComments: number;
 }
 export interface ResourceBucket {
   id: string;

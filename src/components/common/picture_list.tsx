@@ -53,7 +53,7 @@ const PictureList = ({ users, size = 4, gap = 1 }: Props) => {
             }).length +
           size -
           1
-        } h-6 relative mr-1`}
+        } h-${size} relative mr-1`}
       >
         {users
           .filter((u, index) => {

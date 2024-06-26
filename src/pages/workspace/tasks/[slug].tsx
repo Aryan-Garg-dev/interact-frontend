@@ -1,6 +1,5 @@
 import Loader from '@/components/common/loader';
 import Sidebar from '@/components/common/sidebar';
-import TaskCard from '@/components/workspace/task_card';
 import { SERVER_ERROR } from '@/config/errors';
 import { PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
@@ -17,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import NewTask from '@/sections/tasks/new_task';
+import TasksTable from '@/components/tables/tasks';
 
 interface Props {
   slug: string;
@@ -135,22 +135,7 @@ const Tasks = ({ slug }: Props) => {
             {loading ? (
               <Loader />
             ) : filteredTasks.length > 0 ? (
-              <div className="flex justify-evenly px-4">
-                <div className={`${clickedOnTask ? 'w-[40%]' : 'w-[720px]'} max-lg:w-[720px] flex flex-col gap-4`}>
-                  {filteredTasks.map((task, i) => {
-                    return (
-                      <TaskCard
-                        key={task.id}
-                        task={task}
-                        index={i}
-                        clickedTaskID={clickedTaskID}
-                        clickedOnTask={clickedOnTask}
-                        setClickedOnTask={setClickedOnTask}
-                        setClickedTaskID={setClickedTaskID}
-                      />
-                    );
-                  })}
-                </div>
+              <div className="w-full flex justify-evenly px-4">
                 {clickedOnTask && (
                   <TaskView
                     taskID={clickedTaskID}
@@ -162,6 +147,11 @@ const Tasks = ({ slug }: Props) => {
                     setClickedTaskID={setClickedTaskID}
                   />
                 )}
+                <TasksTable
+                  tasks={filteredTasks}
+                  setClickedOnTask={setClickedOnTask}
+                  setClickedTaskID={setClickedTaskID}
+                />
               </div>
             ) : (
               <div className="mx-auto font-medium text-xl mt-8">No Tasks found :)</div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { COMMENT_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import Toaster from '@/utils/toaster';
 import Image from 'next/image';
-import { Announcement, Comment, Event, Post, Project } from '@/types';
+import { Announcement, Comment, Event, Post, Project, Task } from '@/types';
 import getHandler from '@/handlers/get_handler';
 import { userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
@@ -14,8 +14,8 @@ import CommentComponent from './comment';
 
 interface Props {
   type: string;
-  item: Project | Post | Event | Announcement;
-  setNoComments: React.Dispatch<React.SetStateAction<number>>;
+  item: Project | Post | Event | Announcement | Task;
+  setNoComments?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const CommentBox = ({ type, item, setNoComments }: Props) => {
@@ -82,14 +82,17 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
             announcementID: item.id,
             content: commentBody,
           }
-        : {};
+        : {
+            taskID: item.id,
+            content: commentBody,
+          };
 
     const res = await postHandler(COMMENT_URL, formData);
     if (res.statusCode === 201) {
       Toaster.stopLoad(toaster, 'Commented!', 1);
       const newComments = [res.data.comment, ...comments];
       setComments(newComments);
-      setNoComments(prev => prev + 1);
+      if (setNoComments) setNoComments(prev => prev + 1);
       setCommentBody('');
       if (item.userID && item.userID != loggedInUser.id)
         socketService.sendNotification(item.userID, `${loggedInUser.name} commented on your ${type}!`);

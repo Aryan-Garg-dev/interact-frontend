@@ -409,6 +409,8 @@ export const initialTask: Task = {
   id: '',
   title: '',
   description: '',
+  userID: '',
+  user: initialUser,
   tags: [],
   users: [],
   subTasks: [],
@@ -419,6 +421,7 @@ export const initialTask: Task = {
   organization: initialOrganization,
   organizationID: '',
   priority: 'low',
+  noComments: 0,
 };
 
 export const initialSubTask: SubTask = {
