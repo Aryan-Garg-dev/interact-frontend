@@ -1,4 +1,4 @@
-import { ORG_SENIOR } from '@/config/constants';
+import { ORG_MANAGER, ORG_SENIOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import EditTeam from './edit_team';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import { Trash } from '@phosphor-icons/react/dist/ssr';
+import { userSelector } from '@/slices/userSlice';
 
 interface Props {
   teamID: string;
@@ -28,7 +29,9 @@ const MembersList = ({ teamID, setShow, setOrganization }: Props) => {
   const [team, setTeam] = useState(initialTeam);
   const [clickedOnEditTeam, setClickedOnEditTeam] = useState(false);
   const [clickedOnDelete, setClickedOnDelete] = useState(false);
+  const [clickedOnLeave, setClickedOnLeave] = useState(false);
 
+  const user = useSelector(userSelector);
   const currentOrg = useSelector(currentOrgSelector);
 
   const getTeam = async () => {
@@ -124,6 +127,58 @@ const MembersList = ({ teamID, setShow, setOrganization }: Props) => {
     }
   };
 
+  const handleLeave = async () => {
+    const toaster = Toaster.startLoad('Leaving Team...');
+    const URL = `/org/${currentOrg.id}/teams/leave/${team.id}`;
+
+    const res = await deleteHandler(URL);
+    if (res.statusCode === 200) {
+      setOrganization(prev => {
+        return {
+          ...prev,
+          teams: prev.teams.map(t => {
+            if (t.id == team.id) return { ...t, noUsers: t.noUsers - 1 };
+            return t;
+          }),
+          memberships: prev.memberships.map(m => {
+            if (m.userID == user.id)
+              return {
+                ...m,
+                teams: m.teams.filter(t => t.id != team.id),
+              };
+            return m;
+          }),
+        };
+      });
+      setTeam(prev => {
+        return {
+          ...prev,
+          noUsers: prev.noUsers - 1,
+          memberships: prev.memberships.filter(m => m.userID != user.id),
+        };
+      });
+      dispatch(
+        setCurrentOrgTeams(
+          currentOrg.teams.map(t => {
+            if (t.id == team.id)
+              return {
+                ...t,
+                noUsers: t.noUsers - 1,
+              };
+            return t;
+          })
+        )
+      );
+      setShow(false);
+      Toaster.stopLoad(toaster, 'Left Team', 1);
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else {
+        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+      }
+    }
+  };
+
   useEffect(() => {
     getTeam();
   }, []);
@@ -132,13 +187,23 @@ const MembersList = ({ teamID, setShow, setOrganization }: Props) => {
     <EditTeam setShow={setClickedOnEditTeam} team={team} setTeam={setTeam} setOrganization={setOrganization} />
   ) : clickedOnDelete ? (
     <ConfirmDelete handleDelete={handleDelete} setShow={setClickedOnDelete} />
+  ) : clickedOnLeave ? (
+    <ConfirmDelete handleDelete={handleLeave} setShow={setClickedOnLeave} title="Confirm Leave?" />
   ) : (
     <ModalWrapper setShow={setShow} width={'1/4'}>
-      <div className="text-2xl flex-center gap-2 font-semibold">
-        Team Members ({(team.memberships || []).length}){' '}
-        <Pen onClick={() => setClickedOnEditTeam(true)} className="cursor-pointer" />
-        <Trash onClick={() => setClickedOnDelete(true)} className="cursor-pointer" />
+      <div className="w-full flex items-center justify-between flex-wrap">
+        <div className="text-2xl font-semibold">Team Members ({(team.memberships || []).length}) </div>
+        <div className="flex-center gap-2">
+          {checkOrgAccess(ORG_SENIOR) && <Pen onClick={() => setClickedOnEditTeam(true)} className="cursor-pointer" />}
+          {checkOrgAccess(ORG_MANAGER) && <Trash onClick={() => setClickedOnDelete(true)} className="cursor-pointer" />}
+          {team.memberships.map(membership => membership.userID).includes(user.id) && (
+            <div onClick={() => setClickedOnLeave(true)} className="cursor-pointer">
+              Leave
+            </div>
+          )}
+        </div>
       </div>
+
       <div className="w-full flex flex-col gap-2">
         {team.memberships.map(membership => (
           <div

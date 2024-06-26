@@ -7,6 +7,8 @@ import Mascot from '@/components/fillers/mascot';
 import { Plus } from '@phosphor-icons/react';
 import moment from 'moment';
 import MembersList from './view_team_members';
+import checkOrgAccess from '@/utils/funcs/check_org_access';
+import { ORG_SENIOR } from '@/config/constants';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -27,9 +29,11 @@ const TeamsView = ({ setShow, organization, setOrganization }: Props) => {
     <ModalWrapper setShow={setShow}>
       <div className="w-full flex items-center justify-between mb-2">
         <div className="text-3xl font-semibold">Teams</div>
-        <div className="w-fit flex-center">
-          <Plus onClick={() => setClickedOnNewTeam(true)} className="cursor-pointer" size={24} />
-        </div>
+        {checkOrgAccess(ORG_SENIOR) && (
+          <div className="w-fit flex-center">
+            <Plus onClick={() => setClickedOnNewTeam(true)} className="cursor-pointer" size={24} />
+          </div>
+        )}
       </div>
       {organization.teams && organization.teams.length > 0 ? (
         organization.teams.map(team => (

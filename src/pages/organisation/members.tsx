@@ -66,14 +66,12 @@ const Members = () => {
               {!clickedOnInvitations ? 'Members' : 'Invitations'}
             </div>
             <div className="w-fit flex items-center gap-2">
-              {checkOrgAccess(ORG_SENIOR) && (
-                <Users
-                  onClick={() => setClickedOnTeams(true)}
-                  size={42}
-                  className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
-                  weight="regular"
-                />
-              )}
+              <Users
+                onClick={() => setClickedOnTeams(true)}
+                size={42}
+                className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
+                weight="regular"
+              />
               {checkOrgAccess(ORG_MANAGER) && (
                 <Plus
                   onClick={() => setClickedOnAddMember(true)}
