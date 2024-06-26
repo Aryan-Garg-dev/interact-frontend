@@ -44,6 +44,10 @@ const AddMemberToTeam = ({ setShow, membership, setOrganization }: Props) => {
             if (m.id == membership.id) return { ...m, teams: [...(m.teams || []), team] };
             return m;
           }),
+          teams: prev.teams.map(t => {
+            if (t.id == team.id) return { ...t, noUsers: t.noUsers + 1 };
+            return t;
+          }),
         };
       });
       dispatch(
