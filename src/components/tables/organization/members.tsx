@@ -1,16 +1,17 @@
 import ColoredTag from '@/components/common/colored_tag';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import ConfirmOTP from '@/components/common/confirm_otp';
-import { ORG_MANAGER, PROJECT_MANAGER } from '@/config/constants';
+import { ORG_MANAGER } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
-import { MEMBERSHIP_URL, ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
 import getHandler from '@/handlers/get_handler';
 import EditMember from '@/sections/organization/members/edit_member';
-import EditMembership from '@/sections/workspace/manage_project/edit_collaborator';
+import AddMemberToTeam from '@/sections/organization/teams/add_member_dropdown';
+import TeamsDropdown from '@/sections/organization/teams/teams_dropdown';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { setOrganizationMemberships, userSelector } from '@/slices/userSlice';
-import { Organization, OrganizationMembership, Project } from '@/types';
+import { Organization, OrganizationMembership } from '@/types';
 import { initialOrganizationMembership } from '@/types/initials';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
 import Toaster from '@/utils/toaster';
@@ -33,6 +34,8 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
   const [clickedOnRemoveMember, setClickedOnRemoveMember] = useState(false);
   const [clickedOnLeaveOrg, setClickedOnLeaveOrg] = useState(false);
   const [clickedOnConfirmLeave, setClickedOnConfirmLeave] = useState(false);
+  const [clickedOnAddToTeam, setClickedOnAddToTeam] = useState(false);
+  const [clickedOnViewTeams, setClickedOnViewTeams] = useState(false);
 
   const user = useSelector(userSelector);
   const currentOrg = useSelector(currentOrgSelector);
@@ -125,7 +128,7 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
       {memberships.map(membership => (
         <div
           key={membership.user.id}
-          className="w-full h-14 bg-white rounded-xl border-gray-400 flex text-sm text-primary_black transition-ease-300"
+          className="w-full h-14 relative bg-white rounded-xl border-gray-400 flex text-sm text-primary_black transition-ease-300"
         >
           <div className="w-[30%] flex-center gap-2 px-4">
             <Image
@@ -142,10 +145,40 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
             </div>
           </div>
           <div className="w-[20%] flex-center">{membership.title}</div>
-          <div className="w-[20%] flex-center">
-            {membership.teams &&
-              membership.teams.length > 0 &&
-              membership.teams.map(team => <ColoredTag key={team.id} tag={team.title} color={team.color} />)}
+          <div className="w-[20%] flex-center gap-2">
+            {clickedOnAddToTeam && clickedMembership.id == membership.id && (
+              <AddMemberToTeam
+                setShow={setClickedOnAddToTeam}
+                membership={membership}
+                setOrganization={setOrganization}
+              />
+            )}
+            {clickedOnViewTeams && clickedMembership.id == membership.id && (
+              <TeamsDropdown setShow={setClickedOnViewTeams} membership={membership} />
+            )}
+            {membership.teams && membership.teams.length > 0 && (
+              <>
+                {membership.teams.map((team, index) => {
+                  if (index == 0) return <ColoredTag key={team.id} tag={team.title} color={team.color} />;
+                })}
+                {membership.teams.length > 1 && (
+                  <ColoredTag
+                    onClick={() => {
+                      setClickedMembership(membership);
+                      setClickedOnViewTeams(true);
+                    }}
+                    tag={<div className="cursor-pointer">{`+${membership.teams.length - 1}`}</div>}
+                  />
+                )}
+              </>
+            )}
+            <ColoredTag
+              onClick={() => {
+                setClickedMembership(membership);
+                setClickedOnAddToTeam(true);
+              }}
+              tag={<div className="cursor-pointer">+</div>}
+            />
           </div>
 
           <div className="w-[10%] flex-center">{membership.role}</div>
