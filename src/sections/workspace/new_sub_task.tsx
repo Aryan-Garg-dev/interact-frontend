@@ -18,10 +18,9 @@ interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   task: Task;
   setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-const NewSubTask = ({ setShow, task, setTasks, setFilteredTasks }: Props) => {
+const NewSubTask = ({ setShow, task, setTasks }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState<string[]>([]);
@@ -92,13 +91,6 @@ const NewSubTask = ({ setShow, task, setTasks, setFilteredTasks }: Props) => {
       const subtask = res.data.task;
       if (setTasks)
         setTasks(prev =>
-          prev.map(t => {
-            if (t.id == task.id) return { ...t, subTasks: [...(t.subTasks || []), subtask] };
-            else return t;
-          })
-        );
-      if (setFilteredTasks)
-        setFilteredTasks(prev =>
           prev.map(t => {
             if (t.id == task.id) return { ...t, subTasks: [...(t.subTasks || []), subtask] };
             else return t;

@@ -25,7 +25,7 @@ interface Props {
 const NewTeam = ({ setShow, organization, setOrganization }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [color, setColor] = useState('#ffffff');
+  const [color, setColor] = useState('#8ED1FC');
   const [tags, setTags] = useState<string[]>([]);
 
   const [memberships, setMemberships] = useState<OrganizationMembership[]>([]);

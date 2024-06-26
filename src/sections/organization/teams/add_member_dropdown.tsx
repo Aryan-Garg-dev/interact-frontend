@@ -96,7 +96,7 @@ const AddMemberToTeam = ({ setShow, membership, setOrganization }: Props) => {
           );
         })
       ) : (
-        <div>No more teams</div>
+        <div>{membership.teams?.length == 0 ? 'No Teams Present' : 'No More Teams'}</div>
       )}
     </div>
   );

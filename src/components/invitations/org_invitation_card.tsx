@@ -52,6 +52,7 @@ const OrgInvitationCard = ({ invitation, setInvitations }: Props) => {
         user: invitation.user,
         role: ORG_MEMBER,
         title: invitation.title,
+        teams: [],
         createdAt: new Date(),
       };
       dispatch(setOrganizationMemberships([...(user.organizationMemberships || []), membership]));

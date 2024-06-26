@@ -43,7 +43,7 @@ const TeamsView = ({ setShow, organization, setOrganization }: Props) => {
               setClickedTeam(team);
               setClickedOnViewTeam(true);
             }}
-            className="w-full p-2 rounded-lg"
+            className="w-full p-2 rounded-lg cursor-pointer"
             style={{ backgroundColor: team.color }}
           >
             <div className="font-medium">{team.title}</div>

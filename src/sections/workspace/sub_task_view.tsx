@@ -18,7 +18,6 @@ interface Props {
   setClickedOnEditSubTask: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedOnDeleteSubTask: React.Dispatch<React.SetStateAction<boolean>>;
   setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
   getUserTitle: (userID: string) => string;
   getUserRole: (userID: string) => string;
 }
@@ -30,7 +29,6 @@ const SubTaskView = ({
   setClickedOnEditSubTask,
   setClickedOnDeleteSubTask,
   setTasks,
-  setFilteredTasks,
   getUserTitle,
   getUserRole,
 }: Props) => {
@@ -57,21 +55,6 @@ const SubTaskView = ({
     if (res.statusCode === 200) {
       if (setTasks)
         setTasks(prev =>
-          prev.map(t => {
-            if (t.id == task.id)
-              return {
-                ...t,
-                subTasks: t.subTasks.map(s => {
-                  if (s.id == subTask.id) {
-                    return { ...s, isCompleted: !s.isCompleted };
-                  } else return s;
-                }),
-              };
-            else return t;
-          })
-        );
-      if (setFilteredTasks)
-        setFilteredTasks(prev =>
           prev.map(t => {
             if (t.id == task.id)
               return {

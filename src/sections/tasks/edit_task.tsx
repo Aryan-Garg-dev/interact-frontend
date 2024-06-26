@@ -31,7 +31,6 @@ interface Props {
   org: boolean;
   task: Task;
   setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
 const EditTask = ({
@@ -41,7 +40,6 @@ const EditTask = ({
   project = initialProject,
   task,
   setTasks,
-  setFilteredTasks,
 }: Props) => {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
@@ -180,22 +178,6 @@ const EditTask = ({
                 else return t;
               })
             );
-          if (setFilteredTasks)
-            setFilteredTasks(prev =>
-              prev.map(t => {
-                if (t.id == task.id)
-                  return {
-                    ...t,
-                    title,
-                    description,
-                    tags,
-                    priority,
-                    users: selectedUsers,
-                    deadline: new Date(deadline),
-                  };
-                else return t;
-              })
-            );
           setShow(false);
           Toaster.stopLoad(toaster, 'Task Edited!', 1);
         } else {
@@ -205,13 +187,6 @@ const EditTask = ({
       } else {
         if (setTasks)
           setTasks(prev =>
-            prev.map(t => {
-              if (t.id == task.id) return { ...t, title, description, priority, tags, deadline: new Date(deadline) };
-              else return t;
-            })
-          );
-        if (setFilteredTasks)
-          setFilteredTasks(prev =>
             prev.map(t => {
               if (t.id == task.id) return { ...t, title, description, priority, tags, deadline: new Date(deadline) };
               else return t;

@@ -57,7 +57,7 @@ const Announcements = () => {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full py-4">
       {clickedOnNewAnnouncement && (
         <NewAnnouncement
           organisation={organisation}

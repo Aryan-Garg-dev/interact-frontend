@@ -26,10 +26,9 @@ interface Props {
   subTask: SubTask;
   task: Task;
   setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-const EditSubTask = ({ setShow, subTask, task, setTasks, setFilteredTasks }: Props) => {
+const EditSubTask = ({ setShow, subTask, task, setTasks }: Props) => {
   const [title, setTitle] = useState(subTask.title);
   const [description, setDescription] = useState(subTask.description);
   const [tags, setTags] = useState<string[]>(subTask.tags || []);
@@ -162,29 +161,6 @@ const EditSubTask = ({ setShow, subTask, task, setTasks, setFilteredTasks }: Pro
                 else return t;
               })
             );
-          if (setFilteredTasks)
-            setFilteredTasks(prev =>
-              prev.map(t => {
-                if (t.id == task.id)
-                  return {
-                    ...t,
-                    subTasks: t.subTasks.map(s => {
-                      if (s.id == subTask.id) {
-                        return {
-                          ...s,
-                          title,
-                          description,
-                          tags,
-                          priority,
-                          users: selectedUsers,
-                          deadline: new Date(deadline),
-                        };
-                      } else return s;
-                    }),
-                  };
-                else return t;
-              })
-            );
           setShow(false);
           Toaster.stopLoad(toaster, 'Sub Task Edited!', 1);
         } else {
@@ -194,21 +170,6 @@ const EditSubTask = ({ setShow, subTask, task, setTasks, setFilteredTasks }: Pro
       } else {
         if (setTasks)
           setTasks(prev =>
-            prev.map(t => {
-              if (t.id == task.id)
-                return {
-                  ...t,
-                  subTasks: t.subTasks.map(s => {
-                    if (s.id == subTask.id) {
-                      return { ...s, title, description, tags, priority, deadline: new Date(deadline) };
-                    } else return s;
-                  }),
-                };
-              else return t;
-            })
-          );
-        if (setFilteredTasks)
-          setFilteredTasks(prev =>
             prev.map(t => {
               if (t.id == task.id)
                 return {

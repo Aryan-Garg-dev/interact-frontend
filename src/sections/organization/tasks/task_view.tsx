@@ -22,12 +22,11 @@ interface Props {
   tasks: Task[];
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
   setClickedTaskID?: React.Dispatch<React.SetStateAction<number>>;
   organization: Organization;
 }
 
-const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organization, setClickedTaskID }: Props) => {
+const TaskView = ({ taskID, tasks, setShow, setTasks, organization, setClickedTaskID }: Props) => {
   const [clickedOnEditTask, setClickedOnEditTask] = useState(false);
   const [clickedOnDeleteTask, setClickedOnDeleteTask] = useState(false);
   const [clickedOnNewSubTask, setClickedOnNewSubTask] = useState(false);
@@ -49,7 +48,6 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
 
     if (res.statusCode === 204) {
       if (setTasks) setTasks(prev => prev.filter(t => t.id != task.id));
-      if (setFilteredTasks) setFilteredTasks(prev => prev.filter(t => t.id != task.id));
       setShow(false);
       Toaster.stopLoad(toaster, 'Task Deleted', 1);
     } else {
@@ -77,17 +75,6 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
             else return t;
           })
         );
-      if (setFilteredTasks)
-        setFilteredTasks(prev =>
-          prev.map(t => {
-            if (t.id == task.id)
-              return {
-                ...t,
-                subTasks: t.subTasks.filter(s => s.id != clickedSubTask.id),
-              };
-            else return t;
-          })
-        );
       setShow(false);
       Toaster.stopLoad(toaster, 'Sub Task Deleted', 1);
     } else {
@@ -106,13 +93,6 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
     if (res.statusCode === 200) {
       if (setTasks)
         setTasks(prev =>
-          prev.map(t => {
-            if (t.id == task.id) return { ...t, isCompleted: !task.isCompleted };
-            else return t;
-          })
-        );
-      if (setFilteredTasks)
-        setFilteredTasks(prev =>
           prev.map(t => {
             if (t.id == task.id) return { ...t, isCompleted: !task.isCompleted };
             else return t;
@@ -151,30 +131,16 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
           task={task}
           setShow={setClickedOnEditTask}
           setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
         />
       )}
       {clickedOnEditSubTask && (
-        <EditSubTask
-          subTask={clickedSubTask}
-          task={task}
-          setShow={setClickedOnEditSubTask}
-          setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
-        />
+        <EditSubTask subTask={clickedSubTask} task={task} setShow={setClickedOnEditSubTask} setTasks={setTasks} />
       )}
       {clickedOnDeleteTask && <ConfirmDelete setShow={setClickedOnDeleteTask} handleDelete={handleDelete} />}
       {clickedOnDeleteSubTask && (
         <ConfirmDelete setShow={setClickedOnDeleteSubTask} handleDelete={handleDeleteSubTask} />
       )}
-      {clickedOnNewSubTask && (
-        <NewSubTask
-          setShow={setClickedOnNewSubTask}
-          task={task}
-          setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
-        />
-      )}
+      {clickedOnNewSubTask && <NewSubTask setShow={setClickedOnNewSubTask} task={task} setTasks={setTasks} />}
       {clickedOnViewSubTask && (
         <SubTaskView
           setShow={setClickedOnViewSubTask}
@@ -183,7 +149,6 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
           setClickedOnEditSubTask={setClickedOnEditSubTask}
           setClickedOnDeleteSubTask={setClickedOnDeleteSubTask}
           setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
           getUserTitle={getUserTitle}
           getUserRole={getUserRole}
         />
@@ -199,8 +164,6 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
         setClickedOnViewSubTask={setClickedOnViewSubTask}
         toggleComplete={toggleComplete}
         setShow={setShow}
-        getUserTitle={getUserTitle}
-        getUserRole={getUserRole}
       />
     </>
   );

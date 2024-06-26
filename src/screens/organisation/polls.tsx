@@ -49,7 +49,7 @@ const Polls = () => {
   }, []);
 
   return (
-    <div className="w-full">
+    <div className="w-full py-4">
       {clickedOnNewPoll && (
         <NewPoll orgID={currentOrg.id} setPolls={setPolls} organisation={organisation} setShow={setClickedOnNewPoll} />
       )}

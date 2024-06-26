@@ -1,7 +1,6 @@
 import Loader from '@/components/common/loader';
 import OrgSidebar from '@/components/common/org_sidebar';
 import AccessTree from '@/components/organization/access_tree';
-import TaskCard from '@/components/workspace/task_card';
 import { ORG_SENIOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL } from '@/config/routes';
@@ -28,9 +27,6 @@ const Tasks = () => {
   const [loading, setLoading] = useState(true);
   const [organization, setOrganization] = useState(initialOrganization);
 
-  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
-  const [filterStatus, setFilterStatus] = useState(false);
-
   const [clickedOnTask, setClickedOnTask] = useState(false);
   const [clickedTaskID, setClickedTaskID] = useState(-1);
 
@@ -47,7 +43,6 @@ const Tasks = () => {
           const taskData = res.data.tasks || [];
           setOrganization(res.data.organization);
           setTasks(taskData);
-          setFilteredTasks(taskData);
           const tid = new URLSearchParams(window.location.search).get('tid');
           if (tid && tid != '') {
             taskData.forEach((task: Task, i: number) => {
@@ -75,38 +70,12 @@ const Tasks = () => {
     getTasks();
   }, []);
 
-  const filterAssigned = (status: boolean) => {
-    setFilterStatus(status);
-    if (status) {
-      const assignedTasks: Task[] = [];
-      tasks.forEach(task => {
-        var check = false;
-        task.users.forEach(user => {
-          if (user.id == user.id) {
-            check = true;
-            return;
-          }
-        });
-        if (check) {
-          assignedTasks.push(task);
-        }
-      });
-      setFilteredTasks(assignedTasks);
-    } else setFilteredTasks(tasks);
-  };
-
   return (
     <BaseWrapper title={`Tasks | ${currentOrg.title}`}>
       <OrgSidebar index={4} />
       <MainWrapper>
         {clickedOnNewTask && (
-          <NewTask
-            setShow={setClickedOnNewTask}
-            organization={organization}
-            setTasks={setTasks}
-            setFilteredTasks={setFilteredTasks}
-            org={true}
-          />
+          <NewTask setShow={setClickedOnNewTask} organization={organization} setTasks={setTasks} org={true} />
         )}
         {clickedOnInfo && <AccessTree type="task" setShow={setClickedOnInfo} />}
         <div className="w-full flex flex-col">
@@ -133,24 +102,19 @@ const Tasks = () => {
           <div className="w-full flex flex-col gap-6 px-2 pb-2">
             {loading ? (
               <Loader />
-            ) : filteredTasks.length > 0 ? (
+            ) : tasks.length > 0 ? (
               <div className="w-full flex justify-evenly px-4">
                 {clickedOnTask && (
                   <TaskView
                     taskID={clickedTaskID}
-                    tasks={filteredTasks}
+                    tasks={tasks}
                     organization={organization}
                     setShow={setClickedOnTask}
                     setTasks={setTasks}
-                    setFilteredTasks={setFilteredTasks}
                     setClickedTaskID={setClickedTaskID}
                   />
                 )}
-                <TasksTable
-                  tasks={filteredTasks}
-                  setClickedOnTask={setClickedOnTask}
-                  setClickedTaskID={setClickedTaskID}
-                />
+                <TasksTable tasks={tasks} setClickedOnTask={setClickedOnTask} setClickedTaskID={setClickedTaskID} />
               </div>
             ) : (
               <Mascot message="There are no tasks available at the moment." />

@@ -1,14 +1,11 @@
-import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import { SubTask, Task } from '@/types';
-import { ArrowArcLeft, Gear, Trash, PlusCircle, CheckCircle, Circle, XCircle } from '@phosphor-icons/react';
+import { ArrowArcLeft, Gear, Trash, PlusCircle } from '@phosphor-icons/react';
 import moment from 'moment';
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
-import UserHoverCard from '@/components/common/user_hover_card';
 import ToolTip from '@/components/utils/tooltip';
-import { getTaskDeadlineColor, getTaskPriorityColor, getTaskStatusColor } from '@/utils/funcs/task';
+import { getTaskDeadlineColor, getTaskPriorityColor } from '@/utils/funcs/task';
 import UsersList from '@/components/common/users_list';
 import PictureList from '@/components/common/picture_list';
 import Tags from '@/components/common/tags';
@@ -18,8 +15,6 @@ import CommentBox from '@/components/common/comment_box';
 interface Props {
   task: Task;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
   setClickedTaskID?: React.Dispatch<React.SetStateAction<number>>;
   setClickedOnEditTask: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedOnDeleteTask: React.Dispatch<React.SetStateAction<boolean>>;
@@ -28,8 +23,6 @@ interface Props {
   setClickedOnViewSubTask: React.Dispatch<React.SetStateAction<boolean>>;
   toggleComplete: () => void;
   accessChecker: boolean;
-  getUserTitle: (userID: string) => string;
-  getUserRole: (userID: string) => string;
 }
 
 const TaskComponent = ({
@@ -43,8 +36,6 @@ const TaskComponent = ({
   setClickedOnViewSubTask,
   toggleComplete,
   accessChecker,
-  getUserTitle,
-  getUserRole,
 }: Props) => {
   const isAssignedUser = (userID: string) => {
     var check = false;
@@ -82,9 +73,9 @@ const TaskComponent = ({
                   <Trash onClick={() => setClickedOnDeleteTask(true)} className="cursor-pointer" size={32} />
                 </>
               )}
-              <div className="bg-primary_comp hover:bg-primary_comp_hover px-4 py-2 rounded-md transition-ease-300">
-                {isAssignedUser(user.id) &&
-                  (task.isCompleted ? (
+              {isAssignedUser(user.id) && (
+                <div className="bg-primary_comp hover:bg-primary_comp_hover px-4 py-2 rounded-md transition-ease-300">
+                  {task.isCompleted ? (
                     <span onClick={toggleComplete} className="relative group cursor-pointer">
                       <ToolTip content="Mark Incomplete" />
                       <div className="font-semibold">Completed</div>
@@ -93,8 +84,9 @@ const TaskComponent = ({
                     <div onClick={toggleComplete} className="w-fit text-lg font-semibold cursor-pointer">
                       Mark Completed
                     </div>
-                  ))}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -174,9 +166,11 @@ const TaskComponent = ({
             </div>
           )
         )}
-        <div className="text-xl font-medium">Conversations</div>
-        <div className="w-full h-[80%]">
-          <CommentBox type="task" item={task} />
+        <div>
+          <div className="text-xl font-medium">Conversations</div>
+          <div className="w-full h-[80%]">
+            <CommentBox type="task" item={task} />
+          </div>
         </div>
       </div>
     </>
