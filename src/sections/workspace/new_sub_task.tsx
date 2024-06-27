@@ -1,4 +1,4 @@
-import { TASK_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { ORG_URL, TASK_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
 import { PRIORITY, Task, User } from '@/types';
 import Toaster from '@/utils/toaster';
@@ -13,14 +13,17 @@ import Tags from '@/components/form/tags';
 import Select from '@/components/form/select';
 import Time from '@/components/form/time';
 import PrimaryButton from '@/components/buttons/primary_btn';
+import { useSelector } from 'react-redux';
+import { currentOrgIDSelector } from '@/slices/orgSlice';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   task: Task;
   setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
+  byOrgManager?: boolean;
 }
 
-const NewSubTask = ({ setShow, task, setTasks }: Props) => {
+const NewSubTask = ({ setShow, task, setTasks, byOrgManager = false }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState<string[]>([]);
@@ -34,6 +37,8 @@ const NewSubTask = ({ setShow, task, setTasks }: Props) => {
   const [mutex, setMutex] = useState(false);
 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+
+  const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleChange = (el: React.ChangeEvent<HTMLInputElement>) => {
     fetchUsers(el.target.value);
@@ -73,7 +78,7 @@ const NewSubTask = ({ setShow, task, setTasks }: Props) => {
 
     const toaster = Toaster.startLoad('Creating a new sub task');
 
-    const URL = `${TASK_URL}/sub/${task.id}`;
+    const URL = byOrgManager ? `${ORG_URL}/${currentOrgID}/tasks/sub/${task.id}` : `${TASK_URL}/sub/${task.id}`;
 
     const userIDs = selectedUsers.map(user => user.id);
 

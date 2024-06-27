@@ -14,8 +14,9 @@ import EditSubTask from '@/sections/workspace/edit_sub_task';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import TaskComponent from '@/sections/tasks/task_view';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
-import { ORG_MANAGER } from '@/config/constants';
+import { ORG_MANAGER, ORG_SENIOR } from '@/config/constants';
 import EditTask from '@/sections/tasks/edit_task';
+import { userSelector } from '@/slices/userSlice';
 
 interface Props {
   taskID: number;
@@ -37,6 +38,7 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, organization, setClickedTa
 
   const task = tasks[taskID] || initialTask;
 
+  const user = useSelector(userSelector);
   const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleDelete = async () => {
@@ -122,6 +124,17 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, organization, setClickedTa
     return role;
   };
 
+  const isAssignedUser = (userID: string) => {
+    var check = false;
+    task.users?.forEach(user => {
+      if (user.id == userID) {
+        check = true;
+        return;
+      }
+    });
+    return check;
+  };
+
   return (
     <>
       {clickedOnEditTask && (
@@ -140,7 +153,14 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, organization, setClickedTa
       {clickedOnDeleteSubTask && (
         <ConfirmDelete setShow={setClickedOnDeleteSubTask} handleDelete={handleDeleteSubTask} />
       )}
-      {clickedOnNewSubTask && <NewSubTask setShow={setClickedOnNewSubTask} task={task} setTasks={setTasks} />}
+      {clickedOnNewSubTask && (
+        <NewSubTask
+          setShow={setClickedOnNewSubTask}
+          task={task}
+          setTasks={setTasks}
+          byOrgManager={!isAssignedUser(user.id) && checkOrgAccess(ORG_SENIOR)}
+        />
+      )}
       {clickedOnViewSubTask && (
         <SubTaskView
           setShow={setClickedOnViewSubTask}
@@ -155,7 +175,7 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, organization, setClickedTa
       )}
       <TaskComponent
         task={task}
-        accessChecker={checkOrgAccess(ORG_MANAGER)}
+        accessChecker={checkOrgAccess(ORG_SENIOR)}
         setClickedTaskID={setClickedTaskID}
         setClickedOnEditTask={setClickedOnEditTask}
         setClickedOnDeleteTask={setClickedOnDeleteTask}

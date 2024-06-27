@@ -139,7 +139,7 @@ const TaskComponent = ({
           <div className="w-full flex flex-col gap-2">
             <div className="flex gap-2 items-center">
               <div className="text-xl font-medium">Subtasks</div>
-              {isAssignedUser(user.id) && !task.isCompleted && (
+              {(isAssignedUser(user.id) || accessChecker) && (
                 <PlusCircle
                   onClick={() => setClickedOnNewSubTask(true)}
                   className="bg-gray-50 rounded-full cursor-pointer"
@@ -155,8 +155,7 @@ const TaskComponent = ({
             />
           </div>
         ) : (
-          isAssignedUser(user.id) &&
-          !task.isCompleted && (
+          (isAssignedUser(user.id) || accessChecker) && (
             <div
               onClick={() => setClickedOnNewSubTask(true)}
               className="w-full text-base bg-gray-100 rounded-xl p-4 cursor-pointer transition-ease-300"
