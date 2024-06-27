@@ -140,7 +140,7 @@ const AddCollaborators = ({ setShow, project, setProject, org = false }: Props) 
         <div className="text-3xl max-md:text-xl font-semibold">
           {status == 0 ? 'Select Users' : 'Confirm Invitations'}
         </div>
-        <div className="w-full h-[420px] flex flex-col gap-4">
+        <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
           {status == 0 ? (
             <>
               <div className="w-full h-12 flex items-center px-4 gap-4 dark:bg-dark_primary_comp_hover rounded-md">

@@ -114,9 +114,9 @@ const OpeningCard = ({ opening, project, setProject, org = false }: Props) => {
                 ))}
             </div>
           </div>
-          <div className="flex gap-3">
-            {hasAccess && <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={24} />}
-            {hasAccess && (
+          {hasAccess && (
+            <div className="flex gap-3">
+              <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={24} />
               <TrashSimple
                 onClick={() => setClickedOnDelete(true)}
                 className="cursor-pointer"
@@ -124,8 +124,8 @@ const OpeningCard = ({ opening, project, setProject, org = false }: Props) => {
                 color="#ea333e"
                 weight="fill"
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </>

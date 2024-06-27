@@ -104,7 +104,7 @@ const OrgInvitationsTable = ({ invitations, setOrganization }: Props) => {
           </div>
           <div className="w-[20%] flex-center">{moment(invitation.createdAt).format('DD MMMM, YYYY')}</div>
           <div className="w-[10%] flex-center">
-            {checkOrgAccess(ORG_MANAGER) && (
+            {checkOrgAccess(ORG_MANAGER) && invitation.status == 0 && (
               <Trash
                 onClick={() => {
                   setClickedInvitation(invitation);

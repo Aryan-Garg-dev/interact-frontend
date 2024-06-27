@@ -54,7 +54,9 @@ const TeamsView = ({ setShow, organization, setOrganization }: Props) => {
           </div>
         ))
       ) : (
-        <Mascot message="No Teams Yet." />
+        <div className="pb-8">
+          <Mascot message="No Teams Yet." />
+        </div>
       )}
     </ModalWrapper>
   );

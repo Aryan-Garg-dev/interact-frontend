@@ -105,7 +105,7 @@ const AddGroupMembers = ({ setShow, chat, setChat }: Props) => {
     <>
       <div className="fixed top-24 max-lg:top-20 w-[640px] max-lg:w-5/6 backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col gap-4 rounded-lg p-10 max-lg:p-5 dark:text-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
         <div className="text-3xl max-lg:text-xl font-semibold">Select Users</div>
-        <div className="w-full h-[420px] flex flex-col gap-4">
+        <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
           <div className="w-full h-12 flex items-center px-4 gap-4 dark:bg-dark_primary_comp_hover rounded-md">
             <MagnifyingGlass size={24} />
             <input

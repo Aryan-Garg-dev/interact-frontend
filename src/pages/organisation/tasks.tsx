@@ -21,6 +21,7 @@ import { useSelector } from 'react-redux';
 import Mascot from '@/components/fillers/mascot';
 import NewTask from '@/sections/tasks/new_task';
 import TasksTable from '@/components/tables/tasks';
+import OrderMenu from '@/components/common/order_menu';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -32,12 +33,15 @@ const Tasks = () => {
 
   const [clickedOnNewTask, setClickedOnNewTask] = useState(false);
   const [clickedOnInfo, setClickedOnInfo] = useState(false);
+  const [order, setOrder] = useState('deadline');
+  const [search, setSearch] = useState('');
 
   const currentOrg = useSelector(currentOrgSelector);
 
-  const getTasks = () => {
-    const URL = `${ORG_URL}/${currentOrg.id}/tasks`;
-    getHandler(URL)
+  const getTasks = (abortController: AbortController) => {
+    setLoading(true);
+    const URL = `${ORG_URL}/${currentOrg.id}/tasks?order=${order}&search=${search}`;
+    getHandler(URL, abortController.signal)
       .then(res => {
         if (res.statusCode === 200) {
           const taskData = res.data.tasks || [];
@@ -54,7 +58,7 @@ const Tasks = () => {
           }
 
           setLoading(false);
-        } else {
+        } else if (res.status != -1) {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
           else {
             Toaster.error(SERVER_ERROR, 'error_toaster');
@@ -66,9 +70,18 @@ const Tasks = () => {
       });
   };
 
+  let oldAbortController: AbortController | null = null;
+
   useEffect(() => {
-    getTasks();
-  }, []);
+    const abortController = new AbortController();
+    if (oldAbortController) oldAbortController.abort();
+    oldAbortController = abortController;
+
+    getTasks(abortController);
+    return () => {
+      abortController.abort();
+    };
+  }, [order, search]);
 
   return (
     <BaseWrapper title={`Tasks | ${currentOrg.title}`}>
@@ -80,8 +93,19 @@ const Tasks = () => {
         {clickedOnInfo && <AccessTree type="task" setShow={setClickedOnInfo} />}
         <div className="w-full flex flex-col">
           <div className="w-full flex justify-between items-center p-base_padding">
-            <div className="text-6xl font-semibold dark:text-white font-primary">Tasks</div>
-
+            <div className="flex-center gap-2">
+              <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Tasks</div>
+              <OrderMenu
+                orders={['deadline', 'latest']}
+                current={order}
+                setState={setOrder}
+                fixed={false}
+                right={false}
+                addSearch={true}
+                search={search}
+                setSearch={setSearch}
+              />
+            </div>
             <div className="flex items-center gap-2">
               {checkOrgAccess(ORG_SENIOR) && (
                 <Plus

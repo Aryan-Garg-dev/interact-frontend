@@ -303,7 +303,7 @@ const NewProject = ({ setShow, setProjects }: Props) => {
               {selectedUsers.length == 0 ? (
                 <div className="h-64 text-xl flex-center">Selected users will be shown here :)</div>
               ) : (
-                <div className="w-full  h-[420px] flex flex-col gap-2">
+                <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-2">
                   {selectedUsers.map((user, index) => {
                     return (
                       <div

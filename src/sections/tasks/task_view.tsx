@@ -11,6 +11,7 @@ import PictureList from '@/components/common/picture_list';
 import Tags from '@/components/common/tags';
 import SubTasksTable from '@/components/tables/subtasks';
 import CommentBox from '@/components/common/comment_box';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
   task: Task;
@@ -91,7 +92,7 @@ const TaskComponent = ({
           </div>
         </div>
         <div className="w-full flex flex-col gap-4">
-          <div className="text-lg">{task.description}</div>
+          <div className="text-lg">{renderContentWithLinks(task.description, [])}</div>
           <Tags tags={task.tags} />
         </div>
         <div className="w-fit flex-center gap-16">
