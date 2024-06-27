@@ -35,7 +35,7 @@ const SessionDetailsTable = ({ sessionID, setShow }: Props) => {
     const URL = `/org/${currentOrg.id}/meetings/details/${sessionID}?page=${page}&limit=10&type=participants`;
     const res = await getHandler(URL);
     if (res.statusCode === 200) {
-      setParticipants(res.data.participants);
+      setParticipants(res.data.participants || []);
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');

@@ -1,13 +1,13 @@
 import { ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
-import { Meeting, User } from '@/types';
+import { Meeting, OrganizationMembership, Team, User } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
 import moment from 'moment';
-import { currentOrgIDSelector } from '@/slices/orgSlice';
+import { currentOrgIDSelector, currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import PrimaryButton from '@/components/buttons/primary_btn';
 import Input from '@/components/form/input';
@@ -43,19 +43,24 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
 
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
+  const [teams, setTeams] = useState<Team[]>([]);
 
   const [status, setStatus] = useState(0);
   const [mutex, setMutex] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [selectedTeams, setSelectedTeams] = useState<Team[]>([]);
+
   const [meeting, setMeeting] = useState(initialMeeting);
 
   const userID = useSelector(userIDSelector);
 
   const fetchUsers = async (search: string, abortController?: AbortController) => {
     setLoading(true);
-    const URL = `${ORG_URL}/${currentOrgID}/meetings/non-participants/?search=${search}&limit=${10}&isOpenForMembers=${isOpenForMembers}&allowExternalParticipants=${allowExternalParticipants}`;
+    const URL = `${ORG_URL}/${
+      currentOrg.id
+    }/meetings/non-participants/?search=${search}&limit=${10}&isOpenForMembers=${isOpenForMembers}&allowExternalParticipants=${allowExternalParticipants}`;
 
     const res = await getHandler(URL, abortController?.signal);
     if (res.statusCode == 200) {
@@ -68,12 +73,48 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
         else Toaster.error(SERVER_ERROR, 'error_toaster');
       }
     }
+
+    const matchedTeams: Team[] = [];
+    currentOrg.teams?.forEach(t => {
+      if (t.title.match(new RegExp(search, 'i'))) matchedTeams.push(t);
+    });
+    setTeams(matchedTeams);
   };
+
   const handleClickUser = (user: User) => {
-    if (selectedUsers.includes(user)) {
+    if (selectedUsers.map(user => user.id).includes(user.id)) {
       setSelectedUsers(prev => prev.filter(u => u.id != user.id));
     } else {
       setSelectedUsers(prev => [...prev, user]);
+    }
+  };
+
+  const handleClickTeam = async (team: Team) => {
+    const users = await getTeamUsers(team);
+    if (selectedTeams.includes(team)) {
+      setSelectedTeams(prev => prev.filter(t => t.id !== team.id));
+      setSelectedUsers(prev => prev.filter(user => !users.some(u => u.id === user.id)));
+    } else {
+      setSelectedTeams(prev => [...prev, team]);
+      setSelectedUsers(prev => {
+        const newUsers = users.filter(user => !prev.some(u => u.id === user.id));
+        return [...prev, ...newUsers];
+      });
+    }
+  };
+
+  const getTeamUsers = async (team: Team) => {
+    const URL = `${ORG_URL}/${currentOrg.id}/teams/${team.id}`;
+    const res = await getHandler(URL);
+    if (res.statusCode == 200) {
+      const memberships: OrganizationMembership[] = res.data.team?.memberships;
+      return memberships.map(m => m.user);
+    } else {
+      if (res.status != -1) {
+        if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
+        else Toaster.error(SERVER_ERROR, 'error_toaster');
+      }
+      return [];
     }
   };
 
@@ -86,7 +127,7 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
     };
   }, [search]);
 
-  const currentOrgID = useSelector(currentOrgIDSelector);
+  const currentOrg = useSelector(currentOrgSelector);
 
   const meetingDetailsValidator = () => {
     if (title.trim() == '') {
@@ -133,7 +174,7 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
 
     const toaster = Toaster.startLoad('Creating a new meeting');
 
-    const URL = `${ORG_URL}/${currentOrgID}/meetings`;
+    const URL = `${ORG_URL}/${currentOrg.id}/meetings`;
 
     const formData = {
       title,
@@ -170,7 +211,7 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
   const handleAddParticipants = async () => {
     const toaster = Toaster.startLoad('Adding Participants');
 
-    const URL = `${ORG_URL}/${currentOrgID}/meetings/participants/${meeting.id}`;
+    const URL = `${ORG_URL}/${currentOrg.id}/meetings/participants/${meeting.id}`;
 
     const formData = {
       userIDs: selectedUsers.map(u => u.id),
@@ -286,33 +327,54 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
                 {loading ? (
                   <Loader />
                 ) : (
-                  users.map(user => {
-                    return (
-                      <div
-                        key={user.id}
-                        onClick={() => handleClickUser(user)}
-                        className={`w-full flex gap-2 rounded-lg p-2 ${
-                          selectedUsers.includes(user)
-                            ? 'dark:bg-dark_primary_comp_active bg-primary_comp_hover'
-                            : 'dark:bg-dark_primary_comp hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
-                        } cursor-pointer transition-ease-200`}
-                      >
-                        <Image
-                          crossOrigin="anonymous"
-                          width={50}
-                          height={50}
-                          alt={'User Pic'}
-                          src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-                          className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
-                        />
-                        <div className="w-5/6 flex flex-col">
-                          <div className="text-lg font-bold">{user.name}</div>
-                          <div className="text-sm dark:text-gray-200">@{user.username}</div>
-                          {user.tagline && user.tagline != '' && <div className="text-sm mt-2">{user.tagline}</div>}
-                        </div>
+                  <>
+                    {teams && (
+                      <div className="w-full flex items-center flex-wrap gap-2">
+                        {teams.map(team => (
+                          <div
+                            style={{ backgroundColor: team.color }}
+                            onClick={() => handleClickTeam(team)}
+                            className={`w-fit flex flex-col border-2 ${
+                              selectedTeams.includes(team)
+                                ? 'shadow-sm opacity-50 border-primary_text'
+                                : 'hover:opacity-70 border-white'
+                            } rounded-lg px-4 py-2 cursor-pointer transition-ease-300`}
+                            key={team.id}
+                          >
+                            <div className="text-sm font-medium">{team.title}</div>
+                            <div className="text-xs">{team.noUsers} Members</div>
+                          </div>
+                        ))}
                       </div>
-                    );
-                  })
+                    )}
+                    {users.map(user => {
+                      return (
+                        <div
+                          key={user.id}
+                          onClick={() => handleClickUser(user)}
+                          className={`w-full flex gap-2 rounded-lg p-2 ${
+                            selectedUsers.map(user => user.id).includes(user.id)
+                              ? 'dark:bg-dark_primary_comp_active bg-primary_comp_hover'
+                              : 'dark:bg-dark_primary_comp hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
+                          } cursor-pointer transition-ease-200`}
+                        >
+                          <Image
+                            crossOrigin="anonymous"
+                            width={50}
+                            height={50}
+                            alt={'User Pic'}
+                            src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                            className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
+                          />
+                          <div className="w-5/6 flex flex-col">
+                            <div className="text-lg font-bold">{user.name}</div>
+                            <div className="text-sm dark:text-gray-200">@{user.username}</div>
+                            {user.tagline && user.tagline != '' && <div className="text-sm mt-2">{user.tagline}</div>}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </>
                 )}
               </div>
             </>
