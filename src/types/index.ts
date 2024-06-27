@@ -591,6 +591,20 @@ export interface Review {
   createdAt: Date;
 }
 
+export interface ReviewCounts {
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+}
+
+export interface ReviewData {
+  total: number;
+  average: number;
+  counts: ReviewCounts;
+}
+
 export interface Option {
   id: string;
   pollID: string;
