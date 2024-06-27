@@ -167,9 +167,7 @@ const TaskComponent = ({
         )}
         <div>
           <div className="text-xl font-medium">Conversations</div>
-          <div className="w-full h-[80%]">
-            <CommentBox type="task" item={task} />
-          </div>
+          <CommentBox type="task" item={task} />
         </div>
       </div>
     </>

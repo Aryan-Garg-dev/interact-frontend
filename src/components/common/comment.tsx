@@ -10,6 +10,7 @@ import { userSelector } from '@/slices/userSlice';
 import Toaster from '@/utils/toaster';
 import deleteHandler from '@/handlers/delete_handler';
 import { SERVER_ERROR } from '@/config/errors';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
   comment: Comment;
@@ -89,7 +90,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <div className="w-fit bg-primary_comp dark:bg-dark_primary_comp_hover px-4 py-2 max-md:px-2 max-md:py-1 text-sm max-md:text-xs rounded-xl max-md:rounded-lg">
-            {comment.content}
+            {renderContentWithLinks(comment.content, [])}
           </div>
           <LowerComment comment={comment} clickedOnReply={clickedOnReply} setClickedOnReply={setClickedOnReply} />
         </div>
