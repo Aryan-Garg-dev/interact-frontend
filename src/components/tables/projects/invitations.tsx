@@ -6,7 +6,7 @@ import { currentOrgSelector } from '@/slices/orgSlice';
 import { userSelector } from '@/slices/userSlice';
 import { Invitation, Project } from '@/types';
 import { initialInvitation } from '@/types/initials';
-import getInvitationStatus from '@/utils/funcs/get_invitation_status';
+import getInvitationStatus, { getInvitationStatusColor } from '@/utils/funcs/invitation';
 import Toaster from '@/utils/toaster';
 import { Trash } from '@phosphor-icons/react';
 import moment from 'moment';
@@ -91,7 +91,14 @@ const InvitationsTable = ({ invitations, project, setProject, org }: Props) => {
             </div>
           </div>
           <div className="w-[15%] flex-center">{invitation.title}</div>
-          <div className="w-[10%] flex-center">{getInvitationStatus(invitation.status)}</div>
+          <div className="w-[10%] flex-center">
+            <div
+              className="w-fit px-3 py-1 text-xs font-medium rounded-full"
+              style={{ backgroundColor: getInvitationStatusColor(invitation.status) }}
+            >
+              {getInvitationStatus(invitation.status)}
+            </div>
+          </div>
           <div className="w-[25%] flex-center gap-1 px-4">
             <Image
               crossOrigin="anonymous"

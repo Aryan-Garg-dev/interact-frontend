@@ -9,6 +9,7 @@ import { userSelector } from '@/slices/userSlice';
 import { Membership, Project, User } from '@/types';
 import { initialMembership } from '@/types/initials';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
+import { getRoleColor } from '@/utils/funcs/membership';
 import Toaster from '@/utils/toaster';
 import { Pen, Trash } from '@phosphor-icons/react';
 import moment from 'moment';
@@ -102,7 +103,14 @@ const CollaboratorsTable = ({ memberships, project, setProject, org }: Props) =>
             </div>
           </div>
           <div className="w-[20%] flex-center">{membership.title}</div>
-          <div className="w-[10%] flex-center">{membership.role}</div>
+          <div className="w-[10%] flex-center">
+            <div
+              className="w-fit px-3 py-1 text-xs font-medium rounded-full"
+              style={{ backgroundColor: getRoleColor(membership.role) }}
+            >
+              {membership.role}
+            </div>
+          </div>
           <div className="w-[20%] flex-center">{moment(membership.createdAt).format('DD MMMM, YYYY')}</div>
           <div className="w-[15%] flex-center gap-4">
             {project.userID == user.id || (org && checkOrgAccess(ORG_MANAGER)) ? (
