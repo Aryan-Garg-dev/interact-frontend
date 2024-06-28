@@ -74,7 +74,7 @@ const TaskComponent = ({
                   <Trash onClick={() => setClickedOnDeleteTask(true)} className="cursor-pointer" size={32} />
                 </>
               )}
-              {isAssignedUser(user.id) && (
+              {(isAssignedUser(user.id) || accessChecker) && (
                 <div className="bg-primary_comp hover:bg-primary_comp_hover px-4 py-2 rounded-md transition-ease-300">
                   {task.isCompleted ? (
                     <span onClick={toggleComplete} className="relative group cursor-pointer">

@@ -113,6 +113,42 @@ const Deleted = ({ history }: Props) => {
           </div>
         </OrganizationHistoryWrapper>
       );
+    case 33:
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_high px-1 rounded-md gap-4">
+            Deleted a Resource Bucket: <span className="font-semibold">{history.deletedText}</span>
+          </div>
+        </OrganizationHistoryWrapper>
+      );
+    case 36:
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_high px-1 rounded-md gap-4">
+            Deleted a Team: <span className="font-semibold">{history.deletedText}</span>
+          </div>
+        </OrganizationHistoryWrapper>
+      );
+    case 38:
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_high px-1 rounded-md gap-4">
+            Deleted
+            <Link target="_blank" href={'/explore/user/' + history.membership?.user.username} className="font-semibold">
+              {history.membership?.user.name}
+            </Link>{' '}
+            form Team: <span className="font-semibold">{history.deletedText}</span>
+          </div>
+        </OrganizationHistoryWrapper>
+      );
+    case 41:
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_high px-1 rounded-md gap-4">
+            Deleted a Meeting: <span className="font-semibold">{history.deletedText}</span>
+          </div>
+        </OrganizationHistoryWrapper>
+      );
     default:
       return <></>;
   }

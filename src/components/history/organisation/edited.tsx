@@ -92,12 +92,11 @@ const Edited = ({ history }: Props) => {
             Edited an Opening:{' '}
             <Link target="_blank" href={'/explore?oid=' + history.openingID} className="font-semibold">
               {history.opening?.title}
-            </Link>{' '}
-            🎉
+            </Link>
           </div>
         </OrganizationHistoryWrapper>
       );
-    case 30: //User edited memberships details
+    case 30:
       return (
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
@@ -105,10 +104,40 @@ const Edited = ({ history }: Props) => {
             <Link href={`/organisation/members`} className="font-semibold">
               {history.membership?.user?.name}
             </Link>
-            .
           </div>
         </OrganizationHistoryWrapper>
       );
+    case 32:
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
+            Edited a Resource Bucket:{' '}
+            <Link target="_blank" href={'/organisation/resources'} className="font-semibold">
+              {history.resourceBucket?.title}
+            </Link>
+          </div>
+        </OrganizationHistoryWrapper>
+      );
+    case 35:
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
+            Edited a Team:{' '}
+            <Link target="_blank" href={'/organisation/members'} className="font-semibold">
+              {history.team?.title}
+            </Link>
+          </div>
+        </OrganizationHistoryWrapper>
+      );
+    case 40:
+      <OrganizationHistoryWrapper history={history}>
+        <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
+          Edited a Meeting:{' '}
+          <Link target="_blank" href={'/organisation/meetings/' + history.meeting?.id} className="font-semibold">
+            {history.team?.title}
+          </Link>
+        </div>
+      </OrganizationHistoryWrapper>;
     default:
       return <></>;
   }

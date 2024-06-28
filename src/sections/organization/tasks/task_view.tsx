@@ -88,7 +88,9 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, organization, setClickedTa
   const toggleComplete = async () => {
     const toaster = Toaster.startLoad(task.isCompleted ? 'Marking Incomplete' : 'Marking Completed');
 
-    const URL = `${TASK_URL}/completed/${task.id}`;
+    const URL = checkOrgAccess(ORG_SENIOR)
+      ? `${ORG_URL}/${currentOrgID}/tasks/completed/${task.id}`
+      : `${TASK_URL}/completed/${task.id}`;
 
     const res = await patchHandler(URL, { isCompleted: !task.isCompleted });
 

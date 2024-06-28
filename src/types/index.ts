@@ -565,6 +565,12 @@ export interface OrganizationHistory {
   application?: Application;
   membershipID?: string;
   membership?: OrganizationMembership;
+  meetingID?: string;
+  meeting?: Meeting;
+  resourceBucketID: string;
+  resourceBucket?: ResourceBucket;
+  teamID?: string;
+  team?: Team;
   createdAt: Date;
   deletedText: String;
 }
