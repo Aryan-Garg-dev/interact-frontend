@@ -11,7 +11,6 @@ import { ProjectHistory } from '@/types';
 import Toaster from '@/utils/toaster';
 import { X } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 
 interface Props {
@@ -27,6 +26,8 @@ const History = ({ projectID, setShow, org = false }: Props) => {
   const [loading, setLoading] = useState(true);
 
   const currentOrgID = useSelector(currentOrgIDSelector);
+
+  const limit = 10;
 
   const fetchHistory = async () => {
     const URL = org
@@ -60,13 +61,7 @@ const History = ({ projectID, setShow, org = false }: Props) => {
         {loading && page == 1 ? (
           <Loader />
         ) : (
-          <InfiniteScroll
-            dataLength={history.length}
-            next={fetchHistory}
-            hasMore={hasMore}
-            loader={<Loader />}
-            className="w-full flex flex-col gap-2"
-          >
+          <div className="w-full flex flex-col gap-2">
             {history.map((history, index) => {
               switch (history.historyType) {
                 case -1:
@@ -92,7 +87,20 @@ const History = ({ projectID, setShow, org = false }: Props) => {
                   return <></>;
               }
             })}
-          </InfiniteScroll>
+            {loading ? (
+              <Loader />
+            ) : (
+              history.length % limit == 0 &&
+              hasMore && (
+                <div
+                  onClick={fetchHistory}
+                  className="w-fit mx-auto pt-4 text-xs text-gray-700 font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
+                >
+                  Load More
+                </div>
+              )
+            )}
+          </div>
         )}
       </div>
       <div
