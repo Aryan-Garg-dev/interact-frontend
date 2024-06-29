@@ -149,7 +149,13 @@ const Meeting = ({ id }: Props) => {
       <OrgSidebar index={16} />
       <MainWrapper>
         <div className="w-full flex flex-col gap-4 p-base_padding">
-          {clickedOnSession && <SessionDetailsTable sessionID={clickedSessionID} setShow={setClickedOnSession} />}
+          {clickedOnSession && (
+            <SessionDetailsTable
+              sessionID={clickedSessionID}
+              session={sessions.filter(session => session.id == clickedSessionID)[0]}
+              setShow={setClickedOnSession}
+            />
+          )}
           {clickedOnAddParticipants ? (
             <AddMeetingParticipants meeting={meeting} setMeeting={setMeeting} setShow={setClickedOnAddParticipants} />
           ) : (

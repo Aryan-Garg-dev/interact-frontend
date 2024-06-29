@@ -227,7 +227,6 @@ class SocketService {
             const notificationEventPayload = event.payload as WS_Notification;
             toast.info(notificationEventPayload.content, {
               ...messageToastSettings,
-              autoClose: 1000,
               icon: '🐵',
             });
             store.dispatch(incrementUnreadNotifications());

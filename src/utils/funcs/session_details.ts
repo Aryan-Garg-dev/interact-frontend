@@ -52,3 +52,15 @@ export const getNextSessionTime = (meeting: Meeting, end: boolean = false, forma
 
   return nextSessionTime.format(format);
 };
+
+export const getParticipationDuration = (date1: string | Date, date2: string | Date) => {
+  const start = moment(date1);
+  const end = moment(date2);
+  const duration = moment.duration(end.diff(start));
+
+  if (duration.asSeconds() < 60) {
+    return `${Math.floor(duration.asSeconds())} seconds`;
+  } else {
+    return `${duration.asMinutes().toFixed(2)} minutes`;
+  }
+};

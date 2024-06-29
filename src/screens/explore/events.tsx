@@ -17,7 +17,7 @@ const Events = () => {
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-  const [order, setOrder] = useState('next_session_time');
+  const [order, setOrder] = useState('trending');
 
   const open = useSelector(navbarOpenSelector);
 

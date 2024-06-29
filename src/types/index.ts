@@ -681,6 +681,10 @@ export interface Session {
   startedAt: Date;
   endedAt: Date;
   createdAt: Date;
+  chatDownloadURL: string;
+  chatDownloadURLExpiry: string;
+  transcriptDownloadURL: string;
+  transcriptDownloadURLExpiry: string;
 }
 
 export interface Team {
