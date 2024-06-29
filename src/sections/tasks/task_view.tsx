@@ -24,6 +24,7 @@ interface Props {
   setClickedOnViewSubTask: React.Dispatch<React.SetStateAction<boolean>>;
   toggleComplete: () => void;
   accessChecker: boolean;
+  userFetchURL?: string;
 }
 
 const TaskComponent = ({
@@ -37,6 +38,7 @@ const TaskComponent = ({
   setClickedOnViewSubTask,
   toggleComplete,
   accessChecker,
+  userFetchURL,
 }: Props) => {
   const isAssignedUser = (userID: string) => {
     var check = false;
@@ -168,7 +170,7 @@ const TaskComponent = ({
         )}
         <div>
           <div className="text-xl font-medium">Conversations</div>
-          <CommentBox type="task" item={task} />
+          <CommentBox type="task" item={task} userFetchURL={userFetchURL} />
         </div>
       </div>
     </>

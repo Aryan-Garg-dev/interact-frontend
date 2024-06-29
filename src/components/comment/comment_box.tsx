@@ -16,9 +16,10 @@ interface Props {
   type: string;
   item: Project | Post | Event | Announcement | Task;
   setNoComments?: React.Dispatch<React.SetStateAction<number>>;
+  userFetchURL?: string;
 }
 
-const CommentBox = ({ type, item, setNoComments }: Props) => {
+const CommentBox = ({ type, item, setNoComments, userFetchURL }: Props) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -121,6 +122,7 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
         setTaggedUsernames={setTaggedUsernames}
         type={type}
         handleSubmit={submitHandler}
+        userFetchURL={userFetchURL}
       />
       {loading && page == 1 ? (
         <CommentsLoader />

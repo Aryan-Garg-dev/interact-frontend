@@ -16,9 +16,18 @@ interface Props {
   type: string;
   taggedUsernames: string[];
   setTaggedUsernames: React.Dispatch<React.SetStateAction<string[]>>;
+  userFetchURL?: string;
 }
 
-const CommentInput = ({ content, setContent, taggedUsernames, setTaggedUsernames, handleSubmit, type }: Props) => {
+const CommentInput = ({
+  content,
+  setContent,
+  taggedUsernames,
+  setTaggedUsernames,
+  handleSubmit,
+  type,
+  userFetchURL,
+}: Props) => {
   const [users, setUsers] = useState<User[]>([]);
   const [showUsers, setShowUsers] = useState(false);
   const [cursorPosition, setCursorPosition] = useState<number | null>(null);
@@ -26,7 +35,7 @@ const CommentInput = ({ content, setContent, taggedUsernames, setTaggedUsernames
   const user = useSelector(userSelector);
 
   const fetchUsers = async (search: string) => {
-    const URL = `${EXPLORE_URL}/users/trending?search=${search}&limit=${10}`;
+    const URL = (userFetchURL ? userFetchURL : `${EXPLORE_URL}/users/trending`) + `?search=${search}&limit=${10}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       const userData: User[] = res.data.users || [];
@@ -83,7 +92,11 @@ const CommentInput = ({ content, setContent, taggedUsernames, setTaggedUsernames
         </div>
       </div>
       {showUsers && users.length > 0 && (
-        <div className="w-full absolute bg-gradient-to-b from-white via-[#ffffffb2] via-[90%] flex flex-wrap justify-center gap-2 py-4 z-10">
+        <div
+          className={`w-full absolute bg-gradient-to-b ${
+            type == 'task' ? 'from-gray-50 via-[#ffffffca]' : 'from-white via-[#ffffffb2]'
+          } via-[90%] flex flex-wrap justify-center gap-2 py-4 z-10`}
+        >
           {users.map(user => (
             <div
               key={user.id}

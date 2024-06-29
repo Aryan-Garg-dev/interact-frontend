@@ -180,6 +180,7 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, project,
         setClickedOnViewSubTask={setClickedOnViewSubTask}
         toggleComplete={toggleComplete}
         setShow={setShow}
+        userFetchURL={`/membership/members/${project.id}`}
       />
     </>
   );
