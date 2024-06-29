@@ -134,49 +134,57 @@ const Created = ({ history }: Props) => {
         </OrganizationHistoryWrapper>
       );
     case 31:
-      <OrganizationHistoryWrapper history={history}>
-        <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-          Added a Resource Bucket:{' '}
-          <Link target="_blank" href={'/organisation/resources'} className="font-semibold">
-            {history.resourceBucket?.title}
-          </Link>{' '}
-          🎉
-        </div>
-      </OrganizationHistoryWrapper>;
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
+            Added a Resource Bucket:{' '}
+            <Link target="_blank" href={'/organisation/resources'} className="font-semibold">
+              {history.resourceBucket?.title}
+            </Link>{' '}
+            🎉
+          </div>
+        </OrganizationHistoryWrapper>
+      );
     case 34:
-      <OrganizationHistoryWrapper history={history}>
-        <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-          Added a Team:{' '}
-          <Link target="_blank" href={'/organisation/members'} className="font-semibold">
-            {history.team?.title}
-          </Link>{' '}
-          🎉
-        </div>
-      </OrganizationHistoryWrapper>;
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
+            Added a Team:{' '}
+            <Link target="_blank" href={'/organisation/members'} className="font-semibold">
+              {history.team?.title}
+            </Link>{' '}
+            🎉
+          </div>
+        </OrganizationHistoryWrapper>
+      );
     case 37:
-      <OrganizationHistoryWrapper history={history}>
-        <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-          Added
-          <Link target="_blank" href={'/explore/user/' + history.membership?.user.username} className="font-semibold">
-            {history.membership?.user.name}
-          </Link>{' '}
-          to team:{' '}
-          <Link target="_blank" href={'/organisation/members'} className="font-semibold">
-            {history.team?.title}
-          </Link>{' '}
-          🎉
-        </div>
-      </OrganizationHistoryWrapper>;
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
+            Added{' '}
+            <Link target="_blank" href={'/explore/user/' + history.membership?.user.username} className="font-semibold">
+              {history.membership?.user.name}
+            </Link>{' '}
+            to team:{' '}
+            <Link target="_blank" href={'/organisation/members'} className="font-semibold">
+              {history.team?.title}
+            </Link>{' '}
+            🎉
+          </div>
+        </OrganizationHistoryWrapper>
+      );
     case 39:
-      <OrganizationHistoryWrapper history={history}>
-        <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-          Added a Meeting:{' '}
-          <Link target="_blank" href={'/organisation/meetings/' + history.meeting?.id} className="font-semibold">
-            {history.meeting?.title}
-          </Link>{' '}
-          🎉
-        </div>
-      </OrganizationHistoryWrapper>;
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
+            Added a Meeting:{' '}
+            <Link target="_blank" href={'/organisation/meetings/' + history.meeting?.id} className="font-semibold">
+              {history.meeting?.title}
+            </Link>{' '}
+            🎉
+          </div>
+        </OrganizationHistoryWrapper>
+      );
     default:
       return <></>;
   }

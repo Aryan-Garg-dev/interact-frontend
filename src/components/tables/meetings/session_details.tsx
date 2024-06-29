@@ -38,7 +38,7 @@ const SessionDetailsTable = ({ sessionID, session, setShow }: Props) => {
   const currentOrg = useSelector(currentOrgSelector);
 
   const fetchParticipants = async () => {
-    const URL = `/org/${currentOrg.id}/meetings/details/${sessionID}?page=${page}&limit=10&type=participants`;
+    const URL = `/org/${currentOrg.id}/meetings/details/${sessionID}?page=${page}&limit=20&type=participants`;
     const res = await getHandler(URL);
     if (res.statusCode === 200) {
       setParticipants(res.data.participants || []);
@@ -163,6 +163,7 @@ const SessionDetailsTable = ({ sessionID, session, setShow }: Props) => {
             <div className="w-1/6 flex-center">Role</div>
           </div>
           {participants.map(participant => (
+            //TODO add pagination
             <div
               key={participant.user.id}
               className="w-full h-12 bg-slate-100 rounded-xl border-gray-400 flex text-sm text-primary_black"

@@ -130,14 +130,16 @@ const Edited = ({ history }: Props) => {
         </OrganizationHistoryWrapper>
       );
     case 40:
-      <OrganizationHistoryWrapper history={history}>
-        <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-          Edited a Meeting:{' '}
-          <Link target="_blank" href={'/organisation/meetings/' + history.meeting?.id} className="font-semibold">
-            {history.team?.title}
-          </Link>
-        </div>
-      </OrganizationHistoryWrapper>;
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
+            Edited a Meeting:{' '}
+            <Link target="_blank" href={'/organisation/meetings/' + history.meeting?.id} className="font-semibold">
+              {history.team?.title}
+            </Link>
+          </div>
+        </OrganizationHistoryWrapper>
+      );
     default:
       return <></>;
   }

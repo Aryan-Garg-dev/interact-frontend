@@ -93,7 +93,7 @@ const History = () => {
                     case 36:
                     case 38:
                     case 41:
-                      return <Deleted history={history} />;
+                      return <Deleted key={index} history={history} />;
                     case 2:
                     case 8:
                     case 11:

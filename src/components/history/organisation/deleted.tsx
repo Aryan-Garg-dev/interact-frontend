@@ -133,7 +133,7 @@ const Deleted = ({ history }: Props) => {
       return (
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_high px-1 rounded-md gap-4">
-            Deleted
+            Removed{' '}
             <Link target="_blank" href={'/explore/user/' + history.membership?.user.username} className="font-semibold">
               {history.membership?.user.name}
             </Link>{' '}
