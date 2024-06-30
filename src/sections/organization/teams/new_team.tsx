@@ -178,7 +178,7 @@ const NewTeam = ({ setShow, organization, setOrganization }: Props) => {
         <div className="text-3xl max-md:text-xl font-semibold">
           {status == 0 ? 'Team Info' : status == 1 ? 'Select Users' : 'Review Details'}
         </div>
-        <div className="w-full h-[420px] flex flex-col gap-4">
+        <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
           {status == 0 ? (
             <div className="w-full flex flex-col gap-4">
               <Input label="Team Title" val={title} setVal={setTitle} maxLength={50} required={true} />

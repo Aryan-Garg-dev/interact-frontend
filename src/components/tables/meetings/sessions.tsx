@@ -13,6 +13,7 @@ interface Props {
 const SessionTable = ({ sessions, setClickedOnSession, setClickedSessionID }: Props) => {
   return (
     <div className="w-full flex flex-col gap-2">
+      <div className="text-3xl font-semibold my-2">Sessions</div>
       <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold text-primary_black">
         <div className="w-[30%] flex-center">ID</div>
         <div className="w-[30%] flex-center">Started At</div>

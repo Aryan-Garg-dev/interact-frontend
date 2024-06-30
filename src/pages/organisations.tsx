@@ -42,9 +42,15 @@ const Organizations = () => {
           const organizationMemberships: OrganizationMembership[] = res.data.memberships || [];
           setMemberships(organizationMemberships);
 
-          const { oid } = router.query;
+          const { oid, ouid } = router.query;
           if (oid && oid != '') {
             const filteredMemberships = organizationMemberships.filter(m => m.organizationID == oid);
+            if (filteredMemberships.length == 1) {
+              handleClick(filteredMemberships[0]);
+            }
+          }
+          if (ouid && ouid != '') {
+            const filteredMemberships = organizationMemberships.filter(m => m.organization.userID == ouid);
             if (filteredMemberships.length == 1) {
               handleClick(filteredMemberships[0]);
             }

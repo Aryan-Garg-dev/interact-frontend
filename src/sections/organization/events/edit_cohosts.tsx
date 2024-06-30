@@ -212,7 +212,7 @@ const EditCoHosts = ({ event, setShow, setEvents }: Props) => {
               </div>
             </div>
 
-            <div className="w-full h-[420px] flex flex-col gap-4">
+            <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
               {clickedOnInvitations ? (
                 <>
                   {invitations.length == 0 ? (

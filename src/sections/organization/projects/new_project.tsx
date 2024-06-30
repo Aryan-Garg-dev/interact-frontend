@@ -252,7 +252,7 @@ const NewProject = ({ setShow, setProjects }: Props) => {
           ) : step == 1 ? (
             <div className="w-full flex flex-col items-center gap-4 ">
               <div className="w-full text-3xl max-md:text-xl font-semibold">Select Users</div>
-              <div className="w-full h-[420px] flex flex-col gap-4">
+              <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
                 <div className="w-full h-12 flex items-center px-4 gap-4 dark:bg-dark_primary_comp_hover rounded-md">
                   <MagnifyingGlass size={24} />
                   <input

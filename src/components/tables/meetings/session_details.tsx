@@ -170,9 +170,11 @@ const SessionDetailsTable = ({ sessionID, session, setShow }: Props) => {
             >
               <div className="w-1/3 flex-center">{participant.user.name}</div>
               <div className="w-1/6 flex-center">{moment(participant.joined_at).format('hh:mm:ss A')}</div>
-              <div className="w-1/6 flex-center">{moment(participant.left_at).format('hh:mm:ss A')}</div>
               <div className="w-1/6 flex-center">
-                {getParticipationDuration(participant.joined_at, participant.left_at)}
+                {session.isLive ? '-' : moment(participant.left_at).format('hh:mm:ss A')}
+              </div>
+              <div className="w-1/6 flex-center">
+                {getParticipationDuration(participant.joined_at, session.isLive ? new Date() : participant.left_at)}
               </div>
               <div className="w-1/6 flex-center capitalize">{participant.role.replace('group_call_', '')}</div>
             </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, CheckCircle, Circle } from '@phosphor-icons/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
@@ -7,6 +7,8 @@ import { profileCompletionOpenSelector, setProfileCompletionOpen } from '@/slice
 
 const ProfileCompletion = () => {
   const [hide, setHide] = useState(true);
+
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const user = useSelector(userSelector);
   const open = useSelector(profileCompletionOpenSelector);
@@ -34,17 +36,30 @@ const ProfileCompletion = () => {
       const dashOffset = circleLength * ((100 - completionPercentage) / 100);
       circleBackground?.setAttribute('stroke-dashoffset', String(dashOffset));
     }
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      dispatch(setProfileCompletionOpen(false));
+    }
+  };
 
   return (
     <div
+      ref={menuRef}
       className={`${
         open
           ? 'w-[36vw] h-[60vh] pb-4 max-md:mb-12 gap-4 pt-6 max-md:pb-8 max-md:pt-4 px-4 bottom-8 right-12 '
           : 'w-[64px] h-[64px] pb-0 gap-0 pt-16 px-0 bottom-4 right-4 hover:shadow-lg '
       } ${
         hide ? 'hidden' : ''
-      } rounded-xl shadow-md transition-ease-500 max-md:h-fit fixed overflow-y-hidden overflow-x-hidden max-md:mx-auto font-primary flex flex-col dark:text-white items-center bg-white dark:bg-[#84478023] backdrop-blur-md border-[1px] border-gray-400 dark:border-dark_primary_btn max-md:hidden max-md:bg-transparent  z-10`}
+      } rounded-xl shadow-md transition-ease-500 max-md:h-fit fixed overflow-y-hidden overflow-x-hidden max-md:mx-auto font-primary flex flex-col dark:text-white items-center bg-white dark:bg-[#84478023] backdrop-blur-md border-[1px] border-gray-400 dark:border-dark_primary_btn max-md:hidden max-md:bg-transparent z-20`}
     >
       <div
         onClick={() => dispatch(setProfileCompletionOpen(!open))}
