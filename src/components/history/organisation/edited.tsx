@@ -19,6 +19,7 @@ const Edited = ({ history }: Props) => {
               {history.event?.title}
             </Link>{' '}
           </div>
+          : <div>{history.deletedText}</div>
         </OrganizationHistoryWrapper>
       );
     case 8:
@@ -43,6 +44,7 @@ const Edited = ({ history }: Props) => {
               {history.project?.title}
             </Link>{' '}
           </div>
+          : <div>{history.deletedText}</div>
         </OrganizationHistoryWrapper>
       );
     case 14:
@@ -94,6 +96,7 @@ const Edited = ({ history }: Props) => {
               {history.opening?.title}
             </Link>
           </div>
+          : <div>{history.deletedText}</div>
         </OrganizationHistoryWrapper>
       );
     case 30:
@@ -116,6 +119,7 @@ const Edited = ({ history }: Props) => {
               {history.resourceBucket?.title}
             </Link>
           </div>
+          : <div>{history.deletedText}</div>
         </OrganizationHistoryWrapper>
       );
     case 35:
@@ -138,6 +142,19 @@ const Edited = ({ history }: Props) => {
               {history.team?.title}
             </Link>
           </div>
+          : <div>{history.deletedText}</div>
+        </OrganizationHistoryWrapper>
+      );
+    case 42:
+      return (
+        <OrganizationHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
+            Edited a Task:{' '}
+            <Link target="_blank" href={'/organisation/tasks?tid=' + history.taskID} className="font-semibold">
+              {history.task?.title}
+            </Link>
+          </div>
+          : <div>{history.deletedText}</div>
         </OrganizationHistoryWrapper>
       );
     default:

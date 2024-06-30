@@ -168,8 +168,8 @@ const NewTask = ({
     const res = await postHandler(URL, formData);
     if (res.statusCode === 201) {
       const task = res.data.task;
-      if (setTasks) setTasks(prev => [...prev, task]);
-      if (setFilteredTasks) setFilteredTasks(prev => [...prev, task]);
+      if (setTasks) setTasks(prev => [task, ...prev]);
+      if (setFilteredTasks) setFilteredTasks(prev => [task, ...prev]);
 
       setShow(false);
       if (setShowTasks) setShowTasks(true);

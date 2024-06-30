@@ -190,14 +190,17 @@ const MembersList = ({ teamID, setShow, setOrganization }: Props) => {
   ) : clickedOnLeave ? (
     <ConfirmDelete handleDelete={handleLeave} setShow={setClickedOnLeave} title="Confirm Leave?" />
   ) : (
-    <ModalWrapper setShow={setShow} width={'1/4'}>
+    <ModalWrapper setShow={setShow} width={'1/3'}>
       <div className="w-full flex items-center justify-between flex-wrap">
         <div className="text-2xl font-semibold">Team Members ({(team.memberships || []).length}) </div>
         <div className="flex-center gap-2">
           {checkOrgAccess(ORG_SENIOR) && <Pen onClick={() => setClickedOnEditTeam(true)} className="cursor-pointer" />}
           {checkOrgAccess(ORG_MANAGER) && <Trash onClick={() => setClickedOnDelete(true)} className="cursor-pointer" />}
           {team.memberships.map(membership => membership.userID).includes(user.id) && (
-            <div onClick={() => setClickedOnLeave(true)} className="cursor-pointer">
+            <div
+              onClick={() => setClickedOnLeave(true)}
+              className="text-primary_danger text-sm font-medium cursor-pointer"
+            >
               Leave
             </div>
           )}
@@ -208,7 +211,7 @@ const MembersList = ({ teamID, setShow, setOrganization }: Props) => {
         {team.memberships.map(membership => (
           <div
             key={membership.id}
-            className={`w-full h-12 px-4 bg-white ${
+            className={`w-full h-12 px-2 bg-white ${
               checkOrgAccess(ORG_SENIOR) && 'hover:bg-slate-100'
             } rounded-xl border-gray-400 flex items-center text-sm text-primary_black transition-ease-300`}
           >

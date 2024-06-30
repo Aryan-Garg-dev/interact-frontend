@@ -111,7 +111,7 @@ const SessionDetailsTable = ({ sessionID, session, setShow }: Props) => {
                     translate: '-50% 0',
                   }}
                   content={
-                    session.chatDownloadURL != ''
+                    session.transcriptDownloadURL != ''
                       ? !isTranscriptLinkExpired
                         ? 'Download Transcript'
                         : 'Expired'
