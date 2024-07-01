@@ -33,7 +33,7 @@ const CommentBox = ({ type, item, setNoComments, userFetchURL }: Props) => {
 
   useEffect(() => {
     getComments();
-  }, [item]);
+  }, [item.id]);
 
   const getComments = async () => {
     setLoading(true);

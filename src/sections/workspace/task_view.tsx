@@ -116,7 +116,6 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, project,
             else return t;
           })
         );
-      setShow(false);
       Toaster.stopLoad(toaster, task.isCompleted ? 'Task Marked Incomplete' : 'Task Completed', 1);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);

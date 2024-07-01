@@ -77,14 +77,20 @@ const TaskComponent = ({
                 </>
               )}
               {(isAssignedUser(user.id) || accessChecker) && (
-                <div className="bg-primary_comp hover:bg-primary_comp_hover px-4 py-2 rounded-md transition-ease-300">
+                <div
+                  className={`${
+                    task.isCompleted
+                      ? 'bg-priority_low hover:bg-priority_high'
+                      : 'bg-primary_comp hover:bg-priority_low'
+                  } font-semibold px-4 py-2 rounded-md transition-ease-300`}
+                >
                   {task.isCompleted ? (
                     <span onClick={toggleComplete} className="relative group cursor-pointer">
                       <ToolTip content="Mark Incomplete" />
                       <div className="font-semibold">Completed</div>
                     </span>
                   ) : (
-                    <div onClick={toggleComplete} className="w-fit text-lg font-semibold cursor-pointer">
+                    <div onClick={toggleComplete} className="cursor-pointer">
                       Mark Completed
                     </div>
                   )}
@@ -168,7 +174,7 @@ const TaskComponent = ({
             </div>
           )
         )}
-        <div>
+        <div className="pb-32">
           <div className="text-xl font-medium">Conversations</div>
           <CommentBox type="task" item={task} userFetchURL={userFetchURL} />
         </div>

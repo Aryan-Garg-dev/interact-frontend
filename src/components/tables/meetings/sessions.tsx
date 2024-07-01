@@ -35,7 +35,13 @@ const SessionTable = ({ sessions, setClickedOnSession, setClickedSessionID }: Pr
         >
           <div className="w-[30%] flex-center">{session.id}</div>
           <div className="w-[30%] flex-center">{moment(session.startedAt).format('hh:mm A, dddd DD MMMM')}</div>
-          <div className="w-[30%] flex-center">{moment(session.endedAt).format('hh:mm A, dddd DD MMMM')}</div>
+          <div className="w-[30%] flex-center">
+            {session.isLive ? (
+              <div className="w-fit text-sm px-2 py-1 bg-priority_low rounded-full">Session is Live!</div>
+            ) : (
+              moment(session.endedAt).format('hh:mm A, dddd DD MMMM')
+            )}
+          </div>
           <div className="w-[10%] flex-center"></div>
         </div>
       ))}

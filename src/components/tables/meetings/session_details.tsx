@@ -68,7 +68,7 @@ const SessionDetailsTable = ({ sessionID, session, setShow }: Props) => {
       <div className="w-full flex items-center gap-4 py-2">
         <div className="text-3xl font-semibold">Session Details</div>
         {session?.isLive ? (
-          <div className="marker:w-fit text-sm px-2 py-1 bg-priority_low rounded-full">Session is Live!</div>
+          <div className="w-fit text-sm px-2 py-1 bg-priority_low rounded-full">Session is Live!</div>
         ) : (
           session && (
             <div className="flex items-center gap-4">
