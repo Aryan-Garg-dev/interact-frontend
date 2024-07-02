@@ -35,7 +35,7 @@ const Tagged = ({ notification }: Props) => {
           {notification.sender.name}
         </Link>{' '}
       </span>
-      tagged you in a
+      Tagged you in a
       <span>
         {' '}
         <Link className="font-bold capitalize" href={getRedirectURL()}>

@@ -1,42 +1,72 @@
 import React from 'react';
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import Link from 'next/link';
 import { Notification } from '@/types';
 import NotificationWrapper from '@/wrappers/notification';
+import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 
 interface Props {
   notification: Notification;
   status: number;
-  org?: boolean;
 }
 
-const ApplicationUpdate = ({ notification, status, org = false }: Props) => {
+const ApplicationUpdate = ({ notification, status }: Props) => {
+  const getImageURL = () => {
+    switch (notification.notificationType) {
+      case 20:
+        return `${USER_PROFILE_PIC_URL}/${notification.opening.organization?.user.profilePic}`;
+      default:
+        return `${PROJECT_PIC_URL}/${notification.opening.project?.coverPic}`;
+    }
+  };
+
+  const getLinkURL = () => {
+    switch (notification.notificationType) {
+      case 20:
+        return `/explore/organisations/${notification.opening.organizationID}`;
+      default:
+        return `/explore/project/${notification.opening.projectID}`;
+    }
+  };
+
+  const getTitle = () => {
+    switch (notification.notificationType) {
+      case 20:
+        return notification.opening.organization?.title;
+      default:
+        return notification.opening.project?.title;
+    }
+  };
+
+  const getStatusText = () => {
+    switch (status) {
+      case 6:
+        return 'You got selected for the opening';
+      case 7:
+        return 'You got rejected for the opening';
+      default:
+        return '';
+    }
+  };
+
   return (
-    <NotificationWrapper
-      notification={notification}
-      imageURL={
-        org
-          ? `${USER_PROFILE_PIC_URL}/${notification.opening.organization?.user.profilePic}`
-          : `${PROJECT_PIC_URL}/${notification.opening.project?.coverPic}`
-      }
-    >
+    <NotificationWrapper notification={notification} imageURL={getImageURL()}>
       <div className="gap-2 cursor-default">
-        Your Application for {notification.opening.title} at{' '}
+        {notification.notificationType === 20 ? (
+          <span>Your Application for</span>
+        ) : (
+          <span>{getStatusText()}</span>
+        )}
+        {notification.notificationType !== 20 && ' of '}
         <span>
-          {org ? (
-            <Link href={`/explore/organisations/${notification.opening.organizationID}`} className="font-bold">
-              {notification.opening.organization?.title}
-            </Link>
-          ) : (
-            <Link href={`/explore/project/${notification.opening.projectID}`} className="font-bold">
-              {notification.opening.project?.title}
-            </Link>
-          )}{' '}
-        </span>
-        was {status === 0 ? 'Rejected' : 'Accepted'}
+          <Link href={getLinkURL()} className="font-bold capitalize">
+            {getTitle()}
+          </Link>
+        </span>{' '}
+        {getStatusText()}
       </div>
     </NotificationWrapper>
   );
 };
 
 export default ApplicationUpdate;
+

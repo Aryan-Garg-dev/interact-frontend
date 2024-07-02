@@ -43,7 +43,7 @@ const Comment = ({ notification }: Props) => {
           {notification.sender.name}
         </Link>{' '}
       </span>
-      commented on your
+      Commented on your
       <span>
         <Link className="font-bold capitalize" href={getRedirectURL()}>
           {getType()}.

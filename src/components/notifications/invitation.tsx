@@ -32,7 +32,7 @@ const Invitation = ({ notification }: Props) => {
           {notification.sender.name}
         </Link>{' '}
       </span>
-      accepted your Invitation to join
+      Accepted your Invitation to join
       <span>
         {' '}
         <Link className="font-bold capitalize" href={getRedirectURL()}>
