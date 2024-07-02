@@ -78,15 +78,15 @@ const SubTaskView = ({
 
   return (
     <>
-      <div className="fixed top-24 max-lg:top-20 w-[640px] max-lg:w-5/6 max-h-[36rem] overflow-y-auto backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col gap-4 rounded-lg p-10 max-lg:p-5 dark:text-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50 max-lg:z-[60]">
+      <div className="fixed top-[15%] max-lg:top-20 w-[640px] max-lg:w-5/6 max-h-[70%] overflow-y-auto bg-white flex flex-col gap-4 rounded-lg p-6 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50 max-lg:z-[60]">
         <div className="w-full flex flex-col gap-2">
-          <ArrowArcLeft
+          {/* <ArrowArcLeft
             className="cursor-pointer"
             size={24}
             onClick={() => {
               setShow(false);
             }}
-          />
+          /> */}
           <div className="w-full flex justify-between items-center">
             <div className="text-4xl font-semibold">{subTask.title}</div>
             {isAssignedUser(userID) && (

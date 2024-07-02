@@ -240,6 +240,20 @@ html {
   background-color: #363636;
   border-radius: 50px;
 }
+
+.small_scrollbar::-webkit-scrollbar {
+  height: 8px; 
+}
+
+.small_scrollbar::-webkit-scrollbar-thumb {
+  background-color: #1a1919;
+  border-radius: 10px;
+}
+
+.small_scrollbar::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
 .file-table td {
   text-align: center;
   padding-block: 0.5rem;

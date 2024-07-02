@@ -11,7 +11,7 @@ import Comment from '@/components/notifications/comment';
 import Welcome from '@/components/notifications/welcome';
 import ChatRequest from '@/components/notifications/chatRequest';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUnreadNotifications, unreadNotificationsSelector } from '@/slices/feedSlice';
+import { setUnreadNotifications } from '@/slices/feedSlice';
 import { NOTIFICATION_URL } from '@/config/routes';
 import Link from 'next/link';
 import { SERVER_ERROR } from '@/config/errors';
@@ -122,6 +122,7 @@ const Notifications = ({ setShow }: Props) => {
                       return <Impressions notification={notification} />;
                     case 21:
                     case 22:
+                    case 23:
                       return <Tagged notification={notification} />;
                     default:
                       return <></>;

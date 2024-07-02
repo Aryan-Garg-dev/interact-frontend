@@ -114,6 +114,7 @@ const Notifications = () => {
                         return <Impressions notification={notification} />;
                       case 21:
                       case 22:
+                      case 23:
                         return <Tagged notification={notification} />;
 
                       default:

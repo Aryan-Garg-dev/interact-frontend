@@ -14,6 +14,8 @@ const Tagged = ({ notification }: Props) => {
         return 'post';
       case 22:
         return 'announcement';
+      case 23:
+        return 'comment';
       default:
         return '';
     }
@@ -24,8 +26,18 @@ const Tagged = ({ notification }: Props) => {
         return '/explore/post/' + notification.postID;
       case 22:
         return '/explore/announcement/' + notification.announcementID;
+      case 23:
+        if (notification.comment.postID) return '/explore/post/' + notification.comment.postID;
+        if (notification.comment.projectID) return '/explore?pid=' + notification.comment.project.slug;
+        if (notification.comment.announcementID) return '/home' + notification.comment.announcement;
+        if (notification.comment.taskID) {
+          const task = notification.comment.task;
+          if (task?.organizationID) return `/organisations?oid=${task.organizationID}&redirect_url=/tasks`;
+          return '/workspace/tasks/' + task?.project?.slug;
+        }
+        return '#';
       default:
-        return '';
+        return '#';
     }
   };
   return (

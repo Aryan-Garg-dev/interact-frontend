@@ -250,6 +250,10 @@ export interface Comment {
   post: Post;
   projectID: string;
   project: Project;
+  announcementID: string;
+  announcement: Announcement | null;
+  taskID: string;
+  task: Task | null;
   parentCommentID: string;
   isRepliedComment: boolean;
   level: number;
@@ -299,6 +303,8 @@ export interface Notification {
   event: Event;
   announcementID: string;
   announcement: Announcement;
+  commentID: string;
+  comment: Comment;
   impressionCount: number;
   isRead: boolean;
   createdAt: Date;
