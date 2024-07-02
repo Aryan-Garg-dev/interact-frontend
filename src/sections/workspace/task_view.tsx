@@ -116,7 +116,6 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, project,
             else return t;
           })
         );
-      setShow(false);
       Toaster.stopLoad(toaster, task.isCompleted ? 'Task Marked Incomplete' : 'Task Completed', 1);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
@@ -147,36 +146,16 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, project,
   return (
     <>
       {clickedOnEditTask && (
-        <EditTask
-          org={false}
-          project={project}
-          task={task}
-          setShow={setClickedOnEditTask}
-          setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
-        />
+        <EditTask org={false} project={project} task={task} setShow={setClickedOnEditTask} setTasks={setTasks} />
       )}
       {clickedOnEditSubTask && (
-        <EditSubTask
-          subTask={clickedSubTask}
-          task={task}
-          setShow={setClickedOnEditSubTask}
-          setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
-        />
+        <EditSubTask subTask={clickedSubTask} task={task} setShow={setClickedOnEditSubTask} setTasks={setTasks} />
       )}
       {clickedOnDeleteTask && <ConfirmDelete setShow={setClickedOnDeleteTask} handleDelete={handleDelete} />}
       {clickedOnDeleteSubTask && (
         <ConfirmDelete setShow={setClickedOnDeleteSubTask} handleDelete={handleDeleteSubTask} />
       )}
-      {clickedOnNewSubTask && (
-        <NewSubTask
-          setShow={setClickedOnNewSubTask}
-          task={task}
-          setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
-        />
-      )}
+      {clickedOnNewSubTask && <NewSubTask setShow={setClickedOnNewSubTask} task={task} setTasks={setTasks} />}
       {clickedOnViewSubTask && (
         <SubTaskView
           setShow={setClickedOnViewSubTask}
@@ -185,7 +164,6 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, project,
           setClickedOnEditSubTask={setClickedOnEditSubTask}
           setClickedOnDeleteSubTask={setClickedOnDeleteSubTask}
           setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
           getUserTitle={getUserTitle}
           getUserRole={getUserRole}
         />
@@ -201,8 +179,7 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, project,
         setClickedOnViewSubTask={setClickedOnViewSubTask}
         toggleComplete={toggleComplete}
         setShow={setShow}
-        getUserTitle={getUserTitle}
-        getUserRole={getUserRole}
+        userFetchURL={`/membership/members/${project.id}`}
       />
     </>
   );

@@ -28,6 +28,7 @@ import {
   Review,
   SubTask,
   Task,
+  Team,
   User,
 } from '.';
 
@@ -150,6 +151,7 @@ export const initialMembership: Membership = {
   project: initialProject,
   userID: '',
   user: initialUser,
+  teams: [],
   role: '',
   title: '',
   active: false,
@@ -184,6 +186,7 @@ export const initialOrganization: Organization = {
   title: '',
   memberships: [],
   invitations: [],
+  teams: [],
   noEvents: 0,
   noMembers: 0,
   noProjects: 0,
@@ -196,6 +199,7 @@ export const initialOrganizationMembership: OrganizationMembership = {
   organization: initialOrganization,
   userID: '',
   user: initialUser,
+  teams: [],
   role: '',
   title: '',
   createdAt: new Date(),
@@ -217,6 +221,7 @@ export const initialComment: Comment = {
   parentCommentID: '',
   isRepliedComment: false,
   level: 1,
+  taggedUsers: [],
 };
 
 export const initialApplication: Application = {
@@ -343,6 +348,8 @@ export const initialInvitation: Invitation = {
   id: '',
   userID: '',
   user: initialUser,
+  senderID: '',
+  sender: initialUser,
   projectID: '',
   project: initialProject,
   organizationID: '',
@@ -403,6 +410,8 @@ export const initialTask: Task = {
   id: '',
   title: '',
   description: '',
+  userID: '',
+  user: initialUser,
   tags: [],
   users: [],
   subTasks: [],
@@ -413,6 +422,7 @@ export const initialTask: Task = {
   organization: initialOrganization,
   organizationID: '',
   priority: 'low',
+  noComments: 0,
 };
 
 export const initialSubTask: SubTask = {
@@ -514,4 +524,15 @@ export const initialMeeting: Meeting = {
   createdAt: new Date(),
   nextSessionTime: new Date(),
   sessions: [],
+};
+
+export const initialTeam: Team = {
+  id: '',
+  title: '',
+  description: '',
+  color: '#ffffff',
+  memberships: [],
+  noUsers: 0,
+  tags: [],
+  createdAt: new Date(),
 };

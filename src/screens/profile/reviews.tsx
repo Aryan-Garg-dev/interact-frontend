@@ -1,4 +1,4 @@
-import { Review } from '@/types';
+import { Review, ReviewData } from '@/types';
 import React, { useEffect, useState } from 'react';
 import { ORG_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
@@ -18,19 +18,6 @@ import Masonry from 'react-masonry-css';
 import Mascot from '@/components/fillers/mascot';
 interface Props {
   orgID: string;
-}
-
-interface Reviews {
-  1: number;
-  2: number;
-  3: number;
-  4: number;
-  5: number;
-}
-interface ReviewData {
-  total: number;
-  average: number;
-  counts: Reviews;
 }
 
 const Reviews = ({ orgID }: Props) => {
@@ -168,7 +155,7 @@ const Reviews = ({ orgID }: Props) => {
 
             {user.organizationMemberships.map(m => m.organizationID).includes(orgID) && (
               //TODO not show if review is already added
-              <NewReview orgID={orgID} setReviews={setReviews} />
+              <NewReview orgID={orgID} setReviews={setReviews} setReviewData={setReviewData} />
             )}
 
             {reviews.length > 0 ? (

@@ -1,5 +1,5 @@
 import { Task } from '@/types';
-import getCompletionPercentage from '@/utils/funcs/task_completion';
+import getCompletionPercentage from '@/utils/funcs/task';
 import moment from 'moment';
 import React from 'react';
 

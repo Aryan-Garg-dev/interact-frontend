@@ -31,7 +31,6 @@ interface Props {
   org: boolean;
   task: Task;
   setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
 const EditTask = ({
@@ -41,7 +40,6 @@ const EditTask = ({
   project = initialProject,
   task,
   setTasks,
-  setFilteredTasks,
 }: Props) => {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
@@ -180,22 +178,6 @@ const EditTask = ({
                 else return t;
               })
             );
-          if (setFilteredTasks)
-            setFilteredTasks(prev =>
-              prev.map(t => {
-                if (t.id == task.id)
-                  return {
-                    ...t,
-                    title,
-                    description,
-                    tags,
-                    priority,
-                    users: selectedUsers,
-                    deadline: new Date(deadline),
-                  };
-                else return t;
-              })
-            );
           setShow(false);
           Toaster.stopLoad(toaster, 'Task Edited!', 1);
         } else {
@@ -205,13 +187,6 @@ const EditTask = ({
       } else {
         if (setTasks)
           setTasks(prev =>
-            prev.map(t => {
-              if (t.id == task.id) return { ...t, title, description, priority, tags, deadline: new Date(deadline) };
-              else return t;
-            })
-          );
-        if (setFilteredTasks)
-          setFilteredTasks(prev =>
             prev.map(t => {
               if (t.id == task.id) return { ...t, title, description, priority, tags, deadline: new Date(deadline) };
               else return t;
@@ -264,7 +239,7 @@ const EditTask = ({
 
   return (
     <>
-      <div className="fixed top-24 max-lg:top-20 w-[640px] max-lg:w-5/6 backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col gap-4 rounded-lg p-10 max-lg:p-5 dark:text-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50 max-lg:z-[60]">
+      <div className="fixed top-[10%] max-h-[80%] max-md:top-20 w-[640px] overflow-y-auto max-md:w-5/6 backdrop-blur-2xl bg-white flex flex-col gap-4 rounded-lg p-10 max-md:p-5 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
         <div className="text-3xl max-lg:text-xl font-semibold">
           {status == 0 ? 'Task Info' : status == 1 ? 'Select Users' : 'Review Details'}
         </div>

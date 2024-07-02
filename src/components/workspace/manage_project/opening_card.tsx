@@ -99,24 +99,25 @@ const OpeningCard = ({ opening, project, setProject, org = false }: Props) => {
                 </div>
               )}
 
-              {hasAccess &&
-                (opening.noApplications > 0 ? (
-                  <Link
-                    href={`/workspace/manage/applications/${opening.id}`}
-                    className="w-fit text-[#15bffd] text-sm max-md:text-sm underline underline-offset-4"
-                  >
-                    View
-                  </Link>
-                ) : (
-                  <div className="w-fit dark:text-white text-sm max-md:text-sm underline underline-offset-4 cursor-default">
-                    No applications
-                  </div>
-                ))}
+              {project.userID == user.id ||
+                (user.managerProjects.includes(project.id) &&
+                  (opening.noApplications > 0 ? (
+                    <Link
+                      href={`/workspace/manage/applications/${opening.id}`}
+                      className="w-fit text-[#15bffd] text-sm max-md:text-sm underline underline-offset-4"
+                    >
+                      View
+                    </Link>
+                  ) : (
+                    <div className="w-fit dark:text-white text-sm max-md:text-sm underline underline-offset-4 cursor-default">
+                      No applications
+                    </div>
+                  )))}
             </div>
           </div>
-          <div className="flex gap-3">
-            {hasAccess && <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={24} />}
-            {hasAccess && (
+          {hasAccess && (
+            <div className="flex gap-3">
+              <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={24} />
               <TrashSimple
                 onClick={() => setClickedOnDelete(true)}
                 className="cursor-pointer"
@@ -124,8 +125,8 @@ const OpeningCard = ({ opening, project, setProject, org = false }: Props) => {
                 color="#ea333e"
                 weight="fill"
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
-import getInvitationStatus from '@/utils/funcs/get_invitation_status';
+import getInvitationStatus from '@/utils/funcs/invitation';
 import { SERVER_ERROR } from '@/config/errors';
 import deleteHandler from '@/handlers/delete_handler';
 import Toaster from '@/utils/toaster';

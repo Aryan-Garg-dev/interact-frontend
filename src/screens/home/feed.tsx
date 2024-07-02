@@ -100,37 +100,33 @@ const Feed = () => {
 
         {loading ? (
           <PostsLoader />
+        ) : feed.length === 0 ? (
+          <NoFeed />
         ) : (
-          <>
-            {feed.length === 0 ? (
-              <NoFeed />
-            ) : (
-              <InfiniteScroll
-                className="w-full flex flex-col gap-4 dark:gap-0"
-                dataLength={feed.length}
-                next={getFeed}
-                hasMore={hasMore}
-                loader={<PostsLoader />}
-              >
-                {feed.map(item => {
-                  if ('noImpressions' in item) {
-                    if (item.isRePost) return <RePostComponent key={item.id} setFeed={setFeed} post={item} />;
-                    else return <PostComponent key={item.id} setFeed={setFeed} post={item} />;
-                  } else if ('totalVotes' in item) {
-                    return (
-                      <PollCard
-                        key={item.id}
-                        poll={item}
-                        organisation={item.organization || initialOrganization}
-                        setPolls={setFeed}
-                        hoverShadow={false}
-                      />
-                    );
-                  } else return <AnnouncementCard key={item.id} announcement={item} />;
-                })}
-              </InfiniteScroll>
-            )}
-          </>
+          <InfiniteScroll
+            className="w-full flex flex-col gap-4 dark:gap-0"
+            dataLength={feed.length}
+            next={getFeed}
+            hasMore={hasMore}
+            loader={<PostsLoader />}
+          >
+            {feed.map(item => {
+              if ('noImpressions' in item) {
+                if (item.isRePost) return <RePostComponent key={item.id} setFeed={setFeed} post={item} />;
+                else return <PostComponent key={item.id} setFeed={setFeed} post={item} />;
+              } else if ('totalVotes' in item) {
+                return (
+                  <PollCard
+                    key={item.id}
+                    poll={item}
+                    organisation={item.organization || initialOrganization}
+                    setPolls={setFeed}
+                    hoverShadow={false}
+                  />
+                );
+              } else return <AnnouncementCard key={item.id} announcement={item} />;
+            })}
+          </InfiniteScroll>
         )}
       </div>
     </div>

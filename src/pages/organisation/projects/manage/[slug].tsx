@@ -10,7 +10,6 @@ import Toaster from '@/utils/toaster';
 import { GetServerSidePropsContext } from 'next/types';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
-import { ArrowArcLeft } from '@phosphor-icons/react';
 import Openings from '@/screens/workspace/manage_project/openings';
 import Loader from '@/components/common/loader';
 import Collaborators from '@/screens/workspace/manage_project/collaborators';
@@ -56,7 +55,7 @@ const ManageProject = ({ slug }: Props) => {
       <OrgSidebar index={3} />
       <MainWrapper>
         <div className="w-full flex flex-col items-center gap-4">
-          <div className="w-[50vw] max-lg:w-[75vw] max-md:w-[95%] flex items-start gap-3 p-base_padding pl-0 pt-28">
+          <div className="w-[70vw] max-lg:w-[75vw] max-md:w-[95%] flex items-start gap-3 p-base_padding pl-0 pt-28">
             <div className="text-5xl font-bold dark:text-white font-primary">Manage Project</div>
           </div>
           <TabMenu items={['Openings', 'Collaborators']} active={active} setState={setActive} />

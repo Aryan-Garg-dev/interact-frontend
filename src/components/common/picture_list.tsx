@@ -43,7 +43,7 @@ const PictureList = ({ users, size = 4, gap = 1 }: Props) => {
     'h-12',
     'h-18',
   ];
-  return users.length > 0 ? (
+  return users?.length > 0 ? (
     <div className="flex gap-1">
       <div
         className={`w-${
@@ -53,7 +53,7 @@ const PictureList = ({ users, size = 4, gap = 1 }: Props) => {
             }).length +
           size -
           1
-        } h-6 relative mr-1`}
+        } h-${size} relative mr-1`}
       >
         {users
           .filter((u, index) => {

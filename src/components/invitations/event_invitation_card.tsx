@@ -73,9 +73,6 @@ const EventInvitationCard = ({ invitation, setInvitations }: Props) => {
 
   return (
     <>
-      {/* {clickedOnReject && (
-        <ConfirmDelete setShow={setClickedOnReject} handleDelete={handleReject} title="Confirm Reject?" />
-      )} */}
       <div className="w-[45%] font-primary bg-white border-[1px] border-primary_btn rounded-md flex-col items-center justify-start gap-6 p-4 hover:shadow-lg transition-ease-300">
         <Link target="_blank" href={`/explore/event/${invitation.eventID}`}>
           <Image
@@ -88,7 +85,7 @@ const EventInvitationCard = ({ invitation, setInvitations }: Props) => {
           />
         </Link>
         <div className="w-full flex flex-col text-center gap-4 items-center justify-between">
-          <Link target="_blank" href={`/events/${invitation.event?.id}`} className="text-3xl font-bold text-gradient">
+          <Link target="_blank" href={`/events/${invitation.event?.id}`} className="text-2xl font-bold text-gradient">
             {invitation.project.title}
           </Link>
           <Link target="_blank" href={`/explore/event/${invitation.eventID}`} className="text-2xl font-semibold">

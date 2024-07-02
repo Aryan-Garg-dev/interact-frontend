@@ -72,6 +72,10 @@ const History = () => {
                     case 21:
                     case 24:
                     case 27:
+                    case 31:
+                    case 34:
+                    case 37:
+                    case 39:
                       return <Created key={index} history={history} />;
                     case 1:
                     case 4:
@@ -85,7 +89,11 @@ const History = () => {
                     case 25:
                     case 28:
                     case 29:
-                      return <Deleted history={history} />;
+                    case 33:
+                    case 36:
+                    case 38:
+                    case 41:
+                      return <Deleted key={index} history={history} />;
                     case 2:
                     case 8:
                     case 11:
@@ -96,6 +104,10 @@ const History = () => {
                     case 23:
                     case 26:
                     case 30:
+                    case 32:
+                    case 35:
+                    case 40:
+                    case 42:
                       return <Edited key={index} history={history} />;
                     default:
                       return <></>;

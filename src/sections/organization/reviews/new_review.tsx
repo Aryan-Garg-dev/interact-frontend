@@ -7,16 +7,17 @@ import Toaster from '@/utils/toaster';
 import postHandler from '@/handlers/post_handler';
 import { SERVER_ERROR } from '@/config/errors';
 import { X } from '@phosphor-icons/react';
-import { Review } from '@/types';
+import { Review, ReviewCounts, ReviewData } from '@/types';
 import StarRating from '@/components/organization/star_rating';
 import { reviewModalOpenSelector, setReviewModalOpen } from '@/slices/feedSlice';
 
 interface Props {
   orgID: string;
   setReviews: React.Dispatch<React.SetStateAction<Review[]>>;
+  setReviewData: React.Dispatch<React.SetStateAction<ReviewData>>;
 }
 
-const NewReview = ({ orgID, setReviews }: Props) => {
+const NewReview = ({ orgID, setReviews, setReviewData }: Props) => {
   const [content, setContent] = useState('');
   const [rating, setRating] = useState(0);
   const [isAnonymous, setIsAnonymous] = useState(false);
@@ -48,6 +49,17 @@ const NewReview = ({ orgID, setReviews }: Props) => {
     if (res.statusCode === 201) {
       const review = res.data.review;
       setReviews(prev => [review, ...prev]);
+      setReviewData(prev => {
+        return {
+          ...prev,
+          counts: {
+            ...prev.counts,
+            [rating]: prev.counts[rating as keyof ReviewCounts] + 1,
+          },
+          average: Number(((prev.average * prev.total + rating) / (prev.total + 1)).toFixed(2)),
+          total: prev.total + 1,
+        };
+      });
       setContent('');
       setRating(0);
       setIsAnonymous(false);

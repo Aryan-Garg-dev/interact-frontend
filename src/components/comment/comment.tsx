@@ -10,11 +10,12 @@ import { userSelector } from '@/slices/userSlice';
 import Toaster from '@/utils/toaster';
 import deleteHandler from '@/handlers/delete_handler';
 import { SERVER_ERROR } from '@/config/errors';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
   comment: Comment;
   setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
-  setNoComments: React.Dispatch<React.SetStateAction<number>>;
+  setNoComments?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
@@ -30,7 +31,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
     if (res.statusCode == 204) {
       Toaster.stopLoad(toaster, 'Comment Deleted', 1);
       setComments(prev => prev.filter(c => c.id != commentID));
-      setNoComments(prev => prev - 1);
+      if (setNoComments) setNoComments(prev => prev - 1);
     } else {
       if (res.data.message != '') Toaster.stopLoad(toaster, res.data.message, 0);
       else {
@@ -89,7 +90,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
         </div>
         <div className="flex flex-col gap-2">
           <div className="w-fit bg-primary_comp dark:bg-dark_primary_comp_hover px-4 py-2 max-md:px-2 max-md:py-1 text-sm max-md:text-xs rounded-xl max-md:rounded-lg">
-            {comment.content}
+            {renderContentWithLinks(comment.content, comment.taggedUsers)}
           </div>
           <LowerComment comment={comment} clickedOnReply={clickedOnReply} setClickedOnReply={setClickedOnReply} />
         </div>

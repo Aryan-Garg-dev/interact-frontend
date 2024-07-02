@@ -14,20 +14,20 @@ import EditSubTask from '@/sections/workspace/edit_sub_task';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import TaskComponent from '@/sections/tasks/task_view';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
-import { ORG_MANAGER } from '@/config/constants';
+import { ORG_SENIOR } from '@/config/constants';
 import EditTask from '@/sections/tasks/edit_task';
+import { userSelector } from '@/slices/userSlice';
 
 interface Props {
   taskID: number;
   tasks: Task[];
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
   setClickedTaskID?: React.Dispatch<React.SetStateAction<number>>;
   organization: Organization;
 }
 
-const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organization, setClickedTaskID }: Props) => {
+const TaskView = ({ taskID, tasks, setShow, setTasks, organization, setClickedTaskID }: Props) => {
   const [clickedOnEditTask, setClickedOnEditTask] = useState(false);
   const [clickedOnDeleteTask, setClickedOnDeleteTask] = useState(false);
   const [clickedOnNewSubTask, setClickedOnNewSubTask] = useState(false);
@@ -38,6 +38,7 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
 
   const task = tasks[taskID] || initialTask;
 
+  const user = useSelector(userSelector);
   const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleDelete = async () => {
@@ -49,7 +50,6 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
 
     if (res.statusCode === 204) {
       if (setTasks) setTasks(prev => prev.filter(t => t.id != task.id));
-      if (setFilteredTasks) setFilteredTasks(prev => prev.filter(t => t.id != task.id));
       setShow(false);
       Toaster.stopLoad(toaster, 'Task Deleted', 1);
     } else {
@@ -77,17 +77,6 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
             else return t;
           })
         );
-      if (setFilteredTasks)
-        setFilteredTasks(prev =>
-          prev.map(t => {
-            if (t.id == task.id)
-              return {
-                ...t,
-                subTasks: t.subTasks.filter(s => s.id != clickedSubTask.id),
-              };
-            else return t;
-          })
-        );
       setShow(false);
       Toaster.stopLoad(toaster, 'Sub Task Deleted', 1);
     } else {
@@ -99,7 +88,9 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
   const toggleComplete = async () => {
     const toaster = Toaster.startLoad(task.isCompleted ? 'Marking Incomplete' : 'Marking Completed');
 
-    const URL = `${TASK_URL}/completed/${task.id}`;
+    const URL = checkOrgAccess(ORG_SENIOR)
+      ? `${ORG_URL}/${currentOrgID}/tasks/completed/${task.id}`
+      : `${TASK_URL}/completed/${task.id}`;
 
     const res = await patchHandler(URL, { isCompleted: !task.isCompleted });
 
@@ -111,14 +102,6 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
             else return t;
           })
         );
-      if (setFilteredTasks)
-        setFilteredTasks(prev =>
-          prev.map(t => {
-            if (t.id == task.id) return { ...t, isCompleted: !task.isCompleted };
-            else return t;
-          })
-        );
-      setShow(false);
       Toaster.stopLoad(toaster, task.isCompleted ? 'Task Marked Incomplete' : 'Task Completed', 1);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
@@ -142,6 +125,17 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
     return role;
   };
 
+  const isAssignedUser = (userID: string) => {
+    var check = false;
+    task.users?.forEach(user => {
+      if (user.id == userID) {
+        check = true;
+        return;
+      }
+    });
+    return check;
+  };
+
   return (
     <>
       {clickedOnEditTask && (
@@ -151,17 +145,10 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
           task={task}
           setShow={setClickedOnEditTask}
           setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
         />
       )}
       {clickedOnEditSubTask && (
-        <EditSubTask
-          subTask={clickedSubTask}
-          task={task}
-          setShow={setClickedOnEditSubTask}
-          setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
-        />
+        <EditSubTask subTask={clickedSubTask} task={task} setShow={setClickedOnEditSubTask} setTasks={setTasks} />
       )}
       {clickedOnDeleteTask && <ConfirmDelete setShow={setClickedOnDeleteTask} handleDelete={handleDelete} />}
       {clickedOnDeleteSubTask && (
@@ -172,7 +159,7 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
           setShow={setClickedOnNewSubTask}
           task={task}
           setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
+          byOrgManager={!isAssignedUser(user.id) && checkOrgAccess(ORG_SENIOR)}
         />
       )}
       {clickedOnViewSubTask && (
@@ -183,14 +170,13 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
           setClickedOnEditSubTask={setClickedOnEditSubTask}
           setClickedOnDeleteSubTask={setClickedOnDeleteSubTask}
           setTasks={setTasks}
-          setFilteredTasks={setFilteredTasks}
           getUserTitle={getUserTitle}
           getUserRole={getUserRole}
         />
       )}
       <TaskComponent
         task={task}
-        accessChecker={checkOrgAccess(ORG_MANAGER)}
+        accessChecker={checkOrgAccess(ORG_SENIOR)}
         setClickedTaskID={setClickedTaskID}
         setClickedOnEditTask={setClickedOnEditTask}
         setClickedOnDeleteTask={setClickedOnDeleteTask}
@@ -199,8 +185,7 @@ const TaskView = ({ taskID, tasks, setShow, setTasks, setFilteredTasks, organiza
         setClickedOnViewSubTask={setClickedOnViewSubTask}
         toggleComplete={toggleComplete}
         setShow={setShow}
-        getUserTitle={getUserTitle}
-        getUserRole={getUserRole}
+        userFetchURL={`/org/${currentOrgID}/membership/members`}
       />
     </>
   );

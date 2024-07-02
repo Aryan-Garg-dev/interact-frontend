@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { COMMENT_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { COMMENT_URL } from '@/config/routes';
 import Toaster from '@/utils/toaster';
-import Image from 'next/image';
-import { Announcement, Comment, Event, Post, Project } from '@/types';
+import { Announcement, Comment, Event, Post, Project, Task } from '@/types';
 import getHandler from '@/handlers/get_handler';
 import { userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
@@ -11,14 +10,16 @@ import socketService from '@/config/ws';
 import { SERVER_ERROR } from '@/config/errors';
 import CommentsLoader from '../loaders/comments';
 import CommentComponent from './comment';
+import CommentInput from './input';
 
 interface Props {
   type: string;
-  item: Project | Post | Event | Announcement;
-  setNoComments: React.Dispatch<React.SetStateAction<number>>;
+  item: Project | Post | Event | Announcement | Task;
+  setNoComments?: React.Dispatch<React.SetStateAction<number>>;
+  userFetchURL?: string;
 }
 
-const CommentBox = ({ type, item, setNoComments }: Props) => {
+const CommentBox = ({ type, item, setNoComments, userFetchURL }: Props) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
@@ -26,12 +27,13 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
   const [comments, setComments] = useState<Comment[]>([]);
 
   const [commentBody, setCommentBody] = useState('');
+  const [taggedUsernames, setTaggedUsernames] = useState<string[]>([]);
 
   const limit = 10;
 
   useEffect(() => {
     getComments();
-  }, [item]);
+  }, [item.id]);
 
   const getComments = async () => {
     setLoading(true);
@@ -66,30 +68,38 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
         ? {
             postID: item.id,
             content: commentBody,
+            taggedUsernames,
           }
         : type === 'project'
         ? {
             projectID: item.id,
             content: commentBody,
+            taggedUsernames,
           }
         : type === 'event'
         ? {
             eventID: item.id,
             content: commentBody,
+            taggedUsernames,
           }
         : type === 'announcement'
         ? {
             announcementID: item.id,
             content: commentBody,
+            taggedUsernames,
           }
-        : {};
+        : {
+            taskID: item.id,
+            content: commentBody,
+            taggedUsernames,
+          };
 
     const res = await postHandler(COMMENT_URL, formData);
     if (res.statusCode === 201) {
       Toaster.stopLoad(toaster, 'Commented!', 1);
       const newComments = [res.data.comment, ...comments];
       setComments(newComments);
-      setNoComments(prev => prev + 1);
+      if (setNoComments) setNoComments(prev => prev + 1);
       setCommentBody('');
       if (item.userID && item.userID != loggedInUser.id)
         socketService.sendNotification(item.userID, `${loggedInUser.name} commented on your ${type}!`);
@@ -105,35 +115,15 @@ const CommentBox = ({ type, item, setNoComments }: Props) => {
 
   return (
     <div className="w-full h-full overflow-y-auto flex flex-col over p-4 font-primary gap-4 max-md:px-4">
-      <div className="w-full flex gap-2">
-        <Image
-          crossOrigin="anonymous"
-          className="w-8 h-8 rounded-full cursor-default mt-2"
-          width={50}
-          height={50}
-          alt="user"
-          src={`${USER_PROFILE_PIC_URL}/${loggedInUser.profilePic}`}
-        />
-        <div className="w-full flex justify-between gap-3 max-md:flex-col relative max-md:gap-2 max-md:items-end">
-          <textarea
-            value={commentBody}
-            onChange={el => {
-              setCommentBody(el.target.value);
-            }}
-            onKeyDown={el => {
-              if (el.key === 'Enter') submitHandler();
-            }}
-            className="w-5/6 max-md:text-sm border-[1px] border-dashed p-2 rounded-lg dark:text-white dark:bg-dark_primary_comp focus:outline-none min-h-[3rem] max-h-64 max-md:w-full"
-            placeholder={`Comment on this ${type}`}
-          />
-          <div
-            className="w-1/6 h-fit text-sm max-md:text-xs dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-md py-2 px-3  flex-center cursor-pointer max-md:h-10 max-md:w-fit transition-ease-300"
-            onClick={submitHandler}
-          >
-            Comment
-          </div>
-        </div>
-      </div>
+      <CommentInput
+        content={commentBody}
+        setContent={setCommentBody}
+        taggedUsernames={taggedUsernames}
+        setTaggedUsernames={setTaggedUsernames}
+        type={type}
+        handleSubmit={submitHandler}
+        userFetchURL={userFetchURL}
+      />
       {loading && page == 1 ? (
         <CommentsLoader />
       ) : comments.length > 0 ? (

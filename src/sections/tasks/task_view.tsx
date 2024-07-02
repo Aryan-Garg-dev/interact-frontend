@@ -1,29 +1,21 @@
-import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import { SubTask, Task } from '@/types';
-import {
-  CheckSquare,
-  CalendarX,
-  ArrowArcLeft,
-  Gear,
-  Trash,
-  PlusCircle,
-  CheckCircle,
-  Circle,
-  XCircle,
-} from '@phosphor-icons/react';
+import { ArrowArcLeft, Gear, Trash, PlusCircle } from '@phosphor-icons/react';
 import moment from 'moment';
-import React from 'react';
-import Image from 'next/image';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
-import UserHoverCard from '@/components/common/user_hover_card';
 import ToolTip from '@/components/utils/tooltip';
+import { getTaskDeadlineColor, getTaskPriorityColor } from '@/utils/funcs/task';
+import UsersList from '@/components/common/users_list';
+import PictureList from '@/components/common/picture_list';
+import Tags from '@/components/common/tags';
+import SubTasksTable from '@/components/tables/subtasks';
+import CommentBox from '@/components/comment/comment_box';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
   task: Task;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
   setClickedTaskID?: React.Dispatch<React.SetStateAction<number>>;
   setClickedOnEditTask: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedOnDeleteTask: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,8 +24,7 @@ interface Props {
   setClickedOnViewSubTask: React.Dispatch<React.SetStateAction<boolean>>;
   toggleComplete: () => void;
   accessChecker: boolean;
-  getUserTitle: (userID: string) => string;
-  getUserRole: (userID: string) => string;
+  userFetchURL?: string;
 }
 
 const TaskComponent = ({
@@ -47,8 +38,7 @@ const TaskComponent = ({
   setClickedOnViewSubTask,
   toggleComplete,
   accessChecker,
-  getUserTitle,
-  getUserRole,
+  userFetchURL,
 }: Props) => {
   const isAssignedUser = (userID: string) => {
     var check = false;
@@ -61,24 +51,13 @@ const TaskComponent = ({
     return check;
   };
 
+  const [clickedOnUsers, setClickedOnUsers] = useState(false);
+
   const user = useSelector(userSelector);
   return (
     <>
-      {task.isCompleted ? (
-        <div className="absolute flex gap-1 items-center px-2 py-1 rounded-xl text-xs bg-[#bffbbe] max-lg:fixed top-[160px] max-lg:top-navbar right-16 max-lg:right-0 z-[11]">
-          Task Completed
-          <CheckSquare weight="bold" size={16} />
-        </div>
-      ) : (
-        moment(task.deadline).isBefore(moment()) && (
-          <div className="absolute flex gap-1 items-center px-2 py-1 rounded-xl text-xs bg-[#fbbebe] max-lg:fixed top-[160px] max-lg:top-navbar right-16 max-lg:right-0 z-[11]">
-            Deadline Passed
-            <CalendarX weight="bold" size={16} />
-          </div>
-        )
-      )}
-
-      <div className="sticky bg-white max-lg:fixed top-[158px] max-lg:top-navbar max-lg:right-0 w-[640px] max-lg:w-full max-h-[75vh] max-lg:max-h-screen max-lg:h-base max-lg:z-50 max-lg:backdrop-blur-2xl max-lg:backdrop-brightness-90 overflow-y-auto flex flex-col gap-8 p-8 pt-4 font-primary dark:text-white border-[1px] max-lg:border-0 border-primary_btn  dark:border-dark_primary_btn rounded-lg max-lg:rounded-none max-lg:animate-fade_third z-10">
+      {clickedOnUsers && <UsersList title="Task Users" users={task.users} setShow={setClickedOnUsers} />}
+      <div className="w-no_side_base_open h-base fixed bg-gray-50 top-navbar overflow-y-auto flex flex-col gap-4 p-8 pt-4 font-primary animate-fade_third z-10">
         <div className="w-full flex flex-col gap-2">
           <ArrowArcLeft
             className="cursor-pointer"
@@ -90,80 +69,72 @@ const TaskComponent = ({
           />
           <div className="w-full flex justify-between items-center">
             <div className="text-4xl font-semibold">{task.title}</div>
-            {accessChecker && (
-              <div className="flex gap-2">
-                <Gear onClick={() => setClickedOnEditTask(true)} className="cursor-pointer" size={32} />
-                <Trash onClick={() => setClickedOnDeleteTask(true)} className="cursor-pointer" size={32} />
-              </div>
-            )}
+            <div className="flex-center gap-2">
+              {accessChecker && (
+                <>
+                  <Gear onClick={() => setClickedOnEditTask(true)} className="cursor-pointer" size={32} />
+                  <Trash onClick={() => setClickedOnDeleteTask(true)} className="cursor-pointer" size={32} />
+                </>
+              )}
+              {(isAssignedUser(user.id) || accessChecker) && (
+                <div
+                  className={`${
+                    task.isCompleted
+                      ? 'bg-priority_low hover:bg-priority_high'
+                      : 'bg-primary_comp hover:bg-priority_low'
+                  } font-semibold px-4 py-2 rounded-md transition-ease-300`}
+                >
+                  {task.isCompleted ? (
+                    <span onClick={toggleComplete} className="relative group cursor-pointer">
+                      <ToolTip content="Mark Incomplete" />
+                      <div className="font-semibold">Completed</div>
+                    </span>
+                  ) : (
+                    <div onClick={toggleComplete} className="cursor-pointer">
+                      Mark Completed
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="w-full flex flex-col gap-4">
-          <div className="text-lg">{task.description}</div>
-          <div className="w-full flex flex-wrap gap-2">
-            {task.tags.map(tag => {
-              return (
-                <div key={tag} className="text-xs border-black border-[1px] px-2 py-1 rounded-lg">
-                  {tag}
-                </div>
-              );
-            })}
-          </div>
+          <div className="text-lg">{renderContentWithLinks(task.description, [])}</div>
+          <Tags tags={task.tags} />
         </div>
-        <div className="flex gap-2 items-center">
-          <div>Deadline:</div>
-          <div className="font-semibold">{moment(task.deadline).format('DD-MMM-YY')}</div>
-          <div className="text-xs">({moment(task.deadline).fromNow()})</div>
-        </div>
-        <div className="flex gap-2 items-center">
-          <div> Priority:</div>
-          <div
-            style={{
-              backgroundColor: task.priority == 'high' ? '#fbbebe' : task.priority == 'medium' ? '#fbf9be' : '#bffbbe',
-            }}
-            className="uppercase px-3 py-1 rounded-lg text-sm font-medium"
-          >
-            {task.priority}
-          </div>
-        </div>
-        {task.users.length > 0 ? (
-          <div className="w-full flex flex-col gap-2">
-            <div className="text-xl font-medium">Assigned To</div>
-            <div className="w-full flex flex-wrap justify-around gap-2">
-              {task.users.map(user => {
-                return (
-                  <div
-                    key={user.id}
-                    className="w-full relative group flex gap-2 cursor-pointer p-1 rounded-lg hover:bg-slate-100 transition-ease-500"
-                  >
-                    <UserHoverCard user={user} scaleTransition={true} title={getUserTitle(user.id)} />
-                    <Image
-                      crossOrigin="anonymous"
-                      width={50}
-                      height={50}
-                      alt={'User Pic'}
-                      src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-                      className={'rounded-full w-10 h-10'}
-                    />
-                    <div className="w-[calc(100%-40px)] flex items-center justify-between flex-wrap">
-                      <div className="flex-center gap-2">
-                        <div className="text-lg font-medium">{user.name}</div>
-                        <div className="text-xs text-gray-600">@{user.username}</div>
-                      </div>
-                      <div className="border-[1px] border-primary_black text-xs p-1 rounded-lg">
-                        {getUserRole(user.id)}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+        <div className="w-fit flex-center gap-16">
+          <div className="flex gap-2 items-center">
+            <div>Priority:</div>
+            <div
+              style={{ backgroundColor: getTaskPriorityColor(task) }}
+              className="uppercase px-3 py-1 rounded-lg text-sm font-medium"
+            >
+              {task.priority}
             </div>
+          </div>
+          <div className="flex gap-2 items-center">
+            <div>Deadline:</div>
+            <div
+              style={{ backgroundColor: getTaskDeadlineColor(task) }}
+              className="w-fit px-3 py-1 rounded-lg text-sm font-medium"
+            >
+              <div className="font-semibold">{moment(task.deadline).format('DD-MMM-YY')}</div>
+            </div>
+            <div className="text-xs">({moment(task.deadline).fromNow()})</div>
+          </div>
+        </div>
+
+        {task.users.length > 0 ? (
+          <div onClick={() => setClickedOnUsers(true)} className="w-fit h-fit flex-center gap-2 cursor-pointer">
+            <div className="text-xl font-medium">Assigned To: </div>
+            <PictureList users={task.users} size={8} gap={2} />
           </div>
         ) : (
           accessChecker && (
             <div
               onClick={() => setClickedOnEditTask(true)}
-              className="w-full text-base bg-gray-100 rounded-xl p-4 hover:scale-105 cursor-pointer transition-ease-300"
+              className="w-full text-base bg-gray-100 rounded-xl p-4 cursor-pointer transition-ease-300"
             >
               <span className="text-xl max-lg:text-lg text-gradient font-semibold">Your task is lonely! </span> and
               looking for a buddy. Don&apos;t leave it hanging, assign it to a team member and let the magic begin! 🚀
@@ -171,11 +142,13 @@ const TaskComponent = ({
           )
         )}
 
+        <div className="w-full border-[#34343479] border-t-[1px]"></div>
+
         {task.subTasks?.length > 0 ? (
           <div className="w-full flex flex-col gap-2">
             <div className="flex gap-2 items-center">
               <div className="text-xl font-medium">Subtasks</div>
-              {isAssignedUser(user.id) && !task.isCompleted && (
+              {(isAssignedUser(user.id) || accessChecker) && (
                 <PlusCircle
                   onClick={() => setClickedOnNewSubTask(true)}
                   className="bg-gray-50 rounded-full cursor-pointer"
@@ -184,65 +157,27 @@ const TaskComponent = ({
                 />
               )}
             </div>
-            <div className="w-full flex flex-col gap-1">
-              {task.subTasks.map(subtask => {
-                return (
-                  <div
-                    key={subtask.id}
-                    onClick={() => {
-                      setClickedSubTask(subtask);
-                      setClickedOnViewSubTask(true);
-                    }}
-                    className="w-full flex flex-col gap-1 p-2 rounded-xl border-dashed border-[1px] border-gray-600 cursor-pointer"
-                  >
-                    <div className="w-full flex justify-between items-center">
-                      <div className="font-semibold text-xl">{subtask.title}</div>
-                      {subtask.isCompleted ? (
-                        <CheckCircle className="bg-[#bffbbe] rounded-full" size={24} weight="bold" />
-                      ) : moment(subtask.deadline).isAfter(moment()) ? (
-                        <Circle className="bg-[#f4f8af] rounded-full" size={24} weight="bold" />
-                      ) : (
-                        <XCircle className="bg-[#fbbebe] rounded-full" size={24} weight="bold" />
-                      )}
-                    </div>
-                    <div className="text-sm text-gray-600">{subtask.description}</div>
-                  </div>
-                );
-              })}
-            </div>
+            <SubTasksTable
+              subtasks={task.subTasks}
+              setClickedOnTask={setClickedOnViewSubTask}
+              setClickedSubTask={setClickedSubTask}
+            />
           </div>
         ) : (
-          isAssignedUser(user.id) &&
-          !task.isCompleted && (
+          (isAssignedUser(user.id) || accessChecker) && (
             <div
               onClick={() => setClickedOnNewSubTask(true)}
-              className="w-full text-base bg-gray-100 rounded-xl p-4 hover:scale-105 cursor-pointer transition-ease-300"
+              className="w-full text-base bg-gray-100 rounded-xl p-4 cursor-pointer transition-ease-300"
             >
               <span className="text-xl max-lg:text-lg text-gradient font-semibold">Divide and conquer! </span> Big tasks
               can be daunting! Break them down into bite-sized subtasks for smoother sailing. 📋
             </div>
           )
         )}
-
-        {isAssignedUser(user.id) &&
-          (task.isCompleted ? (
-            <div className="w-full flex justify-center gap-2 border-t-[1px] pt-4 border-[#34343479]">
-              <div></div>
-              <span onClick={toggleComplete} className="relative group cursor-pointer">
-                <ToolTip content="Mark Incomplete" />
-                <div className="text-xl font-semibold text-gradient"> Not Completed?</div>
-              </span>
-            </div>
-          ) : (
-            <div className="w-full text-center flex flex-col gap-2 border-t-[1px] pt-4 border-[#34343479]">
-              <div
-                onClick={toggleComplete}
-                className="w-fit mx-auto text-xl text-gradient font-semibold hover-underline-animation after:bg-dark_primary_btn cursor-pointer"
-              >
-                Mark Completed
-              </div>
-            </div>
-          ))}
+        <div className="pb-32">
+          <div className="text-xl font-medium">Conversations</div>
+          <CommentBox type="task" item={task} userFetchURL={userFetchURL} />
+        </div>
       </div>
     </>
   );

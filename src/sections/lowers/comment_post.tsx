@@ -1,4 +1,4 @@
-import CommentBox from '@/components/common/comment_box';
+import CommentBox from '@/components/comment/comment_box';
 import PostComponent from '@/components/home/post';
 import { Post } from '@/types';
 import { X } from '@phosphor-icons/react';

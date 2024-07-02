@@ -1,7 +1,6 @@
 import Loader from '@/components/common/loader';
 import OrgSidebar from '@/components/common/org_sidebar';
 import AccessTree from '@/components/organization/access_tree';
-import TaskCard from '@/components/workspace/task_card';
 import { ORG_SENIOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL } from '@/config/routes';
@@ -21,32 +20,33 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Mascot from '@/components/fillers/mascot';
 import NewTask from '@/sections/tasks/new_task';
+import TasksTable from '@/components/tables/tasks';
+import OrderMenu from '@/components/common/order_menu';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [organization, setOrganization] = useState(initialOrganization);
 
-  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
-  const [filterStatus, setFilterStatus] = useState(false);
-
   const [clickedOnTask, setClickedOnTask] = useState(false);
   const [clickedTaskID, setClickedTaskID] = useState(-1);
 
   const [clickedOnNewTask, setClickedOnNewTask] = useState(false);
   const [clickedOnInfo, setClickedOnInfo] = useState(false);
+  const [order, setOrder] = useState('deadline');
+  const [search, setSearch] = useState('');
 
   const currentOrg = useSelector(currentOrgSelector);
 
-  const getTasks = () => {
-    const URL = `${ORG_URL}/${currentOrg.id}/tasks`;
-    getHandler(URL)
+  const getTasks = (abortController: AbortController) => {
+    setLoading(true);
+    const URL = `${ORG_URL}/${currentOrg.id}/tasks?order=${order}&search=${search}`;
+    getHandler(URL, abortController.signal)
       .then(res => {
         if (res.statusCode === 200) {
           const taskData = res.data.tasks || [];
           setOrganization(res.data.organization);
           setTasks(taskData);
-          setFilteredTasks(taskData);
           const tid = new URLSearchParams(window.location.search).get('tid');
           if (tid && tid != '') {
             taskData.forEach((task: Task, i: number) => {
@@ -58,7 +58,7 @@ const Tasks = () => {
           }
 
           setLoading(false);
-        } else {
+        } else if (res.status != -1) {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
           else {
             Toaster.error(SERVER_ERROR, 'error_toaster');
@@ -70,48 +70,42 @@ const Tasks = () => {
       });
   };
 
-  useEffect(() => {
-    getTasks();
-  }, []);
+  let oldAbortController: AbortController | null = null;
 
-  const filterAssigned = (status: boolean) => {
-    setFilterStatus(status);
-    if (status) {
-      const assignedTasks: Task[] = [];
-      tasks.forEach(task => {
-        var check = false;
-        task.users.forEach(user => {
-          if (user.id == user.id) {
-            check = true;
-            return;
-          }
-        });
-        if (check) {
-          assignedTasks.push(task);
-        }
-      });
-      setFilteredTasks(assignedTasks);
-    } else setFilteredTasks(tasks);
-  };
+  useEffect(() => {
+    const abortController = new AbortController();
+    if (oldAbortController) oldAbortController.abort();
+    oldAbortController = abortController;
+
+    getTasks(abortController);
+    return () => {
+      abortController.abort();
+    };
+  }, [order, search]);
 
   return (
     <BaseWrapper title={`Tasks | ${currentOrg.title}`}>
       <OrgSidebar index={4} />
       <MainWrapper>
         {clickedOnNewTask && (
-          <NewTask
-            setShow={setClickedOnNewTask}
-            organization={organization}
-            setTasks={setTasks}
-            setFilteredTasks={setFilteredTasks}
-            org={true}
-          />
+          <NewTask setShow={setClickedOnNewTask} organization={organization} setTasks={setTasks} org={true} />
         )}
         {clickedOnInfo && <AccessTree type="task" setShow={setClickedOnInfo} />}
         <div className="w-full flex flex-col">
           <div className="w-full flex justify-between items-center p-base_padding">
-            <div className="text-6xl font-semibold dark:text-white font-primary">Tasks</div>
-
+            <div className="flex-center gap-2">
+              <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Tasks</div>
+              <OrderMenu
+                orders={['deadline', 'latest']}
+                current={order}
+                setState={setOrder}
+                fixed={false}
+                right={false}
+                addSearch={true}
+                search={search}
+                setSearch={setSearch}
+              />
+            </div>
             <div className="flex items-center gap-2">
               {checkOrgAccess(ORG_SENIOR) && (
                 <Plus
@@ -132,34 +126,19 @@ const Tasks = () => {
           <div className="w-full flex flex-col gap-6 px-2 pb-2">
             {loading ? (
               <Loader />
-            ) : filteredTasks.length > 0 ? (
-              <div className="flex justify-evenly px-4">
-                <div className={`${clickedOnTask ? 'w-[40%]' : 'w-[720px]'} max-lg:w-[720px] flex flex-col gap-4`}>
-                  {filteredTasks.map((task, i) => {
-                    return (
-                      <TaskCard
-                        key={task.id}
-                        task={task}
-                        index={i}
-                        clickedTaskID={clickedTaskID}
-                        clickedOnTask={clickedOnTask}
-                        setClickedOnTask={setClickedOnTask}
-                        setClickedTaskID={setClickedTaskID}
-                      />
-                    );
-                  })}
-                </div>
+            ) : tasks.length > 0 ? (
+              <div className="w-full flex justify-evenly px-4">
                 {clickedOnTask && (
                   <TaskView
                     taskID={clickedTaskID}
-                    tasks={filteredTasks}
+                    tasks={tasks}
                     organization={organization}
                     setShow={setClickedOnTask}
                     setTasks={setTasks}
-                    setFilteredTasks={setFilteredTasks}
                     setClickedTaskID={setClickedTaskID}
                   />
                 )}
+                <TasksTable tasks={tasks} setClickedOnTask={setClickedOnTask} setClickedTaskID={setClickedTaskID} />
               </div>
             ) : (
               <Mascot message="There are no tasks available at the moment." />

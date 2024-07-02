@@ -16,7 +16,6 @@ import { Notification } from '@/types';
 import Comment from '@/components/notifications/comment';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { SERVER_ERROR } from '@/config/errors';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import Impressions from '@/components/notifications/impressions';
 import Invitation from '@/components/notifications/invitation';

@@ -47,42 +47,55 @@ const OpeningCard = ({ opening, setOpenings }: Props) => {
     <>
       {clickedOnEdit && <EditOpening setShow={setClickedOnEdit} opening={opening} setOpenings={setOpenings} />}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
-
-      <div className="w-[49%] relative bg-white group font-primary border-[1px] border-primary_btn rounded-lg p-4 flex items-center gap-8 max-md:gap-4 transition-ease-300">
-        {checkOrgAccess(ORG_MANAGER) && (
-          <div className="absolute flex gap-3 top-4 right-4 opacity-0 group-hover:opacity-100 transition-ease-300">
-            <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={24} />
-            <TrashSimple
-              onClick={() => setClickedOnDelete(true)}
-              className="cursor-pointer"
-              size={24}
-              color="#ea333e"
-              weight="fill"
-            />
-          </div>
-        )}
+      <div className="w-full bg-gray-100 hover:bg-white dark:hover:bg-transparent dark:bg-transparent font-primary dark:text-white border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-4 flex items-center gap-4 max-md:gap-4 transition-ease-300">
         <Image
           crossOrigin="anonymous"
-          width={100}
-          height={100}
-          alt={'Org Pic'}
+          width={50}
+          height={50}
+          alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${opening.organization?.user.profilePic}`}
-          className={'w-[140px] h-[140px] max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover'}
+          className={'w-[120px] h-[120px] max-md:w-[90px] max-md:h-[90px] rounded-lg object-cover'}
         />
 
-        <div className="w-[calc(100%-140px)] flex-col gap-2">
-          <div className="font-bold text-2xl max-md:text-lg text-gradient line-clamp-1">{opening.title}</div>
-          <div className="text-sm text-gray-500">{moment(opening.createdAt).fromNow()}</div>
-          <div className="text-sm mt-2">
-            {opening.noApplications} Application{opening.noApplications == 1 ? '' : 's'}
+        <div className="w-full h-full flex items-start justify-between">
+          <div className="w-5/6 flex flex-col gap-1">
+            <div className="font-bold text-3xl max-md:text-lg text-gradient line-clamp-1">{opening.title}</div>
+            {/* <div className="text-lg max-md:text-sm">{project.title}</div> */}
+            <div className="text-xs text-gray-500 mb-8">{moment(opening.createdAt).fromNow()}</div>
+
+            <div className="w-fit flex-center gap-2 mb-1">
+              {opening.noApplications > 0 && (
+                <div className="text-sm">
+                  {opening.noApplications} Application{opening.noApplications == 1 ? '' : 's'}
+                </div>
+              )}
+
+              {checkOrgAccess(ORG_MANAGER) &&
+                (opening.noApplications > 0 ? (
+                  <Link
+                    href={`/workspace/manage/applications/${opening.id}`}
+                    className="w-fit text-[#15bffd] text-sm max-md:text-sm underline underline-offset-4"
+                  >
+                    View
+                  </Link>
+                ) : (
+                  <div className="w-fit dark:text-white text-sm max-md:text-sm underline underline-offset-4 cursor-default">
+                    No applications
+                  </div>
+                ))}
+            </div>
           </div>
-          {checkOrgAccess(ORG_MANAGER) && opening.noApplications > 0 && (
-            <Link
-              href={`/organisation/openings/applications/${opening.id}`}
-              className="w-fit text-[#15bffd] text-sm max-md:text-sm underline underline-offset-4"
-            >
-              View
-            </Link>
+          {checkOrgAccess(ORG_MANAGER) && (
+            <div className="flex gap-3">
+              <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={24} />
+              <TrashSimple
+                onClick={() => setClickedOnDelete(true)}
+                className="cursor-pointer"
+                size={24}
+                color="#ea333e"
+                weight="fill"
+              />
+            </div>
           )}
         </div>
       </div>

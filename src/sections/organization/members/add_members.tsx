@@ -48,7 +48,7 @@ const AddMembers = ({ setShow, organization, setOrganization }: Props) => {
 
   const fetchUsers = async (key: string, abortController: AbortController) => {
     setLoading(true);
-    const URL = `${ORG_URL}/${currentOrgID}/membership/non_members?search=${key}`;
+    const URL = `${ORG_URL}/${currentOrgID}/membership/non_members?search=${key}&invitations=exclude`;
     const res = await getHandler(URL, abortController.signal);
     if (res.statusCode == 200) {
       setUsers(res.data.users || []);
@@ -153,7 +153,7 @@ const AddMembers = ({ setShow, organization, setOrganization }: Props) => {
         <div className="text-3xl max-md:text-xl font-semibold">
           {status == 0 ? 'Select Users' : 'Confirm Invitations'}
         </div>
-        <div className="w-full h-[420px] flex flex-col gap-4">
+        <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
           {status == 0 ? (
             <>
               <div className="w-full h-12 flex items-center px-4 gap-4 dark:bg-dark_primary_comp_hover rounded-md">
@@ -169,39 +169,37 @@ const AddMembers = ({ setShow, organization, setOrganization }: Props) => {
                 {loading ? (
                   <Loader />
                 ) : (
-                  <>
-                    {users.map(user => {
-                      return (
-                        <div
-                          key={user.id}
-                          onClick={() => handleClickUser(user)}
-                          className={`w-full flex gap-2 rounded-lg p-2 ${
-                            selectedUsers.includes(user)
-                              ? 'bg-primary_comp_hover dark:bg-dark_primary_comp_active'
-                              : 'hover:bg-primary_comp dark:bg-dark_primary_comp dark:hover:bg-dark_primary_comp_hover'
-                          } cursor-pointer transition-ease-200`}
-                        >
-                          <Image
-                            crossOrigin="anonymous"
-                            width={50}
-                            height={50}
-                            alt={'User Pic'}
-                            src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-                            className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
-                          />
-                          <div className="w-5/6 flex flex-col">
-                            <div className="text-lg font-bold">{user.name}</div>
-                            <div className="text-sm dark:text-gray-200">@{user.username}</div>
-                            {user.tagline && user.tagline != '' ? (
-                              <div className="text-sm mt-2">{user.tagline}</div>
-                            ) : (
-                              <></>
-                            )}
-                          </div>
+                  users.map(user => {
+                    return (
+                      <div
+                        key={user.id}
+                        onClick={() => handleClickUser(user)}
+                        className={`w-full flex gap-2 rounded-lg p-2 ${
+                          selectedUsers.includes(user)
+                            ? 'bg-primary_comp_hover dark:bg-dark_primary_comp_active'
+                            : 'hover:bg-primary_comp dark:bg-dark_primary_comp dark:hover:bg-dark_primary_comp_hover'
+                        } cursor-pointer transition-ease-200`}
+                      >
+                        <Image
+                          crossOrigin="anonymous"
+                          width={50}
+                          height={50}
+                          alt={'User Pic'}
+                          src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                          className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
+                        />
+                        <div className="w-5/6 flex flex-col">
+                          <div className="text-lg font-bold">{user.name}</div>
+                          <div className="text-sm dark:text-gray-200">@{user.username}</div>
+                          {user.tagline && user.tagline != '' ? (
+                            <div className="text-sm mt-2">{user.tagline}</div>
+                          ) : (
+                            <></>
+                          )}
                         </div>
-                      );
-                    })}
-                  </>
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </>

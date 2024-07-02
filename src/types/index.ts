@@ -81,6 +81,7 @@ export interface Membership {
   project: Project;
   userID: string;
   user: User;
+  teams: Team[];
   role: string;
   title: string;
   active: boolean;
@@ -161,6 +162,7 @@ export interface OrganizationMembership {
   organization: Organization;
   userID: string;
   user: User;
+  teams: Team[];
   role: string;
   title: string;
   createdAt: Date;
@@ -173,6 +175,7 @@ export interface Organization {
   title: string;
   memberships: OrganizationMembership[];
   invitations: Invitation[];
+  teams: Team[];
   noMembers: number;
   noEvents: number;
   noProjects: number;
@@ -254,6 +257,7 @@ export interface Comment {
   noLikes: number;
   noReplies: number;
   likedBy: string[];
+  taggedUsers: User[];
   createdAt: Date;
 }
 
@@ -399,6 +403,8 @@ export interface Invitation {
   id: string;
   userID: string;
   user: User;
+  senderID: string;
+  sender: User;
   projectID: string;
   project: Project;
   organizationID: string;
@@ -429,6 +435,8 @@ export type PRIORITY = 'low' | 'medium' | 'high';
 
 export interface Task {
   id: string;
+  userID: string;
+  user: User;
   projectID: string;
   project: Project | undefined;
   organizationID: string;
@@ -441,6 +449,7 @@ export interface Task {
   isCompleted: boolean;
   subTasks: SubTask[];
   priority: PRIORITY;
+  noComments: number;
 }
 export interface ResourceBucket {
   id: string;
@@ -557,6 +566,12 @@ export interface OrganizationHistory {
   application?: Application;
   membershipID?: string;
   membership?: OrganizationMembership;
+  meetingID?: string;
+  meeting?: Meeting;
+  resourceBucketID: string;
+  resourceBucket?: ResourceBucket;
+  teamID?: string;
+  team?: Team;
   createdAt: Date;
   deletedText: String;
 }
@@ -581,6 +596,20 @@ export interface Review {
   noDownVotes: number;
   isAnonymous: boolean;
   createdAt: Date;
+}
+
+export interface ReviewCounts {
+  1: number;
+  2: number;
+  3: number;
+  4: number;
+  5: number;
+}
+
+export interface ReviewData {
+  total: number;
+  average: number;
+  counts: ReviewCounts;
 }
 
 export interface Option {
@@ -651,5 +680,20 @@ export interface Session {
   isLive: boolean;
   startedAt: Date;
   endedAt: Date;
+  createdAt: Date;
+  chatDownloadURL: string;
+  chatDownloadURLExpiry: string;
+  transcriptDownloadURL: string;
+  transcriptDownloadURLExpiry: string;
+}
+
+export interface Team {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  memberships: Membership[];
+  noUsers: number;
+  tags: string[];
   createdAt: Date;
 }

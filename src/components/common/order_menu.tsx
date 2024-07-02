@@ -1,5 +1,5 @@
 import { Funnel } from '@phosphor-icons/react';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Input from '../form/input';
 
 interface Props {
@@ -28,11 +28,28 @@ const OrderMenu = ({
   right = true,
 }: Props) => {
   const [showOrders, setShowOrders] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setShowOrders(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const variants = ['z-10', 'z-20', 'z-30', 'z-40', 'z-50'];
   return (
     <div
+      ref={menuRef}
       className={`w-12 h-12 rounded-lg shadow-l border-gray-300 border-[1px] bg-white gap-1 ${
         fixed ? 'fixed top-[90px] right-12' : 'relative'
-      } z-[${zIndex}]`}
+      } z-${zIndex}`}
     >
       <div onClick={() => setShowOrders(prev => !prev)} className="flex-center p-3 cursor-pointer">
         <Funnel className="w-full h-full " />

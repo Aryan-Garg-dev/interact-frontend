@@ -357,8 +357,8 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
             {selectedUsers.length == 0 ? (
               <div className="h-64 text-xl flex-center">Selected users will be shown here :)</div>
             ) : (
-              <div className="w-full  h-[420px] flex flex-col gap-2">
-                {selectedUsers.map((user, index) => {
+              <div className="w-full  h-[420px] overflow-y-auto flex flex-col gap-2">
+                {selectedUsers.map(user => {
                   return (
                     <div
                       key={user.id}
@@ -397,7 +397,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
         ) : step === 3 ? (
           <div className="w-full flex flex-col gap-4 ">
             <div className="text-3xl max-md:text-xl font-semibold">Select Co-host</div>
-            <div className="w-full h-[420px] flex flex-col gap-4">
+            <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
               <div className="w-full h-12 flex items-center px-4 gap-4 dark:bg-dark_primary_comp_hover rounded-md">
                 <MagnifyingGlass size={24} />
                 <input
@@ -448,7 +448,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
             {selectedOrganizationalUsers.length == 0 ? (
               <div className="h-64 text-xl flex-center">Selected Co-hosts will be shown here :)</div>
             ) : (
-              <div className="w-full  h-[420px] flex flex-col gap-2">
+              <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-2">
                 {selectedOrganizationalUsers.map((org, index) => {
                   return (
                     <div

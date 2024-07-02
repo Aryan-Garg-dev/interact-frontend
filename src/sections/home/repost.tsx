@@ -11,6 +11,7 @@ import getHandler from '@/handlers/get_handler';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import moment from 'moment';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
+import TagUserUtils from '@/utils/funcs/tag_users';
 
 interface Props {
   post: Post;
@@ -89,75 +90,17 @@ const RePost = ({ post, setShow, setFeed, org = false }: Props) => {
     }
   };
 
-  const handleContentChange = async (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { value, selectionStart } = e.target;
-
-    const cursorPos = selectionStart;
-    setCursorPosition(cursorPos);
-
-    setContent(value);
-
-    const lastWord = value.substring(0, cursorPos).split(' ').pop();
-
-    // Detect backspace key press
-    if ((e.nativeEvent as InputEvent).inputType === 'deleteContentBackward') {
-      // Check if the last word starts with "@" (indicating a tagged user)
-      if (lastWord && lastWord.startsWith('@')) {
-        const usernameToRemove = lastWord.substring(1); // Remove "@" symbol
-        handleRemoveTag(usernameToRemove);
-      }
-    } else {
-      if (lastWord && lastWord.startsWith('@')) {
-        // Remove "@" symbol
-        const usernameToSearch = lastWord.substring(1);
-
-        await fetchUsers(usernameToSearch);
-        setShowUsers(true);
-      } else if (showUsers) {
-        setShowUsers(false);
-      }
-    }
-  };
-
-  const handleTagUser = (username: string) => {
-    if (!taggedUsernames.includes(username)) setTaggedUsernames(prevUsernames => [...prevUsernames, username]);
-
-    if (cursorPosition !== null) {
-      // Find the last "@" symbol before the current cursor position
-      const lastAtIndex = content.lastIndexOf('@', cursorPosition - 1);
-
-      if (lastAtIndex !== -1) {
-        // Replace the part of the content with the selected username
-        setContent(prevContent => {
-          const contentBefore = prevContent.substring(0, lastAtIndex);
-          const contentAfter = prevContent.substring(cursorPosition);
-          return `${contentBefore}@${username} ${contentAfter}`;
-        });
-      }
-    }
-
-    setShowUsers(false);
-  };
-
-  const handleRemoveTag = (username: string) => {
-    setTaggedUsernames(prevUsernames => prevUsernames.filter(u => u !== username));
-
-    if (cursorPosition !== null) {
-      // Find the last occurrence of `@username` before the current cursor position
-      const lastAtIndex = content.lastIndexOf(`@${username}`, cursorPosition - 1);
-
-      if (lastAtIndex !== -1) {
-        // Replace the tagged username with an empty string in the content
-        setContent(prevContent => {
-          const contentBefore = prevContent.substring(0, lastAtIndex);
-          const contentAfter = prevContent.substring(lastAtIndex + `@${username}`.length);
-          return `${contentBefore}${contentAfter}`;
-        });
-      }
-    }
-
-    setShowUsers(false);
-  };
+  const tagsUserUtils = new TagUserUtils(
+    cursorPosition,
+    content,
+    showUsers,
+    taggedUsernames,
+    setCursorPosition,
+    setContent,
+    fetchUsers,
+    setShowUsers,
+    setTaggedUsernames
+  );
 
   return (
     <>
@@ -223,7 +166,7 @@ const RePost = ({ post, setShow, setFeed, org = false }: Props) => {
             <textarea
               className="w-full mt-4 bg-transparent focus:outline-none min-h-[154px] max-h-[320px]"
               value={content}
-              onChange={handleContentChange}
+              onChange={tagsUserUtils.handleContentChange}
               maxLength={2000}
               placeholder="Add to conversation..."
             ></textarea>
@@ -235,7 +178,7 @@ const RePost = ({ post, setShow, setFeed, org = false }: Props) => {
             {users.map(user => (
               <div
                 key={user.id}
-                onClick={() => handleTagUser(user.username)}
+                onClick={() => tagsUserUtils.handleTagUser(user.username)}
                 className="w-1/4 hover:scale-105 flex items-center gap-2 rounded-md border-[1px] border-primary_btn p-2 hover:bg-primary_comp cursor-pointer transition-ease-300"
               >
                 <Image

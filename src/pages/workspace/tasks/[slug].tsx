@@ -1,6 +1,5 @@
 import Loader from '@/components/common/loader';
 import Sidebar from '@/components/common/sidebar';
-import TaskCard from '@/components/workspace/task_card';
 import { SERVER_ERROR } from '@/config/errors';
 import { PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
@@ -17,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import NewTask from '@/sections/tasks/new_task';
+import TasksTable from '@/components/tables/tasks';
 
 interface Props {
   slug: string;
@@ -26,9 +26,6 @@ const Tasks = ({ slug }: Props) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [project, setProject] = useState<Project>(initialProject);
   const [loading, setLoading] = useState(true);
-
-  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
-  const [filterStatus, setFilterStatus] = useState(false);
 
   const [clickedOnTask, setClickedOnTask] = useState(false);
   const [clickedTaskID, setClickedTaskID] = useState(-1);
@@ -45,7 +42,6 @@ const Tasks = ({ slug }: Props) => {
           setProject(res.data.project);
           const taskData = res.data.tasks || [];
           setTasks(taskData);
-          setFilteredTasks(taskData);
           const tid = new URLSearchParams(window.location.search).get('tid');
           if (tid && tid != '') {
             taskData.forEach((task: Task, i: number) => {
@@ -73,39 +69,13 @@ const Tasks = ({ slug }: Props) => {
     getTasks();
   }, [slug]);
 
-  const filterAssigned = (status: boolean) => {
-    setFilterStatus(status);
-    if (status) {
-      const assignedTasks: Task[] = [];
-      tasks.forEach(task => {
-        var check = false;
-        task.users.forEach(user => {
-          if (user.id == user.id) {
-            check = true;
-            return;
-          }
-        });
-        if (check) {
-          assignedTasks.push(task);
-        }
-      });
-      setFilteredTasks(assignedTasks);
-    } else setFilteredTasks(tasks);
-  };
-
   return (
     <BaseWrapper title={`Tasks | ${project.title}`}>
       <Sidebar index={3} />
 
       <MainWrapper>
         {clickedOnNewTask && (
-          <NewTask
-            org={false}
-            setShow={setClickedOnNewTask}
-            project={project}
-            setTasks={setTasks}
-            setFilteredTasks={setFilteredTasks}
-          />
+          <NewTask org={false} setShow={setClickedOnNewTask} project={project} setTasks={setTasks} />
         )}
         <div className="w-full flex flex-col">
           <div className="w-full flex justify-between p-base_padding">
@@ -126,42 +96,24 @@ const Tasks = ({ slug }: Props) => {
                   <span className="max-md:hidden">Create a</span> New Task
                 </div>
               )}
-              {/* <div onClick={() => filterAssigned(!filterStatus)} className="">
-                Show Assigned To Me
-              </div> */}
             </div>
           </div>
           <div className="w-full flex flex-col gap-6 px-2 py-2">
             {loading ? (
               <Loader />
-            ) : filteredTasks.length > 0 ? (
-              <div className="flex justify-evenly px-4">
-                <div className={`${clickedOnTask ? 'w-[40%]' : 'w-[720px]'} max-lg:w-[720px] flex flex-col gap-4`}>
-                  {filteredTasks.map((task, i) => {
-                    return (
-                      <TaskCard
-                        key={task.id}
-                        task={task}
-                        index={i}
-                        clickedTaskID={clickedTaskID}
-                        clickedOnTask={clickedOnTask}
-                        setClickedOnTask={setClickedOnTask}
-                        setClickedTaskID={setClickedTaskID}
-                      />
-                    );
-                  })}
-                </div>
+            ) : tasks.length > 0 ? (
+              <div className="w-full flex justify-evenly px-4">
                 {clickedOnTask && (
                   <TaskView
                     taskID={clickedTaskID}
-                    tasks={filteredTasks}
+                    tasks={tasks}
                     project={project}
                     setShow={setClickedOnTask}
                     setTasks={setTasks}
-                    setFilteredTasks={setFilteredTasks}
                     setClickedTaskID={setClickedTaskID}
                   />
                 )}
+                <TasksTable tasks={tasks} setClickedOnTask={setClickedOnTask} setClickedTaskID={setClickedTaskID} />
               </div>
             ) : (
               <div className="mx-auto font-medium text-xl mt-8">No Tasks found :)</div>

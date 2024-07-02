@@ -1,4 +1,4 @@
-import { TASK_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { ORG_URL, TASK_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
 import { PRIORITY, Task, User } from '@/types';
 import Toaster from '@/utils/toaster';
@@ -13,15 +13,17 @@ import Tags from '@/components/form/tags';
 import Select from '@/components/form/select';
 import Time from '@/components/form/time';
 import PrimaryButton from '@/components/buttons/primary_btn';
+import { useSelector } from 'react-redux';
+import { currentOrgIDSelector } from '@/slices/orgSlice';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   task: Task;
   setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
+  byOrgManager?: boolean;
 }
 
-const NewSubTask = ({ setShow, task, setTasks, setFilteredTasks }: Props) => {
+const NewSubTask = ({ setShow, task, setTasks, byOrgManager = false }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState<string[]>([]);
@@ -35,6 +37,8 @@ const NewSubTask = ({ setShow, task, setTasks, setFilteredTasks }: Props) => {
   const [mutex, setMutex] = useState(false);
 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+
+  const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleChange = (el: React.ChangeEvent<HTMLInputElement>) => {
     fetchUsers(el.target.value);
@@ -74,7 +78,7 @@ const NewSubTask = ({ setShow, task, setTasks, setFilteredTasks }: Props) => {
 
     const toaster = Toaster.startLoad('Creating a new sub task');
 
-    const URL = `${TASK_URL}/sub/${task.id}`;
+    const URL = byOrgManager ? `${ORG_URL}/${currentOrgID}/tasks/sub/${task.id}` : `${TASK_URL}/sub/${task.id}`;
 
     const userIDs = selectedUsers.map(user => user.id);
 
@@ -92,13 +96,6 @@ const NewSubTask = ({ setShow, task, setTasks, setFilteredTasks }: Props) => {
       const subtask = res.data.task;
       if (setTasks)
         setTasks(prev =>
-          prev.map(t => {
-            if (t.id == task.id) return { ...t, subTasks: [...(t.subTasks || []), subtask] };
-            else return t;
-          })
-        );
-      if (setFilteredTasks)
-        setFilteredTasks(prev =>
           prev.map(t => {
             if (t.id == task.id) return { ...t, subTasks: [...(t.subTasks || []), subtask] };
             else return t;
@@ -122,7 +119,7 @@ const NewSubTask = ({ setShow, task, setTasks, setFilteredTasks }: Props) => {
         <div className="text-3xl max-md:text-xl font-semibold">
           {status == 0 ? 'Sub Task Info' : status == 1 ? 'Select Users' : 'Review Sub Task Details'}
         </div>
-        <div className="w-full h-[420px] flex flex-col gap-4">
+        <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
           {status == 0 ? (
             <div className="w-full flex flex-col gap-4">
               <Input label="Sub Task Title" val={title} setVal={setTitle} maxLength={25} required={true} />

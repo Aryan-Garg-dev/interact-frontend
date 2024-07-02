@@ -9,6 +9,8 @@
   "[css]": {
     "editor.suggest.insertMode": "replace"
   },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,

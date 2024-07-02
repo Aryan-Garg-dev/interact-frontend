@@ -98,17 +98,17 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
           height={100}
           alt={'User Pic'}
           src={`${PROJECT_PIC_URL}/${invitation.project.coverPic}`}
-          className={'rounded-md w-32 h-32'}
+          className={'rounded-md w-28 h-28'}
           placeholder="blur"
           blurDataURL={invitation.project.blurHash || 'no-hash'}
         />
       </Link>
-      <div className="grow flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between">
-        <div className="grow flex flex-col gap-2">
+      <div className="w-[calc(100%-112px)] flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between">
+        <div className="w-[calc(100%-112px-96px)] flex flex-col gap-2">
           <Link
             target="_blank"
             href={`/explore?pid=${invitation.project.slug}`}
-            className="text-3xl font-bold text-gradient"
+            className="text-2xl font-bold text-gradient"
           >
             {invitation.project.title}
           </Link>

@@ -6,7 +6,7 @@ import { initialOrganization } from '@/types/initials';
 import Toaster from '@/utils/toaster';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
-import { EnvelopeSimple, Info, Plus } from '@phosphor-icons/react';
+import { EnvelopeSimple, Info, Plus, Users } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { currentOrgSelector } from '@/slices/orgSlice';
@@ -14,12 +14,13 @@ import OrgSidebar from '@/components/common/org_sidebar';
 import AddMembers from '@/sections/organization/members/add_members';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
-import { ORG_MANAGER } from '@/config/constants';
+import { ORG_MANAGER, ORG_SENIOR } from '@/config/constants';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import AccessTree from '@/components/organization/access_tree';
 import OrgMembersTable from '@/components/tables/organization/members';
 import Mascot from '@/components/fillers/mascot';
 import OrgInvitationsTable from '@/components/tables/organization/invitations';
+import TeamsView from '@/sections/organization/teams/teams_view';
 
 const Members = () => {
   const [organization, setOrganization] = useState(initialOrganization);
@@ -46,12 +47,16 @@ const Members = () => {
   const [clickedOnAddMember, setClickedOnAddMember] = useState(false);
   const [clickedOnInvitations, setClickedOnInvitations] = useState(false);
   const [clickedOnInfo, setClickedOnInfo] = useState(false);
+  const [clickedOnTeams, setClickedOnTeams] = useState(false);
 
   return (
     <BaseWrapper title={`Memberships | ${currentOrg.title}`}>
       <OrgSidebar index={6} />
       <MainWrapper>
         <div className="w-full flex flex-col items-center">
+          {clickedOnTeams && (
+            <TeamsView setShow={setClickedOnTeams} organization={organization} setOrganization={setOrganization} />
+          )}
           {clickedOnAddMember && (
             <AddMembers setShow={setClickedOnAddMember} organization={organization} setOrganization={setOrganization} />
           )}
@@ -61,6 +66,12 @@ const Members = () => {
               {!clickedOnInvitations ? 'Members' : 'Invitations'}
             </div>
             <div className="w-fit flex items-center gap-2">
+              <Users
+                onClick={() => setClickedOnTeams(true)}
+                size={42}
+                className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
+                weight="regular"
+              />
               {checkOrgAccess(ORG_MANAGER) && (
                 <Plus
                   onClick={() => setClickedOnAddMember(true)}

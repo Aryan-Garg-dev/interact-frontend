@@ -52,6 +52,7 @@ const OrgInvitationCard = ({ invitation, setInvitations }: Props) => {
         user: invitation.user,
         role: ORG_MEMBER,
         title: invitation.title,
+        teams: [],
         createdAt: new Date(),
       };
       dispatch(setOrganizationMemberships([...(user.organizationMemberships || []), membership]));
@@ -113,16 +114,16 @@ const OrgInvitationCard = ({ invitation, setInvitations }: Props) => {
           height={100}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${invitation.organization.user.profilePic}`}
-          className={'rounded-md w-32 h-32'}
+          className="rounded-md w-28 h-28"
         />
       </Link>
       <Link
         target="_blank"
         onClick={() => dispatch(setExploreTab(3))}
         href={`/explore/organisation/${invitation.organization.user.username}`}
-        className="grow flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between"
+        className="w-[calc(100%-112px)] flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between"
       >
-        <div className="grow flex flex-col gap-2">
+        <div className="w-[calc(100%-112px-96px)] flex flex-col gap-2">
           <div className="text-3xl font-bold text-gradient">{invitation.organization.title}</div>
           <div className="font-semibold">{invitation.title}</div>
           <div className="text-xs">Invited {moment(invitation.createdAt).format('DD MMM YYYY')}</div>

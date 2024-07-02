@@ -105,7 +105,12 @@ const Projects = () => {
 
   return (
     <div>
-      <OrderMenu orders={['trending', 'most_liked', 'most_viewed', 'latest']} current={order} setState={setOrder} />
+      <OrderMenu
+        orders={['trending', 'most_liked', 'most_viewed', 'latest']}
+        current={order}
+        setState={setOrder}
+        zIndex={20}
+      />
       {loading ? (
         <Loader />
       ) : (

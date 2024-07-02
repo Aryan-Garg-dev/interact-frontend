@@ -17,7 +17,7 @@ const Events = () => {
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-  const [order, setOrder] = useState('next_session_time');
+  const [order, setOrder] = useState('trending');
 
   const open = useSelector(navbarOpenSelector);
 
@@ -58,7 +58,12 @@ const Events = () => {
   }, [window.location.search, order]);
   return (
     <div className="w-full flex flex-col gap-6 pt-2">
-      <OrderMenu orders={['trending', 'most_liked', 'most_viewed', 'latest']} current={order} setState={setOrder} />
+      <OrderMenu
+        orders={['trending', 'most_liked', 'most_viewed', 'latest']}
+        current={order}
+        setState={setOrder}
+        zIndex={20}
+      />
       {loading ? (
         <Loader />
       ) : events.length > 0 ? (

@@ -30,7 +30,7 @@ const ModalWrapper = ({
     <>
       <div
         style={modalStyles}
-        className={`fixed top-${top} w-${width} max-lg:w-5/6 max-h-5/6 overflow-y-auto flex flex-col items-center gap-2 right-1/2 translate-x-1/2 rounded-lg p-6 dark:text-white font-primary bg-white backdrop-blur-lg border-2 border-primary_btn animate-fade_third z-${
+        className={`fixed top-${top} w-${width} max-lg:w-5/6 max-h-2/3 overflow-y-auto flex flex-col items-center gap-2 right-1/2 translate-x-1/2 rounded-lg p-6 dark:text-white font-primary bg-white backdrop-blur-lg border-2 border-primary_btn animate-fade_third z-${
           z + 10
         }`}
       >

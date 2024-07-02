@@ -9,6 +9,7 @@ import { userSelector } from '@/slices/userSlice';
 import { Membership, Project, User } from '@/types';
 import { initialMembership } from '@/types/initials';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
+import { getRoleColor } from '@/utils/funcs/membership';
 import Toaster from '@/utils/toaster';
 import { Pen, Trash } from '@phosphor-icons/react';
 import moment from 'moment';
@@ -76,35 +77,42 @@ const CollaboratorsTable = ({ memberships, project, setProject, org }: Props) =>
         />
       )}
       <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold text-primary_black">
-        <div className="w-[30%] flex-center">Name</div>
+        <div className="w-[35%] flex-center">Name</div>
         <div className="w-[20%] flex-center">Title</div>
         <div className="w-[10%] flex-center">Role</div>
         <div className="w-[20%] flex-center">Joined At</div>
-        <div className="w-[20%] flex-center">Action</div>
+        <div className="w-[15%] flex-center">Action</div>
       </div>
       {memberships.map(membership => (
         <div
           key={membership.user.id}
           className="w-full h-12 bg-white rounded-xl border-gray-400 flex text-sm text-primary_black transition-ease-300"
         >
-          <div className="w-[30%] flex-center gap-1 px-4">
+          <div className="w-[35%] flex-center gap-1 px-4">
             <Image
               crossOrigin="anonymous"
               width={50}
               height={50}
               alt={'User Pic'}
               src={`${USER_PROFILE_PIC_URL}/${membership.user.profilePic}`}
-              className="w-6 h-6 rounded-full z-[1]"
+              className="w-8 h-8 rounded-full z-[1]"
             />
-            <div className="w-[calc(100%-24px)] flex items-center flex-wrap gap-1">
-              <div className="font-medium">{membership.user.name}</div>
-              <div className="text-xxs">@{membership.user.username}</div>
+            <div className="w-[calc(100%-32px)] flex items-center flex-wrap gap-1">
+              <div className="font-medium text-lg">{membership.user.name}</div>
+              <div className="text-xs">@{membership.user.username}</div>
             </div>
           </div>
           <div className="w-[20%] flex-center">{membership.title}</div>
-          <div className="w-[10%] flex-center">{membership.role}</div>
+          <div className="w-[10%] flex-center">
+            <div
+              className="w-fit px-3 py-1 text-xs font-medium rounded-full"
+              style={{ backgroundColor: getRoleColor(membership.role) }}
+            >
+              {membership.role}
+            </div>
+          </div>
           <div className="w-[20%] flex-center">{moment(membership.createdAt).format('DD MMMM, YYYY')}</div>
-          <div className="w-[20%] flex-center gap-4">
+          <div className="w-[15%] flex-center gap-4">
             {project.userID == user.id || (org && checkOrgAccess(ORG_MANAGER)) ? (
               <Pen
                 onClick={() => {
