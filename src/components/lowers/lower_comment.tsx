@@ -3,7 +3,7 @@ import { Comment } from '@/types';
 import getHandler from '@/handlers/get_handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLikes, userSelector } from '@/slices/userSlice';
-import { COMMENT_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { COMMENT_URL } from '@/config/routes';
 import Semaphore from '@/utils/semaphore';
 import { configSelector, setUpdatingLikes } from '@/slices/configSlice';
 import { HeartStraight, Repeat } from '@phosphor-icons/react';
@@ -14,9 +14,7 @@ import postHandler from '@/handlers/post_handler';
 import { SERVER_ERROR } from '@/config/errors';
 import CommentsLoader from '../loaders/comments';
 import CommentComponent from '../comment/comment';
-import Image from 'next/image';
 import CommentInput from '../comment/input';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 interface Props {
   comment: Comment;
@@ -174,35 +172,14 @@ const LowerComment = ({ comment, clickedOnReply, setClickedOnReply }: Props) => 
         </div>
         {clickedOnReply && (
           <div className="w-full flex flex-col gap-4">
-            <div className="w-full flex gap-2">
-              <Image
-                crossOrigin="anonymous"
-                className="w-6 h-6 rounded-full cursor-default mt-1"
-                width={50}
-                height={50}
-                alt="user"
-                src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-              />
-              <div className="w-full flex justify-between gap-3 max-md:flex-col relative max-md:gap-2 max-md:items-end">
-                <textarea
-                  value={reply}
-                  onChange={el => {
-                    setReply(el.target.value);
-                  }}
-                  onKeyDown={el => {
-                    if (el.key === 'Enter') submitHandler();
-                  }}
-                  className="w-5/6 text-sm border-[1px] border-dashed p-2 rounded-lg dark:text-white dark:bg-dark_primary_comp focus:outline-none min-h-[3rem] max-h-64 max-md:w-full"
-                  placeholder="Reply to this comment"
-                />
-                <div
-                  className="w-1/6 h-fit text-xs dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-md py-2 px-3  flex-center cursor-pointer max-md:h-10 max-md:w-fit transition-ease-300"
-                  onClick={submitHandler}
-                >
-                  Reply
-                </div>
-              </div>
-            </div>
+            <CommentInput
+              content={reply}
+              setContent={setReply}
+              taggedUsernames={taggedUsernames}
+              setTaggedUsernames={setTaggedUsernames}
+              type="comment"
+              handleSubmit={submitHandler}
+            />
             {loading && page == 1 ? (
               <CommentsLoader />
             ) : replies.length > 0 ? (
@@ -245,4 +222,3 @@ const LowerComment = ({ comment, clickedOnReply, setClickedOnReply }: Props) => 
 };
 
 export default LowerComment;
-
