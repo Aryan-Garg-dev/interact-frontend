@@ -1,6 +1,8 @@
 import { User } from '@/types';
+import { ClipboardText } from '@phosphor-icons/react';
 import Link from 'next/link';
 import React from 'react';
+import Toaster from '../toaster';
 
 const renderContentWithLinks = (caption: string, taggedUsers?: User[]) => {
   const codeBlockRegex = /```[\s\S]+?```/g;
@@ -21,12 +23,20 @@ const renderContentWithLinks = (caption: string, taggedUsers?: User[]) => {
         if (part.startsWith('```') && part.endsWith('```')) {
           const codeContent = part.slice(3, -3);
           return (
-            <pre
-              key={partIndex}
-              className="w-full overflow-auto rounded-sm p-3 border-[1px] border-[#3636363f] border-dashed small_scrollbar"
-            >
-              <code>{codeContent}</code>
-            </pre>
+            <div key={partIndex} className="w-full relative group">
+              <ClipboardText
+                onClick={() => {
+                  navigator.clipboard.writeText(codeContent.trim());
+                  Toaster.success('Copied to Clipboard!');
+                }}
+                className="bg-white absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-ease-300 cursor-pointer"
+                size={24}
+                weight="duotone"
+              />
+              <pre className="w-full overflow-auto rounded-sm p-3 border-[1px] border-[#3636363f] border-dashed small_scrollbar">
+                <code>{codeContent.trim()}</code>
+              </pre>
+            </div>
           );
         }
 
@@ -120,7 +130,7 @@ const Word: React.FC<WordProps> = ({ word, taggedUsernames }) => {
         target="_blank"
         rel="noopener noreferrer"
       >
-        {word}{' '}
+        {word.trim()}{' '}
       </a>
     );
   }
@@ -150,7 +160,7 @@ const Word: React.FC<WordProps> = ({ word, taggedUsernames }) => {
     );
   }
 
-  return <span>{word} </span>; // Render regular text
+  return <span>{word} </span>;
 };
 
 export default renderContentWithLinks;

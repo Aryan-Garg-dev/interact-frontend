@@ -192,7 +192,7 @@ const PostComponent = ({
           />
         </Link>
       </div>
-      <div className="w-[calc(100%-32px)] flex flex-col gap-1">
+      <div className="w-[calc(100%-40px)] flex flex-col gap-1">
         <div className="w-full h-fit flex justify-between">
           <Link
             href={`${

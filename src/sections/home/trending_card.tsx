@@ -220,7 +220,7 @@ const TrendingCard = () => {
                 </div>
                 <div
                   className={`w-28 text-xs ${
-                    moment(task.deadline).isBefore(moment()) ? 'text-primary_danger' : 'text-primary_text'
+                    moment(task.deadline).isBefore(moment()) ? 'text-primary_danger' : 'text-green-400'
                   }`}
                 >
                   {moment(task.deadline).format('hh:mm A DD MMM')}
