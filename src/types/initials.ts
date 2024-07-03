@@ -525,6 +525,7 @@ export const initialMeeting: Meeting = {
   userID: '',
   user: initialUser,
   participants: [],
+  rsvp: [],
   createdAt: new Date(),
   nextSessionTime: new Date(),
   sessions: [],

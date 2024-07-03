@@ -675,6 +675,7 @@ export interface Meeting {
   userID: string;
   user: User;
   participants: User[];
+  rsvp: User[];
   createdAt: Date;
   nextSessionTime: Date;
   sessions: Session[];
