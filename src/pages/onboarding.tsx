@@ -27,6 +27,7 @@ import ProgressBar from '@/components/onboarding/progress_bar';
 import UserCard from '@/components/onboarding/user_card';
 import DummyUserCard from '@/components/onboarding/dummy_user_card';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
+import { useRouter } from 'next/router';
 
 const Onboarding = () => {
   const [clickedOnBuild, setClickedOnBuild] = useState(false);
@@ -110,6 +111,8 @@ const Onboarding = () => {
     setMutex(false);
   };
 
+  const router = useRouter();
+
   const handleSubmitProfileDetails = async (toaster: Id) => {
     const formData = new FormData();
 
@@ -122,7 +125,7 @@ const Onboarding = () => {
 
     if (res.statusCode === 200) {
       Toaster.stopLoad(toaster, 'Profile Ready!', 1);
-      window.location.replace('/home');
+      router.replace('/home');
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
       else {
@@ -216,7 +219,7 @@ const Onboarding = () => {
           </div>
         ) : (
           <div className="w-full h-full flex justify-between items-center max-md:px-4 font-primary ">
-            <div className="w-3/5 max-lg:w-full h-full p-12 max-md:px-2 font-primary flex flex-col gap-16 items-center border-r-2 max-md:border-r-0 border-primary_comp">
+            <div className="w-3/5 max-lg:w-full h-full p-12 max-md:px-2 font-primary flex flex-col gap-16 items-center">
               <div className="w-full flex justify-start items-center gap-1">
                 <ReactSVG src="/onboarding_logo.svg" />
                 {/* <div className="text-gradient text-xl font-semibold">Onboarding</div> */}
@@ -305,7 +308,8 @@ const Onboarding = () => {
                             type="radio"
                             id="radio"
                             name="gender"
-                            value="male"
+                            value={gender}
+                            checked={gender == 'male'}
                             onClick={() => setGender('male')}
                             className="peer z-10 h-full w-full cursor-pointer opacity-0"
                           />
@@ -335,7 +339,8 @@ const Onboarding = () => {
                             type="radio"
                             id="radio"
                             name="gender"
-                            value="female"
+                            value={gender}
+                            checked={gender == 'female'}
                             onClick={() => setGender('female')}
                             className="peer z-10 h-full w-full cursor-pointer opacity-0"
                           />
@@ -360,7 +365,8 @@ const Onboarding = () => {
                           <input
                             type="radio"
                             name="gender"
-                            value="none-binary"
+                            value={gender}
+                            checked={gender == 'none-binary'}
                             onClick={() => setGender('none-binary')}
                             className="peer z-10 h-full w-full cursor-pointer opacity-0"
                           />
@@ -384,7 +390,8 @@ const Onboarding = () => {
                           <input
                             type="radio"
                             name="gender"
-                            value="none"
+                            value={gender}
+                            checked={gender == 'none'}
                             onClick={() => setGender('none')}
                             className="peer z-10 h-full w-full cursor-pointer opacity-0"
                           />
@@ -426,7 +433,7 @@ const Onboarding = () => {
                       Add <span className="underline underline-offset-2">at least three</span> and help us build your
                       recommendations!
                     </div>
-                    <Tags tags={tags} setTags={setTags} onboardingDesign={true} maxTags={10} suggestions={true} />
+                    <Tags tags={tags} setTags={setTags} onboardingDesign={true} maxTags={5} suggestions={true} />
                   </>
                 ) : step == 5 ? (
                   <>
@@ -605,7 +612,7 @@ const Onboarding = () => {
                 </div>
               </div>
             </div>
-            <div className="w-2/5 h-full max-md:hidden overflow-clip flex-center flex-col gap-8 relative bg-slate-100">
+            <div className="w-2/5 fixed top-0 right-0 h-full max-md:hidden overflow-clip flex-center flex-col gap-8 bg-slate-100">
               <div className="w-full h-full absolute -top-32 flex flex-col items-center gap-4 rotate-12 animate-fade_1">
                 <div className="w-[250%] flex gap-4 animate-onboarding_dummy_user_card">
                   <DummyUserCard />

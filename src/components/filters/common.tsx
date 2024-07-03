@@ -16,7 +16,7 @@ export const FilterButton = ({ setShow, fieldName, filledText, icon }: FilterBut
     >
       {icon}
       {filledText != '' ? (
-        filledText
+        filledText.replaceAll('_', ' ')
       ) : (
         <div className="flex-center gap-1">
           {fieldName}

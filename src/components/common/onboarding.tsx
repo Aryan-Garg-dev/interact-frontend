@@ -127,6 +127,13 @@ const Onboarding = () => {
                         Bookmark tab. Easy peasy! 📚
                       </span>
                     </div>
+                    <div>
+                      <span className="font-medium underline underline-offset-2 text-lg">Organisation:</span>{' '}
+                      <span>
+                        This tab will be available after you join organisations, and will be used to dive into whole
+                        another realm of organisation management ✨
+                      </span>
+                    </div>
                   </div>
                 </div>
               );

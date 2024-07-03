@@ -85,7 +85,7 @@ const Meetings = () => {
             <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Meetings</div>
             <div className="flex-center gap-2">
               <Select
-                fieldName="Status"
+                fieldName="Access"
                 options={['open', 'restricted']}
                 icon={<LockOpen size={20} />}
                 selectedOption={status}
