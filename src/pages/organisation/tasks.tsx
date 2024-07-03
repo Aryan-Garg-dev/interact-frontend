@@ -54,8 +54,6 @@ const Tasks = () => {
       .map(u => u.id)
       .join(',')}`;
 
-    console.log(URL);
-
     getHandler(URL, abortController.signal)
       .then(res => {
         if (res.statusCode === 200) {
@@ -126,7 +124,7 @@ const Tasks = () => {
                   setSelectedOption={setPriority}
                 />
                 <Order
-                  fieldName="Order By"
+                  fieldName="Sort By"
                   options={['deadline', 'latest']}
                   icon={<SortAscending size={20} />}
                   selectedOption={order}
