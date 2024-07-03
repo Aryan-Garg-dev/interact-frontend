@@ -20,6 +20,7 @@ import { userSelector } from '@/slices/userSlice';
 import { Session } from '@/types';
 import { initialMeeting, initialUser } from '@/types/initials';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
+import { getUserFromState } from '@/utils/funcs/redux';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import { getNextSessionTime } from '@/utils/funcs/session_details';
 import Toaster from '@/utils/toaster';
@@ -158,14 +159,8 @@ const Meeting = ({ id }: Props) => {
 
     const res = await postHandler(URL, {});
     if (res.statusCode === 200) {
-      const rsvpUser = initialUser;
-      rsvpUser.id = user.id;
-      rsvpUser.name = user.name;
-      rsvpUser.username = user.username;
-      rsvpUser.profilePic = user.profilePic;
-
       setMeeting(prev => {
-        return { ...prev, rsvp: [...prev.rsvp, rsvpUser] };
+        return { ...prev, rsvp: [...prev.rsvp, getUserFromState(user)] };
       });
       Toaster.stopLoad(toaster, 'Participation Confirmed!', 1);
     } else {

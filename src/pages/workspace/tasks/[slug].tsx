@@ -5,7 +5,7 @@ import { PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import TaskView from '@/sections/workspace/task_view';
 import { userSelector } from '@/slices/userSlice';
-import { Project, Task } from '@/types';
+import { Project, Task, User } from '@/types';
 import { initialProject } from '@/types/initials';
 import Toaster from '@/utils/toaster';
 import WidthCheck from '@/utils/wrappers/widthCheck';
@@ -17,6 +17,12 @@ import { useSelector } from 'react-redux';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import NewTask from '@/sections/tasks/new_task';
 import TasksTable from '@/components/tables/tasks';
+import Select from '@/components/filters/select';
+import { ChartLine, Plus, SortAscending, WarningCircle } from '@phosphor-icons/react';
+import Order from '@/components/filters/order';
+import Users from '@/components/filters/users';
+import Tags from '@/components/filters/tags';
+import { getUserFromState } from '@/utils/funcs/redux';
 
 interface Props {
   slug: string;
@@ -32,11 +38,23 @@ const Tasks = ({ slug }: Props) => {
 
   const [clickedOnNewTask, setClickedOnNewTask] = useState(false);
 
+  const [order, setOrder] = useState('deadline');
+  const [priority, setPriority] = useState('');
+  const [status, setStatus] = useState('');
+  const [search, setSearch] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+
   const user = useSelector(userSelector);
 
-  const getTasks = () => {
-    const URL = `${PROJECT_URL}/tasks/populated/${slug}`;
-    getHandler(URL)
+  const getTasks = (abortController: AbortController) => {
+    const URL = `${PROJECT_URL}/tasks/populated/${slug}?order=${order}&search=${search}&tags=${tags.join(
+      ','
+    )}&priority=${priority}&is_completed=${status == '' ? '' : status == 'completed'}&user_id=${users
+      .map(u => u.id)
+      .join(',')}`;
+
+    getHandler(URL, abortController.signal)
       .then(res => {
         if (res.statusCode === 200) {
           setProject(res.data.project);
@@ -53,7 +71,7 @@ const Tasks = ({ slug }: Props) => {
           }
 
           setLoading(false);
-        } else {
+        } else if (res.status != -1) {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
           else {
             Toaster.error(SERVER_ERROR, 'error_toaster');
@@ -65,9 +83,18 @@ const Tasks = ({ slug }: Props) => {
       });
   };
 
+  let oldAbortController: AbortController | null = null;
+
   useEffect(() => {
-    getTasks();
-  }, [slug]);
+    const abortController = new AbortController();
+    if (oldAbortController) oldAbortController.abort();
+    oldAbortController = abortController;
+
+    getTasks(abortController);
+    return () => {
+      abortController.abort();
+    };
+  }, [order, search, priority, status, tags, users]);
 
   return (
     <BaseWrapper title={`Tasks | ${project.title}`}>
@@ -78,26 +105,52 @@ const Tasks = ({ slug }: Props) => {
           <NewTask org={false} setShow={setClickedOnNewTask} project={project} setTasks={setTasks} />
         )}
         <div className="w-full flex flex-col">
-          <div className="w-full flex justify-between p-base_padding">
-            <div className="flex gap-3">
-              {/* <ArrowArcLeft
-            onClick={() => router.back()}
-            className="w-10 h-10 p-2 dark:bg-dark_primary_comp_hover rounded-full cursor-pointer"
-            size={40}
-          /> */}
-              <div className="text-6xl font-semibold dark:text-white font-primary">Tasks</div>
+          <div className="w-full flex justify-between items-center p-base_padding">
+            <div className="flex-center gap-4">
+              <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Tasks</div>
+              <div className="flex-center gap-2">
+                <Select
+                  fieldName="Status"
+                  options={['not_completed', 'completed']}
+                  icon={<ChartLine size={20} />}
+                  selectedOption={status}
+                  setSelectedOption={setStatus}
+                />
+                <Select
+                  fieldName="Priority"
+                  options={['low', 'medium', 'high']}
+                  icon={<WarningCircle size={20} />}
+                  selectedOption={priority}
+                  setSelectedOption={setPriority}
+                />
+                <Order
+                  fieldName="Sort By"
+                  options={['deadline', 'latest']}
+                  icon={<SortAscending size={20} />}
+                  selectedOption={order}
+                  setSelectedOption={setOrder}
+                />
+                <Tags selectedTags={tags} setSelectedTags={setTags} />
+                <Users
+                  fieldName="Assigned To"
+                  users={[...project.memberships.map(m => m.user), getUserFromState(user)]}
+                  selectedUsers={users}
+                  setSelectedUsers={setUsers}
+                />
+                {/* <Search /> */}
+              </div>
             </div>
-            <div className="flex gap-8 items-center">
-              {(project.userID == user.id || user.managerProjects.includes(project.id)) && (
-                <div
-                  onClick={() => setClickedOnNewTask(true)}
-                  className="text-xl text-gradient font-semibold hover-underline-animation after:bg-dark_primary_btn cursor-pointer"
-                >
-                  <span className="max-md:hidden">Create a</span> New Task
-                </div>
-              )}
-            </div>
+
+            {(project.userID == user.id || user.managerProjects.includes(project.id)) && (
+              <Plus
+                onClick={() => setClickedOnNewTask(true)}
+                size={42}
+                className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
+                weight="regular"
+              />
+            )}
           </div>
+
           <div className="w-full flex flex-col gap-6 px-2 py-2">
             {loading ? (
               <Loader />

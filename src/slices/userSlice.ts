@@ -7,7 +7,7 @@ export interface ChatSlice {
   userID: string;
   chatID: string;
 }
-interface UserState {
+export interface UserState {
   id: string;
   name: string;
   username: string;
