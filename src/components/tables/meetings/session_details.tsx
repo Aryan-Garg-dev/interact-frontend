@@ -38,7 +38,7 @@ const SessionDetailsTable = ({ sessionID, session, setShow }: Props) => {
   const currentOrg = useSelector(currentOrgSelector);
 
   const fetchParticipants = async () => {
-    const URL = `/org/${currentOrg.id}/meetings/details/${sessionID}?page=${page}&limit=20&type=participants`;
+    const URL = `/org/${currentOrg.id}/meetings/details/${sessionID}?page=${page}&limit=50&type=participants`;
     const res = await getHandler(URL);
     if (res.statusCode === 200) {
       setParticipants(res.data.participants || []);

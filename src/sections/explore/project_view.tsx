@@ -20,6 +20,7 @@ import { userSelector } from '@/slices/userSlice';
 import LowerWorkspaceProject from '@/components/lowers/lower_workspace_project';
 import PictureList from '@/components/common/picture_list';
 import ToolTip from '@/components/utils/tooltip';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
   projectSlugs: string[];
@@ -207,7 +208,7 @@ const ProjectView = ({
             </div>
             <div className="font-semibold text-lg">{project.tagline}</div>
 
-            <div className="text-sm">
+            <div className="text-sm whitespace-pre-line">
               {project.description.length > 200 ? (
                 clickedOnReadMore ? (
                   project.description
@@ -224,7 +225,7 @@ const ProjectView = ({
                   </>
                 )
               ) : (
-                project.description
+                renderContentWithLinks(project.description)
               )}
             </div>
             <div className="w-full flex flex-wrap gap-2">

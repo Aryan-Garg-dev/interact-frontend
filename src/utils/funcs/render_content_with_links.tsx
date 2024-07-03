@@ -2,7 +2,7 @@ import { User } from '@/types';
 import Link from 'next/link';
 import React from 'react';
 
-const renderContentWithLinks = (caption: string, taggedUsers: User[]) => {
+const renderContentWithLinks = (caption: string, taggedUsers?: User[]) => {
   const codeBlockRegex = /```[\s\S]+?```/g;
   const taggedUsernames = (taggedUsers || []).map(u => u.username);
 

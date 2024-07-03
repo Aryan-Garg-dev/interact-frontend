@@ -221,7 +221,7 @@ const Meeting = ({ id }: Props) => {
                 </div>
 
                 <div className="w-full flex flex-col gap-2">
-                  <div className="">{renderContentWithLinks(meeting.description, [])}</div>
+                  <div className="">{renderContentWithLinks(meeting.description)}</div>
                   {meeting.tags && <Tags tags={meeting.tags} />}
                 </div>
 

@@ -27,6 +27,7 @@ import Report from '@/components/common/report';
 import SignUp from '@/components/common/signup_box';
 import { setCurrentChatID } from '@/slices/messagingSlice';
 import SendMessage from '@/sections/explore/send_message';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
   id: string;
@@ -266,7 +267,7 @@ const EventComponent = ({ id }: Props) => {
 
       <div className="w-full flex flex-col gap-2">
         <div className="text-sm font-medium text-gray-500">ABOUT THE EVENT</div>
-        <div className="whitespace-pre-wrap">{event.description}</div>
+        <div className="whitespace-pre-wrap">{renderContentWithLinks(event.description)}</div>
       </div>
     </div>
   );

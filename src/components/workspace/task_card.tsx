@@ -25,7 +25,7 @@ const TaskCard = ({ task, index, clickedTaskID, clickedOnTask, setClickedOnTask,
     >
       <div className="grow flex flex-col gap-2">
         <div className="font-semibold text-xl">{task.title}</div>
-        <div className="text-sm text-gray-600">{task.description}</div>
+        <div className="text-sm text-gray-600 whitespace-pre-line">{task.description}</div>
         <div className="flex gap-2 text-sm">
           <div>Deadline: </div>
           <div> {moment(task.deadline).format('DD-MMM-YY')}</div>

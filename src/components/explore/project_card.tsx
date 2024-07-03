@@ -55,7 +55,7 @@ const ProjectCard = ({ index, project, size = 72, setClickedOnProject, setClicke
             </div>
           ))}
         </div>
-        <div>{project.description}</div>
+        <div className="whitespace-pre-line">{project.description}</div>
       </div>
       <Image
         crossOrigin="anonymous"

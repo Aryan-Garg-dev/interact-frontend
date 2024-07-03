@@ -7,6 +7,7 @@ import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { College, Profile, User } from '@/types';
 import { collegesData } from '@/utils/colleges';
 import isArrEdited from '@/utils/funcs/check_array_edited';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Toaster from '@/utils/toaster';
 import { Buildings, CalendarBlank, Certificate, Envelope, MapPin, PencilSimple, Phone, X } from '@phosphor-icons/react';
 import fuzzysort from 'fuzzysort';
@@ -469,7 +470,9 @@ const About = ({ profile, setUser, org = false }: Props) => {
           {profile.description.trim() == '' ? (
             <div className="">Click here to add a Descriptive Bio!</div>
           ) : (
-            <div className={`whitespace-pre-wrap max-md:text-sm cursor-pointer`}>{profile.description}</div>
+            <div className="whitespace-pre-wrap max-md:text-sm cursor-pointer">
+              {renderContentWithLinks(profile.description)}
+            </div>
           )}
         </div>
       )}

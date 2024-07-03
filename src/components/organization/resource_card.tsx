@@ -28,7 +28,7 @@ const ResourceCard = ({ resource, setClickedOnResource, setClickedResource }: Pr
       </div>
       <div className="w-full flex flex-col items-center text-center gap-1">
         <div className="font-semibold text-3xl line-clamp-1">{resource.title}</div>
-        <div className="text-sm text-gray-600 line-clamp-2">{resource.description}</div>
+        <div className="text-sm text-gray-600 line-clamp-2 whitespace-pre-line">{resource.description}</div>
       </div>
     </div>
   );

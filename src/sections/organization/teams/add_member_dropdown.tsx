@@ -17,7 +17,7 @@ interface Props {
 const AddMemberToTeam = ({ setShow, membership, setOrganization }: Props) => {
   const [teams, setTeams] = useState<Team[]>([]);
   const currentOrg = useSelector(currentOrgSelector);
-  const orgTeams = currentOrg.teams;
+  const orgTeams = currentOrg.teams || [];
 
   const menuRef = useRef<HTMLDivElement>(null);
   const handleClickOutside = (event: MouseEvent) => {

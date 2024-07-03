@@ -112,7 +112,7 @@ const SubTaskView = ({
           </div>
         </div>
         <div className="w-full flex flex-col gap-4">
-          <div className="text-lg">{subTask.description}</div>
+          <div className="text-lg whitespace-pre-wrap">{subTask.description}</div>
           <div className="w-full flex flex-wrap gap-2">
             {subTask.tags.map(tag => {
               return (

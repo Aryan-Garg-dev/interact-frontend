@@ -7,6 +7,7 @@ import getHandler from '@/handlers/get_handler';
 import Connections from '@/sections/explore/connections_view';
 import { userSelector } from '@/slices/userSlice';
 import { Organization, OrganizationMembership, Profile, User } from '@/types';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Toaster from '@/utils/toaster';
 import { ArrowRight, Envelope, Lock, Phone } from '@phosphor-icons/react';
 import Image from 'next/image';
@@ -132,7 +133,9 @@ const About = ({ profile, organisation }: Props) => {
           <div className="border-t-[1px] border-gray-200"></div>
           {profile.description || organisation.user?.tags || profile.email || profile.phoneNo ? (
             <div className="w-full flex flex-col gap-4">
-              {profile.description && <div className="whitespace-pre-wrap text-sm">{profile.description}</div>}
+              {profile.description && (
+                <div className="whitespace-pre-wrap text-sm"> {renderContentWithLinks(profile.description)}</div>
+              )}
               <div className="flex flex-wrap gap-2">
                 {organisation.user?.tags?.map(tag => (
                   <Link

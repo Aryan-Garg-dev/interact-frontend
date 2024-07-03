@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { useWindowWidth } from '@react-hook/window-size';
 import SignUp from '@/components/common/signup_box';
 import UpdateResume from '../settings/update_resume';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
   opening: Opening;
@@ -116,7 +117,7 @@ const OpeningView = ({ opening, setShow, setOpening, org = false, showBack = fal
             <div className="flex justify-between items-center">
               <div className="font-bold text-xl text-gradient">About this role</div>
             </div>
-            <div className="whitespace-pre-wrap">{opening.description}</div>
+            <div className="whitespace-pre-wrap">{renderContentWithLinks(opening.description)}</div>
             <div className="w-full flex flex-wrap gap-2">
               {opening.tags &&
                 opening.tags.map(tag => {

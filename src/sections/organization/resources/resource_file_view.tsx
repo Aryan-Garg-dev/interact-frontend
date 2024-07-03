@@ -181,7 +181,7 @@ const ResourceFileView = ({
             ) : (
               <div className="w-full h-full flex-center flex-col gap-2">
                 <div className="text-3xl font-semibold text-center">{resourceFile.title}</div>
-                <div className="text-gray-500 text-center">{resourceFile.description}</div>
+                <div className="text-gray-500 text-center whitespace-pre-wrap">{resourceFile.description}</div>
                 {resourceFile.type != '' && (
                   <div className="text-sm">
                     Type- <span className="uppercase font-medium">{resourceFile.type}</span>

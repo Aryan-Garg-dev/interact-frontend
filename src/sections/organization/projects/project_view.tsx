@@ -23,6 +23,7 @@ import checkOrgAccess from '@/utils/funcs/check_org_access';
 import { ORG_MANAGER, ORG_SENIOR } from '@/config/constants';
 import Link from 'next/link';
 import ConfirmOTP from '@/components/common/confirm_otp';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
   projectSlugs: string[];
@@ -336,7 +337,7 @@ const ProjectView = ({
                   </div>
                   <div className="font-semibold text-lg">{project.tagline}</div>
 
-                  <div className="text-sm">
+                  <div className="text-sm whitespace-pre-line">
                     {project.description.length > 200 ? (
                       <>
                         {clickedOnReadMore ? (
@@ -355,7 +356,7 @@ const ProjectView = ({
                         )}
                       </>
                     ) : (
-                      project.description
+                      renderContentWithLinks(project.description)
                     )}
                   </div>
                   <div className="w-full flex flex-wrap gap-2">
