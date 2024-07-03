@@ -5,10 +5,11 @@ import Tags from '@/components/filters/tags';
 import Users from '@/components/filters/users';
 import TasksTable from '@/components/tables/tasks';
 import { SERVER_ERROR } from '@/config/errors';
-import { PROJECT_URL } from '@/config/routes';
+import { ORG_URL, PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import NewTask from '@/sections/tasks/new_task';
 import TaskView from '@/sections/workspace/task_view';
+import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { userSelector } from '@/slices/userSlice';
 import { Project, Task, User } from '@/types';
 import { initialProject } from '@/types/initials';
@@ -21,9 +22,10 @@ import { useSelector } from 'react-redux';
 
 interface Props {
   slug: string;
+  org?: boolean;
 }
 
-const ProjectTasks = ({ slug }: Props) => {
+const ProjectTasks = ({ slug, org = false }: Props) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [project, setProject] = useState<Project>(initialProject);
   const [loading, setLoading] = useState(true);
@@ -42,12 +44,14 @@ const ProjectTasks = ({ slug }: Props) => {
 
   const user = useSelector(userSelector);
 
+  const currentOrgID = useSelector(currentOrgIDSelector);
+
   const getTasks = (abortController: AbortController) => {
-    const URL = `${PROJECT_URL}/tasks/populated/${slug}?order=${order}&search=${search}&tags=${tags.join(
-      ','
-    )}&priority=${priority}&is_completed=${status == '' ? '' : status == 'completed'}&user_id=${users
-      .map(u => u.id)
-      .join(',')}`;
+    const URL =
+      (org ? `${ORG_URL}/${currentOrgID}/projects/${slug}` : `${PROJECT_URL}/tasks/populated/${slug}`) +
+      `?order=${order}&search=${search}&tags=${tags.join(',')}&priority=${priority}&is_completed=${
+        status == '' ? '' : status == 'completed'
+      }&user_id=${users.map(u => u.id).join(',')}`;
 
     getHandler(URL, abortController.signal)
       .then(res => {

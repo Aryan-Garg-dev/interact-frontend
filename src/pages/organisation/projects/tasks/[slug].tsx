@@ -14,7 +14,7 @@ const Tasks = ({ slug }: Props) => {
   return (
     <BaseWrapper title="Tasks">
       <OrgSidebar index={3} />
-      <ProjectTasks slug={slug} />
+      <ProjectTasks slug={slug} org={true} />
     </BaseWrapper>
   );
 };

@@ -272,40 +272,6 @@ const ProjectView = ({
                     >
                       {project.user.name}
                     </div>
-                    {project.memberships?.length > 0 && (
-                      <div className="flex gap-1">
-                        <div>+</div>
-                        <div
-                          className={`w-${
-                            4 *
-                            project.memberships.filter((m, index) => {
-                              return index >= 0 && index < 3;
-                            }).length
-                          } h-4 relative mr-1`}
-                        >
-                          {project.memberships
-                            .filter((m, index) => {
-                              return index >= 0 && index < 3;
-                            })
-                            .map((m, index) => {
-                              return (
-                                <Image
-                                  key={index}
-                                  crossOrigin="anonymous"
-                                  width={50}
-                                  height={50}
-                                  alt={'User Pic'}
-                                  src={`${USER_PROFILE_PIC_URL}/${m.user.profilePic}`}
-                                  className={`w-4 h-4 rounded-full cursor-default absolute top-0 left-${index}`}
-                                />
-                              );
-                            })}
-                        </div>
-                        <div>
-                          {project.memberships.length} other{project.memberships.length != 1 ? 's' : ''}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
