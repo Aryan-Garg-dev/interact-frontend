@@ -50,7 +50,7 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
       <div className="w-[calc(100%-140px)] flex flex-col gap-2">
         <div className="w-5/6 flex flex-col gap-1">
           <div className="font-bold text-2xl max-lg:text-lg text-gradient line-clamp-1">{opening.title}</div>
-          <div className="font-medium text-sm line-clamp-1">
+          <div className="w-fit font-medium flex-center text-sm line-clamp-1">
             @
             {org ? (
               <span className="w-fit flex-center gap-1">

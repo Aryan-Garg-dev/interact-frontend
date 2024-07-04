@@ -1,6 +1,6 @@
-import { MEMBERSHIP_URL, ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
-import { Invitation, Organization, Project, User } from '@/types';
+import { Invitation, Organization, User } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -8,7 +8,6 @@ import { MagnifyingGlass } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import Loader from '@/components/common/loader';
-import project from '@/screens/messaging/project';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import PrimaryButton from '@/components/buttons/primary_btn';
@@ -24,7 +23,7 @@ interface InvitationSlice {
   title: string;
 }
 
-const AddMembers = ({ setShow, organization, setOrganization }: Props) => {
+const AddMembers = ({ setShow, setOrganization }: Props) => {
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);

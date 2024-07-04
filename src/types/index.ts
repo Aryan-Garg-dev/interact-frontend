@@ -282,6 +282,7 @@ export interface Application {
   links: string[];
   score: number;
   createdAt: Date;
+  noComments: number;
 }
 
 export interface Notification {

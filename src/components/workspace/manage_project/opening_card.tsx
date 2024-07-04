@@ -99,20 +99,19 @@ const OpeningCard = ({ opening, project, setProject, org = false }: Props) => {
                 </div>
               )}
 
-              {project.userID == user.id ||
-                (user.managerProjects.includes(project.id) &&
-                  (opening.noApplications > 0 ? (
-                    <Link
-                      href={`/workspace/manage/applications/${opening.id}`}
-                      className="w-fit text-[#15bffd] text-sm max-md:text-sm underline underline-offset-4"
-                    >
-                      View
-                    </Link>
-                  ) : (
-                    <div className="w-fit dark:text-white text-sm max-md:text-sm underline underline-offset-4 cursor-default">
-                      No applications
-                    </div>
-                  )))}
+              {(project.userID == user.id || user.managerProjects.includes(project.id)) &&
+                (opening.noApplications > 0 ? (
+                  <Link
+                    href={`/workspace/manage/applications/${opening.id}`}
+                    className="w-fit text-[#15bffd] text-sm max-md:text-sm underline underline-offset-4"
+                  >
+                    View
+                  </Link>
+                ) : (
+                  <div className="w-fit dark:text-white text-sm max-md:text-sm underline underline-offset-4 cursor-default">
+                    No applications
+                  </div>
+                ))}
             </div>
           </div>
           {hasAccess && (

@@ -65,10 +65,8 @@ export default function Openings({ orgID }: Props) {
   }, []);
   return (
     <>
-      {clickedOnNewOpening && checkOrgAccess(ORG_MANAGER) ? (
+      {clickedOnNewOpening && checkOrgAccess(ORG_MANAGER) && (
         <NewOpening setShow={setClickedOnNewOpening} openings={openings} setOpenings={setOpenings} />
-      ) : (
-        <></>
       )}
       <div className="w-full flex justify-evenly gap-4 px-4 pb-base_padding">
         {openings.length > 0 ? (

@@ -245,6 +245,7 @@ export const initialApplication: Application = {
   links: [],
   score: -1,
   createdAt: new Date(),
+  noComments: 0,
 };
 
 export const initialAnnouncement: Announcement = {

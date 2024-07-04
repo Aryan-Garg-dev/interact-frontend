@@ -73,7 +73,7 @@ const OpeningCard = ({ opening, setOpenings }: Props) => {
               {checkOrgAccess(ORG_MANAGER) &&
                 (opening.noApplications > 0 ? (
                   <Link
-                    href={`/workspace/manage/applications/${opening.id}`}
+                    href={`/organisation/openings/applications/${opening.id}`}
                     className="w-fit text-[#15bffd] text-sm max-md:text-sm underline underline-offset-4"
                   >
                     View
