@@ -352,7 +352,7 @@ const Meeting = ({ id }: Props) => {
                       )}
                     </div>
 
-                    {!meeting.isLive && moment(moment()).isBefore(meeting.nextSessionTime) && (
+                    {!meeting.isLive && moment(moment()).isBefore(moment(getNextSessionTime(meeting))) && (
                       <div className="w-1/3 flex flex-col gap-4">
                         {meeting.rsvp && meeting.rsvp.length > 0 && (
                           <div className="w-full bg-white flex flex-col gap-2 rounded-md p-4 shadow-md">
@@ -385,7 +385,7 @@ const Meeting = ({ id }: Props) => {
                           </div>
                         )}
 
-                        {isParticipant() && !meeting.rsvp.map(u => u.id).includes(user.id) && (
+                        {isParticipant() && !meeting?.rsvp.map(u => u.id).includes(user.id) && (
                           <div className="w-full bg-white flex flex-col gap-2 rounded-md p-4 shadow-md">
                             <div className="w-full text-2xl font-semibold text-primary_black">RSVP Now!</div>
                             <div className="text-sm">

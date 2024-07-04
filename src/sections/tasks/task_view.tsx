@@ -1,7 +1,7 @@
 import { SubTask, Task } from '@/types';
 import { ArrowArcLeft, Gear, Trash, PlusCircle } from '@phosphor-icons/react';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import ToolTip from '@/components/utils/tooltip';
@@ -54,6 +54,17 @@ const TaskComponent = ({
   const [clickedOnUsers, setClickedOnUsers] = useState(false);
 
   const user = useSelector(userSelector);
+
+  useEffect(() => {
+    document.documentElement.style.overflowY = 'hidden';
+    document.documentElement.style.height = '100vh';
+
+    return () => {
+      document.documentElement.style.overflowY = 'auto';
+      document.documentElement.style.height = 'auto';
+    };
+  }, []);
+
   return (
     <>
       {clickedOnUsers && <UsersList title="Task Users" users={task.users} setShow={setClickedOnUsers} />}

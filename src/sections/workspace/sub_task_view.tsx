@@ -1,6 +1,6 @@
 import { userIDSelector } from '@/slices/userSlice';
 import { SubTask, Task } from '@/types';
-import { ArrowArcLeft, Gear, Trash } from '@phosphor-icons/react';
+import { Gear, Trash } from '@phosphor-icons/react';
 import moment from 'moment';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -36,7 +36,7 @@ const SubTaskView = ({
 
   const isAssignedUser = (userID: string) => {
     var check = false;
-    task.users.forEach(user => {
+    task.users?.forEach(user => {
       if (user.id == userID) {
         check = true;
         return;
@@ -114,13 +114,14 @@ const SubTaskView = ({
         <div className="w-full flex flex-col gap-4">
           <div className="text-lg whitespace-pre-wrap">{subTask.description}</div>
           <div className="w-full flex flex-wrap gap-2">
-            {subTask.tags.map(tag => {
-              return (
-                <div key={tag} className="text-xs border-black border-[1px] px-2 py-1 rounded-lg">
-                  {tag}
-                </div>
-              );
-            })}
+            {subTask.tags &&
+              subTask.tags.map(tag => {
+                return (
+                  <div key={tag} className="text-xs border-black border-[1px] px-2 py-1 rounded-lg">
+                    {tag}
+                  </div>
+                );
+              })}
           </div>
         </div>
         <div className="flex gap-2 items-center">
@@ -140,7 +141,7 @@ const SubTaskView = ({
             {subTask.priority}
           </div>
         </div>
-        {subTask.users.length > 0 ? (
+        {subTask.users && subTask.users.length > 0 ? (
           <div className="w-full flex flex-col gap-2">
             <div className="text-xl font-medium">Assigned To</div>
             <div className="w-full flex flex-wrap justify-around gap-2">
