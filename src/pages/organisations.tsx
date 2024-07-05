@@ -21,6 +21,7 @@ import WidthCheck from '@/utils/wrappers/widthCheck';
 import ConfirmOTP from '@/components/common/confirm_otp';
 import { setOrganizationMemberships, userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
+import { GetServerSideProps } from 'next';
 
 const Organizations = () => {
   const [memberships, setMemberships] = useState<OrganizationMembership[]>([]);
@@ -167,6 +168,16 @@ const Organizations = () => {
       </MainWrapper>
     </BaseWrapper>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  const { query } = context;
+
+  return {
+    props: {
+      query,
+    },
+  };
 };
 
 export default WidthCheck(NonOrgOnlyAndProtect(Organizations));

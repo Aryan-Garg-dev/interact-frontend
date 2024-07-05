@@ -1,3 +1,4 @@
+import CopyClipboardButton from '@/components/buttons/copy_clipboard_btn';
 import PrimaryButton from '@/components/buttons/primary_btn';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import Loader from '@/components/common/loader';
@@ -6,6 +7,7 @@ import PictureList from '@/components/common/picture_list';
 import Tags from '@/components/common/tags';
 import SessionDetailsTable from '@/components/tables/meetings/session_details';
 import SessionTable from '@/components/tables/meetings/sessions';
+import ToolTip from '@/components/utils/tooltip';
 import { ORG_SENIOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
@@ -18,12 +20,14 @@ import ParticipantsList from '@/sections/organization/meetings/view_participants
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { userSelector } from '@/slices/userSlice';
 import { Session } from '@/types';
-import { initialMeeting, initialUser } from '@/types/initials';
+import { initialMeeting } from '@/types/initials';
 import checkOrgAccess from '@/utils/funcs/check_org_access';
 import { getUserFromState } from '@/utils/funcs/redux';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import { getNextSessionTime } from '@/utils/funcs/session_details';
 import Toaster from '@/utils/toaster';
+import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
+import WidthCheck from '@/utils/wrappers/widthCheck';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import { Pen, Trash } from '@phosphor-icons/react';
@@ -208,6 +212,25 @@ const Meeting = ({ id }: Props) => {
                       //TODO back button
                       <ArrowLeft size={24} /> */}
                       <div className="text-5xl font-semibold">{meeting.title}</div>
+                      <div className="relative group">
+                        <ToolTip
+                          content="Copy Meeting Link"
+                          styles={{
+                            fontSize: '10px',
+                            padding: '2px',
+                            width: '120px',
+                            top: '-50%',
+                            left: '50%',
+                            translate: '-50% 0',
+                            border: 'none',
+                          }}
+                        />
+                        <CopyClipboardButton
+                          url={`/organisations?oid=${currentOrg.id}&redirect_url=/meetings/${id}`}
+                          iconOnly={true}
+                          size={28}
+                        />
+                      </div>
                     </div>
                     <div className="w-fit flex-center gap-4">
                       {checkOrgAccess(ORG_SENIOR) && (
@@ -352,58 +375,61 @@ const Meeting = ({ id }: Props) => {
                       )}
                     </div>
 
-                    {!meeting.isLive && moment(moment()).isBefore(moment(getNextSessionTime(meeting))) && (
-                      <div className="w-1/3 flex flex-col gap-4">
-                        {meeting.rsvp && meeting.rsvp.length > 0 && (
-                          <div className="w-full bg-white flex flex-col gap-2 rounded-md p-4 shadow-md">
-                            <div className="w-full text-2xl font-semibold text-primary_black">
-                              Confirmed Participants
-                            </div>
-                            <div className="w-full max-h-48 overflow-y-auto flex flex-col gap-2">
-                              {meeting.rsvp.map(user => (
-                                <div
-                                  key={user.id}
-                                  className="w-full h-12 bg-white rounded-xl border-gray-400 flex text-sm text-primary_black transition-ease-300"
-                                >
-                                  <div className="w-full flex items-center gap-1">
-                                    <Image
-                                      crossOrigin="anonymous"
-                                      width={50}
-                                      height={50}
-                                      alt={'User Pic'}
-                                      src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-                                      className="w-8 h-8 rounded-full z-[1]"
-                                    />
-                                    <div className="flex-center gap-2">
-                                      <div className="font-medium text-lg">{user.name}</div>
-                                      <div className="text-xs">@{user.username}</div>
+                    {!meeting.isLive &&
+                      moment()
+                        .utcOffset('+05:30')
+                        .isBefore(moment(getNextSessionTime(meeting), 'hh:mm A, ddd MMM DD').utcOffset('+05:30')) && (
+                        <div className="w-1/3 flex flex-col gap-4">
+                          {meeting.rsvp && meeting.rsvp.length > 0 && (
+                            <div className="w-full bg-white flex flex-col gap-2 rounded-md p-4 shadow-md">
+                              <div className="w-full text-2xl font-semibold text-primary_black">
+                                Confirmed Participants
+                              </div>
+                              <div className="w-full max-h-48 overflow-y-auto flex flex-col gap-2">
+                                {meeting.rsvp.map(user => (
+                                  <div
+                                    key={user.id}
+                                    className="w-full h-12 bg-white rounded-xl border-gray-400 flex text-sm text-primary_black transition-ease-300"
+                                  >
+                                    <div className="w-full flex items-center gap-1">
+                                      <Image
+                                        crossOrigin="anonymous"
+                                        width={50}
+                                        height={50}
+                                        alt={'User Pic'}
+                                        src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                                        className="w-8 h-8 rounded-full z-[1]"
+                                      />
+                                      <div className="flex-center gap-2">
+                                        <div className="font-medium text-lg">{user.name}</div>
+                                        <div className="text-xs">@{user.username}</div>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                              ))}
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                        )}
+                          )}
 
-                        {isParticipant() && !meeting?.rsvp.map(u => u.id).includes(user.id) && (
-                          <div className="w-full bg-white flex flex-col gap-2 rounded-md p-4 shadow-md">
-                            <div className="w-full text-2xl font-semibold text-primary_black">RSVP Now!</div>
-                            <div className="text-sm">
-                              Looks like you haven&apos;t confirmed your presence yet. Click the button below and let
-                              other participants know you&apos;ll be joining the meeting!
+                          {isParticipant() && !meeting?.rsvp.map(u => u.id).includes(user.id) && (
+                            <div className="w-full bg-white flex flex-col gap-2 rounded-md p-4 shadow-md">
+                              <div className="w-full text-2xl font-semibold text-primary_black">RSVP Now!</div>
+                              <div className="text-sm">
+                                Looks like you haven&apos;t confirmed your presence yet. Click the button below and let
+                                other participants know you&apos;ll be joining the meeting!
+                              </div>
+                              <div className="w-full flex-center mt-2">
+                                <PrimaryButton
+                                  label="Yes, i will be joining the meeting."
+                                  width="fit"
+                                  textSize="sm"
+                                  onClick={handleRSVP}
+                                />
+                              </div>
                             </div>
-                            <div className="w-full flex-center mt-2">
-                              <PrimaryButton
-                                label="Yes, i will be joining the meeting."
-                                width="fit"
-                                textSize="sm"
-                                onClick={handleRSVP}
-                              />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
+                          )}
+                        </div>
+                      )}
                   </div>
                 </div>
               </div>
@@ -430,4 +456,4 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 }
 
-export default Meeting;
+export default WidthCheck(OrgMembersOnlyAndProtect(Meeting));

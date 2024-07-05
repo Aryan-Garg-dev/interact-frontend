@@ -308,11 +308,7 @@ const EditTask = ({
                       <div className="w-5/6 flex flex-col">
                         <div className="text-lg font-bold">{user.name}</div>
                         <div className="text-sm dark:text-gray-200">@{user.username}</div>
-                        {user.tagline && user.tagline != '' ? (
-                          <div className="text-sm mt-2">{user.tagline}</div>
-                        ) : (
-                          <></>
-                        )}
+                        {user.tagline && user.tagline != '' && <div className="text-sm mt-2">{user.tagline}</div>}
                       </div>
                     </div>
                   );

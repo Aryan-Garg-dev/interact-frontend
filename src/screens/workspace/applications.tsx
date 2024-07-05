@@ -73,7 +73,7 @@ const Applications = () => {
                     case 0:
                       return (
                         <div className="absolute top-0 right-2 -translate-y-1/2 flex gap-1 items-center px-2 py-1 rounded-xl text-xs bg-[#ffffff] max-lg:fixed max-lg:top-navbar">
-                          Submitted
+                          Waiting
                         </div>
                       );
                     case 1:
