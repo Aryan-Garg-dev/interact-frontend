@@ -20,7 +20,7 @@ import patchHandler from '@/handlers/patch_handler';
 import Toaster from '@/utils/toaster';
 import Head from 'next/head';
 import { resizeImage } from '@/utils/resize_image';
-import { setOnboarding } from '@/slices/feedSlice';
+import { setHomeTab, setOnboarding } from '@/slices/feedSlice';
 import { Id } from 'react-toastify';
 import { ReactSVG } from 'react-svg';
 import ProgressBar from '@/components/onboarding/progress_bar';
@@ -95,6 +95,7 @@ const Onboarding = () => {
       if (bio != user.bio) dispatch(setReduxBio(bio));
       if (tagline != user.tagline) dispatch(setReduxTagline(tagline));
       dispatch(setReduxLinks(links));
+      dispatch(setHomeTab(1));
       dispatch(setOnboarding(true));
       dispatch(setOnboardingStatus(true));
 

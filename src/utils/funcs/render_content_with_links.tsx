@@ -33,7 +33,7 @@ const renderContentWithLinks = (caption: string, taggedUsers?: User[]) => {
                 size={24}
                 weight="duotone"
               />
-              <pre className="w-full overflow-auto rounded-sm p-3 border-[1px] border-[#3636363f] border-dashed small_scrollbar">
+              <pre className="w-full overflow-auto rounded-sm p-3 border-[1px] border-[#3636363f] border-dashed thin_scrollbar">
                 <code>{codeContent.trim()}</code>
               </pre>
             </div>

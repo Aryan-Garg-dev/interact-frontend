@@ -54,7 +54,7 @@ const EventCard = ({
           blurDataURL={event.blurHash || 'no-hash'}
         />
         {org && checkOrgAccess(ORG_SENIOR) && (
-          <div className="flex gap-2 absolute opacity-0 group-hover:opacity-100 top-2 left-2 transition-ease-300">
+          <div className="w-full flex gap-2 absolute opacity-0 group-hover:opacity-100 top-2 left-2 transition-ease-300">
             {checkParticularOrgAccess(ORG_SENIOR, event.organization) && (
               <div
                 onClick={el => {
