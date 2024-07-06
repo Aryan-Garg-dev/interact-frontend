@@ -7,7 +7,6 @@ import getHandler from '@/handlers/get_handler';
 import { OrganizationMembership, User } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 interface Props {
   type: string; // followers, following or members
@@ -24,10 +23,12 @@ const Connections = ({ type, user, setShow, orgID = '', org = false }: Props) =>
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
+  const limit = 10;
+
   const fetchUsers = async () => {
     setLoading(true);
     const BASE_URL = org ? `${ORG_URL}/${orgID}/explore_memberships` : `${CONNECTION_URL}/${type}/${user.id}`;
-    const URL = `${BASE_URL}?page=${page}&limit=${10}`;
+    const URL = `${BASE_URL}?page=${page}&limit=${limit}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       var newUsers: User[] = res.data.users || [];
@@ -80,24 +81,29 @@ const Connections = ({ type, user, setShow, orgID = '', org = false }: Props) =>
                 <UserCardLoader key={i} />
               ))}
           </div>
+        ) : loading && page == 1 ? (
+          <Loader />
+        ) : users && users.length == 0 ? (
+          <div className="w-full text-center font-medium">No users here :)</div>
         ) : (
-          <>
-            {!users || users.length === 0 ? (
-              <div className="w-full text-center text-lg font-medium">Nothing Here :)</div>
+          <div className="w-full flex flex-col gap-2">
+            {users.map(user => {
+              return <UserCard key={user.id} user={user} forTrending={true} />;
+            })}
+            {loading ? (
+              <Loader />
             ) : (
-              <InfiniteScroll
-                className="px-4 max-lg:px-2 flex flex-col gap-2"
-                dataLength={users.length}
-                next={fetchUsers}
-                hasMore={hasMore}
-                loader={<Loader />}
-              >
-                {users.map(user => {
-                  return <UserCard key={user.id} user={user} />;
-                })}
-              </InfiniteScroll>
+              users.length % limit == 0 &&
+              hasMore && (
+                <div
+                  onClick={fetchUsers}
+                  className="w-fit mx-auto pt-4 text-xs text-gray-700 font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
+                >
+                  Load More
+                </div>
+              )
             )}
-          </>
+          </div>
         )}
       </div>
       <div

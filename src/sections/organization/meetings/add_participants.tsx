@@ -35,7 +35,7 @@ const AddMeetingParticipants = ({ meeting, setShow, setMeeting }: Props) => {
     setLoading(true);
     const URL = `${ORG_URL}/${currentOrg.id}/meetings/non-participants/?search=${search}&limit=${10}&isOpenForMembers=${
       meeting.isOpenForMembers
-    }&allowExternalParticipants=${meeting.allowExternalParticipants}`;
+    }&allowExternalParticipants=${meeting.allowExternalParticipants}&meetingID=${meeting.id}`;
 
     const res = await getHandler(URL, abortController?.signal);
     if (res.statusCode == 200) {
