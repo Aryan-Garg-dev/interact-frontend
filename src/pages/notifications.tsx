@@ -59,7 +59,7 @@ const Notifications = () => {
       <Sidebar index={8} />
       <MainWrapper>
         <div className="w-full max-lg:w-full mx-auto flex flex-col gap-4 px-8 max-md:px-4 py-6 font-primary relative transition-ease-out-500">
-          <div className="w-fit text-4xl max-md:text-3xl font-extrabold text-gradient pl-2">Notifications</div>
+          <div className="w-fit text-5xl max-md:text-3xl font-extrabold text-gradient pl-2">Notifications</div>
           {loading ? (
             <Loader />
           ) : (
@@ -74,7 +74,7 @@ const Notifications = () => {
                   next={getNotifications}
                   hasMore={hasMore}
                   loader={<Loader />}
-                  className="flex flex-col gap-2"
+                  className="flex flex-col gap-1"
                 >
                   {notifications.map(notification => {
                     switch (notification.notificationType) {
@@ -86,12 +86,12 @@ const Notifications = () => {
                       case 3:
                       case 12:
                       case 18:
-                        return <Liked notification={notification} />;
+                        return <Liked notification={notification} short={false} />;
                       case 2:
                       case 4:
                       case 13:
                       case 19:
-                        return <Comment notification={notification} />;
+                        return <Comment notification={notification} short={false} />;
                       case 5:
                       case 20:
                         return <UserAppliedToOpening notification={notification} />;
@@ -111,12 +111,11 @@ const Notifications = () => {
                       case 15:
                       case 16:
                       case 17:
-                        return <Impressions notification={notification} />;
+                        return <Impressions notification={notification} short={false} />;
                       case 21:
                       case 22:
                       case 23:
-                        return <Tagged notification={notification} />;
-
+                        return <Tagged notification={notification} short={false} />;
                       default:
                         return <></>;
                     }
