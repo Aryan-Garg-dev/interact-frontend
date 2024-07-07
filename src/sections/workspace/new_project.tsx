@@ -7,13 +7,14 @@ import CoverPic from '@/components/utils/new_cover';
 import { SERVER_ERROR } from '@/config/errors';
 import { PROJECT_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
-import { userSelector } from '@/slices/userSlice';
+import { setOwnerProjects, userSelector } from '@/slices/userSlice';
 import { Project } from '@/types';
 import categories from '@/utils/categories';
 import Toaster from '@/utils/toaster';
 import ModalWrapper from '@/wrappers/modal';
 import { X } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 
 interface Props {
@@ -34,6 +35,8 @@ const NewProject = ({ setShow, setProjects }: Props) => {
   const [mutex, setMutex] = useState(false);
 
   const user = useSelector(userSelector);
+
+  const dispatch = useDispatch();
 
   const [randomImage, setRandomImage] = useState(`default_${Math.floor(Math.random() * 9) + 1}.jpg`);
 
@@ -93,6 +96,7 @@ const NewProject = ({ setShow, setProjects }: Props) => {
       setLinks([]);
       setImage(undefined);
       setShow(false);
+      dispatch(setOwnerProjects([...(user.ownerProjects || [], project.id)]));
     } else if (res.statusCode == 413) {
       Toaster.stopLoad(toaster, 'Image too large', 0);
     } else {
@@ -116,7 +120,7 @@ const NewProject = ({ setShow, setProjects }: Props) => {
   }, []);
 
   return (
-    <ModalWrapper setShow={setShow} width="2/3" height="fit" blur={true} modalStyles={{ top: '50%' }}>
+    <ModalWrapper setShow={setShow} width="2/3" height="4/5" blur={true} modalStyles={{ top: '50%' }}>
       <div className="w-full h-full bg-white dark:bg-[#ffe1fc22] flex max-lg:flex-col justify-between rounded-lg p-2 gap-8 max-lg:gap-4 dark:text-white font-primary border-primary_btn  dark:border-dark_primary_btn">
         <X
           onClick={() => setShow(false)}

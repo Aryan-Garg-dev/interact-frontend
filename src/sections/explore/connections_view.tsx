@@ -70,7 +70,7 @@ const Connections = ({ type, user, setShow, orgID = '', org = false }: Props) =>
       width="2/5"
       height="fit"
       blur={true}
-      modalStyles={{ top: users && users.length > 5 ? '50%' : '30%' }}
+      modalStyles={{ top: users && users.length > 5 ? '50%' : '45%' }}
     >
       <div className="w-full text-center text-gradient font-bold text-2xl capitalize">
         {type} of {user.name}

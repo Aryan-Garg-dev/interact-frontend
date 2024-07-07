@@ -43,7 +43,7 @@ const ProfileCompletion = () => {
       onClick={el => {
         if (width > 760) {
           el.preventDefault();
-          dispatch(setProfileCompletionOpen(!open));
+          if (!open) dispatch(setProfileCompletionOpen(true));
         }
       }}
       className={`${
