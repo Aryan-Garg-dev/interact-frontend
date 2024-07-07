@@ -12,7 +12,7 @@ interface Props {
 
 const UsersList = ({ users, title, setShow }: Props) => {
   return (
-    <ModalWrapper setShow={setShow} width={'1/3'}>
+    <ModalWrapper setShow={setShow} width={'1/3'} top={'1/3'}>
       <div className="text-2xl font-semibold">
         {title} ({users.length})
       </div>

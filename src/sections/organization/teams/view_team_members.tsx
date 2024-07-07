@@ -190,7 +190,7 @@ const MembersList = ({ teamID, setShow, setOrganization }: Props) => {
   ) : clickedOnLeave ? (
     <ConfirmDelete handleDelete={handleLeave} setShow={setClickedOnLeave} title="Confirm Leave?" />
   ) : (
-    <ModalWrapper setShow={setShow} width={'1/3'}>
+    <ModalWrapper setShow={setShow} width={'1/3'} top={'1/3'}>
       <div className="w-full flex items-center justify-between flex-wrap">
         <div className="text-2xl font-semibold">Team Members ({(team.memberships || []).length}) </div>
         <div className="flex-center gap-2">

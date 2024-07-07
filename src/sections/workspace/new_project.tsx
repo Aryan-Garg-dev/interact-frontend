@@ -11,6 +11,7 @@ import { userSelector } from '@/slices/userSlice';
 import { Project } from '@/types';
 import categories from '@/utils/categories';
 import Toaster from '@/utils/toaster';
+import ModalWrapper from '@/wrappers/modal';
 import { X } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -115,8 +116,8 @@ const NewProject = ({ setShow, setProjects }: Props) => {
   }, []);
 
   return (
-    <>
-      <div className="fixed top-14 max-lg:top-0 w-5/6 max-lg:w-screen h-5/6 max-lg:h-screen backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex max-lg:flex-col justify-between rounded-lg p-8 gap-8 max-lg:gap-4 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 shadow-2xl animate-fade_third z-50">
+    <ModalWrapper setShow={setShow} width="2/3" height="fit" blur={true} modalStyles={{ top: '50%' }}>
+      <div className="w-full h-full bg-white dark:bg-[#ffe1fc22] flex max-lg:flex-col justify-between rounded-lg p-2 gap-8 max-lg:gap-4 dark:text-white font-primary border-primary_btn  dark:border-dark_primary_btn">
         <X
           onClick={() => setShow(false)}
           className="lg:hidden absolute top-2 right-2 cursor-pointer"
@@ -205,11 +206,7 @@ const NewProject = ({ setShow, setProjects }: Props) => {
           {/* <div className="w-fit  text-3xl font-bold">Build Project</div> */}
         </div>
       </div>
-      <div
-        onClick={() => setShow(false)}
-        className="bg-backdrop w-screen h-screen backdrop-blur-md max-lg:w-[105vw] max-lg:h-[105vh] fixed top-0 left-0 animate-fade_third z-20"
-      ></div>
-    </>
+    </ModalWrapper>
   );
 };
 

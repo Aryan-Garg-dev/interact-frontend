@@ -64,7 +64,7 @@ const SessionDetailsTable = ({ sessionID, session, setShow }: Props) => {
   }, [sessionID]);
 
   return (
-    <ModalWrapper setShow={setShow} width={'2/3'} blur={true}>
+    <ModalWrapper setShow={setShow} width={'2/3'} blur={true} top={'1/3'}>
       <div className="w-full flex items-center gap-4 py-2">
         <div className="text-3xl font-semibold">Session Details</div>
         {session?.isLive ? (

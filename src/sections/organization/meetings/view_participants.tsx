@@ -45,7 +45,7 @@ const ParticipantsList = ({ meeting, title, setShow, setClickedOnAddParticipants
   };
 
   return (
-    <ModalWrapper setShow={setShow} width={'1/3'}>
+    <ModalWrapper setShow={setShow} width={'1/3'} top={'1/3'}>
       <div className="text-2xl flex-center gap-2 font-semibold">
         {title} ({meeting.participants.length}){' '}
         <PlusCircle onClick={() => setClickedOnAddParticipants(true)} className="cursor-pointer" weight="bold" />

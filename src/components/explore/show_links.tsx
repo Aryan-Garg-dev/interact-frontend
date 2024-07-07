@@ -2,6 +2,7 @@ import getDomainName from '@/utils/funcs/get_domain_name';
 import Link from 'next/link';
 import React from 'react';
 import getIcon from '@/utils/funcs/get_icon';
+import ToolTip from '../utils/tooltip';
 
 interface Props {
   links: string[];
@@ -18,9 +19,15 @@ const Links = ({ links, title = 'Links' }: Props) => {
             {links.map(link => {
               return (
                 <Link key={link} href={link} target="_blank" className="relative group">
-                  <div className="w-fit absolute -top-12 left-0 scale-0 px-3 rounded-lg border-2  border-gray-200 bg-white py-2 text-sm font-semibold shadow-xl transition-ease-300 capitalize group-hover:scale-100">
-                    {getDomainName(link)}
-                  </div>
+                  <ToolTip
+                    content={getDomainName(link)}
+                    styles={{
+                      fontSize: '10px',
+                      padding: '2px 8px',
+                      left: '50%',
+                      translate: '-50% 60%',
+                    }}
+                  />
                   <div className="hover:scale-110 transition-ease-300"> {getIcon(getDomainName(link), 40)}</div>
                 </Link>
               );

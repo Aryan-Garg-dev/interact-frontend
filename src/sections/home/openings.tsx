@@ -13,7 +13,7 @@ const Openings = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchOpenings = async () => {
-    const URL = `${EXPLORE_URL}/openings?limit=${8}&order=trending`;
+    const URL = `${EXPLORE_URL}/openings?limit=8&order=trending`;
 
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
@@ -48,7 +48,9 @@ const Openings = () => {
             <div className="w-full grid grid-cols-2 gap-2">
               {openings.map(opening => {
                 return (
-                  <OpeningCard key={opening.id} opening={opening} org={opening?.organizationID == ''} short={true} />
+                  <Link key={opening.id} href={`/explore?tab=openings&oid=${opening.id}`}>
+                    <OpeningCard key={opening.id} opening={opening} org={opening?.organizationID == ''} short={true} />
+                  </Link>
                 );
               })}
             </div>

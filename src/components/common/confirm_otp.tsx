@@ -1,4 +1,5 @@
 import { userSelector } from '@/slices/userSlice';
+import ModalWrapper from '@/wrappers/modal';
 import { X } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import OTPInput from 'react-otp-input';
@@ -33,8 +34,8 @@ const ConfirmOTP = ({
     };
   }, []);
   return (
-    <>
-      <div className="fixed top-48 max-md:top-20 w-1/3 max-lg:w-5/6 h-fit max-lg:h-fit backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col gap-2 max-lg:gap-0 rounded-lg p-8 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 shadow-lg translate-x-1/2 animate-fade_third z-50 max-lg:z-[60]">
+    <ModalWrapper setShow={setShow} width="1/3" height="fit" blur={true} modalStyles={{ top: '40%' }}>
+      <div className="w-full flex flex-col gap-2 max-lg:gap-0 rounded-lg p-2 font-primary">
         <div className="w-full flex justify-end">
           <X className="cursor-pointer" onClick={() => setShow(false)} size={32} />
         </div>
@@ -76,11 +77,7 @@ const ConfirmOTP = ({
           </div>
         </div>
       </div>
-      <div
-        onClick={() => setShow(false)}
-        className="bg-backdrop w-screen h-screen fixed top-0 left-0 animate-fade_third z-30 max-lg:z-[51]"
-      ></div>
-    </>
+    </ModalWrapper>
   );
 };
 

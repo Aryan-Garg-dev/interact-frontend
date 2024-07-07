@@ -18,8 +18,6 @@ import SimilarProjects from '@/components/explore/similar_projects';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import LowerWorkspaceProject from '@/components/lowers/lower_workspace_project';
-import PictureList from '@/components/common/picture_list';
-import ToolTip from '@/components/utils/tooltip';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
@@ -108,6 +106,26 @@ const ProjectView = ({
       }
     },
   });
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') {
+      setClickedProjectIndex(prev => prev - 1);
+      setFadeIn(false);
+    } else if (event.key === 'ArrowRight') {
+      setClickedProjectIndex(prev => prev + 1);
+      setFadeIn(false);
+    } else if (event.key === 'Escape') {
+      setClickedOnProject(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   return loading ? (
     <ProjectViewLoader fadeIn={fadeIn} setClickedOnProject={setClickedOnProject} />

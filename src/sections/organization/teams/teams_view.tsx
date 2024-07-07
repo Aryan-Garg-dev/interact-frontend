@@ -26,7 +26,7 @@ const TeamsView = ({ setShow, organization, setOrganization }: Props) => {
   ) : clickedOnViewTeam ? (
     <MembersList setShow={setClickedOnViewTeam} teamID={clickedTeam.id} setOrganization={setOrganization} />
   ) : (
-    <ModalWrapper setShow={setShow}>
+    <ModalWrapper setShow={setShow} top={'1/3'}>
       <div className="w-full flex items-center justify-between mb-2">
         <div className="text-3xl font-semibold">Teams</div>
         {checkOrgAccess(ORG_SENIOR) && (

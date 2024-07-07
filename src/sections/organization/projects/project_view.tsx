@@ -200,6 +200,26 @@ const ProjectView = ({
     }
   };
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') {
+      setClickedProjectIndex(prev => prev - 1);
+      setFadeIn(false);
+    } else if (event.key === 'ArrowRight') {
+      setClickedProjectIndex(prev => prev + 1);
+      setFadeIn(false);
+    } else if (event.key === 'Escape') {
+      setClickedOnProject(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   const swipeHandler = useSwipeable({
     onSwipedRight: handleClickPrev,
     onSwipedLeft: handleClickNext,
