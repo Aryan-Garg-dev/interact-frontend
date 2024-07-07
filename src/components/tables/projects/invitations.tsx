@@ -109,7 +109,7 @@ const InvitationsTable = ({ invitations, project, setProject, org }: Props) => {
               className="w-6 h-6 rounded-full z-[1]"
             />
             <div className="w-fit flex items-center flex-wrap gap-1">
-              <div className="font-medium text-sm">{invitation.sender.name}</div>
+              <div className="font-medium text-sm line-clamp-1">{invitation.sender.name}</div>
               {/* <div className="text-xxs">@{invitation.sender.username}</div> */}
             </div>
           </div>

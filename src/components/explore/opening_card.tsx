@@ -42,14 +42,16 @@ const OpeningCard = ({
           height={200}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${opening.organization?.user?.profilePic}`}
-          className={'w-[110px] h-[110px] max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover'}
+          className={`${
+            short ? 'w-[90px] h-[90px]' : 'w-[110px] h-[110px]'
+          } max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover`}
         />
       ) : (
         <Image
           crossOrigin="anonymous"
           width={200}
           height={200}
-          alt={'User Pic'}
+          alt={'Project Pic'}
           src={`${PROJECT_PIC_URL}/${opening.project?.coverPic}`}
           className={`${
             short ? 'w-[90px] h-[90px]' : 'w-[110px] h-[110px]'

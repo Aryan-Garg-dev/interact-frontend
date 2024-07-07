@@ -82,7 +82,7 @@ const OrgInvitationsTable = ({ invitations, setOrganization }: Props) => {
               className="w-8 h-8 rounded-full z-[1]"
             />
             <div className="w-[calc(100%-32px)] flex items-center flex-wrap gap-1">
-              <div className="font-medium text-base">{invitation.user.name}</div>
+              <div className="font-medium text-base line-clamp-1">{invitation.user.name}</div>
               <div className="text-xs">@{invitation.user.username}</div>
             </div>
           </div>
