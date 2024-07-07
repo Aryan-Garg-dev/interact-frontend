@@ -19,6 +19,7 @@ import PollCard from '@/components/organization/poll_card';
 import { initialOrganization } from '@/types/initials';
 import AnnouncementCard from '@/components/organization/announcement_card';
 import moment from 'moment';
+import Openings from '@/sections/home/openings';
 
 const Feed = () => {
   const [feed, setFeed] = useState<(Post | Announcement | Poll)[]>([]);
@@ -126,8 +127,10 @@ const Feed = () => {
                 );
               } else return <AnnouncementCard key={item.id} announcement={item} />;
             })}
+            {!hasMore && <div className="w-full text-lg text-gray-700 text-center mb-2">You are all caught up :)</div>}
           </InfiniteScroll>
         )}
+        {(!hasMore || feed.length === 0) && <Openings />}
       </div>
     </div>
   );

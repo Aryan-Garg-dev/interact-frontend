@@ -219,7 +219,7 @@ const Meeting = ({ id }: Props) => {
                             fontSize: '10px',
                             padding: '2px',
                             width: '120px',
-                            top: '-50%',
+                            top: '-60%',
                             left: '50%',
                             translate: '-50% 0',
                             border: 'none',

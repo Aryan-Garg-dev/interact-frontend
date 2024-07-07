@@ -7,7 +7,7 @@ const NoFeed = () => {
   return (
     <div
       onClick={() => dispatch(setHomeTab(1))}
-      className="w-full h-fit px-12 max-md:px-8 py-8 rounded-md dark:text-white font-primary border-gray-300 dark:border-dark_primary_btn border-[1px] bg-white dark:bg-dark_primary_comp hover:shadow-lg dark:hover:shadow-2xl flex-center flex-col gap-2 cursor-pointer transition-ease-500"
+      className="w-full h-fit px-12 max-md:px-8 py-8 my-2 rounded-md dark:text-white font-primary border-gray-300 dark:border-dark_primary_btn border-[1px] bg-white dark:bg-dark_primary_comp hover:shadow-lg dark:hover:shadow-2xl flex-center flex-col gap-2 cursor-pointer transition-ease-500"
     >
       <div className="text-xl max-md:text-lg font-medium text-center">
         <span className="text-2xl font-semibold max-md:block">Fresh to the scene?</span> Your feed&apos;s a little

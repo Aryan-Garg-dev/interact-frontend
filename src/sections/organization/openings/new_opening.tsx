@@ -23,7 +23,6 @@ const NewOpening = ({ setShow, openings, setOpenings }: Props) => {
   const currentOrg = useSelector(currentOrgSelector);
 
   const handleSubmit = async () => {
-    const toaster = Toaster.startLoad('Submitting...');
     if (title.trim() == '') {
       Toaster.error("Title can't be empty");
       return;
@@ -33,9 +32,11 @@ const NewOpening = ({ setShow, openings, setOpenings }: Props) => {
       return;
     }
     if (tags.length < 3) {
-      Toaster.error('Atleast 3 tags');
+      Toaster.error('Add at least 3 tags');
       return;
     }
+
+    const toaster = Toaster.startLoad('Submitting...');
 
     const formData = {
       title,

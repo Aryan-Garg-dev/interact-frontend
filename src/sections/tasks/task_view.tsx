@@ -12,6 +12,7 @@ import Tags from '@/components/common/tags';
 import SubTasksTable from '@/components/tables/subtasks';
 import CommentBox from '@/components/comment/comment_box';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
+import CopyClipboardButton from '@/components/buttons/copy_clipboard_btn';
 
 interface Props {
   task: Task;
@@ -79,7 +80,32 @@ const TaskComponent = ({
             }}
           />
           <div className="w-full flex justify-between items-center">
-            <div className="text-4xl font-semibold">{task.title}</div>
+            <div className="flex-center gap-2">
+              <div className="text-4xl font-semibold">{task.title}</div>
+              <div className="relative group">
+                <ToolTip
+                  content="Copy Task Link"
+                  styles={{
+                    fontSize: '10px',
+                    padding: '2px',
+                    width: '120px',
+                    top: '-60%',
+                    left: '50%',
+                    translate: '-50% 0',
+                    border: 'none',
+                  }}
+                />
+                <CopyClipboardButton
+                  url={
+                    task.organizationID != ''
+                      ? `organisations?oid=${task.organizationID}&redirect_url=/tasks?tid=${task.id}`
+                      : `workspace/tasks/${task.project?.title}?tid=${task.id}`
+                  }
+                  iconOnly={true}
+                  size={28}
+                />
+              </div>
+            </div>
             <div className="flex-center gap-2">
               {accessChecker && (
                 <>

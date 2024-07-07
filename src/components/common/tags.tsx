@@ -14,7 +14,7 @@ const Tags = ({ tags, limit = 20, center = false, displayAll = false }: Props) =
     else
       setDisplayTags(
         (tags || []).filter(tag => {
-          if (limit < 0) return false;
+          if (limit - tag.length < 0) return false;
           limit -= tag.length;
           return true;
         })
