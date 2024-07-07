@@ -53,7 +53,7 @@ const EditMeeting = ({ meeting, setShow, setMeeting }: Props) => {
       Toaster.error('Start Time cannot be before current time.');
       return false;
     }
-    if (end.isBefore(start)) {
+    if (end.isSameOrBefore(start)) {
       Toaster.error('End Time cannot be before Start Time');
       return false;
     }

@@ -153,7 +153,7 @@ const Meeting = ({ id }: Props) => {
 
   const isParticipant = () => {
     if (meeting.isOpenForMembers) return true;
-    return meeting.participants.map(u => u.id).includes(user.id);
+    return meeting.participants.map(u => u.id).includes(user.id) || meeting.userID == user.id;
   };
 
   const handleRSVP = async () => {

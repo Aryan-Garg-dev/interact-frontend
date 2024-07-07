@@ -236,7 +236,7 @@ const TrendingCard = () => {
           <div className="w-full flex flex-col gap-1">
             {meetings.map(meeting => (
               <Link
-                href={`/organisations?oid=${meeting.organizationID}&redirect_url=/meetings`}
+                href={`/organisations?oid=${meeting.organizationID}&redirect_url=/meetings/${meeting.id}`}
                 key={meeting.id}
                 className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp rounded-lg px-2 py-1 transition-ease-300"
               >

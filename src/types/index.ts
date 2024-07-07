@@ -306,6 +306,8 @@ export interface Notification {
   announcement: Announcement;
   commentID: string;
   comment: Comment;
+  taskID: string;
+  task: Task;
   impressionCount: number;
   isRead: boolean;
   createdAt: Date;
