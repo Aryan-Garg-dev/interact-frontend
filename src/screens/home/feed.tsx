@@ -130,7 +130,7 @@ const Feed = () => {
             {!hasMore && <div className="w-full text-lg text-gray-700 text-center mb-2">You are all caught up :)</div>}
           </InfiniteScroll>
         )}
-        {(!hasMore || feed.length === 0) && <Openings />}
+        {(!hasMore || feed.length === 0) && !user.isOrganization && <Openings />}
       </div>
     </div>
   );

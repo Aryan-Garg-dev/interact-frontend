@@ -122,7 +122,7 @@ const Organizations = () => {
     <BaseWrapper title="Organizations">
       <Sidebar index={10} />
       <MainWrapper>
-        <div className="w-full flex flex-col gap-8 px-32 py-10">
+        <div className="w-full flex flex-col gap-6 px-8 py-6">
           {clickedOnLeaveOrg && (
             <ConfirmDelete setShow={setClickedOnLeaveOrg} handleDelete={sendOTP} title="Leave Organisation?" />
           )}
@@ -130,12 +130,44 @@ const Organizations = () => {
 
           <div className="text-5xl font-semibold dark:text-white font-primary">Memberships</div>
 
-          <div className="w-full flex justify-between gap-4 flex-wrap">
+          <div className="w-full grid grid-cols-2 gap-8">
             {memberships.map(membership => (
               <div
                 key={membership.id}
                 onClick={() => handleClick(membership)}
-                className="w-[45%] hover:scale-105 hover:shadow-xl font-primary bg-white border-[1px] border-primary_btn rounded-md flex max-md:flex-col items-center justify-start gap-6 p-4 transition-ease-300 cursor-pointer animate-reveal"
+                className="w-full hover:scale-105 hover:shadow-xl font-primary bg-white border-[1px] border-primary_btn rounded-md flex max-md:flex-col items-center justify-start gap-6 p-4 transition-ease-300 cursor-pointer animate-reveal"
+              >
+                <Image
+                  crossOrigin="anonymous"
+                  width={100}
+                  height={100}
+                  alt={'User Pic'}
+                  src={`${USER_PROFILE_PIC_URL}/${membership.organization.user.profilePic}`}
+                  className="rounded-md w-32 h-32"
+                />
+                <div className="w-[calc(100%-128px)] flex flex-col gap-2 max-md:text-center max-md:gap-4">
+                  <div className="w-full flex justify-between items-center">
+                    <div className="text-3xl font-bold text-gradient line-clamp-1">{membership.organization.title}</div>
+                    <Trash
+                      onClick={el => {
+                        el.stopPropagation();
+                        setClickedMembership(membership);
+                        setClickedOnLeaveOrg(true);
+                      }}
+                      size={24}
+                    />
+                  </div>
+                  <div className="line-clamp-1">{membership.title}</div>
+                  <div className="font-medium">{membership.role}</div>
+                  <div className="text-xs">Joined {moment(membership.createdAt).format('DD MMM YYYY')}</div>
+                </div>
+              </div>
+            ))}
+            {memberships.map(membership => (
+              <div
+                key={membership.id}
+                onClick={() => handleClick(membership)}
+                className="w-full hover:scale-105 hover:shadow-xl font-primary bg-white border-[1px] border-primary_btn rounded-md flex max-md:flex-col items-center justify-start gap-6 p-4 transition-ease-300 cursor-pointer animate-reveal"
               >
                 <Image
                   crossOrigin="anonymous"
