@@ -2,15 +2,18 @@ import { useDyteMeeting } from '@dytesdk/react-web-core';
 import { DyteMeeting } from '@dytesdk/react-ui-kit';
 import { useEffect } from 'react';
 
-function Meeting() {
+interface Props {
+  id: string;
+}
+
+function Meeting({ id }: Props) {
   const { meeting } = useDyteMeeting();
 
   useEffect(() => {
-    //TODO
-    // meeting.self.on('roomLeft', () => {
-    //   // handle navigation to other screen here after the user has left the room.
-    //   alert("You've left the room");
-    // });
+    meeting.self.on('roomLeft', () => {
+      window.location.replace(`/organisations/meetings/${id}`);
+    });
+    meeting.meta.meetingId;
   }, [meeting]);
 
   return (

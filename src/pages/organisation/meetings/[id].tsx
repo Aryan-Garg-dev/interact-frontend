@@ -89,7 +89,7 @@ const Meeting = ({ id }: Props) => {
       .then(res => {
         if (res.statusCode === 200) {
           const authToken = res.data.authToken;
-          window.location.assign('/organisation/meetings/live?mid=' + authToken);
+          window.location.assign(`/organisation/meetings/live?id=${id}&token=${authToken}`);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
           else {
@@ -226,7 +226,7 @@ const Meeting = ({ id }: Props) => {
                           }}
                         />
                         <CopyClipboardButton
-                          url={`/organisations?oid=${currentOrg.id}&redirect_url=/meetings/${id}`}
+                          url={`organisations?oid=${currentOrg.id}&redirect_url=/meetings/${id}`}
                           iconOnly={true}
                           size={28}
                         />
