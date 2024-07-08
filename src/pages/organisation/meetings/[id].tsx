@@ -81,6 +81,7 @@ const Meeting = ({ id }: Props) => {
       else {
         Toaster.error(SERVER_ERROR, 'error_toaster');
       }
+      window.location.assign('/organisation/meetings');
     }
   };
 

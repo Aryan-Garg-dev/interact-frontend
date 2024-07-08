@@ -20,6 +20,7 @@ import History from '@/sections/workspace/history';
 
 interface Props {
   project: Project;
+  initialCommentShowState?: boolean;
 }
 
 interface bookMarkStatus {
@@ -28,7 +29,7 @@ interface bookMarkStatus {
   bookmarkID: string;
 }
 
-const LowerWorkspaceProject = ({ project }: Props) => {
+const LowerWorkspaceProject = ({ project, initialCommentShowState = false }: Props) => {
   const [liked, setLiked] = useState(false);
   const [numLikes, setNumLikes] = useState(project.noLikes);
   const [numComments, setNumComments] = useState(project.noComments);
@@ -38,7 +39,7 @@ const LowerWorkspaceProject = ({ project }: Props) => {
     projectItemID: '',
     bookmarkID: '',
   });
-  const [clickedOnComment, setClickedOnComment] = useState(false);
+  const [clickedOnComment, setClickedOnComment] = useState(initialCommentShowState);
   const [clickedOnShare, setClickedOnShare] = useState(false);
   const [clickedOnBookmark, setClickedOnBookmark] = useState(false);
   const [clickedOnTasks, setClickedOnTasks] = useState(false);

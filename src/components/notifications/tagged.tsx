@@ -2,7 +2,6 @@ import React from 'react';
 import Link from 'next/link';
 import { Notification } from '@/types';
 import NotificationWrapper from '@/wrappers/notification';
-import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
   notification: Notification;
@@ -29,14 +28,17 @@ const Tagged = ({ notification, short = true }: Props) => {
       case 22:
         return '/explore/announcement/' + notification.announcementID;
       case 23:
-        if (notification.comment.postID) return '/explore/post/' + notification.comment.postID;
-        if (notification.comment.projectID) return '/explore?pid=' + notification.comment.project.slug;
-        if (notification.comment.announcementID) return '/home' + notification.comment.announcement;
+        if (notification.comment.postID) return `/explore/post/${notification.comment.postID}?action=comments`;
+        if (notification.comment.projectID) return `/explore?pid=${notification.comment.project.slug}&action=comments`;
+        if (notification.comment.announcementID)
+          return `/explore/announcement/${notification.comment.announcementID}?action=comments`;
         if (notification.comment.taskID) {
           const task = notification.comment.task;
-          if (task?.organizationID) return `/organisations?oid=${task.organizationID}&redirect_url=/tasks`;
-          return '/workspace/tasks/' + task?.project?.slug;
+          if (task?.organizationID)
+            return `/organisations?oid=${task.organizationID}&redirect_url=/tasks?tid=${notification.comment.taskID}`;
+          return `/workspace/tasks/${task?.project?.slug}?tid=${notification.comment.taskID}`;
         }
+        if (notification.comment.eventID) return `/explore/events/${notification.comment.eventID}?action=comments`;
         return '#';
       default:
         return '#';

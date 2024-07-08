@@ -11,7 +11,7 @@ function Meeting({ id }: Props) {
 
   useEffect(() => {
     meeting.self.on('roomLeft', () => {
-      window.location.replace(`/organisations/meetings/${id}`);
+      window.location.replace(`/organisation/meetings/${id}`);
     });
     meeting.meta.meetingId;
   }, [meeting]);

@@ -42,7 +42,7 @@ const MeetingCard = ({ meeting }: Props) => {
         </div>
       </div>
       <div className="w-1/6 flex-center">
-        <Tags tags={meeting.tags} limit={8} />
+        <Tags tags={meeting.tags} limit={8} center={true} />
       </div>
       <div className="w-1/6 flex-center">
         <div

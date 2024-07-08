@@ -39,6 +39,7 @@ const ProjectView = ({
 }: Props) => {
   const [project, setProject] = useState<Project>(initialProject);
   const [loading, setLoading] = useState(true);
+  const [showComments, setShowComments] = useState(false);
 
   const [clickedOnReadMore, setClickedOnReadMore] = useState(false);
   const user = useSelector(userSelector);
@@ -53,6 +54,10 @@ const ProjectView = ({
       const res = await getHandler(URL, abortController.signal);
       if (res.statusCode == 200) {
         setProject(res.data.project);
+
+        const action = new URLSearchParams(window.location.search).get('action');
+        if (action && action == 'comments') setShowComments(true);
+
         setLoading(false);
       } else {
         if (res.status != -1) {
@@ -288,7 +293,11 @@ const ProjectView = ({
         </div>
 
         <div className="max-lg:hidden">
-          {isProjectMember(project) ? <LowerWorkspaceProject project={project} /> : <LowerProject project={project} />}
+          {isProjectMember(project) ? (
+            <LowerWorkspaceProject project={project} initialCommentShowState={showComments} />
+          ) : (
+            <LowerProject project={project} initialCommentShowState={showComments} />
+          )}
         </div>
 
         {clickedProjectIndex != projectSlugs.length - 1 ? (

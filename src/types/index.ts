@@ -250,6 +250,10 @@ export interface Comment {
   post: Post;
   projectID: string;
   project: Project;
+  eventID: string;
+  event: Event | null;
+  applicationID: string;
+  application: Application | null;
   announcementID: string;
   announcement: Announcement | null;
   taskID: string;

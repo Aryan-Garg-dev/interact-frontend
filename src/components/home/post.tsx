@@ -31,6 +31,7 @@ interface Props {
   setFeed?: React.Dispatch<React.SetStateAction<any[]>>;
   org?: boolean;
   clamp?: boolean;
+  initialCommentShowState?: boolean;
 }
 
 const PostComponent = ({
@@ -41,6 +42,7 @@ const PostComponent = ({
   setFeed,
   org = false,
   clamp = false,
+  initialCommentShowState = false,
 }: Props) => {
   const loggedInUser = useSelector(userSelector);
   const [clickedOnOptions, setClickedOnOptions] = useState(false);
@@ -305,7 +307,14 @@ const PostComponent = ({
             {renderContentWithLinks(post.content, post.taggedUsers)}
           </div>
         )}
-        {showLowerPost && <LowerPost setFeed={setFeed} post={post} isRepost={isRepost} />}
+        {showLowerPost && (
+          <LowerPost
+            setFeed={setFeed}
+            post={post}
+            isRepost={isRepost}
+            initialCommentShowState={initialCommentShowState}
+          />
+        )}
       </div>
     </div>
   );

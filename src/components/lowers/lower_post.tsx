@@ -20,6 +20,7 @@ interface Props {
   post: Post;
   setFeed?: React.Dispatch<React.SetStateAction<(Post | Announcement | Poll)[]>>;
   isRepost?: boolean;
+  initialCommentShowState?: boolean;
 }
 
 interface bookMarkStatus {
@@ -28,7 +29,7 @@ interface bookMarkStatus {
   bookmarkID: string;
 }
 
-const LowerPost = ({ post, setFeed, isRepost = false }: Props) => {
+const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = false }: Props) => {
   const [liked, setLiked] = useState(false);
   const [numLikes, setNumLikes] = useState(post.noLikes);
   const [numComments, setNumComments] = useState(post.noComments);
@@ -37,7 +38,7 @@ const LowerPost = ({ post, setFeed, isRepost = false }: Props) => {
     postItemID: '',
     bookmarkID: '',
   });
-  const [clickedOnComment, setClickedOnComment] = useState(false);
+  const [clickedOnComment, setClickedOnComment] = useState(initialCommentShowState);
   const [clickedOnShare, setClickedOnShare] = useState(false);
   const [clickedOnBookmark, setClickedOnBookmark] = useState(false);
   const [clickedOnRePost, setClickedOnRePost] = useState(false);

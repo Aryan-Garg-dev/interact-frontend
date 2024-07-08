@@ -25,7 +25,7 @@ export default function App() {
         video: false,
       },
     });
-  }, [meeting, meetingID]);
+  }, []);
 
   return (
     <DyteProvider value={meeting}>
