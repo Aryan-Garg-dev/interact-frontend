@@ -5,10 +5,11 @@ import Loader from '@/components/common/loader';
 import OrgSidebar from '@/components/common/org_sidebar';
 import PictureList from '@/components/common/picture_list';
 import Tags from '@/components/common/tags';
+import RecordingsTable from '@/components/tables/meetings/recordings';
 import SessionDetailsTable from '@/components/tables/meetings/session_details';
 import SessionTable from '@/components/tables/meetings/sessions';
 import ToolTip from '@/components/utils/tooltip';
-import { ORG_SENIOR } from '@/config/constants';
+import { ORG_MEMBER, ORG_SENIOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
@@ -30,7 +31,7 @@ import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
-import { Pen, Trash } from '@phosphor-icons/react';
+import { Pen, Record, Trash } from '@phosphor-icons/react';
 import moment from 'moment';
 import Image from 'next/image';
 import { GetServerSidePropsContext } from 'next/types';
@@ -50,6 +51,7 @@ const Meeting = ({ id }: Props) => {
   const [clickedSessionID, setClickedSessionID] = useState('');
   const [clickedOnViewParticipants, setClickedOnViewParticipants] = useState(false);
   const [clickedOnAddParticipants, setClickedOnAddParticipants] = useState(false);
+  const [clickedOnViewRecordings, setClickedOnViewRecordings] = useState(false);
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
   const [clickedOnDelete, setClickedOnDelete] = useState(false);
 
@@ -186,6 +188,7 @@ const Meeting = ({ id }: Props) => {
               setShow={setClickedOnSession}
             />
           )}
+          {clickedOnViewRecordings && <RecordingsTable meetingID={id} setShow={setClickedOnViewRecordings} />}
           {clickedOnAddParticipants ? (
             <AddMeetingParticipants meeting={meeting} setMeeting={setMeeting} setShow={setClickedOnAddParticipants} />
           ) : (
@@ -234,6 +237,15 @@ const Meeting = ({ id }: Props) => {
                       </div>
                     </div>
                     <div className="w-fit flex-center gap-4">
+                      {checkOrgAccess(ORG_MEMBER) &&
+                        (status == 'Ended' || (status == 'Scheduled' && meeting.frequency != 'none')) && (
+                          <Record
+                            onClick={() => setClickedOnViewRecordings(true)}
+                            className=" cursor-pointer"
+                            size={28}
+                            weight="duotone"
+                          />
+                        )}
                       {checkOrgAccess(ORG_SENIOR) && (
                         <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={28} />
                       )}

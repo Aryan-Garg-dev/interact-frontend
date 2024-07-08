@@ -58,8 +58,8 @@ const SessionDetailsTable = ({ sessionID, session, setShow }: Props) => {
 
     if (!session?.isLive) {
       const now = moment.now();
-      setIsChatLinkExpired(moment(now).isAfter(session.chatDownloadURLExpiry));
-      setIsTranscriptLinkExpired(moment(now).isAfter(session.transcriptDownloadURLExpiry));
+      setIsChatLinkExpired(moment(now).isAfter(session?.chatDownloadURLExpiry));
+      setIsTranscriptLinkExpired(moment(now).isAfter(session?.transcriptDownloadURLExpiry));
     }
   }, [sessionID]);
 

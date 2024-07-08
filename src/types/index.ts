@@ -711,3 +711,18 @@ export interface Team {
   tags: string[];
   createdAt: Date;
 }
+
+export interface Recording {
+  id: string;
+  download_url?: string | null;
+  download_url_expiry?: Date | null;
+  audio_download_url?: string | null;
+  file_size?: number | null;
+  session_id: string;
+  output_file_name: string;
+  status: string;
+  invoked_time: Date;
+  started_time: Date;
+  stopped_time: Date;
+  recording_duration: number;
+}
