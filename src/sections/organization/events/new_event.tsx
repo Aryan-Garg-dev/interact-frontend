@@ -267,7 +267,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
 
   return (
     <>
-      <div className="fixed top-10 max-lg:top-0 w-1/2 max-lg:w-screen h-[90%] max-lg:h-screen backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col justify-between rounded-lg px-12 py-8 gap-8 max-lg:gap-4 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 shadow-2xl animate-fade_third z-50">
+      <div className="fixed top-10 max-lg:top-0 w-1/2 max-lg:w-screen h-[90%] max-lg:h-screen backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col justify-between rounded-lg p-8 gap-8 max-lg:gap-4 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 shadow-2xl animate-fade_third z-50">
         {step == 0 ? (
           <div className="w-full flex flex-col gap-8 max-lg:gap-4 ">
             <div className="w-full">
@@ -414,31 +414,35 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
                   disabled={false}
                 />
               </div>
-              <div>
-                - To have the session on Interact, the event duration (hence the meeting duration) must not exceed 5
-                hours.
-              </div>
-              <div>
-                - Checking this Option will create a parallel Session on Interact which will be active during the event
-                timings and registered participants will be free to join.
-              </div>
-              <div>
-                - The session will be open for all host organisation members and a registrations will be done for non
-                members.
-              </div>
-              <div>
-                - Session details(participation information, recordings, transcripts) will be accessible to the members
-                of host organisation only.
-              </div>
-              <div>
-                - Managers (and Event Coordinators) of all host/co-host organisations will join as meeting hosts and
-                will have full control of the meeting.
-              </div>
-              <div>
-                - Details on this parallel meeting cannot be edited directly by the host organisation, but any change to
-                the event details will be reflected in the meeting too.
-              </div>
-              <div>- This option wont be should again so think twice before not selecting it :)</div>
+              <ul className="list-disc ml-4 flex flex-col gap-4 text-gray-700">
+                <li>
+                  By checking this option, a <b>parallel session on Interact</b> will be created, active during the
+                  event timings, allowing registered participants to join freely.
+                </li>
+                <li>
+                  To host the session on Interact, the event duration (and therefore the meeting duration){' '}
+                  <b>must not exceed 5 hours</b>.
+                </li>
+                <li>
+                  The session will be <b>open to all members</b> of the host and co-host organisations, with
+                  registrations available for non-members.
+                </li>
+                <li>
+                  Session details (including participation information, recordings, and transcripts) will be accessible
+                  <b> exclusively to members of the host organisation</b>.
+                </li>
+                <li>
+                  Managers and Event Coordinators from the host and co-host organisations will act as meeting hosts,
+                  retaining full control over the session.
+                </li>
+                <li>
+                  Any changes to the event details will automatically reflect in the parallel meeting on Interact;
+                  however, <b>direct editing of the parallel meeting details is not possible</b>.
+                </li>
+                <li>
+                  Once unchecked, <b>this option cannot be selected again</b>, so consider carefully before opting out.
+                </li>
+              </ul>
             </div>
           )
         )}
@@ -450,8 +454,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
               label="Next"
               onClick={() => {
                 if (step == 0) {
-                  // const checker = eventDetailsValidator();
-                  const checker = true;
+                  const checker = eventDetailsValidator();
                   if (checker) setStep(prev => prev + 1);
                 } else setStep(prev => prev + 1);
               }}
