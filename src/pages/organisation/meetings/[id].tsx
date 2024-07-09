@@ -94,7 +94,6 @@ const Meeting = ({ id }: Props) => {
           const authToken = res.data.authToken;
           if (!authToken || authToken == '') {
             Toaster.error(SERVER_ERROR, 'error_toaster');
-            console.log(res);
             return;
           }
           window.location.assign(`/organisation/meetings/live?id=${id}&token=${authToken}`);
