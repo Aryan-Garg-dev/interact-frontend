@@ -102,6 +102,7 @@ const accessDefinitions: Record<ACCESS_TYPE, Access[]> = {
     { task: 'Edit Meetings', canMember: false, canSenior: true, canManager: true },
     { task: 'Delete Meetings', canMember: false, canSenior: true, canManager: true },
     { task: 'Record Meetings', canMember: false, canSenior: true, canManager: true },
+    { task: 'Generate Session Transcripts', canMember: false, canSenior: true, canManager: true },
     { task: 'Edit Meeting Participants', canMember: false, canSenior: true, canManager: true },
     { task: 'View Session Reports', canMember: true, canSenior: true, canManager: true },
     { task: 'View Meeting Recordings', canMember: true, canSenior: true, canManager: true },

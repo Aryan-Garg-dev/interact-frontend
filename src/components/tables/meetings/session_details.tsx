@@ -16,6 +16,7 @@ import { getParticipationDuration } from '@/utils/funcs/session_details';
 interface Props {
   sessionID: string;
   session: Session;
+  meetingHostID: string;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -27,7 +28,7 @@ interface Participant {
   role: string;
 }
 
-const SessionDetailsTable = ({ sessionID, session, setShow }: Props) => {
+const SessionDetailsTable = ({ sessionID, meetingHostID, session, setShow }: Props) => {
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -162,23 +163,28 @@ const SessionDetailsTable = ({ sessionID, session, setShow }: Props) => {
             <div className="w-1/6 flex-center">Duration</div>
             <div className="w-1/6 flex-center">Role</div>
           </div>
-          {participants.map(participant => (
-            //TODO add pagination
-            <div
-              key={participant.user.id}
-              className="w-full h-12 bg-slate-100 rounded-xl border-gray-400 flex text-sm text-primary_black"
-            >
-              <div className="w-1/3 flex-center">{participant.user.name}</div>
-              <div className="w-1/6 flex-center">{moment(participant.joined_at).format('hh:mm:ss A')}</div>
-              <div className="w-1/6 flex-center">
-                {session.isLive ? '-' : moment(participant.left_at).format('hh:mm:ss A')}
+          {participants.map(participant => {
+            const role = participant.role.replace('group_call_', '');
+            return (
+              //TODO add pagination
+              <div
+                key={participant.user.id}
+                className="w-full h-12 bg-slate-100 rounded-xl border-gray-400 flex text-sm text-primary_black"
+              >
+                <div className="w-1/3 flex-center">{participant.user.name}</div>
+                <div className="w-1/6 flex-center">{moment(participant.joined_at).format('hh:mm:ss A')}</div>
+                <div className="w-1/6 flex-center">
+                  {session.isLive ? '-' : moment(participant.left_at).format('hh:mm:ss A')}
+                </div>
+                <div className="w-1/6 flex-center">
+                  {getParticipationDuration(participant.joined_at, session.isLive ? new Date() : participant.left_at)}
+                </div>
+                <div className="w-1/6 flex-center capitalize">
+                  {role == 'host' ? (participant.user.id == meetingHostID ? 'host' : 'admin') : role}
+                </div>
               </div>
-              <div className="w-1/6 flex-center">
-                {getParticipationDuration(participant.joined_at, session.isLive ? new Date() : participant.left_at)}
-              </div>
-              <div className="w-1/6 flex-center capitalize">{participant.role.replace('group_call_', '')}</div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </ModalWrapper>

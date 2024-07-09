@@ -184,6 +184,7 @@ const Meeting = ({ id }: Props) => {
           {clickedOnSession && (
             <SessionDetailsTable
               sessionID={clickedSessionID}
+              meetingHostID={meeting.userID}
               session={sessions.filter(session => session.id == clickedSessionID)[0]}
               setShow={setClickedOnSession}
             />
@@ -237,15 +238,14 @@ const Meeting = ({ id }: Props) => {
                       </div>
                     </div>
                     <div className="w-fit flex-center gap-4">
-                      {checkOrgAccess(ORG_MEMBER) &&
-                        (status == 'Ended' || (status == 'Scheduled' && meeting.frequency != 'none')) && (
-                          <Record
-                            onClick={() => setClickedOnViewRecordings(true)}
-                            className=" cursor-pointer"
-                            size={28}
-                            weight="duotone"
-                          />
-                        )}
+                      {checkOrgAccess(ORG_MEMBER) && !meeting.isLive && sessions && sessions.length > 0 && (
+                        <Record
+                          onClick={() => setClickedOnViewRecordings(true)}
+                          className=" cursor-pointer"
+                          size={28}
+                          weight="duotone"
+                        />
+                      )}
                       {checkOrgAccess(ORG_SENIOR) && (
                         <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={28} />
                       )}
@@ -398,7 +398,7 @@ const Meeting = ({ id }: Props) => {
                               <div className="w-full text-2xl font-semibold text-primary_black">
                                 Confirmed Participants
                               </div>
-                              <div className="w-full max-h-48 overflow-y-auto flex flex-col gap-2">
+                              <div className="w-full max-h-52 overflow-y-auto flex flex-col gap-2">
                                 {meeting.rsvp.map(user => (
                                   <div
                                     key={user.id}
