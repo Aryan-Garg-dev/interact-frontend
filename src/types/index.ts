@@ -667,6 +667,7 @@ export interface Announcement {
 export interface Meeting {
   id: string;
   dyteID: string;
+  eventID: string;
   title: string;
   description: string;
   tags: string[];

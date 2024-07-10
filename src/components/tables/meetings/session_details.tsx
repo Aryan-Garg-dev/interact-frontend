@@ -177,7 +177,7 @@ const SessionDetailsTable = ({ sessionID, meetingHostID, session, setShow }: Pro
                   {session.isLive ? '-' : moment(participant.left_at).format('hh:mm:ss A')}
                 </div>
                 <div className="w-1/6 flex-center">
-                  {getParticipationDuration(participant.joined_at, session.isLive ? new Date() : participant.left_at)}
+                  {session.isLive ? '-' : getParticipationDuration(participant.joined_at, participant.left_at)}
                 </div>
                 <div className="w-1/6 flex-center capitalize">
                   {role == 'host' ? (participant.user.id == meetingHostID ? 'host' : 'admin') : role}

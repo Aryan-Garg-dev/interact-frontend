@@ -408,7 +408,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
               <div className="text-3xl max-md:text-xl font-semibold">Create a Session on Interact</div>
               <div className="">
                 <Checkbox
-                  label="Conduct the session on Interact?"
+                  label="Conduct the event on Interact?"
                   val={haveSession}
                   setVal={setHaveSession}
                   disabled={false}

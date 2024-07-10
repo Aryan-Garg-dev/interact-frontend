@@ -250,7 +250,7 @@ const Meeting = ({ id }: Props) => {
                           weight="duotone"
                         />
                       )}
-                      {checkOrgAccess(ORG_SENIOR) && (
+                      {!meeting.eventID && checkOrgAccess(ORG_SENIOR) && (
                         <Pen onClick={() => setClickedOnEdit(true)} className="cursor-pointer" size={28} />
                       )}
                       {checkOrgAccess(ORG_SENIOR) && (
