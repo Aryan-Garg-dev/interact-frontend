@@ -22,14 +22,22 @@ interface Props {
 const RecordingsTable = ({ meetingID, setShow }: Props) => {
   const [recordings, setRecordings] = useState<Recording[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const currentOrg = useSelector(currentOrgSelector);
 
+  const limit = 20;
+
   const getRecordings = async () => {
-    const URL = `/org/${currentOrg.id}/meetings/recordings/${meetingID}`;
+    setLoading(true);
+    const URL = `/org/${currentOrg.id}/meetings/recordings/${meetingID}?page=${page}&limit=${limit}`;
     const res = await getHandler(URL);
     if (res.statusCode === 200) {
-      setRecordings(res.data.recordings);
+      const addedRecordings = [...(res.data.recordings || []), ...recordings];
+      if (addedRecordings.length === recordings.length) setHasMore(false);
+      setRecordings(addedRecordings);
+      setPage(prev => prev + 1);
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -44,9 +52,9 @@ const RecordingsTable = ({ meetingID, setShow }: Props) => {
   }, []);
 
   return (
-    <ModalWrapper setShow={setShow} width={'2/3'} blur={true} top={'1/3'}>
+    <ModalWrapper setShow={setShow} width={'2/3'} blur={true} top={recordings.length < 5 ? '1/3' : '1/2'}>
       <div className="text-3xl font-semibold mb-4">Meeting Recordings</div>
-      {loading ? (
+      {loading && page == 1 ? (
         <Loader />
       ) : recordings.length > 0 ? (
         <div className="w-full flex flex-col gap-2">
@@ -61,7 +69,6 @@ const RecordingsTable = ({ meetingID, setShow }: Props) => {
             <div className="grow flex-center"></div>
           </div>
           {recordings.map(recording => (
-            //TODO add pagination
             <div
               key={recording.id}
               className="w-full h-12 bg-slate-100 rounded-xl border-gray-400 flex text-sm text-primary_black"
@@ -103,6 +110,19 @@ const RecordingsTable = ({ meetingID, setShow }: Props) => {
               </div>
             </div>
           ))}
+          {loading ? (
+            <Loader />
+          ) : (
+            recordings.length % limit == 0 &&
+            hasMore && (
+              <div
+                onClick={getRecordings}
+                className="w-fit mx-auto pt-4 text-xs text-gray-700 font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
+              >
+                Load More
+              </div>
+            )
+          )}
         </div>
       ) : (
         <div className="text-lg">No recordings found for this meeting.</div>

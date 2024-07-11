@@ -371,18 +371,12 @@ const Meeting = ({ id }: Props) => {
                         <div className="w-fit flex flex-col gap-1">
                           <div className="text-sm font-medium uppercase text-gray-700">Accepted Users</div>
                           {meeting.participants && meeting.participants.length > 0 ? (
-                            meeting.participants.length === 1 && meeting.participants[0].id === user.id ? (
-                              <span onClick={() => setClickedOnAddParticipants(true)} className="cursor-pointer">
-                                None +
-                              </span>
-                            ) : (
-                              <span
-                                onClick={() => setClickedOnViewParticipants(true)}
-                                className="w-fit flex-center gap-1 font-medium cursor-pointer"
-                              >
-                                <PictureList users={meeting.participants} size={6} gap={3} />
-                              </span>
-                            )
+                            <span
+                              onClick={() => setClickedOnViewParticipants(true)}
+                              className="w-fit flex-center gap-1 font-medium cursor-pointer"
+                            >
+                              <PictureList users={meeting.participants} size={6} gap={3} />
+                            </span>
                           ) : (
                             <span onClick={() => setClickedOnAddParticipants(true)} className="cursor-pointer">
                               None +

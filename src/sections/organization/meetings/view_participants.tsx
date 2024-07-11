@@ -9,7 +9,7 @@ import Toaster from '@/utils/toaster';
 import ModalWrapper from '@/wrappers/modal';
 import { PlusCircle, XCircle } from '@phosphor-icons/react';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 interface Props {

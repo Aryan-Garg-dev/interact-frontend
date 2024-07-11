@@ -32,17 +32,24 @@ const SessionDetailsTable = ({ sessionID, meetingHostID, session, setShow }: Pro
   const [participants, setParticipants] = useState<Participant[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const [isChatLinkExpired, setIsChatLinkExpired] = useState(false);
   const [isTranscriptLinkExpired, setIsTranscriptLinkExpired] = useState(false);
 
   const currentOrg = useSelector(currentOrgSelector);
 
+  const limit = 20;
+
   const fetchParticipants = async () => {
-    const URL = `/org/${currentOrg.id}/meetings/details/${sessionID}?page=${page}&limit=50&type=participants`;
+    setLoading(true);
+    const URL = `/org/${currentOrg.id}/meetings/details/${sessionID}?page=${page}&limit=${limit}&type=participants`;
     const res = await getHandler(URL);
     if (res.statusCode === 200) {
-      setParticipants(res.data.participants || []);
+      const addedUsers = [...(res.data.participants || []), ...participants];
+      if (addedUsers.length === participants.length) setHasMore(false);
+      setParticipants(addedUsers);
+      setPage(prev => prev + 1);
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -65,7 +72,7 @@ const SessionDetailsTable = ({ sessionID, meetingHostID, session, setShow }: Pro
   }, [sessionID]);
 
   return (
-    <ModalWrapper setShow={setShow} width={'2/3'} blur={true} top={'1/3'}>
+    <ModalWrapper setShow={setShow} width={'2/3'} blur={true} top={participants.length < 5 ? '1/3' : '1/2'}>
       <div className="w-full flex items-center gap-4 py-2">
         <div className="text-3xl font-semibold">Session Details</div>
         {session?.isLive ? (
@@ -152,7 +159,7 @@ const SessionDetailsTable = ({ sessionID, meetingHostID, session, setShow }: Pro
           )
         )}
       </div>
-      {loading ? (
+      {loading && page == 1 ? (
         <Loader />
       ) : (
         <div className="w-full flex flex-col gap-2">
@@ -166,7 +173,6 @@ const SessionDetailsTable = ({ sessionID, meetingHostID, session, setShow }: Pro
           {participants.map(participant => {
             const role = participant.role.replace('group_call_', '');
             return (
-              //TODO add pagination
               <div
                 key={participant.user.id}
                 className="w-full h-12 bg-slate-100 rounded-xl border-gray-400 flex text-sm text-primary_black"
@@ -185,6 +191,19 @@ const SessionDetailsTable = ({ sessionID, meetingHostID, session, setShow }: Pro
               </div>
             );
           })}
+          {loading ? (
+            <Loader />
+          ) : (
+            participants.length % limit == 0 &&
+            hasMore && (
+              <div
+                onClick={fetchParticipants}
+                className="w-fit mx-auto pt-4 text-xs text-gray-700 font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
+              >
+                Load More
+              </div>
+            )
+          )}
         </div>
       )}
     </ModalWrapper>

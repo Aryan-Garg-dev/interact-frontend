@@ -29,7 +29,7 @@ const About = ({ profile, organisation }: Props) => {
   const user = useSelector(userSelector);
 
   const fetchMemberships = () => {
-    const URL = `${ORG_URL}/${organisation.id}/explore_memberships?limit=11`;
+    const URL = `${ORG_URL}/${organisation.id}/explore_memberships?limit=12`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
@@ -105,7 +105,7 @@ const About = ({ profile, organisation }: Props) => {
             )}
             {memberships
               .filter((_, i) => {
-                return i > 0 && i < 3;
+                return i >= 0 && i < 10;
               })
               .map(membership => (
                 <AboutUser key={membership.id} user={membership.user} role={membership.role} title={membership.title} />
