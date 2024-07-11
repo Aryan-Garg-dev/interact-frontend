@@ -143,7 +143,7 @@ const Organizations = () => {
                   height={100}
                   alt={'User Pic'}
                   src={`${USER_PROFILE_PIC_URL}/${membership.organization.user.profilePic}`}
-                  className="rounded-md w-32 h-32"
+                  className="rounded-full w-32 h-32"
                 />
                 <div className="w-[calc(100%-128px)] flex flex-col gap-2 max-md:text-center max-md:gap-4">
                   <div className="w-full flex justify-between items-center">

@@ -9,6 +9,13 @@ export interface Education {
   description: string;
 }
 
+export interface GenericBookmark {
+  id: string;
+  userID: string;
+  title: string;
+  createdAt: Date;
+}
+
 export interface PostBookmark {
   id: string;
   userID: string;
