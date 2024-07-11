@@ -6,7 +6,7 @@ import getHandler from '@/handlers/get_handler';
 import { currentOrgSelector, setCurrentOrgTeams } from '@/slices/orgSlice';
 import { Organization } from '@/types';
 import { initialTeam } from '@/types/initials';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import ModalWrapper from '@/wrappers/modal';
 import { Pen, XCircle } from '@phosphor-icons/react';

@@ -7,7 +7,7 @@ import Mascot from '@/components/fillers/mascot';
 import { Plus } from '@phosphor-icons/react';
 import moment from 'moment';
 import MembersList from './view_team_members';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 
 interface Props {

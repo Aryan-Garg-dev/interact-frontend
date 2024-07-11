@@ -1,6 +1,6 @@
 import { ORG_MEMBER, ORG_SENIOR } from '@/config/constants';
 import { Session } from '@/types';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import moment from 'moment';
 import React from 'react';
 

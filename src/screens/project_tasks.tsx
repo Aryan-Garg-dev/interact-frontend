@@ -4,6 +4,7 @@ import Select from '@/components/filters/select';
 import Tags from '@/components/filters/tags';
 import Users from '@/components/filters/users';
 import TasksTable from '@/components/tables/tasks';
+import { PROJECT_MANAGER } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL, PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
@@ -13,6 +14,7 @@ import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { userSelector } from '@/slices/userSlice';
 import { Project, Task, User } from '@/types';
 import { initialProject } from '@/types/initials';
+import { checkProjectAccess } from '@/utils/funcs/access';
 import { getUserFromState } from '@/utils/funcs/redux';
 import Toaster from '@/utils/toaster';
 import MainWrapper from '@/wrappers/main';
@@ -135,7 +137,7 @@ const ProjectTasks = ({ slug, org = false }: Props) => {
             </div>
           </div>
 
-          {(project.userID == user.id || user.managerProjects.includes(project.id)) && (
+          {checkProjectAccess(PROJECT_MANAGER, project.id) && (
             <Plus
               onClick={() => setClickedOnNewTask(true)}
               size={42}

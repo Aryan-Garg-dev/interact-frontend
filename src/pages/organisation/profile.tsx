@@ -21,7 +21,7 @@ import MyAbout from '@/screens/profile/my_about';
 import OrgSidebar from '@/components/common/org_sidebar';
 import { currentOrgIDSelector, currentOrgSelector } from '@/slices/orgSlice';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import OrgCard from '@/sections/profile/org_card';
 

@@ -1,11 +1,9 @@
 import Loader from '@/components/common/loader';
-import ProjectCard from '@/components/organization/project_card';
 import { EXPLORE_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
-import ProjectView from '@/sections/organization/projects/project_view';
 import NewProject from '@/sections/organization/projects/new_project';
 import { Info, Plus } from '@phosphor-icons/react';
 import { userSelector } from '@/slices/userSlice';
@@ -18,10 +16,13 @@ import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import { currentOrgSelector } from '@/slices/orgSlice';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_MANAGER } from '@/config/constants';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import AccessTree from '@/components/organization/access_tree';
+import ProjectCard from '@/components/workspace/project_card';
+import ProjectView from '@/sections/workspace/project_view';
+import { initialOrganization } from '@/types/initials';
 
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -48,6 +49,11 @@ const Projects = () => {
         if (res.statusCode === 200) {
           let projectsData = res.data.projects || [];
           projectsData = projectsData.map((project: Project) => {
+            project.organizationID = currentOrg.id;
+            const org = initialOrganization;
+            org.id = currentOrg.id;
+            org.userID = currentOrg.userID;
+            project.organization = org;
             return { ...project, user };
           });
           setProjects(projectsData);
@@ -119,6 +125,7 @@ const Projects = () => {
                 <ProjectView
                   projectSlugs={projects.map(project => project.slug)}
                   clickedProjectIndex={clickedProjectIndex}
+                  clickedProject={projects[clickedProjectIndex]}
                   setClickedProjectIndex={setClickedProjectIndex}
                   setClickedOnProject={setClickedOnProject}
                   fadeIn={fadeIn}

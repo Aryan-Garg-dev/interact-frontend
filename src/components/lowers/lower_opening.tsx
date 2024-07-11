@@ -9,7 +9,7 @@ import OpeningBookmarkIcon from './opening_bookmark';
 import Report from '../common/report';
 import { WarningCircle } from '@phosphor-icons/react';
 import SignUp from '../common/signup_box';
-import { checkParticularOrgAccess } from '@/utils/funcs/check_org_access';
+import { checkParticularOrgAccess } from '@/utils/funcs/access';
 import { ORG_MANAGER } from '@/config/constants';
 
 interface Props {

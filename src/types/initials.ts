@@ -124,6 +124,8 @@ export const initialProject: Project = {
   totalNoViews: 0,
   privateLinks: [],
   links: [],
+  organizationID: '',
+  organization: null,
   noMembers: 1,
 };
 
@@ -535,6 +537,7 @@ export const initialMeeting: Meeting = {
   rsvp: [],
   createdAt: new Date(),
   nextSessionTime: new Date(),
+  eventID: '',
   sessions: [],
 };
 

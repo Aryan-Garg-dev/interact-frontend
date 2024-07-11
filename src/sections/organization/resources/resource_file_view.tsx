@@ -12,7 +12,7 @@ import {
   X,
 } from '@phosphor-icons/react';
 import { ORG_MANAGER, ORG_MEMBER, ORG_SENIOR } from '@/config/constants';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_URL, RESOURCE_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';

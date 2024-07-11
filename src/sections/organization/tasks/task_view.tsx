@@ -13,7 +13,7 @@ import SubTaskView from '@/sections/workspace/sub_task_view';
 import EditSubTask from '@/sections/workspace/edit_sub_task';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import TaskComponent from '@/sections/tasks/task_view';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import EditTask from '@/sections/tasks/edit_task';
 import { userSelector } from '@/slices/userSlice';

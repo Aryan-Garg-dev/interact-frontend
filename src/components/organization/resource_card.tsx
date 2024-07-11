@@ -1,5 +1,5 @@
 import { ResourceBucket } from '@/types';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { Lock } from '@phosphor-icons/react';
 import React from 'react';
 

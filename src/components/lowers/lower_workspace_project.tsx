@@ -17,6 +17,8 @@ import socketService from '@/config/ws';
 import Tasks from '@/sections/workspace/tasks';
 import NewTask from '@/sections/tasks/new_task';
 import History from '@/sections/workspace/history';
+import checkOrgAccess, { checkOrgProjectAccess, checkParticularOrgAccess } from '@/utils/funcs/access';
+import { ORG_SENIOR, PROJECT_MEMBER } from '@/config/constants';
 
 interface Props {
   project: Project;
@@ -146,7 +148,12 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false }: Pro
   return (
     <>
       {clickedOnTasks && (
-        <Tasks setShow={setClickedOnTasks} setClickedOnNewTask={setClickedOnNewTask} project={project} />
+        <Tasks
+          setShow={setClickedOnTasks}
+          setClickedOnNewTask={setClickedOnNewTask}
+          project={project}
+          org={checkParticularOrgAccess(ORG_SENIOR, project.organization)}
+        />
       )}
       {clickedOnNewTask && <NewTask setShow={setClickedOnNewTask} setShowTasks={setClickedOnTasks} project={project} />}
 
@@ -162,15 +169,23 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false }: Pro
         />
       )}
       {clickedOnShare && <ShareProject setShow={setClickedOnShare} project={project} setNoShares={setNumShares} />}
-      {clickedOnHistory && <History setShow={setClickedOnHistory} projectID={project.id} />}
+      {clickedOnHistory && (
+        <History
+          setShow={setClickedOnHistory}
+          project={project}
+          org={checkParticularOrgAccess(ORG_SENIOR, project.organization)}
+        />
+      )}
 
       <div className="flex flex-col gap-8 max-lg:gap-3 max-lg:p-0 max-lg:flex-row">
-        <Kanban
-          className="cursor-pointer hover:bg-[#ababab3e] max-lg:hover:bg-transparent p-2 max-lg:p-0 transition-ease-300 rounded-full max-lg:w-6 max-lg:h-6"
-          onClick={() => setClickedOnTasks(true)}
-          size={48}
-          weight="regular"
-        />
+        {checkOrgProjectAccess(PROJECT_MEMBER, project.id, ORG_SENIOR, project.organization) && (
+          <Kanban
+            className="cursor-pointer hover:bg-[#ababab3e] max-lg:hover:bg-transparent p-2 max-lg:p-0 transition-ease-300 rounded-full max-lg:w-6 max-lg:h-6"
+            onClick={() => setClickedOnTasks(true)}
+            size={48}
+            weight="regular"
+          />
+        )}
         <ClockCounterClockwise
           className="cursor-pointer hover:bg-[#ababab3e] max-lg:hover:bg-transparent p-2 max-lg:p-0 transition-ease-300 rounded-full max-lg:w-6 max-lg:h-6"
           onClick={() => setClickedOnHistory(true)}

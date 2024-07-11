@@ -212,6 +212,8 @@ export interface Project {
   noMembers: number;
   privateLinks: string[];
   links: string[];
+  organizationID: string;
+  organization: Organization | null;
   createdAt: Date;
 }
 

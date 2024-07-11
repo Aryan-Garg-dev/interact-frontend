@@ -82,6 +82,7 @@ const ContributingProjects = () => {
                 <ProjectView
                   projectSlugs={projects.map(project => project.slug)}
                   clickedProjectIndex={clickedProjectIndex}
+                  clickedProject={projects[clickedProjectIndex]}
                   setClickedProjectIndex={setClickedProjectIndex}
                   setClickedOnProject={setClickedOnProject}
                   fadeIn={fadeIn}

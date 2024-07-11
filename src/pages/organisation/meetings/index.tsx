@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useState, useEffect } from 'react';
 import NewMeeting from '@/sections/organization/meetings/new_meeting';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ArrowCounterClockwise, CalendarBlank, Info, LockOpen, Plus, SortAscending } from '@phosphor-icons/react';
 import { ORG_SENIOR } from '@/config/constants';
 // import NoMeetings from '@/components/fillers/meetings';

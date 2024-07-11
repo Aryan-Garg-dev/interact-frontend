@@ -22,7 +22,7 @@ import { currentOrgSelector } from '@/slices/orgSlice';
 import { userSelector } from '@/slices/userSlice';
 import { Session } from '@/types';
 import { initialMeeting } from '@/types/initials';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { getUserFromState } from '@/utils/funcs/redux';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import { getNextSessionTime } from '@/utils/funcs/session_details';

@@ -4,7 +4,7 @@ import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { Meeting } from '@/types';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import ModalWrapper from '@/wrappers/modal';
 import { PlusCircle, XCircle } from '@phosphor-icons/react';

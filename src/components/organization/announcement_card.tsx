@@ -13,7 +13,7 @@ import ConfirmDelete from '../common/confirm_delete';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Report from '../common/report';
 import SignUp from '../common/signup_box';
-import { checkParticularOrgAccess } from '@/utils/funcs/check_org_access';
+import { checkParticularOrgAccess } from '@/utils/funcs/access';
 import { ORG_MEMBER, ORG_SENIOR } from '@/config/constants';
 import isArrEdited from '@/utils/funcs/check_array_edited';
 import LowerAnnouncement from '../lowers/lower_announcement';

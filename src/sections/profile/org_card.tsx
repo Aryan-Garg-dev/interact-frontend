@@ -27,7 +27,7 @@ import isArrEdited from '@/utils/funcs/check_array_edited';
 import Connections from '../explore/connections_view';
 import { SERVER_ERROR } from '@/config/errors';
 import { currentOrgSelector } from '@/slices/orgSlice';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import AccessTree from '@/components/organization/access_tree';
 

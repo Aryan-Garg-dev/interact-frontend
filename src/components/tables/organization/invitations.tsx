@@ -6,7 +6,7 @@ import deleteHandler from '@/handlers/delete_handler';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { Invitation, Organization } from '@/types';
 import { initialInvitation } from '@/types/initials';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import getInvitationStatus, { getInvitationStatusColor } from '@/utils/funcs/invitation';
 import Toaster from '@/utils/toaster';
 import { Trash } from '@phosphor-icons/react';

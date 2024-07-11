@@ -9,7 +9,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import deleteHandler from '@/handlers/delete_handler';
 import Toaster from '@/utils/toaster';
 import ConfirmDelete from '@/components/common/confirm_delete';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_MANAGER } from '@/config/constants';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 

@@ -4,7 +4,7 @@ import Toaster from '@/utils/toaster';
 import { Opening } from '@/types';
 import OpeningCard from '@/components/explore/opening_card';
 import NewOpening from '@/sections/organization/openings/new_opening';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_MANAGER } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { initialOpening } from '@/types/initials';

@@ -11,7 +11,7 @@ import NewChat from '@/sections/organization/chats/new_chat';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { GroupChat } from '@/types';
 import { initialGroupChat, initialOrganization } from '@/types/initials';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import WidthCheck from '@/utils/wrappers/widthCheck';

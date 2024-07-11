@@ -10,7 +10,7 @@ import { EXPLORE_URL, ORG_URL } from '@/config/routes';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import { useSelector } from 'react-redux';
 import { currentOrgSelector } from '@/slices/orgSlice';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import Loader from '@/components/common/loader';
 import { Event } from '@/types';

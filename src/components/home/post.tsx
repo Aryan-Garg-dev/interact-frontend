@@ -18,7 +18,7 @@ import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Report from '../common/report';
 import SignUp from '../common/signup_box';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
 import isArrEdited from '@/utils/funcs/check_array_edited';

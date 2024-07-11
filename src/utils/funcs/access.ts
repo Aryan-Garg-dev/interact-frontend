@@ -1,4 +1,12 @@
-import { ORG_MANAGER, ORG_MEMBER, ORG_SENIOR } from '@/config/constants';
+import {
+  ORG_MANAGER,
+  ORG_MEMBER,
+  ORG_SENIOR,
+  PROJECT_EDITOR,
+  PROJECT_MANAGER,
+  PROJECT_MEMBER,
+  PROJECT_OWNER,
+} from '@/config/constants';
 import { store } from '@/store';
 import { Organization } from '@/types';
 import { initialOrganization, initialOrganizationMembership } from '@/types/initials';
@@ -51,6 +59,43 @@ export const checkParticularOrgAccess = (accessRole: string, checkOrg: Organizat
     default:
       return false;
   }
+};
+
+export const checkProjectAccess = (role: string, projectID: string) => {
+  const ownerProjects = user.ownerProjects;
+  const managerProjects = user.managerProjects;
+  const editorProjects = user.editorProjects;
+  const memberProjects = user.memberProjects;
+
+  const isOwner = ownerProjects.includes(projectID);
+  const isManager = managerProjects.includes(projectID);
+  const isEditor = editorProjects.includes(projectID);
+  const isMember = memberProjects.includes(projectID);
+
+  switch (role) {
+    case PROJECT_OWNER:
+      return isOwner;
+    case PROJECT_MANAGER:
+      return isOwner || isManager;
+    case PROJECT_EDITOR:
+      return isOwner || isManager || isEditor;
+    case PROJECT_MEMBER:
+      return isOwner || isManager || isEditor || isMember;
+    default:
+      return false;
+  }
+};
+
+export const checkOrgProjectAccess = (
+  projectRole: string,
+  projectID: string,
+  orgRole: string,
+  org?: Organization | null
+) => {
+  const projectAccess = checkProjectAccess(projectRole, projectID);
+  const orgAccess = org ? checkParticularOrgAccess(orgRole, org) : checkOrgAccess(orgRole);
+
+  return projectAccess || orgAccess;
 };
 
 export default checkOrgAccess;

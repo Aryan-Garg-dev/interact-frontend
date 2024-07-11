@@ -10,7 +10,7 @@ import deleteHandler from '@/handlers/delete_handler';
 import { SERVER_ERROR } from '@/config/errors';
 import ConfirmDelete from '../common/confirm_delete';
 import Link from 'next/link';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_MANAGER } from '@/config/constants';
 import { Pen, TrashSimple } from '@phosphor-icons/react';
 import EditOpening from '@/sections/organization/openings/edit_opening';

@@ -15,8 +15,8 @@ import Loader from '@/components/common/loader';
 import Collaborators from '@/screens/workspace/manage_project/collaborators';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import { currentOrgSelector } from '@/slices/orgSlice';
-import { ORG_SENIOR } from '@/config/constants';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import { ORG_MANAGER, ORG_SENIOR, PROJECT_MANAGER } from '@/config/constants';
+import checkOrgAccess, { checkOrgProjectAccess } from '@/utils/funcs/access';
 import OrgSidebar from '@/components/common/org_sidebar';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 
@@ -37,7 +37,7 @@ const ManageProject = ({ slug }: Props) => {
     const URL = `${ORG_URL}/${currentOrgID}/projects/${slug}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      if (!checkOrgAccess(ORG_SENIOR) && !user.managerProjects.includes(project.id)) window.history.back();
+      if (!checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR)) window.history.back();
       setProject(res.data.project);
       setLoading(false);
     } else {
@@ -64,10 +64,10 @@ const ManageProject = ({ slug }: Props) => {
           ) : (
             <>
               <div className={`${active === 0 ? 'block' : 'hidden'}`}>
-                <Openings project={project} setProject={setProject} org={true} />
+                <Openings project={project} setProject={setProject} org={checkOrgAccess(ORG_SENIOR)} />
               </div>
               <div className={`${active === 1 ? 'block' : 'hidden'}`}>
-                <Collaborators project={project} setProject={setProject} org={true} />
+                <Collaborators project={project} setProject={setProject} org={checkOrgAccess(ORG_MANAGER)} />
               </div>
               {/* <div className={`${active === 2 ? 'block' : 'hidden'}`}>
                 <Chats project={project} />
