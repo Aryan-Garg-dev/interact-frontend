@@ -434,6 +434,7 @@ export const initialTask: Task = {
   organizationID: '',
   priority: 'low',
   noComments: 0,
+  histories: [],
 };
 
 export const initialSubTask: SubTask = {

@@ -13,6 +13,7 @@ import SubTasksTable from '@/components/tables/subtasks';
 import CommentBox from '@/components/comment/comment_box';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import CopyClipboardButton from '@/components/buttons/copy_clipboard_btn';
+import TaskHistories from './history';
 
 interface Props {
   task: Task;
@@ -53,6 +54,7 @@ const TaskComponent = ({
   };
 
   const [clickedOnUsers, setClickedOnUsers] = useState(false);
+  const [noComments, setNoComments] = useState(task.noComments);
 
   const user = useSelector(userSelector);
 
@@ -137,7 +139,7 @@ const TaskComponent = ({
           </div>
         </div>
         <div className="w-full flex flex-col gap-4">
-          <div className="text-lg">{renderContentWithLinks(task.description)}</div>
+          <div>{renderContentWithLinks(task.description)}</div>
           <Tags tags={task.tags} />
         </div>
         <div className="w-fit flex-center gap-16">
@@ -179,7 +181,7 @@ const TaskComponent = ({
           )
         )}
 
-        <div className="w-full border-[#34343479] border-t-[1px]"></div>
+        <div className="w-full border-[#34343479] border-t-[1px] my-2"></div>
 
         {task.subTasks?.length > 0 ? (
           <div className="w-full flex flex-col gap-2">
@@ -211,9 +213,15 @@ const TaskComponent = ({
             </div>
           )
         )}
-        <div className="pb-32">
-          <div className="text-xl font-medium">Conversations</div>
-          <CommentBox type="task" item={task} userFetchURL={userFetchURL} />
+        {task.histories && task.histories.length > 0 && (
+          <div className="mt-4">
+            <div className="text-xl font-medium">Activity</div>
+            <TaskHistories histories={task.histories} />
+          </div>
+        )}
+        <div className="mt-4">
+          <div className="text-xl font-medium">Conversations ({noComments})</div>
+          <CommentBox type="task" item={task} userFetchURL={userFetchURL} setNoComments={setNoComments} />
         </div>
       </div>
     </>

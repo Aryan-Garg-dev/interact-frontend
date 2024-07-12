@@ -472,7 +472,26 @@ export interface Task {
   subTasks: SubTask[];
   priority: PRIORITY;
   noComments: number;
+  histories: TaskHistory[];
 }
+
+export interface TaskHistory {
+  id: string;
+  historyType: number;
+  taskID: string;
+  task: Task;
+  userID: string;
+  user: User;
+  assigneeID?: string;
+  assignee: User;
+  subTaskID?: string;
+  subTask: SubTask;
+  commentID?: string;
+  comment: Comment;
+  deletedText: string;
+  createdAt: Date;
+}
+
 export interface ResourceBucket {
   id: string;
   title: string;

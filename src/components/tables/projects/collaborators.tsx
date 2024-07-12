@@ -1,14 +1,14 @@
 import ConfirmDelete from '@/components/common/confirm_delete';
-import { ORG_MANAGER, PROJECT_MANAGER } from '@/config/constants';
+import { ORG_MANAGER, PROJECT_MANAGER, PROJECT_OWNER } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { MEMBERSHIP_URL, ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
 import EditCollaborator from '@/sections/workspace/manage_project/edit_collaborator';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { userSelector } from '@/slices/userSlice';
-import { Membership, Project, User } from '@/types';
+import { Membership, Project } from '@/types';
 import { initialMembership } from '@/types/initials';
-import checkOrgAccess from '@/utils/funcs/access';
+import checkOrgAccess, { checkProjectAccess } from '@/utils/funcs/access';
 import { getRoleColor } from '@/utils/funcs/membership';
 import Toaster from '@/utils/toaster';
 import { Pen, Trash } from '@phosphor-icons/react';
@@ -136,8 +136,8 @@ const CollaboratorsTable = ({ memberships, project, setProject, org }: Props) =>
               )
             )}
 
-            {(project.userID == user.id ||
-              user.managerProjects.includes(project.id) ||
+            {(checkProjectAccess(PROJECT_OWNER, project.id) ||
+              (checkProjectAccess(PROJECT_MANAGER, project.id) && membership.role != PROJECT_MANAGER) ||
               (org && checkOrgAccess(ORG_MANAGER))) && (
               <Trash
                 onClick={() => {

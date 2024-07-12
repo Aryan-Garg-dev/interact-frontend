@@ -34,6 +34,7 @@ import MainWrapper from '@/wrappers/main';
 import { Pen, Record, Trash } from '@phosphor-icons/react';
 import moment from 'moment';
 import Image from 'next/image';
+import Link from 'next/link';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -350,7 +351,10 @@ const Meeting = ({ id }: Props) => {
                         label="Scheduled by"
                         child={
                           <div className="w-fit flex-center gap-1 mt-1">
-                            <span className="flex-center gap-1 font-medium">
+                            <Link
+                              href={`/explore/user/${meeting.user.username}`}
+                              className="flex-center gap-1 font-medium"
+                            >
                               <Image
                                 crossOrigin="anonymous"
                                 width={200}
@@ -359,8 +363,8 @@ const Meeting = ({ id }: Props) => {
                                 src={`${USER_PROFILE_PIC_URL}/${meeting.user?.profilePic}`}
                                 className={'w-6 h-6 rounded-full object-cover'}
                               />
-                              {meeting.user.name}
-                            </span>
+                              <div className="hover-underline-animation after:bg-gray-700">{meeting.user.name}</div>
+                            </Link>
                             on
                             <span>{moment(meeting.createdAt).format('DD MMMM YYYY')}</span>
                           </div>
