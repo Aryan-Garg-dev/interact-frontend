@@ -83,6 +83,8 @@ const InvitationsTable = ({ invitations, project, setProject, org }: Props) => {
               height={50}
               alt={'User Pic'}
               src={`${USER_PROFILE_PIC_URL}/${invitation.user.profilePic}`}
+              placeholder="blur"
+              blurDataURL={invitation.user.profilePicBlurHash || 'no-hash'}
               className="w-8 h-8 rounded-full z-[1]"
             />
             <div className="w-[calc(100%-32px)] flex items-center flex-wrap gap-1">
@@ -106,6 +108,8 @@ const InvitationsTable = ({ invitations, project, setProject, org }: Props) => {
               height={50}
               alt={'User Pic'}
               src={`${USER_PROFILE_PIC_URL}/${invitation.sender.profilePic}`}
+              placeholder="blur"
+              blurDataURL={invitation.sender.profilePicBlurHash || 'no-hash'}
               className="w-6 h-6 rounded-full z-[1]"
             />
             <div className="w-fit flex items-center flex-wrap gap-1">

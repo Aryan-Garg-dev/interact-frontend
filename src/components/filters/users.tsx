@@ -101,6 +101,8 @@ const Users = ({ fieldName, users, selectedUsers, setSelectedUsers }: Props) => 
                     height={50}
                     alt={'User Pic'}
                     src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                    placeholder="blur"
+                    blurDataURL={user.profilePicBlurHash || 'no-hash'}
                     className="w-6 h-6 rounded-full z-[1]"
                   />
                   <div className="flex-center gap-2">

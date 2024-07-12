@@ -141,6 +141,8 @@ const OptionComponent = ({ option, totalVotes, orgID, pollID, setPolls }: Props)
                   height={50}
                   alt={'User Pic'}
                   src={`${USER_PROFILE_PIC_URL}/${u.profilePic}`}
+                  placeholder="blur"
+                  blurDataURL={u.profilePicBlurHash || 'no-hash'}
                   className={`w-6 h-6 rounded-full cursor-default absolute top-0 right-${index * 3} animate-fade_third`}
                 />
               );

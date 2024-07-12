@@ -53,6 +53,8 @@ const PictureList = ({ users, size = 4, gap = 1 }: Props) => {
                 alt={'User Pic'}
                 src={`${USER_PROFILE_PIC_URL}/${u.profilePic}`}
                 style={{ width: size * 4, height: size * 4 }}
+                placeholder="blur"
+                blurDataURL={u.profilePicBlurHash || 'no-hash'}
                 className={`rounded-full cursor-default shadow-md absolute top-0 left-${index * gap}`}
               />
             );

@@ -54,6 +54,8 @@ const OpeningCard = ({ opening, setOpenings }: Props) => {
           height={50}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${opening.organization?.user.profilePic}`}
+          placeholder="blur"
+          blurDataURL={opening.organization?.user.profilePicBlurHash || 'no-hash'}
           className={'w-[120px] h-[120px] max-md:w-[90px] max-md:h-[90px] rounded-lg object-cover'}
         />
 

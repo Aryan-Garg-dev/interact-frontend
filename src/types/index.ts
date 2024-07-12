@@ -137,7 +137,9 @@ export interface User {
   resume: string;
   active: boolean;
   profilePic: string;
+  profilePicBlurHash: string;
   coverPic: string;
+  coverPicBlurHash: string;
   username: string;
   phoneNo: string;
   bio: string;

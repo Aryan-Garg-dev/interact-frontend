@@ -65,6 +65,8 @@ const ParticipantsList = ({ meeting, title, setShow, setClickedOnAddParticipants
                 height={50}
                 alt={'User Pic'}
                 src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                placeholder="blur"
+                blurDataURL={user.profilePicBlurHash || 'no-hash'}
                 className="w-8 h-8 rounded-full z-[1]"
               />
               <div className="flex-center gap-2">

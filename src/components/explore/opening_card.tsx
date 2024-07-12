@@ -42,6 +42,8 @@ const OpeningCard = ({
           height={200}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${opening.organization?.user?.profilePic}`}
+          placeholder="blur"
+          blurDataURL={opening.organization?.user?.profilePicBlurHash || 'no-hash'}
           className={`${
             short ? 'w-[90px] h-[90px]' : 'w-[110px] h-[110px]'
           } max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover`}

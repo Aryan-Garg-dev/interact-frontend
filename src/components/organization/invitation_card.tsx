@@ -59,6 +59,8 @@ const InvitationCard = ({ invitation, setOrganization }: Props) => {
           height={50}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${invitation.user.profilePic}`}
+          placeholder="blur"
+          blurDataURL={invitation.user.profilePicBlurHash || 'no-hash'}
           className={'rounded-full w-16 h-16'}
         />
         <div className="grow flex flex-col gap-2 pt-1">

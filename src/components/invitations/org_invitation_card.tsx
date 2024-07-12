@@ -115,6 +115,8 @@ const OrgInvitationCard = ({ invitation, setInvitations }: Props) => {
           height={100}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${invitation.organization.user.profilePic}`}
+          placeholder="blur"
+          blurDataURL={invitation.organization.user.profilePicBlurHash || 'no-hash'}
           className="w-20 h-20 rounded-full"
         />
       </Link>

@@ -62,6 +62,8 @@ const About = ({ profile, organisation }: Props) => {
             width={50}
             height={50}
             src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={user.profilePicBlurHash || 'no-hash'}
             alt=""
             className={`${host ? 'w-8 h-8' : 'w-6 h-6'} rounded-full cursor-pointer`}
           />

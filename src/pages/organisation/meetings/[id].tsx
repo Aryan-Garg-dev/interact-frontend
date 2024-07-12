@@ -361,6 +361,8 @@ const Meeting = ({ id }: Props) => {
                                 height={200}
                                 alt={'User Pic'}
                                 src={`${USER_PROFILE_PIC_URL}/${meeting.user?.profilePic}`}
+                                placeholder="blur"
+                                blurDataURL={meeting.user?.profilePicBlurHash || 'no-hash'}
                                 className={'w-6 h-6 rounded-full object-cover'}
                               />
                               <div className="hover-underline-animation after:bg-gray-700">{meeting.user.name}</div>
@@ -413,6 +415,8 @@ const Meeting = ({ id }: Props) => {
                                         height={50}
                                         alt={'User Pic'}
                                         src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                                        placeholder="blur"
+                                        blurDataURL={user.profilePicBlurHash || 'no-hash'}
                                         className="w-8 h-8 rounded-full z-[1]"
                                       />
                                       <div className="flex-center gap-2">

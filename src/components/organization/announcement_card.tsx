@@ -177,6 +177,8 @@ const AnnouncementCard = ({ announcement, setAnnouncements }: Props) => {
           height={100}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${announcement.organization?.user.profilePic}`}
+          placeholder="blur"
+          blurDataURL={announcement.organization?.user.profilePicBlurHash || 'no-hash'}
           className="rounded-full w-8 h-8"
         />
       </Link>

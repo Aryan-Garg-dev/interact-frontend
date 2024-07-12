@@ -102,6 +102,8 @@ const Applications = () => {
                     height={100}
                     alt={'User Pic'}
                     src={`${USER_PROFILE_PIC_URL}/${application.organization?.user.profilePic}`}
+                    placeholder="blur"
+                    blurDataURL={application.organization?.user.profilePicBlurHash || 'no-hash'}
                     className={'w-[120px] h-[120px] max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover'}
                   />
                 ) : (

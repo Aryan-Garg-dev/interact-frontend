@@ -52,6 +52,8 @@ const ApplicationsTable = ({ applications, setClickedOnApplication, setClickedAp
               height={50}
               alt={'User Pic'}
               src={`${USER_PROFILE_PIC_URL}/${application.user.profilePic}`}
+              placeholder="blur"
+              blurDataURL={application.user.profilePicBlurHash || 'no-hash'}
               className="w-8 h-8 rounded-full z-[1]"
             />
             <div className="w-[calc(100%-32px)] flex items-center flex-wrap gap-1">

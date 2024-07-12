@@ -190,6 +190,8 @@ const PostComponent = ({
             height={100}
             alt={'User Pic'}
             src={`${USER_PROFILE_PIC_URL}/${post.user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={post.user.profilePicBlurHash || 'no-hash'}
             className={'rounded-full w-8 h-8'}
           />
         </Link>

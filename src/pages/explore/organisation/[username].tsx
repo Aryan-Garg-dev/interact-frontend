@@ -137,6 +137,8 @@ const User = ({ username }: Props) => {
               height={10000}
               alt={'User Pic'}
               src={`${USER_COVER_PIC_URL}/${user.coverPic}`}
+              placeholder="blur"
+              blurDataURL={user.coverPicBlurHash || 'no-hash'}
               // className="w-5/6 h-72 mx-auto object-cover rounded-b-md"
               className="w-full h-80 max-md:h-fit object-cover"
             />
@@ -148,6 +150,8 @@ const User = ({ username }: Props) => {
                 height={100}
                 alt="Profile Pic"
                 src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                placeholder="blur"
+                blurDataURL={user.profilePicBlurHash || 'no-hash'}
               />
               <div className="w-full flex flex-col gap-1">
                 <div className="w-full flex flex-wrap justify-between items-center">

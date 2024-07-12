@@ -147,6 +147,8 @@ const ProjectView = ({
             height={50}
             alt={'User Pic'}
             src={`${USER_PROFILE_PIC_URL}/${project.user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={project.user.profilePicBlurHash || 'no-hash'}
             className={'w-10 h-10 rounded-full cursor-default absolute top-0 left-0 z-10'}
           />
         </div>
@@ -172,6 +174,8 @@ const ProjectView = ({
               height={100}
               alt={'User Pic'}
               src={`${USER_PROFILE_PIC_URL}/${project.user.profilePic}`}
+              placeholder="blur"
+              blurDataURL={project.user.profilePicBlurHash || 'no-hash'}
               className={'lg:hidden w-10 h-10 rounded-full cursor-default'}
             />
             <div>

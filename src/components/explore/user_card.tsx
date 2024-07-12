@@ -39,6 +39,8 @@ const UserCard = ({ user, forTrending = false }: Props) => {
               height={100}
               alt={'User Pic'}
               src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+              placeholder="blur"
+              blurDataURL={user.profilePicBlurHash || 'no-hash'}
               className={`rounded-full ${!forTrending ? 'w-14 h-14' : 'w-10 h-10'}`}
             />
             {user.isOrganization && (

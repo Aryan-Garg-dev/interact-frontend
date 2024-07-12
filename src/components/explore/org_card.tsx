@@ -28,6 +28,8 @@ const OrgCard = ({ user }: Props) => {
           height={100}
           alt={'User Pic'}
           src={`${USER_COVER_PIC_URL}/${user.coverPic}`}
+          placeholder="blur"
+          blurDataURL={user.coverPicBlurHash || 'no-hash'}
           className="w-full h-32 rounded-t-xl fade-img"
         />
         <Image
@@ -36,6 +38,8 @@ const OrgCard = ({ user }: Props) => {
           height={100}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+          placeholder="blur"
+          blurDataURL={user.profilePicBlurHash || 'no-hash'}
           className="w-32 h-32 rounded-full absolute bottom-6 right-1/2 translate-x-1/2 translate-y-1/2"
         />
         {/* <Image

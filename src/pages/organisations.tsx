@@ -143,6 +143,8 @@ const Organizations = () => {
                   height={100}
                   alt={'User Pic'}
                   src={`${USER_PROFILE_PIC_URL}/${membership.organization.user.profilePic}`}
+                  placeholder="blur"
+                  blurDataURL={membership.organization.user.profilePicBlurHash || 'no-hash'}
                   className="rounded-full w-32 h-32"
                 />
                 <div className="w-[calc(100%-128px)] flex flex-col gap-2 max-md:text-center max-md:gap-4">
