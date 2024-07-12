@@ -12,7 +12,7 @@ interface Props {
 
 const TaskHistories: React.FC<Props> = ({ histories }) => {
   return (
-    <div>
+    <div className="w-full flex flex-col gap-3">
       {histories.map(history => {
         switch (history.historyType) {
           case -1:

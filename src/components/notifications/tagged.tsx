@@ -16,6 +16,11 @@ const Tagged = ({ notification, short = true }: Props) => {
       case 22:
         return 'announcement';
       case 23:
+        if (notification.comment.postID) return 'comment of a post.';
+        if (notification.comment.projectID) return 'comment of a project.';
+        if (notification.comment.announcementID) return 'comment of an announcement';
+        if (notification.comment.taskID) return 'comment of a task';
+        if (notification.comment.eventID) return 'comment of an event';
         return 'comment';
       default:
         return '';
@@ -68,7 +73,12 @@ const Tagged = ({ notification, short = true }: Props) => {
       notification={notification}
       extended={
         !short && (
-          <div className="w-fit max-w-[50%] text-xs rounded-md px-2 pt-1 bg-white line-clamp-2">{getContent()}</div>
+          <Link
+            href={getRedirectURL()}
+            className="w-fit max-w-[50%] text-xs rounded-md px-2 pt-1 bg-white line-clamp-2"
+          >
+            {getContent()}
+          </Link>
         )
       }
     >

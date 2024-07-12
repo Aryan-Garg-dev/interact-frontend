@@ -11,8 +11,8 @@ interface WrapperProps {
 
 const TaskHistoryWrapper: React.FC<WrapperProps> = ({ children, history }) => {
   return (
-    <div className="w-full flex flex-col gap-1 p-3 dark:text-white hover:bg-primary_comp dark:hover:bg-[#ae8abd39] rounded-xl font-primary transition-ease-200">
-      <div className="w-full flex justify-between items-center">
+    <div className="w-full flex flex-col gap-1 rounded-xl font-primary">
+      <div className="w-full flex justify-between items-center text-sm">
         <div className="w-fit flex-center gap-1">
           <Image
             crossOrigin="anonymous"
@@ -23,10 +23,10 @@ const TaskHistoryWrapper: React.FC<WrapperProps> = ({ children, history }) => {
             className={'rounded-full w-4 h-4 cursor-default border-[1px] border-black'}
           />
           <div className="font-semibold">{history.user.name}</div>
+          <div className="flex gap-1 text-gray-600"> - {children}</div>
         </div>
         <div className="text-xxs">{getDisplayTime(history.createdAt, false)}</div>
       </div>
-      <div className="text-sm flex">- {children}</div>
     </div>
   );
 };

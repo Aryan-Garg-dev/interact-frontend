@@ -214,7 +214,7 @@ const TaskComponent = ({
           )
         )}
         {task.histories && task.histories.length > 0 && (
-          <div className="mt-4">
+          <div className="w-full flex flex-col gap-2 mt-4">
             <div className="text-xl font-medium">Activity</div>
             <TaskHistories histories={task.histories} />
           </div>

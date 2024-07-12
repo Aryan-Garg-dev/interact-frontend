@@ -10,9 +10,7 @@ const Commented = ({ history }: Props) => {
   if (history.historyType === 5) {
     return (
       <TaskHistoryWrapper history={history}>
-        <div className="w-fit text-center flex-center gap-1">
-          commented on the task: <b>{history.comment.content}</b>.
-        </div>
+        <div className="w-fit text-center flex-center gap-1">commented on the task.</div>
       </TaskHistoryWrapper>
     );
   }
