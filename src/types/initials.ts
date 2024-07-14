@@ -1,3 +1,4 @@
+import { SUBSCRIPTIONS } from '@/config/constants';
 import {
   Achievement,
   Announcement,
@@ -94,6 +95,7 @@ export const initialUser: User = {
   isVerified: false,
   isOrganization: false,
   organization: null,
+  subscription: SUBSCRIPTIONS.USER_BASE,
 };
 
 export const initialProject: Project = {

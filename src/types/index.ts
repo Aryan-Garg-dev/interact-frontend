@@ -163,6 +163,7 @@ export interface User {
   isVerified: boolean;
   isOrganization: boolean;
   organization: Organization | null;
+  subscription: string;
 }
 
 export interface OrganizationMembership {

@@ -98,4 +98,30 @@ export const checkOrgProjectAccess = (
   return projectAccess || orgAccess;
 };
 
+const subscriptionLevels: Record<string, number> = {
+  FREE: 0,
+  BASE: 1,
+  PREMIUM: 2,
+};
+
+export const checkSubscriptionAccess = (subscription: string, requiredSubscription: string): boolean => {
+  const normalize = (sub: string): string => sub.replace(/^(USER_|ORG_)/, '');
+
+  const subscriptionPrefix = subscription.split('_')[0];
+  const requiredSubscriptionPrefix = requiredSubscription.split('_')[0];
+
+  if (subscriptionPrefix !== requiredSubscriptionPrefix) return false;
+
+  const normalizedSubscription = normalize(subscription);
+  const normalizedRequiredSubscription = normalize(requiredSubscription);
+
+  if (
+    subscriptionLevels[normalizedSubscription] !== undefined &&
+    subscriptionLevels[normalizedRequiredSubscription] !== undefined
+  )
+    return subscriptionLevels[normalizedSubscription] >= subscriptionLevels[normalizedRequiredSubscription];
+
+  return false;
+};
+
 export default checkOrgAccess;
