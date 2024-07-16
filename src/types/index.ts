@@ -504,6 +504,7 @@ export interface ResourceBucket {
   viewAccess: string;
   editAccess: string;
   resourceFiles: ResourceFile[];
+  size: number;
   createdAt: Date;
 }
 export interface ResourceFile {
@@ -516,6 +517,7 @@ export interface ResourceFile {
   user: User;
   path: string;
   type: string;
+  size: number;
   isFileUploaded: boolean;
 }
 export interface ProjectHistory {

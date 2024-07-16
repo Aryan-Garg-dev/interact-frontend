@@ -503,6 +503,7 @@ export const initialResourceBucket: ResourceBucket = {
   viewAccess: '',
   editAccess: '',
   resourceFiles: [],
+  size: 0,
   createdAt: new Date(),
 };
 
@@ -516,6 +517,7 @@ export const initialResourceFile: ResourceFile = {
   userID: '',
   user: initialUser,
   isFileUploaded: false,
+  size: 0,
   createdAt: new Date(),
 };
 
