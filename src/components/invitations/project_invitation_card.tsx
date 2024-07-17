@@ -1,5 +1,5 @@
 import { Invitation } from '@/types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { INVITATION_URL, PROJECT_PIC_URL } from '@/config/routes';
 import moment from 'moment';
@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setMemberProjects, userSelector } from '@/slices/userSlice';
 import ConfirmDelete from '../common/confirm_delete';
 import { setUnreadInvitations, unreadInvitationsSelector } from '@/slices/feedSlice';
-import getInvitationStatus, { getInvitationStatusColor } from '@/utils/funcs/invitation';
+import socketService from '@/config/ws';
 
 interface Props {
   invitation: Invitation;
@@ -47,6 +47,8 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
       dispatch(setMemberProjects([...user.memberProjects, invitation.projectID]));
       dispatch(setUnreadInvitations(unreadInvitations - 1));
       Toaster.stopLoad(toaster, 'Invitation Accepted', 1);
+
+      socketService.sendNotification(invitation.sender.id, `${user.name} accepted the invitation to join ${invitation.project.title}`);
     } else {
       if (res.data.message) {
         Toaster.stopLoad(toaster, res.data.message, 0);
@@ -77,6 +79,8 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
       dispatch(setUnreadInvitations(unreadInvitations - 1));
       setClickedOnReject(false);
       Toaster.stopLoad(toaster, 'Invitation Rejected', 1);
+
+      socketService.sendNotification(invitation.sender.id, `${user.name} rejected the invitation to join ${invitation.project.title}`);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
       else {

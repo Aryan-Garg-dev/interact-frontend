@@ -87,7 +87,7 @@ const Tagged = ({ notification, short = true }: Props) => {
           {notification.sender.name}
         </Link>{' '}
       </span>
-      tagged you in a
+      Tagged you in a
       <span>
         {' '}
         <Link className="font-bold capitalize" href={getRedirectURL()}>
@@ -99,3 +99,5 @@ const Tagged = ({ notification, short = true }: Props) => {
 };
 
 export default Tagged;
+
+

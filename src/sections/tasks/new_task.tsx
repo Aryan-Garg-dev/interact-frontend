@@ -43,7 +43,7 @@ const NewTask = ({
   const [tags, setTags] = useState<string[]>([]);
   const [deadline, setDeadline] = useState(getInputFieldFormatTime(new Date()));
   const [priority, setPriority] = useState<PRIORITY>('low');
-
+  const [difficulty, setDifficulty] = useState('easy'); 
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
   const [teams, setTeams] = useState<Team[]>([]);
@@ -164,6 +164,7 @@ const NewTask = ({
       users: userIDs,
       deadline: moment(deadline),
       priority,
+      difficulty, 
     };
 
     const res = await postHandler(URL, formData);
@@ -207,6 +208,7 @@ const NewTask = ({
               <TextArea label="Task Description" val={description} setVal={setDescription} maxLength={500} />
               <Tags label="Task Tags" tags={tags} setTags={setTags} maxTags={5} />
               <Select label="Task Priority" val={priority} setVal={setPriority} options={['low', 'medium', 'high']} />
+              <Select label="Task Difficulty" val={difficulty} setVal={setDifficulty} options={['easy', 'medium', 'difficult']} /> 
               <Time
                 label="Task Deadline"
                 val={deadline}

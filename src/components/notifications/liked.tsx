@@ -68,7 +68,7 @@ const Liked = ({ notification, short = true }: Props) => {
           {notification.sender.name}
         </Link>{' '}
       </span>
-      liked your
+      Liked your
       <span>
         {' '}
         <Link className="font-bold capitalize" href={getRedirectURL()}>
@@ -80,3 +80,5 @@ const Liked = ({ notification, short = true }: Props) => {
 };
 
 export default Liked;
+
+

@@ -11,16 +11,38 @@ interface Props {
 
 const ChatRequest = ({ notification }: Props) => {
   const loggedInUser = useSelector(userSelector);
+
+  const getMessage = () => {
+    switch (notification.notificationType) {
+      case 9:
+        return `${notification.sender.name} has initiated a chat.`;
+      default:
+        return 'New chat request received.';
+    }
+  };
+
+  const getRedirectURL = () => {
+    switch (notification.notificationType) {
+      case 9:
+        return `/explore/user/${notification.sender.username}`;
+      default:
+        return '';
+    }
+  };
+
   return (
     <NotificationWrapper notification={notification}>
       <span>
-        <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
+        <Link className="font-bold capitalize" href={getRedirectURL()}>
           {notification.sender.name}
         </Link>{' '}
       </span>
-      has initiated a chat.
+      {getMessage()}
     </NotificationWrapper>
   );
 };
 
 export default ChatRequest;
+
+
+

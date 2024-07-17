@@ -8,15 +8,33 @@ interface Props {
 }
 
 const Follow = ({ notification }: Props) => {
+  const getMessage = () => {
+    switch (notification.notificationType) {
+      case 0:
+        return `${notification.sender.name} started following you.`;
+      default:
+        return 'New follower notification.';
+    }
+  };
+
+  const getRedirectURL = () => {
+    switch (notification.notificationType) {
+      case 0:
+        return `/explore/user/${notification.sender.username}`;
+      default:
+        return '';
+    }
+  };
+
   return (
     <NotificationWrapper notification={notification}>
       <div>
         <span>
-          <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
+          <Link className="font-bold capitalize" href={getRedirectURL()}>
             {notification.sender.name}
           </Link>{' '}
         </span>
-        started following you.
+        {getMessage()}
       </div>
     </NotificationWrapper>
   );
