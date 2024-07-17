@@ -96,7 +96,7 @@ const NewProject = ({ setShow, setProjects }: Props) => {
       setLinks([]);
       setImage(undefined);
       setShow(false);
-      dispatch(setOwnerProjects([...(user.ownerProjects || [], project.id)]));
+      dispatch(setOwnerProjects([...(user.ownerProjects || []), project.id]));
     } else if (res.statusCode == 413) {
       Toaster.stopLoad(toaster, 'Image too large', 0);
     } else {
