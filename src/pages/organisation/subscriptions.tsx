@@ -1,6 +1,6 @@
 import RazorpayButton from '@/components/buttons/rzp_btn';
 import Sidebar from '@/components/common/sidebar';
-import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
+import OrgOnlyAndProtect from '@/utils/wrappers/org_only';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 
@@ -12,13 +12,13 @@ const Subscriptions = () => {
         <div className="w-full max-lg:w-full mx-auto flex flex-col gap-8 px-8 max-md:px-4 py-6 font-primary relative transition-ease-out-500">
           <div className="w-fit text-5xl max-md:text-3xl font-extrabold pl-2">Subscriptions</div>
           <div className="w-full grid grid-cols-3 gap-8">
-            <SubscriptionCard title="Free" description="For trial" amount={0} subscription="USER_FREE" />
-            <SubscriptionCard title="Pro" description="For Project Finders" amount={200} subscription="USER_BASE" />
+            <SubscriptionCard title="Free" description="For trial" amount={0} subscription="ORG_FREE" />
+            <SubscriptionCard title="Pro" description="For starting orgs" amount={1000} subscription="ORG_BASE" />
             <SubscriptionCard
               title="Premium"
-              description="For Project Owners"
-              amount={350}
-              subscription="USER_PREMIUM"
+              description="For Professional Orgs"
+              amount={1500}
+              subscription="ORG_PREMIUM"
             />
           </div>
         </div>
@@ -57,4 +57,4 @@ const SubscriptionCard = ({ title, description, amount, subscription }: Props) =
   );
 };
 
-export default NonOrgOnlyAndProtect(Subscriptions);
+export default OrgOnlyAndProtect(Subscriptions);
