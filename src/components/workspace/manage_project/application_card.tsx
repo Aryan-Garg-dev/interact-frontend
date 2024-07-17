@@ -75,6 +75,8 @@ const ApplicationCard = ({
           height={50}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${application.user.profilePic}`}
+          placeholder="blur"
+          blurDataURL={application.user.profilePicBlurHash || 'no-hash'}
           className={'rounded-full w-20 h-20'}
         />
         <div className="flex flex-col gap-2">

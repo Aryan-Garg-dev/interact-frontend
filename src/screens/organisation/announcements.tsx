@@ -9,7 +9,7 @@ import NewAnnouncement from '@/sections/organization/announcements/new_announcem
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { Announcement, Organization } from '@/types';
 import { initialOrganization } from '@/types/initials';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import { Plus } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';

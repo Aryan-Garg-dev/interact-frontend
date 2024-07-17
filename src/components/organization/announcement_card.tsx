@@ -13,7 +13,7 @@ import ConfirmDelete from '../common/confirm_delete';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Report from '../common/report';
 import SignUp from '../common/signup_box';
-import { checkParticularOrgAccess } from '@/utils/funcs/check_org_access';
+import { checkParticularOrgAccess } from '@/utils/funcs/access';
 import { ORG_MEMBER, ORG_SENIOR } from '@/config/constants';
 import isArrEdited from '@/utils/funcs/check_array_edited';
 import LowerAnnouncement from '../lowers/lower_announcement';
@@ -109,7 +109,7 @@ const AnnouncementCard = ({ announcement, setAnnouncements }: Props) => {
   return (
     <div
       onClick={() => setClickedOnOptions(false)}
-      className="w-full max-w-3xl mx-auto relative overflow-clip bg-white font-primary flex gap-1 rounded-lg border-gray-300 border-[1px] dark:border-b-[1px] p-4 animate-fade_third"
+      className="w-full relative overflow-clip bg-white font-primary flex gap-1 rounded-lg border-gray-300 border-[1px] dark:border-b-[1px] p-4 animate-fade_third"
     >
       {noUserClick && <SignUp setShow={setNoUserClick} />}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
@@ -177,6 +177,8 @@ const AnnouncementCard = ({ announcement, setAnnouncements }: Props) => {
           height={100}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${announcement.organization?.user.profilePic}`}
+          placeholder="blur"
+          blurDataURL={announcement.organization?.user.profilePicBlurHash || 'no-hash'}
           className="rounded-full w-8 h-8"
         />
       </Link>

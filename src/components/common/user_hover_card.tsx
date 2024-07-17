@@ -23,6 +23,8 @@ const UserHoverCard = ({ user, title, scaleTransition = false }: Props) => {
         width={50}
         height={50}
         src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+        placeholder="blur"
+        blurDataURL={user.profilePicBlurHash || 'no-hash'}
         alt=""
         className="w-12 h-12 rounded-full"
       />

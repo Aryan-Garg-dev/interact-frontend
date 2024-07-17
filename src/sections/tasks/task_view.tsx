@@ -1,7 +1,7 @@
 import { SubTask, Task } from '@/types';
 import { ArrowArcLeft, Gear, Trash, PlusCircle } from '@phosphor-icons/react';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import ToolTip from '@/components/utils/tooltip';
@@ -12,6 +12,8 @@ import Tags from '@/components/common/tags';
 import SubTasksTable from '@/components/tables/subtasks';
 import CommentBox from '@/components/comment/comment_box';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
+import CopyClipboardButton from '@/components/buttons/copy_clipboard_btn';
+import TaskHistories from './history';
 
 interface Props {
   task: Task;
@@ -52,8 +54,20 @@ const TaskComponent = ({
   };
 
   const [clickedOnUsers, setClickedOnUsers] = useState(false);
+  const [noComments, setNoComments] = useState(task.noComments);
 
   const user = useSelector(userSelector);
+
+  useEffect(() => {
+    document.documentElement.style.overflowY = 'hidden';
+    document.documentElement.style.height = '100vh';
+
+    return () => {
+      document.documentElement.style.overflowY = 'auto';
+      document.documentElement.style.height = 'auto';
+    };
+  }, []);
+
   return (
     <>
       {clickedOnUsers && <UsersList title="Task Users" users={task.users} setShow={setClickedOnUsers} />}
@@ -68,7 +82,32 @@ const TaskComponent = ({
             }}
           />
           <div className="w-full flex justify-between items-center">
-            <div className="text-4xl font-semibold">{task.title}</div>
+            <div className="flex-center gap-2">
+              <div className="text-4xl font-semibold">{task.title}</div>
+              <div className="relative group">
+                <ToolTip
+                  content="Copy Task Link"
+                  styles={{
+                    fontSize: '10px',
+                    padding: '2px',
+                    width: '120px',
+                    top: '-60%',
+                    left: '50%',
+                    translate: '-50% 0',
+                    border: 'none',
+                  }}
+                />
+                <CopyClipboardButton
+                  url={
+                    task.organizationID != ''
+                      ? `organisations?oid=${task.organizationID}&redirect_url=/tasks?tid=${task.id}`
+                      : `workspace/tasks/${task.project?.title}?tid=${task.id}`
+                  }
+                  iconOnly={true}
+                  size={28}
+                />
+              </div>
+            </div>
             <div className="flex-center gap-2">
               {accessChecker && (
                 <>
@@ -100,7 +139,7 @@ const TaskComponent = ({
           </div>
         </div>
         <div className="w-full flex flex-col gap-4">
-          <div className="text-lg">{renderContentWithLinks(task.description, [])}</div>
+          <div>{renderContentWithLinks(task.description)}</div>
           <Tags tags={task.tags} />
         </div>
         <div className="w-fit flex-center gap-16">
@@ -142,7 +181,7 @@ const TaskComponent = ({
           )
         )}
 
-        <div className="w-full border-[#34343479] border-t-[1px]"></div>
+        <div className="w-full border-[#34343479] border-t-[1px] my-2"></div>
 
         {task.subTasks?.length > 0 ? (
           <div className="w-full flex flex-col gap-2">
@@ -174,9 +213,15 @@ const TaskComponent = ({
             </div>
           )
         )}
-        <div className="pb-32">
-          <div className="text-xl font-medium">Conversations</div>
-          <CommentBox type="task" item={task} userFetchURL={userFetchURL} />
+        {task.histories && task.histories.length > 0 && (
+          <div className="w-full flex flex-col gap-2 mt-4">
+            <div className="text-xl font-medium">Activity</div>
+            <TaskHistories histories={task.histories} />
+          </div>
+        )}
+        <div className="mt-4">
+          <div className="text-xl font-medium">Conversations ({noComments})</div>
+          <CommentBox type="task" item={task} userFetchURL={userFetchURL} setNoComments={setNoComments} />
         </div>
       </div>
     </>

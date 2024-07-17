@@ -13,6 +13,7 @@ import { userSelector } from '@/slices/userSlice';
 import { Project } from '@/types';
 import categories from '@/utils/categories';
 import Toaster from '@/utils/toaster';
+import ModalWrapper from '@/wrappers/modal';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -135,12 +136,12 @@ const EditProject = ({ projectToEdit, setShow, setProjectToEdit, setProjects, or
   }, []);
 
   return (
-    <>
-      <div className="fixed top-12 max-lg:top-20 w-[953px] max-lg:w-5/6 h-[680px] max-lg:h-5/6 backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex max-lg:flex-col justify-between rounded-lg max-lg:rounded-md p-8 pb-2 gap-8 max-lg:gap-4 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_black  dark:border-dark_primary_btn right-1/2 translate-x-1/2 shadow-2xl animate-fade_third z-30">
-        <div className="w-2/5 max-lg:w-full lg:sticky lg:top-0">
+    <ModalWrapper setShow={setShow} width="2/3" height="fit" blur={true} modalStyles={{ top: '50%' }}>
+      <div className="w-full flex max-lg:flex-col justify-between rounded-lg max-lg:rounded-md p-2 gap-8 max-lg:gap-4 dark:text-white font-primary z-30">
+        <div className="w-80 max-lg:w-full lg:sticky lg:top-0">
           <Images initialImage={projectToEdit.coverPic} setSelectedFile={setImage} />
         </div>
-        <div className="w-3/5 max-lg:w-full h-fit flex flex-col max-lg:items-center gap-4 max-lg:gap-6 max-lg:pb-4">
+        <div className="w-[calc(100%-320px)] max-lg:w-full h-fit flex flex-col max-lg:items-center gap-4 max-lg:gap-6 max-lg:pb-4">
           <div className="w-fit text-5xl max-lg:text-3xl font-bold cursor-default">{projectToEdit.title}</div>
           <Select label="Project Category" val={category} setVal={setCategory} options={categories} required={true} />
           <Input label="Project Tagline" val={tagline} setVal={setTagline} maxLength={50} required={true} />
@@ -153,11 +154,7 @@ const EditProject = ({ projectToEdit, setShow, setProjectToEdit, setProjects, or
           </div>
         </div>
       </div>
-      <div
-        onClick={() => setShow(false)}
-        className="bg-backdrop w-screen h-screen backdrop-blur-sm max-lg:backdrop-blur-sm fixed top-0 left-0 animate-fade_third z-20"
-      ></div>
-    </>
+    </ModalWrapper>
   );
 };
 

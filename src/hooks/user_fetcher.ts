@@ -24,6 +24,7 @@ import {
   setFetchedProjectBookmarks,
   setFetchedProjects,
   setLastFetchedOrganizationMemberships,
+  setLastFetchedRegisteredEvents,
   setLastFetchedUnreadChats,
   setLastFetchedUnreadInvitations,
   setLastFetchedUnreadNotifications,
@@ -47,6 +48,7 @@ import {
   setPersonalChatSlices,
   setPostBookmarks,
   setProjectBookmarks,
+  setRegisteredEvents,
   setVotedOptions,
 } from '@/slices/userSlice';
 import {
@@ -334,6 +336,22 @@ const useUserStateFetcher = () => {
       });
   };
 
+  const fetchRegisteredEvents = () => {
+    if (moment().utc().diff(config.lastFetchedRegisteredEvents, 'minute') < 5) return;
+    const URL = `${USER_URL}/me/events`;
+    getHandler(URL)
+      .then(res => {
+        if (res.statusCode === 200) {
+          const eventIDs: string[] = res.data.eventIDs;
+          dispatch(setRegisteredEvents(eventIDs));
+          dispatch(setLastFetchedRegisteredEvents(new Date().toUTCString()));
+        } else Toaster.error(res.data.message, 'error_toaster');
+      })
+      .catch(err => {
+        Toaster.error(SERVER_ERROR, 'error_toaster');
+      });
+  };
+
   const fetchUserState = () => {
     fetchFollowing();
     fetchLikes();
@@ -347,6 +365,7 @@ const useUserStateFetcher = () => {
     fetchUnreadChats();
     fetchOrganizationMemberships();
     fetchVotedOptions();
+    fetchRegisteredEvents();
   };
 
   return fetchUserState;

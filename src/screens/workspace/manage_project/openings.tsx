@@ -5,7 +5,7 @@ import NewOpening from '@/sections/workspace/manage_project/new_opening';
 import OpeningCard from '@/components/workspace/manage_project/opening_card';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import NoOpenings from '@/components/fillers/openings';
 

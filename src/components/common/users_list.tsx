@@ -12,7 +12,7 @@ interface Props {
 
 const UsersList = ({ users, title, setShow }: Props) => {
   return (
-    <ModalWrapper setShow={setShow} width={'1/4'}>
+    <ModalWrapper setShow={setShow} width={'1/3'} top={'1/3'}>
       <div className="text-2xl font-semibold">
         {title} ({users.length})
       </div>
@@ -29,6 +29,8 @@ const UsersList = ({ users, title, setShow }: Props) => {
                 height={50}
                 alt={'User Pic'}
                 src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                placeholder="blur"
+                blurDataURL={user.profilePicBlurHash || 'no-hash'}
                 className="w-8 h-8 rounded-full z-[1]"
               />
               <div className="flex-center gap-2">

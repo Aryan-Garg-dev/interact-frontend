@@ -239,6 +239,16 @@ const EditTask = ({
     }
   };
 
+  useEffect(() => {
+    document.documentElement.style.overflowY = 'hidden';
+    document.documentElement.style.height = '100vh';
+
+    return () => {
+      document.documentElement.style.overflowY = 'auto';
+      document.documentElement.style.height = 'auto';
+    };
+  }, []);
+
   return (
     <>
       <div className="fixed top-[10%] max-h-[80%] max-md:top-20 w-[640px] overflow-y-auto max-md:w-5/6 backdrop-blur-2xl bg-white flex flex-col gap-4 rounded-lg p-10 max-md:p-5 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
@@ -301,11 +311,7 @@ const EditTask = ({
                       <div className="w-5/6 flex flex-col">
                         <div className="text-lg font-bold">{user.name}</div>
                         <div className="text-sm dark:text-gray-200">@{user.username}</div>
-                        {user.tagline && user.tagline != '' ? (
-                          <div className="text-sm mt-2">{user.tagline}</div>
-                        ) : (
-                          <></>
-                        )}
+                        {user.tagline && user.tagline != '' && <div className="text-sm mt-2">{user.tagline}</div>}
                       </div>
                     </div>
                   );

@@ -22,38 +22,22 @@ const PictureList = ({ users, size = 4, gap = 1 }: Props) => {
     'left-8',
     'left-9',
     'left-10',
-    'w-4',
-    'w-6',
-    'w-8',
-    'w-9',
-    'w-10',
-    'w-11',
-    'w-12',
-    'w-13',
-    'w-14',
-    'w-15',
-    'w-16',
-    'w-17',
-    'w-18',
-    'w-19',
-    'w-20',
-    'h-4',
-    'h-6',
-    'h-8',
-    'h-12',
-    'h-18',
   ];
   return users?.length > 0 ? (
     <div className="flex gap-1">
       <div
-        className={`w-${
-          (gap - 1) *
-            users.filter((_, index) => {
-              return index >= 0 && index < 3;
-            }).length +
-          size -
-          1
-        } h-${size} relative mr-1`}
+        style={{
+          width:
+            (gap *
+              users.filter((_, index) => {
+                return index >= 0 && index < 3;
+              }).length +
+              size -
+              1) *
+            4,
+          height: size * 4,
+        }}
+        className="relative mr-1"
       >
         {users
           .filter((u, index) => {
@@ -68,9 +52,10 @@ const PictureList = ({ users, size = 4, gap = 1 }: Props) => {
                 height={50}
                 alt={'User Pic'}
                 src={`${USER_PROFILE_PIC_URL}/${u.profilePic}`}
-                className={`w-${size} h-${size} rounded-full cursor-default shadow-md absolute top-0 left-${
-                  index * gap
-                }`}
+                style={{ width: size * 4, height: size * 4 }}
+                placeholder="blur"
+                blurDataURL={u.profilePicBlurHash || 'no-hash'}
+                className={`rounded-full cursor-default shadow-md absolute top-0 left-${index * gap}`}
               />
             );
           })}

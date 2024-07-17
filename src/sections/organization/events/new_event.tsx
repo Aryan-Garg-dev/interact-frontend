@@ -23,6 +23,7 @@ import TextArea from '@/components/form/textarea';
 import Tags from '@/components/form/tags';
 import Links from '@/components/form/links';
 import { getFormattedTime } from '@/utils/funcs/time';
+import Checkbox from '@/components/form/checkbox';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,6 +41,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [image, setImage] = useState<File>();
+  const [haveSession, setHaveSession] = useState(false);
 
   const [step, setStep] = useState(0);
 
@@ -186,6 +188,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
     formData.append('startTime', getFormattedTime(startTime));
     formData.append('endTime', getFormattedTime(endTime));
     if (image) formData.append('coverPic', image);
+    if (haveSession) formData.append('haveSession', String(haveSession));
 
     const URL = `${ORG_URL}/${currentOrg.id}/events`;
 
@@ -264,7 +267,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
 
   return (
     <>
-      <div className="fixed top-10 max-lg:top-0 w-1/2 max-lg:w-screen h-[90%] max-lg:h-screen backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col justify-between rounded-lg px-12 py-8 gap-8 max-lg:gap-4 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 shadow-2xl animate-fade_third z-50">
+      <div className="fixed top-10 max-lg:top-0 w-1/2 max-lg:w-screen h-[90%] max-lg:h-screen backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col justify-between rounded-lg p-8 gap-8 max-lg:gap-4 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 shadow-2xl animate-fade_third z-50">
         {step == 0 ? (
           <div className="w-full flex flex-col gap-8 max-lg:gap-4 ">
             <div className="w-full">
@@ -306,7 +309,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
         ) : step == 1 ? (
           <div className="w-full flex flex-col items-center gap-4 ">
             <div className="w-full text-3xl max-md:text-xl font-semibold">Select Coordinators</div>
-            <div className="w-full h-full flex flex-col gap-4">
+            <div className="w-full h-[540px] overflow-y-auto flex flex-col gap-4">
               <div className="w-full h-12 flex items-center px-4 gap-4 dark:bg-dark_primary_comp_hover rounded-md">
                 <MagnifyingGlass size={24} />
                 <input
@@ -319,7 +322,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
               {users.length == 0 ? (
                 <div className="h-64 text-xl flex-center">No other user in the Organisation :(</div>
               ) : (
-                <div className="w-full flex-1 flex flex-col gap-2 overflow-y-auto">
+                <div className="w-full flex flex-col gap-2">
                   {users.map(user => {
                     return (
                       <div
@@ -353,51 +356,8 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
           </div>
         ) : step === 2 ? (
           <div className="w-full flex flex-col gap-4 ">
-            <div className="text-3xl max-md:text-xl font-semibold">Confirm Coordinators</div>
-            {selectedUsers.length == 0 ? (
-              <div className="h-64 text-xl flex-center">Selected users will be shown here :)</div>
-            ) : (
-              <div className="w-full  h-[420px] overflow-y-auto flex flex-col gap-2">
-                {selectedUsers.map(user => {
-                  return (
-                    <div
-                      key={user.id}
-                      className="w-full flex justify-between items-center rounded-lg p-2 dark:bg-dark_primary_comp_hover cursor-default transition-ease-200"
-                    >
-                      <div className="w-fit flex gap-2 items-center">
-                        <Image
-                          crossOrigin="anonymous"
-                          width={50}
-                          height={50}
-                          alt={'User Pic'}
-                          src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-                          className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
-                        />
-                        <div className="grow flex flex-wrap justify-between items-center">
-                          <div className="flex flex-col">
-                            <div className="text-lg font-bold">{user.name}</div>
-                            <div className="text-sm dark:text-gray-200">@{user.username}</div>
-                          </div>
-                        </div>
-                      </div>
-                      <X
-                        onClick={() => {
-                          setSelectedUsers(prev => prev.filter(u => u.id != user.id));
-                        }}
-                        className="cursor-pointer"
-                        size={24}
-                        weight="bold"
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        ) : step === 3 ? (
-          <div className="w-full flex flex-col gap-4 ">
             <div className="text-3xl max-md:text-xl font-semibold">Select Co-host</div>
-            <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
+            <div className="w-full h-[540px] overflow-y-auto flex flex-col gap-4">
               <div className="w-full h-12 flex items-center px-4 gap-4 dark:bg-dark_primary_comp_hover rounded-md">
                 <MagnifyingGlass size={24} />
                 <input
@@ -443,53 +403,53 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
             </div>
           </div>
         ) : (
-          <div className="w-full flex flex-col gap-4 ">
-            <div className="text-3xl max-md:text-xl font-semibold">Confirm Co-hosts</div>
-            {selectedOrganizationalUsers.length == 0 ? (
-              <div className="h-64 text-xl flex-center">Selected Co-hosts will be shown here :)</div>
-            ) : (
-              <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-2">
-                {selectedOrganizationalUsers.map((org, index) => {
-                  return (
-                    <div
-                      key={org.id}
-                      className="w-full flex justify-between items-center rounded-lg p-2 dark:bg-dark_primary_comp_hover cursor-default transition-ease-200"
-                    >
-                      <div className="w-fit flex gap-2 items-center">
-                        <Image
-                          crossOrigin="anonymous"
-                          width={50}
-                          height={50}
-                          alt={'User Pic'}
-                          src={`${USER_PROFILE_PIC_URL}/${org.profilePic}`}
-                          className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
-                        />
-                        <div className="grow flex flex-wrap justify-between items-center">
-                          <div className="flex flex-col">
-                            <div className="text-lg font-bold">{org.name}</div>
-                            <div className="text-sm dark:text-gray-200">@{org.username}</div>
-                          </div>
-                        </div>
-                      </div>
-                      <X
-                        onClick={() => {
-                          setSelectedOrganizationalUsers(prev => prev.filter(u => u.id != org.id));
-                        }}
-                        className="cursor-pointer"
-                        size={24}
-                        weight="bold"
-                      />
-                    </div>
-                  );
-                })}
+          step === 3 && (
+            <div className="w-full flex flex-col gap-4 ">
+              <div className="text-3xl max-md:text-xl font-semibold">Create a Session on Interact</div>
+              <div className="">
+                <Checkbox
+                  label="Conduct the event on Interact?"
+                  val={haveSession}
+                  setVal={setHaveSession}
+                  disabled={false}
+                />
               </div>
-            )}
-          </div>
+              <ul className="list-disc ml-4 flex flex-col gap-4 text-gray-700">
+                <li>
+                  By checking this option, a <b>parallel session on Interact</b> will be created, active during the
+                  event timings, allowing registered participants to join freely.
+                </li>
+                <li>
+                  To host the session on Interact, the event duration (and therefore the meeting duration){' '}
+                  <b>must not exceed 5 hours</b>.
+                </li>
+                <li>
+                  The session will be <b>open to all members</b> of the host and co-host organisations, with
+                  registrations available for non-members.
+                </li>
+                <li>
+                  Session details (including participation information, recordings, and transcripts) will be accessible
+                  <b> exclusively to members of the host organisation</b>.
+                </li>
+                <li>
+                  Managers and Event Coordinators from the host and co-host organisations will act as meeting hosts,
+                  retaining full control over the session.
+                </li>
+                <li>
+                  Any changes to the event details will automatically reflect in the parallel meeting on Interact;
+                  however, <b>direct editing of the parallel meeting details is not possible</b>.
+                </li>
+                <li>
+                  Once unchecked, <b>this option cannot be selected again</b>, so consider carefully before opting out.
+                </li>
+              </ul>
+            </div>
+          )
         )}
 
         <div className="w-full flex items-end justify-between">
           {step != 0 ? <PrimaryButton label="Back" onClick={() => setStep(prev => prev - 1)} /> : <div></div>}
-          {step != 4 ? (
+          {step != 3 ? (
             <PrimaryButton
               label="Next"
               onClick={() => {

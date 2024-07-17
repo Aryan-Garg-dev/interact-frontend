@@ -11,7 +11,7 @@ import deleteHandler from '@/handlers/delete_handler';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import { SERVER_ERROR } from '@/config/errors';
 import EditMember from '@/sections/organization/members/edit_member';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { currentOrgIDSelector, currentOrgSelector } from '@/slices/orgSlice';
 import { userIDSelector } from '@/slices/userSlice';
 
@@ -72,6 +72,8 @@ const MemberCard = ({ membership, organization, setOrganization }: Props) => {
           height={50}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${membership.user.profilePic}`}
+          placeholder="blur"
+          blurDataURL={membership.user.profilePicBlurHash || 'no-hash'}
           className={'rounded-full w-16 h-16'}
         />
         <div className="grow flex flex-col gap-2 pt-1">

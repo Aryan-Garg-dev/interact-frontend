@@ -94,6 +94,8 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                 height={200}
                 alt={'User Pic'}
                 src={`${USER_PROFILE_PIC_URL}/${opening.organization?.user.profilePic}`}
+                placeholder="blur"
+                blurDataURL={opening.organization?.user.profilePicBlurHash || 'no-hash'}
                 className={
                   'w-[240px] h-[240px] max-lg:hidden max-lg:w-[120px] max-lg:h-[120px] rounded-lg object-cover'
                 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { COMMENT_URL } from '@/config/routes';
 import Toaster from '@/utils/toaster';
-import { Announcement, Comment, Event, Post, Project, Task } from '@/types';
+import { Announcement, Application, Comment, Event, Post, Project, Task } from '@/types';
 import getHandler from '@/handlers/get_handler';
 import { userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
@@ -14,7 +14,7 @@ import CommentInput from './input';
 
 interface Props {
   type: string;
-  item: Project | Post | Event | Announcement | Task;
+  item: Project | Post | Event | Announcement | Task | Application;
   setNoComments?: React.Dispatch<React.SetStateAction<number>>;
   userFetchURL?: string;
 }
@@ -88,8 +88,14 @@ const CommentBox = ({ type, item, setNoComments, userFetchURL }: Props) => {
             content: commentBody,
             taggedUsernames,
           }
-        : {
+        : type === 'task'
+        ? {
             taskID: item.id,
+            content: commentBody,
+            taggedUsernames,
+          }
+        : {
+            applicationID: item.id,
             content: commentBody,
             taggedUsernames,
           };
@@ -115,7 +121,11 @@ const CommentBox = ({ type, item, setNoComments, userFetchURL }: Props) => {
   const loggedInUser = useSelector(userSelector);
 
   return (
-    <div className="w-full h-full overflow-y-auto flex flex-col over p-4 font-primary gap-4 max-md:px-4">
+    <div
+      className={`w-full h-full overflow-y-auto flex flex-col p-4 ${
+        comments.length < 3 && 'pb-40'
+      } font-primary gap-4 max-md:px-4`}
+    >
       <CommentInput
         content={commentBody}
         setContent={setCommentBody}

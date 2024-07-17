@@ -7,6 +7,7 @@ import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { College, Profile, User } from '@/types';
 import { collegesData } from '@/utils/colleges';
 import isArrEdited from '@/utils/funcs/check_array_edited';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Toaster from '@/utils/toaster';
 import { Buildings, CalendarBlank, Certificate, Envelope, MapPin, PencilSimple, Phone, X } from '@phosphor-icons/react';
 import fuzzysort from 'fuzzysort';
@@ -245,10 +246,13 @@ const About = ({ profile, setUser, org = false }: Props) => {
                     <div className="w-fit">
                       <div className="text-xs ml-1 font-medium uppercase text-gray-500">Graduation Year</div>
                       <input
-                        value={!profile.yearOfGraduation ? 2024 : yog}
+                        value={yog}
                         type="number"
-                        onChange={el => setYOG(Number(el.target.value))}
-                        min={2000}
+                        onChange={el => {
+                          const val = el.target.value;
+                          if (Number(val) > 1980 && Number(val) < 2030) setYOG(Number(val));
+                        }}
+                        min={1980}
                         max={2030}
                         placeholder="2024"
                         className="w-full text-primary_black focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 font-semibold bg-transparent"
@@ -289,10 +293,10 @@ const About = ({ profile, setUser, org = false }: Props) => {
               {clickedOnDegree ? (
                 <div className="w-3/4">
                   <div className="text-xs ml-1 font-medium uppercase text-gray-500">
-                    Degree Name ({degree.trim().length}/25)
+                    Degree Name ({degree.trim().length}/75)
                   </div>
                   <input
-                    maxLength={25}
+                    maxLength={75}
                     value={degree}
                     onChange={el => setDegree(el.target.value)}
                     placeholder="Bachelors in Interacting"
@@ -469,7 +473,9 @@ const About = ({ profile, setUser, org = false }: Props) => {
           {profile.description.trim() == '' ? (
             <div className="">Click here to add a Descriptive Bio!</div>
           ) : (
-            <div className={`whitespace-pre-wrap max-md:text-sm cursor-pointer`}>{profile.description}</div>
+            <div className="whitespace-pre-wrap max-md:text-sm cursor-pointer">
+              {renderContentWithLinks(profile.description)}
+            </div>
           )}
         </div>
       )}

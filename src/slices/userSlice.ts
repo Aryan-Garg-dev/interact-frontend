@@ -7,7 +7,7 @@ export interface ChatSlice {
   userID: string;
   chatID: string;
 }
-interface UserState {
+export interface UserState {
   id: string;
   name: string;
   username: string;
@@ -39,6 +39,7 @@ interface UserState {
   isOnboardingComplete: boolean;
   isPasswordSetupComplete: boolean;
   organizationMemberships: OrganizationMembership[];
+  registeredEvents: string[];
   votedOptions: string[];
 }
 
@@ -75,6 +76,7 @@ const initialState: UserState = {
   isPasswordSetupComplete: true,
   organizationMemberships: [],
   votedOptions: [],
+  registeredEvents: [],
 };
 
 export const userSlice = createSlice({
@@ -114,6 +116,7 @@ export const userSlice = createSlice({
       state.eventBookmarks = [];
       state.organizationMemberships = [];
       state.votedOptions = [];
+      state.registeredEvents = [];
     },
     resetUser: state => {
       state.id = '';
@@ -148,6 +151,7 @@ export const userSlice = createSlice({
       state.isOnboardingComplete = false;
       state.isPasswordSetupComplete = true;
       state.votedOptions = [];
+      state.registeredEvents = [];
     },
     setReduxName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
@@ -239,6 +243,9 @@ export const userSlice = createSlice({
     setVotedOptions: (state, action: PayloadAction<string[]>) => {
       state.votedOptions = action.payload;
     },
+    setRegisteredEvents: (state, action: PayloadAction<string[]>) => {
+      state.registeredEvents = action.payload;
+    },
   },
 });
 
@@ -275,6 +282,7 @@ export const {
   setPasswordSetupStatus,
   setOrganizationMemberships,
   setVotedOptions,
+  setRegisteredEvents,
 } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -34,6 +34,7 @@ import Connections from '@/sections/explore/connections_view';
 import FollowBtn from '@/components/common/follow_btn';
 import { Organization } from '@/types';
 import SignUp from '@/components/common/signup_box';
+import ToolTip from '@/components/utils/tooltip';
 
 interface Props {
   username: string;
@@ -136,6 +137,8 @@ const User = ({ username }: Props) => {
               height={10000}
               alt={'User Pic'}
               src={`${USER_COVER_PIC_URL}/${user.coverPic}`}
+              placeholder="blur"
+              blurDataURL={user.coverPicBlurHash || 'no-hash'}
               // className="w-5/6 h-72 mx-auto object-cover rounded-b-md"
               className="w-full h-80 max-md:h-fit object-cover"
             />
@@ -147,6 +150,8 @@ const User = ({ username }: Props) => {
                 height={100}
                 alt="Profile Pic"
                 src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                placeholder="blur"
+                blurDataURL={user.profilePicBlurHash || 'no-hash'}
               />
               <div className="w-full flex flex-col gap-1">
                 <div className="w-full flex flex-wrap justify-between items-center">
@@ -179,7 +184,7 @@ const User = ({ username }: Props) => {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
                   <div
                     onClick={() => {
                       if (loggedInUser.id != '') setClickedOnFollowers(true);
@@ -192,8 +197,23 @@ const User = ({ username }: Props) => {
                   </div>
                   {user.links && <div className="max-md:text-xs text-gray-400">|</div>}
                   {user.links?.map(link => (
-                    <Link key={link} href={link} target="_blank" className="w-fit">
-                      {getIcon(getDomainName(link), 22, 'regular')}
+                    <Link
+                      key={link}
+                      href={link}
+                      target="_blank"
+                      className="w-fit relative group hover:scale-125 transition-ease-300"
+                    >
+                      <ToolTip
+                        content={getDomainName(link)}
+                        styles={{
+                          fontSize: '10px',
+                          padding: '2px 8px',
+                          left: '50%',
+                          translate: '-50% 80%',
+                          border: 'none',
+                        }}
+                      />
+                      {getIcon(getDomainName(link), 20, 'bold')}
                     </Link>
                   ))}
                 </div>

@@ -4,20 +4,25 @@ import React from 'react';
 
 interface Props {
   url: string;
+  size?: number;
+  iconOnly?: boolean;
+  border?: boolean;
 }
 
-const CopyClipboardButton = ({ url }: Props) => {
+const CopyClipboardButton = ({ url, size = 24, iconOnly = false }: Props) => {
   return (
     <div
       onClick={() => {
         navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/${url}`);
         Toaster.success('Copied to Clipboard!');
       }}
-      className="w-full text-center py-2 flex justify-center gap-2 rounded-lg border-[1px] border-primary_btn dark:border-[#ffe1fc10] 
-hover:bg-primary_comp dark:hover:bg-[#ffe1fc10] cursor-pointer transition-ease-200"
+      className={`${
+        !iconOnly &&
+        'w-full text-center flex justify-center gap-2 rounded-lg border-[1px] border-primary_btn hover:bg-primary_comp'
+      } p-1 cursor-pointer transition-ease-200`}
     >
-      <ClipboardText size={24} />
-      <div> Copy Link</div>
+      <ClipboardText size={size} />
+      {!iconOnly && <div> Copy Link</div>}
     </div>
   );
 };

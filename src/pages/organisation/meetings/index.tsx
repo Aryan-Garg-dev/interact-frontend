@@ -6,8 +6,8 @@ import { useSelector } from 'react-redux';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useState, useEffect } from 'react';
 import NewMeeting from '@/sections/organization/meetings/new_meeting';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
-import { Info, Plus } from '@phosphor-icons/react';
+import checkOrgAccess from '@/utils/funcs/access';
+import { ArrowCounterClockwise, CalendarBlank, Info, LockOpen, Plus, SortAscending } from '@phosphor-icons/react';
 import { ORG_SENIOR } from '@/config/constants';
 // import NoMeetings from '@/components/fillers/meetings';
 import MeetingCard from '@/components/organization/meeting_card';
@@ -20,7 +20,9 @@ import AccessTree from '@/components/organization/access_tree';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import Mascot from '@/components/fillers/mascot';
-import OrderMenu from '@/components/common/order_menu';
+import Select from '@/components/filters/select';
+import Order from '@/components/filters/order';
+import Tags from '@/components/filters/tags';
 
 const Meetings = () => {
   const [loading, setLoading] = useState(true);
@@ -28,14 +30,23 @@ const Meetings = () => {
   const [meetings, setMeetings] = useState<Meeting[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
+
   const [order, setOrder] = useState('next_session_time');
+  const [frequency, setFrequency] = useState('');
+  const [status, setStatus] = useState('');
+  const [search, setSearch] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
 
   const [clickedOnInfo, setClickedOnInfo] = useState(false);
 
   const currentOrg = useSelector(currentOrgSelector);
 
   const getMeetings = async (initialPage: number | null) => {
-    const URL = `/org/${currentOrg.id}/meetings?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
+    const URL = `/org/${currentOrg.id}/meetings?page=${
+      initialPage ? initialPage : page
+    }&limit=${10}&order=${order}&frequency=${frequency == 'one_time' ? 'none' : frequency}&tags=${tags.join(
+      ','
+    )}&is_open_for_members=${status == '' ? status : status == 'open'}`;
     const res = await getHandler(URL);
     if (res.statusCode === 200) {
       if (initialPage == 1) {
@@ -61,7 +72,7 @@ const Meetings = () => {
     setHasMore(true);
     setLoading(true);
     getMeetings(1);
-  }, [order]);
+  }, [order, status, frequency, tags]);
 
   return (
     <BaseWrapper title={`Meetings | ${currentOrg.title}`}>
@@ -70,15 +81,33 @@ const Meetings = () => {
         {clickedOnNewMeeting && <NewMeeting setShow={setClickedOnNewMeeting} setMeetings={setMeetings} />}
         {clickedOnInfo && <AccessTree type="meeting" setShow={setClickedOnInfo} />}
         <div className="w-full flex justify-between items-center p-base_padding">
-          <div className="flex-center gap-2">
+          <div className="flex-center gap-4">
             <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Meetings</div>
-            <OrderMenu
-              orders={['next_session_time', 'latest']}
-              current={order}
-              setState={setOrder}
-              fixed={false}
-              right={false}
-            />
+            <div className="flex-center gap-2">
+              <Select
+                fieldName="Access"
+                options={['open', 'restricted']}
+                icon={<LockOpen size={20} />}
+                selectedOption={status}
+                setSelectedOption={setStatus}
+              />
+              <Select
+                fieldName="Frequency"
+                options={['one_time', 'daily', 'weekly', 'monthly']}
+                icon={<ArrowCounterClockwise size={20} />}
+                selectedOption={frequency}
+                setSelectedOption={setFrequency}
+              />
+              <Order
+                fieldName="Sort By"
+                options={['next_session_time', 'latest']}
+                icon={<SortAscending size={20} />}
+                selectedOption={order}
+                setSelectedOption={setOrder}
+              />
+              <Tags selectedTags={tags} setSelectedTags={setTags} />
+              {/* <Search /> */}
+            </div>
           </div>
           <div className="flex items-center gap-2">
             {checkOrgAccess(ORG_SENIOR) && (

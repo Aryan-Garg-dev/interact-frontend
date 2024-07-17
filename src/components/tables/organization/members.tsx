@@ -13,7 +13,7 @@ import { currentOrgSelector } from '@/slices/orgSlice';
 import { setOrganizationMemberships, userSelector } from '@/slices/userSlice';
 import { Organization, OrganizationMembership } from '@/types';
 import { initialOrganizationMembership } from '@/types/initials';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { getRoleColor } from '@/utils/funcs/membership';
 import Toaster from '@/utils/toaster';
 import { Pen, Trash } from '@phosphor-icons/react';
@@ -138,6 +138,8 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
               height={50}
               alt={'User Pic'}
               src={`${USER_PROFILE_PIC_URL}/${membership.user.profilePic}`}
+              placeholder="blur"
+              blurDataURL={membership.user.profilePicBlurHash || 'no-hash'}
               className="w-8 h-8 rounded-full z-[1]"
             />
             <div className="w-[calc(100%-24px)] flex items-center flex-wrap gap-1">

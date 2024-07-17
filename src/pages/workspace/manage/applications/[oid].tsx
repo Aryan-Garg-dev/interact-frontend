@@ -10,7 +10,6 @@ import Sidebar from '@/components/common/sidebar';
 import { ArrowArcLeft, SlidersHorizontal } from '@phosphor-icons/react';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { useEffect, useState } from 'react';
-import ApplicationCard from '@/components/workspace/manage_project/application_card';
 import ApplicationView from '@/sections/workspace/manage_project/application_view';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import { useSelector } from 'react-redux';
@@ -18,12 +17,15 @@ import { userSelector } from '@/slices/userSlice';
 import OrgSidebar from '@/components/common/org_sidebar';
 import Protect from '@/utils/wrappers/protect';
 import OrderMenu from '@/components/common/order_menu';
+import ApplicationsTable from '@/components/tables/applications';
+import { initialOpening } from '@/types/initials';
 
 interface Props {
   oid: string;
 }
 
 const Applications = ({ oid }: Props) => {
+  const [opening, setOpening] = useState(initialOpening);
   const [applications, setApplications] = useState<Application[]>([]);
   const [filteredApplications, setFilteredApplications] = useState<Application[]>([]);
   const [filterStatus, setFilterStatus] = useState(0);
@@ -38,6 +40,7 @@ const Applications = ({ oid }: Props) => {
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       const applicationData = res.data.applications || [];
+      setOpening(res.data.opening || initialOpening);
       setApplications(applicationData);
       setFilteredApplications(applicationData);
       const aid = new URLSearchParams(window.location.search).get('aid');
@@ -82,7 +85,7 @@ const Applications = ({ oid }: Props) => {
       {user.isOrganization ? <OrgSidebar index={3} /> : <Sidebar index={3} />}
 
       <MainWrapper>
-        <div className="w-full flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-2">
           <div className="w-full flex justify-between p-base_padding">
             <div className="flex gap-3">
               <ArrowArcLeft
@@ -90,7 +93,7 @@ const Applications = ({ oid }: Props) => {
                 className="w-10 h-10 p-2 dark:bg-dark_primary_comp_hover rounded-full cursor-pointer"
                 size={40}
               />
-              <div className="text-4xl font-semibold dark:text-white font-primary">Applications</div>
+              <div className="text-5xl font-semibold dark:text-white font-primary">Applications</div>
             </div>
 
             <div className="relative">
@@ -140,28 +143,17 @@ const Applications = ({ oid }: Props) => {
               )}
             </div>
           </div>
-          <div className="w-full flex flex-col gap-6 px-2 py-2">
+          <div className="w-full">
             {loading ? (
               <Loader />
             ) : filteredApplications.length > 0 ? (
-              <div className="flex justify-evenly px-4">
-                <div
-                  className={`${clickedOnApplication ? 'w-[40%]' : 'w-[720px]'} max-md:w-[720px] flex flex-col gap-4`}
-                >
-                  {filteredApplications.map((application, i) => {
-                    return (
-                      <ApplicationCard
-                        key={application.id}
-                        index={i}
-                        application={application}
-                        applications={filteredApplications}
-                        clickedApplicationID={clickedApplicationID}
-                        setClickedOnApplication={setClickedOnApplication}
-                        setClickedApplicationID={setClickedApplicationID}
-                      />
-                    );
-                  })}
-                </div>
+              <>
+                <ApplicationsTable
+                  applications={filteredApplications}
+                  setClickedOnApplication={setClickedOnApplication}
+                  setClickedApplicationID={setClickedApplicationID}
+                />
+
                 {clickedOnApplication && (
                   <ApplicationView
                     applicationIndex={clickedApplicationID}
@@ -169,9 +161,10 @@ const Applications = ({ oid }: Props) => {
                     setShow={setClickedOnApplication}
                     setApplications={setApplications}
                     setFilteredApplications={setFilteredApplications}
+                    projectID={opening.projectID}
                   />
                 )}
-              </div>
+              </>
             ) : (
               <div className="w-full text-center text-xl font-medium">No Applications found :)</div>
             )}

@@ -1,6 +1,6 @@
-import { ORG_SENIOR } from '@/config/constants';
+import { ORG_MEMBER, ORG_SENIOR } from '@/config/constants';
 import { Session } from '@/types';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import moment from 'moment';
 import React from 'react';
 
@@ -24,13 +24,13 @@ const SessionTable = ({ sessions, setClickedOnSession, setClickedSessionID }: Pr
         <div
           key={session.id}
           onClick={() => {
-            if (checkOrgAccess(ORG_SENIOR)) {
+            if (checkOrgAccess(ORG_MEMBER)) {
               setClickedSessionID(session.id);
               setClickedOnSession(true);
             }
           }}
           className={`w-full h-12 bg-white rounded-xl border-gray-400 flex text-sm text-primary_black ${
-            checkOrgAccess(ORG_SENIOR) ? 'hover:bg-slate-100 cursor-pointer' : 'cursor-default'
+            checkOrgAccess(ORG_MEMBER) ? 'hover:bg-slate-100 cursor-pointer' : 'cursor-default'
           } transition-ease-300`}
         >
           <div className="w-[30%] flex-center">{session.id}</div>

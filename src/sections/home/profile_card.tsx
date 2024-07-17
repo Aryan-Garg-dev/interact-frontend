@@ -63,6 +63,8 @@ const ProfileCard = () => {
                 height={50}
                 alt="Cover Pic"
                 src={`${USER_COVER_PIC_URL}/${user.coverPic}`}
+                placeholder="blur"
+                blurDataURL={user.coverPicBlurHash || 'no-hash'}
               />
             </div>
 
@@ -80,6 +82,8 @@ const ProfileCard = () => {
                 height={100}
                 alt="Profile Pic"
                 src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                placeholder="blur"
+                blurDataURL={user.profilePicBlurHash || 'no-hash'}
               />
             </div>
           </div>

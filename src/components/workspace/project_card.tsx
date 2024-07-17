@@ -13,6 +13,8 @@ import ConfirmDelete from '../common/confirm_delete';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import ConfirmOTP from '../common/confirm_otp';
+import { checkOrgProjectAccess } from '@/utils/funcs/access';
+import { ORG_MANAGER, ORG_SENIOR, PROJECT_EDITOR, PROJECT_MANAGER, PROJECT_OWNER } from '@/config/constants';
 
 interface Props {
   index: number;
@@ -107,7 +109,7 @@ const ProjectCard = ({
         className={`w-${size} h-${size} max-lg:w-56 max-lg:h-56 max-md:w-72 max-md:h-72 rounded-lg relative group cursor-pointer transition-ease-out-500 animate-fade_third`}
       >
         <div className="w-full h-full absolute top-0 hidden group-hover:flex justify-between gap-4 text-white animate-fade_third z-[6] rounded-lg p-2">
-          {(project.userID == user.id || user.editorProjects.includes(project.id)) && (
+          {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
             <div
               onClick={el => {
                 el.stopPropagation();
@@ -124,7 +126,7 @@ const ProjectCard = ({
               onClick={el => el.stopPropagation()}
               className="w-1/2 h-fit flex flex-col absolute top-2 left-12 rounded-2xl glassMorphism p-2"
             >
-              {(project.userID == user.id || user.editorProjects.includes(project.id)) && (
+              {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
                 <div
                   onClick={() => setClickedOnEdit(true)}
                   className="w-full px-4 py-3 hover:bg-[#ffffff78] dark:hover:bg-[#ffffff19] transition-ease-100 rounded-lg"
@@ -132,7 +134,7 @@ const ProjectCard = ({
                   Edit
                 </div>
               )}
-              {(project.userID == user.id || user.managerProjects.includes(project.id)) && (
+              {checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR, project.organization) && (
                 <Link
                   href={`/workspace/manage/${project.slug}`}
                   target="_blank"
@@ -141,7 +143,7 @@ const ProjectCard = ({
                   Manage
                 </Link>
               )}
-              {project.userID == user.id && (
+              {checkOrgProjectAccess(PROJECT_OWNER, project.id, ORG_MANAGER, project.organization) && (
                 <div
                   onClick={() => setClickedOnDelete(true)}
                   className="w-full px-4 py-3 hover:bg-[#ffffff78] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg"

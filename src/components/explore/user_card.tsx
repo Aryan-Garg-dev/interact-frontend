@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { USER_COVER_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import { User } from '@/types';
 import Link from 'next/link';
 import FollowBtn from '../common/follow_btn';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
-import { Buildings, Eye, MapPin, Users } from '@phosphor-icons/react';
+import { Buildings } from '@phosphor-icons/react';
 
 interface Props {
   user: User;
@@ -24,14 +24,14 @@ const UserCard = ({ user, forTrending = false }: Props) => {
           : '/profile'
       }`}
       target="_blank"
-      className={`w-full font-primary dark:text-white border-[1px] dark:border-dark_primary_btn dark:bg-transparent dark:hover:bg-transparent rounded-lg flex flex-col ${
+      className={`w-full font-primary border-[1px] rounded-lg flex flex-col ${
         !forTrending
           ? 'px-5 py-4 bg-gray-100 hover:bg-white border-primary_btn gap-4'
           : 'px-2 py-3 hover:bg-primary_comp gap-2'
       } transition-ease-300`}
     >
       <div className="flex items-center justify-between w-full">
-        <div className="flex items-center gap-2 w-fit">
+        <div className="w-full flex items-center gap-2">
           <div className={`${!forTrending ? 'w-14 h-14' : 'w-10 h-10'} relative rounded-full`}>
             <Image
               crossOrigin="anonymous"
@@ -39,6 +39,8 @@ const UserCard = ({ user, forTrending = false }: Props) => {
               height={100}
               alt={'User Pic'}
               src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+              placeholder="blur"
+              blurDataURL={user.profilePicBlurHash || 'no-hash'}
               className={`rounded-full ${!forTrending ? 'w-14 h-14' : 'w-10 h-10'}`}
             />
             {user.isOrganization && (
@@ -48,7 +50,7 @@ const UserCard = ({ user, forTrending = false }: Props) => {
             )}
           </div>
 
-          <div className={`${!forTrending ? 'w-[calc(100%-56px)]' : 'w-[calc(100%-40px)]'} flex flex-col font-light`}>
+          <div className={`${!forTrending ? 'w-[calc(100%-60px)]' : 'w-[calc(100%-40px)]'} flex flex-col font-light`}>
             <div className={`text-lg ${!forTrending ? 'text-lg font-semibold' : 'text-base font-medium'}`}>
               {user.name}
             </div>

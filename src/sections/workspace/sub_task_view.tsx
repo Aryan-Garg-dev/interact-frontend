@@ -1,6 +1,6 @@
 import { userIDSelector } from '@/slices/userSlice';
 import { SubTask, Task } from '@/types';
-import { ArrowArcLeft, Gear, Trash } from '@phosphor-icons/react';
+import { Gear, Trash } from '@phosphor-icons/react';
 import moment from 'moment';
 import React from 'react';
 import { useSelector } from 'react-redux';
@@ -36,7 +36,7 @@ const SubTaskView = ({
 
   const isAssignedUser = (userID: string) => {
     var check = false;
-    task.users.forEach(user => {
+    task.users?.forEach(user => {
       if (user.id == userID) {
         check = true;
         return;
@@ -78,15 +78,15 @@ const SubTaskView = ({
 
   return (
     <>
-      <div className="fixed top-24 max-lg:top-20 w-[640px] max-lg:w-5/6 max-h-[36rem] overflow-y-auto backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col gap-4 rounded-lg p-10 max-lg:p-5 dark:text-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50 max-lg:z-[60]">
+      <div className="fixed top-[15%] max-lg:top-20 w-[640px] max-lg:w-5/6 max-h-[70%] overflow-y-auto bg-white flex flex-col gap-4 rounded-lg p-6 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50 max-lg:z-[60]">
         <div className="w-full flex flex-col gap-2">
-          <ArrowArcLeft
+          {/* <ArrowArcLeft
             className="cursor-pointer"
             size={24}
             onClick={() => {
               setShow(false);
             }}
-          />
+          /> */}
           <div className="w-full flex justify-between items-center">
             <div className="text-4xl font-semibold">{subTask.title}</div>
             {isAssignedUser(userID) && (
@@ -112,15 +112,16 @@ const SubTaskView = ({
           </div>
         </div>
         <div className="w-full flex flex-col gap-4">
-          <div className="text-lg">{subTask.description}</div>
+          <div className="text-lg whitespace-pre-wrap">{subTask.description}</div>
           <div className="w-full flex flex-wrap gap-2">
-            {subTask.tags.map(tag => {
-              return (
-                <div key={tag} className="text-xs border-black border-[1px] px-2 py-1 rounded-lg">
-                  {tag}
-                </div>
-              );
-            })}
+            {subTask.tags &&
+              subTask.tags.map(tag => {
+                return (
+                  <div key={tag} className="text-xs border-black border-[1px] px-2 py-1 rounded-lg">
+                    {tag}
+                  </div>
+                );
+              })}
           </div>
         </div>
         <div className="flex gap-2 items-center">
@@ -140,7 +141,7 @@ const SubTaskView = ({
             {subTask.priority}
           </div>
         </div>
-        {subTask.users.length > 0 ? (
+        {subTask.users && subTask.users.length > 0 ? (
           <div className="w-full flex flex-col gap-2">
             <div className="text-xl font-medium">Assigned To</div>
             <div className="w-full flex flex-wrap justify-around gap-2">

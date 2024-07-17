@@ -41,7 +41,7 @@ const Onboarding = () => {
             : index == 3
             ? 'top-[45%]'
             : 'top-1/2'
-        } max-md:top-12 w-[45%] max-lg:w-3/4 max-md:w-[90%] h-fit max-md:h-5/6 bg-white dark:bg-[#ffe1fc22] flex flex-col max-lg:justify-between gap-4 max-lg:gap-8 rounded-lg p-10 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 shadow-2xl translate-x-1/2 md:-translate-y-1/2 animate-fade_third z-50 max-lg:z-[60] transition-ease-500`}
+        } w-[45%] max-lg:w-3/4 h-fit max-md:h-screen max-md:w-screen max-md:top-0 bg-white dark:bg-[#ffe1fc22] flex flex-col max-lg:justify-between gap-4 max-lg:gap-8 rounded-lg p-10 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn dark:border-dark_primary_btn right-1/2 shadow-2xl translate-x-1/2 md:-translate-y-1/2 animate-fade_third z-50 max-lg:z-[60] transition-ease-500`}
       >
         {(() => {
           switch (index) {
@@ -125,6 +125,13 @@ const Onboarding = () => {
                       <span>
                         Found something you love while exploring? Bookmark it, and it&apos;ll be waiting for you in the
                         Bookmark tab. Easy peasy! 📚
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-medium underline underline-offset-2 text-lg">Organisation:</span>{' '}
+                      <span>
+                        This tab will be available after you join organisations, and will be used to dive into whole
+                        another realm of organisation management ✨
                       </span>
                     </div>
                   </div>

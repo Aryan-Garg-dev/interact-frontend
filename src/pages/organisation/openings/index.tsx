@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useState, useEffect } from 'react';
 import NewOpening from '@/sections/organization/openings/new_opening';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { Info, Plus } from '@phosphor-icons/react';
 import { ORG_MANAGER } from '@/config/constants';
 import NoOpenings from '@/components/fillers/openings';

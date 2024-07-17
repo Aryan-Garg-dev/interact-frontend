@@ -10,7 +10,7 @@ import deleteHandler from '@/handlers/delete_handler';
 import { SERVER_ERROR } from '@/config/errors';
 import ConfirmDelete from '../common/confirm_delete';
 import Link from 'next/link';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_MANAGER } from '@/config/constants';
 import { Pen, TrashSimple } from '@phosphor-icons/react';
 import EditOpening from '@/sections/organization/openings/edit_opening';
@@ -54,6 +54,8 @@ const OpeningCard = ({ opening, setOpenings }: Props) => {
           height={50}
           alt={'User Pic'}
           src={`${USER_PROFILE_PIC_URL}/${opening.organization?.user.profilePic}`}
+          placeholder="blur"
+          blurDataURL={opening.organization?.user.profilePicBlurHash || 'no-hash'}
           className={'w-[120px] h-[120px] max-md:w-[90px] max-md:h-[90px] rounded-lg object-cover'}
         />
 
@@ -73,7 +75,7 @@ const OpeningCard = ({ opening, setOpenings }: Props) => {
               {checkOrgAccess(ORG_MANAGER) &&
                 (opening.noApplications > 0 ? (
                   <Link
-                    href={`/workspace/manage/applications/${opening.id}`}
+                    href={`/organisation/openings/applications/${opening.id}`}
                     className="w-fit text-[#15bffd] text-sm max-md:text-sm underline underline-offset-4"
                   >
                     View

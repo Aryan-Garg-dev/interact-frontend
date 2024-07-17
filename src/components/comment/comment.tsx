@@ -55,6 +55,8 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
             height={50}
             alt={'User Pic'}
             src={`${USER_PROFILE_PIC_URL}/${comment.user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={comment.user.profilePicBlurHash || 'no-hash'}
             className={`rounded-full ${comment.isRepliedComment ? 'w-6 h-6' : 'w-8 h-8'} cursor-pointer`}
           />
         </Link>

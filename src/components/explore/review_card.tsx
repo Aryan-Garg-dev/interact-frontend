@@ -91,6 +91,8 @@ const ReviewCard = ({ review, setReviews }: Props) => {
               height={100}
               alt={'User Pic'}
               src={`${USER_PROFILE_PIC_URL}/${review.isAnonymous ? 'default.jpg' : review.user.profilePic}`}
+              placeholder="blur"
+              blurDataURL={review.user.profilePicBlurHash || 'no-hash'}
               className={'rounded-full w-10 h-10'}
             />
             <div className="w-fit">

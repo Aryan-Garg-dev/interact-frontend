@@ -9,21 +9,9 @@ interface Props {
 }
 
 const Task = ({ notification }: Props) => {
-  const getTitle = (): string => {
-    switch (notification.notificationType) {
-      case 11:
-        return notification.project.title;
-      default:
-        return '';
-    }
-  };
   const getRedirectURL = () => {
-    switch (notification.notificationType) {
-      case 11:
-        return '/workspace/tasks/' + notification.project.slug;
-      default:
-        return '';
-    }
+    if (notification.task?.projectID != '') return '/workspace/tasks/' + notification.task.project?.slug;
+    else return `/organisations?oid=${notification.task.organizationID}&redirect_url=/tasks`;
   };
   return (
     <NotificationWrapper notification={notification}>
@@ -40,7 +28,7 @@ const Task = ({ notification }: Props) => {
         </Link>
       </span>{' '}
       in
-      {' ' + getTitle()}
+      {' ' + notification.task?.title}
     </NotificationWrapper>
   );
 };

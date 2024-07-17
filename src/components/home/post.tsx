@@ -18,7 +18,7 @@ import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Report from '../common/report';
 import SignUp from '../common/signup_box';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
 import isArrEdited from '@/utils/funcs/check_array_edited';
@@ -31,6 +31,7 @@ interface Props {
   setFeed?: React.Dispatch<React.SetStateAction<any[]>>;
   org?: boolean;
   clamp?: boolean;
+  initialCommentShowState?: boolean;
 }
 
 const PostComponent = ({
@@ -41,6 +42,7 @@ const PostComponent = ({
   setFeed,
   org = false,
   clamp = false,
+  initialCommentShowState = false,
 }: Props) => {
   const loggedInUser = useSelector(userSelector);
   const [clickedOnOptions, setClickedOnOptions] = useState(false);
@@ -188,11 +190,13 @@ const PostComponent = ({
             height={100}
             alt={'User Pic'}
             src={`${USER_PROFILE_PIC_URL}/${post.user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={post.user.profilePicBlurHash || 'no-hash'}
             className={'rounded-full w-8 h-8'}
           />
         </Link>
       </div>
-      <div className="w-[calc(100%-32px)] flex flex-col gap-1">
+      <div className="w-[calc(100%-40px)] flex flex-col gap-1">
         <div className="w-full h-fit flex justify-between">
           <Link
             href={`${
@@ -305,7 +309,14 @@ const PostComponent = ({
             {renderContentWithLinks(post.content, post.taggedUsers)}
           </div>
         )}
-        {showLowerPost && <LowerPost setFeed={setFeed} post={post} isRepost={isRepost} />}
+        {showLowerPost && (
+          <LowerPost
+            setFeed={setFeed}
+            post={post}
+            isRepost={isRepost}
+            initialCommentShowState={initialCommentShowState}
+          />
+        )}
       </div>
     </div>
   );

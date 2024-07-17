@@ -7,6 +7,7 @@ import getHandler from '@/handlers/get_handler';
 import Connections from '@/sections/explore/connections_view';
 import { userSelector } from '@/slices/userSlice';
 import { Organization, OrganizationMembership, Profile, User } from '@/types';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Toaster from '@/utils/toaster';
 import { ArrowRight, Envelope, Lock, Phone } from '@phosphor-icons/react';
 import Image from 'next/image';
@@ -28,7 +29,7 @@ const About = ({ profile, organisation }: Props) => {
   const user = useSelector(userSelector);
 
   const fetchMemberships = () => {
-    const URL = `${ORG_URL}/${organisation.id}/explore_memberships?limit=10`;
+    const URL = `${ORG_URL}/${organisation.id}/explore_memberships?limit=12`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
@@ -61,6 +62,8 @@ const About = ({ profile, organisation }: Props) => {
             width={50}
             height={50}
             src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={user.profilePicBlurHash || 'no-hash'}
             alt=""
             className={`${host ? 'w-8 h-8' : 'w-6 h-6'} rounded-full cursor-pointer`}
           />
@@ -102,9 +105,13 @@ const About = ({ profile, organisation }: Props) => {
                 </Link>
               </div>
             )}
-            {memberships.map(membership => (
-              <AboutUser key={membership.id} user={membership.user} role={membership.role} title={membership.title} />
-            ))}
+            {memberships
+              .filter((_, i) => {
+                return i >= 0 && i < 10;
+              })
+              .map(membership => (
+                <AboutUser key={membership.id} user={membership.user} role={membership.role} title={membership.title} />
+              ))}
             {memberships.length > 10 && (
               <div
                 onClick={() => setClickedOnViewAllMembers(true)}
@@ -132,7 +139,9 @@ const About = ({ profile, organisation }: Props) => {
           <div className="border-t-[1px] border-gray-200"></div>
           {profile.description || organisation.user?.tags || profile.email || profile.phoneNo ? (
             <div className="w-full flex flex-col gap-4">
-              {profile.description && <div className="whitespace-pre-wrap text-sm">{profile.description}</div>}
+              {profile.description && (
+                <div className="whitespace-pre-wrap text-sm"> {renderContentWithLinks(profile.description)}</div>
+              )}
               <div className="flex flex-wrap gap-2">
                 {organisation.user?.tags?.map(tag => (
                   <Link

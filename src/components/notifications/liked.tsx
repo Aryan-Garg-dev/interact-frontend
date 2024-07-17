@@ -5,17 +5,18 @@ import NotificationWrapper from '@/wrappers/notification';
 
 interface Props {
   notification: Notification;
+  short?: boolean;
 }
 
-const Liked = ({ notification }: Props) => {
+const Liked = ({ notification, short = true }: Props) => {
   const getType = () => {
     switch (notification.notificationType) {
       case 1:
         return 'post';
       case 3:
-        return 'project';
+        return `project (${notification.project.title})`;
       case 12:
-        return 'event';
+        return `event (${notification.event.title})`;
       case 18:
         return 'announcement';
       default:
@@ -36,8 +37,32 @@ const Liked = ({ notification }: Props) => {
         return '';
     }
   };
+  const getContent = () => {
+    var content = '';
+    switch (notification.notificationType) {
+      case 1:
+        content = notification.post.content;
+        break;
+      case 18:
+        content = notification.announcement.content;
+        break;
+      default:
+        return '';
+    }
+
+    const regex = /\*\*|\^\^|```/g;
+    return content.replace(regex, '');
+  };
   return (
-    <NotificationWrapper notification={notification}>
+    <NotificationWrapper
+      notification={notification}
+      extended={
+        !short &&
+        getContent() != '' && (
+          <div className="w-fit max-w-[50%] text-xs rounded-md px-2 pt-1 bg-white line-clamp-2">{getContent()}</div>
+        )
+      }
+    >
       <span>
         <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
           {notification.sender.name}

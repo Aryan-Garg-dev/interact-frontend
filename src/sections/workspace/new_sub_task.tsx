@@ -122,7 +122,7 @@ const NewSubTask = ({ setShow, task, setTasks, byOrgManager = false }: Props) =>
         <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
           {status == 0 ? (
             <div className="w-full flex flex-col gap-4">
-              <Input label="Sub Task Title" val={title} setVal={setTitle} maxLength={25} required={true} />
+              <Input label="Sub Task Title" val={title} setVal={setTitle} maxLength={50} required={true} />
               <TextArea label="Sub Task Description" val={description} setVal={setDescription} maxLength={500} />
               <Tags label="Sub Task Tags" tags={tags} setTags={setTags} maxTags={5} />
               <Select

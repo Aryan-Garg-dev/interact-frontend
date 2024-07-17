@@ -240,6 +240,21 @@ html {
   background-color: #363636;
   border-radius: 50px;
 }
+
+.thin_scrollbar::-webkit-scrollbar {
+  height: 4px;
+  width: 2px;
+}
+
+.thin_scrollbar::-webkit-scrollbar-thumb {
+  background-color: #1a1919;
+  border-radius: 10px;
+}
+
+.thin_scrollbar::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
 .file-table td {
   text-align: center;
   padding-block: 0.5rem;
@@ -259,27 +274,51 @@ html {
 }
 
 @-webkit-keyframes gradient {
-  0%{background-position:0% 23%}
-  50%{background-position:100% 78%}
-  100%{background-position:0% 23%}
+  0% {
+    background-position: 0% 23%;
+  }
+  50% {
+    background-position: 100% 78%;
+  }
+  100% {
+    background-position: 0% 23%;
+  }
 }
 @-moz-keyframes gradient {
-  0%{background-position:0% 23%}
-  50%{background-position:100% 78%}
-  100%{background-position:0% 23%}
+  0% {
+    background-position: 0% 23%;
+  }
+  50% {
+    background-position: 100% 78%;
+  }
+  100% {
+    background-position: 0% 23%;
+  }
 }
 @keyframes gradient {
-  0%{background-position:0% 23%}
-  50%{background-position:100% 78%}
-  100%{background-position:0% 23%}
+  0% {
+    background-position: 0% 23%;
+  }
+  50% {
+    background-position: 100% 78%;
+  }
+  100% {
+    background-position: 0% 23%;
+  }
 }
 
 .bg-wavy {
-  --mask:
-    radial-gradient(52.4px at 50% calc(100% + 33.60px),#0000 calc(99% - 12px),#000 calc(101% - 12px) 99%,#0000 101%) calc(50% - 64px) calc(50% - 22px + .5px)/128px 44px ,
-    radial-gradient(52.4px at 50% -33.6px,#0000 calc(99% - 12px),#000 calc(101% - 12px) 99%,#0000 101%) 50% calc(50% + 22px)/128px 44px ;
+  --mask: radial-gradient(
+        52.4px at 50% calc(100% + 33.6px),
+        #0000 calc(99% - 12px),
+        #000 calc(101% - 12px) 99%,
+        #0000 101%
+      )
+      calc(50% - 64px) calc(50% - 22px + 0.5px) / 128px 44px,
+    radial-gradient(52.4px at 50% -33.6px, #0000 calc(99% - 12px), #000 calc(101% - 12px) 99%, #0000 101%) 50%
+      calc(50% + 22px) / 128px 44px;
   -webkit-mask: var(--mask);
-          mask: var(--mask);
+  mask: var(--mask);
 }
 
 .glow {
@@ -301,13 +340,13 @@ html {
 }
 
 .rotating-border-mask::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 400%;
   height: 100%;
-  background: linear-gradient(115deg,#4fcf70,#fad648,#a767e5,#12bcfe,#44ce7b);
+  background: linear-gradient(115deg, #4fcf70, #fad648, #a767e5, #12bcfe, #44ce7b);
   background-size: 25% 100%;
   animation: rotating-border-mask-animation 1s linear infinite;
   animation-play-state: paused;
@@ -327,7 +366,7 @@ html {
   }
 }
 
-[data-rbd-draggable-id] { 
-  left: auto !important; 
-  top: auto !important; 
+[data-rbd-draggable-id] {
+  left: auto !important;
+  top: auto !important;
 }

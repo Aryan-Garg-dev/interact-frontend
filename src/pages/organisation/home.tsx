@@ -1,6 +1,5 @@
 import Discover from '@/screens/home/discover';
 import Feed from '@/screens/home/feed';
-import ProfileCompletion from '@/sections/home/profile_completion';
 import { homeTabSelector, onboardingSelector } from '@/slices/feedSlice';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';

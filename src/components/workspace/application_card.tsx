@@ -28,6 +28,8 @@ const ApplicationCard = ({ application, setClickedOnApplication, setClickedAppli
             height={50}
             alt={'User Pic'}
             src={`${USER_PROFILE_PIC_URL}/${application.opening.organization?.user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={application.opening.organization?.user.profilePicBlurHash || 'no-hash'}
             className={'w-[120px] h-[120px] max-md:w-[90px] max-md:h-[90px] rounded-lg object-cover'}
           />
         ) : (

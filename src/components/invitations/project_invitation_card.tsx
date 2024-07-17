@@ -92,7 +92,7 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
   };
 
   return (
-    <div className="w-full font-primary bg-white dark:bg-transparent dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-md flex max-md:flex-col items-center justify-start gap-6 p-6 transition-ease-300 animate-fade_third">
+    <div className="w-full font-primary bg-white dark:bg-transparent dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-md flex max-md:flex-col items-center justify-start gap-4 p-4 transition-ease-300 animate-fade_third">
       {clickedOnReject && (
         <ConfirmDelete setShow={setClickedOnReject} handleDelete={handleReject} title="Confirm Reject?" />
       )}
@@ -103,41 +103,49 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
           height={100}
           alt={'User Pic'}
           src={`${PROJECT_PIC_URL}/${invitation.project.coverPic}`}
-          className={'rounded-md w-28 h-28'}
+          className={'rounded-md w-20 h-20'}
           placeholder="blur"
           blurDataURL={invitation.project.blurHash || 'no-hash'}
         />
       </Link>
-      <div className="w-[calc(100%-112px)] flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between">
-        <div className="w-[calc(100%-112px-96px)] flex flex-col gap-2">
+      <div className="w-[calc(100%-80px)] flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between">
+        <div
+          style={{ width: invitation.status == 0 ? '100%-50px' : '100%-20px' }}
+          className="w-[calc(100%-112px)] flex flex-col gap-1"
+        >
           <Link
             target="_blank"
             href={`/explore?pid=${invitation.project.slug}`}
-            className="text-2xl font-bold text-gradient"
+            className="text-xl font-bold text-gradient line-clamp-1"
           >
             {invitation.project.title}
           </Link>
-          <div className="font-semibold">{invitation.title}</div>
-          <div className="text-xs">Invited {moment(invitation.createdAt).format('DD MMM YYYY')}</div>
+          <div className="font-medium">Role: {invitation.title}</div>
+          <div className="text-xs">Invited on {moment(invitation.createdAt).format('DD MMM YYYY')}</div>
         </div>
         {invitation.status == 0 ? (
           <div className="flex gap-4">
             <div
               onClick={handleAccept}
-              className="w-24 h-10 font-semibold border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:shadow-xl dark:text-white dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active flex-center rounded-lg transition-ease-300 cursor-pointer"
+              style={{ backgroundColor: getInvitationStatusColor(1) }}
+              className="w-fit px-5 py-2 text-sm font-medium border-[1px] border-primary_btn bg-green-100 hover:bg-green-200 active:bg-priority_low flex-center rounded-lg transition-ease-300 cursor-pointer"
             >
               Accept
             </div>
             <div
               onClick={() => setClickedOnReject(true)}
-              className="w-24 h-10 font-semibold border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:shadow-xl dark:text-white dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active flex-center rounded-lg transition-ease-300 cursor-pointer"
+              style={{ backgroundColor: getInvitationStatusColor(-1) }}
+              className="w-fit px-5 py-2 text-sm font-medium border-[1px] border-primary_btn bg-red-100 hover:bg-red-200 active:bg-priority_high flex-center rounded-lg transition-ease-300 cursor-pointer"
             >
               Reject
             </div>
           </div>
         ) : (
-          <div className="w-24 h-10 font-semibold border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:shadow-xl dark:text-white dark:bg-dark_primary_comp_hover flex-center rounded-lg cursor-default">
-            {invitation.status == 1 ? 'Accepted' : 'Rejected'}
+          <div
+            className="w-fit px-3 py-1 text-xs font-medium rounded-full"
+            style={{ backgroundColor: getInvitationStatusColor(invitation.status) }}
+          >
+            {getInvitationStatus(invitation.status)}
           </div>
         )}
       </div>

@@ -1,5 +1,5 @@
 import { SERVER_ERROR } from '@/config/errors';
-import { MEMBERSHIP_URL, PROJECT_PIC_URL, PROJECT_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { MEMBERSHIP_URL, ORG_URL, PROJECT_PIC_URL, PROJECT_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
 import { initialProject } from '@/types/initials';
@@ -12,7 +12,13 @@ import ProjectViewLoader from '@/components/loaders/workspace_project_view';
 import { useRouter } from 'next/router';
 import Collaborators from '@/components/explore/collaborators';
 import { useDispatch, useSelector } from 'react-redux';
-import { setOwnerProjects, userSelector } from '@/slices/userSlice';
+import {
+  setEditorProjects,
+  setManagerProjects,
+  setMemberProjects,
+  setOwnerProjects,
+  userSelector,
+} from '@/slices/userSlice';
 import EditProject from './edit_project';
 import Links from '@/components/explore/show_links';
 import deleteHandler from '@/handlers/delete_handler';
@@ -20,10 +26,23 @@ import { useSwipeable } from 'react-swipeable';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import ConfirmOTP from '@/components/common/confirm_otp';
 import Link from 'next/link';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
+import Tags from '@/components/common/tags';
+import { checkOrgProjectAccess, checkParticularOrgAccess, checkProjectAccess } from '@/utils/funcs/access';
+import {
+  ORG_MANAGER,
+  ORG_SENIOR,
+  PROJECT_EDITOR,
+  PROJECT_MANAGER,
+  PROJECT_MEMBER,
+  PROJECT_OWNER,
+} from '@/config/constants';
+import { currentOrgSelector } from '@/slices/orgSlice';
 
 interface Props {
   projectSlugs: string[];
   clickedProjectIndex: number;
+  clickedProject: Project;
   setClickedProjectIndex: React.Dispatch<React.SetStateAction<number>>;
   setClickedOnProject: React.Dispatch<React.SetStateAction<boolean>>;
   fadeIn: boolean;
@@ -34,6 +53,7 @@ interface Props {
 const ProjectView = ({
   projectSlugs,
   clickedProjectIndex,
+  clickedProject,
   setClickedProjectIndex,
   setClickedOnProject,
   fadeIn,
@@ -62,7 +82,10 @@ const ProjectView = ({
     try {
       slug = projectSlugs[clickedProjectIndex];
     } finally {
-      const URL = `${PROJECT_URL}/${slug}`;
+      const URL = checkProjectAccess(PROJECT_MEMBER, clickedProject.id, clickedProject)
+        ? `${PROJECT_URL}/${slug}`
+        : `${ORG_URL}/${clickedProject.organizationID}/projects/${slug}`;
+
       const res = await getHandler(URL, abortController.signal);
       if (res.statusCode == 200) {
         const projectData: Project = res.data.project;
@@ -105,10 +128,14 @@ const ProjectView = ({
     }
   };
 
+  const currentOrg = useSelector(currentOrgSelector);
+
   const sendOTP = async () => {
     const toaster = Toaster.startLoad('Sending OTP');
 
-    const URL = `${PROJECT_URL}/delete/${project.id}`;
+    const URL = checkParticularOrgAccess(ORG_MANAGER, project.organization)
+      ? `${ORG_URL}/${project.organizationID}/projects/delete/${project.id}`
+      : `${PROJECT_URL}/delete/${project.id}`;
 
     const res = await getHandler(URL);
 
@@ -125,13 +152,22 @@ const ProjectView = ({
   const handleDelete = async (otp: string) => {
     const toaster = Toaster.startLoad('Deleting your project...');
 
-    const URL = `${PROJECT_URL}/${project.id}`;
+    const URL = checkParticularOrgAccess(ORG_MANAGER, project.organization)
+      ? `${ORG_URL}/${project.organizationID}/projects/${project.id}`
+      : `${PROJECT_URL}/${project.id}`;
 
     const res = await deleteHandler(URL, { otp });
 
     if (res.statusCode === 204) {
       if (setProjects) setProjects(prev => prev.filter(p => p.id != project.id));
+
       dispatch(setOwnerProjects(user.ownerProjects.filter(projectID => projectID != project.id)));
+      if (checkParticularOrgAccess(ORG_MANAGER, project.organization)) {
+        dispatch(setManagerProjects(user.managerProjects.filter(projectID => projectID != project.id)));
+        dispatch(setEditorProjects(user.editorProjects.filter(projectID => projectID != project.id)));
+        dispatch(setMemberProjects(user.memberProjects.filter(projectID => projectID != project.id)));
+      }
+
       setClickedOnConfirmDelete(false);
       setClickedOnProject(false);
       Toaster.stopLoad(toaster, 'Project Deleted', 1);
@@ -188,6 +224,26 @@ const ProjectView = ({
       setFadeIn(false);
     }
   };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') {
+      setClickedProjectIndex(prev => prev - 1);
+      setFadeIn(false);
+    } else if (event.key === 'ArrowRight') {
+      setClickedProjectIndex(prev => prev + 1);
+      setFadeIn(false);
+    } else if (event.key === 'Escape') {
+      setClickedOnProject(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   const swipeHandler = useSwipeable({
     onSwipedRight: handleClickPrev,
@@ -302,7 +358,7 @@ const ProjectView = ({
                   </div>
                   <div className="font-semibold text-lg">{project.tagline}</div>
 
-                  <div className="text-sm">
+                  <div className="text-sm whitespace-pre-wrap">
                     {project.description.length > 200 ? (
                       <>
                         {clickedOnReadMore ? (
@@ -321,29 +377,17 @@ const ProjectView = ({
                         )}
                       </>
                     ) : (
-                      project.description
+                      renderContentWithLinks(project.description)
                     )}
                   </div>
-                  <div className="w-full flex flex-wrap gap-2">
-                    {project.tags &&
-                      project.tags.map(tag => {
-                        return (
-                          <div
-                            key={tag}
-                            className="flex-center p-2 font-primary text-xs dark:text-white border-[1px] border-gray-400  dark:border-dark_primary_btn bg-gray-200 dark:bg-[#20032c41] cursor-default rounded-lg"
-                          >
-                            {tag}
-                          </div>
-                        );
-                      })}
-                  </div>
+                  {project.tags && <Tags tags={project.tags} displayAll={true} />}
                   <Collaborators memberships={project.memberships} workspace={true} />
                   <Links links={project.links} title="Public Links" />
                   <Links links={project.privateLinks} title="Private Links" />
                 </div>
 
                 <div className="w-full mx-auto flex flex-col gap-2 pb-4">
-                  {(project.userID == user.id || user.editorProjects.includes(project.id)) && (
+                  {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
                     <div
                       onClick={() => setClickedOnEdit(true)}
                       className="w-full text-lg font-medium border-[1px] border-gray-400 hover:bg-primary_comp_hover active:bg-primary_comp_active  dark:border-dark_primary_btn dark:active:bg-dark_primary_gradient_end py-2 flex-center hover:bg-gradient-to-r dark:hover:from-dark_secondary_gradient_start dark:hover:to-dark_secondary_gradient_end rounded-lg cursor-pointer transition-ease-300"
@@ -351,16 +395,22 @@ const ProjectView = ({
                       Edit Project
                     </div>
                   )}
-                  {(project.userID == user.id || user.managerProjects.includes(project.id)) && (
+                  {checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR, project.organization) && (
                     <Link
                       target="_blank"
-                      href={`/workspace/manage/${projectSlugs[clickedProjectIndex]}`}
+                      href={
+                        checkParticularOrgAccess(ORG_SENIOR, project.organization)
+                          ? currentOrg.id == project.organizationID
+                            ? `/organisation/projects/manage/${projectSlugs[clickedProjectIndex]}`
+                            : `/organisations?oid=${project.organizationID}&redirect_url=/projects/manage/${projectSlugs[clickedProjectIndex]}`
+                          : `/workspace/manage/${projectSlugs[clickedProjectIndex]}`
+                      }
                       className="w-full text-lg font-medium border-[1px] border-gray-400 hover:bg-primary_comp_hover active:bg-primary_comp_active dark:active:bg-dark_primary_gradient_end dark:border-dark_primary_btn py-2 flex-center hover:bg-gradient-to-r dark:hover:from-dark_secondary_gradient_start dark:hover:to-dark_secondary_gradient_end rounded-lg cursor-pointer transition-ease-300"
                     >
                       Manage Project
                     </Link>
                   )}
-                  {project.userID == user.id ? (
+                  {checkOrgProjectAccess(PROJECT_OWNER, project.id, ORG_MANAGER, project.organization) ? (
                     <div
                       onClick={() => setClickedOnDelete(true)}
                       className="w-full text-lg font-medium py-2 flex-center border-[1px] border-primary_danger hover:text-white hover:bg-primary_danger rounded-lg cursor-pointer transition-ease-300"
@@ -368,12 +418,14 @@ const ProjectView = ({
                       Delete Project
                     </div>
                   ) : (
-                    <div
-                      onClick={() => setClickedOnLeave(true)}
-                      className="w-full text-lg font-medium py-2 flex-center border-[1px] border-primary_danger hover:text-white hover:bg-primary_danger rounded-lg cursor-pointer transition-ease-300"
-                    >
-                      Leave Project
-                    </div>
+                    checkProjectAccess(PROJECT_MEMBER, project.id) && (
+                      <div
+                        onClick={() => setClickedOnLeave(true)}
+                        className="w-full text-lg font-medium py-2 flex-center border-[1px] border-primary_danger hover:text-white hover:bg-primary_danger rounded-lg cursor-pointer transition-ease-300"
+                      >
+                        Leave Project
+                      </div>
+                    )
                   )}
                 </div>
               </div>

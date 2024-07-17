@@ -20,7 +20,7 @@ import Loader from '@/components/common/loader';
 import { userIDSelector } from '@/slices/userSlice';
 import { initialMeeting } from '@/types/initials';
 import Select from '@/components/form/select';
-import { getFormattedTime } from '@/utils/funcs/time';
+import { getFormattedTime, getInputFieldFormatTime } from '@/utils/funcs/time';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,8 +31,8 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState<string[]>([]);
-  const [startTime, setStartTime] = useState('');
-  const [endTime, setEndTime] = useState('');
+  const [startTime, setStartTime] = useState(getInputFieldFormatTime(new Date()));
+  const [endTime, setEndTime] = useState(getInputFieldFormatTime(new Date()));
   const [isOnline, setIsOnline] = useState(true);
   const [isOpenForMembers, setIsOpenForMembers] = useState(false);
   const [allowExternalParticipants, setAllowExternalParticipants] = useState(false);
@@ -142,7 +142,7 @@ const NewMeeting = ({ setShow, setMeetings }: Props) => {
       Toaster.error('Start Time cannot be before current time.');
       return false;
     }
-    if (end.isBefore(start)) {
+    if (end.isSameOrBefore(start)) {
       Toaster.error('End Time cannot be before Start Time');
       return false;
     }

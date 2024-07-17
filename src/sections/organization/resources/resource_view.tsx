@@ -12,7 +12,7 @@ import {
   X,
 } from '@phosphor-icons/react';
 import { ORG_MANAGER, ORG_MEMBER, ORG_SENIOR } from '@/config/constants';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import getHandler from '@/handlers/get_handler';
 import { ORG_URL, RESOURCE_URL } from '@/config/routes';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
@@ -29,6 +29,7 @@ import { initialResourceBucket, initialResourceFile } from '@/types/initials';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import Link from 'next/link';
 import ResourceFileView from './resource_file_view';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -306,7 +307,7 @@ const ResourceView = ({
                 <>
                   <div className="flex flex-col gap-1 text-center">
                     <div className="text-3xl font-semibold">{resourceBucket.title}</div>
-                    <div className="text-gray-500">{resourceBucket.description}</div>
+                    <div className="text-gray-500">{renderContentWithLinks(resourceBucket.description)}</div>
                   </div>
                   <div className="flex items-center gap-10">
                     <div className="flex flex-col items-center gap-1">

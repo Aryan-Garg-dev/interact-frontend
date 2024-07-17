@@ -5,17 +5,18 @@ import NotificationWrapper from '@/wrappers/notification';
 
 interface Props {
   notification: Notification;
+  short?: boolean;
 }
 
-const Impressions = ({ notification }: Props) => {
+const Impressions = ({ notification, short = true }: Props) => {
   const getType = () => {
     switch (notification.notificationType) {
       case 14:
         return 'post';
       case 15:
-        return 'project';
+        return `project (${notification.project.title})`;
       case 16:
-        return 'event';
+        return `event (${notification.event.title})`;
       case 17:
         return 'announcement';
       default:
@@ -36,8 +37,33 @@ const Impressions = ({ notification }: Props) => {
         return '';
     }
   };
+  const getContent = () => {
+    var content = '';
+    switch (notification.notificationType) {
+      case 14:
+        content = notification.post.content;
+        break;
+      case 17:
+        content = notification.announcement.content;
+        break;
+      default:
+        return '';
+    }
+
+    const regex = /\*\*|\^\^|```/g;
+    return content.replace(regex, '');
+  };
   return (
-    <NotificationWrapper notification={notification} image={false}>
+    <NotificationWrapper
+      notification={notification}
+      image={false}
+      extended={
+        !short &&
+        getContent() != '' && (
+          <div className="w-fit max-w-[50%] text-xs rounded-md px-2 pt-1 bg-white line-clamp-2">{getContent()}</div>
+        )
+      }
+    >
       Your
       <span>
         <Link className="font-bold capitalize" href={getRedirectURL()}>

@@ -9,7 +9,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import { userIDSelector } from '@/slices/userSlice';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;

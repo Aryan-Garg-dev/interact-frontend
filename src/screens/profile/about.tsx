@@ -1,4 +1,5 @@
 import { Profile } from '@/types';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import { Buildings, CalendarBlank, Certificate, Envelope, MapPin, Phone } from '@phosphor-icons/react';
 import React from 'react';
 
@@ -67,7 +68,7 @@ const About = ({ profile, org = false }: Props) => {
       )}
       {profile.description != '' && (
         <>
-          <div className="whitespace-pre-wrap">{profile.description}</div>
+          <div className="whitespace-pre-wrap">{renderContentWithLinks(profile.description)}</div>
           <div className="w-full h-[1px] border-t-[1px] border-gray-400 border-dashed"></div>
         </>
       )}

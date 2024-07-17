@@ -17,6 +17,7 @@ import Tags from '@/components/form/tags';
 import Select from '@/components/form/select';
 import Time from '@/components/form/time';
 import getHandler from '@/handlers/get_handler';
+import { getInputFieldFormatTime } from '@/utils/funcs/time';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,7 +41,7 @@ const NewTask = ({
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState<string[]>([]);
-  const [deadline, setDeadline] = useState(new Date().toISOString());
+  const [deadline, setDeadline] = useState(getInputFieldFormatTime(new Date()));
   const [priority, setPriority] = useState<PRIORITY>('low');
   const [difficulty, setDifficulty] = useState('easy'); 
   const [users, setUsers] = useState<User[]>([]);
@@ -183,6 +184,16 @@ const NewTask = ({
       setMutex(false);
     }
   };
+
+  useEffect(() => {
+    document.documentElement.style.overflowY = 'hidden';
+    document.documentElement.style.height = '100vh';
+
+    return () => {
+      document.documentElement.style.overflowY = 'auto';
+      document.documentElement.style.height = 'auto';
+    };
+  }, []);
 
   return (
     <>

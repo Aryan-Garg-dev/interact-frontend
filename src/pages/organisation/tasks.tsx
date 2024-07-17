@@ -7,21 +7,24 @@ import { ORG_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import TaskView from '@/sections/organization/tasks/task_view';
 import { currentOrgSelector } from '@/slices/orgSlice';
-import { Task } from '@/types';
+import { Task, User } from '@/types';
 import { initialOrganization } from '@/types/initials';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
-import { Info, Plus } from '@phosphor-icons/react';
+import { ChartLine, Info, Plus, SortAscending, WarningCircle } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Mascot from '@/components/fillers/mascot';
 import NewTask from '@/sections/tasks/new_task';
 import TasksTable from '@/components/tables/tasks';
-import OrderMenu from '@/components/common/order_menu';
+import Select from '@/components/filters/select';
+import Tags from '@/components/filters/tags';
+import Users from '@/components/filters/users';
+import Order from '@/components/filters/order';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -33,14 +36,24 @@ const Tasks = () => {
 
   const [clickedOnNewTask, setClickedOnNewTask] = useState(false);
   const [clickedOnInfo, setClickedOnInfo] = useState(false);
+
   const [order, setOrder] = useState('deadline');
+  const [priority, setPriority] = useState('');
+  const [status, setStatus] = useState('');
   const [search, setSearch] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
 
   const currentOrg = useSelector(currentOrgSelector);
 
   const getTasks = (abortController: AbortController) => {
     setLoading(true);
-    const URL = `${ORG_URL}/${currentOrg.id}/tasks?order=${order}&search=${search}`;
+    const URL = `${ORG_URL}/${currentOrg.id}/tasks?order=${order}&search=${search}&tags=${tags.join(
+      ','
+    )}&priority=${priority}&is_completed=${status == '' ? '' : status == 'completed'}&user_id=${users
+      .map(u => u.id)
+      .join(',')}`;
+
     getHandler(URL, abortController.signal)
       .then(res => {
         if (res.statusCode === 200) {
@@ -81,7 +94,7 @@ const Tasks = () => {
     return () => {
       abortController.abort();
     };
-  }, [order, search]);
+  }, [order, search, priority, status, tags, users]);
 
   return (
     <BaseWrapper title={`Tasks | ${currentOrg.title}`}>
@@ -93,18 +106,39 @@ const Tasks = () => {
         {clickedOnInfo && <AccessTree type="task" setShow={setClickedOnInfo} />}
         <div className="w-full flex flex-col">
           <div className="w-full flex justify-between items-center p-base_padding">
-            <div className="flex-center gap-2">
+            <div className="flex-center gap-4">
               <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Tasks</div>
-              <OrderMenu
-                orders={['deadline', 'latest']}
-                current={order}
-                setState={setOrder}
-                fixed={false}
-                right={false}
-                addSearch={true}
-                search={search}
-                setSearch={setSearch}
-              />
+              <div className="flex-center gap-2">
+                <Select
+                  fieldName="Status"
+                  options={['not_completed', 'completed']}
+                  icon={<ChartLine size={20} />}
+                  selectedOption={status}
+                  setSelectedOption={setStatus}
+                />
+                <Select
+                  fieldName="Priority"
+                  options={['low', 'medium', 'high']}
+                  icon={<WarningCircle size={20} />}
+                  selectedOption={priority}
+                  setSelectedOption={setPriority}
+                />
+                <Order
+                  fieldName="Sort By"
+                  options={['deadline', 'latest']}
+                  icon={<SortAscending size={20} />}
+                  selectedOption={order}
+                  setSelectedOption={setOrder}
+                />
+                <Tags selectedTags={tags} setSelectedTags={setTags} />
+                <Users
+                  fieldName="Assigned To"
+                  users={organization.memberships.map(m => m.user)}
+                  selectedUsers={users}
+                  setSelectedUsers={setUsers}
+                />
+                {/* <Search /> */}
+              </div>
             </div>
             <div className="flex items-center gap-2">
               {checkOrgAccess(ORG_SENIOR) && (

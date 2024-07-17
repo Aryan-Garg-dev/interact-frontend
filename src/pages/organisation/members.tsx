@@ -13,7 +13,7 @@ import { currentOrgSelector } from '@/slices/orgSlice';
 import OrgSidebar from '@/components/common/org_sidebar';
 import AddMembers from '@/sections/organization/members/add_members';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_MANAGER, ORG_SENIOR } from '@/config/constants';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import AccessTree from '@/components/organization/access_tree';

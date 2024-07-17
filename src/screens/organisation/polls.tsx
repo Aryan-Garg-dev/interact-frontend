@@ -9,7 +9,7 @@ import NewPoll from '@/sections/organization/polls/new_poll';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { Poll } from '@/types';
 import { initialOrganization } from '@/types/initials';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import { Plus } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';

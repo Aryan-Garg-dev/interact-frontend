@@ -1,14 +1,14 @@
 import ConfirmDelete from '@/components/common/confirm_delete';
-import { ORG_MANAGER, PROJECT_MANAGER } from '@/config/constants';
+import { ORG_MANAGER, PROJECT_MANAGER, PROJECT_OWNER } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { MEMBERSHIP_URL, ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
 import EditCollaborator from '@/sections/workspace/manage_project/edit_collaborator';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { userSelector } from '@/slices/userSlice';
-import { Membership, Project, User } from '@/types';
+import { Membership, Project } from '@/types';
 import { initialMembership } from '@/types/initials';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess, { checkProjectAccess } from '@/utils/funcs/access';
 import { getRoleColor } from '@/utils/funcs/membership';
 import Toaster from '@/utils/toaster';
 import { Pen, Trash } from '@phosphor-icons/react';
@@ -95,6 +95,8 @@ const CollaboratorsTable = ({ memberships, project, setProject, org }: Props) =>
               height={50}
               alt={'User Pic'}
               src={`${USER_PROFILE_PIC_URL}/${membership.user.profilePic}`}
+              placeholder="blur"
+              blurDataURL={membership.user.profilePicBlurHash || 'no-hash'}
               className="w-8 h-8 rounded-full z-[1]"
             />
             <div className="w-[calc(100%-32px)] flex items-center flex-wrap gap-1">
@@ -136,8 +138,8 @@ const CollaboratorsTable = ({ memberships, project, setProject, org }: Props) =>
               )
             )}
 
-            {(project.userID == user.id ||
-              user.managerProjects.includes(project.id) ||
+            {(checkProjectAccess(PROJECT_OWNER, project.id) ||
+              (checkProjectAccess(PROJECT_MANAGER, project.id) && membership.role != PROJECT_MANAGER) ||
               (org && checkOrgAccess(ORG_MANAGER))) && (
               <Trash
                 onClick={() => {

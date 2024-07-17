@@ -4,12 +4,12 @@ import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { Meeting } from '@/types';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import ModalWrapper from '@/wrappers/modal';
 import { PlusCircle, XCircle } from '@phosphor-icons/react';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 interface Props {
@@ -45,7 +45,7 @@ const ParticipantsList = ({ meeting, title, setShow, setClickedOnAddParticipants
   };
 
   return (
-    <ModalWrapper setShow={setShow} width={'1/3'}>
+    <ModalWrapper setShow={setShow} width={'1/3'} top={'1/3'}>
       <div className="text-2xl flex-center gap-2 font-semibold">
         {title} ({meeting.participants.length}){' '}
         <PlusCircle onClick={() => setClickedOnAddParticipants(true)} className="cursor-pointer" weight="bold" />
@@ -65,6 +65,8 @@ const ParticipantsList = ({ meeting, title, setShow, setClickedOnAddParticipants
                 height={50}
                 alt={'User Pic'}
                 src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                placeholder="blur"
+                blurDataURL={user.profilePicBlurHash || 'no-hash'}
                 className="w-8 h-8 rounded-full z-[1]"
               />
               <div className="flex-center gap-2">

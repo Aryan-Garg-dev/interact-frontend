@@ -6,8 +6,8 @@ import { CONNECTION_URL, ORG_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { OrganizationMembership, User } from '@/types';
 import Toaster from '@/utils/toaster';
+import ModalWrapper from '@/wrappers/modal';
 import React, { useEffect, useState } from 'react';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 interface Props {
   type: string; // followers, following or members
@@ -24,10 +24,12 @@ const Connections = ({ type, user, setShow, orgID = '', org = false }: Props) =>
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
+  const limit = 10;
+
   const fetchUsers = async () => {
     setLoading(true);
     const BASE_URL = org ? `${ORG_URL}/${orgID}/explore_memberships` : `${CONNECTION_URL}/${type}/${user.id}`;
-    const URL = `${BASE_URL}?page=${page}&limit=${10}`;
+    const URL = `${BASE_URL}?page=${page}&limit=${limit}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       var newUsers: User[] = res.data.users || [];
@@ -63,48 +65,49 @@ const Connections = ({ type, user, setShow, orgID = '', org = false }: Props) =>
   }, []);
 
   return (
-    <>
-      <div
-        className={`w-2/5 ${
-          users.length < 5 ? 'h-fit' : 'h-4/5'
-        } max-lg:w-5/6  fixed overflow-y-auto border-gray-400 border-[1px] dark:border-0 backdrop-blur-lg bg-white dark:bg-[#ffe1fc22] dark:max-lg:bg-[#2a192eea] dark:text-white z-30 translate-x-1/2 -translate-y-1/4 top-64 right-1/2 flex flex-col font-primary p-6 gap-6 rounded-xl animate-fade_third`}
-      >
-        <div className="w-full text-center text-gradient font-bold text-2xl capitalize">
-          {type} of {user.name}
-        </div>
-        {loading && page == 1 ? (
-          <div className="w-full flex flex-col gap-2">
-            {Array(3)
-              .fill(1)
-              .map((_, i) => (
-                <UserCardLoader key={i} />
-              ))}
-          </div>
-        ) : (
-          <>
-            {!users || users.length === 0 ? (
-              <div className="w-full text-center text-lg font-medium">Nothing Here :)</div>
-            ) : (
-              <InfiniteScroll
-                className="px-4 max-lg:px-2 flex flex-col gap-2"
-                dataLength={users.length}
-                next={fetchUsers}
-                hasMore={hasMore}
-                loader={<Loader />}
-              >
-                {users.map(user => {
-                  return <UserCard key={user.id} user={user} />;
-                })}
-              </InfiniteScroll>
-            )}
-          </>
-        )}
+    <ModalWrapper
+      setShow={setShow}
+      width="2/5"
+      height="fit"
+      blur={true}
+      modalStyles={{ top: users && users.length > 5 ? '50%' : '45%' }}
+    >
+      <div className="w-full text-center text-gradient font-bold text-2xl capitalize">
+        {type} of {user.name}
       </div>
-      <div
-        onClick={() => setShow(false)}
-        className=" bg-backdrop w-screen h-screen fixed top-0 right-0 animate-fade_third z-20"
-      ></div>
-    </>
+      {loading && page == 1 ? (
+        <div className="w-full flex flex-col gap-2">
+          {Array(3)
+            .fill(1)
+            .map((_, i) => (
+              <UserCardLoader key={i} />
+            ))}
+        </div>
+      ) : loading && page == 1 ? (
+        <Loader />
+      ) : users && users.length == 0 ? (
+        <div className="w-full text-center font-medium">No users here :)</div>
+      ) : (
+        <div className="w-full flex flex-col gap-2">
+          {users.map(user => {
+            return <UserCard key={user.id} user={user} forTrending={true} />;
+          })}
+          {loading ? (
+            <Loader />
+          ) : (
+            users.length % limit == 0 &&
+            hasMore && (
+              <div
+                onClick={fetchUsers}
+                className="w-fit mx-auto pt-4 text-xs text-gray-700 font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
+              >
+                Load More
+              </div>
+            )
+          )}
+        </div>
+      )}
+    </ModalWrapper>
   );
 };
 

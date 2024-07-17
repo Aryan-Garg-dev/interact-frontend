@@ -64,7 +64,9 @@ const Openings = ({ openings, slug, projectCoverPic }: Props) => {
                         <></>
                       )}
                     </div>
-                    <div className="w-full text-gray-700 text-sm line-clamp-3">{opening.description}</div>
+                    <div className="w-full text-gray-700 text-sm line-clamp-3 whitespace-pre-line">
+                      {opening.description}
+                    </div>
                     <Image
                       crossOrigin="anonymous"
                       className="w-full h-full object-cover absolute top-0 right-0 opacity-30 blur-[1px]"

@@ -17,7 +17,7 @@ import Link from 'next/link';
 import moment from 'moment';
 import getIcon from '@/utils/funcs/get_icon';
 import getDomainName from '@/utils/funcs/get_domain_name';
-import { userSelector } from '@/slices/userSlice';
+import { setRegisteredEvents, userSelector } from '@/slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import OrgSidebar from '@/components/common/org_sidebar';
 import LowerEvent from '@/components/lowers/lower_event';
@@ -27,6 +27,8 @@ import Report from '@/components/common/report';
 import SignUp from '@/components/common/signup_box';
 import { setCurrentChatID } from '@/slices/messagingSlice';
 import SendMessage from '@/sections/explore/send_message';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
+import SecondaryButton from '@/components/buttons/secondary_btn';
 
 interface Props {
   id: string;
@@ -106,6 +108,25 @@ const EventComponent = ({ id }: Props) => {
     } else setClickedOnChat(true);
   };
 
+  const handleRegister = async () => {
+    const toaster = Toaster.startLoad('Registering for the Event');
+    await getHandler(`/events/register/${id}`)
+      .then(res => {
+        if (res.statusCode === 200) {
+          Toaster.stopLoad(toaster, 'Successfully registered for the Event!', 1);
+          dispatch(setRegisteredEvents([...(user.registeredEvents || []), event.id]));
+        } else {
+          if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+          else {
+            Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+          }
+        }
+      })
+      .catch(err => {
+        Toaster.error(SERVER_ERROR, 'error_toaster');
+      });
+  };
+
   interface UserProps {
     user: User;
     host?: boolean;
@@ -122,6 +143,8 @@ const EventComponent = ({ id }: Props) => {
             width={50}
             height={50}
             src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={user.profilePicBlurHash || 'no-hash'}
             alt=""
             className={`${host ? 'w-8 h-8' : 'w-6 h-6'} rounded-full cursor-pointer`}
           />
@@ -131,6 +154,80 @@ const EventComponent = ({ id }: Props) => {
       </div>
     </div>
   );
+
+  const AboutSession = () => {
+    const isRegistered = user.registeredEvents?.includes(event.id);
+    const isLive = event.meeting?.isLive;
+
+    const startTime = moment(event.meeting?.startTime).utcOffset('+05:30');
+    const endTime = moment(event.meeting?.endTime).utcOffset('+05:30');
+    const now = moment().utcOffset('+05:30');
+    const isBeforeStart = now.isBefore(startTime);
+
+    let timeUntilStart = '';
+
+    if (isBeforeStart) {
+      const duration = moment.duration(startTime.diff(now));
+      const hours = duration.hours();
+      const minutes = duration.minutes();
+
+      if (hours > 0) {
+        timeUntilStart = `${hours} hour${hours > 1 ? 's' : ''} `;
+      }
+      timeUntilStart += `${minutes} minute${minutes !== 1 ? 's' : ''}`;
+    }
+
+    const handleJoinMeeting = async () => {
+      await getHandler(`/events/meeting/token/${id}`)
+        .then(res => {
+          if (res.statusCode === 200) {
+            const authToken = res.data.authToken;
+            if (!authToken || authToken == '') {
+              Toaster.error(SERVER_ERROR, 'error_toaster');
+              return;
+            }
+            window.location.assign(`/explore/event/live?id=${id}&token=${authToken}`);
+          } else {
+            if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
+            else {
+              Toaster.error(SERVER_ERROR, 'error_toaster');
+            }
+          }
+        })
+        .catch(err => {
+          Toaster.error(SERVER_ERROR, 'error_toaster');
+        });
+    };
+
+    return (
+      <div className="w-full flex flex-col gap-2">
+        <div className="text-xs font-semibold text-gray-500">This event is happening on Interact!</div>
+        {isRegistered ? (
+          isLive || now.isBetween(startTime, endTime) ? (
+            <div
+              onClick={handleJoinMeeting}
+              className="w-full relative p-2 text-center bg-yellow-200 text-gray-700 rounded-lg font-medium cursor-default"
+            >
+              Join Event!
+            </div>
+          ) : isBeforeStart ? (
+            <div className="w-full relative p-2 text-center bg-yellow-200 text-gray-700 rounded-lg font-medium cursor-default">
+              Event starts in {timeUntilStart}!
+            </div>
+          ) : (
+            <button
+              type="submit"
+              className="w-full relative p-2 bg-priority_high text-gray-700 rounded-lg cursor-default"
+            >
+              Event has Ended
+            </button>
+          )
+        ) : (
+          <SecondaryButton label="Register Now!" onClick={handleRegister} />
+        )}
+      </div>
+    );
+  };
 
   const AboutHosts = () => (
     <div className="w-2/5 bg-white rounded-xl max-md:w-full shadow-lg">
@@ -143,8 +240,9 @@ const EventComponent = ({ id }: Props) => {
         placeholder="blur"
         blurDataURL={event.blurHash || 'no-hash'}
       />
-      <div className="w-full flex flex-col gap-6 p-2">
+      <div className="w-full flex flex-col gap-6 p-4 pt-2">
         <LowerEvent event={event} numLikes={eventLikes} setNumLikes={setEventLikes} />
+        {event.meetingID && <AboutSession />}
         <div className="w-full flex flex-col gap-4">
           <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">HOSTED BY</div>
           <AboutUser user={event.organization.user} host={true} />
@@ -266,7 +364,7 @@ const EventComponent = ({ id }: Props) => {
 
       <div className="w-full flex flex-col gap-2">
         <div className="text-sm font-medium text-gray-500">ABOUT THE EVENT</div>
-        <div className="whitespace-pre-wrap">{event.description}</div>
+        <div className="whitespace-pre-wrap">{renderContentWithLinks(event.description)}</div>
       </div>
     </div>
   );
@@ -287,11 +385,11 @@ const EventComponent = ({ id }: Props) => {
           ) : (
             <SignUp setShow={setClickedOnReport} />
           ))}
-        <div className="w-full py-12 px-20 max-md:p-2 flex flex-col transition-ease-out-500 font-primary">
+        <div className="w-full p-12 max-md:p-2 flex flex-col transition-ease-out-500 font-primary">
           {loading ? (
             <Loader />
           ) : (
-            <div className="w-[70vw] max-md:w-full mx-auto flex flex-col gap-12">
+            <div className="w-full max-md:w-full mx-auto flex flex-col gap-12">
               <div className="w-full flex max-md:flex-col gap-12 max-md:px-2">
                 <AboutHosts />
                 <AboutEvent />

@@ -49,11 +49,7 @@ const EditMeeting = ({ meeting, setShow, setMeeting }: Props) => {
     const start = moment(startTime);
     const end = moment(endTime);
 
-    if (start.isBefore(moment())) {
-      Toaster.error('Start Time cannot be before current time.');
-      return false;
-    }
-    if (end.isBefore(start)) {
+    if (end.isSameOrBefore(start)) {
       Toaster.error('End Time cannot be before Start Time');
       return false;
     }

@@ -9,6 +9,13 @@ export interface Education {
   description: string;
 }
 
+export interface GenericBookmark {
+  id: string;
+  userID: string;
+  title: string;
+  createdAt: Date;
+}
+
 export interface PostBookmark {
   id: string;
   userID: string;
@@ -130,7 +137,9 @@ export interface User {
   resume: string;
   active: boolean;
   profilePic: string;
+  profilePicBlurHash: string;
   coverPic: string;
+  coverPicBlurHash: string;
   username: string;
   phoneNo: string;
   bio: string;
@@ -212,6 +221,8 @@ export interface Project {
   noMembers: number;
   privateLinks: string[];
   links: string[];
+  organizationID: string;
+  organization: Organization | null;
   createdAt: Date;
 }
 
@@ -250,6 +261,14 @@ export interface Comment {
   post: Post;
   projectID: string;
   project: Project;
+  eventID: string;
+  event: Event | null;
+  applicationID: string;
+  application: Application | null;
+  announcementID: string;
+  announcement: Announcement | null;
+  taskID: string;
+  task: Task | null;
   parentCommentID: string;
   isRepliedComment: boolean;
   level: number;
@@ -278,6 +297,7 @@ export interface Application {
   links: string[];
   score: number;
   createdAt: Date;
+  noComments: number;
 }
 
 export interface Notification {
@@ -299,6 +319,10 @@ export interface Notification {
   event: Event;
   announcementID: string;
   announcement: Announcement;
+  commentID: string;
+  comment: Comment;
+  taskID: string;
+  task: Task;
   impressionCount: number;
   isRead: boolean;
   createdAt: Date;
@@ -453,7 +477,26 @@ export interface Task {
   priority: PRIORITY;
   noComments: number;
   difficulty: DIFFICULTY;
+  histories: TaskHistory[];
 }
+
+export interface TaskHistory {
+  id: string;
+  historyType: number;
+  taskID: string;
+  task: Task;
+  userID: string;
+  user: User;
+  assigneeID?: string;
+  assignee: User;
+  subTaskID?: string;
+  subTask: SubTask;
+  commentID?: string;
+  comment: Comment;
+  deletedText: string;
+  createdAt: Date;
+}
+
 export interface ResourceBucket {
   id: string;
   title: string;
@@ -521,6 +564,8 @@ export interface Event {
   noComments: number;
   noImpressions: number;
   noViews: number;
+  meetingID: string;
+  meeting: Meeting | null;
   createdAt: Date;
   userID: string; //Dummy for type fixes in comment_box
 }
@@ -655,6 +700,7 @@ export interface Announcement {
 export interface Meeting {
   id: string;
   dyteID: string;
+  eventID: string;
   title: string;
   description: string;
   tags: string[];
@@ -672,6 +718,7 @@ export interface Meeting {
   userID: string;
   user: User;
   participants: User[];
+  rsvp: User[];
   createdAt: Date;
   nextSessionTime: Date;
   sessions: Session[];
@@ -699,4 +746,19 @@ export interface Team {
   noUsers: number;
   tags: string[];
   createdAt: Date;
+}
+
+export interface Recording {
+  id: string;
+  download_url?: string | null;
+  download_url_expiry?: Date | null;
+  audio_download_url?: string | null;
+  file_size?: number | null;
+  session_id: string;
+  output_file_name: string;
+  status: string;
+  invoked_time: Date;
+  started_time: Date;
+  stopped_time: Date;
+  recording_duration: number;
 }

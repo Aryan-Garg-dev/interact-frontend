@@ -19,6 +19,7 @@ import SignUp from '../common/signup_box';
 
 interface Props {
   project: Project;
+  initialCommentShowState?: boolean;
 }
 
 interface bookMarkStatus {
@@ -27,7 +28,7 @@ interface bookMarkStatus {
   bookmarkID: string;
 }
 
-const LowerProject = ({ project }: Props) => {
+const LowerProject = ({ project, initialCommentShowState = false }: Props) => {
   const [liked, setLiked] = useState(false);
   const [numLikes, setNumLikes] = useState(project.noLikes);
   const [numComments, setNumComments] = useState(project.noComments);
@@ -36,7 +37,7 @@ const LowerProject = ({ project }: Props) => {
     projectItemID: '',
     bookmarkID: '',
   });
-  const [clickedOnComment, setClickedOnComment] = useState(false);
+  const [clickedOnComment, setClickedOnComment] = useState(initialCommentShowState);
   const [clickedOnShare, setClickedOnShare] = useState(false);
   const [clickedOnBookmark, setClickedOnBookmark] = useState(false);
   const [clickedOnReport, setClickedOnReport] = useState(false);

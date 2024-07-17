@@ -67,7 +67,9 @@ export const initialUser: User = {
   name: '',
   resume: '',
   profilePic: '',
+  profilePicBlurHash: 'no-hash',
   coverPic: '',
+  coverPicBlurHash: 'no-hash',
   username: '',
   phoneNo: '',
   bio: '',
@@ -124,6 +126,8 @@ export const initialProject: Project = {
   totalNoViews: 0,
   privateLinks: [],
   links: [],
+  organizationID: '',
+  organization: null,
   noMembers: 1,
 };
 
@@ -218,7 +222,15 @@ export const initialComment: Comment = {
   post: initialPost,
   projectID: '',
   project: initialProject,
+  eventID: '',
+  event: null,
+  applicationID: '',
+  application: null,
   parentCommentID: '',
+  announcementID: '',
+  announcement: null,
+  taskID: '',
+  task: null,
   isRepliedComment: false,
   level: 1,
   taggedUsers: [],
@@ -241,6 +253,7 @@ export const initialApplication: Application = {
   links: [],
   score: -1,
   createdAt: new Date(),
+  noComments: 0,
 };
 
 export const initialAnnouncement: Announcement = {
@@ -423,6 +436,7 @@ export const initialTask: Task = {
   organizationID: '',
   priority: 'low',
   noComments: 0,
+  histories: [],
 };
 
 export const initialSubTask: SubTask = {
@@ -459,6 +473,8 @@ export const initialEvent: Event = {
   startTime: new Date(),
   endTime: new Date(),
   location: '',
+  meetingID: '',
+  meeting: null,
   createdAt: new Date(),
   userID: '',
 };
@@ -521,8 +537,10 @@ export const initialMeeting: Meeting = {
   userID: '',
   user: initialUser,
   participants: [],
+  rsvp: [],
   createdAt: new Date(),
   nextSessionTime: new Date(),
+  eventID: '',
   sessions: [],
 };
 

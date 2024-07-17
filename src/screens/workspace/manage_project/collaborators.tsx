@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import AddCollaborators from '@/sections/workspace/manage_project/add_collaborators';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_MANAGER } from '@/config/constants';
 import NoCollaborators from '@/components/fillers/collaborators';
 import CollaboratorsTable from '@/components/tables/projects/collaborators';

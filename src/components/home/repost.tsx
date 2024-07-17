@@ -17,7 +17,7 @@ import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Report from '../common/report';
 import SignUp from '../common/signup_box';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
 
@@ -167,6 +167,8 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
             height={50}
             alt={'User Pic'}
             src={`${USER_PROFILE_PIC_URL}/${post.user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={post.user.profilePicBlurHash || 'no-hash'}
             className={'rounded-full w-8 h-8'}
           />
         </Link>

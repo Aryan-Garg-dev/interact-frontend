@@ -33,6 +33,8 @@ const UserCard = ({ user }: Props) => {
           height={200}
           alt={'User Pic'}
           src={`${USER_COVER_PIC_URL}/${user.coverPic}`}
+          placeholder="blur"
+          blurDataURL={user.coverPicBlurHash || 'no-hash'}
           className="w-full h-40 rounded-t-xl fade-img absolute top-0"
         />
         <div className="w-full flex gap-4 p-4">
@@ -42,6 +44,8 @@ const UserCard = ({ user }: Props) => {
             height={100}
             alt={'User Pic'}
             src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={user.profilePicBlurHash || 'no-hash'}
             className="w-24 h-24 rounded-full z-[1]"
           />
           <div className="w-full flex flex-col justify-center">

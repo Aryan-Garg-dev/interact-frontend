@@ -106,6 +106,8 @@ const OpeningBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit,
                   height={500}
                   alt=""
                   src={`${USER_PROFILE_PIC_URL}/${bookmark.openingItems[0].opening.organization?.user.profilePic}`}
+                  placeholder="blur"
+                  blurDataURL={bookmark.openingItems[0].opening.organization?.user.profilePicBlurHash || 'no-hash'}
                 />
               </div>
             ) : (
@@ -144,6 +146,8 @@ const OpeningBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit,
                     height={500}
                     alt=""
                     src={`${USER_PROFILE_PIC_URL}/${openingItem.opening.organization?.user.profilePic}`}
+                    placeholder="blur"
+                    blurDataURL={openingItem.opening.organization?.user.profilePicBlurHash || 'no-hash'}
                   />
                 );
               })}

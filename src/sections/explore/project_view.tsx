@@ -18,8 +18,7 @@ import SimilarProjects from '@/components/explore/similar_projects';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import LowerWorkspaceProject from '@/components/lowers/lower_workspace_project';
-import PictureList from '@/components/common/picture_list';
-import ToolTip from '@/components/utils/tooltip';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 
 interface Props {
   projectSlugs: string[];
@@ -40,6 +39,7 @@ const ProjectView = ({
 }: Props) => {
   const [project, setProject] = useState<Project>(initialProject);
   const [loading, setLoading] = useState(true);
+  const [showComments, setShowComments] = useState(false);
 
   const [clickedOnReadMore, setClickedOnReadMore] = useState(false);
   const user = useSelector(userSelector);
@@ -54,6 +54,10 @@ const ProjectView = ({
       const res = await getHandler(URL, abortController.signal);
       if (res.statusCode == 200) {
         setProject(res.data.project);
+
+        const action = new URLSearchParams(window.location.search).get('action');
+        if (action && action == 'comments') setShowComments(true);
+
         setLoading(false);
       } else {
         if (res.status != -1) {
@@ -108,6 +112,26 @@ const ProjectView = ({
     },
   });
 
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') {
+      setClickedProjectIndex(prev => prev - 1);
+      setFadeIn(false);
+    } else if (event.key === 'ArrowRight') {
+      setClickedProjectIndex(prev => prev + 1);
+      setFadeIn(false);
+    } else if (event.key === 'Escape') {
+      setClickedOnProject(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   return loading ? (
     <ProjectViewLoader fadeIn={fadeIn} setClickedOnProject={setClickedOnProject} />
   ) : (
@@ -123,6 +147,8 @@ const ProjectView = ({
             height={50}
             alt={'User Pic'}
             src={`${USER_PROFILE_PIC_URL}/${project.user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={project.user.profilePicBlurHash || 'no-hash'}
             className={'w-10 h-10 rounded-full cursor-default absolute top-0 left-0 z-10'}
           />
         </div>
@@ -148,6 +174,8 @@ const ProjectView = ({
               height={100}
               alt={'User Pic'}
               src={`${USER_PROFILE_PIC_URL}/${project.user.profilePic}`}
+              placeholder="blur"
+              blurDataURL={project.user.profilePicBlurHash || 'no-hash'}
               className={'lg:hidden w-10 h-10 rounded-full cursor-default'}
             />
             <div>
@@ -207,7 +235,7 @@ const ProjectView = ({
             </div>
             <div className="font-semibold text-lg">{project.tagline}</div>
 
-            <div className="text-sm">
+            <div className="text-sm whitespace-pre-line">
               {project.description.length > 200 ? (
                 clickedOnReadMore ? (
                   project.description
@@ -224,7 +252,7 @@ const ProjectView = ({
                   </>
                 )
               ) : (
-                project.description
+                renderContentWithLinks(project.description)
               )}
             </div>
             <div className="w-full flex flex-wrap gap-2">
@@ -269,7 +297,11 @@ const ProjectView = ({
         </div>
 
         <div className="max-lg:hidden">
-          {isProjectMember(project) ? <LowerWorkspaceProject project={project} /> : <LowerProject project={project} />}
+          {isProjectMember(project) ? (
+            <LowerWorkspaceProject project={project} initialCommentShowState={showComments} />
+          ) : (
+            <LowerProject project={project} initialCommentShowState={showComments} />
+          )}
         </div>
 
         {clickedProjectIndex != projectSlugs.length - 1 ? (

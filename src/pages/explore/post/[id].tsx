@@ -21,6 +21,7 @@ interface Props {
 const Post = ({ id }: Props) => {
   const [post, setPost] = useState(initialPost);
   const [loading, setLoading] = useState(true);
+  const [showComments, setShowComments] = useState(false);
 
   const user = useSelector(userSelector);
 
@@ -30,6 +31,10 @@ const Post = ({ id }: Props) => {
       .then(res => {
         if (res.statusCode === 200) {
           setPost(res.data.post);
+
+          const action = new URLSearchParams(window.location.search).get('action');
+          if (action && action == 'comments') setShowComments(true);
+
           setLoading(false);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -45,14 +50,14 @@ const Post = ({ id }: Props) => {
 
   useEffect(() => {
     getPost();
-  }, []);
+  }, [id]);
 
   return (
     <BaseWrapper title="Post">
       {user.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={2} />}
       <MainWrapper>
         <div className="w-[50vw] pt-6 mx-auto max-lg:w-full flex max-md:flex-col transition-ease-out-500 font-primary">
-          {loading ? <Loader /> : <PostComponent post={post} />}
+          {loading ? <Loader /> : <PostComponent post={post} initialCommentShowState={showComments} />}
         </div>
       </MainWrapper>
     </BaseWrapper>

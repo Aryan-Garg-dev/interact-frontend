@@ -21,6 +21,7 @@ interface ConfigState {
   lastFetchedUnreadChats: string;
   lastFetchedOrganizationMemberships: string;
   lastFetchedVotedOptions: string;
+  lastFetchedRegisteredEvents: string;
 }
 
 const getInitialDate = (): string => {
@@ -60,6 +61,7 @@ const initialState: ConfigState = {
   lastFetchedUnreadChats: getInitialInvitationDate(),
   lastFetchedOrganizationMemberships: getInitialDate(),
   lastFetchedVotedOptions: getInitialDate(),
+  lastFetchedRegisteredEvents: getInitialDate(),
 };
 
 export const configSlice = createSlice({
@@ -86,6 +88,7 @@ export const configSlice = createSlice({
       state.lastFetchedUnreadChats = getInitialInvitationDate();
       state.lastFetchedOrganizationMemberships = getInitialDate();
       state.lastFetchedVotedOptions = getInitialDate();
+      state.lastFetchedRegisteredEvents = getInitialDate();
     },
     setUpdatingFollowing: (state, action: PayloadAction<boolean>) => {
       state.updatingFollowing = action.payload;
@@ -113,6 +116,7 @@ export const configSlice = createSlice({
       state.lastFetchedUnreadInvitations = new Date().toUTCString();
       state.lastFetchedOrganizationMemberships = new Date().toUTCString();
       state.lastFetchedVotedOptions = new Date().toUTCString();
+      state.lastFetchedRegisteredEvents = new Date().toUTCString();
     },
     setFetchedFollowing: (state, action: PayloadAction<string>) => {
       state.lastFetchedFollowing = action.payload;
@@ -159,6 +163,9 @@ export const configSlice = createSlice({
     setLastFetchedVotedOptions: (state, action: PayloadAction<string>) => {
       state.lastFetchedVotedOptions = action.payload;
     },
+    setLastFetchedRegisteredEvents: (state, action: PayloadAction<string>) => {
+      state.lastFetchedRegisteredEvents = action.payload;
+    },
   },
 });
 
@@ -184,6 +191,7 @@ export const {
   setLastFetchedUnreadChats,
   setLastFetchedOrganizationMemberships,
   setLastFetchedVotedOptions,
+  setLastFetchedRegisteredEvents,
 } = configSlice.actions;
 
 export default configSlice.reducer;

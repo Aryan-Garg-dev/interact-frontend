@@ -11,13 +11,14 @@ import Toaster from '@/utils/toaster';
 import { GetServerSidePropsContext } from 'next/types';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
-import { ArrowArcLeft } from '@phosphor-icons/react';
 import Openings from '@/screens/workspace/manage_project/openings';
 import Loader from '@/components/common/loader';
 import Collaborators from '@/screens/workspace/manage_project/collaborators';
 import Chats from '@/screens/workspace/manage_project/chats';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
+import { checkParticularOrgAccess } from '@/utils/funcs/access';
+import { ORG_MANAGER, ORG_SENIOR } from '@/config/constants';
 
 interface Props {
   slug: string;
@@ -62,10 +63,18 @@ const ManageProject = ({ slug }: Props) => {
           ) : (
             <>
               <div className={`${active === 0 ? 'block' : 'hidden'}`}>
-                <Openings project={project} setProject={setProject} />
+                <Openings
+                  project={project}
+                  setProject={setProject}
+                  org={checkParticularOrgAccess(ORG_SENIOR, project.organization)}
+                />
               </div>
               <div className={`${active === 1 ? 'block' : 'hidden'}`}>
-                <Collaborators project={project} setProject={setProject} />
+                <Collaborators
+                  project={project}
+                  setProject={setProject}
+                  org={checkParticularOrgAccess(ORG_MANAGER, project.organization)}
+                />
               </div>
               <div className={`${active === 2 ? 'block' : 'hidden'}`}>
                 <Chats project={project} />

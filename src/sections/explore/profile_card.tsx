@@ -89,6 +89,8 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
             height={100}
             alt={'User Pic'}
             src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={user.profilePicBlurHash || 'no-hash'}
             className="rounded-full max-lg:mx-auto w-48 h-48 cursor-default"
           />
           {user.isOrganization && (

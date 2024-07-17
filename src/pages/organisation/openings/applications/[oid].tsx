@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 import OrgSidebar from '@/components/common/org_sidebar';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
+import ApplicationsTable from '@/components/tables/applications';
 
 interface Props {
   oid: string;
@@ -141,28 +142,17 @@ const Applications = ({ oid }: Props) => {
               )}
             </div>
           </div>
-          <div className="w-full flex flex-col gap-6 px-2 py-2">
+          <div className="w-full flex flex-col gap-6 py-2">
             {loading ? (
               <Loader />
             ) : filteredApplications.length > 0 ? (
-              <div className="flex justify-evenly px-4">
-                <div
-                  className={`${clickedOnApplication ? 'w-[40%]' : 'w-[720px]'} max-md:w-[720px] flex flex-col gap-4`}
-                >
-                  {filteredApplications.map((application, i) => {
-                    return (
-                      <ApplicationCard
-                        key={application.id}
-                        index={i}
-                        application={application}
-                        applications={filteredApplications}
-                        clickedApplicationID={clickedApplicationID}
-                        setClickedOnApplication={setClickedOnApplication}
-                        setClickedApplicationID={setClickedApplicationID}
-                      />
-                    );
-                  })}
-                </div>
+              <>
+                <ApplicationsTable
+                  applications={filteredApplications}
+                  setClickedOnApplication={setClickedOnApplication}
+                  setClickedApplicationID={setClickedApplicationID}
+                />
+
                 {clickedOnApplication && (
                   <ApplicationView
                     applicationIndex={clickedApplicationID}
@@ -173,7 +163,7 @@ const Applications = ({ oid }: Props) => {
                     org={true}
                   />
                 )}
-              </div>
+              </>
             ) : (
               <div className="w-full text-center text-xl font-medium">No Applications found :)</div>
             )}

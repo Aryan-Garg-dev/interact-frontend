@@ -7,7 +7,7 @@ import Mascot from '@/components/fillers/mascot';
 import { Plus } from '@phosphor-icons/react';
 import moment from 'moment';
 import MembersList from './view_team_members';
-import checkOrgAccess from '@/utils/funcs/check_org_access';
+import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 
 interface Props {
@@ -26,7 +26,7 @@ const TeamsView = ({ setShow, organization, setOrganization }: Props) => {
   ) : clickedOnViewTeam ? (
     <MembersList setShow={setClickedOnViewTeam} teamID={clickedTeam.id} setOrganization={setOrganization} />
   ) : (
-    <ModalWrapper setShow={setShow}>
+    <ModalWrapper setShow={setShow} top={'1/3'}>
       <div className="w-full flex items-center justify-between mb-2">
         <div className="text-3xl font-semibold">Teams</div>
         {checkOrgAccess(ORG_SENIOR) && (

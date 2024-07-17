@@ -61,6 +61,8 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
             height={100}
             alt={'User Pic'}
             src={`${USER_PROFILE_PIC_URL}/${organisation.user.profilePic}`}
+            placeholder="blur"
+            blurDataURL={organisation.user.profilePicBlurHash || 'no-hash'}
             className="rounded-full w-8 h-8"
           />
         </Link>

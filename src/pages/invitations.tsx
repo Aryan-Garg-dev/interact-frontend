@@ -17,6 +17,7 @@ import MainWrapper from '@/wrappers/main';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
+import { useDispatch } from 'react-redux';
 
 const Invitations = () => {
   const active = useSelector(invitationsTabSelector);
@@ -24,6 +25,8 @@ const Invitations = () => {
   const [groupChatInvitations, setGroupChatInvitations] = useState<Invitation[]>([]);
   const [orgInvitations, setOrgInvitations] = useState<Invitation[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const dispatch = useDispatch();
 
   const fetchInvitations = async () => {
     setLoading(true);
@@ -40,6 +43,12 @@ const Invitations = () => {
       setOrgInvitations(
         invitationData.filter((invitation: Invitation) => invitation.organizationID && invitation.organizationID != '')
       );
+
+      const tab = new URLSearchParams(window.location.search).get('tab');
+      if (tab && tab == 'projects') dispatch(setInvitationsTab(0));
+      else if (tab && tab == 'group_chats') dispatch(setInvitationsTab(1));
+      else if (tab && tab == 'organisations') dispatch(setInvitationsTab(2));
+
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
