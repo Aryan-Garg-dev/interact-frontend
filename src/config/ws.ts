@@ -167,93 +167,6 @@ class SocketService {
     }
   }
 
-  private mapNotificationTypeToMessage(type: number, payload: any): string {
-    switch (type) {
-      case -1:
-        return "Welcome to Interact";
-      case 0:
-        return `User started following you`;
-      case 1:
-        return `User liked your post`;
-      case 2:
-        return `User commented on your post`;
-      case 3:
-        return `User liked your project`;
-      case 4:
-        return `User commented on your project`;
-      case 5:
-        return `User applied for your project opening`;
-      case 6:
-        return `You got selected for the opening`;
-      case 7:
-        return `You got rejected for the opening`;
-      case 8:
-        return `You were removed from the project`;
-      case 9:
-        return `Chat request`;
-      case 10:
-        return `Accepted Project Invitation`;
-      case 11:
-        return `User assigned you a task in project`;
-      case 12:
-        return `User liked your event`;
-      case 13:
-        return `User commented on your event`;
-      case 14:
-        return `Your post got ${payload.impressions} impressions`;
-      case 15:
-        return `Your project got ${payload.impressions} impressions`;
-      case 16:
-        return `Your event got ${payload.impressions} impressions`;
-      case 17:
-        return `Your announcement got ${payload.impressions} impressions`;
-      case 18:
-        return `User liked your announcement`;
-      case 19:
-        return `User commented on your announcement`;
-      case 20:
-        return `User applied for your organization's opening`;
-      case 21:
-        return `Tagged in a Post`;
-      case 22:
-        return `Tagged in an Announcement`;
-      default:
-        return 'You have a new notification';
-    }
-  }
-
-  public setupPushNotifications() {
-    if (this.socket) {
-      this.socket.addEventListener('message', (evt) => {
-        const event = getWSEvent(evt);
-        if (event.type === undefined) {
-          alert('No Type in the Event');
-          return;
-        }
-
-        switch (event.type) {
-          case 'receive_notification':
-            type WS_Notification = {
-              userID: string;
-              type: number;
-              payload: any;
-            };
-            const notificationEventPayload = event.payload as WS_Notification;
-            const message = this.mapNotificationTypeToMessage(notificationEventPayload.type, notificationEventPayload.payload);
-            toast.info(message, {
-              ...messageToastSettings,
-              autoClose: 1000,
-              icon: '🐵',
-            });
-            store.dispatch(incrementUnreadNotifications());
-            break;
-          default:
-            break;
-        }
-      });
-    }
-  }
-
   public setupChatNotifications() {
     if (this.socket) {
       this.socket.addEventListener('message', function (evt) {
@@ -295,7 +208,37 @@ class SocketService {
       });
     }
   }
+
+  public setupPushNotifications() {
+    if (this.socket) {
+      this.socket.addEventListener('message', function (evt) {
+        const event = getWSEvent(evt);
+        if (event.type === undefined) {
+          alert('No Type in the Event');
+        }
+
+        switch (event.type) {
+          case 'receive_notification':
+            type WS_Notification = {
+              userID: string;
+              content: string;
+              //TODO add notification type
+            };
+            const notificationEventPayload = event.payload as WS_Notification;
+            toast.info(notificationEventPayload.content, {
+              ...messageToastSettings,
+              icon: '🐵',
+            });
+            store.dispatch(incrementUnreadNotifications());
+            break;
+          default:
+            break;
+        }
+      });
+    }
+  }
 }
 
 const socketService = SocketService.getInstance();
 export default socketService;
+

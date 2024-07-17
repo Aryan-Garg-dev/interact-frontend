@@ -44,3 +44,6 @@ const Invitation = ({ notification }: Props) => {
 };
 
 export default Invitation;
+
+
+

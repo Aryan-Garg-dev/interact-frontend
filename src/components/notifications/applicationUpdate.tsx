@@ -70,3 +70,5 @@ const ApplicationUpdate = ({ notification, status }: Props) => {
 
 export default ApplicationUpdate;
 
+
+

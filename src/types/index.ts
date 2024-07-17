@@ -429,9 +429,11 @@ export interface SubTask {
   users: User[];
   isCompleted: boolean;
   priority: PRIORITY;
+  difficulty: DIFFICULTY;
 }
 
 export type PRIORITY = 'low' | 'medium' | 'high';
+export type DIFFICULTY = 'low' | 'medium' | 'high';
 
 export interface Task {
   id: string;
@@ -450,6 +452,7 @@ export interface Task {
   subTasks: SubTask[];
   priority: PRIORITY;
   noComments: number;
+  difficulty: DIFFICULTY;
 }
 export interface ResourceBucket {
   id: string;

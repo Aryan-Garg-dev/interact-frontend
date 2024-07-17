@@ -38,3 +38,4 @@ const Removal = ({ notification }: Props) => {
 };
 
 export default Removal;
+

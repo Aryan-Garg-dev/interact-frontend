@@ -109,6 +109,7 @@ const CommentBox = ({ type, item, setNoComments, userFetchURL }: Props) => {
         Toaster.stopLoad(toaster, SERVER_ERROR, 0);
       }
     }
+    
   };
 
   const loggedInUser = useSelector(userSelector);
