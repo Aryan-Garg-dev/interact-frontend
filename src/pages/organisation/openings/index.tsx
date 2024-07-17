@@ -19,6 +19,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import AccessTree from '@/components/organization/access_tree';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import WidthCheck from '@/utils/wrappers/widthCheck';
+import SubscriptionsConfig from '@/config/subscriptions';
+import Mascot from '@/components/fillers/mascot';
 
 const Openings = () => {
   const [loading, setLoading] = useState(true);
@@ -63,7 +65,7 @@ const Openings = () => {
         <div className="w-full flex justify-between items-center p-base_padding">
           <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Openings</div>
           <div className="flex items-center gap-2">
-            {checkOrgAccess(ORG_MANAGER) && (
+            {checkOrgAccess(ORG_MANAGER) && SubscriptionsConfig[currentOrg.subscription].OrgOpenings && (
               <Plus
                 onClick={() => setClickedOnNewOpening(prev => !prev)}
                 size={42}
@@ -79,6 +81,12 @@ const Openings = () => {
             />
           </div>
         </div>
+
+        {!SubscriptionsConfig[currentOrg.subscription].OrgOpenings && (
+          <div className="h-90 mb-12">
+            <Mascot message="Not available with your current subscription" />
+          </div>
+        )}
 
         {loading ? (
           <Loader />

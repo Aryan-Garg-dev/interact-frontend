@@ -9,6 +9,9 @@ import moment from 'moment';
 import MembersList from './view_team_members';
 import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
+import SubscriptionsConfig from '@/config/subscriptions';
+import { useSelector } from 'react-redux';
+import { currentOrgSelector } from '@/slices/orgSlice';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,6 +24,8 @@ const TeamsView = ({ setShow, organization, setOrganization }: Props) => {
   const [clickedOnViewTeam, setClickedOnViewTeam] = useState(false);
   const [clickedTeam, setClickedTeam] = useState(initialTeam);
 
+  const currentOrg = useSelector(currentOrgSelector);
+
   return clickedOnNewTeam ? (
     <NewTeam organization={organization} setShow={setClickedOnNewTeam} setOrganization={setOrganization} />
   ) : clickedOnViewTeam ? (
@@ -29,13 +34,15 @@ const TeamsView = ({ setShow, organization, setOrganization }: Props) => {
     <ModalWrapper setShow={setShow} top={'1/3'}>
       <div className="w-full flex items-center justify-between mb-2">
         <div className="text-3xl font-semibold">Teams</div>
-        {checkOrgAccess(ORG_SENIOR) && (
+        {checkOrgAccess(ORG_SENIOR) && SubscriptionsConfig[currentOrg.subscription].Teams && (
           <div className="w-fit flex-center">
             <Plus onClick={() => setClickedOnNewTeam(true)} className="cursor-pointer" size={24} />
           </div>
         )}
       </div>
-      {organization.teams && organization.teams.length > 0 ? (
+      {!SubscriptionsConfig[currentOrg.subscription].Teams ? (
+        <Mascot message={'Not included in your current subscription'} />
+      ) : organization.teams && organization.teams.length > 0 ? (
         organization.teams.map(team => (
           <div
             key={team.id}

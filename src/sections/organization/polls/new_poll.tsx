@@ -7,6 +7,10 @@ import { SERVER_ERROR } from '@/config/errors';
 import { X } from '@phosphor-icons/react';
 import { Organization, Poll } from '@/types';
 import Tags from '@/components/utils/edit_tags';
+import Checkbox from '@/components/form/checkbox';
+import SubscriptionsConfig from '@/config/subscriptions';
+import { useSelector } from 'react-redux';
+import { currentOrgSelector } from '@/slices/orgSlice';
 
 interface Props {
   orgID: string;
@@ -23,6 +27,8 @@ const NewPoll = ({ orgID, setPolls, setShow, organisation }: Props) => {
   const [isMultiAnswer, setIsMultiAnswer] = useState(false);
 
   const [mutex, setMutex] = useState(false);
+
+  const currentOrg = useSelector(currentOrgSelector);
 
   const submitHandler = async () => {
     if (content == '') {
@@ -109,40 +115,16 @@ const NewPoll = ({ orgID, setPolls, setShow, organisation }: Props) => {
           <div className="w-fit flex gap-4 flex-wrap">
             <label className="flex w-fit cursor-pointer select-none items-center text-sm gap-2">
               <div className="font-semibold">Open for All</div>
-              <div className="relative">
-                <input type="checkbox" checked={isOpen} onChange={() => setIsOpen(prev => !prev)} className="sr-only" />
-                <div
-                  className={`box block h-6 w-10 rounded-full ${
-                    isOpen ? 'bg-blue-300' : 'bg-black'
-                  } transition-ease-300`}
-                ></div>
-                <div
-                  className={`absolute left-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-white transition ${
-                    isOpen ? 'translate-x-full' : ''
-                  }`}
-                ></div>
-              </div>
+              <Checkbox
+                val={isOpen}
+                setVal={setIsOpen}
+                border={false}
+                disabled={!SubscriptionsConfig[currentOrg.subscription].AnnouncementsAndPolls.OrgAndOpenForAll}
+              />
             </label>{' '}
             <label className="flex w-fit cursor-pointer select-none items-center text-sm gap-2">
               <div className="font-semibold">Multiple Answers Allowed</div>
-              <div className="relative">
-                <input
-                  type="checkbox"
-                  checked={isMultiAnswer}
-                  onChange={() => setIsMultiAnswer(prev => !prev)}
-                  className="sr-only"
-                />
-                <div
-                  className={`box block h-6 w-10 rounded-full ${
-                    isMultiAnswer ? 'bg-blue-300' : 'bg-black'
-                  } transition-ease-300`}
-                ></div>
-                <div
-                  className={`absolute left-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-white transition ${
-                    isMultiAnswer ? 'translate-x-full' : ''
-                  }`}
-                ></div>
-              </div>
+              <Checkbox val={isMultiAnswer} setVal={setIsMultiAnswer} border={false} />
             </label>
           </div>
 

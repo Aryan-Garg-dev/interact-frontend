@@ -24,6 +24,7 @@ import Tags from '@/components/form/tags';
 import Links from '@/components/form/links';
 import { getFormattedTime } from '@/utils/funcs/time';
 import Checkbox from '@/components/form/checkbox';
+import SubscriptionsConfig from '@/config/subscriptions';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -449,7 +450,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
 
         <div className="w-full flex items-end justify-between">
           {step != 0 ? <PrimaryButton label="Back" onClick={() => setStep(prev => prev - 1)} /> : <div></div>}
-          {step != 3 ? (
+          {step != (SubscriptionsConfig[currentOrg.subscription].Event.Enabled ? 3 : 2) ? (
             <PrimaryButton
               label="Next"
               onClick={() => {

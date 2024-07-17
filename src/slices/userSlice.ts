@@ -1,3 +1,4 @@
+import { SUBSCRIPTIONS } from '@/config/constants';
 import { RootState } from '@/store';
 import { EventBookmark, OpeningBookmark, OrganizationMembership, PostBookmark, ProjectBookmark, User } from '@/types';
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -41,6 +42,7 @@ export interface UserState {
   organizationMemberships: OrganizationMembership[];
   registeredEvents: string[];
   votedOptions: string[];
+  subscription: string;
 }
 
 const initialState: UserState = {
@@ -77,6 +79,7 @@ const initialState: UserState = {
   organizationMemberships: [],
   votedOptions: [],
   registeredEvents: [],
+  subscription: SUBSCRIPTIONS.USER_FREE,
 };
 
 export const userSlice = createSlice({
@@ -117,6 +120,7 @@ export const userSlice = createSlice({
       state.organizationMemberships = [];
       state.votedOptions = [];
       state.registeredEvents = [];
+      state.subscription = SUBSCRIPTIONS.USER_FREE;
     },
     resetUser: state => {
       state.id = '';
@@ -152,6 +156,7 @@ export const userSlice = createSlice({
       state.isPasswordSetupComplete = true;
       state.votedOptions = [];
       state.registeredEvents = [];
+      state.subscription = SUBSCRIPTIONS.USER_FREE;
     },
     setReduxName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
@@ -246,6 +251,9 @@ export const userSlice = createSlice({
     setRegisteredEvents: (state, action: PayloadAction<string[]>) => {
       state.registeredEvents = action.payload;
     },
+    setSubscription: (state, action: PayloadAction<string>) => {
+      state.subscription = action.payload;
+    },
   },
 });
 
@@ -283,6 +291,7 @@ export const {
   setOrganizationMemberships,
   setVotedOptions,
   setRegisteredEvents,
+  setSubscription,
 } = userSlice.actions;
 
 export default userSlice.reducer;

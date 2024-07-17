@@ -4,13 +4,14 @@ import postHandler from '@/handlers/post_handler';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
 import NewPostHelper from '@/components/home/new_post_helper';
-import { Announcement, Organization, Post, User } from '@/types';
+import { Announcement, Organization, User } from '@/types';
 import { useWindowWidth } from '@react-hook/window-size';
-import { currentOrgIDSelector } from '@/slices/orgSlice';
+import { currentOrgSelector } from '@/slices/orgSlice';
 import getHandler from '@/handlers/get_handler';
+import Checkbox from '@/components/form/checkbox';
+import SubscriptionsConfig from '@/config/subscriptions';
 
 interface Props {
   organisation: Organization;
@@ -21,7 +22,7 @@ interface Props {
 const NewAnnouncement = ({ organisation, setShow, setAnnouncements }: Props) => {
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [showTipsModal, setShowTipsModal] = useState<boolean>(false);
   const [taggedUsernames, setTaggedUsernames] = useState<string[]>([]);
   const [users, setUsers] = useState<User[]>([]);
@@ -137,7 +138,7 @@ const NewAnnouncement = ({ organisation, setShow, setAnnouncements }: Props) => 
     textarea.setSelectionRange(start + prefix.length, end + prefix.length);
   };
 
-  const currentOrgID = useSelector(currentOrgIDSelector);
+  const currentOrg = useSelector(currentOrgSelector);
 
   const handleSubmit = async () => {
     if (title.trim() == '') {
@@ -158,7 +159,7 @@ const NewAnnouncement = ({ organisation, setShow, setAnnouncements }: Props) => 
       taggedUsernames,
     };
 
-    const URL = `${ORG_URL}/${currentOrgID}/announcements`;
+    const URL = `${ORG_URL}/${currentOrg.id}/announcements`;
 
     const res = await postHandler(URL, formData);
 
@@ -231,24 +232,12 @@ const NewAnnouncement = ({ organisation, setShow, setAnnouncements }: Props) => 
               <div className="w-fit flex-center gap-4">
                 <label className="w-fit flex cursor-pointer select-none items-center text-sm gap-2">
                   <div className="font-semibold">Open for All</div>
-                  <div className="relative">
-                    <input
-                      type="checkbox"
-                      checked={isOpen}
-                      onChange={() => setIsOpen(prev => !prev)}
-                      className="sr-only"
-                    />
-                    <div
-                      className={`box block h-6 w-10 rounded-full ${
-                        isOpen ? 'bg-blue-300' : 'bg-black'
-                      } transition-ease-300`}
-                    ></div>
-                    <div
-                      className={`absolute left-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-white transition ${
-                        isOpen ? 'translate-x-full' : ''
-                      }`}
-                    ></div>
-                  </div>
+                  <Checkbox
+                    val={isOpen}
+                    setVal={setIsOpen}
+                    border={false}
+                    disabled={!SubscriptionsConfig[currentOrg.subscription].AnnouncementsAndPolls.OrgAndOpenForAll}
+                  />
                 </label>
                 <div className="text-sm font-medium text-gray-500">
                   (
