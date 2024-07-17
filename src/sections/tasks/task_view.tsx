@@ -140,7 +140,7 @@ const TaskComponent = ({
         </div>
         <div className="w-full flex flex-col gap-4">
           <div>{renderContentWithLinks(task.description)}</div>
-          <Tags tags={task.tags} />
+          <Tags tags={task.tags} displayAll={true} />
         </div>
         <div className="w-fit flex-center gap-16">
           <div className="flex gap-2 items-center">
