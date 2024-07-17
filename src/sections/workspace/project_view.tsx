@@ -28,11 +28,7 @@ import ConfirmOTP from '@/components/common/confirm_otp';
 import Link from 'next/link';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Tags from '@/components/common/tags';
-import checkOrgAccess, {
-  checkOrgProjectAccess,
-  checkParticularOrgAccess,
-  checkProjectAccess,
-} from '@/utils/funcs/access';
+import { checkOrgProjectAccess, checkParticularOrgAccess, checkProjectAccess } from '@/utils/funcs/access';
 import {
   ORG_MANAGER,
   ORG_SENIOR,
@@ -86,7 +82,7 @@ const ProjectView = ({
     try {
       slug = projectSlugs[clickedProjectIndex];
     } finally {
-      const URL = checkProjectAccess(PROJECT_MEMBER, clickedProject.id)
+      const URL = checkProjectAccess(PROJECT_MEMBER, clickedProject.id, clickedProject)
         ? `${PROJECT_URL}/${slug}`
         : `${ORG_URL}/${clickedProject.organizationID}/projects/${slug}`;
 

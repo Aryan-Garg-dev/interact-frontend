@@ -31,6 +31,8 @@ const ProfileCompletion = () => {
   useEffect(() => {
     if (user.id != '') {
       if (completionPercentage != 100) setHide(false);
+      else setHide(true);
+
       const circleBackground = document.getElementById('circleBackground');
       const circleLength = 2 * Math.PI * 40;
       const dashOffset = circleLength * ((100 - completionPercentage) / 100);
@@ -42,7 +44,7 @@ const ProfileCompletion = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [user]);
+  }, [completionPercentage, user]);
 
   const handleClickOutside = (event: MouseEvent) => {
     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {

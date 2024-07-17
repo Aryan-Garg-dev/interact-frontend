@@ -8,7 +8,7 @@ import {
   PROJECT_OWNER,
 } from '@/config/constants';
 import { store } from '@/store';
-import { Organization } from '@/types';
+import { Organization, Project } from '@/types';
 import { initialOrganization, initialOrganizationMembership } from '@/types/initials';
 
 const user = store.getState().user;
@@ -61,13 +61,13 @@ export const checkParticularOrgAccess = (accessRole: string, checkOrg: Organizat
   }
 };
 
-export const checkProjectAccess = (role: string, projectID: string) => {
+export const checkProjectAccess = (role: string, projectID: string, project?: Project) => {
   const ownerProjects = user.ownerProjects;
   const managerProjects = user.managerProjects;
   const editorProjects = user.editorProjects;
   const memberProjects = user.memberProjects;
 
-  const isOwner = ownerProjects.includes(projectID);
+  const isOwner = ownerProjects.includes(projectID) || project?.userID == user.id;
   const isManager = managerProjects.includes(projectID);
   const isEditor = editorProjects.includes(projectID);
   const isMember = memberProjects.includes(projectID);
