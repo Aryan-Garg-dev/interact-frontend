@@ -1,8 +1,10 @@
 import RazorpayButton from '@/components/buttons/rzp_btn';
 import Sidebar from '@/components/common/sidebar';
+import { userSelector } from '@/slices/userSlice';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
+import { useSelector } from 'react-redux';
 
 const Subscriptions = () => {
   return (
@@ -35,8 +37,14 @@ interface Props {
 }
 
 const SubscriptionCard = ({ title, description, amount, subscription }: Props) => {
+  const user = useSelector(userSelector);
   return (
-    <div className="flex flex-col gap-6 bg-white rounded-3xl p-6 hover:shadow-lg transition-ease-500">
+    <div className="flex relative overflow-clip flex-col gap-6 bg-white rounded-3xl p-6 hover:shadow-lg transition-ease-500">
+      {user.subscription == subscription && (
+        <div className="absolute px-10 rotate-45 top-10 -right-10 rounded-xl bg-black text-white font-medium">
+          Current Plan
+        </div>
+      )}
       <div className="grid items-center justify-center w-full grid-cols-1 text-left">
         <div>
           <h2 className="text-lg font-medium tracking-tighter text-primary_black lg:text-3xl">{title}</h2>
@@ -44,15 +52,17 @@ const SubscriptionCard = ({ title, description, amount, subscription }: Props) =
         </div>
         <div className="mt-6">
           <p>
-            <span className="text-5xl font-light tracking-tight text-black">₹{amount}</span>
+            <span className="text-5xl font-medium tracking-tight text-black">₹{amount}</span>
             <span className="text-base font-medium text-gray-500"> /mo </span>
           </p>
         </div>
       </div>
 
-      <div className="w-full flex-center">
-        <RazorpayButton subscription={subscription} />
-      </div>
+      {amount != 0 && (
+        <div className="w-full flex-center">
+          <RazorpayButton title={user.subscription == subscription ? 'Renew' : 'Buy Now'} subscription={subscription} />
+        </div>
+      )}
     </div>
   );
 };

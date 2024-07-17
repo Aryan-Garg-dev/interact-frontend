@@ -58,6 +58,7 @@ const RazorpayButton = ({ subscription, title }: Props) => {
       image: 'https://mailer.interactnow.in/logo.png',
       order_id: order.id,
       handler: function () {
+        dispatch(setSubscription(subscription));
         Toaster.success('Payment Successful!');
       },
       prefill: {
@@ -76,13 +77,12 @@ const RazorpayButton = ({ subscription, title }: Props) => {
     const rzp1 = new window.Razorpay(options);
     rzp1.on('payment.failed', function (response: any) {
       Toaster.error(response.error.reason);
-      dispatch(setSubscription(''));
     });
 
     rzp1.open();
   };
 
-  return <BlackButton label="Pay Now" width="40" onClick={handlePayment} />;
+  return <BlackButton label={title ? title : 'Pay Now'} width="40" onClick={handlePayment} />;
 };
 
 export default RazorpayButton;
