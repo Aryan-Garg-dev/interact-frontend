@@ -161,6 +161,7 @@ export interface User {
   passwordChangedAt: Date;
   lastViewed: Project[];
   isVerified: boolean;
+  githubUsername: string;
   isOrganization: boolean;
   organization: Organization | null;
 }
@@ -478,6 +479,9 @@ export interface Task {
   noComments: number;
   difficulty: DIFFICULTY;
   histories: TaskHistory[];
+  prID: '';
+  prLink: '';
+  prStatus: -1;
 }
 
 export interface TaskHistory {

@@ -41,6 +41,7 @@ export interface UserState {
   organizationMemberships: OrganizationMembership[];
   registeredEvents: string[];
   votedOptions: string[];
+  githubUsername: string;
 }
 
 const initialState: UserState = {
@@ -77,6 +78,7 @@ const initialState: UserState = {
   organizationMemberships: [],
   votedOptions: [],
   registeredEvents: [],
+  githubUsername: '',
 };
 
 export const userSlice = createSlice({
@@ -117,6 +119,7 @@ export const userSlice = createSlice({
       state.organizationMemberships = [];
       state.votedOptions = [];
       state.registeredEvents = [];
+      state.githubUsername = action.payload.githubUsername;
     },
     resetUser: state => {
       state.id = '';
@@ -152,6 +155,7 @@ export const userSlice = createSlice({
       state.isPasswordSetupComplete = true;
       state.votedOptions = [];
       state.registeredEvents = [];
+      state.githubUsername = '';
     },
     setReduxName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
@@ -246,6 +250,9 @@ export const userSlice = createSlice({
     setRegisteredEvents: (state, action: PayloadAction<string[]>) => {
       state.registeredEvents = action.payload;
     },
+    setGithubUsername: (state, action: PayloadAction<string>) => {
+      state.githubUsername = action.payload;
+    },
   },
 });
 
@@ -283,6 +290,7 @@ export const {
   setOrganizationMemberships,
   setVotedOptions,
   setRegisteredEvents,
+  setGithubUsername,
 } = userSlice.actions;
 
 export default userSlice.reducer;

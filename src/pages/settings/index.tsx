@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import UpdateResume from '@/sections/settings/update_resume';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
+import UpdateGithub from '@/sections/settings/update_github';
 
 const Settings = () => {
   const [theme, setTheme] = useState(String(localStorage.getItem('theme')) == 'dark' ? 'dark' : 'light');
@@ -92,6 +93,7 @@ const Settings = () => {
               <SmileyXEyes size={40} weight="duotone" />
             </Link>
           )}
+          <UpdateGithub />
           {clickedOnChangeResume && <UpdateResume setShow={setClickedOnChangeResume} />}
           {clickedOnChangePhoneNo && <UpdatePhoneNumber setShow={setClickedOnChangePhoneNo} />}
           {clickedOnChangePassword && (

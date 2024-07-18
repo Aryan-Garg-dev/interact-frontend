@@ -93,6 +93,7 @@ export const initialUser: User = {
   lastViewed: [],
   isVerified: false,
   isOrganization: false,
+  githubUsername: '',
   organization: null,
 };
 
@@ -438,6 +439,9 @@ export const initialTask: Task = {
   difficulty: 'easy',
   noComments: 0,
   histories: [],
+  prID: '',
+  prLink: '',
+  prStatus: -1,
 };
 
 export const initialSubTask: SubTask = {
