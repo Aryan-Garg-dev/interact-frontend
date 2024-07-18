@@ -14,6 +14,20 @@ const Completed = ({ history }: Props) => {
       </TaskHistoryWrapper>
     );
   }
+  if (history.historyType === 13)
+    // User requested review on PR
+    return (
+      <TaskHistoryWrapper history={history}>
+        <div className="w-fit text-center flex-center gap-1">requested a review on the PR.</div>
+      </TaskHistoryWrapper>
+    );
+  if (history.historyType === 15)
+    // User merged PR
+    return (
+      <TaskHistoryWrapper history={history}>
+        <div className="w-fit text-center flex-center gap-1">merged the PR.</div>
+      </TaskHistoryWrapper>
+    );
   return null;
 };
 
