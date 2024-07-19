@@ -42,6 +42,7 @@ export interface UserState {
   registeredEvents: string[];
   votedOptions: string[];
   githubUsername: string;
+  createdAt: Date;
 }
 
 const initialState: UserState = {
@@ -79,6 +80,7 @@ const initialState: UserState = {
   votedOptions: [],
   registeredEvents: [],
   githubUsername: '',
+  createdAt: new Date(),
 };
 
 export const userSlice = createSlice({
@@ -120,6 +122,7 @@ export const userSlice = createSlice({
       state.votedOptions = [];
       state.registeredEvents = [];
       state.githubUsername = action.payload.githubUsername;
+      state.createdAt = action.payload.createdAt;
     },
     resetUser: state => {
       state.id = '';
@@ -156,6 +159,7 @@ export const userSlice = createSlice({
       state.votedOptions = [];
       state.registeredEvents = [];
       state.githubUsername = '';
+      state.createdAt = new Date();
     },
     setReduxName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;

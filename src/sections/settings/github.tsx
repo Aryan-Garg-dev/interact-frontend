@@ -7,7 +7,7 @@ import { BACKEND_URL } from '@/config/routes';
 import { useRouter } from 'next/router';
 import GithubRepos from './github_repos';
 
-const UpdateGithub = () => {
+const Github = () => {
   const [clickedOnViewRepositories, setClickedOnViewRepositories] = useState(false);
 
   const dispatch = useDispatch();
@@ -49,9 +49,9 @@ const UpdateGithub = () => {
   }, []);
 
   return (
-    <div className="w-full flex flex-col gap-2 mt-8 pt-4 border-t-[1px] border-black text-primary_black">
+    <div className="w-full flex flex-col gap-2 pt-4 border-t-[1px] border-gray-400 text-primary_black">
       {clickedOnViewRepositories && <GithubRepos setShow={setClickedOnViewRepositories} />}
-      <div className="text-xl font-medium">Connect Interact to your Github!</div>
+      <div className="text-xl font-semibold">Connect Interact to your Github!</div>
       <div className="w-full flex items-center justify-between gap-4">
         {user.githubUsername && (
           <div className="flex flex-col gap-1">
@@ -95,4 +95,4 @@ const UpdateGithub = () => {
   );
 };
 
-export default UpdateGithub;
+export default Github;

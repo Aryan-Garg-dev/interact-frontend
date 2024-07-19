@@ -66,6 +66,7 @@ const SignUpCallback = ({ token }: Props) => {
           user.email = res.data.email;
           user.phoneNo = res.data.phoneNo || '';
           user.resume = res.data.resume || '';
+          user.createdAt = res.data.createdAt || new Date();
           Cookies.set('token', res.data.token, {
             expires: Number(process.env.NEXT_PUBLIC_COOKIE_EXPIRATION_TIME),
           });

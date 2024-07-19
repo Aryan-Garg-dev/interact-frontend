@@ -27,7 +27,7 @@ const Deleted = ({ history }: Props) => {
     case 14: // User closed PR
       return (
         <TaskHistoryWrapper history={history}>
-          <div className="w-fit text-center flex-center gap-1">closed the PR.</div>
+          <div className="w-fit text-center flex-center gap-1">closed the Pull Request.</div>
         </TaskHistoryWrapper>
       );
     default:

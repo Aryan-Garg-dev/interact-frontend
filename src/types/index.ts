@@ -164,6 +164,7 @@ export interface User {
   githubUsername: string;
   isOrganization: boolean;
   organization: Organization | null;
+  createdAt: Date;
 }
 
 export interface OrganizationMembership {
@@ -481,7 +482,7 @@ export interface Task {
   histories: TaskHistory[];
   prID: '';
   prLink: '';
-  prStatus: -1;
+  prStatus: number;
 }
 
 export interface TaskHistory {
