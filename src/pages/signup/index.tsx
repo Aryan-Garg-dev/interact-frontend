@@ -112,6 +112,7 @@ const SignUp = () => {
           user.email = res.data.email;
           user.phoneNo = res.data.phoneNo || '';
           user.resume = res.data.resume || '';
+          user.createdAt = res.data.createdAt || new Date();
           Cookies.set('token', res.data.token, {
             expires: Number(process.env.NEXT_PUBLIC_COOKIE_EXPIRATION_TIME),
           });
@@ -221,7 +222,8 @@ const SignUp = () => {
 
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 font-medium">
-                  Email <div className="text-xs font-normal">(use your college email only)</div>
+                  Email
+                  {/* <div className="text-xs font-normal">(we recommend to use your college email)</div> */}
                 </div>
                 <input
                   name="email"

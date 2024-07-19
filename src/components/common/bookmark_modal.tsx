@@ -48,7 +48,7 @@ const BookmarkModal = ({
             })}
           </div>
         ) : (
-          <>No Event Bookmarks found, Create One Now!</>
+          <>No Bookmarks found, Create One Now!</>
         )}
 
         <form className="w-fit mx-auto" onSubmit={addBookmarkHandler}>

@@ -241,3 +241,4 @@ class SocketService {
 
 const socketService = SocketService.getInstance();
 export default socketService;
+

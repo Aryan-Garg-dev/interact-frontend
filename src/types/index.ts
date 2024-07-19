@@ -161,8 +161,10 @@ export interface User {
   passwordChangedAt: Date;
   lastViewed: Project[];
   isVerified: boolean;
+  githubUsername: string;
   isOrganization: boolean;
   organization: Organization | null;
+  createdAt: string;
   subscription: string;
 }
 
@@ -454,9 +456,11 @@ export interface SubTask {
   users: User[];
   isCompleted: boolean;
   priority: PRIORITY;
+  difficulty: DIFFICULTY;
 }
 
 export type PRIORITY = 'low' | 'medium' | 'high';
+export type DIFFICULTY = 'easy' | 'medium' | 'high';
 
 export interface Task {
   id: string;
@@ -475,7 +479,11 @@ export interface Task {
   subTasks: SubTask[];
   priority: PRIORITY;
   noComments: number;
+  difficulty: DIFFICULTY;
   histories: TaskHistory[];
+  prID: '';
+  prLink: '';
+  prStatus: number;
 }
 
 export interface TaskHistory {

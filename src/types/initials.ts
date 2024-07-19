@@ -94,7 +94,9 @@ export const initialUser: User = {
   lastViewed: [],
   isVerified: false,
   isOrganization: false,
+  githubUsername: '',
   organization: null,
+  createdAt: '',
   subscription: SUBSCRIPTIONS.USER_BASE,
 };
 
@@ -437,8 +439,12 @@ export const initialTask: Task = {
   organization: initialOrganization,
   organizationID: '',
   priority: 'low',
+  difficulty: 'easy',
   noComments: 0,
   histories: [],
+  prID: '',
+  prLink: '',
+  prStatus: -1,
 };
 
 export const initialSubTask: SubTask = {
@@ -451,6 +457,7 @@ export const initialSubTask: SubTask = {
   isCompleted: false,
   taskID: '',
   priority: 'low',
+  difficulty: 'easy',
 };
 
 export const initialEvent: Event = {

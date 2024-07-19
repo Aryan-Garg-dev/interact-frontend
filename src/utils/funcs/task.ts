@@ -36,4 +36,18 @@ export const getTaskStatusColor = (task: Task) =>
 
 export const getSubtaskColor = (subtask: SubTask) => (subtask.isCompleted ? success : danger);
 
+export const getPRStatusColor = (task: Task) => {
+  switch (task.prStatus) {
+    case -1:
+      return '#478eeb86';
+    case 0:
+    case 1:
+      return warn;
+    case 2:
+      return danger;
+    case 3:
+      return success;
+  }
+};
+
 export default getCompletionPercentage;

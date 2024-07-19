@@ -3,8 +3,6 @@ import MainWrapper from '@/wrappers/main';
 import React, { useState } from 'react';
 import OrgSidebar from '@/components/common/org_sidebar';
 import { Phone, Password, SmileyXEyes } from '@phosphor-icons/react';
-import UpdatePassword from '@/sections/settings/update_password';
-import UpdatePhoneNumber from '@/sections/settings/update_phone_number';
 import { useSelector } from 'react-redux';
 import OrgOnlyAndProtect from '@/utils/wrappers/org_only';
 import { userSelector } from '@/slices/userSlice';
@@ -25,7 +23,7 @@ const Settings = () => {
             onClick={() => setClickedOnChangePhoneNo(true)}
             className="w-full h-16 text-xl flex-center gap-4 dark:bg-dark_primary_comp hover:bg-primary_comp active:bg-primary_comp_hover dark:hover:bg-dark_primary_comp dark:active:bg-dark_primary_comp_hover px-6 rounded-md text-center cursor-pointer transition-ease-300"
           >
-            <div>{user.phoneNo ? 'Change Phone Number' : 'Add Phone Number'}</div>
+            <div>{user.phoneNo ? 'Update Phone Number' : 'Add Phone Number'}</div>
             <Phone size={40} weight="duotone" />
           </div>
           <div
@@ -39,8 +37,6 @@ const Settings = () => {
             <div>Delete Organization</div>
             <SmileyXEyes size={40} weight="duotone" />
           </div>
-          {clickedOnChangePhoneNo ? <UpdatePhoneNumber setShow={setClickedOnChangePhoneNo} /> : <></>}
-          {clickedOnChangePassword ? <UpdatePassword setShow={setClickedOnChangePassword} /> : <></>}
         </div>
       </MainWrapper>
     </BaseWrapper>

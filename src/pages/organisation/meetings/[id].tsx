@@ -288,7 +288,7 @@ const Meeting = ({ id }: Props) => {
                       </div>
                       <div className="w-full flex flex-col gap-2">
                         <div className="">{renderContentWithLinks(meeting.description)}</div>
-                        {meeting.tags && <Tags tags={meeting.tags} />}
+                        {meeting.tags && <Tags tags={meeting.tags} displayAll={true} />}
                       </div>
 
                       <div className="w-full flex items-center justify-between">

@@ -42,6 +42,8 @@ export interface UserState {
   organizationMemberships: OrganizationMembership[];
   registeredEvents: string[];
   votedOptions: string[];
+  githubUsername: string;
+  createdAt: string;
   subscription: string;
 }
 
@@ -79,6 +81,8 @@ const initialState: UserState = {
   organizationMemberships: [],
   votedOptions: [],
   registeredEvents: [],
+  githubUsername: '',
+  createdAt: '',
   subscription: SUBSCRIPTIONS.USER_FREE,
 };
 
@@ -120,6 +124,8 @@ export const userSlice = createSlice({
       state.organizationMemberships = [];
       state.votedOptions = [];
       state.registeredEvents = [];
+      state.githubUsername = action.payload.githubUsername;
+      state.createdAt = action.payload.createdAt;
       state.subscription = SUBSCRIPTIONS.USER_FREE;
     },
     resetUser: state => {
@@ -156,7 +162,6 @@ export const userSlice = createSlice({
       state.isPasswordSetupComplete = true;
       state.votedOptions = [];
       state.registeredEvents = [];
-      state.subscription = SUBSCRIPTIONS.USER_FREE;
     },
     setReduxName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
@@ -251,6 +256,9 @@ export const userSlice = createSlice({
     setRegisteredEvents: (state, action: PayloadAction<string[]>) => {
       state.registeredEvents = action.payload;
     },
+    setGithubUsername: (state, action: PayloadAction<string>) => {
+      state.githubUsername = action.payload;
+    },
     setSubscription: (state, action: PayloadAction<string>) => {
       state.subscription = action.payload;
     },
@@ -291,6 +299,7 @@ export const {
   setOrganizationMemberships,
   setVotedOptions,
   setRegisteredEvents,
+  setGithubUsername,
   setSubscription,
 } = userSlice.actions;
 

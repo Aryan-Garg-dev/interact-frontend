@@ -14,6 +14,7 @@ import { navbarOpenSelector } from '@/slices/feedSlice';
 import { SERVER_ERROR } from '@/config/errors';
 import NewButton from '@/components/buttons/new_btn';
 import OrderMenu from '@/components/common/order_menu';
+import { Plus } from '@phosphor-icons/react';
 
 const YourProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);

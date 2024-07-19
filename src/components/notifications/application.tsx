@@ -8,18 +8,37 @@ interface Props {
 }
 
 const Application = ({ notification }: Props) => {
+  const getOrganizationOrProjectTitle = () => {
+    switch (notification.notificationType) {
+      case 20:
+        return notification.opening.organization?.title;
+      default:
+        return notification.project?.title;
+    }
+  };
+
+  const getRedirectURL = () => {
+    switch (notification.notificationType) {
+      case 20:
+        return '/workspace/manage/applications/' + notification.opening.id;
+      default:
+        return '';
+    }
+  };
+    
+
   return (
     <NotificationWrapper notification={notification}>
       <span>
-        <Link className="font-bold z-50" href={`/explore/user/${notification.sender.username}`}>
+        <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
           {notification.sender.name}
         </Link>{' '}
       </span>
-      applied for the opening of {notification.opening.title} at
+      Applied for the opening of {notification.opening.title} at
       <span>
         {' '}
-        <Link className="font-bold" href={`/workspace/manage/applications/${notification.opening.id}`}>
-          {notification.notificationType == 20 ? notification.opening.organization?.title : notification.project?.title}
+        <Link className="font-bold capitalize" href={getRedirectURL()}>
+        {getOrganizationOrProjectTitle()}.
         </Link>
       </span>
     </NotificationWrapper>
@@ -27,3 +46,8 @@ const Application = ({ notification }: Props) => {
 };
 
 export default Application;
+
+
+
+
+
