@@ -38,18 +38,22 @@ const GithubRepos = ({ setShow }: Props) => {
 
   return (
     <ModalWrapper setShow={setShow} top={'1/2'}>
-      {repoLinks.map((repoLink, index) => {
-        const link = 'https://www.github.com/' + repoLink;
-        const repo = repoLink.split('/')[1];
-        return (
-          <div key={index} className="w-full p-2 border-[1px] rounded-lg flex items-center justify-between">
-            <div className="text-sm">{repo}</div>
-            <Link href={link} target="_blank">
-              <ArrowUpRight />
-            </Link>
-          </div>
-        );
-      })}
+      {repoLinks && repoLinks.length > 0 ? (
+        repoLinks.map((repoLink, index) => {
+          const link = 'https://www.github.com/' + repoLink;
+          const repo = repoLink.split('/')[1];
+          return (
+            <div key={index} className="w-full p-2 border-[1px] rounded-lg flex items-center justify-between">
+              <div className="text-sm">{repo}</div>
+              <Link href={link} target="_blank">
+                <ArrowUpRight />
+              </Link>
+            </div>
+          );
+        })
+      ) : (
+        <div>No Repositories selected</div>
+      )}
     </ModalWrapper>
   );
 };
