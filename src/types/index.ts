@@ -164,7 +164,7 @@ export interface User {
   githubUsername: string;
   isOrganization: boolean;
   organization: Organization | null;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface OrganizationMembership {

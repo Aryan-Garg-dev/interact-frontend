@@ -3,8 +3,6 @@ import MainWrapper from '@/wrappers/main';
 import React, { useState } from 'react';
 import OrgSidebar from '@/components/common/org_sidebar';
 import { Phone, Password, SmileyXEyes } from '@phosphor-icons/react';
-import UpdatePassword from '@/sections/settings/update_password';
-import UpdatePhoneNumber from '@/sections/settings/update_phone_number';
 import { useSelector } from 'react-redux';
 import OrgOnlyAndProtect from '@/utils/wrappers/org_only';
 import { userSelector } from '@/slices/userSlice';
@@ -39,8 +37,6 @@ const Settings = () => {
             <div>Delete Organization</div>
             <SmileyXEyes size={40} weight="duotone" />
           </div>
-          {clickedOnChangePhoneNo ? <UpdatePhoneNumber setShow={setClickedOnChangePhoneNo} /> : <></>}
-          {clickedOnChangePassword ? <UpdatePassword setShow={setClickedOnChangePassword} /> : <></>}
         </div>
       </MainWrapper>
     </BaseWrapper>

@@ -110,7 +110,7 @@ const Password = () => {
                 value={password}
                 onChange={el => setPassword(el.target.value)}
                 type={showPassword ? 'text' : 'password'}
-                className="w-full bg-white p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10"
+                className="w-full bg-gray-100 p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10 transition-ease-300"
               />
               {showPassword ? (
                 <Eye
@@ -149,7 +149,7 @@ const Password = () => {
                     value={newPassword}
                     onChange={el => setNewPassword(el.target.value)}
                     type={showNewPassword ? 'text' : 'password'}
-                    className="w-full bg-white p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10"
+                    className="w-full bg-gray-100 p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10 transition-ease-300"
                   />
                   {showNewPassword ? (
                     <Eye
@@ -179,7 +179,7 @@ const Password = () => {
                   value={confirmPassword}
                   onChange={el => setConfirmPassword(el.target.value)}
                   type={showConfirmPassword ? 'text' : 'password'}
-                  className="w-full bg-white p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10"
+                  className="w-full bg-gray-100 p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10 transition-ease-300"
                 />
                 {showConfirmPassword ? (
                   <Eye

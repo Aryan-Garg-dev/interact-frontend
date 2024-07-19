@@ -6,6 +6,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import { BACKEND_URL } from '@/config/routes';
 import { useRouter } from 'next/router';
 import GithubRepos from './github_repos';
+import Cookies from 'js-cookie';
 
 const Github = () => {
   const [clickedOnViewRepositories, setClickedOnViewRepositories] = useState(false);
@@ -13,7 +14,7 @@ const Github = () => {
   const dispatch = useDispatch();
 
   const handleSubmit = async () => {
-    window.location.assign(`${BACKEND_URL}/github?loggedInUserID=${user.id}`);
+    window.location.assign(`${BACKEND_URL}/auth/github?token=${Cookies.get('token')}`);
   };
 
   const user = useSelector(userSelector);
@@ -90,6 +91,31 @@ const Github = () => {
           </svg>
           {user.githubUsername ? 'Update Sync' : ' Connect Interact to Github'}
         </button>
+      </div>
+      <div className="w-full flex flex-col gap-1">
+        <div className="text-lg font-medium">Why Connect Your GitHub Account to Interact?</div>
+        <ul className="list-disc ml-4 flex flex-col gap-4 text-gray-700 mt-2">
+          <li>
+            By connecting Interact with your GitHub account, updates from pull requests (PRs) on your repositories will
+            be automatically linked to the relevant tasks. To link a task to a PR, simply include the Task ID from your
+            task view in the PR title.
+          </li>
+          <li>
+            If you are a collaborator but haven&apos;t connected Interact to your GitHub account, any PR activity you
+            perform won&apos;t be reflected in Interact.
+          </li>
+          <li>
+            If you create a new repository and want it included in your Interact connection, just click on the update
+            sync option.
+          </li>
+          <li>
+            A task can only be associated with one PR. Any additional PRs that include the same Task ID will be ignored.
+          </li>
+          <li>
+            Interact does not read your code or have direct access to your repositories, ensuring that your private code
+            remains secure.
+          </li>
+        </ul>
       </div>
     </div>
   );

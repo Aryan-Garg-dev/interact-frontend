@@ -1,4 +1,3 @@
-import Input from '@/components/form/input';
 import { userSelector } from '@/slices/userSlice';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -21,7 +20,7 @@ const Email = () => {
               value={newEmail}
               onChange={el => setNewEmail(el.target.value)}
               type="email"
-              className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
+              className="w-full bg-white focus:outline-none rounded-lg p-2"
             />
             <div className="w-fit h-fit flex text-sm justify-end gap-2">
               <div
@@ -51,14 +50,14 @@ const Email = () => {
           <div>{user.email}</div>
         )}
       </div>
-      {!clickedOnChange && (
+      {/* {!clickedOnChange && (
         <div
           onClick={() => setClickedOnChange(true)}
           className="bg-white h-fit flex-center text-sm font-medium px-3 py-1 rounded-xl border-[1px] cursor-pointer"
         >
           Update
         </div>
-      )}
+      )} */}
     </div>
   );
 };

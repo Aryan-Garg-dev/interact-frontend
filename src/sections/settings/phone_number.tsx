@@ -64,7 +64,7 @@ const PhoneNumber = () => {
               }}
               maxLength={10}
               type="text"
-              className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
+              className="w-full bg-white focus:outline-none rounded-lg p-2"
             />
             <div className="w-fit h-fit flex text-sm justify-end gap-2">
               <div

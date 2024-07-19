@@ -95,7 +95,7 @@ export const initialUser: User = {
   isOrganization: false,
   githubUsername: '',
   organization: null,
-  createdAt: new Date(),
+  createdAt: '',
 };
 
 export const initialProject: Project = {

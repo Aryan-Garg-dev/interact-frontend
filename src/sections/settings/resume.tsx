@@ -16,7 +16,7 @@ const Resume = () => {
   const user = useSelector(userSelector);
 
   useEffect(() => {
-    const regex = new RegExp(`${user.id}-(.*?)-\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z`);
+    const regex = new RegExp(`${user.id}-(.*?)-\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z-(.*)`);
     const match = regex.exec(user.resume);
 
     setResumeName(match ? match[0] : user.resume);
