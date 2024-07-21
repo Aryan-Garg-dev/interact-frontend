@@ -46,7 +46,7 @@ const OpeningCard = ({
           blurDataURL={opening.organization?.user?.profilePicBlurHash || 'no-hash'}
           className={`${
             short ? 'w-[90px] h-[90px]' : 'w-[110px] h-[110px]'
-          } max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover`}
+          } max-lg:w-[90px] max-lg:h-[90px] rounded-full object-cover`}
         />
       ) : (
         <Image

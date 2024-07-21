@@ -222,7 +222,7 @@ const ProjectView = ({
             blurDataURL={project.blurHash || 'no-hash'}
           />
 
-          <div className="w-[calc(100vw-128px-(100vh-56px))] max-lg:w-full h-full max-lg:h-fit max-lg:min-h-[calc(100vh-65px-384px)] overflow-y-auto border-gray-300 border-t-[1px] border-r-[1px] dark:border-0 p-4 bg-white dark:bg-dark_primary_comp_hover flex flex-col gap-6 z-10">
+          <div className="w-[calc(100vw-128px-(100vh-56px))] lg:h-full lg:overflow-y-auto max-lg:w-full border-gray-300 border-t-[1px] border-r-[1px] dark:border-0 p-4 bg-white dark:bg-dark_primary_comp_hover flex flex-col gap-6 z-10">
             <div className="flex flex-wrap justify-between items-center gap-2">
               <div className="font-bold text-4xl text-gradient">{project.title}</div>
               <div className="lg:hidden w-fit">
@@ -276,7 +276,6 @@ const ProjectView = ({
                 <ArrowUpRight size={18} weight="bold" />
               </Link>
             )}
-
             {
               //TODO Project Owner Details
             }
@@ -318,8 +317,8 @@ const ProjectView = ({
           <div className="w-10 h-10 rounded-full"></div>
         )}
       </div>
-      <div className="lg:hidden fixed bottom-3 w-full flex justify-between px-3">
-        {clickedProjectIndex != 0 && (
+      <div className="lg:hidden fixed bottom-3 w-full flex justify-between px-3 z-20">
+        {clickedProjectIndex != 0 ? (
           <div
             onClick={() => {
               setClickedProjectIndex(prev => prev - 1);
@@ -329,6 +328,8 @@ const ProjectView = ({
           >
             <CaretLeft size={24} weight="bold" />
           </div>
+        ) : (
+          <div></div>
         )}
         {clickedProjectIndex != projectSlugs.length - 1 && (
           <div

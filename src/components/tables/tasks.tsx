@@ -17,12 +17,12 @@ interface Props {
 const TasksTable = ({ tasks, setClickedOnTask, setClickedTaskID }: Props) => {
   return (
     <div className="w-full flex flex-col gap-2">
-      <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold text-primary_black">
+      <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold text-primary_black max-md:text-sm">
         <div className="w-[35%] flex-center">Title</div>
-        <div className="w-[20%] flex-center">Assigned To</div>
-        <div className="w-[15%] flex-center">Priority</div>
-        <div className="w-[15%] flex-center">Deadline</div>
-        <div className="w-[15%] flex-center">Status</div>
+        <div className="w-[20%] max-md:w-[25%] flex-center">Assigned To</div>
+        <div className="w-[15%] max-md:hidden flex-center">Priority</div>
+        <div className="w-[15%] max-md:w-[20%] flex-center">Deadline</div>
+        <div className="w-[15%] max-md:w-[20%] flex-center">Status</div>
       </div>
       {tasks.map((task, index) => (
         <div
@@ -33,11 +33,11 @@ const TasksTable = ({ tasks, setClickedOnTask, setClickedTaskID }: Props) => {
           }}
           className="w-full h-12 bg-white hover:bg-slate-100 rounded-xl border-gray-400 flex text-sm text-primary_black transition-ease-300 cursor-pointer"
         >
-          <div className="w-[35%] flex-center text-gl font-medium">{task.title}</div>
-          <div className="w-[20%] flex-center">
+          <div className="w-[35%] flex-center font-medium max-md:text-sm">{task.title}</div>
+          <div className="w-[20%] max-md:w-[25%] flex-center">
             <PictureList users={task.users} size={6} gap={2} />
           </div>
-          <div className="w-[15%] flex-center">
+          <div className="w-[15%] max-md:hidden flex-center">
             <div
               className="flex-center px-3 py-1 rounded-full text-xs"
               style={{ backgroundColor: getTaskPriorityColor(task) }}
@@ -45,17 +45,17 @@ const TasksTable = ({ tasks, setClickedOnTask, setClickedTaskID }: Props) => {
               {task.priority}
             </div>
           </div>
-          <div className="w-[15%] flex-center">
+          <div className="w-[15%] max-md:w-[20%] flex-center">
             <div
-              className="flex-center px-3 py-1 rounded-full text-xs"
+              className="flex-center px-3 max-md:px-2 py-1 rounded-full text-xs max-md:text-xxs"
               style={{ backgroundColor: getTaskDeadlineColor(task) }}
             >
               {moment(task.deadline).format('DD MMM YY')}
             </div>
           </div>
-          <div className="w-[15%] flex-center">
+          <div className="w-[15%] max-md:w-[20%] flex-center">
             <div
-              className="flex-center px-3 py-1 rounded-full text-xs"
+              className="flex-center px-3 max-md:px-2 py-1 rounded-full text-xs max-md:text-xxs"
               style={{ backgroundColor: getTaskStatusColor(task) }}
             >
               {task.isCompleted

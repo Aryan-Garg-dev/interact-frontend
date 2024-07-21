@@ -124,9 +124,12 @@ const OrgInvitationCard = ({ invitation, setInvitations }: Props) => {
         target="_blank"
         onClick={() => dispatch(setExploreTab(3))}
         href={`/explore/organisation/${invitation.organization.user.username}`}
-        className="w-[calc(100%-80px)] flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between"
+        className="w-[calc(100%-80px)] max-md:w-full flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between"
       >
-        <div style={{ width: invitation.status == 0 ? '100%-50px' : '100%-20px' }} className="flex flex-col gap-1">
+        <div
+          style={{ width: invitation.status == 0 ? '100%-50px' : '100%-20px' }}
+          className="max-md:w-full flex flex-col gap-1"
+        >
           <div className="text-xl font-bold text-gradient line-clamp-1">{invitation.organization.title}</div>
           <div className="font-medium">Role: {invitation.title}</div>
           <div className="text-xs">Invited on {moment(invitation.createdAt).format('DD MMM YYYY')}</div>

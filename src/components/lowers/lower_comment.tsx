@@ -144,7 +144,7 @@ const LowerComment = ({ comment, clickedOnReply, setClickedOnReply }: Props) => 
                   if (user.id == '') setNoUserClick(true);
                   else likeHandler();
                 }}
-                className={`cursor-pointer max-md:w-6 max-md:h-6 ${
+                className={`cursor-pointer max-md:w-4 max-md:h-4 ${
                   liked ? 'text-heart_filled' : 'text-black opacity-60'
                 } transition-ease-300`}
                 size={18}
@@ -153,13 +153,13 @@ const LowerComment = ({ comment, clickedOnReply, setClickedOnReply }: Props) => 
             </div>
             {comment.level != 5 && (
               <div className="flex-center gap-1">
-                {numReplies > 0 && <div className="text-sm opacity-60">{numReplies}</div>}
+                {numReplies > 0 && <div className="text-sm max-md:text-xs opacity-60">{numReplies}</div>}
                 <Repeat
                   onClick={() => {
                     if (user.id == '') setNoUserClick(true);
                     else setClickedOnReply(prev => !prev);
                   }}
-                  className={`cursor-pointer max-md:w-6 max-md:h-6 ${
+                  className={`cursor-pointer max-md:w-4 max-md:h-4 ${
                     clickedOnReply ? 'text-blue-500' : 'text-black opacity-60'
                   } transition-ease-300`}
                   size={18}

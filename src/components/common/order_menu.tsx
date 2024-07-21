@@ -49,7 +49,7 @@ const OrderMenu = ({
       ref={menuRef}
       className={`w-12 h-12 rounded-lg shadow-l border-gray-300 border-[1px] bg-white gap-1 ${
         fixed ? 'fixed top-[90px] right-12' : 'relative'
-      } z-${zIndex}`}
+      } z-${zIndex} max-md:hidden`}
     >
       <div onClick={() => setShowOrders(prev => !prev)} className="flex-center p-3 cursor-pointer">
         <Funnel className="w-full h-full " />

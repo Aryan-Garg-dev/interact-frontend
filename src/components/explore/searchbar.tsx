@@ -49,7 +49,7 @@ const SearchBar = ({ initialValue = '' }: Props) => {
     <>
       {clickedOnFilters ? <Filters setShow={setClickedOnFilters} /> : <></>}
       {showSearchSuggestions ? <SearchSuggestions search={search} setShow={setShowSearchSuggestions} /> : <></>}
-      <div className="relative md:hidden w-taskbar max-md:w-taskbar_md mx-auto">
+      <div className="relative md:hidden w-taskbar max-md:w-[95%] mx-auto">
         <form
           onSubmit={handleSubmit}
           className={`w-full h-taskbar px-4 text-gray-500 ${

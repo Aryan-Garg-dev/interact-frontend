@@ -63,20 +63,20 @@ const InvitationsTable = ({ invitations, project, setProject, org }: Props) => {
         />
       )}
 
-      <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold text-primary_black">
-        <div className="w-[30%] flex-center">Name</div>
-        <div className="w-[15%] flex-center">Title</div>
-        <div className="w-[10%] flex-center">Status</div>
-        <div className="w-[25%] flex-center">Invited By</div>
-        <div className="w-[15%] flex-center">Invited At</div>
-        <div className="w-[5%] flex-center"></div>
+      <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold max-md:text-sm text-primary_black">
+        <div className="w-[30%] max-md:w-[35%] flex-center">Name</div>
+        <div className="w-[15%] max-md:w-[20%] flex-center">Title</div>
+        <div className="w-[10%] max-md:w-[15%] flex-center">Status</div>
+        <div className="w-[25%] max-md:hidden flex-center">Invited By</div>
+        <div className="w-[15%] max-md:w-[20%] flex-center">Invited On</div>
+        <div className="w-[5%] max-md:w-[10%] flex-center"></div>
       </div>
       {invitations.map(invitation => (
         <div
           key={invitation.user.id}
           className="w-full h-12 bg-white rounded-xl border-gray-400 flex text-sm text-primary_black transition-ease-300"
         >
-          <div className="w-[30%] flex-center gap-1 px-4">
+          <div className="w-[30%] max-md:w-[35%] flex-center gap-1 px-4">
             <Image
               crossOrigin="anonymous"
               width={50}
@@ -87,21 +87,23 @@ const InvitationsTable = ({ invitations, project, setProject, org }: Props) => {
               blurDataURL={invitation.user.profilePicBlurHash || 'no-hash'}
               className="w-8 h-8 rounded-full z-[1]"
             />
-            <div className="w-[calc(100%-32px)] flex items-center flex-wrap gap-1">
-              <div className="font-medium text-base">{invitation.user.name}</div>
-              <div className="text-xs">@{invitation.user.username}</div>
+            <div className="w-[calc(100%-32px)] flex max-md:flex-col items-center flex-wrap gap-1 max-md:gap-0">
+              <div className="max-md:w-full font-medium text-base max-md:text-sm line-clamp-1">
+                {invitation.user.name}
+              </div>
+              <div className="max-md:w-full text-xs max-md:text-xxs line-clamp-1">@{invitation.user.username}</div>
             </div>
           </div>
-          <div className="w-[15%] flex-center">{invitation.title}</div>
-          <div className="w-[10%] flex-center">
+          <div className="w-[15%] max-md:w-[20%] flex-center">{invitation.title}</div>
+          <div className="w-[10%] max-md:w-[15%] flex-center">
             <div
-              className="w-fit px-3 py-1 text-xs font-medium rounded-full"
+              className="w-fit px-3 max-md:px-2 py-1 text-xs max-md:text-xxs font-medium rounded-full"
               style={{ backgroundColor: getInvitationStatusColor(invitation.status) }}
             >
               {getInvitationStatus(invitation.status)}
             </div>
           </div>
-          <div className="w-[25%] flex-center gap-1 px-4">
+          <div className="w-[25%] max-md:hidden flex-center gap-1 px-4">
             <Image
               crossOrigin="anonymous"
               width={50}
@@ -117,8 +119,10 @@ const InvitationsTable = ({ invitations, project, setProject, org }: Props) => {
               {/* <div className="text-xxs">@{invitation.sender.username}</div> */}
             </div>
           </div>
-          <div className="w-[15%] flex-center">{moment(invitation.createdAt).format('DD MMMM, YYYY')}</div>
-          <div className="w-[5%] flex-center">
+          <div className="w-[15%] max-md:w-[20%] flex-center max-md:text-xxs">
+            {moment(invitation.createdAt).format('DD MMMM, YYYY')}
+          </div>
+          <div className="w-[5%] max-md:w-[10%] flex-center">
             {invitation.status == 0 && (project.userID == user.id || user.managerProjects.includes(project.id)) && (
               <Trash
                 onClick={() => {

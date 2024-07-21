@@ -99,7 +99,7 @@ const NewOpening = ({ setShow, project, setProject, org = false }: Props) => {
                 placeholder="Opening Title"
                 className="w-full text-4xl max-lg:text-3xl font-bold bg-transparent focus:outline-none"
               />
-              <div className="text-lg font-medium cursor-default">@{project.title}</div>
+              <div className="text-lg font-medium cursor-default max-md:hidden">@{project.title}</div>
               <div className="w-full flex flex-col gap-2">
                 <div className="text-xs ml-1 font-medium uppercase text-gray-500">Tags ({tags.length || 0}/10)</div>
                 <Tags tags={tags} setTags={setTags} maxTags={10} />

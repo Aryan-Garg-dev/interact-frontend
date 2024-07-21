@@ -85,12 +85,29 @@ const Password = () => {
           setShow={setClickedOnStrongPassInfo}
         />
       )}
-      <div className="flex flex-col gap-4">
-        <div className="w-fit flex-center gap-2 text-lg font-semibold">
-          {!user.isPasswordSetupComplete ? 'Setup Password' : 'Update Password'}
-          <PasswordIcon size={24} weight="duotone" />
+      <div className="w-full flex flex-col gap-4">
+        <div className="w-full flex items-center justify-between">
+          <div className="w-fit flex-center gap-2 text-lg font-semibold">
+            {!user.isPasswordSetupComplete ? 'Setup Password' : 'Update Password'}
+            <PasswordIcon size={24} weight="duotone" />
+          </div>
+          <div
+            onClick={() => {
+              if (password != newPassword && newPassword == confirmPassword) handleSubmit();
+            }}
+            className={`h-fit flex-center text-sm font-medium px-3 py-1 rounded-xl border-[1px]
+        ${
+          password != newPassword && newPassword == confirmPassword
+            ? 'cursor-pointer bg-white'
+            : 'cursor-default bg-gray-100 opacity-60'
+        }
+        `}
+          >
+            Update
+          </div>
         </div>
-        <div className="flex flex-col gap-4">
+
+        <div className="w-1/2 max-md:w-full flex flex-col gap-4">
           <div className="flex flex-col gap-1 ">
             <div className="flex items-center gap-2 font-medium">
               <div>{user.isPasswordSetupComplete && 'Current '}Password</div>
@@ -200,21 +217,6 @@ const Password = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div
-        onClick={() => {
-          if (password != newPassword && newPassword == confirmPassword) handleSubmit();
-        }}
-        className={`h-fit flex-center text-sm font-medium px-3 py-1 rounded-xl border-[1px]
-        ${
-          password != newPassword && newPassword == confirmPassword
-            ? 'cursor-pointer bg-white'
-            : 'cursor-default bg-gray-100 opacity-60'
-        }
-        
-        `}
-      >
-        Update
       </div>
     </div>
   );
