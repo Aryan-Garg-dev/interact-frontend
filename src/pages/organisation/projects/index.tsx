@@ -91,7 +91,7 @@ const Projects = () => {
       <MainWrapper>
         <div className="w-full max-md:w-full mx-auto flex flex-col items-center relative gap-6 max-md:px-2 p-base_padding">
           <div className="w-full flex justify-between items-center">
-            <div className="w-fit text-6xl font-semibold dark:text-white font-primary">Projects</div>
+            <div className="w-fit text-6xl max-md:text-4xl font-semibold dark:text-white font-primary">Projects</div>
 
             <div className="flex items-center gap-2">
               {checkOrgAccess(ORG_MANAGER) && (
@@ -156,4 +156,4 @@ const Projects = () => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Projects));
+export default OrgMembersOnlyAndProtect(Projects);

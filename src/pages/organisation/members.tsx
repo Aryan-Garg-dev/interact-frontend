@@ -62,7 +62,7 @@ const Members = () => {
           )}
           {clickedOnInfo && <AccessTree type="membership" setShow={setClickedOnInfo} />}
           <div className="w-full flex justify-between items-center p-base_padding">
-            <div className="text-6xl font-semibold dark:text-white font-primary">
+            <div className="text-6xl max-md:text-4xl font-semibold dark:text-white font-primary">
               {!clickedOnInvitations ? 'Members' : 'Invitations'}
             </div>
             <div className="w-fit flex items-center gap-2">

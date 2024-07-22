@@ -119,7 +119,7 @@ const Events = () => {
       <MainWrapper>
         <div className="w-full flex flex-col items-center gap-4 max-md:px-2 p-base_padding pl-0 pb-0">
           <div className="w-full flex justify-between items-center">
-            <div className="w-fit text-6xl font-semibold dark:text-white font-primary pl-6">Events</div>
+            <div className="w-fit text-6xl max-md:text-4xl font-semibold dark:text-white font-primary pl-6">Events</div>
             <div className="flex items-center gap-2">
               {checkOrgAccess(ORG_SENIOR) && (
                 <>
@@ -189,7 +189,7 @@ const Events = () => {
                     next={getEvents}
                     hasMore={hasMore}
                     loader={<Loader />}
-                    className="w-full pl-6 pb-12 mx-auto flex flex-wrap gap-8 justify-center"
+                    className="w-full pl-6 max-md:pl-0 pb-12 mx-auto flex flex-wrap gap-8 justify-center"
                   >
                     {events.map(event => (
                       <EventCard
@@ -217,4 +217,4 @@ const Events = () => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Events));
+export default OrgMembersOnlyAndProtect(Events);

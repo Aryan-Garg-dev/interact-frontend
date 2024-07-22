@@ -209,7 +209,7 @@ const NewProject = ({ setShow, setProjects }: Props) => {
 
   return (
     <>
-      <div className="fixed top-1/2 -translate-y-1/2 max-lg:top-0 w-5/6 max-lg:w-screen h-5/3 max-h-[90%] max-lg:h-screen backdrop-blur-2xl bg-white rounded-lg p-8 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 shadow-2xl animate-fade_third z-50">
+      <div className="fixed top-1/2 max-md:top-[8%] md:-translate-y-1/2 max-lg:top-0 w-5/6 max-lg:w-5/6 md:max-h-[90%] max-md:h-5/6 bg-white rounded-lg p-8 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 shadow-2xl animate-fade_third z-50">
         <X
           onClick={() => setShow(false)}
           className="lg:hidden absolute top-2 right-2 cursor-pointer"

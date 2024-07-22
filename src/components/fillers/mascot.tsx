@@ -46,7 +46,9 @@ export default function Mascot({ message }: Props) {
           <div className="shadow bg-[#CCCCCC] w-[9rem] h-[1rem] rounded-[100%] relative top-12 "></div>
         </div>
       </div>
-      <div className="w-fit text-xl font-medium mx-auto mt-56">{message ?? 'Nothing found here!'}</div>
+      <div className="w-fit text-xl max-md:text-sm max-md:text-center font-medium mx-auto mt-56">
+        {message ?? 'Nothing found here!'}
+      </div>
     </div>
   );
 }

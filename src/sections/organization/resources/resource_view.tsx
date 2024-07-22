@@ -138,7 +138,7 @@ const ResourceView = ({
   useEffect(() => getResourceBucketFiles(), [resourceBucket]);
   return (
     <>
-      <div className="w-[70%] aspect-[5/3] font-primary bg-white rounded-xl fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[100] shadow-lg p-4 animate-fade_third">
+      <div className="w-[70%] max-md:w-5/6 max-md:h-4/5 overflow-y-auto md:aspect-[5/3] font-primary bg-white rounded-xl fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[100] shadow-lg p-4 animate-fade_third">
         {clickedOnUploadFile && (
           <NewResourceFile
             setShow={setClickedOnUploadFile}
@@ -167,8 +167,8 @@ const ResourceView = ({
         {loading ? (
           <Loader />
         ) : (
-          <div className="w-full h-full flex gap-4">
-            <div className="w-1/3 h-full flex flex-col items-center gap-4 border-r-[1px] border-dashed p-2 ">
+          <div className="w-full h-full flex max-md:flex-col gap-4">
+            <div className="w-1/3 max-md:w-full h-full flex flex-col items-center gap-4 border-r-[1px] border-dashed p-2 ">
               {clickedOnEdit ? (
                 <div className="w-full flex justify-end items-center gap-1">
                   <X
@@ -342,11 +342,11 @@ const ResourceView = ({
                 </>
               )}
 
-              <div className="text-xs font-medium text-gray-400 mt-48">
+              <div className="text-xs font-medium text-gray-400 mt-48 max-md:mt-4">
                 Created {moment(resourceBucket.createdAt).fromNow()}
               </div>
             </div>
-            <div className="file-content w-2/3 h-full">
+            <div className="file-content w-2/3 max-md:w-full h-full max-md:text-sm">
               {resourceFiles && resourceFiles.length > 0 ? (
                 <table className="file-table w-full mt-4 rounded-xl overflow-hidden">
                   <thead className="bg-primary_text text-white h-10">

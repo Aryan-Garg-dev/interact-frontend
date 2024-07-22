@@ -2,7 +2,7 @@ import OrgSidebar from '@/components/common/org_sidebar';
 import TabMenu from '@/components/common/tab_menu';
 import SearchBar from '@/components/explore/searchbar';
 import Events from '@/screens/explore/events';
-import Organisations from '@/screens/explore/oraganisations';
+import Organisations from '@/screens/explore/organisations';
 import Projects from '@/screens/explore/projects';
 import Users from '@/screens/explore/users';
 import ProfileCompletion from '@/sections/home/profile_completion';

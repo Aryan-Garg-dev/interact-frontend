@@ -62,7 +62,7 @@ const Chats = () => {
           {clickedOnInfo && <AccessTree type="chat" setShow={setClickedOnInfo} />}
 
           <div className="w-full flex justify-between items-center p-base_padding">
-            <div className="text-6xl font-semibold dark:text-white font-primary">Chats</div>
+            <div className="text-6xl max-md:text-4xl font-semibold dark:text-white font-primary">Chats</div>
             <div className="flex items-center gap-2">
               {checkOrgAccess(ORG_MANAGER) && (
                 <Plus

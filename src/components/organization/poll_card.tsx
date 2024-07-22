@@ -13,6 +13,7 @@ import { ORG_SENIOR } from '@/config/constants';
 import { ListChecks, Lock, LockOpen, RadioButton } from '@phosphor-icons/react';
 import OptionComponent from './poll_option';
 import Link from 'next/link';
+import checkOrgAccess from '@/utils/funcs/access';
 
 interface Props {
   poll: Poll;
@@ -76,10 +77,12 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
                   : `/explore/organisation/${organisation.user.username}`
               }
               target="_blank"
-              className="flex items-center gap-2 font-medium"
+              className="flex max-md:flex-col md:items-center gap-2 max-md:gap-0 font-medium"
             >
               {organisation.user.name}
-              <div className="text-xs font-normal text-gray-500">@{organisation.user.username}</div>
+              <div className="text-xs max-md:text-xxs font-normal text-gray-500">
+                @{organisation.user.username}
+              </div>{' '}
             </Link>
             <div className="text-gray-400 text-xs">{moment(poll.createdAt).fromNow()}</div>
           </div>
@@ -100,23 +103,19 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
             ))}
           </div>
 
-          <div className="w-full flex justify-between items-center">
+          <div className="w-full flex max-md:flex-col justify-between md:items-center">
             <div className="flex justify-between gap-4">
               <div className="text-sm text-gray-400 font-medium">
                 {poll.totalVotes} Vote{poll.totalVotes != 1 ? 's' : ''}
               </div>
 
-              {((user.isOrganization && user.id == organisation.userID) ||
-                user.organizationMemberships
-                  .filter(m => m.role == ORG_SENIOR)
-                  .map(m => m.organizationID)
-                  .includes(organisation.id)) && (
+              {checkOrgAccess(ORG_SENIOR) && (
                 <div onClick={() => setClickedOnDelete(true)} className="text-sm text-primary_danger cursor-pointer">
                   Delete
                 </div>
               )}
             </div>
-            <div className="flex justify-end items-center gap-4 text-sm text-gray-400 font-medium">
+            <div className="flex justify-end max-md:justify-between items-center gap-4 text-sm text-gray-400 font-medium">
               <div className="flex-center gap-1">
                 {poll.isOpen ? (
                   <>

@@ -107,8 +107,8 @@ const Tasks = () => {
         <div className="w-full flex flex-col">
           <div className="w-full flex justify-between items-center p-base_padding">
             <div className="flex-center gap-4">
-              <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Tasks</div>
-              <div className="flex-center gap-2">
+              <div className="w-fit text-6xl max-md:text-4xl font-semibold dark:text-white font-primary ">Tasks</div>
+              <div className="flex-center gap-2 max-md:hidden">
                 <Select
                   fieldName="Status"
                   options={['not_completed', 'completed']}
@@ -184,4 +184,4 @@ const Tasks = () => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Tasks));
+export default OrgMembersOnlyAndProtect(Tasks);

@@ -192,10 +192,12 @@ const AnnouncementCard = ({ announcement, setAnnouncements }: Props) => {
                 : `/explore/organisation/${announcement.organization?.user.username}`
             }
             target="_blank"
-            className="flex items-center gap-2 font-medium"
+            className="flex max-md:flex-col md:items-center gap-2 max-md:gap-0 font-medium"
           >
             {announcement.organization?.user.name}
-            <div className="text-xs font-normal text-gray-500">@{announcement.organization?.user.username}</div>{' '}
+            <div className="text-xs max-md:text-xxs font-normal text-gray-500">
+              @{announcement.organization?.user.username}
+            </div>{' '}
           </Link>
           <div className="flex-center gap-2 text-xs text-gray-400">
             {announcement.isEdited ? <div>(edited)</div> : <></>}

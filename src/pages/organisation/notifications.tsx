@@ -65,7 +65,9 @@ const Notifications = () => {
       <OrgSidebar index={10} />
       <MainWrapper>
         <div className="w-full flex flex-col items-center gap-6 max-md:px-2 p-base_padding">
-          <div className="w-full text-6xl font-semibold dark:text-white font-primary">Notifications</div>
+          <div className="w-full text-6xl max-md:text-4xl font-semibold dark:text-white font-primary">
+            Notifications
+          </div>
           {loading ? (
             <Loader />
           ) : (
