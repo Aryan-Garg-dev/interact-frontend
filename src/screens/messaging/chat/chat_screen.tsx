@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/components/common/loader';
 import { groupBy } from 'lodash';
 import ChatHeader from '@/sections/messaging/chats/personal_header';
+import GroupChatHeader from '@/sections/messaging/chats/group_header';
 import ScrollableFeed from 'react-scrollable-feed';
 import MessageGroup from '@/sections/messaging/chats/message_group';
 import ChatTextarea from '@/components/messaging/chat_textarea';
@@ -20,7 +21,7 @@ import ChatInfo from '@/sections/messaging/chat_info';
 import patchHandler from '@/handlers/patch_handler';
 import { setUnreadChats, unreadChatsSelector } from '@/slices/feedSlice';
 
-const PersonalChat = () => {
+const ChatScreen = () => {
   const [chat, setChat] = useState<Chat>(initialChat);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,7 +30,7 @@ const PersonalChat = () => {
 
   const chatID = useSelector(currentChatIDSelector);
   const unreadChatIDs = useSelector(unreadChatsSelector) || [];
-  const userID = Cookies.get('id');
+  const userID = Cookies.get('id') || '';
 
   const dispatch = useDispatch();
 
@@ -52,15 +53,8 @@ const PersonalChat = () => {
     if (res.statusCode == 200) {
       const messageData: Message[] = res.data.messages || [];
       for (const message of messageData) {
-        if (userID == chat.acceptedByID && message.userID == chat.createdByID) {
-          socketService.sendReadMessage(userID, message.id, chat.id);
-          break;
-        } else if (userID == chat.createdByID && message.userID == chat.acceptedByID) {
-          socketService.sendReadMessage(userID, message.id, chat.id);
-          break;
-        }
+        socketService.sendReadMessage(userID, message.id, chat.id);
       }
-
       setMessages(messageData);
       setLoading(false);
     } else {
@@ -73,7 +67,7 @@ const PersonalChat = () => {
     const URL = `${MESSAGING_URL}/accept/${chatID}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      setChat({ ...chat, accepted: true });
+      setChat({ ...chat, isAccepted: true });
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
       else Toaster.error(SERVER_ERROR, 'error_toaster');
@@ -136,7 +130,11 @@ const PersonalChat = () => {
         <ChatInfo chat={chat} setShow={setClickedOnInfo} setChat={setChat} />
       ) : (
         <>
-          <ChatHeader chat={chat} setClickedOnInfo={setClickedOnInfo} />
+          {chat.isGroup ? (
+            <GroupChatHeader chat={chat} setClickedOnInfo={setClickedOnInfo} />
+          ) : (
+            <ChatHeader chat={chat} setClickedOnInfo={setClickedOnInfo} />
+          )}
           <div className="w-full h-[calc(100%-72px)] max-h-full flex flex-col gap-6 overflow-hidden">
             <ScrollableFeed>
               {Object.keys(messagesByDate)
@@ -152,15 +150,17 @@ const PersonalChat = () => {
             </ScrollableFeed>
           </div>
           <div className="flex w-[calc(100%-16px)] max-lg:w-[99%] items-end gap-2 absolute max-lg:sticky bottom-2 right-1/2 translate-x-1/2 max-lg:translate-x-0">
-            {chat.accepted || chat.createdByID == userID ? (
+            {chat.isAccepted ? (
               <ChatTextarea chat={chat} />
             ) : (
-              <div
-                onClick={handleAccept}
-                className="w-full h-12 rounded-md dark:text-white font-primary flex-center text-xl font-medium bg-primary_comp dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active cursor-pointer transition-ease-300"
-              >
-                Accept Chat
-              </div>
+              userID != chat.userID && (
+                <div
+                  onClick={handleAccept}
+                  className="w-full h-12 rounded-md dark:text-white font-primary flex-center text-xl font-medium bg-primary_comp dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active cursor-pointer transition-ease-300"
+                >
+                  Accept Chat
+                </div>
+              )
             )}
           </div>
         </>
@@ -169,4 +169,4 @@ const PersonalChat = () => {
   );
 };
 
-export default PersonalChat;
+export default ChatScreen;

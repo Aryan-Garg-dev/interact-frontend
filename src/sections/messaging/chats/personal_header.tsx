@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import { Chat } from '@/types';
-import getMessagingUser from '@/utils/funcs/get_messaging_user';
+import { getMessagingUser } from '@/utils/funcs/messaging';
 import { ArrowArcLeft } from '@phosphor-icons/react';
 import { useDispatch } from 'react-redux';
 import { setCurrentChatID } from '@/slices/messagingSlice';

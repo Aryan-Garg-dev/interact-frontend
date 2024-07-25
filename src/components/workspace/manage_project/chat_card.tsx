@@ -1,13 +1,13 @@
-import { GroupChat, Project } from '@/types';
+import { Chat } from '@/types';
 import React from 'react';
 import Image from 'next/image';
 import { GROUP_CHAT_PIC_URL } from '@/config/routes';
 
 interface Props {
-  chat: GroupChat;
+  chat: Chat;
   setClickedOnEditChat: React.Dispatch<React.SetStateAction<boolean>>;
-  clickedEditChat: GroupChat;
-  setClickedEditChat: React.Dispatch<React.SetStateAction<GroupChat>>;
+  clickedEditChat: Chat;
+  setClickedEditChat: React.Dispatch<React.SetStateAction<Chat>>;
 }
 
 const ChatCard = ({ chat, setClickedOnEditChat, clickedEditChat, setClickedEditChat }: Props) => {

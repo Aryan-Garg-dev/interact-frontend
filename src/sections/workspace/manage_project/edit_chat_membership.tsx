@@ -1,6 +1,6 @@
 import { MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
-import { GroupChat, GroupChatMembership } from '@/types';
+import { Chat, ChatMembership } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useState } from 'react';
 import Image from 'next/image';
@@ -13,9 +13,9 @@ import Link from 'next/link';
 import ConfirmDelete from '@/components/common/confirm_delete';
 
 interface Props {
-  membership: GroupChatMembership;
+  membership: ChatMembership;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  setChats: React.Dispatch<React.SetStateAction<GroupChat[]>>;
+  setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
 }
 
 const EditMembership = ({ setShow, membership, setChats }: Props) => {
@@ -32,7 +32,7 @@ const EditMembership = ({ setShow, membership, setChats }: Props) => {
 
     const formData = {
       userID: membership.userID,
-      role: membership.role == GROUP_ADMIN ? GROUP_MEMBER : GROUP_ADMIN,
+      isAdmin: !membership.isAdmin,
     };
 
     const res = await patchHandler(URL, formData);
@@ -43,7 +43,7 @@ const EditMembership = ({ setShow, membership, setChats }: Props) => {
             return {
               ...chat,
               memberships: chat.memberships.map(m => {
-                if (m.id == membership.id) return { ...m, role: m.role == GROUP_ADMIN ? GROUP_MEMBER : GROUP_ADMIN };
+                if (m.id == membership.id) return { ...m, role: (m.isAdmin = !m.isAdmin) };
                 else return m;
               }),
             };
@@ -136,7 +136,7 @@ const EditMembership = ({ setShow, membership, setChats }: Props) => {
               onClick={handleChangeRole}
               className="w-full py-4 text-center dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active rounded-lg cursor-pointer transition-ease-300"
             >
-              {membership.role == GROUP_MEMBER ? 'Make Group Admin' : 'Make Group Member'}
+              {!membership.isAdmin ? 'Make Group Admin' : 'Make Group Member'}
             </div>
           </div>
           <div

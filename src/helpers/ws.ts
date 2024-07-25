@@ -1,8 +1,8 @@
 import socketService from '@/config/ws';
 import { store } from '@/store';
-import { Chat, GroupChat, GroupChatMessage, Message, TypingStatus, User } from '@/types';
+import { Chat, Message, TypingStatus, User } from '@/types';
 import { initialUser } from '@/types/initials';
-import sortChats, { sortGroupChats } from '@/utils/funcs/sort_chats';
+import sortChats from '@/utils/funcs/sort_chats';
 import { toast } from 'react-toastify';
 import { messageToastSettings } from '../utils/toaster';
 
@@ -159,54 +159,6 @@ export function routeMessagingWindowEvents(
   }
 }
 
-export function routeGroupMessagingWindowEvents(
-  event: WSEvent,
-  setMessages: React.Dispatch<React.SetStateAction<GroupChatMessage[]>>,
-  typingStatus: TypingStatus,
-  setTypingStatus: React.Dispatch<React.SetStateAction<TypingStatus>>
-) {
-  if (event.type === undefined) {
-    alert('No Type in the Event');
-  }
-  const currentGroupChatID = store.getState().messaging.currentGroupChatID;
-  switch (event.type) {
-    case 'new_message':
-      const messageEventPayload = event.payload as GroupChatMessage;
-      if (messageEventPayload.chatID == currentGroupChatID) setMessages(prev => [messageEventPayload, ...prev]);
-      else if (currentGroupChatID != '') {
-        toast.info(messageEventPayload.user.name + ': ' + messageEventPayload.content, {
-          ...messageToastSettings,
-          icon: '🐵',
-          // icon: () => (
-          //   <Image
-          //     width={100}
-          //     height={100}
-          //     src={`${USER_PROFILE_PIC_URL}/${messageEventPayload.user.profilePic}`}
-          //     alt="User"
-          //   />
-          // ),
-        });
-      }
-      break;
-    case 'user_typing':
-      const userTypingEventPayload = event.payload as TypingStatus;
-      setTypingStatus(userTypingEventPayload);
-      break;
-    case 'user_stop_typing':
-      const userStopTypingEventPayload = event.payload as TypingStatus;
-      if (userStopTypingEventPayload.user.id !== typingStatus.user.id) {
-        const initialTypingStatus: TypingStatus = {
-          user: initialUser,
-          chatID: typingStatus.chatID,
-        };
-        setTypingStatus(initialTypingStatus);
-      }
-      break;
-    default:
-      break;
-  }
-}
-
 export function routeChatListEvents(
   event: WSEvent,
   setChats: React.Dispatch<React.SetStateAction<Chat[]>>
@@ -236,35 +188,6 @@ export function routeChatListEvents(
   }
 }
 
-export function routeGroupChatListEvents(
-  event: WSEvent,
-  setChats: React.Dispatch<React.SetStateAction<GroupChat[]>>
-  // typingStatus: TypingStatus,
-  // setTypingStatus: React.Dispatch<React.SetStateAction<TypingStatus>>
-) {
-  if (event.type === undefined) {
-    alert('No Type in the Event');
-  }
-
-  switch (event.type) {
-    case 'new_message':
-      const messageEventPayload = event.payload as GroupChatMessage;
-      setChats(prev =>
-        sortGroupChats(
-          prev.map(chat => {
-            if (chat.id == messageEventPayload.chatID) {
-              chat.latestMessage = messageEventPayload;
-            }
-            return chat;
-          })
-        )
-      );
-      break;
-    default:
-      break;
-  }
-}
-
 export function routeChatReadEvents(event: WSEvent, setChat: React.Dispatch<React.SetStateAction<Chat>>) {
   if (event.type === undefined) {
     alert('No Type in the Event');
@@ -278,13 +201,13 @@ export function routeChatReadEvents(event: WSEvent, setChat: React.Dispatch<Reac
       //TODO handle a case where user 1 has sent message and his screen has socket ids and other user opens then chat and send read message socket request of backend id
       const payload = event.payload as Message;
       if (payload.userID != userID && currentChatID == payload.chatID)
-        setChat(prev => {
-          if (prev.acceptedByID == userID) return { ...prev, lastReadMessageByCreatingUserID: payload.id };
-          else if (prev.createdByID == userID) return { ...prev, lastReadMessageByAcceptingUserID: payload.id };
+        // setChat(prev => {
+        //   if (prev.acceptedByID == userID) return { ...prev, lastReadMessageByCreatingUserID: payload.id };
+        //   else if (prev.createdByID == userID) return { ...prev, lastReadMessageByAcceptingUserID: payload.id };
 
-          return prev;
-        });
-      break;
+        //   return prev;
+        // });
+        break;
     default:
       break;
   }

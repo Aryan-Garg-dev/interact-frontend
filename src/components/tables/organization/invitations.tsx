@@ -60,11 +60,11 @@ const OrgInvitationsTable = ({ invitations, setOrganization }: Props) => {
       )}
 
       <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold text-primary_black">
-        <div className="w-[25%] flex-center">Name</div>
-        <div className="w-[15%] flex-center">Title</div>
-        <div className="w-[10%] flex-center">Status</div>
-        <div className="w-[20%] flex-center">Invited By</div>
-        <div className="w-[20%] flex-center">Invited At</div>
+        <div className="w-[25%] max-md:w-[40%] flex-center">Name</div>
+        <div className="w-[15%] max-md:w-[30%] flex-center">Title</div>
+        <div className="w-[10%] max-md:w-[20%] flex-center">Status</div>
+        <div className="w-[20%] max-md:hidden flex-center">Invited By</div>
+        <div className="w-[20%] max-md:hidden flex-center">Invited At</div>
         <div className="w-[10%] flex-center"></div>
       </div>
       {invitations.map(invitation => (
@@ -72,7 +72,7 @@ const OrgInvitationsTable = ({ invitations, setOrganization }: Props) => {
           key={invitation.user.id}
           className="w-full h-12 bg-white rounded-xl border-gray-400 flex text-sm text-primary_black transition-ease-300"
         >
-          <div className="w-[25%] flex-center gap-1 px-4">
+          <div className="w-[25%] max-md:w-[40%] flex-center gap-1 px-4">
             <Image
               crossOrigin="anonymous"
               width={50}
@@ -83,21 +83,21 @@ const OrgInvitationsTable = ({ invitations, setOrganization }: Props) => {
               blurDataURL={invitation.user.profilePicBlurHash || 'no-hash'}
               className="w-8 h-8 rounded-full z-[1]"
             />
-            <div className="w-[calc(100%-32px)] flex items-center flex-wrap gap-1">
-              <div className="font-medium text-base line-clamp-1">{invitation.user.name}</div>
-              <div className="text-xs">@{invitation.user.username}</div>
+            <div className="w-[calc(100%-32px)] flex max-md:flex-col md:items-center flex-wrap gap-1 max-md:gap-0">
+              <div className="font-medium text-lg max-md:text-sm line-clamp-1">{invitation.user.name}</div>
+              <div className="text-xs max-md:text-xxs">@{invitation.user.username}</div>
             </div>
           </div>
-          <div className="w-[15%] flex-center">{invitation.title}</div>
-          <div className="w-[10%] flex-center">
+          <div className="w-[15%] max-md:w-[30%] flex-center max-md:text-xxs">{invitation.title}</div>
+          <div className="w-[10%] max-md:w-[20%] flex-center">
             <div
-              className="w-fit px-3 py-1 text-xs font-medium rounded-full"
+              className="w-fit px-3 max-md:px-2 py-1 text-xs max-md:text-xxs font-medium rounded-full"
               style={{ backgroundColor: getInvitationStatusColor(invitation.status) }}
             >
               {getInvitationStatus(invitation.status)}
             </div>
           </div>
-          <div className="w-[20%] flex-center gap-1 px-4">
+          <div className="w-[20%] max-md:hidden flex-center gap-1 px-4">
             <Image
               crossOrigin="anonymous"
               width={50}
@@ -113,7 +113,9 @@ const OrgInvitationsTable = ({ invitations, setOrganization }: Props) => {
               <div className="text-xxs">@{invitation.sender.username}</div>
             </div>
           </div>
-          <div className="w-[20%] flex-center">{moment(invitation.createdAt).format('DD MMMM, YYYY')}</div>
+          <div className="w-[20%] max-md:hidden flex-center">
+            {moment(invitation.createdAt).format('DD MMMM, YYYY')}
+          </div>
           <div className="w-[10%] flex-center">
             {checkOrgAccess(ORG_MANAGER) && invitation.status == 0 && (
               <Trash
@@ -121,7 +123,7 @@ const OrgInvitationsTable = ({ invitations, setOrganization }: Props) => {
                   setClickedInvitation(invitation);
                   setClickedOnWithdraw(true);
                 }}
-                className="cursor-pointer"
+                className="max-md:w-4 max-md:h-4 cursor-pointer"
                 size={20}
               />
             )}

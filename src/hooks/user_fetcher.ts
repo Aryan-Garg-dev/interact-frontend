@@ -55,7 +55,6 @@ import {
   Application,
   Chat,
   EventBookmark,
-  GroupChat,
   Membership,
   OpeningBookmark,
   OrganizationMembership,
@@ -63,6 +62,7 @@ import {
   Project,
   ProjectBookmark,
 } from '@/types';
+import { getMessagingUser } from '@/utils/funcs/messaging';
 import Toaster from '@/utils/toaster';
 import Cookies from 'js-cookie';
 import moment from 'moment';
@@ -164,10 +164,10 @@ const useUserStateFetcher = () => {
             chats.push(chat.id);
             personalChatSlices.push({
               chatID: chat.id,
-              userID: chat.acceptedByID == userID ? chat.createdByID : chat.acceptedByID,
+              userID: getMessagingUser(chat).id,
             });
           });
-          res.data.groupChats?.forEach((chat: GroupChat) => {
+          res.data.groupChats?.forEach((chat: Chat) => {
             chats.push(chat.id);
           });
           dispatch(setPersonalChatSlices(personalChatSlices));

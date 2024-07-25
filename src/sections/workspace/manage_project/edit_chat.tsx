@@ -5,8 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import moment from 'moment';
 import { GROUP_CHAT_PIC_URL, MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
-import { GroupChat, GroupChatMembership, Project } from '@/types';
-import { initialGroupChatMembership } from '@/types/initials';
+import { Chat, Project } from '@/types';
 import EditMembership from './edit_chat_membership';
 import AddChatMembers from './add_chat_members';
 import { SERVER_ERROR } from '@/config/errors';
@@ -17,17 +16,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setChats, userSelector } from '@/slices/userSlice';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import { resizeImage } from '@/utils/resize_image';
+import { initialChatMembership } from '@/types/initials';
 
 interface Props {
-  chat: GroupChat;
+  chat: Chat;
   project: Project;
-  setStateChats: React.Dispatch<React.SetStateAction<GroupChat[]>>;
+  setStateChats: React.Dispatch<React.SetStateAction<Chat[]>>;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const EditChat = ({ chat, project, setStateChats, setShow }: Props) => {
   const [clickedOnEditMembership, setClickedOnEditMembership] = useState(false);
-  const [clickedEditUserMembership, setClickedEditUserMembership] = useState(initialGroupChatMembership);
+  const [clickedEditUserMembership, setClickedEditUserMembership] = useState(initialChatMembership);
   const [clickedOnAddMembers, setClickedOnAddMembers] = useState(false);
 
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
@@ -37,7 +37,7 @@ const EditChat = ({ chat, project, setStateChats, setShow }: Props) => {
 
   const [title, setTitle] = useState(chat.title);
   const [description, setDescription] = useState(chat.description);
-  const [isAdminOnly, setIsAdminOnly] = useState(chat.adminOnly);
+  const [isAdminOnly, setIsAdminOnly] = useState(chat.isAdminOnly);
   const [groupPic, setGroupPic] = useState<File>();
   const [groupPicView, setGroupPicView] = useState<string>(`${GROUP_CHAT_PIC_URL}/${chat.coverPic}`);
 
@@ -294,7 +294,7 @@ const EditChat = ({ chat, project, setStateChats, setShow }: Props) => {
                     <Link href={`/explore/user/${m.user.username}`} className="text-lg font-medium">
                       {m.user.name}
                     </Link>
-                    <div className="text-sm">{m.role}</div>
+                    <div className="text-sm">{m.isAdmin ? 'Admin' : 'Member'}</div>
                   </div>
                 </div>
                 {project.userID == user.id || user.managerProjects.includes(project.id) ? (
@@ -315,12 +315,10 @@ const EditChat = ({ chat, project, setStateChats, setShow }: Props) => {
         </div>
       </div>
 
-      {chat.adminOnly ? (
+      {isAdminOnly && (
         <div className="text-center opacity-75 text-xs">
           This is an <span className="font-semibold">Admin Only</span> chat.
         </div>
-      ) : (
-        <></>
       )}
 
       <div className="text-center opacity-75 text-sm">

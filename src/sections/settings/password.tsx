@@ -11,8 +11,6 @@ import { useSelector } from 'react-redux';
 import isStrongPassword from 'validator/lib/isStrongPassword';
 
 const Password = () => {
-  const [clickedOnChange, setClickedOnChange] = useState(false);
-
   const [mutex, setMutex] = useState(false);
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -65,7 +63,6 @@ const Password = () => {
       if (!user.isPasswordSetupComplete) dispatch(setPasswordSetupStatus(true));
       setMutex(false);
       Toaster.stopLoad(toaster, !user.isPasswordSetupComplete ? 'Password Added!' : 'Password Updated!', 1);
-      setClickedOnChange(false);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
       else {
@@ -76,6 +73,14 @@ const Password = () => {
   };
 
   const user = useSelector(userSelector);
+
+  const canSubmit = () => {
+    if (!user.isPasswordSetupComplete) {
+      return password && password === confirmPassword;
+    }
+    return newPassword && newPassword === confirmPassword;
+  };
+
   return (
     <div className="w-full flex justify-between">
       {clickedOnStrongPassInfo && (
@@ -93,14 +98,10 @@ const Password = () => {
           </div>
           <div
             onClick={() => {
-              if (password != newPassword && newPassword == confirmPassword) handleSubmit();
+              if (canSubmit()) handleSubmit();
             }}
             className={`h-fit flex-center text-sm font-medium px-3 py-1 rounded-xl border-[1px]
-        ${
-          password != newPassword && newPassword == confirmPassword
-            ? 'cursor-pointer bg-white'
-            : 'cursor-default bg-gray-100 opacity-60'
-        }
+        ${canSubmit() ? 'cursor-pointer bg-white' : 'cursor-default bg-gray-100 opacity-60'}
         `}
           >
             Update
@@ -187,7 +188,7 @@ const Password = () => {
               </div>
             )}
 
-            <div className="flex flex-col gap-1">
+            <div className={`${!user.isPasswordSetupComplete && 'w-full'}flex flex-col gap-1`}>
               <div className="font-medium">Confirm {user.isPasswordSetupComplete && 'New'} Password</div>
               <div className="w-full relative">
                 <input

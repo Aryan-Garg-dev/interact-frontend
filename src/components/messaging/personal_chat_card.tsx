@@ -4,9 +4,9 @@ import React from 'react';
 import Image from 'next/image';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import getDisplayTime from '@/utils/funcs/get_display_time';
-import getMessagingUser from '@/utils/funcs/get_messaging_user';
+import { getMessagingUser } from '@/utils/funcs/messaging';
 import { useDispatch, useSelector } from 'react-redux';
-import { currentChatIDSelector, setCurrentChatID, setCurrentGroupChatID } from '@/slices/messagingSlice';
+import { currentChatIDSelector, setCurrentChatID } from '@/slices/messagingSlice';
 import { useRouter } from 'next/router';
 
 interface Props {
@@ -26,7 +26,6 @@ const PersonalChatCard = ({ chat, setChats }: Props) => {
       pathname: router.pathname,
       query: { ...router.query, chat: 'personal' },
     });
-    dispatch(setCurrentGroupChatID(''));
     dispatch(setCurrentChatID(chat.id));
     // setChats(prev =>
     //   prev.map(c => {
@@ -38,11 +37,6 @@ const PersonalChatCard = ({ chat, setChats }: Props) => {
     //     return c;
     //   })
     // );
-  };
-
-  const getLastReadMessageID = () => {
-    if (chat.createdByID == userID) return chat.lastReadMessageByCreatingUserID;
-    return chat.lastReadMessageByAcceptingUserID;
   };
   return (
     <div

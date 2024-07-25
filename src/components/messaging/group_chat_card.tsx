@@ -1,27 +1,26 @@
-import { GroupChat } from '@/types';
+import { Chat } from '@/types';
 import Cookies from 'js-cookie';
 import React from 'react';
 import Image from 'next/image';
 import getDisplayTime from '@/utils/funcs/get_display_time';
 import { useDispatch, useSelector } from 'react-redux';
-import { currentGroupChatIDSelector, setCurrentChatID, setCurrentGroupChatID } from '@/slices/messagingSlice';
+import { currentChatIDSelector, setCurrentChatID } from '@/slices/messagingSlice';
 import { useRouter } from 'next/router';
 import { GROUP_CHAT_PIC_URL } from '@/config/routes';
 
 interface Props {
-  chat: GroupChat;
+  chat: Chat;
 }
 
 const GroupChatCard = ({ chat }: Props) => {
   const userID = Cookies.get('id');
   const dispatch = useDispatch();
 
-  const currentChatID = useSelector(currentGroupChatIDSelector);
+  const currentChatID = useSelector(currentChatIDSelector);
   const router = useRouter();
 
   const handleClick = () => {
-    dispatch(setCurrentChatID(''));
-    dispatch(setCurrentGroupChatID(chat.id));
+    dispatch(setCurrentChatID(chat.id));
     router.push({
       pathname: router.pathname,
       query: { ...router.query, chat: 'group' },

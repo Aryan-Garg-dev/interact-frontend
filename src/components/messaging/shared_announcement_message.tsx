@@ -1,4 +1,4 @@
-import { GroupChatMessage, Message } from '@/types';
+import { Message } from '@/types';
 import React from 'react';
 import Image from 'next/image';
 import { POST_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
@@ -8,7 +8,7 @@ import getDisplayTime from '@/utils/funcs/get_display_time';
 import Link from 'next/link';
 
 interface Props {
-  message: Message | GroupChatMessage;
+  message: Message;
 }
 
 const SharedAnnouncementMessage = ({ message }: Props) => {

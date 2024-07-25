@@ -1,4 +1,4 @@
-import { GroupChat, Project } from '@/types';
+import { Chat, Project } from '@/types';
 import { Plus } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import NewChat from '@/sections/workspace/manage_project/new_chat';
@@ -8,7 +8,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import Loader from '@/components/common/loader';
-import { initialGroupChat } from '@/types/initials';
+import { initialChat } from '@/types/initials';
 import EditChat from '@/sections/workspace/manage_project/edit_chat';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
@@ -19,12 +19,12 @@ interface Props {
 }
 
 const Chats = ({ project }: Props) => {
-  const [chats, setChats] = useState<GroupChat[]>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [clickedOnAddChat, setClickedOnAddChat] = useState(false);
   const [clickedOnEditChat, setClickedOnEditChat] = useState(false);
-  const [clickedEditChat, setClickedEditChat] = useState(initialGroupChat);
+  const [clickedEditChat, setClickedEditChat] = useState(initialChat);
 
   const user = useSelector(userSelector);
 

@@ -1,20 +1,19 @@
-import { GROUP_CHAT_PIC_URL, MESSAGING_URL, ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { GROUP_CHAT_PIC_URL, ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
-import { GroupChat, Organization, Project, User } from '@/types';
+import { Chat, Organization, User } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MagnifyingGlass, Pen } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
 import { resizeImage } from '@/utils/resize_image';
-import project from '@/screens/messaging/project';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   organization: Organization;
-  setChats: React.Dispatch<React.SetStateAction<GroupChat[]>>;
+  setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
 }
 
 const NewChat = ({ setShow, organization, setChats }: Props) => {
@@ -83,7 +82,7 @@ const NewChat = ({ setShow, organization, setChats }: Props) => {
 
     const res = await postHandler(URL, formData, 'multipart/form-data');
     if (res.statusCode === 201) {
-      const chat: GroupChat = res.data.chat;
+      const chat: Chat = res.data.chat;
 
       setChats(prev => [...prev, chat]);
       setShow(false);

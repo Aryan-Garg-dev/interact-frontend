@@ -9,14 +9,12 @@ import {
   getWSEvent,
   routeChatListEvents,
   routeChatReadEvents,
-  routeGroupChatListEvents,
-  routeGroupMessagingWindowEvents,
   routeMessagingWindowEvents,
   sendEvent,
 } from '@/helpers/ws';
 import { incrementUnreadNotifications, setUnreadChats } from '@/slices/feedSlice';
 import { store } from '@/store';
-import { Chat, GroupChat, GroupChatMessage, Message, TypingStatus, User } from '@/types';
+import { Chat, Message, TypingStatus, User } from '@/types';
 import { messageToastSettings } from '@/utils/toaster';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -123,36 +121,12 @@ class SocketService {
     }
   }
 
-  public setupGroupChatWindowRoutes(
-    setMessages: React.Dispatch<React.SetStateAction<GroupChatMessage[]>>,
-    typingStatus: TypingStatus,
-    setTypingStatus: React.Dispatch<React.SetStateAction<TypingStatus>>
-  ) {
-    if (this.socket) {
-      this.socket.addEventListener('message', function (evt) {
-        const eventData = JSON.parse(evt.data);
-        const event = new WSEvent(eventData.type, eventData.payload);
-        routeGroupMessagingWindowEvents(event, setMessages, typingStatus, setTypingStatus);
-      });
-    }
-  }
-
   public setupChatListRoutes(setChats: React.Dispatch<React.SetStateAction<Chat[]>>) {
     if (this.socket) {
       this.socket.addEventListener('message', function (evt) {
         const eventData = JSON.parse(evt.data);
         const event = new WSEvent(eventData.type, eventData.payload);
         routeChatListEvents(event, setChats);
-      });
-    }
-  }
-
-  public setupGroupChatListRoutes(setChats: React.Dispatch<React.SetStateAction<GroupChat[]>>) {
-    if (this.socket) {
-      this.socket.addEventListener('message', function (evt) {
-        const eventData = JSON.parse(evt.data);
-        const event = new WSEvent(eventData.type, eventData.payload);
-        routeGroupChatListEvents(event, setChats);
       });
     }
   }
@@ -187,7 +161,7 @@ class SocketService {
               messageEventPayload.chatID != currentChatID
             )
               store.dispatch(setUnreadChats([...unreadChatIDs, messageEventPayload.chatID]));
-            if (store.getState().messaging.currentChatID == '' && store.getState().messaging.currentGroupChatID == '')
+            if (store.getState().messaging.currentChatID == '')
               toast.info('New Message from: ' + messageEventPayload.user.name, {
                 ...messageToastSettings,
                 toastId: messageEventPayload.chatID,
@@ -241,4 +215,3 @@ class SocketService {
 
 const socketService = SocketService.getInstance();
 export default socketService;
-

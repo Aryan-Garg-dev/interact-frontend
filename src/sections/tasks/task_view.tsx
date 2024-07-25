@@ -85,7 +85,10 @@ const TaskComponent = ({
           />
           <div className="w-full flex max-md:flex-col gap-4 justify-between items-center">
             <div className="flex-center gap-2">
-              <div className="text-4xl font-semibold">{`${task.prID}: ${task.title}`}</div>
+              <div className="w-fit flex-center text-4xl font-semibold">
+                {task.prID && `${task.prID}: `}
+                {task.title}
+              </div>
               <div className="relative group">
                 <ToolTip
                   content="Copy Task Link"

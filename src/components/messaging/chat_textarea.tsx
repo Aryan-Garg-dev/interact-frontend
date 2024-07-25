@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 // import { MeStopTyping, MeTyping, sendEvent } from '@/utils/ws';
-import { Chat, GroupChat } from '@/types';
+import { Chat } from '@/types';
 import Cookies from 'js-cookie';
 import socketService from '@/config/ws';
 import postHandler from '@/handlers/post_handler';
 import Toaster from '@/utils/toaster';
 import { SERVER_ERROR } from '@/config/errors';
+import { getSelfMembership } from '@/utils/funcs/messaging';
 
 interface Props {
   chat: Chat;
@@ -20,7 +21,7 @@ const ChatTextarea = ({ chat }: Props) => {
     const newValue = event.target.value;
 
     const typingStatus = newValue === '' ? 0 : 1;
-    socketService.sendTypingStatus(getSelf(chat), chat.id, typingStatus);
+    socketService.sendTypingStatus(getSelfMembership(chat).user, chat.id, typingStatus);
 
     setValue(newValue);
   };
@@ -31,20 +32,10 @@ const ChatTextarea = ({ chat }: Props) => {
     }
   };
 
-  const getSelf = (chat: Chat) => {
-    if (userID === chat.createdByID) return chat.createdBy;
-    return chat.acceptedBy;
-  };
-
-  const isBlocked = (chat: Chat) => {
-    if (userID === chat.createdByID) return chat.blockedByAcceptingUser;
-    return chat.blockedByCreatingUser;
-  };
-
   const handleSubmit = async () => {
     if (value.trim() == '') return;
-    socketService.sendMessage(value, chat.id, userID || '', getSelf(chat));
-    socketService.sendTypingStatus(getSelf(chat), chat.id, 0);
+    socketService.sendMessage(value, chat.id, userID || '', getSelfMembership(chat).user);
+    socketService.sendTypingStatus(getSelfMembership(chat).user, chat.id, 0);
 
     setValue('');
 
@@ -65,7 +56,11 @@ const ChatTextarea = ({ chat }: Props) => {
     }
   };
 
-  return isBlocked(chat) ? (
+  return chat.isAdminOnly && !getSelfMembership(chat).isAdmin ? (
+    <div className="w-full h-[64px] backdrop-blur-md bg-primary_comp text-gray-600 dark:bg-[#c578bf10] rounded-xl p-4 dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn cursor-default">
+      Only Admins can send messages
+    </div>
+  ) : getSelfMembership(chat).isBlocked ? (
     <div className="w-full h-[64px] backdrop-blur-md bg-primary_comp text-gray-600 dark:bg-[#c578bf10] rounded-xl p-4 dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn cursor-default">
       Chat is Blocked
     </div>

@@ -5,7 +5,7 @@ import { MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import postHandler from '@/handlers/post_handler';
 import { Chat, Event } from '@/types';
-import getMessagingUser from '@/utils/funcs/get_messaging_user';
+import { getMessagingUser } from '@/utils/funcs/messaging';
 import Toaster from '@/utils/toaster';
 import { X } from '@phosphor-icons/react';
 import Cookies from 'js-cookie';

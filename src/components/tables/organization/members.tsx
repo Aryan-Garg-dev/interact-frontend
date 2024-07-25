@@ -119,19 +119,19 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
       {clickedOnConfirmLeave && <ConfirmOTP setShow={setClickedOnConfirmLeave} handleSubmit={handleLeaveOrg} />}
 
       <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold text-primary_black">
-        <div className="w-[30%] flex-center">Name</div>
-        <div className="w-[20%] flex-center">Title</div>
-        <div className="w-[20%] flex-center">Teams</div>
-        <div className="w-[10%] flex-center">Role</div>
-        <div className="w-[10%] flex-center">Joined At</div>
-        {checkOrgAccess(ORG_MANAGER) && <div className="w-[10%] flex-center"></div>}
+        <div className="w-[30%] max-md:w-[40%] flex-center">Name</div>
+        <div className="w-[20%] max-md:w-[30%] flex-center">Title</div>
+        <div className="w-[20%] max-md:hidden flex-center">Teams</div>
+        <div className="w-[10%] max-md:w-[15%] flex-center">Role</div>
+        <div className="w-[10%] max-md:hidden flex-center">Joined At</div>
+        {checkOrgAccess(ORG_MANAGER) && <div className="w-[10%] max-md:w-[15%] flex-center"></div>}
       </div>
       {memberships.map(membership => (
         <div
           key={membership.user.id}
           className="w-full h-14 relative bg-white rounded-xl border-gray-400 flex text-sm text-primary_black transition-ease-300"
         >
-          <div className="w-[30%] flex-center gap-2 px-4">
+          <div className="w-[30%] max-md:w-[40%] flex-center gap-2 px-4">
             <Image
               crossOrigin="anonymous"
               width={50}
@@ -142,13 +142,13 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
               blurDataURL={membership.user.profilePicBlurHash || 'no-hash'}
               className="w-8 h-8 rounded-full z-[1]"
             />
-            <div className="w-[calc(100%-24px)] flex items-center flex-wrap gap-1">
-              <div className="font-medium text-lg">{membership.user.name}</div>
-              <div className="text-xs">@{membership.user.username}</div>
+            <div className="w-[calc(100%-24px)] flex max-md:flex-col md:items-center flex-wrap gap-1 max-md:gap-0">
+              <div className="font-medium text-lg max-md:text-sm line-clamp-1">{membership.user.name}</div>
+              <div className="text-xs max-md:text-xxs">@{membership.user.username}</div>
             </div>
           </div>
-          <div className="w-[20%] flex-center">{membership.title}</div>
-          <div className="w-[20%] flex-center gap-2">
+          <div className="w-[20%] max-md:w-[30%] flex-center max-md:text-xxs line-clamp-1">{membership.title}</div>
+          <div className="w-[20%] max-md:hidden flex-center gap-2">
             {clickedOnAddToTeam && clickedMembership.id == membership.id && (
               <AddMemberToTeam
                 setShow={setClickedOnAddToTeam}
@@ -183,24 +183,26 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
               tag={<div className="cursor-pointer">+</div>}
             />
           </div>
-          <div className="w-[10%] flex-center">
+          <div className="w-[10%] max-md:w-[15%] flex-center">
             <div
-              className="w-fit px-3 py-1 text-xs font-medium rounded-full"
+              className="w-fit px-3 max-md:px-2 py-1 text-xs max-md:text-xxs font-medium rounded-full"
               style={{ backgroundColor: getRoleColor(membership.role) }}
             >
               {membership.role}
             </div>
           </div>{' '}
-          <div className="w-[10%] flex-center">{moment(membership.createdAt).format('DD MMMM, YYYY')}</div>
+          <div className="w-[10%] max-md:hidden flex-center">
+            {moment(membership.createdAt).format('DD MMMM, YYYY')}
+          </div>
           {checkOrgAccess(ORG_MANAGER) ? (
-            <div className="w-[10%] flex-center gap-4">
+            <div className="w-[10%] max-md:w-[15%] flex-center gap-4 max-md:gap-1">
               {user.id != membership.userID && (
                 <Pen
                   onClick={() => {
                     setClickedMembership(membership);
                     setClickedOnEditMembership(true);
                   }}
-                  className="cursor-pointer"
+                  className="max-md:w-4 max-md:h-4 cursor-pointer"
                   size={20}
                 />
               )}
@@ -210,13 +212,13 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
                     setClickedMembership(membership);
                     setClickedOnRemoveMember(true);
                   }}
-                  className="cursor-pointer"
+                  className="max-md:w-4 max-md:h-4 cursor-pointer"
                   size={20}
                 />
               ) : (
                 <div
                   onClick={() => setClickedOnLeaveOrg(true)}
-                  className="text-primary_danger font-medium cursor-pointer"
+                  className="max-md:text-xxs text-primary_danger font-medium cursor-pointer"
                 >
                   Leave
                 </div>
@@ -226,7 +228,7 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
             user.id == membership.userID && (
               <div
                 onClick={() => setClickedOnLeaveOrg(true)}
-                className="w-[10%] flex-center text-primary_danger font-medium cursor-pointer"
+                className="w-[10%] max-md:w-[15%] flex-center max-md:text-xxs text-primary_danger font-medium cursor-pointer"
               >
                 Leave
               </div>

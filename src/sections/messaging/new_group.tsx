@@ -136,39 +136,37 @@ const NewGroup = ({ setShow }: Props) => {
                 {loading ? (
                   <Loader />
                 ) : (
-                  <>
-                    {users.map(user => {
-                      return (
-                        <div
-                          key={user.id}
-                          onClick={() => handleClickUser(user)}
-                          className={`w-full flex gap-2 rounded-lg p-2 ${
-                            selected(user)
-                              ? 'bg-primary_comp_hover dark:bg-dark_primary_comp_active'
-                              : 'dark:bg-dark_primary_comp hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
-                          } cursor-pointer transition-ease-200`}
-                        >
-                          <Image
-                            crossOrigin="anonymous"
-                            width={50}
-                            height={50}
-                            alt={'User Pic'}
-                            src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-                            className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
-                          />
-                          <div className="w-5/6 flex flex-col">
-                            <div className="text-lg font-bold">{user.name}</div>
-                            <div className="text-sm dark:text-gray-200">@{user.username}</div>
-                            {user.tagline && user.tagline != '' ? (
-                              <div className="text-sm mt-2">{user.tagline}</div>
-                            ) : (
-                              <></>
-                            )}
-                          </div>
+                  users.map(user => {
+                    return (
+                      <div
+                        key={user.id}
+                        onClick={() => handleClickUser(user)}
+                        className={`w-full flex gap-2 rounded-lg p-2 ${
+                          selected(user)
+                            ? 'bg-primary_comp_hover dark:bg-dark_primary_comp_active'
+                            : 'dark:bg-dark_primary_comp hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
+                        } cursor-pointer transition-ease-200`}
+                      >
+                        <Image
+                          crossOrigin="anonymous"
+                          width={50}
+                          height={50}
+                          alt={'User Pic'}
+                          src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                          className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
+                        />
+                        <div className="w-5/6 flex flex-col">
+                          <div className="text-lg font-bold">{user.name}</div>
+                          <div className="text-sm dark:text-gray-200">@{user.username}</div>
+                          {user.tagline && user.tagline != '' ? (
+                            <div className="text-sm mt-2">{user.tagline}</div>
+                          ) : (
+                            <></>
+                          )}
                         </div>
-                      );
-                    })}
-                  </>
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </>
