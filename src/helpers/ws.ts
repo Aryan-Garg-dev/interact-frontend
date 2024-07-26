@@ -125,7 +125,6 @@ export function routeMessagingWindowEvents(
     alert('No Type in the Event');
   }
 
-  const userID = store.getState().user.id;
   const currentChatID = store.getState().messaging.currentChatID;
 
   switch (event.type) {

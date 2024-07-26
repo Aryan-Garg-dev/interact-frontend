@@ -5,10 +5,10 @@ import { currentChatIDSelector, setCurrentChatID } from '@/slices/messagingSlice
 import { initialChat, initialUser } from '@/types/initials';
 import Toaster from '@/utils/toaster';
 import { Chat, Message, TypingStatus } from '@/types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/components/common/loader';
-import { groupBy } from 'lodash';
+import { Dictionary, groupBy } from 'lodash';
 import ChatHeader from '@/sections/messaging/chats/personal_header';
 import GroupChatHeader from '@/sections/messaging/chats/group_header';
 import ScrollableFeed from 'react-scrollable-feed';
@@ -21,6 +21,8 @@ import ChatInfo from '@/sections/messaging/chat_info';
 import { setUnreadChats, unreadChatsSelector } from '@/slices/feedSlice';
 import { getUserFromState } from '@/utils/funcs/redux';
 import { getMessagingUser } from '@/utils/funcs/messaging';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import ScrollWrapper from './scroll_wrapper';
 
 const ChatScreen = () => {
   const [chat, setChat] = useState<Chat>(initialChat);
@@ -32,6 +34,9 @@ const ChatScreen = () => {
   const chatID = useSelector(currentChatIDSelector);
   const unreadChatIDs = useSelector(unreadChatsSelector) || [];
   const userID = Cookies.get('id') || '';
+
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -49,7 +54,7 @@ const ChatScreen = () => {
   };
 
   const fetchMessages = async (chat: Chat) => {
-    const URL = `${MESSAGING_URL}/content/${chatID}`;
+    const URL = `${MESSAGING_URL}/content/${chatID}?page=${page}&limit=10`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       const messageData: Message[] = res.data.messages || [];
@@ -57,7 +62,10 @@ const ChatScreen = () => {
         if (!message.readBy.map(r => r.userID).includes(userID))
           socketService.sendReadMessage(getUserFromState(), message.id, chat.id);
       }
-      setMessages(messageData);
+      const addedMessages = [...messages, ...messageData];
+      if (addedMessages.length == messages.length) setHasMore(false);
+      setMessages(addedMessages);
+      setPage(prev => prev + 1);
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -122,20 +130,24 @@ const ChatScreen = () => {
           ) : (
             <ChatHeader chat={chat} setClickedOnInfo={setClickedOnInfo} />
           )}
-          <div className="w-full h-[calc(100%-72px)] max-h-full flex flex-col gap-6 overflow-hidden">
-            <ScrollableFeed>
-              {Object.keys(messagesByDate)
+          <ScrollWrapper
+            fetchMoreMessages={() => fetchMessages(chat)}
+            hasMore={hasMore}
+            isFetching={loading}
+            currentPage={page}
+          >
+            {messagesByDate &&
+              Object.keys(messagesByDate)
                 .reverse()
                 .map(date => {
                   return <MessageGroup key={date} date={date} messages={messagesByDate[date]} chat={chat} />;
                 })}
-              {typingStatus.chatID == chat.id && typingStatus.user.id !== '' && typingStatus.user.id != userID && (
-                <div className="w-fit dark:text-white text-sm cursor-default border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-xl px-4 py-2">
-                  {typingStatus.user.username} is typing...
-                </div>
-              )}
-            </ScrollableFeed>
-          </div>
+            {typingStatus.chatID == chat.id && typingStatus.user.id !== '' && typingStatus.user.id != userID && (
+              <div className="w-fit dark:text-white text-sm cursor-default border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-xl px-4 py-2">
+                {typingStatus.user.username} is typing...
+              </div>
+            )}
+          </ScrollWrapper>
           <div className="flex w-[calc(100%-16px)] max-lg:w-[99%] items-end gap-2 absolute max-lg:sticky bottom-2 right-1/2 translate-x-1/2 max-lg:translate-x-0">
             {chat.isAccepted ? (
               <ChatTextarea chat={chat} />

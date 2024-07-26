@@ -23,7 +23,7 @@ const ChatTextarea = ({ chat }: Props) => {
     const newValue = event.target.value;
 
     const typingStatus = newValue === '' ? 0 : 1;
-    // socketService.sendTypingStatus(getUserFromState(), chat.id, typingStatus);
+    socketService.sendTypingStatus(getUserFromState(), chat.id, typingStatus);
 
     setValue(newValue);
   };
