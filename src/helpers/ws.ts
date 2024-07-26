@@ -1,7 +1,10 @@
+import { MESSAGING_URL } from '@/config/routes';
 import socketService from '@/config/ws';
+import patchHandler from '@/handlers/patch_handler';
 import { store } from '@/store';
 import { Chat, Message, TypingStatus, User } from '@/types';
 import { initialUser } from '@/types/initials';
+import { getUserFromState } from '@/utils/funcs/redux';
 import sortChats from '@/utils/funcs/sort_chats';
 import { toast } from 'react-toastify';
 import { messageToastSettings } from '../utils/toaster';
@@ -22,12 +25,14 @@ export const getWSEvent = (evt: MessageEvent<any>) => {
 
 export class SendMessageEvent {
   content = '';
+  id = '';
   chatID = '';
   user = initialUser;
   userID = '';
 
-  constructor(content: string, chatID: string, userID: string, user: User) {
+  constructor(content: string, id: string, chatID: string, userID: string, user: User) {
     this.content = content;
+    this.id = id;
     this.chatID = chatID;
     this.userID = userID;
     this.user = user;
@@ -62,12 +67,12 @@ export class SendNotificationEvent {
 }
 
 export class SendMessageReadEvent {
-  userID = '';
+  user = initialUser;
   messageID = '';
   chatID = '';
 
-  constructor(userID: string, messageID: string, chatID: string) {
-    this.userID = userID;
+  constructor(user: User, messageID: string, chatID: string) {
+    this.user = user;
     this.messageID = messageID;
     this.chatID = chatID;
   }
@@ -105,6 +110,11 @@ export class MeStopTyping {
   }
 }
 
+const updateLastRead = async (messageID: string) => {
+  const URL = `${MESSAGING_URL}/content/${messageID}`;
+  await patchHandler(URL, {});
+};
+
 export function routeMessagingWindowEvents(
   event: WSEvent,
   setMessages: React.Dispatch<React.SetStateAction<Message[]>>,
@@ -121,8 +131,11 @@ export function routeMessagingWindowEvents(
   switch (event.type) {
     case 'new_message':
       const messageEventPayload = event.payload as Message;
-      if (messageEventPayload.chatID == currentChatID) setMessages(prev => [messageEventPayload, ...prev]);
-      else if (currentChatID != '') {
+      if (messageEventPayload.chatID == currentChatID) {
+        setMessages(prev => [messageEventPayload, ...prev]);
+        updateLastRead(messageEventPayload.id);
+        socketService.sendReadMessage(getUserFromState(), messageEventPayload.id, messageEventPayload.chatID);
+      } else if (currentChatID != '') {
         toast.info(messageEventPayload.user.name + ': ' + messageEventPayload.content, {
           ...messageToastSettings,
           icon: '🐵',
@@ -136,9 +149,6 @@ export function routeMessagingWindowEvents(
           // ),
         });
       }
-
-      if (messageEventPayload.userID != userID && currentChatID == messageEventPayload.chatID)
-        socketService.sendReadMessage(userID, messageEventPayload.id, messageEventPayload.chatID);
       break;
     case 'user_typing':
       const userTypingEventPayload = event.payload as TypingStatus;
@@ -188,26 +198,44 @@ export function routeChatListEvents(
   }
 }
 
-export function routeChatReadEvents(event: WSEvent, setChat: React.Dispatch<React.SetStateAction<Chat>>) {
+export function routeChatReadEvents(event: WSEvent, setMessages: React.Dispatch<React.SetStateAction<Message[]>>) {
   if (event.type === undefined) {
     alert('No Type in the Event');
   }
 
-  const userID = store.getState().user.id;
   const currentChatID = store.getState().messaging.currentChatID;
 
   switch (event.type) {
     case 'read_message':
-      //TODO handle a case where user 1 has sent message and his screen has socket ids and other user opens then chat and send read message socket request of backend id
-      const payload = event.payload as Message;
-      if (payload.userID != userID && currentChatID == payload.chatID)
-        // setChat(prev => {
-        //   if (prev.acceptedByID == userID) return { ...prev, lastReadMessageByCreatingUserID: payload.id };
-        //   else if (prev.createdByID == userID) return { ...prev, lastReadMessageByAcceptingUserID: payload.id };
+      interface ReadMessagePayload {
+        user: User;
+        messageID: string;
+        chatID: string;
+      }
 
-        //   return prev;
-        // });
-        break;
+      const payload = event.payload as ReadMessagePayload;
+      if (currentChatID == payload.chatID) {
+        setMessages(prev =>
+          prev.map(m => {
+            if (m.id == payload.messageID) {
+              return {
+                ...m,
+                readBy: [
+                  ...(m.readBy || []),
+                  {
+                    userID: payload.user.id,
+                    messageID: m.id,
+                    user: payload.user,
+                    readAt: new Date(),
+                  },
+                ],
+              };
+            }
+            return m;
+          })
+        );
+      }
+      break;
     default:
       break;
   }
@@ -219,6 +247,7 @@ export function sendEvent(eventName: string, payloadEvent: any, conn: WebSocket)
   try {
     conn.send(JSON.stringify(event));
   } catch (err) {
+    console.log(err);
     alert('Socket connection error: ' + eventName);
   }
 }

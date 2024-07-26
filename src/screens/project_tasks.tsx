@@ -129,7 +129,7 @@ const ProjectTasks = ({ slug, org = false }: Props) => {
               <Tags selectedTags={tags} setSelectedTags={setTags} />
               <Users
                 fieldName="Assigned To"
-                users={[...project.memberships.map(m => m.user), getUserFromState(user)]}
+                users={[...project.memberships.map(m => m.user), getUserFromState()]}
                 selectedUsers={users}
                 setSelectedUsers={setUsers}
               />

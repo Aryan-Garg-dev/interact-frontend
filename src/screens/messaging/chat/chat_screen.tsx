@@ -18,8 +18,9 @@ import Cookies from 'js-cookie';
 import socketService from '@/config/ws';
 import { useWindowWidth } from '@react-hook/window-size';
 import ChatInfo from '@/sections/messaging/chat_info';
-import patchHandler from '@/handlers/patch_handler';
 import { setUnreadChats, unreadChatsSelector } from '@/slices/feedSlice';
+import { getUserFromState } from '@/utils/funcs/redux';
+import { getMessagingUser } from '@/utils/funcs/messaging';
 
 const ChatScreen = () => {
   const [chat, setChat] = useState<Chat>(initialChat);
@@ -53,7 +54,8 @@ const ChatScreen = () => {
     if (res.statusCode == 200) {
       const messageData: Message[] = res.data.messages || [];
       for (const message of messageData) {
-        socketService.sendReadMessage(userID, message.id, chat.id);
+        if (!message.readBy.map(r => r.userID).includes(userID))
+          socketService.sendReadMessage(getUserFromState(), message.id, chat.id);
       }
       setMessages(messageData);
       setLoading(false);
@@ -74,28 +76,13 @@ const ChatScreen = () => {
     }
   };
 
-  const updateLastRead = async () => {
-    const URL = `${MESSAGING_URL}/chat/last_read/${chatID}`;
-    const res = await patchHandler(URL, {});
-    if (res.statusCode == 200) {
-    } else {
-      if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
-      else Toaster.error(SERVER_ERROR, 'error_toaster');
-    }
-  };
-
   useEffect(() => {
     if (chatID != '') {
       fetchChat();
       socketService.setupChatWindowRoutes(setMessages, typingStatus, setTypingStatus);
-      socketService.setupChatReadRoutes(setChat);
-      updateLastRead();
+      socketService.setupChatReadRoutes(setMessages);
       if (unreadChatIDs.includes(chatID)) dispatch(setUnreadChats(unreadChatIDs.filter(id => id != chatID)));
     }
-
-    return () => {
-      updateLastRead(); //TODO runs on the new chatID instead of the old one
-    };
   }, [chatID]);
 
   useEffect(() => {
@@ -152,15 +139,17 @@ const ChatScreen = () => {
           <div className="flex w-[calc(100%-16px)] max-lg:w-[99%] items-end gap-2 absolute max-lg:sticky bottom-2 right-1/2 translate-x-1/2 max-lg:translate-x-0">
             {chat.isAccepted ? (
               <ChatTextarea chat={chat} />
+            ) : userID != chat.userID ? (
+              <div
+                onClick={handleAccept}
+                className="w-full h-12 rounded-md dark:text-white font-primary flex-center text-xl font-medium bg-primary_comp dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active cursor-pointer transition-ease-300"
+              >
+                Accept Chat
+              </div>
             ) : (
-              userID != chat.userID && (
-                <div
-                  onClick={handleAccept}
-                  className="w-full h-12 rounded-md dark:text-white font-primary flex-center text-xl font-medium bg-primary_comp dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active cursor-pointer transition-ease-300"
-                >
-                  Accept Chat
-                </div>
-              )
+              <div className="w-full h-12 rounded-md dark:text-white font-primary flex-center bg-primary_comp">
+                {getMessagingUser(chat).name} has not accepted your chat yet.
+              </div>
             )}
           </div>
         </>

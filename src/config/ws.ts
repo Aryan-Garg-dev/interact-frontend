@@ -74,9 +74,9 @@ class SocketService {
     }
   }
 
-  public sendMessage(message: string, chatID: string, userID: string, self: User) {
+  public sendMessage(message: string, id: string, chatID: string, userID: string, self: User) {
     if (this.socket) {
-      const outgoingMessageEvent = new SendMessageEvent(message, chatID, userID, self);
+      const outgoingMessageEvent = new SendMessageEvent(message, id, chatID, userID, self);
       sendEvent('send_message', outgoingMessageEvent, this.socket);
     }
   }
@@ -100,9 +100,9 @@ class SocketService {
     }
   }
 
-  public sendReadMessage(userID: string, messageID: string, chatID: string) {
+  public sendReadMessage(user: User, messageID: string, chatID: string) {
     if (this.socket) {
-      const outgoingNotificationEvent = new SendMessageReadEvent(userID, messageID, chatID);
+      const outgoingNotificationEvent = new SendMessageReadEvent(user, messageID, chatID);
       sendEvent('send_read_message', outgoingNotificationEvent, this.socket);
     }
   }
@@ -131,12 +131,12 @@ class SocketService {
     }
   }
 
-  public setupChatReadRoutes(setChat: React.Dispatch<React.SetStateAction<Chat>>) {
+  public setupChatReadRoutes(setMessages: React.Dispatch<React.SetStateAction<Message[]>>) {
     if (this.socket) {
       this.socket.addEventListener('message', function (evt) {
         const eventData = JSON.parse(evt.data);
         const event = new WSEvent(eventData.type, eventData.payload);
-        routeChatReadEvents(event, setChat);
+        routeChatReadEvents(event, setMessages);
       });
     }
   }

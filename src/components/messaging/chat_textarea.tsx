@@ -7,6 +7,8 @@ import postHandler from '@/handlers/post_handler';
 import Toaster from '@/utils/toaster';
 import { SERVER_ERROR } from '@/config/errors';
 import { getSelfMembership } from '@/utils/funcs/messaging';
+import { v4 as uuidv4 } from 'uuid';
+import { getUserFromState } from '@/utils/funcs/redux';
 
 interface Props {
   chat: Chat;
@@ -21,7 +23,7 @@ const ChatTextarea = ({ chat }: Props) => {
     const newValue = event.target.value;
 
     const typingStatus = newValue === '' ? 0 : 1;
-    socketService.sendTypingStatus(getSelfMembership(chat).user, chat.id, typingStatus);
+    // socketService.sendTypingStatus(getUserFromState(), chat.id, typingStatus);
 
     setValue(newValue);
   };
@@ -34,7 +36,10 @@ const ChatTextarea = ({ chat }: Props) => {
 
   const handleSubmit = async () => {
     if (value.trim() == '') return;
-    socketService.sendMessage(value, chat.id, userID || '', getSelfMembership(chat).user);
+
+    const id = uuidv4();
+
+    socketService.sendMessage(value, id, chat.id, userID || '', getSelfMembership(chat).user);
     socketService.sendTypingStatus(getSelfMembership(chat).user, chat.id, 0);
 
     setValue('');
@@ -42,6 +47,7 @@ const ChatTextarea = ({ chat }: Props) => {
     const URL = `/messaging/content/`;
     const formData = {
       content: value,
+      id,
       chatID: chat.id,
     };
 

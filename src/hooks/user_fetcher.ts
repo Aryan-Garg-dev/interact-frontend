@@ -162,13 +162,11 @@ const useUserStateFetcher = () => {
           const chats: string[] = [];
           res.data.chats?.forEach((chat: Chat) => {
             chats.push(chat.id);
-            personalChatSlices.push({
-              chatID: chat.id,
-              userID: getMessagingUser(chat).id,
-            });
-          });
-          res.data.groupChats?.forEach((chat: Chat) => {
-            chats.push(chat.id);
+            if (!chat.isGroup)
+              personalChatSlices.push({
+                chatID: chat.id,
+                userID: getMessagingUser(chat).id,
+              });
           });
           dispatch(setPersonalChatSlices(personalChatSlices));
           dispatch(setChats(chats));

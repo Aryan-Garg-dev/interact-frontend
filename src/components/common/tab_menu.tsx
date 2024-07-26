@@ -25,7 +25,9 @@ const TabMenu = ({
   const variants = ['w-[500px]', 'w-[640px]', 'w-[720px]', 'w-[840px]', 'w-[100%]'];
   return (
     <div
-      className={`max-w-[100%] thin_scrollbar overflow-auto h-fit rounded-lg bg-gradient-to-b shadow-lg dark:shadow-outer mx-auto border-gray-300 border-[1px] dark:border-0 bg-white dark:bg-slate-100 ${
+      className={`${
+        width == '100%' && 'w-full'
+      } max-w-[100%] thin_scrollbar overflow-x-auto overflow-y-clip h-fit rounded-lg bg-gradient-to-b shadow-lg dark:shadow-outer mx-auto border-gray-300 border-[1px] dark:border-0 bg-white dark:bg-slate-100 ${
         sticky ? 'sticky' : 'fixed'
       } top-[90px] transition-ease-out-500 z-10`}
     >
@@ -49,7 +51,6 @@ const TabMenu = ({
           </div>
         ))}
       </div>
-      {/* 64+24=88 */}
     </div>
   );
 };

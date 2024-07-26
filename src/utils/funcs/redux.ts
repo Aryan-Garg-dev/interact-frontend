@@ -1,7 +1,9 @@
-import { UserState } from '@/slices/userSlice';
+import { store } from '@/store';
 import { initialUser } from '@/types/initials';
 
-export const getUserFromState = (reduxUser: UserState) => {
+export const getUserFromState = () => {
+  const reduxUser = store.getState().user;
+
   const user = initialUser;
   user.id = reduxUser.id;
   user.name = reduxUser.name;

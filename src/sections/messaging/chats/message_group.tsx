@@ -5,6 +5,8 @@ import SharedProjectMessage from '@/components/messaging/shared_project_message'
 import SharedOpeningMessage from '@/components/messaging/shared_opening_message';
 import SharedProfileMessage from '@/components/messaging/shared_profile_message';
 import SharedAnnouncementMessage from '@/components/messaging/shared_announcement_message';
+import { useSelector } from 'react-redux';
+import { userIDSelector } from '@/slices/userSlice';
 
 interface Props {
   date: string;
@@ -13,6 +15,7 @@ interface Props {
 }
 
 const MessageGroup = ({ date, messages, chat }: Props) => {
+  const userID = useSelector(userIDSelector);
   return (
     <div className="flex flex-col gap-4 mx-2 dark:text-white font-primary pt-4 pb-2">
       <div className="w-full text-center text-sm">{date}</div>
@@ -33,7 +36,7 @@ const MessageGroup = ({ date, messages, chat }: Props) => {
               ) : (
                 <RegularMessage message={message} />
               )}
-              {chat.isAccepted && message.readBy?.length == chat.noMembers && (
+              {chat.isAccepted && message.readBy?.length == chat.noMembers && message.userID == userID && (
                 <div className="w-fit text-xs self-end opacity-75">• Seen</div>
               )}
             </div>

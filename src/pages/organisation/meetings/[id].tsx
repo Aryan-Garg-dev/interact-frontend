@@ -172,7 +172,7 @@ const Meeting = ({ id }: Props) => {
     const res = await postHandler(URL, {});
     if (res.statusCode === 200) {
       setMeeting(prev => {
-        return { ...prev, rsvp: [...prev.rsvp, getUserFromState(user)] };
+        return { ...prev, rsvp: [...prev.rsvp, getUserFromState()] };
       });
       Toaster.stopLoad(toaster, 'Participation Confirmed!', 1);
     } else {

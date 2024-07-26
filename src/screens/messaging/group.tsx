@@ -25,7 +25,7 @@ const Group = ({ type }: Props) => {
 
   const fetchChats = async () => {
     setLoading(true);
-    const URL = `${MESSAGING_URL}/group${type && `?type=${type}`}`;
+    const URL = `${MESSAGING_URL}/group${type ? `?type=${type}` : ''}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       setChats(sortChats(res.data.chats || []));
