@@ -7,7 +7,6 @@ import socketService from '@/config/ws';
 import getHandler from '@/handlers/get_handler';
 import { userSelector } from '@/slices/userSlice';
 import { Chat } from '@/types';
-import sortChats from '@/utils/funcs/sort_chats';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -28,7 +27,7 @@ const Group = ({ type }: Props) => {
     const URL = `${MESSAGING_URL}/group${type ? `?type=${type}` : ''}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      setChats(sortChats(res.data.chats || []));
+      setChats(res.data.chats || []);
       setFilteredChats(res.data.chats || []);
       setLoading(false);
     } else {

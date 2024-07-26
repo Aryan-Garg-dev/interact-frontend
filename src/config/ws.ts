@@ -113,11 +113,18 @@ class SocketService {
     setTypingStatus: React.Dispatch<React.SetStateAction<TypingStatus>>
   ) {
     if (this.socket) {
-      this.socket.addEventListener('message', function (evt) {
+      const handleMessage = (evt: MessageEvent) => {
         const eventData = JSON.parse(evt.data);
         const event = new WSEvent(eventData.type, eventData.payload);
         routeMessagingWindowEvents(event, setMessages, typingStatus, setTypingStatus);
-      });
+      };
+
+      this.socket.addEventListener('message', handleMessage);
+
+      // Return a cleanup function to remove the event listener
+      return () => {
+        if (this.socket) this.socket.removeEventListener('message', handleMessage);
+      };
     }
   }
 
@@ -133,11 +140,17 @@ class SocketService {
 
   public setupChatReadRoutes(setMessages: React.Dispatch<React.SetStateAction<Message[]>>) {
     if (this.socket) {
-      this.socket.addEventListener('message', function (evt) {
+      const handleMessage = (evt: MessageEvent) => {
         const eventData = JSON.parse(evt.data);
         const event = new WSEvent(eventData.type, eventData.payload);
         routeChatReadEvents(event, setMessages);
-      });
+      };
+
+      this.socket.addEventListener('message', handleMessage);
+
+      return () => {
+        if (this.socket) this.socket.removeEventListener('message', handleMessage);
+      };
     }
   }
 

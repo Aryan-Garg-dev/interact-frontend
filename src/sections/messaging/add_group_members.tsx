@@ -73,7 +73,7 @@ const AddGroupMembers = ({ setShow, chat, setChat }: Props) => {
 
     const toaster = Toaster.startLoad('Sending Invitations');
 
-    const URL = `${MESSAGING_URL}/group/members/add/${chat.id}`;
+    const URL = `${MESSAGING_URL}/group/members/invite/${chat.id}`;
 
     const userIDs = selectedUsers.map(user => user.id);
     const formData = {
@@ -86,7 +86,7 @@ const AddGroupMembers = ({ setShow, chat, setChat }: Props) => {
       setChat(prev => {
         return {
           ...prev,
-          invitations: [...prev.invitations, ...invitations],
+          invitations: [...prev.invitations, ...(invitations || [])],
         };
       });
       setShow(false);

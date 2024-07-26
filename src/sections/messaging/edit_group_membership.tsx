@@ -6,9 +6,9 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { X } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
-import { GROUP_ADMIN, GROUP_MEMBER } from '@/config/constants';
 import moment from 'moment';
 import Link from 'next/link';
+import patchHandler from '@/handlers/patch_handler';
 
 interface Props {
   membership: ChatMembership;
@@ -32,14 +32,14 @@ const EditMembership = ({ setShow, membership, setChat }: Props) => {
       isAdmin: !membership.isAdmin,
     };
 
-    const res = await postHandler(URL, formData);
+    const res = await patchHandler(URL, formData);
     if (res.statusCode === 200) {
       setChat(prev => {
         return {
           ...prev,
           memberships: prev.memberships.map(m => {
             if (m.id == membership.id) {
-              return { ...m, role: (m.isAdmin = !m.isAdmin) };
+              return { ...m, isAdmin: !m.isAdmin };
             } else return m;
           }),
         };
@@ -90,7 +90,7 @@ const EditMembership = ({ setShow, membership, setChat }: Props) => {
 
   return (
     <>
-      <div className="absolute bottom-0 w-full backdrop-blur-2xl bg-[#ffe1fc22] flex flex-col gap-6 rounded-md p-10 max-lg:p-5 dark:text-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
+      <div className="absolute bottom-0 w-full backdrop-blur-2xl bg-white flex flex-col gap-6 rounded-md p-10 max-lg:p-5 dark:text-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
         <div className="w-full flex items-center gap-4">
           <Image
             crossOrigin="anonymous"

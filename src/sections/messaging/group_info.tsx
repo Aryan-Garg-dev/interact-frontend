@@ -19,15 +19,15 @@ import { resizeImage } from '@/utils/resize_image';
 import Report from '@/components/common/report';
 import { setCurrentChatID } from '@/slices/messagingSlice';
 import { getSelfMembership } from '@/utils/funcs/messaging';
+import getInvitationStatus, { getInvitationStatusColor } from '@/utils/funcs/invitation';
 
 interface Props {
   chat: Chat;
   setChat: React.Dispatch<React.SetStateAction<Chat>>;
-  membership: ChatMembership;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const GroupInfo = ({ chat, setChat, membership, setShow }: Props) => {
+const GroupInfo = ({ chat, setChat, setShow }: Props) => {
   const [clickedOnEditMembership, setClickedOnEditMembership] = useState(false);
   const [clickedEditUserMembership, setClickedEditUserMembership] = useState(initialChatMembership);
   const [clickedOnAddMembers, setClickedOnAddMembers] = useState(false);
@@ -148,7 +148,7 @@ const GroupInfo = ({ chat, setChat, membership, setShow }: Props) => {
           title="Confirm Withdraw?"
         />
       )}
-      <div className="w-full h-full overflow-y-auto flex flex-col gap-4">
+      <div className="w-full h-full overflow-y-auto thin_scrollbar flex flex-col gap-4">
         {clickedOnEditMembership && (
           <EditMembership
             membership={clickedEditUserMembership}
@@ -290,17 +290,17 @@ const GroupInfo = ({ chat, setChat, membership, setShow }: Props) => {
                 onClick={() => setClickedOnAddMembers(true)}
                 className="w-full h-12 p-4 bg-primary_comp_hover dark:bg-dark_primary_comp_hover rounded-md flex items-center justify-between cursor-pointer"
               >
-                <div className="text-lg">Add Members</div>
-                <Plus size={32} />
+                <div className="">Add Members</div>
+                <Plus size={24} />
               </div>
             )}
             {chat.memberships.map(m => {
               return (
                 <div
                   key={m.id}
-                  className="w-full py-4 dark:p-4 dark:bg-dark_primary_comp_hover rounded-md flex items-center justify-between"
+                  className="w-full py-2 dark:p-4 dark:bg-dark_primary_comp_hover rounded-md flex items-center justify-between"
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
                     <Link href={`/explore/user/${m.user.username}`} className="rounded-full">
                       <Image
                         crossOrigin="anonymous"
@@ -308,24 +308,24 @@ const GroupInfo = ({ chat, setChat, membership, setShow }: Props) => {
                         height={50}
                         alt={'User Pic'}
                         src={`${USER_PROFILE_PIC_URL}/${m.user.profilePic}`}
-                        className="rounded-full w-14 h-14"
+                        className="rounded-full w-10 h-10"
                       />
                     </Link>
                     <div className="flex flex-col">
-                      <Link href={`/explore/user/${m.user.username}`} className="text-xl font-medium">
+                      <Link href={`/explore/user/${m.user.username}`} className="text-lg font-medium">
                         {m.user.name}
                       </Link>
-                      <div className="text-sm">{m.isAdmin ? 'Admin' : 'Member'}</div>
+                      <div className="text-xs">{m.isAdmin ? 'Admin' : 'Member'}</div>
                     </div>
                   </div>
-                  {getSelfMembership(chat).isAdmin && membership.id != m.id && (
+                  {getSelfMembership(chat).isAdmin && getSelfMembership(chat).id != m.id && (
                     <Pen
                       onClick={() => {
                         setClickedEditUserMembership(m);
                         setClickedOnEditMembership(true);
                       }}
                       className="cursor-pointer"
-                      size={24}
+                      size={20}
                     />
                   )}
                 </div>
@@ -336,39 +336,48 @@ const GroupInfo = ({ chat, setChat, membership, setShow }: Props) => {
 
         <div className="w-full  rounded-md flex flex-col gap-4 p-4">
           <div className="text-xl font-semibold">
-            {chat.invitations.length} Pending Invitation{chat.invitations.length == 1 ? '' : 's'}
+            {chat.invitations.length} Invitation{chat.invitations.length == 1 ? '' : 's'}
           </div>
           <div className="w-full flex flex-col gap-1">
             {chat.invitations.map(invitation => {
               return (
                 <div
                   key={invitation.id}
-                  className="w-full py-4 dark:p-4 dark:bg-dark_primary_comp_hover rounded-md flex items-center justify-between"
+                  className="w-full py-2 dark:p-4 dark:bg-dark_primary_comp_hover rounded-md flex items-center justify-between"
                 >
-                  <Link href={`/explore/user/${invitation.user.username}`} className="flex items-center gap-4">
+                  <Link href={`/explore/user/${invitation.user.username}`} className="flex items-center gap-2">
                     <Image
                       crossOrigin="anonymous"
                       width={50}
                       height={50}
                       alt={'User Pic'}
                       src={`${USER_PROFILE_PIC_URL}/${invitation.user.profilePic}`}
-                      className="rounded-full w-14 h-14"
+                      className="rounded-full w-10 h-10"
                     />
 
                     <div className="flex flex-col">
-                      <div className="text-xl font-medium">{invitation.user.name}</div>
-                      <div className="text-sm">@{invitation.user.username}</div>
+                      <div className="text-lg font-medium">{invitation.user.name}</div>
+                      <div className="text-xs">@{invitation.user.username}</div>
                     </div>
                   </Link>
-                  {getSelfMembership(chat).isAdmin && (
+                  {invitation.status == 0 ? (
+                    getSelfMembership(chat).isAdmin && (
+                      <div
+                        onClick={() => {
+                          setClickedInvitationToWithdraw(invitation);
+                          setClickedOnWithdrawInvitation(true);
+                        }}
+                        className="text-xs text-primary_danger cursor-pointer"
+                      >
+                        Withdraw Invitation
+                      </div>
+                    )
+                  ) : (
                     <div
-                      onClick={() => {
-                        setClickedInvitationToWithdraw(invitation);
-                        setClickedOnWithdrawInvitation(true);
-                      }}
-                      className="text-xs text-primary_danger cursor-pointer"
+                      className="w-fit px-3 py-1 text-xs font-medium rounded-full"
+                      style={{ backgroundColor: getInvitationStatusColor(invitation.status) }}
                     >
-                      Withdraw Invitation
+                      {getInvitationStatus(invitation.status)}
                     </div>
                   )}
                 </div>

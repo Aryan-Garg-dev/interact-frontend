@@ -75,7 +75,7 @@ const ScrollWrapper: React.FC<ScrollWrapperProps> = ({
   }, [children, isAtBottom, previousScrollHeight, currentPage]); // Trigger scroll adjustment when messages change
 
   return (
-    <div ref={containerRef} className="w-full h-[calc(100%-140px)] flex flex-col gap-6 overflow-y-auto">
+    <div ref={containerRef} className="w-full h-[calc(100%-140px)] thin_scrollbar flex flex-col gap-6 overflow-y-auto">
       {children}
     </div>
   );

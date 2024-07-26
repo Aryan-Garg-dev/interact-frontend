@@ -27,10 +27,10 @@ const ChatHeader = ({ chat, setClickedOnInfo }: Props) => {
         />
         <div className="flex flex-col">
           <div className="text-lg font-medium">{chat.title}</div>
-          {chat.project ? (
+          {chat.projectID ? (
             <div className="text-xs">@{chat.project?.title}</div>
           ) : (
-            chat.organization && <div className="text-xs">@{chat.organization?.title}</div>
+            chat.organizationID && <div className="text-xs">@{chat.organization?.title}</div>
           )}
         </div>
       </div>

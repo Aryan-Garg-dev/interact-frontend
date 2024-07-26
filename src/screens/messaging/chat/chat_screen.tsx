@@ -5,13 +5,12 @@ import { currentChatIDSelector, setCurrentChatID } from '@/slices/messagingSlice
 import { initialChat, initialUser } from '@/types/initials';
 import Toaster from '@/utils/toaster';
 import { Chat, Message, TypingStatus } from '@/types';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/components/common/loader';
-import { Dictionary, groupBy } from 'lodash';
+import { groupBy } from 'lodash';
 import ChatHeader from '@/sections/messaging/chats/personal_header';
 import GroupChatHeader from '@/sections/messaging/chats/group_header';
-import ScrollableFeed from 'react-scrollable-feed';
 import MessageGroup from '@/sections/messaging/chats/message_group';
 import ChatTextarea from '@/components/messaging/chat_textarea';
 import Cookies from 'js-cookie';
@@ -21,8 +20,8 @@ import ChatInfo from '@/sections/messaging/chat_info';
 import { setUnreadChats, unreadChatsSelector } from '@/slices/feedSlice';
 import { getUserFromState } from '@/utils/funcs/redux';
 import { getMessagingUser } from '@/utils/funcs/messaging';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import ScrollWrapper from './scroll_wrapper';
+import GroupInfo from '@/sections/messaging/group_info';
 
 const ChatScreen = () => {
   const [chat, setChat] = useState<Chat>(initialChat);
@@ -46,26 +45,33 @@ const ChatScreen = () => {
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       setChat(res.data.chat);
-      await fetchMessages(res.data.chat);
+      await fetchMessages(1);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
       else Toaster.error(SERVER_ERROR, 'error_toaster');
     }
   };
 
-  const fetchMessages = async (chat: Chat) => {
-    const URL = `${MESSAGING_URL}/content/${chatID}?page=${page}&limit=10`;
+  const fetchMessages = async (initialPage?: number) => {
+    const URL = `${MESSAGING_URL}/content/${chatID}?page=${initialPage ? initialPage : page}&limit=10`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       const messageData: Message[] = res.data.messages || [];
       for (const message of messageData) {
         if (!message.readBy.map(r => r.userID).includes(userID))
-          socketService.sendReadMessage(getUserFromState(), message.id, chat.id);
+          socketService.sendReadMessage(getUserFromState(), message.id, chatID);
       }
-      const addedMessages = [...messages, ...messageData];
-      if (addedMessages.length == messages.length) setHasMore(false);
-      setMessages(addedMessages);
-      setPage(prev => prev + 1);
+
+      if (initialPage == 1) {
+        setMessages(messageData);
+        setPage(2);
+      } else {
+        const addedMessages = [...messages, ...messageData];
+        if (addedMessages.length == messages.length) setHasMore(false);
+        setMessages(addedMessages);
+        setPage(prev => prev + 1);
+      }
+
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -86,10 +92,20 @@ const ChatScreen = () => {
 
   useEffect(() => {
     if (chatID != '') {
+      setMessages([]);
+      setPage(1);
+      setHasMore(true);
+      setLoading(true);
       fetchChat();
-      socketService.setupChatWindowRoutes(setMessages, typingStatus, setTypingStatus);
-      socketService.setupChatReadRoutes(setMessages);
+
+      const windowCleanup = socketService.setupChatWindowRoutes(setMessages, typingStatus, setTypingStatus);
+      const readCleanup = socketService.setupChatReadRoutes(setMessages);
       if (unreadChatIDs.includes(chatID)) dispatch(setUnreadChats(unreadChatIDs.filter(id => id != chatID)));
+
+      return () => {
+        if (windowCleanup) windowCleanup();
+        if (readCleanup) readCleanup();
+      };
     }
   }, [chatID]);
 
@@ -122,7 +138,11 @@ const ChatScreen = () => {
       ) : loading ? (
         <Loader />
       ) : clickedOnInfo ? (
-        <ChatInfo chat={chat} setShow={setClickedOnInfo} setChat={setChat} />
+        chat.isGroup ? (
+          <GroupInfo chat={chat} setShow={setClickedOnInfo} setChat={setChat} />
+        ) : (
+          <ChatInfo chat={chat} setShow={setClickedOnInfo} setChat={setChat} />
+        )
       ) : (
         <>
           {chat.isGroup ? (
@@ -131,7 +151,7 @@ const ChatScreen = () => {
             <ChatHeader chat={chat} setClickedOnInfo={setClickedOnInfo} />
           )}
           <ScrollWrapper
-            fetchMoreMessages={() => fetchMessages(chat)}
+            fetchMoreMessages={() => fetchMessages()}
             hasMore={hasMore}
             isFetching={loading}
             currentPage={page}

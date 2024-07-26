@@ -36,8 +36,21 @@ const MessageGroup = ({ date, messages, chat }: Props) => {
               ) : (
                 <RegularMessage message={message} />
               )}
-              {chat.isAccepted && message.readBy?.length == chat.noMembers && message.userID == userID && (
-                <div className="w-fit text-xs self-end opacity-75">• Seen</div>
+              {message.userID == userID && (
+                <>
+                  {chat.isGroup ? (
+                    <div className="w-fit text-xs self-end opacity-75">
+                      {message.readBy?.length == chat.noMembers
+                        ? ' • Seen'
+                        : message.readBy?.length - 1 != 0 && `• Seen by ${message.readBy?.length - 1} users`}
+                    </div>
+                  ) : (
+                    chat.isAccepted &&
+                    message.readBy?.length == chat.noMembers && (
+                      <div className="w-fit text-xs self-end opacity-75">• Seen</div>
+                    )
+                  )}
+                </>
               )}
             </div>
           );

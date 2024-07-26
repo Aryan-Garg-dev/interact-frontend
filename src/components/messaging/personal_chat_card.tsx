@@ -7,7 +7,6 @@ import getDisplayTime from '@/utils/funcs/get_display_time';
 import { getMessagingUser } from '@/utils/funcs/messaging';
 import { useDispatch, useSelector } from 'react-redux';
 import { currentChatIDSelector, setCurrentChatID } from '@/slices/messagingSlice';
-import { useRouter } from 'next/router';
 
 interface Props {
   chat: Chat;
@@ -17,15 +16,10 @@ interface Props {
 const PersonalChatCard = ({ chat, setChats }: Props) => {
   const userID = Cookies.get('id');
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const currentChatID = useSelector(currentChatIDSelector);
 
   const handleClick = () => {
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, chat: 'personal' },
-    });
     dispatch(setCurrentChatID(chat.id));
     // setChats(prev =>
     //   prev.map(c => {

@@ -5,7 +5,6 @@ import Image from 'next/image';
 import getDisplayTime from '@/utils/funcs/get_display_time';
 import { useDispatch, useSelector } from 'react-redux';
 import { currentChatIDSelector, setCurrentChatID } from '@/slices/messagingSlice';
-import { useRouter } from 'next/router';
 import { GROUP_CHAT_PIC_URL } from '@/config/routes';
 
 interface Props {
@@ -17,14 +16,9 @@ const GroupChatCard = ({ chat }: Props) => {
   const dispatch = useDispatch();
 
   const currentChatID = useSelector(currentChatIDSelector);
-  const router = useRouter();
 
   const handleClick = () => {
     dispatch(setCurrentChatID(chat.id));
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, chat: 'group' },
-    });
   };
 
   return (
@@ -46,7 +40,14 @@ const GroupChatCard = ({ chat }: Props) => {
       />
       <div className="w-full flex flex-col gap-1">
         <div className="w-full flex items-center justify-between">
-          <div className="text-xl font-semibold">{chat.title}</div>
+          <div className="w-fit flex-center gap-2">
+            <div className="text-xl font-semibold">{chat.title}</div>
+            <div className="text-xs">
+              {chat.projectID
+                ? '@' + chat.project?.title
+                : chat.organizationID && '@' + chat.organization?.user?.username}
+            </div>
+          </div>
           <div className="flex flex-col font text-xs">
             {chat.latestMessage
               ? getDisplayTime(chat.latestMessage.createdAt, false)
