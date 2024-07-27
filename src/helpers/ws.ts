@@ -8,7 +8,7 @@ import { getUserFromState } from '@/utils/funcs/redux';
 import sortChats from '@/utils/funcs/sort_chats';
 import { toast } from 'react-toastify';
 import { messageToastSettings } from '../utils/toaster';
-import { currentOrgIDSelector, currentOrgMembershipSelector, currentOrgSelector, setCurrentOrgRole } from '@/slices/orgSlice';
+import {setCurrentOrgRole } from '@/slices/orgSlice';
 
 export class WSEvent {
   type = '';

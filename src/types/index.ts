@@ -351,10 +351,6 @@ export interface Message {
   message: Message | null;
   readBy: MessageReadStatus[];
   createdAt: Date;
-  organizationID: string;
-  organization: Organization;
-  role: string;
-
 }
 
 export interface MessageReadStatus {
