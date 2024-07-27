@@ -13,10 +13,11 @@ import patchHandler from '@/handlers/patch_handler';
 interface Props {
   membership: ChatMembership;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  setChat: React.Dispatch<React.SetStateAction<Chat>>;
+  setChat?: React.Dispatch<React.SetStateAction<Chat>>;
+  setChats?: React.Dispatch<React.SetStateAction<Chat[]>>;
 }
 
-const EditMembership = ({ setShow, membership, setChat }: Props) => {
+const EditMembership = ({ setShow, membership, setChat, setChats }: Props) => {
   const [mutex, setMutex] = useState(false);
 
   const handleChangeRole = async () => {
@@ -34,16 +35,31 @@ const EditMembership = ({ setShow, membership, setChat }: Props) => {
 
     const res = await patchHandler(URL, formData);
     if (res.statusCode === 200) {
-      setChat(prev => {
-        return {
-          ...prev,
-          memberships: prev.memberships.map(m => {
-            if (m.id == membership.id) {
-              return { ...m, isAdmin: !m.isAdmin };
-            } else return m;
-          }),
-        };
-      });
+      if (setChat)
+        setChat(prev => {
+          return {
+            ...prev,
+            memberships: prev.memberships.map(m => {
+              if (m.id == membership.id) {
+                return { ...m, isAdmin: !m.isAdmin };
+              } else return m;
+            }),
+          };
+        });
+      else if (setChats)
+        setChats(prev =>
+          prev.map(chat => {
+            if (chat.id == membership.chatID) {
+              return {
+                ...chat,
+                memberships: chat.memberships.map(m => {
+                  if (m.id == membership.id) return { ...m, role: (m.isAdmin = !m.isAdmin) };
+                  else return m;
+                }),
+              };
+            } else return chat;
+          })
+        );
       setShow(false);
       Toaster.stopLoad(toaster, 'Role Changed of the User', 1);
     } else {
@@ -70,12 +86,24 @@ const EditMembership = ({ setShow, membership, setChat }: Props) => {
 
     const res = await postHandler(URL, formData);
     if (res.statusCode === 204) {
-      setChat(prev => {
-        return {
-          ...prev,
-          memberships: prev.memberships.filter(m => m.id != membership.id),
-        };
-      });
+      if (setChat)
+        setChat(prev => {
+          return {
+            ...prev,
+            memberships: prev.memberships.filter(m => m.id != membership.id),
+          };
+        });
+      else if (setChats)
+        setChats(prev =>
+          prev.map(chat => {
+            if (chat.id == membership.chatID) {
+              return {
+                ...chat,
+                memberships: chat.memberships.filter(m => m.id != membership.id),
+              };
+            } else return chat;
+          })
+        );
       setShow(false);
       Toaster.stopLoad(toaster, 'Member Removed from Group', 1);
     } else {

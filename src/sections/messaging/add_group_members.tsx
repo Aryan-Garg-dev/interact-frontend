@@ -12,10 +12,11 @@ import Loader from '@/components/common/loader';
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   chat: Chat;
-  setChat: React.Dispatch<React.SetStateAction<Chat>>;
+  setChat?: React.Dispatch<React.SetStateAction<Chat>>;
+  setChats?: React.Dispatch<React.SetStateAction<Chat[]>>;
 }
 
-const AddGroupMembers = ({ setShow, chat, setChat }: Props) => {
+const AddGroupMembers = ({ setShow, chat, setChat, setChats }: Props) => {
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
@@ -23,9 +24,6 @@ const AddGroupMembers = ({ setShow, chat, setChat }: Props) => {
   const [mutex, setMutex] = useState(false);
 
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
-
-  const memberUserIDs = chat.memberships.map(membership => membership.userID);
-  const invitedUserIDs = chat.invitations.map(invitation => invitation.userID);
 
   let oldAbortController: AbortController | null = null;
 
@@ -39,12 +37,10 @@ const AddGroupMembers = ({ setShow, chat, setChat }: Props) => {
 
   const fetchUsers = async (key: string, abortController: AbortController) => {
     setLoading(true);
-    const URL = `${EXPLORE_URL}/users/trending?search=${key}`;
+    const URL = `${MESSAGING_URL}/group/non_members/${chat.id}?search=${key}`;
     const res = await getHandler(URL, abortController.signal);
     if (res.statusCode == 200) {
-      let userData = res.data.users || [];
-      userData = userData.filter((user: User) => !invitedUserIDs.includes(user.id) && !memberUserIDs.includes(user.id));
-      setUsers(userData);
+      setUsers(res.data.users || []);
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -71,9 +67,9 @@ const AddGroupMembers = ({ setShow, chat, setChat }: Props) => {
     if (mutex) return;
     setMutex(true);
 
-    const toaster = Toaster.startLoad('Sending Invitations');
+    const toaster = Toaster.startLoad(chat.projectID || chat.organizationID ? 'Adding Members' : 'Sending Invitations');
 
-    const URL = `${MESSAGING_URL}/group/members/invite/${chat.id}`;
+    const URL = `${MESSAGING_URL}/group/members/${chat.projectID || chat.organizationID ? 'add' : 'invite'}/${chat.id}`;
 
     const userIDs = selectedUsers.map(user => user.id);
     const formData = {
@@ -83,14 +79,28 @@ const AddGroupMembers = ({ setShow, chat, setChat }: Props) => {
     const res = await postHandler(URL, formData);
     if (res.statusCode === 200) {
       const invitations = res.data.invitations;
-      setChat(prev => {
-        return {
-          ...prev,
-          invitations: [...prev.invitations, ...(invitations || [])],
-        };
-      });
+      if (chat.projectID || chat.organizationID) {
+        if (setChats) {
+          const memberships = res.data.memberships || [];
+          setChats(prev =>
+            prev.map(c => {
+              if (c.id == chat.id) {
+                return { ...c, memberships: [...c.memberships, ...memberships] };
+              } else return c;
+            })
+          );
+        }
+      } else {
+        if (setChat)
+          setChat(prev => {
+            return {
+              ...prev,
+              invitations: [...prev.invitations, ...(invitations || [])],
+            };
+          });
+      }
       setShow(false);
-      Toaster.stopLoad(toaster, 'Invitations Sent!', 1);
+      Toaster.stopLoad(toaster, chat.projectID || chat.organizationID ? 'Members Added' : 'Invitations Sent!', 1);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
       else {

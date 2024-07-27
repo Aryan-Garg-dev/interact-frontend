@@ -2,6 +2,7 @@ import OrgSidebar from '@/components/common/org_sidebar';
 import Sidebar from '@/components/common/sidebar';
 import TabMenu from '@/components/common/tab_menu';
 import SearchBar from '@/components/messaging/searchbar';
+import { EXPLORE_URL, MESSAGING_URL } from '@/config/routes';
 import ChatScreen from '@/screens/messaging/chat/chat_screen';
 import Group from '@/screens/messaging/group';
 import Personal from '@/screens/messaging/personal';
@@ -59,7 +60,13 @@ const Messaging = () => {
             open ? 'gap-2' : 'gap-16'
           } transition-ease-out-500 font-primary`}
         >
-          {clickedOnNewGroup && <NewGroup setShow={setClickedOnNewGroup} />}
+          {clickedOnNewGroup && (
+            <NewGroup
+              userFetchURL={`${EXPLORE_URL}/users/trending`}
+              submitURL={`${MESSAGING_URL}/group`}
+              setShow={setClickedOnNewGroup}
+            />
+          )}
           {/* 100-(navbar+1) */}
           <div className="w-[37.5vw] max-lg:w-screen h-full flex flex-col pt-4 pl-4 max-lg:pl-0 gap-4 ">
             <div className="w-full flex items-center justify-between max-lg:px-4 relative">

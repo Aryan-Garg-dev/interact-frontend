@@ -6,14 +6,15 @@ interface Props {
   setVal: React.Dispatch<React.SetStateAction<boolean>>;
   required?: boolean;
   disabled?: boolean;
+  border?: boolean;
 }
 
-const Checkbox = ({ label, val, setVal, required = false, disabled = false }: Props) => {
+const Checkbox = ({ label, val, setVal, required = false, disabled = false, border = true }: Props) => {
   return (
     <label
-      className={`w-full flex justify-between  select-none items-center text-sm gap-2 border-[1px] border-gray-400 rounded-lg p-2 ${
-        disabled ? 'cursor-default' : 'cursor-pointer'
-      }`}
+      className={`w-full flex justify-between  select-none items-center text-sm gap-2 ${
+        border && 'border-[1px] border-gray-400'
+      } rounded-lg p-2 ${disabled ? 'cursor-default' : 'cursor-pointer'}`}
     >
       {label && (
         <div className="text-base font-medium text-gray-500">

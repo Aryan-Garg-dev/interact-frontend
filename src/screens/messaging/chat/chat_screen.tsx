@@ -19,7 +19,7 @@ import { useWindowWidth } from '@react-hook/window-size';
 import ChatInfo from '@/sections/messaging/chat_info';
 import { setUnreadChats, unreadChatsSelector } from '@/slices/feedSlice';
 import { getUserFromState } from '@/utils/funcs/redux';
-import { getMessagingUser } from '@/utils/funcs/messaging';
+import { getMessagingUser, getSelfMembership } from '@/utils/funcs/messaging';
 import ScrollWrapper from './scroll_wrapper';
 import GroupInfo from '@/sections/messaging/group_info';
 
@@ -139,7 +139,12 @@ const ChatScreen = () => {
         <Loader />
       ) : clickedOnInfo ? (
         chat.isGroup ? (
-          <GroupInfo chat={chat} setShow={setClickedOnInfo} setChat={setChat} />
+          <GroupInfo
+            chat={chat}
+            setShow={setClickedOnInfo}
+            setChat={setChat}
+            access={getSelfMembership(chat).isAdmin}
+          />
         ) : (
           <ChatInfo chat={chat} setShow={setClickedOnInfo} setChat={setChat} />
         )
