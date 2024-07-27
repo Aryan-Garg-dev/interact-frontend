@@ -82,8 +82,8 @@ const Meetings = () => {
         {clickedOnInfo && <AccessTree type="meeting" setShow={setClickedOnInfo} />}
         <div className="w-full flex justify-between items-center p-base_padding">
           <div className="flex-center gap-4">
-            <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Meetings</div>
-            <div className="flex-center gap-2">
+            <div className="w-fit text-6xl max-md:text-4xl font-semibold dark:text-white font-primary ">Meetings</div>
+            <div className="flex-center gap-2 max-md:hidden">
               <Select
                 fieldName="Access"
                 options={['open', 'restricted']}
@@ -127,13 +127,13 @@ const Meetings = () => {
           </div>
         </div>
 
-        <div className="w-[calc(100%-48px)] h-16 bg-white rounded-xl mx-auto border-gray-400 flex font-semibold text-primary_black mb-2">
-          <div className="w-1/6 flex-center">Title</div>
-          <div className="w-1/6 flex-center">Status</div>
-          <div className="w-1/6 flex-center">Tags</div>
-          <div className="w-1/6 flex-center">Frequency</div>
-          <div className="w-1/6 flex-center">Access</div>
-          <div className="w-1/6 flex-center">Details</div>
+        <div className="w-[calc(100%-48px)] h-16 max-md:h-12 bg-white rounded-xl mx-auto border-gray-400 flex font-semibold text-primary_black mb-2">
+          <div className="w-1/6 max-md:w-1/3 flex-center">Title</div>
+          <div className="w-1/6 max-md:w-1/3 flex-center">Status</div>
+          <div className="w-1/6 max-md:hidden flex-center">Tags</div>
+          <div className="w-1/6 max-md:hidden flex-center">Frequency</div>
+          <div className="w-1/6 max-md:w-1/3 flex-center">Access</div>
+          <div className="w-1/6 max-md:hidden flex-center">Details</div>
         </div>
 
         {loading ? (
@@ -158,4 +158,4 @@ const Meetings = () => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Meetings));
+export default OrgMembersOnlyAndProtect(Meetings);

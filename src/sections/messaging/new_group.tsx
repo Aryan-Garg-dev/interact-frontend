@@ -1,6 +1,6 @@
-import { EXPLORE_URL, GROUP_CHAT_PIC_URL, MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { GROUP_CHAT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
-import { User } from '@/types';
+import { Chat, User } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -8,14 +8,23 @@ import { MagnifyingGlass, Pen } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import Loader from '@/components/common/loader';
-import Cookies from 'js-cookie';
 import { resizeImage } from '@/utils/resize_image';
+import PrimaryButton from '@/components/buttons/primary_btn';
+import TextArea from '@/components/form/textarea';
+import { setChats, userSelector } from '@/slices/userSlice';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import socketService from '@/config/ws';
 
 interface Props {
+  userFetchURL: string;
+  userFetchURLQuery?: string;
+  submitURL: string;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
+  setStateChats?: React.Dispatch<React.SetStateAction<Chat[]>>;
 }
 
-const NewGroup = ({ setShow }: Props) => {
+const NewGroup = ({ userFetchURL, submitURL, userFetchURLQuery, setShow, setStateChats }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [users, setUsers] = useState<User[]>([]);
@@ -32,7 +41,8 @@ const NewGroup = ({ setShow }: Props) => {
 
   let oldAbortController: AbortController | null = null;
 
-  const userID = Cookies.get('id');
+  const user = useSelector(userSelector);
+  const dispatch = useDispatch();
 
   const handleChange = (el: React.ChangeEvent<HTMLInputElement>) => {
     const abortController = new AbortController();
@@ -44,11 +54,11 @@ const NewGroup = ({ setShow }: Props) => {
 
   const fetchUsers = async (key: string, abortController: AbortController) => {
     setLoading(true);
-    const URL = `${EXPLORE_URL}/users/trending?search=${key}`;
+    let URL = `${userFetchURL}?search=${key}`;
+    if (userFetchURLQuery) URL += userFetchURLQuery;
     const res = await getHandler(URL, abortController.signal);
     if (res.statusCode == 200) {
-      const userData: User[] = res.data.users || [];
-      setUsers(userData.filter(user => user.id != userID));
+      setUsers(res.data.users || []);
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -82,7 +92,7 @@ const NewGroup = ({ setShow }: Props) => {
 
     const toaster = Toaster.startLoad('Sending Invitations');
 
-    const URL = `${MESSAGING_URL}/group`;
+    const URL = submitURL;
 
     const userIDs = selectedUsers.map(user => user.id);
 
@@ -94,6 +104,11 @@ const NewGroup = ({ setShow }: Props) => {
 
     const res = await postHandler(URL, formData, 'multipart/form-data');
     if (res.statusCode === 201) {
+      if (setStateChats) setStateChats(prev => [...prev, res.data.chat]);
+      if (res.data.chat?.id) {
+        dispatch(setChats([...user.chats, res.data.chat.id]));
+        socketService.setupChats([...user.chats, res.data.chat.id]);
+      }
       setGroupPic(undefined);
       setShow(false);
       Toaster.stopLoad(toaster, 'New Group Created!', 1);
@@ -136,39 +151,33 @@ const NewGroup = ({ setShow }: Props) => {
                 {loading ? (
                   <Loader />
                 ) : (
-                  <>
-                    {users.map(user => {
-                      return (
-                        <div
-                          key={user.id}
-                          onClick={() => handleClickUser(user)}
-                          className={`w-full flex gap-2 rounded-lg p-2 ${
-                            selected(user)
-                              ? 'bg-primary_comp_hover dark:bg-dark_primary_comp_active'
-                              : 'dark:bg-dark_primary_comp hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
-                          } cursor-pointer transition-ease-200`}
-                        >
-                          <Image
-                            crossOrigin="anonymous"
-                            width={50}
-                            height={50}
-                            alt={'User Pic'}
-                            src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-                            className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
-                          />
-                          <div className="w-5/6 flex flex-col">
-                            <div className="text-lg font-bold">{user.name}</div>
-                            <div className="text-sm dark:text-gray-200">@{user.username}</div>
-                            {user.tagline && user.tagline != '' ? (
-                              <div className="text-sm mt-2">{user.tagline}</div>
-                            ) : (
-                              <></>
-                            )}
-                          </div>
+                  users.map(user => {
+                    return (
+                      <div
+                        key={user.id}
+                        onClick={() => handleClickUser(user)}
+                        className={`w-full flex gap-2 rounded-lg p-2 ${
+                          selected(user)
+                            ? 'bg-primary_comp_hover dark:bg-dark_primary_comp_active'
+                            : 'dark:bg-dark_primary_comp hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
+                        } cursor-pointer transition-ease-200`}
+                      >
+                        <Image
+                          crossOrigin="anonymous"
+                          width={50}
+                          height={50}
+                          alt={'User Pic'}
+                          src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                          className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
+                        />
+                        <div className="w-5/6 flex flex-col">
+                          <div className="text-lg font-bold">{user.name}</div>
+                          <div className="text-sm dark:text-gray-200">@{user.username}</div>
+                          {user.tagline && user.tagline != '' && <div className="text-sm mt-2">{user.tagline}</div>}
                         </div>
-                      );
-                    })}
-                  </>
+                      </div>
+                    );
+                  })
                 )}
               </div>
             </>
@@ -213,13 +222,7 @@ const NewGroup = ({ setShow }: Props) => {
                   onChange={el => setTitle(el.target.value)}
                 />
               </div>
-              <textarea
-                className="w-full min-h-[64px] max-h-36 px-4 py-2 bg-primary_comp dark:bg-dark_primary_comp rounded-lg focus:outline-none"
-                placeholder="Group Description"
-                maxLength={250}
-                value={description}
-                onChange={el => setDescription(el.target.value)}
-              ></textarea>
+              <TextArea val={description} setVal={setDescription} maxLength={250} label="Description" />
               <div className="w-full flex flex-col gap-2 px-4 py-2">
                 <div>Members ({selectedUsers.length}/25)</div>
                 <div className="w-full flex flex-wrap gap-4">
@@ -250,26 +253,11 @@ const NewGroup = ({ setShow }: Props) => {
         </div>
         <div className={`w-full flex ${status == 0 ? 'justify-end' : 'justify-between'}`}>
           {status == 0 ? (
-            <div
-              onClick={() => setStatus(1)}
-              className="w-32 p-2 flex-center dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active transition-ease-300 cursor-pointer rounded-lg font-medium text-lg"
-            >
-              Next
-            </div>
+            <PrimaryButton onClick={() => setStatus(1)} label="Next" animateIn={true} />
           ) : (
             <>
-              <div
-                onClick={() => setStatus(0)}
-                className="w-32 p-2 flex-center dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active transition-ease-300 cursor-pointer rounded-lg font-medium text-lg"
-              >
-                Prev
-              </div>
-              <div
-                onClick={handleSubmit}
-                className="w-32 p-2 flex-center dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active transition-ease-300 cursor-pointer rounded-lg font-medium text-lg"
-              >
-                Submit
-              </div>
+              <PrimaryButton onClick={() => setStatus(0)} label="Prev" animateIn={true} />
+              <PrimaryButton onClick={handleSubmit} label="Submit" animateIn={true} />
             </>
           )}
         </div>

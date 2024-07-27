@@ -1,13 +1,13 @@
 import React from 'react';
 import Image from 'next/image';
-import { GroupChat } from '@/types';
 import { ArrowArcLeft, Info } from '@phosphor-icons/react';
 import { useDispatch } from 'react-redux';
 import { setCurrentChatID } from '@/slices/messagingSlice';
 import { GROUP_CHAT_PIC_URL } from '@/config/routes';
+import { Chat } from '@/types';
 
 interface Props {
-  chat: GroupChat;
+  chat: Chat;
   setClickedOnInfo: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -27,7 +27,11 @@ const ChatHeader = ({ chat, setClickedOnInfo }: Props) => {
         />
         <div className="flex flex-col">
           <div className="text-lg font-medium">{chat.title}</div>
-          {chat.project.title != '' ? <div className="text-xs">@{chat.project.title}</div> : <></>}
+          {chat.projectID ? (
+            <div className="text-xs">@{chat.project?.title}</div>
+          ) : (
+            chat.organizationID && <div className="text-xs">@{chat.organization?.title}</div>
+          )}
         </div>
       </div>
       <Info onClick={() => setClickedOnInfo(true)} className="cursor-pointer" size={32} />

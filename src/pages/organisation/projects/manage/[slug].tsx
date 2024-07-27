@@ -80,7 +80,7 @@ const ManageProject = ({ slug }: Props) => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(ManageProject));
+export default OrgMembersOnlyAndProtect(ManageProject);
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { slug } = context.query;

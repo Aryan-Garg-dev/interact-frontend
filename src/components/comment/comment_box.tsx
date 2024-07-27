@@ -115,17 +115,12 @@ const CommentBox = ({ type, item, setNoComments, userFetchURL }: Props) => {
         Toaster.stopLoad(toaster, SERVER_ERROR, 0);
       }
     }
-    
   };
 
   const loggedInUser = useSelector(userSelector);
 
   return (
-    <div
-      className={`w-full h-full overflow-y-auto flex flex-col p-4 ${
-        comments.length < 3 && 'pb-40'
-      } font-primary gap-4 max-md:px-4`}
-    >
+    <div className={`w-full h-full flex flex-col p-4 font-primary gap-4 max-md:px-4`}>
       <CommentInput
         content={commentBody}
         setContent={setCommentBody}

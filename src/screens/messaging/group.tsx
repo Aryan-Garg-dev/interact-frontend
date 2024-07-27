@@ -6,25 +6,28 @@ import { MESSAGING_URL } from '@/config/routes';
 import socketService from '@/config/ws';
 import getHandler from '@/handlers/get_handler';
 import { userSelector } from '@/slices/userSlice';
-import { GroupChat } from '@/types';
-import { sortGroupChats } from '@/utils/funcs/sort_chats';
+import { Chat } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const Group = () => {
-  const [chats, setChats] = useState<GroupChat[]>([]);
-  const [filteredChats, setFilteredChats] = useState<GroupChat[]>([]);
+interface Props {
+  type?: string;
+}
+
+const Group = ({ type }: Props) => {
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
 
   const currentChats = useSelector(userSelector).chats;
 
   const fetchChats = async () => {
     setLoading(true);
-    const URL = `${MESSAGING_URL}/group`;
+    const URL = `${MESSAGING_URL}/group${type ? `?type=${type}` : ''}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      setChats(sortGroupChats(res.data.chats || []));
+      setChats(res.data.chats || []);
       setFilteredChats(res.data.chats || []);
       setLoading(false);
     } else {
@@ -46,7 +49,7 @@ const Group = () => {
 
   useEffect(() => {
     fetchChats();
-    socketService.setupGroupChatListRoutes(setChats);
+    socketService.setupChatListRoutes(setChats);
   }, [currentChats]);
 
   useEffect(() => {
@@ -57,34 +60,20 @@ const Group = () => {
     <div className="w-full flex flex-col gap-2 p-2">
       {loading ? (
         <Loader />
+      ) : !new URLSearchParams(window.location.search).get('search') ? (
+        chats.length > 0 ? (
+          chats.map(chat => {
+            return <GroupChatCard key={chat.id} chat={chat} />;
+          })
+        ) : (
+          <NoChats />
+        )
+      ) : filteredChats.length > 0 ? (
+        filteredChats.map(chat => {
+          return <GroupChatCard key={chat.id} chat={chat} />;
+        })
       ) : (
-        <>
-          {!new URLSearchParams(window.location.search).get('search') ? (
-            <>
-              {chats.length > 0 ? (
-                <>
-                  {chats.map(chat => {
-                    return <GroupChatCard key={chat.id} chat={chat} />;
-                  })}
-                </>
-              ) : (
-                <NoChats />
-              )}
-            </>
-          ) : (
-            <>
-              {filteredChats.length > 0 ? (
-                <>
-                  {filteredChats.map(chat => {
-                    return <GroupChatCard key={chat.id} chat={chat} />;
-                  })}
-                </>
-              ) : (
-                <NoChats />
-              )}
-            </>
-          )}
-        </>
+        <NoChats />
       )}
     </div>
   );

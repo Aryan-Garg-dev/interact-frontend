@@ -1,22 +1,23 @@
 import { MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
-import { GroupChat, GroupChatMembership } from '@/types';
+import { Chat, ChatMembership } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { X } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
-import { GROUP_ADMIN, GROUP_MEMBER } from '@/config/constants';
 import moment from 'moment';
 import Link from 'next/link';
+import patchHandler from '@/handlers/patch_handler';
 
 interface Props {
-  membership: GroupChatMembership;
+  membership: ChatMembership;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  setChat: React.Dispatch<React.SetStateAction<GroupChat>>;
+  setChat?: React.Dispatch<React.SetStateAction<Chat>>;
+  setChats?: React.Dispatch<React.SetStateAction<Chat[]>>;
 }
 
-const EditMembership = ({ setShow, membership, setChat }: Props) => {
+const EditMembership = ({ setShow, membership, setChat, setChats }: Props) => {
   const [mutex, setMutex] = useState(false);
 
   const handleChangeRole = async () => {
@@ -29,21 +30,36 @@ const EditMembership = ({ setShow, membership, setChat }: Props) => {
 
     const formData = {
       userID: membership.userID,
-      role: membership.role == GROUP_ADMIN ? GROUP_MEMBER : GROUP_ADMIN,
+      isAdmin: !membership.isAdmin,
     };
 
-    const res = await postHandler(URL, formData);
+    const res = await patchHandler(URL, formData);
     if (res.statusCode === 200) {
-      setChat(prev => {
-        return {
-          ...prev,
-          memberships: prev.memberships.map(m => {
-            if (m.id == membership.id) {
-              return { ...m, role: m.role == GROUP_ADMIN ? GROUP_MEMBER : GROUP_ADMIN };
-            } else return m;
-          }),
-        };
-      });
+      if (setChat)
+        setChat(prev => {
+          return {
+            ...prev,
+            memberships: prev.memberships.map(m => {
+              if (m.id == membership.id) {
+                return { ...m, isAdmin: !m.isAdmin };
+              } else return m;
+            }),
+          };
+        });
+      else if (setChats)
+        setChats(prev =>
+          prev.map(chat => {
+            if (chat.id == membership.chatID) {
+              return {
+                ...chat,
+                memberships: chat.memberships.map(m => {
+                  if (m.id == membership.id) return { ...m, role: (m.isAdmin = !m.isAdmin) };
+                  else return m;
+                }),
+              };
+            } else return chat;
+          })
+        );
       setShow(false);
       Toaster.stopLoad(toaster, 'Role Changed of the User', 1);
     } else {
@@ -70,12 +86,24 @@ const EditMembership = ({ setShow, membership, setChat }: Props) => {
 
     const res = await postHandler(URL, formData);
     if (res.statusCode === 204) {
-      setChat(prev => {
-        return {
-          ...prev,
-          memberships: prev.memberships.filter(m => m.id != membership.id),
-        };
-      });
+      if (setChat)
+        setChat(prev => {
+          return {
+            ...prev,
+            memberships: prev.memberships.filter(m => m.id != membership.id),
+          };
+        });
+      else if (setChats)
+        setChats(prev =>
+          prev.map(chat => {
+            if (chat.id == membership.chatID) {
+              return {
+                ...chat,
+                memberships: chat.memberships.filter(m => m.id != membership.id),
+              };
+            } else return chat;
+          })
+        );
       setShow(false);
       Toaster.stopLoad(toaster, 'Member Removed from Group', 1);
     } else {
@@ -90,7 +118,7 @@ const EditMembership = ({ setShow, membership, setChat }: Props) => {
 
   return (
     <>
-      <div className="absolute bottom-0 w-full backdrop-blur-2xl bg-[#ffe1fc22] flex flex-col gap-6 rounded-md p-10 max-lg:p-5 dark:text-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
+      <div className="absolute bottom-0 w-full backdrop-blur-2xl bg-white flex flex-col gap-6 rounded-md p-10 max-lg:p-5 dark:text-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
         <div className="w-full flex items-center gap-4">
           <Image
             crossOrigin="anonymous"
@@ -120,7 +148,7 @@ const EditMembership = ({ setShow, membership, setChat }: Props) => {
               onClick={handleChangeRole}
               className="w-full py-4 text-center dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active rounded-lg cursor-pointer transition-ease-300"
             >
-              {membership.role == GROUP_MEMBER ? 'Make Group Admin' : 'Make Group Member'}
+              {!membership.isAdmin ? 'Make Group Admin' : 'Make Group Member'}
             </div>
           </div>
           <div

@@ -15,7 +15,6 @@ import Openings from '@/screens/workspace/manage_project/openings';
 import Loader from '@/components/common/loader';
 import Collaborators from '@/screens/workspace/manage_project/collaborators';
 import Chats from '@/screens/workspace/manage_project/chats';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import { checkParticularOrgAccess } from '@/utils/funcs/access';
 import { ORG_MANAGER, ORG_SENIOR } from '@/config/constants';
@@ -54,8 +53,8 @@ const ManageProject = ({ slug }: Props) => {
       <Sidebar index={3} />
       <MainWrapper>
         <div className="w-full flex flex-col items-center gap-4">
-          <div className="w-[70vw] max-lg:w-[75vw] max-md:w-[95%] flex items-start gap-3 p-base_padding pl-0 pt-28">
-            <div className="text-5xl font-bold dark:text-white font-primary">Manage Project</div>
+          <div className="w-[70vw] max-lg:w-[75vw] max-md:w-[95%] flex items-start gap-3 p-base_padding pl-0 pt-28 max-md:pt-16">
+            <div className="text-5xl font-bold dark:text-white font-primary max-md:hidden">Manage Project</div>
           </div>
           <TabMenu items={['Openings', 'Collaborators', 'Chats']} active={active} setState={setActive} />
           {loading ? (
@@ -87,7 +86,7 @@ const ManageProject = ({ slug }: Props) => {
   );
 };
 
-export default WidthCheck(NonOrgOnlyAndProtect(ManageProject));
+export default NonOrgOnlyAndProtect(ManageProject);
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { slug } = context.query;

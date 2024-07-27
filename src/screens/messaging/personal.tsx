@@ -8,13 +8,16 @@ import socketService from '@/config/ws';
 import getHandler from '@/handlers/get_handler';
 import { userSelector } from '@/slices/userSlice';
 import { Chat } from '@/types';
-import getMessagingUser from '@/utils/funcs/get_messaging_user';
-import sortChats from '@/utils/funcs/sort_chats';
+import { getMessagingUser } from '@/utils/funcs/messaging';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-const Personal = () => {
+interface Props {
+  requests?: boolean;
+}
+
+const Personal = ({ requests = false }: Props) => {
   const [allChats, setAllChats] = useState<Chat[]>([]);
   const [chats, setChats] = useState<Chat[]>([]);
   const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
@@ -24,10 +27,10 @@ const Personal = () => {
 
   const fetchChats = async () => {
     setLoading(true);
-    const URL = `${MESSAGING_URL}/personal`;
+    const URL = `${MESSAGING_URL}/personal${requests ? '?type=requests' : ''}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      setChats(sortChats(res.data.chats || []));
+      setChats(res.data.chats || []);
       setFilteredChats(res.data.chats || []);
       setLoading(false);
     } else {
@@ -38,7 +41,7 @@ const Personal = () => {
 
   const fetchAllChats = async () => {
     setLoading(true);
-    const URL = `${MESSAGING_URL}/personal/unfiltered`;
+    const URL = `${MESSAGING_URL}/personal${requests ? '?type=requests' : ''}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       setAllChats(res.data.chats || []);

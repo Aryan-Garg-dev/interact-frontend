@@ -12,6 +12,7 @@ import { setMemberProjects, userSelector } from '@/slices/userSlice';
 import ConfirmDelete from '../common/confirm_delete';
 import { setUnreadInvitations, unreadInvitationsSelector } from '@/slices/feedSlice';
 import socketService from '@/config/ws';
+import getInvitationStatus, { getInvitationStatusColor } from '@/utils/funcs/invitation';
 
 interface Props {
   invitation: Invitation;
@@ -48,7 +49,10 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
       dispatch(setUnreadInvitations(unreadInvitations - 1));
       Toaster.stopLoad(toaster, 'Invitation Accepted', 1);
 
-      socketService.sendNotification(invitation.sender.id, `${user.name} accepted the invitation to join ${invitation.project.title}`);
+      socketService.sendNotification(
+        invitation.sender.id,
+        `${user.name} accepted the invitation to join ${invitation.project.title}`
+      );
     } else {
       if (res.data.message) {
         Toaster.stopLoad(toaster, res.data.message, 0);
@@ -80,7 +84,10 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
       setClickedOnReject(false);
       Toaster.stopLoad(toaster, 'Invitation Rejected', 1);
 
-      socketService.sendNotification(invitation.sender.id, `${user.name} rejected the invitation to join ${invitation.project.title}`);
+      socketService.sendNotification(
+        invitation.sender.id,
+        `${user.name} rejected the invitation to join ${invitation.project.title}`
+      );
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
       else {
@@ -108,10 +115,10 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
           blurDataURL={invitation.project.blurHash || 'no-hash'}
         />
       </Link>
-      <div className="w-[calc(100%-80px)] flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between">
+      <div className="w-[calc(100%-80px)] max-md:w-full flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between">
         <div
           style={{ width: invitation.status == 0 ? '100%-50px' : '100%-20px' }}
-          className="w-[calc(100%-112px)] flex flex-col gap-1"
+          className="w-[calc(100%-112px)] max-md:w-full flex flex-col gap-1"
         >
           <Link
             target="_blank"

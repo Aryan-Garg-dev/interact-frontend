@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
-import { currentOrgIDSelector, currentOrgSelector } from '@/slices/orgSlice';
+import { currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import PrimaryButton from '@/components/buttons/primary_btn';
 import getHandler from '@/handlers/get_handler';
@@ -121,9 +121,9 @@ const AddMeetingParticipants = ({ meeting, setShow, setMeeting }: Props) => {
   return (
     <>
       <div className="fixed top-12 max-md:top-20 w-[640px] max-md:w-5/6 backdrop-blur-2xl bg-white flex flex-col gap-6 rounded-lg px-2 py-10 max-md:p-5 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
-        <div className="text-3xl max-md:text-xl font-semibold px-8">Add Participants</div>
-        <div className="w-full max-h-[540px] overflow-y-auto flex flex-col gap-4 px-8">
-          <div className="w-full h-12 flex items-center px-4 gap-4 dark:bg-dark_primary_comp_hover rounded-md">
+        <div className="text-3xl max-md:text-xl font-semibold px-8 max-md:px-0">Add Participants</div>
+        <div className="w-full max-h-[540px] overflow-y-auto flex flex-col gap-4 px-8 max-md:px-0">
+          <div className="w-full h-12 flex items-center px-4 max-md:px-0 gap-4 dark:bg-dark_primary_comp_hover rounded-md">
             <MagnifyingGlass size={24} />
             <input
               className="grow bg-transparent focus:outline-none font-medium"

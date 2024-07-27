@@ -19,7 +19,7 @@ const Tasks = ({ slug }: Props) => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Tasks));
+export default OrgMembersOnlyAndProtect(Tasks);
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { slug } = context.query;

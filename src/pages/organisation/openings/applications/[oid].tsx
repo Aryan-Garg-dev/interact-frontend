@@ -8,7 +8,6 @@ import MainWrapper from '@/wrappers/main';
 import { ArrowArcLeft, SlidersHorizontal } from '@phosphor-icons/react';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { useEffect, useState } from 'react';
-import ApplicationCard from '@/components/workspace/manage_project/application_card';
 import ApplicationView from '@/sections/workspace/manage_project/application_view';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import { useSelector } from 'react-redux';
@@ -81,7 +80,7 @@ const Applications = ({ oid }: Props) => {
 
       <MainWrapper>
         <div className="w-full flex flex-col gap-4">
-          <div className="w-full flex justify-between p-base_padding">
+          <div className="w-full flex justify-between p-base_padding max-md:px-4">
             <div className="flex gap-3">
               <ArrowArcLeft
                 onClick={() => window.history.back()}
@@ -91,7 +90,7 @@ const Applications = ({ oid }: Props) => {
               <div className="text-4xl font-semibold dark:text-white font-primary">Applications</div>
             </div>
 
-            <div className="relative">
+            <div className="relative max-md:hidden">
               <div
                 onClick={() => setClickedOnFilter(prev => !prev)}
                 className={`w-28 flex items-center justify-center gap-2 text-xl font-medium cursor-pointer p-2 rounded-xl ${
@@ -174,7 +173,7 @@ const Applications = ({ oid }: Props) => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Applications));
+export default OrgMembersOnlyAndProtect(Applications);
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { oid } = context.query;

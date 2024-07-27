@@ -18,7 +18,7 @@ const News = () => {
     <BaseWrapper title={`News | ${currentOrg.title}`}>
       <OrgSidebar index={13} />
       <MainWrapper>
-        <div className="w-full flex flex-col items-center gap-4 py-20">
+        <div className="w-full flex flex-col items-center gap-4 py-20 max-md:px-4">
           <TabMenu items={['Polls', 'Announcements']} active={tab} setState={setTab} />
           <div className={`w-full ${tab === 0 ? 'block' : 'hidden'}`}>
             <Polls />
@@ -32,4 +32,4 @@ const News = () => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(News));
+export default OrgMembersOnlyAndProtect(News);

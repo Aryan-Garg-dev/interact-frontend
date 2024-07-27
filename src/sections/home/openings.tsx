@@ -30,22 +30,24 @@ const Openings = () => {
   }, []);
 
   return (
-    <div className="w-full h-fit flex flex-col gap-6 max-md:hidden">
+    <div className="w-full h-fit flex flex-col gap-6">
       {loading ? (
         <Loader />
       ) : (
         openings.length > 0 && (
           <div className="w-full h-fit flex flex-col gap-4 p-6 rounded-md text-primary_black font-primary border-gray-300 border-[1px] bg-white hover:shadow-lg transition-ease-500">
             <div className="w-full flex items-center justify-between">
-              <div className="w-fit text-2xl font-semibold text-gradient">Trending Openings for You!</div>
+              <div className="w-fit text-2xl max-md:text-lg font-semibold text-gradient">
+                Trending Openings for You!
+              </div>
               <Link
                 href={'/explore?tab=openings'}
-                className="w-fit text-xs font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
+                className="w-fit text-xs max-md:text-xxs font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
               >
                 View More
               </Link>
             </div>
-            <div className="w-full grid grid-cols-2 gap-2">
+            <div className="w-full grid grid-cols-2 max-md:grid-cols-1 gap-2">
               {openings.map(opening => {
                 return (
                   <Link key={opening.id} href={`/explore?tab=openings&oid=${opening.id}`}>

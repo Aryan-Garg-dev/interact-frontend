@@ -1,15 +1,16 @@
 import CopyClipboardButton from '@/components/buttons/copy_clipboard_btn';
 import Loader from '@/components/common/loader';
-import PostComponent from '@/components/home/post';
 import { SERVER_ERROR } from '@/config/errors';
 import { MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import postHandler from '@/handlers/post_handler';
 import { Chat, Post } from '@/types';
-import getMessagingUser from '@/utils/funcs/get_messaging_user';
+import { getMessagingUser } from '@/utils/funcs/messaging';
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Toaster from '@/utils/toaster';
 import { X } from '@phosphor-icons/react';
 import Cookies from 'js-cookie';
+import moment from 'moment';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
@@ -99,7 +100,29 @@ const SharePost = ({ post, setShow }: Props) => {
           <X size={24} weight="bold" />
         </div>
         <div className="text-3xl text-center text-gray-900 font-bold">Share this Post</div>
-        <PostComponent post={post} showLowerPost={false} showImage={false} clamp={true} />
+        <div className="w-full font-primary flex gap-1 mt-4 border-primary_btn dark:border-dark_primary_btn border-[1px] dark:text-white rounded-xl p-2 max-md:px-4 max-md:py-4">
+          <div className="h-full">
+            <div className="rounded-full">
+              <Image
+                crossOrigin="anonymous"
+                width={50}
+                height={50}
+                alt={'User Pic'}
+                src={`${USER_PROFILE_PIC_URL}/${post.user.profilePic}`}
+                className={'rounded-full w-8 h-8'}
+              />
+            </div>
+          </div>
+          <div className="w-[calc(100%-32px)] flex flex-col gap-1">
+            <div className="w-full h-fit flex justify-between items-center">
+              <div className="font-medium">{post.user.username}</div>
+              <div className="flex gap-2 font-light text-xxs">{moment(post.postedAt).fromNow()}</div>
+            </div>
+            <div className="w-full text-xs  whitespace-pre-wrap mb-2 line-clamp-8">
+              {renderContentWithLinks(post.content, post.taggedUsers)}
+            </div>
+          </div>
+        </div>{' '}
         <div className="w-full h-[400px] overflow-y-auto flex flex-col justify-between gap-2">
           {loading ? (
             <Loader />

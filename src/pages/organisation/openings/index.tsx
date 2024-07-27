@@ -61,7 +61,7 @@ const Openings = () => {
         )}
         {clickedOnInfo && <AccessTree type="opening" setShow={setClickedOnInfo} />}
         <div className="w-full flex justify-between items-center p-base_padding">
-          <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Openings</div>
+          <div className="w-fit text-6xl max-md:text-4xl font-semibold dark:text-white font-primary ">Openings</div>
           <div className="flex items-center gap-2">
             {checkOrgAccess(ORG_MANAGER) && (
               <Plus
@@ -102,4 +102,4 @@ const Openings = () => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Openings));
+export default OrgMembersOnlyAndProtect(Openings);

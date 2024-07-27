@@ -147,8 +147,8 @@ const EditMeeting = ({ meeting, setShow, setMeeting }: Props) => {
   return (
     <>
       <div className="fixed top-12 max-md:top-20 w-[640px] max-md:w-5/6 backdrop-blur-2xl bg-white flex flex-col gap-6 rounded-lg px-2 py-10 max-md:p-5 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
-        <div className="text-3xl max-md:text-xl font-semibold px-8">Meeting Details</div>
-        <div className="w-full max-h-[540px] overflow-y-auto flex flex-col gap-4 px-8">
+        <div className="text-3xl max-md:text-xl font-semibold px-8 max-md:px-0">Meeting Details</div>
+        <div className="w-full max-h-[540px] overflow-y-auto flex flex-col gap-4 px-8 max-md:px-0">
           <div className="w-full flex flex-col gap-4">
             <Input label="Meeting Title" val={title} setVal={setTitle} maxLength={50} required={true} />
             <TextArea label="Meeting Description" val={description} setVal={setDescription} maxLength={500} />
@@ -162,8 +162,8 @@ const EditMeeting = ({ meeting, setShow, setMeeting }: Props) => {
                 options={['daily', 'weekly', 'monthly']}
               />
             )}
-            <div className="w-full flex justify-between gap-4">
-              <div className="w-1/2">
+            <div className="w-full flex max-md:flex-col justify-between gap-4">
+              <div className="w-1/2 max-md:w-full">
                 <Time
                   label="Start Time"
                   val={startTime}
@@ -172,7 +172,7 @@ const EditMeeting = ({ meeting, setShow, setMeeting }: Props) => {
                   includeDate={!isReoccurring}
                 />
               </div>
-              <div className="w-1/2">
+              <div className="w-1/2 max-md:w-full">
                 <Time
                   label="Expected End Time"
                   val={endTime}
@@ -215,7 +215,7 @@ const EditMeeting = ({ meeting, setShow, setMeeting }: Props) => {
             )}
           </div>
         </div>
-        <div className="w-full flex justify-end px-8">
+        <div className="w-full flex justify-end px-8 max-md:px-0">
           <PrimaryButton
             onClick={async () => {
               const checker = meetingDetailsValidator();

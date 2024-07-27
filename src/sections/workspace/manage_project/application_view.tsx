@@ -206,7 +206,7 @@ const ApplicationView = ({
       {clickedOnReject && (
         <ConfirmDelete setShow={setClickedOnReject} handleDelete={handleReject} title="Confirm Reject?" />
       )}
-      <div className="fixed w-no_side_base_open h-base top-navbar bg-white overflow-y-auto flex flex-col justify-between gap-8 p-8 font-primary z-10 animate-fade_third">
+      <div className="fixed w-no_side_base_open max-md:w-screen h-base top-navbar bg-white overflow-y-auto flex flex-col justify-between gap-8 p-8 max-md:px-4 font-primary z-10 max-md:z-20 animate-fade_third">
         <div className="w-full flex flex-col gap-6">
           <X
             className="fixed top-20 right-4 cursor-pointer"

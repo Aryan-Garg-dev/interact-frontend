@@ -1,30 +1,32 @@
-import { GroupChat, Project } from '@/types';
+import { Chat, Project } from '@/types';
 import { Plus } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
-import NewChat from '@/sections/workspace/manage_project/new_chat';
 import ChatCard from '@/components/workspace/manage_project/chat_card';
-import { PROJECT_URL } from '@/config/routes';
+import { MEMBERSHIP_URL, MESSAGING_URL, PROJECT_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import Loader from '@/components/common/loader';
-import { initialGroupChat } from '@/types/initials';
-import EditChat from '@/sections/workspace/manage_project/edit_chat';
+import { initialChat } from '@/types/initials';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import NoChats from '@/components/fillers/project_chats';
+import NewGroup from '@/sections/messaging/new_group';
+import GroupInfo from '@/sections/messaging/group_info';
+import { checkProjectAccess } from '@/utils/funcs/access';
+import { PROJECT_EDITOR } from '@/config/constants';
 
 interface Props {
   project: Project;
 }
 
 const Chats = ({ project }: Props) => {
-  const [chats, setChats] = useState<GroupChat[]>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [clickedOnAddChat, setClickedOnAddChat] = useState(false);
   const [clickedOnEditChat, setClickedOnEditChat] = useState(false);
-  const [clickedEditChat, setClickedEditChat] = useState(initialGroupChat);
+  const [clickedEditChat, setClickedEditChat] = useState(initialChat);
 
   const user = useSelector(userSelector);
 
@@ -46,7 +48,15 @@ const Chats = ({ project }: Props) => {
 
   return (
     <div className="w-[70vw] max-lg:w-screen mx-auto flex flex-col gap-6">
-      {clickedOnAddChat && <NewChat setShow={setClickedOnAddChat} project={project} setChats={setChats} />}
+      {clickedOnAddChat && (
+        <NewGroup
+          userFetchURL={`${MEMBERSHIP_URL}/members/${project.id}`}
+          userFetchURLQuery="&exclude_user=false"
+          submitURL={`${MESSAGING_URL}/project/${project.id}`}
+          setShow={setClickedOnAddChat}
+          setStateChats={setChats}
+        />
+      )}
       {(project.userID == user.id || user.managerProjects.includes(project.id)) && (
         <div
           onClick={() => setClickedOnAddChat(true)}
@@ -66,7 +76,7 @@ const Chats = ({ project }: Props) => {
       {loading ? (
         <Loader />
       ) : chats && chats.length > 0 ? (
-        <div className="flex justify-evenly px-4 pb-4">
+        <div className="flex justify-evenly px-4 pb-4 gap-8">
           <div className={`${clickedOnEditChat ? 'w-[40%]' : 'w-[720px]'} max-md:w-full flex flex-col gap-4`}>
             {chats.map(chat => {
               return (
@@ -81,12 +91,14 @@ const Chats = ({ project }: Props) => {
             })}
           </div>
           {clickedOnEditChat && (
-            <EditChat
-              chat={clickedEditChat}
-              project={project}
-              setStateChats={setChats}
-              setShow={setClickedOnEditChat}
-            />
+            <div className="grow h-full bg-gray-100 max-lg:border-0 border-primary_btn rounded-lg max-lg:rounded-none p-3 relative max-lg:backdrop-blur-2xl max-lg:z-50">
+              <GroupInfo
+                chat={clickedEditChat}
+                setStateChats={setChats}
+                setShow={setClickedOnEditChat}
+                access={checkProjectAccess(PROJECT_EDITOR, project.id)}
+              />
+            </div>
           )}
         </div>
       ) : (

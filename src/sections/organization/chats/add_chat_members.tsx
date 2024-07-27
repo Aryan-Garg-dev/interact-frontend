@@ -1,6 +1,6 @@
 import { MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
-import { GroupChat, Organization, User } from '@/types';
+import { Chat, Organization, User } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -9,9 +9,9 @@ import { SERVER_ERROR } from '@/config/errors';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  chat: GroupChat;
+  chat: Chat;
   organization: Organization;
-  setChats: React.Dispatch<React.SetStateAction<GroupChat[]>>;
+  setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
 }
 
 const AddChatMembers = ({ setShow, chat, organization, setChats }: Props) => {

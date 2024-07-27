@@ -32,7 +32,7 @@ const Home = () => {
       <Sidebar index={1} />
       <MainWrapper>
         {onboarding && user.id != '' && <Onboarding />}
-        <div className="w-full flex gap-6 px-12 max-md:px-2 py-base_padding">
+        <div className="w-full flex gap-6 px-12 max-md:px-4 py-base_padding">
           <div className="w-[70%] max-md:w-full flex flex-col items-center relative">
             {user.id != '' ? (
               <>

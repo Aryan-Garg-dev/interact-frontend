@@ -17,6 +17,8 @@ const TaskHistories: React.FC<Props> = ({ histories }) => {
         switch (history.historyType) {
           case -1:
           case 2:
+          case 12:
+          case 16:
             return <Created key={history.id} history={history} />;
           case 0:
           case 3:
@@ -28,10 +30,12 @@ const TaskHistories: React.FC<Props> = ({ histories }) => {
             return <Commented key={history.id} history={history} />;
           case 10:
           case 11:
+          case 14:
             return <Deleted key={history.id} history={history} />;
           case 6:
+          case 13:
+          case 15:
             return <Completed key={history.id} history={history} />;
-          // Add other cases here
           default:
             return null;
         }

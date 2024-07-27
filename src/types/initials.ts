@@ -3,13 +3,11 @@ import {
   Announcement,
   Application,
   Chat,
+  ChatMembership,
   Comment,
   Education,
   Event,
   EventBookmark,
-  GroupChat,
-  GroupChatMembership,
-  GroupChatMessage,
   Invitation,
   Meeting,
   Membership,
@@ -93,7 +91,9 @@ export const initialUser: User = {
   lastViewed: [],
   isVerified: false,
   isOrganization: false,
+  githubUsername: '',
   organization: null,
+  createdAt: '',
 };
 
 export const initialProject: Project = {
@@ -280,7 +280,6 @@ export const initialMessage: Message = {
   userID: '',
   user: initialUser,
   createdAt: new Date(),
-  read: false,
   postID: '',
   post: initialPost,
   projectID: '',
@@ -293,68 +292,30 @@ export const initialMessage: Message = {
   message: null,
   announcementID: '',
   announcement: initialAnnouncement,
-};
-
-export const initialGroupChatMessage: GroupChatMessage = {
-  id: '',
-  content: '',
-  chatID: '',
-  chat: null,
-  userID: '',
-  user: initialUser,
-  createdAt: new Date(),
-  read: false,
-  postID: '',
-  post: initialPost,
-  projectID: '',
-  project: initialProject,
-  openingID: '',
-  opening: initialOpening,
-  profileID: '',
-  profile: initialUser,
-  messageID: '',
-  message: null,
-  announcementID: '',
-  announcement: initialAnnouncement,
+  readBy: [],
 };
 
 export const initialChat: Chat = {
   id: '',
   title: '',
   description: '',
-  createdByID: '',
-  createdBy: initialUser,
-  acceptedByID: '',
-  acceptedBy: initialUser,
+  userID: '',
+  user: initialUser,
   createdAt: new Date(),
   messages: [],
   latestMessageID: '',
   latestMessage: initialMessage,
-  lastReadMessageByAcceptingUserID: '',
-  lastReadMessageByCreatingUserID: '',
-  accepted: false,
-  blockedByCreatingUser: false,
-  blockedByAcceptingUser: false,
-};
-
-export const initialGroupChat: GroupChat = {
-  id: '',
-  title: '',
-  description: '',
+  isAccepted: false,
+  isAdminOnly: false,
+  isGroup: false,
   coverPic: '',
-  adminOnly: false,
-  userID: '',
-  user: initialUser,
-  projectID: '',
-  project: initialProject,
-  organizationID: '',
-  organization: initialOrganization,
-  memberships: [],
-  createdAt: new Date(),
-  messages: [],
   invitations: [],
-  latestMessageID: '',
-  latestMessage: initialGroupChatMessage,
+  memberships: [],
+  noMembers: 0,
+  organization: null,
+  organizationID: '',
+  project: null,
+  projectID: '',
 };
 
 export const initialInvitation: Invitation = {
@@ -368,7 +329,7 @@ export const initialInvitation: Invitation = {
   organizationID: '',
   organization: initialOrganization,
   chatID: '',
-  chat: initialGroupChat,
+  chat: initialChat,
   eventID: '',
   event: null,
   title: '',
@@ -377,14 +338,16 @@ export const initialInvitation: Invitation = {
   createdAt: new Date(),
 };
 
-export const initialGroupChatMembership: GroupChatMembership = {
+export const initialChatMembership: ChatMembership = {
   id: '',
   userID: '',
   user: initialUser,
   chatID: '',
-  chat: initialGroupChat,
-  role: '',
+  isAdmin: false,
+  isBlocked: false,
   createdAt: new Date(),
+  lastReadMessage: initialMessage,
+  lastReadMessageID: '',
 };
 
 export const initialPostBookmark: PostBookmark = {
@@ -435,8 +398,12 @@ export const initialTask: Task = {
   organization: initialOrganization,
   organizationID: '',
   priority: 'low',
+  difficulty: 'easy',
   noComments: 0,
   histories: [],
+  prID: '',
+  prLink: '',
+  prStatus: -1,
 };
 
 export const initialSubTask: SubTask = {
@@ -449,6 +416,7 @@ export const initialSubTask: SubTask = {
   isCompleted: false,
   taskID: '',
   priority: 'low',
+  difficulty: 'easy',
 };
 
 export const initialEvent: Event = {

@@ -5,9 +5,9 @@ import { MESSAGING_URL, PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/r
 import getHandler from '@/handlers/get_handler';
 import postHandler from '@/handlers/post_handler';
 import { Chat, Opening } from '@/types';
-import getMessagingUser from '@/utils/funcs/get_messaging_user';
+import { getMessagingUser } from '@/utils/funcs/messaging';
 import Toaster from '@/utils/toaster';
-import { ClipboardText, X } from '@phosphor-icons/react';
+import { X } from '@phosphor-icons/react';
 import Cookies from 'js-cookie';
 import moment from 'moment';
 import Image from 'next/image';

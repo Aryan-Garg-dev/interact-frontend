@@ -348,7 +348,7 @@ const ProjectView = ({
                 blurDataURL={project.blurHash || 'no-hash'}
               />
 
-              <div className="w-[calc(100vw-128px-(100vh-56px))] max-lg:w-full h-full max-lg:h-fit max-lg:min-h-[calc(100vh-65px-384px)] overflow-y-auto border-gray-300 border-t-[1px] border-r-[1px] dark:border-0 p-4 bg-white dark:bg-dark_primary_comp_hover flex flex-col justify-between gap-4">
+              <div className="w-[calc(100vw-128px-(100vh-56px))] lg:h-full lg:overflow-y-auto max-lg:w-full border-gray-300 border-t-[1px] border-r-[1px] dark:border-0 p-4 bg-white dark:bg-dark_primary_comp_hover flex flex-col lg:justify-between gap-6 z-10">
                 <div className="w-full h-fit flex flex-col gap-6">
                   <div className="flex flex-wrap justify-between items-center gap-2">
                     <div className="font-bold text-3xl text-gradient">{project.title}</div>
@@ -460,7 +460,7 @@ const ProjectView = ({
                 setClickedProjectIndex(prev => prev - 1);
                 setFadeIn(false);
               }}
-              className="w-10 h-10 lg:hidden fixed bottom-3 left-3 rounded-full flex-center dark:bg-dark_primary_comp_hover cursor-pointer shadow-xl"
+              className="w-10 h-10 lg:hidden fixed bottom-3 left-3 rounded-full flex-center dark:bg-dark_primary_comp_hover cursor-pointer shadow-xl z-20"
             >
               <CaretLeft size={24} weight="bold" />
             </div>
@@ -471,7 +471,7 @@ const ProjectView = ({
                 setClickedProjectIndex(prev => prev + 1);
                 setFadeIn(false);
               }}
-              className="w-10 h-10 lg:hidden fixed bottom-3 right-3 rounded-full flex-center dark:bg-dark_primary_comp_hover cursor-pointer shadow-xl"
+              className="w-10 h-10 lg:hidden fixed bottom-3 right-3 rounded-full flex-center dark:bg-dark_primary_comp_hover cursor-pointer shadow-xl z-20"
             >
               <CaretRight size={24} weight="bold" />
             </div>

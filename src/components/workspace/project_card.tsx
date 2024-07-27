@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Project } from '@/types';
 import Image from 'next/image';
-import { PROJECT_PIC_URL, PROJECT_URL } from '@/config/routes';
+import { ORG_URL, PROJECT_PIC_URL, PROJECT_URL } from '@/config/routes';
 import { Eye, EyeSlash, HeartStraight } from '@phosphor-icons/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOwnerProjects, userSelector } from '@/slices/userSlice';
@@ -13,7 +13,7 @@ import ConfirmDelete from '../common/confirm_delete';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import ConfirmOTP from '../common/confirm_otp';
-import { checkOrgProjectAccess } from '@/utils/funcs/access';
+import checkOrgAccess, { checkOrgProjectAccess, checkParticularOrgAccess } from '@/utils/funcs/access';
 import { ORG_MANAGER, ORG_SENIOR, PROJECT_EDITOR, PROJECT_MANAGER, PROJECT_OWNER } from '@/config/constants';
 
 interface Props {
@@ -46,7 +46,9 @@ const ProjectCard = ({
   const sendOTP = async () => {
     const toaster = Toaster.startLoad('Sending OTP');
 
-    const URL = `${PROJECT_URL}/delete/${project.id}`;
+    const URL = checkParticularOrgAccess(ORG_MANAGER, project.organization)
+      ? `${ORG_URL}/${project.organizationID}/projects/delete/${project.id}`
+      : `${PROJECT_URL}/delete/${project.id}`;
 
     const res = await getHandler(URL);
 
@@ -63,7 +65,9 @@ const ProjectCard = ({
   const handleDelete = async (otp: string) => {
     const toaster = Toaster.startLoad('Deleting your project...');
 
-    const URL = `${PROJECT_URL}/${project.id}`;
+    const URL = checkParticularOrgAccess(ORG_MANAGER, project.organization)
+      ? `${ORG_URL}/${project.organizationID}/projects/${project.id}`
+      : `${PROJECT_URL}/${project.id}`;
 
     const res = await deleteHandler(URL, { otp });
 

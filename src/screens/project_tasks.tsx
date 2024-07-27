@@ -104,7 +104,7 @@ const ProjectTasks = ({ slug, org = false }: Props) => {
         <div className="w-full flex justify-between items-center p-base_padding">
           <div className="flex-center gap-4">
             <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Tasks</div>
-            <div className="flex-center gap-2">
+            <div className="flex-center gap-2 max-md:hidden">
               <Select
                 fieldName="Status"
                 options={['not_completed', 'completed']}
@@ -129,7 +129,7 @@ const ProjectTasks = ({ slug, org = false }: Props) => {
               <Tags selectedTags={tags} setSelectedTags={setTags} />
               <Users
                 fieldName="Assigned To"
-                users={[...project.memberships.map(m => m.user), getUserFromState(user)]}
+                users={[...project.memberships.map(m => m.user), getUserFromState()]}
                 selectedUsers={users}
                 setSelectedUsers={setUsers}
               />

@@ -22,6 +22,18 @@ const Created = ({ history }: Props) => {
           </div>
         </TaskHistoryWrapper>
       );
+    case 12: // User created PR
+      return (
+        <TaskHistoryWrapper history={history}>
+          <div className="w-fit text-center flex-center gap-1">created a Pull Request.</div>
+        </TaskHistoryWrapper>
+      );
+    case 16: // User reopened PR
+      return (
+        <TaskHistoryWrapper history={history}>
+          <div className="w-fit text-center flex-center gap-1">reopened the Pull Request.</div>
+        </TaskHistoryWrapper>
+      );
     default:
       return null;
   }
