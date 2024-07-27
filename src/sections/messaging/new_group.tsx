@@ -8,20 +8,23 @@ import { MagnifyingGlass, Pen } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import Loader from '@/components/common/loader';
-import Cookies from 'js-cookie';
 import { resizeImage } from '@/utils/resize_image';
 import PrimaryButton from '@/components/buttons/primary_btn';
 import TextArea from '@/components/form/textarea';
+import { setChats, userSelector } from '@/slices/userSlice';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import socketService from '@/config/ws';
 
 interface Props {
   userFetchURL: string;
   userFetchURLQuery?: string;
   submitURL: string;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  setChats?: React.Dispatch<React.SetStateAction<Chat[]>>;
+  setStateChats?: React.Dispatch<React.SetStateAction<Chat[]>>;
 }
 
-const NewGroup = ({ userFetchURL, submitURL, userFetchURLQuery, setShow, setChats }: Props) => {
+const NewGroup = ({ userFetchURL, submitURL, userFetchURLQuery, setShow, setStateChats }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [users, setUsers] = useState<User[]>([]);
@@ -38,7 +41,8 @@ const NewGroup = ({ userFetchURL, submitURL, userFetchURLQuery, setShow, setChat
 
   let oldAbortController: AbortController | null = null;
 
-  const userID = Cookies.get('id');
+  const user = useSelector(userSelector);
+  const dispatch = useDispatch();
 
   const handleChange = (el: React.ChangeEvent<HTMLInputElement>) => {
     const abortController = new AbortController();
@@ -100,7 +104,11 @@ const NewGroup = ({ userFetchURL, submitURL, userFetchURLQuery, setShow, setChat
 
     const res = await postHandler(URL, formData, 'multipart/form-data');
     if (res.statusCode === 201) {
-      if (setChats) setChats(prev => [...prev, res.data.chat]);
+      if (setStateChats) setStateChats(prev => [...prev, res.data.chat]);
+      if (res.data.chat?.id) {
+        dispatch(setChats([...user.chats, res.data.chat.id]));
+        socketService.setupChats([...user.chats, res.data.chat.id]);
+      }
       setGroupPic(undefined);
       setShow(false);
       Toaster.stopLoad(toaster, 'New Group Created!', 1);
