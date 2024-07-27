@@ -54,7 +54,7 @@ const Chats = ({ project }: Props) => {
           userFetchURLQuery="&exclude_user=false"
           submitURL={`${MESSAGING_URL}/project/${project.id}`}
           setShow={setClickedOnAddChat}
-          setChats={setChats}
+          setStateChats={setChats}
         />
       )}
       {(project.userID == user.id || user.managerProjects.includes(project.id)) && (
