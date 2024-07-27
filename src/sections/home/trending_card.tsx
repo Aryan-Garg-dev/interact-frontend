@@ -115,6 +115,79 @@ const TrendingCard = () => {
     <TrendingCardLoader />
   ) : (
     <div className="w-full flex flex-col gap-4 animate-reveal">
+      {meetings && meetings.length > 0 && (
+        <div className="w-full h-fit flex flex-col gap-2 bg-white rounded-lg p-4">
+          <div className="w-fit text-lg font-bold text-gradient">Upcoming Meetings</div>
+          <div className="w-full flex flex-col gap-1">
+            {meetings.map(meeting => (
+              <Link
+                href={`/organisations?oid=${meeting.organizationID}&redirect_url=/meetings/${meeting.id}`}
+                key={meeting.id}
+                className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp rounded-lg px-2 py-1 transition-ease-300"
+              >
+                <div className="w-[calc(100%-112px)]">
+                  <div className="font-medium line-clamp-1">{meeting.title}</div>
+                  <div className="text-xs line-clamp-1">@{meeting.organization.title}</div>
+                </div>
+                <div className="w-28 text-xs">{getNextSessionTime(meeting, false, 'hh:mm A DD MMM')}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+      {tasks && tasks.length > 0 && (
+        <div className="w-full h-fit flex flex-col gap-2 bg-white rounded-lg p-4">
+          <div className="w-fit text-lg font-bold text-gradient">Pending Tasks</div>
+          <div className="w-full flex flex-col gap-1">
+            {tasks.map(task => (
+              <Link
+                href={
+                  task.project?.title
+                    ? '/workspace/tasks/' + task.project?.slug
+                    : `/organisations?oid=${task.organizationID}&redirect_url=/tasks`
+                }
+                key={task.id}
+                className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp rounded-lg px-2 py-1 transition-ease-300"
+              >
+                <div className="w-[calc(100%-112px)]">
+                  <div className="font-medium line-clamp-1">{task.title}</div>
+                  <div className="text-xs line-clamp-1">
+                    @{task.project?.title ? task.project.title : task.organization?.title}
+                  </div>
+                </div>
+                <div
+                  className={`w-28 text-xs ${
+                    moment(task.deadline).isBefore(moment()) ? 'text-primary_danger' : 'text-green-400'
+                  }`}
+                >
+                  {moment(task.deadline).format('hh:mm A DD MMM')}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+      {users && users.length > 0 && (
+        <div className="w-full h-fit flex flex-col gap-2 bg-white rounded-lg p-4 relative">
+          {user.id == '' && (
+            <div className="w-full h-[calc(100%-48px)] flex-center flex-col gap-1 absolute top-12 right-0 backdrop-blur-sm rounded-lg z-10">
+              <div className="bg-white flex-center gap-1 border-primary_black border-[1px] rounded-lg px-2 py-1">
+                <Lock /> Locked
+              </div>
+              <Link href={'/login'} className="font-medium hover-underline-animation after:bg-black">
+                Sign up to see who&apos;s here
+              </Link>
+            </div>
+          )}
+
+          <div className="w-fit text-2xl font-bold text-gradient">Profiles to Follow</div>
+          <div className="w-full flex flex-col gap-2">
+            {users.map(user => (
+              <UserCard key={user.id} user={user} forTrending={true} />
+            ))}
+          </div>
+        </div>
+      )}
       {searches && searches.length > 0 && (
         <div className="w-full h-fit flex flex-col gap-2 bg-white rounded-lg p-4">
           <div className="w-fit text-2xl font-bold text-gradient">Trending Now</div>
@@ -175,79 +248,6 @@ const TrendingCard = () => {
               homeTab == 0 && 'animate-pulse'
             } top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2 rounded-lg -z-10 transition-ease-300`}
           ></div>
-        </div>
-      )}
-      {users && users.length > 0 && (
-        <div className="w-full h-fit flex flex-col gap-2 bg-white rounded-lg p-4 relative">
-          {user.id == '' && (
-            <div className="w-full h-[calc(100%-48px)] flex-center flex-col gap-1 absolute top-12 right-0 backdrop-blur-sm rounded-lg z-10">
-              <div className="bg-white flex-center gap-1 border-primary_black border-[1px] rounded-lg px-2 py-1">
-                <Lock /> Locked
-              </div>
-              <Link href={'/login'} className="font-medium hover-underline-animation after:bg-black">
-                Sign up to see who&apos;s here
-              </Link>
-            </div>
-          )}
-
-          <div className="w-fit text-2xl font-bold text-gradient">Profiles to Follow</div>
-          <div className="w-full flex flex-col gap-2">
-            {users.map(user => (
-              <UserCard key={user.id} user={user} forTrending={true} />
-            ))}
-          </div>
-        </div>
-      )}
-      {tasks && tasks.length > 0 && (
-        <div className="w-full h-fit flex flex-col gap-2 bg-white rounded-lg p-4">
-          <div className="w-fit text-lg font-bold text-gradient">Pending Tasks</div>
-          <div className="w-full flex flex-col gap-1">
-            {tasks.map(task => (
-              <Link
-                href={
-                  task.project?.title
-                    ? '/workspace/tasks/' + task.project?.slug
-                    : `/organisations?oid=${task.organizationID}&redirect_url=/tasks`
-                }
-                key={task.id}
-                className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp rounded-lg px-2 py-1 transition-ease-300"
-              >
-                <div className="w-[calc(100%-112px)]">
-                  <div className="font-medium line-clamp-1">{task.title}</div>
-                  <div className="text-xs line-clamp-1">
-                    @{task.project?.title ? task.project.title : task.organization?.title}
-                  </div>
-                </div>
-                <div
-                  className={`w-28 text-xs ${
-                    moment(task.deadline).isBefore(moment()) ? 'text-primary_danger' : 'text-green-400'
-                  }`}
-                >
-                  {moment(task.deadline).format('hh:mm A DD MMM')}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-      {meetings && meetings.length > 0 && (
-        <div className="w-full h-fit flex flex-col gap-2 bg-white rounded-lg p-4">
-          <div className="w-fit text-lg font-bold text-gradient">Upcoming Meetings</div>
-          <div className="w-full flex flex-col gap-1">
-            {meetings.map(meeting => (
-              <Link
-                href={`/organisations?oid=${meeting.organizationID}&redirect_url=/meetings/${meeting.id}`}
-                key={meeting.id}
-                className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp rounded-lg px-2 py-1 transition-ease-300"
-              >
-                <div className="w-[calc(100%-112px)]">
-                  <div className="font-medium line-clamp-1">{meeting.title}</div>
-                  <div className="text-xs line-clamp-1">@{meeting.organization.title}</div>
-                </div>
-                <div className="w-28 text-xs">{getNextSessionTime(meeting, false, 'hh:mm A DD MMM')}</div>
-              </Link>
-            ))}
-          </div>
         </div>
       )}
     </div>
