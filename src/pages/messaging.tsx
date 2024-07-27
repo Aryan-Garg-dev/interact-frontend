@@ -11,7 +11,6 @@ import { navbarOpenSelector } from '@/slices/feedSlice';
 import { currentChatIDSelector, messagingTabSelector, setMessagingTab } from '@/slices/messagingSlice';
 import { userSelector } from '@/slices/userSlice';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import { PencilSimpleLine } from '@phosphor-icons/react';
@@ -132,4 +131,4 @@ const Messaging = () => {
   );
 };
 
-export default WidthCheck(NonOrgOnlyAndProtect(Messaging));
+export default NonOrgOnlyAndProtect(Messaging);

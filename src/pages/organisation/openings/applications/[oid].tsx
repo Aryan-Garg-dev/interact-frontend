@@ -9,7 +9,6 @@ import { ArrowArcLeft, SlidersHorizontal } from '@phosphor-icons/react';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { useEffect, useState } from 'react';
 import ApplicationView from '@/sections/workspace/manage_project/application_view';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import { useSelector } from 'react-redux';
 import OrgSidebar from '@/components/common/org_sidebar';
 import { currentOrgSelector } from '@/slices/orgSlice';

@@ -15,7 +15,6 @@ import AddMembers from '@/sections/organization/members/add_members';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_MANAGER } from '@/config/constants';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import AccessTree from '@/components/organization/access_tree';
 import OrgMembersTable from '@/components/tables/organization/members';
 import Mascot from '@/components/fillers/mascot';

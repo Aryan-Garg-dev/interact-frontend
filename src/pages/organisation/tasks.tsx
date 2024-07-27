@@ -12,7 +12,6 @@ import { initialOrganization } from '@/types/initials';
 import checkOrgAccess from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import { ChartLine, Info, Plus, SortAscending, WarningCircle } from '@phosphor-icons/react';

@@ -21,7 +21,6 @@ import EditEvent from '@/sections/organization/events/edit_event';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import deleteHandler from '@/handlers/delete_handler';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import { navbarOpenSelector } from '@/slices/feedSlice';
 import EditCoordinators from '@/sections/organization/events/edit_coordinators';
 import AccessTree from '@/components/organization/access_tree';

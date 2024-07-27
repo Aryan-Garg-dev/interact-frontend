@@ -18,7 +18,6 @@ import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_MANAGER } from '@/config/constants';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import AccessTree from '@/components/organization/access_tree';
 import ProjectCard from '@/components/workspace/project_card';
 import ProjectView from '@/sections/workspace/project_view';

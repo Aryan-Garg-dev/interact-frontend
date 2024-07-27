@@ -5,23 +5,22 @@ import {
   SendMessageEvent,
   SendMessageReadEvent,
   SendNotificationEvent,
+  SendUpdateMembership,
   WSEvent,
   getWSEvent,
   routeChatListEvents,
   routeChatReadEvents,
   routeMessagingWindowEvents,
-  sendEvent,
   routeUpdateMembership,
-  SendUpdateMembership
+  sendEvent,
 } from '@/helpers/ws';
 import { incrementUnreadNotifications, setUnreadChats } from '@/slices/feedSlice';
 import { store } from '@/store';
-import { Chat, Message, TypingStatus, User} from '@/types';
+import { Chat, Message, TypingStatus, User } from '@/types';
 import { messageToastSettings } from '@/utils/toaster';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import { SOCKET_URL } from './routes';
-
 
 class SocketService {
   private static instance: SocketService | null = null;
@@ -111,7 +110,7 @@ class SocketService {
     }
   }
 
-  public sendUpdateMembership(userID:string, organizationID: string, role: string){
+  public sendUpdateMembership(userID: string, organizationID: string, role: string) {
     if (this.socket) {
       const outgoingNotificationEvent = new SendUpdateMembership(userID, organizationID, role);
       sendEvent('send_update_membership', outgoingNotificationEvent, this.socket);
@@ -248,4 +247,3 @@ class SocketService {
 }
 const socketService = SocketService.getInstance();
 export default socketService;
-

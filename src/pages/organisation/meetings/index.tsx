@@ -18,7 +18,6 @@ import { SERVER_ERROR } from '@/config/errors';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AccessTree from '@/components/organization/access_tree';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import Mascot from '@/components/fillers/mascot';
 import Select from '@/components/filters/select';
 import Order from '@/components/filters/order';

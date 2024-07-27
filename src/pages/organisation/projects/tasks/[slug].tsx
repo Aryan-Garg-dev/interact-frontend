@@ -1,4 +1,3 @@
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import BaseWrapper from '@/wrappers/base';
 import { GetServerSidePropsContext } from 'next';
 import React from 'react';

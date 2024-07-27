@@ -15,7 +15,6 @@ import Created from '@/components/history/organisation/created';
 import Deleted from '@/components/history/organisation/deleted';
 import Edited from '@/components/history/organisation/edited';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 
 const History = () => {
   const [history, setHistory] = useState<OrganizationHistory[]>([]);
