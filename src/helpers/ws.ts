@@ -2,12 +2,13 @@ import { MESSAGING_URL } from '@/config/routes';
 import socketService from '@/config/ws';
 import patchHandler from '@/handlers/patch_handler';
 import { store } from '@/store';
-import { Chat, Message, TypingStatus, User } from '@/types';
+import { Chat, Message, TypingStatus, User,OrganizationMembership } from '@/types';
 import { initialUser } from '@/types/initials';
 import { getUserFromState } from '@/utils/funcs/redux';
 import sortChats from '@/utils/funcs/sort_chats';
 import { toast } from 'react-toastify';
 import { messageToastSettings } from '../utils/toaster';
+import {setCurrentOrgRole } from '@/slices/orgSlice';
 
 export class WSEvent {
   type = '';
@@ -107,6 +108,17 @@ export class MeStopTyping {
   constructor(user: User, chatID: string) {
     this.user = user;
     this.chatID = chatID;
+  }
+}
+
+export class SendUpdateMembership {
+  userID = '';
+  organizationID = '';
+  role = '';
+  constructor(userID: string, organizationID: string, role: string) {
+    this.userID = userID;
+    this.organizationID = organizationID;
+    this.role = role;
   }
 }
 
@@ -240,6 +252,26 @@ export function routeChatReadEvents(event: WSEvent, setMessages: React.Dispatch<
   }
 }
 
+export function routeUpdateMembership(event: WSEvent){
+  if (event.type === undefined) {
+    alert('No Type in the Event');
+  }
+
+  const userID = store.getState().user.id;
+  const organizationID = store.getState().organization.currentOrgMembership.id;
+
+  switch (event.type) {
+    case 'receive_update_membership':
+      const payload = event.payload as OrganizationMembership;
+      if (payload.userID === userID && organizationID === payload.organizationID) {
+        store.dispatch(setCurrentOrgRole(payload.role)); 
+      }
+      break;
+
+    default:
+      break;
+  }
+}
 export function sendEvent(eventName: string, payloadEvent: any, conn: WebSocket) {
   const event = new WSEvent(eventName, payloadEvent);
 

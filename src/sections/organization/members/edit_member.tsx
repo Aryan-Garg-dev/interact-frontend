@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { currentOrgMembershipSelector, currentOrgSelector } from '@/slices/orgSlice';
 import { initialOrganization, initialOrganizationMembership } from '@/types/initials';
 import { SERVER_ERROR } from '@/config/errors';
+import socketService from '@/config/ws';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,8 +46,11 @@ const EditMember = ({ setShow, membership, setOrganization }: Props) => {
     const URL = `${ORG_URL}/${org.id}/membership/${membership.id}`;
 
     const res = await patchHandler(URL, formData);
-
+    
     if (res.statusCode === 200) {
+      if(membership.role != role){
+        socketService.sendUpdateMembership(membership.userID, membership.organizationID, role)
+      }
       if (setOrganization)
         setOrganization(prev => {
           return {

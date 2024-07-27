@@ -1,6 +1,6 @@
 import Notifications from '@/sections/navbar/notifications';
 import { unreadChatsSelector, unreadNotificationsSelector } from '@/slices/feedSlice';
-import { Bell, ChatCircleDots, Handshake, MagnifyingGlass } from '@phosphor-icons/react';
+import { Bell, ChatCircleDots, Handshake, MagnifyingGlass} from '@phosphor-icons/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ReactSVG } from 'react-svg';
