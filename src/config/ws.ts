@@ -13,14 +13,17 @@ import {
   routeGroupMessagingWindowEvents,
   routeMessagingWindowEvents,
   sendEvent,
+  routeUpdateMembership,
+  SendUpdateMembership
 } from '@/helpers/ws';
 import { incrementUnreadNotifications, setUnreadChats } from '@/slices/feedSlice';
 import { store } from '@/store';
-import { Chat, GroupChat, GroupChatMessage, Message, TypingStatus, User } from '@/types';
+import { Chat, GroupChat, GroupChatMessage, Message, TypingStatus, User, Organization, OrganizationMembership } from '@/types';
 import { messageToastSettings } from '@/utils/toaster';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import { SOCKET_URL } from './routes';
+
 
 class SocketService {
   private static instance: SocketService | null = null;
@@ -54,6 +57,7 @@ class SocketService {
         this.setupChats();
         this.setupChatNotifications();
         this.setupPushNotifications();
+        this.setupUpdateMembership();
       });
     }
   }
@@ -106,6 +110,13 @@ class SocketService {
     if (this.socket) {
       const outgoingNotificationEvent = new SendMessageReadEvent(userID, messageID, chatID);
       sendEvent('send_read_message', outgoingNotificationEvent, this.socket);
+    }
+  }
+
+  public sendUpdateMembership(userID:string, organizationID: string, role: string){
+    if (this.socket) {
+      const outgoingNotificationEvent = new SendUpdateMembership(userID, organizationID, role);
+      sendEvent('send_update_membership', outgoingNotificationEvent, this.socket);
     }
   }
 
@@ -237,8 +248,16 @@ class SocketService {
       });
     }
   }
-}
 
+  public setupUpdateMembership() {
+    if (this.socket) {
+      this.socket.addEventListener('message', function (evt) {
+        const eventData = JSON.parse(evt.data);
+        const event = new WSEvent(eventData.type, eventData.payload);
+        routeUpdateMembership(event);
+      });
+    }
+  }
+}
 const socketService = SocketService.getInstance();
 export default socketService;
-

@@ -349,6 +349,10 @@ export interface Message {
   messageID: string;
   message: Message | null;
   createdAt: Date;
+  organizationID: string;
+  organization: Organization;
+  role: string;
+
 }
 
 export interface GroupChatMessage {
