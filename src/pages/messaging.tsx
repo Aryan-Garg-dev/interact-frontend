@@ -2,7 +2,9 @@ import OrgSidebar from '@/components/common/org_sidebar';
 import Sidebar from '@/components/common/sidebar';
 import TabMenu from '@/components/common/tab_menu';
 import SearchBar from '@/components/messaging/searchbar';
+import { SERVER_ERROR } from '@/config/errors';
 import { EXPLORE_URL, MESSAGING_URL } from '@/config/routes';
+import getHandler from '@/handlers/get_handler';
 import ChatScreen from '@/screens/messaging/chat/chat_screen';
 import Group from '@/screens/messaging/group';
 import Personal from '@/screens/messaging/personal';
@@ -10,6 +12,7 @@ import NewGroup from '@/sections/messaging/new_group';
 import { navbarOpenSelector } from '@/slices/feedSlice';
 import { currentChatIDSelector, messagingTabSelector, setMessagingTab } from '@/slices/messagingSlice';
 import { userSelector } from '@/slices/userSlice';
+import Toaster from '@/utils/toaster';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
@@ -25,12 +28,25 @@ const Messaging = () => {
 
   const [clickedOnNew, setClickedOnNew] = useState(false);
   const [clickedOnNewGroup, setClickedOnNewGroup] = useState(false);
+  const [unreadChatCounts, setUnreadChatCounts] = useState<number[]>([0, 0, 0, 0]);
 
   const dispatch = useDispatch();
 
   const user = useSelector(userSelector);
 
+  const fetchCounts = async () => {
+    const URL = `${MESSAGING_URL}/unread/counts`;
+    const res = await getHandler(URL);
+    if (res.statusCode == 200) {
+      setUnreadChatCounts(res.data.counts || [0, 0, 0, 0]);
+    } else {
+      if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
+      else Toaster.error(SERVER_ERROR, 'error_toaster');
+    }
+  };
+
   useEffect(() => {
+    fetchCounts();
     const tab = new URLSearchParams(window.location.search).get('tab') || '';
     switch (tab) {
       case 'personal':
@@ -98,6 +114,7 @@ const Messaging = () => {
             <SearchBar />
             <TabMenu
               items={['Personal', 'Group', 'Project', 'Request']}
+              itemSupers={unreadChatCounts}
               active={active}
               setReduxState={setMessagingTab}
               width="100%"
@@ -105,16 +122,16 @@ const Messaging = () => {
             />
             <div className="w-full h-full overflow-y-auto">
               <div className={`${active === 0 ? 'block' : 'hidden'}`}>
-                <Personal />
+                <Personal setUnreadChatCounts={setUnreadChatCounts} />
               </div>
               <div className={`${active === 1 ? 'block' : 'hidden'}`}>
-                <Group />
+                <Group setUnreadChatCounts={setUnreadChatCounts} />
               </div>
               <div className={`${active === 2 ? 'block' : 'hidden'} `}>
-                <Group type="projects" />
+                <Group setUnreadChatCounts={setUnreadChatCounts} type="projects" />
               </div>
               <div className={`${active === 3 ? 'block' : 'hidden'} `}>
-                <Personal requests={true} />
+                <Personal setUnreadChatCounts={setUnreadChatCounts} requests={true} />
               </div>
             </div>
           </div>

@@ -10,6 +10,7 @@ interface Props {
   width?: string;
   sticky?: boolean;
   smallerTextForMD?: boolean;
+  itemSupers?: any[];
 }
 
 const TabMenu = ({
@@ -20,6 +21,7 @@ const TabMenu = ({
   width = '500px',
   sticky = false,
   smallerTextForMD = false,
+  itemSupers,
 }: Props) => {
   const dispatch = useDispatch();
   const variants = ['w-[500px]', 'w-[640px]', 'w-[720px]', 'w-[840px]', 'w-[100%]'];
@@ -39,7 +41,7 @@ const TabMenu = ({
               if (setReduxState) dispatch(setReduxState(index));
               else if (setState) setState(index);
             }}
-            className={`${
+            className={`relative ${
               active === index
                 ? 'bg-primary_comp_hover dark:bg-[#0E0C2A59] dark:shadow-inner text-primary_text dark:text-white'
                 : 'hover:bg-primary_comp dark:hover:bg-dark_primary_comp_active text-gray-500 dark:text-white'
@@ -48,6 +50,9 @@ const TabMenu = ({
             } rounded-md transition-ease-300 cursor-pointer`}
           >
             {item}
+            {itemSupers && itemSupers[index] != 0 && (
+              <div className="absolute top-1/2 -translate-y-1/2 right-3 text-xs">{itemSupers[index]}</div>
+            )}
           </div>
         ))}
       </div>

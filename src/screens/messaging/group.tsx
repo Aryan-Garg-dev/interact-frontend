@@ -13,9 +13,10 @@ import { useSelector } from 'react-redux';
 
 interface Props {
   type?: string;
+  setUnreadChatCounts: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
-const Group = ({ type }: Props) => {
+const Group = ({ type, setUnreadChatCounts }: Props) => {
   const [chats, setChats] = useState<Chat[]>([]);
   const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,14 +64,18 @@ const Group = ({ type }: Props) => {
       ) : !new URLSearchParams(window.location.search).get('search') ? (
         chats.length > 0 ? (
           chats.map(chat => {
-            return <GroupChatCard key={chat.id} chat={chat} />;
+            return (
+              <GroupChatCard key={chat.id} chat={chat} setChats={setChats} setUnreadChatCounts={setUnreadChatCounts} />
+            );
           })
         ) : (
           <NoChats />
         )
       ) : filteredChats.length > 0 ? (
         filteredChats.map(chat => {
-          return <GroupChatCard key={chat.id} chat={chat} />;
+          return (
+            <GroupChatCard key={chat.id} chat={chat} setChats={setChats} setUnreadChatCounts={setUnreadChatCounts} />
+          );
         })
       ) : (
         <NoChats />

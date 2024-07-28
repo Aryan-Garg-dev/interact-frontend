@@ -356,7 +356,7 @@ export interface Message {
 export interface MessageReadStatus {
   messageID: string;
   userID: string;
-  user: User;
+  user: User | null;
   readAt: Date;
 }
 

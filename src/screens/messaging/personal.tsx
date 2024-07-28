@@ -15,9 +15,10 @@ import { useSelector } from 'react-redux';
 
 interface Props {
   requests?: boolean;
+  setUnreadChatCounts: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
-const Personal = ({ requests = false }: Props) => {
+const Personal = ({ requests = false, setUnreadChatCounts }: Props) => {
   const [allChats, setAllChats] = useState<Chat[]>([]);
   const [chats, setChats] = useState<Chat[]>([]);
   const [filteredChats, setFilteredChats] = useState<Chat[]>([]);
@@ -85,14 +86,23 @@ const Personal = ({ requests = false }: Props) => {
       ) : !new URLSearchParams(window.location.search).get('search') ? (
         chats.length > 0 ? (
           chats.map(chat => {
-            return <PersonalChatCard key={chat.id} chat={chat} setChats={setChats} />;
+            return (
+              <PersonalChatCard
+                key={chat.id}
+                chat={chat}
+                setChats={setChats}
+                setUnreadChatCounts={setUnreadChatCounts}
+              />
+            );
           })
         ) : (
           <NoPersonalChats />
         )
       ) : filteredChats.length > 0 ? (
         filteredChats.map(chat => {
-          return <PersonalChatCard key={chat.id} chat={chat} setChats={setChats} />;
+          return (
+            <PersonalChatCard key={chat.id} chat={chat} setChats={setChats} setUnreadChatCounts={setUnreadChatCounts} />
+          );
         })
       ) : (
         <NoChats />

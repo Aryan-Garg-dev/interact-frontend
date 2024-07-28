@@ -21,3 +21,13 @@ export const getSelfMembership = (chat: Chat) => {
   }
   return initialChatMembership;
 };
+
+export const isChatUnread = (chat: Chat) => {
+  const userID = Cookies.get('id') || '';
+
+  return (
+    chat.latestMessageID &&
+    chat.latestMessage?.userID !== userID &&
+    !chat.latestMessage?.readBy?.some(r => r.userID === userID)
+  );
+};
