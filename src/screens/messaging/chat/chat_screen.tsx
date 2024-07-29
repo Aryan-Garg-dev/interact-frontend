@@ -53,7 +53,8 @@ const ChatScreen = () => {
   };
 
   const fetchMessages = async (initialPage?: number) => {
-    const URL = `${MESSAGING_URL}/content/${chatID}?page=${initialPage ? initialPage : page}&limit=10`;
+    let URL = `${MESSAGING_URL}/content/${chatID}?page=${initialPage ? initialPage : page}&limit=10`;
+    if (!initialPage && messages.length > 0) URL += `&timestamp=${messages[messages.length - 1].createdAt}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       const messageData: Message[] = res.data.messages || [];

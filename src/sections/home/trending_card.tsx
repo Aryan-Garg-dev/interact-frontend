@@ -172,7 +172,7 @@ const TrendingCard = () => {
                   <div className="font-medium line-clamp-1">{meeting.title}</div>
                   <div className="text-xs line-clamp-1">@{meeting.organization.title}</div>
                 </div>
-                <div className="w-28 text-xs">{getNextSessionTime(meeting, false, 'hh:mm A DD MMM')}</div>
+                <div className="w-28 text-xs text-end">{getNextSessionTime(meeting, false, 'hh:mm A DD MMM')}</div>
               </Link>
             ))}
           </div>
@@ -186,8 +186,8 @@ const TrendingCard = () => {
               <Link
                 href={
                   task.project?.title
-                    ? '/workspace/tasks/' + task.project?.slug
-                    : `/organisations?oid=${task.organizationID}&redirect_url=/tasks`
+                    ? `/workspace/tasks/${task.project?.slug}?tid=${task.id}`
+                    : `/organisations?oid=${task.organizationID}&redirect_url=/tasks?tid=${task.id}`
                 }
                 key={task.id}
                 className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp rounded-lg px-2 py-1 transition-ease-300"
@@ -199,7 +199,7 @@ const TrendingCard = () => {
                   </div>
                 </div>
                 <div
-                  className={`w-28 text-xs ${
+                  className={`w-28 text-xs text-end ${
                     moment(task.deadline).isBefore(moment()) ? 'text-primary_danger' : 'text-green-400'
                   }`}
                 >
