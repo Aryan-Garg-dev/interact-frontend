@@ -288,6 +288,8 @@ export const initialMessage: Message = {
   opening: initialOpening,
   profileID: '',
   profile: initialUser,
+  eventID: '',
+  event: null,
   messageID: '',
   message: null,
   announcementID: '',

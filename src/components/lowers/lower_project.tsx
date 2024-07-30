@@ -10,12 +10,13 @@ import { BOOKMARK_URL, PROJECT_URL } from '@/config/routes';
 import Semaphore from '@/utils/semaphore';
 import { configSelector, setUpdateBookmark, setUpdatingLikes } from '@/slices/configSlice';
 import { HeartStraight, WarningCircle } from '@phosphor-icons/react';
-import ShareProject from '@/sections/lowers/share_project';
 import CommentProject from '@/sections/lowers/comment_project';
 import socketService from '@/config/ws';
 import Report from '../common/report';
 import Toaster from '@/utils/toaster';
 import SignUp from '../common/signup_box';
+import Share from '@/sections/lowers/share';
+import ProjectCard from '../cards/project';
 
 interface Props {
   project: Project;
@@ -158,7 +159,15 @@ const LowerProject = ({ project, initialCommentShowState = false }: Props) => {
           setNoComments={setNumComments}
         />
       )}
-      {clickedOnShare && <ShareProject setShow={setClickedOnShare} project={project} />}
+      {clickedOnShare && (
+        <Share
+          itemID={project.id}
+          itemType="project"
+          setShow={setClickedOnShare}
+          clipboardURL={`explore?pid=${project.slug}&action=external`}
+          item={<ProjectCard project={project} />}
+        />
+      )}
       {clickedOnReport && <Report projectID={project.id} setShow={setClickedOnReport} />}
 
       <div className="flex flex-col gap-12 max-lg:gap-2 max-lg:flex-row">

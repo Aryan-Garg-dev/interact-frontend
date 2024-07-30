@@ -7,6 +7,7 @@ import SharedProfileMessage from '@/components/messaging/shared_profile_message'
 import SharedAnnouncementMessage from '@/components/messaging/shared_announcement_message';
 import { useSelector } from 'react-redux';
 import { userIDSelector } from '@/slices/userSlice';
+import SharedEventMessage from '@/components/messaging/shared_event_message';
 
 interface Props {
   date: string;
@@ -33,6 +34,8 @@ const MessageGroup = ({ date, messages, chat }: Props) => {
                 <SharedProfileMessage message={message} />
               ) : message.announcementID != null ? (
                 <SharedAnnouncementMessage message={message} />
+              ) : message.eventID != null ? (
+                <SharedEventMessage message={message} />
               ) : (
                 <RegularMessage message={message} />
               )}
