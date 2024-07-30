@@ -244,7 +244,7 @@ const GroupInfo = ({ chat, setChat, setStateChats, setShow, access }: Props) => 
                   src={groupPicView}
                 />
               </label>
-              <div className="grow flex flex-col pt-1 gap-2">
+              <div className="w-[calc(100%-56px)] flex flex-col pt-1 gap-2">
                 <div className="w-full flex items-center justify-between pr-2">
                   <input
                     type="text"
