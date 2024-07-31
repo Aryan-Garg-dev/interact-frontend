@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Project, ProjectBookmark, ResourceBucket } from '@/types';
+import { Project, ProjectBookmark } from '@/types';
 import deleteHandler from '@/handlers/delete_handler';
 import getHandler from '@/handlers/get_handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLikes, setProjectBookmarks, userSelector } from '@/slices/userSlice';
+// import clickedOnSharePost from './clickedOnShare_project';
 import { BookmarkSimple, ChatTeardrop, ClockCounterClockwise, Export, Kanban } from '@phosphor-icons/react';
 import BookmarkProject from '../../sections/lowers/bookmark_project';
 import { BOOKMARK_URL, PROJECT_URL } from '@/config/routes';
 import Semaphore from '@/utils/semaphore';
 import { configSelector, setUpdateBookmark, setUpdatingLikes } from '@/slices/configSlice';
 import { HeartStraight } from '@phosphor-icons/react';
-import ShareProject from '@/sections/lowers/share_project';
 import CommentProject from '@/sections/lowers/comment_project';
 import socketService from '@/config/ws';
 import Tasks from '@/sections/workspace/tasks';
 import NewTask from '@/sections/tasks/new_task';
 import History from '@/sections/workspace/history';
-import checkOrgProjectAccess from '@/utils/funcs/access';
+import { checkOrgProjectAccess, checkParticularOrgAccess } from '@/utils/funcs/access';
 import { ORG_SENIOR, PROJECT_MEMBER } from '@/config/constants';
-import ResourceCard from '@/components/organization/resource_card'; 
+import Share from '@/sections/lowers/share_project';
+import ProjectCard from '../cards/project';
 
 interface Props {
   project: Project;
   initialCommentShowState?: boolean;
-  resources?: ResourceBucket[]; 
 }
 
 interface bookMarkStatus {
@@ -32,7 +32,7 @@ interface bookMarkStatus {
   bookmarkID: string;
 }
 
-const LowerWorkspaceProject = ({ project, initialCommentShowState = false, resources =[] }: Props) => {
+const LowerWorkspaceProject = ({ project, initialCommentShowState = false }: Props) => {
   const [liked, setLiked] = useState(false);
   const [numLikes, setNumLikes] = useState(project.noLikes);
   const [numComments, setNumComments] = useState(project.noComments);
@@ -55,6 +55,7 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false, resou
   const bookmarks = user.projectBookmarks || [];
 
   const dispatch = useDispatch();
+
   const updatingLikes = useSelector(configSelector).updatingLikes;
 
   const semaphore = new Semaphore(updatingLikes, setUpdatingLikes);
@@ -88,10 +89,10 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false, resou
     bookmarks.forEach(bookmarksObj => {
       if (bookmarksObj.projectItems)
         bookmarksObj.projectItems.forEach(projectItem => {
-          if (projectItem.projectID === project.id) setBookmark(true, projectItem.id, bookmarksObj.id);
+          if (projectItem.projectID == project.id) setBookmark(true, projectItem.id, bookmarksObj.id);
         });
     });
-  }, [likes, bookmarks, project.id]);
+  }, []);
 
   const likeHandler = async () => {
     await semaphore.acquire();
@@ -110,7 +111,7 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false, resou
         newLikes.splice(newLikes.indexOf(project.id), 1);
       } else {
         newLikes.push(project.id);
-        if (project.userID !== user.id)
+        if (project.userID != user.id)
           socketService.sendNotification(project.userID, `${user.name} liked your project!`);
       }
       dispatch(setLikes(newLikes));
@@ -152,7 +153,7 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false, resou
           setShow={setClickedOnTasks}
           setClickedOnNewTask={setClickedOnNewTask}
           project={project}
-          org={checkOrgProjectAccess(PROJECT_MEMBER)}
+          org={checkParticularOrgAccess(ORG_SENIOR, project.organization)}
         />
       )}
       {clickedOnNewTask && <NewTask setShow={setClickedOnNewTask} setShowTasks={setClickedOnTasks} project={project} />}
@@ -168,17 +169,25 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false, resou
           setNoComments={setNumComments}
         />
       )}
-      {clickedOnShare && <ShareProject setShow={setClickedOnShare} project={project} setNoShares={setNumShares} />}
+      {clickedOnShare && (
+        <Share
+          itemID={project.id}
+          itemType="project"
+          setShow={setClickedOnShare}
+          clipboardURL={`explore?pid=${project.slug}&action=external`}
+          item={<ProjectCard project={project} />}
+        />
+      )}
       {clickedOnHistory && (
         <History
           setShow={setClickedOnHistory}
           project={project}
-          org={checkOrgProjectAccess(PROJECT_MEMBER)}
+          org={checkParticularOrgAccess(ORG_SENIOR, project.organization)}
         />
       )}
 
       <div className="flex flex-col gap-8 max-lg:gap-3 max-lg:p-0 max-lg:flex-row">
-        {checkOrgProjectAccess(PROJECT_MEMBER) && (
+        {checkOrgProjectAccess(PROJECT_MEMBER, project.id, ORG_SENIOR, project.organization) && (
           <Kanban
             className="cursor-pointer hover:bg-[#ababab3e] max-lg:hover:bg-transparent p-2 max-lg:p-0 transition-ease-300 rounded-full max-lg:w-6 max-lg:h-6"
             onClick={() => setClickedOnTasks(true)}
@@ -201,6 +210,7 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false, resou
             weight={liked ? 'fill' : 'regular'}
             fill={liked ? '#fe251b' : '#000000'}
           />
+          {/* <div className="text-xs">{numLikes}</div> */}
         </div>
         <div className="flex-center flex-col">
           <Export
@@ -209,6 +219,7 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false, resou
             size={32}
             weight="regular"
           />
+          {/* <div className="text-xs">{numShares}</div> */}
         </div>
         <div className="flex-center flex-col">
           <ChatTeardrop
@@ -216,6 +227,7 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false, resou
             className="cursor-pointer rounded-full max-lg:w-6 max-lg:h-6"
             size={32}
           />
+          {/* <div className="text-xs">{numComments}</div> */}
         </div>
         <BookmarkSimple
           className="cursor-pointer p-2 max-lg:p-0 rounded-full max-lg:w-6 max-lg:h-6"
@@ -227,18 +239,6 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false, resou
           weight={bookmarkStatus.isBookmarked ? 'fill' : 'light'}
           fill={bookmarkStatus.isBookmarked ? '#478EE1' : '#000000'}
         />
-      </div>
-
-      {/* Render ResourceCards */}
-      <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {resources.map(resource => (
-          <ResourceCard
-            key={resource.id}
-            resource={resource}
-            setClickedOnResource={setClickedOnTasks} // Adjust this as needed
-            setClickedResource={(res) => console.log('Resource clicked:', res)} // Handle the resource click
-          />
-        ))}
       </div>
     </>
   );
