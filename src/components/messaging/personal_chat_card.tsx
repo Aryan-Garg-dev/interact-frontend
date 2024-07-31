@@ -41,6 +41,17 @@ const PersonalChatCard = ({ chat, setChats, setUnreadChatCounts }: Props) => {
       })
     );
   };
+
+  const getLatestMessageContent = () => {
+    if (chat.latestMessage.content != '') return chat.latestMessage.content;
+    if (chat.latestMessage.postID) return 'shared a post.';
+    if (chat.latestMessage.projectID) return 'shared a project.';
+    if (chat.latestMessage.openingID) return 'shared an opening.';
+    if (chat.latestMessage.profileID) return 'shared a profile.';
+    if (chat.latestMessage.announcementID) return 'shared an announcement.';
+    if (chat.latestMessage.eventID) return 'shared an event.';
+    return '';
+  };
   return (
     <div
       onClick={handleClick}
@@ -67,7 +78,7 @@ const PersonalChatCard = ({ chat, setChats, setUnreadChatCounts }: Props) => {
               <span className="mr-2 font-medium">
                 • {chat.latestMessage.userID == userID ? 'You' : `${getMessagingUser(chat).username}`}
               </span>
-              {chat.latestMessage.content}
+              {getLatestMessageContent()}
             </div>
           )}
         </div>

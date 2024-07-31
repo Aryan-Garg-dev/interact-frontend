@@ -18,7 +18,7 @@ import NewTask from '@/sections/tasks/new_task';
 import History from '@/sections/workspace/history';
 import { checkOrgProjectAccess, checkParticularOrgAccess } from '@/utils/funcs/access';
 import { ORG_SENIOR, PROJECT_MEMBER } from '@/config/constants';
-import Share from '@/sections/lowers/share_project';
+import Share from '@/sections/lowers/share';
 import ProjectCard from '../cards/project';
 
 interface Props {

@@ -33,6 +33,7 @@ const TaskHistories: React.FC<Props> = ({ histories }) => {
           case 14:
             return <Deleted key={history.id} history={history} />;
           case 6:
+          case 7:
           case 13:
           case 15:
             return <Completed key={history.id} history={history} />;

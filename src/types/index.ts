@@ -347,6 +347,8 @@ export interface Message {
   profile: User;
   announcementID: string;
   announcement: Announcement;
+  eventID: string;
+  event: Event | null;
   messageID: string;
   message: Message | null;
   readBy: MessageReadStatus[];

@@ -86,7 +86,6 @@ export default function Openings({ orgID }: Props) {
                     clickedOpening={clickedOpening}
                     setClickedOnOpening={setClickedOnOpening}
                     setClickedOpening={setClickedOpening}
-                    org={true}
                   />
                 );
               })}

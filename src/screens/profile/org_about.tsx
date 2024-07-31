@@ -35,7 +35,10 @@ const About = ({ profile, organisation }: Props) => {
         if (res.statusCode === 200) {
           setMemberships(res.data.memberships);
           setLoading(false);
-        } else Toaster.error(res.data.message, 'error_toaster');
+        } else {
+          if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
+          else Toaster.error(SERVER_ERROR, 'error_toaster');
+        }
       })
       .catch(err => {
         Toaster.error(SERVER_ERROR, 'error_toaster');

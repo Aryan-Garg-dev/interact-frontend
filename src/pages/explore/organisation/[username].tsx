@@ -25,7 +25,7 @@ import Openings from '@/screens/profile/opening';
 import getDomainName from '@/utils/funcs/get_domain_name';
 import Link from 'next/link';
 import getIcon from '@/utils/funcs/get_icon';
-import ShareProfile from '@/sections/lowers/share_profile';
+import ShareProfile from '@/sections/lowers/share';
 import SendMessage from '@/sections/explore/send_message';
 import Report from '@/components/common/report';
 import { Chat, Share, Warning } from '@phosphor-icons/react';
@@ -35,6 +35,7 @@ import FollowBtn from '@/components/common/follow_btn';
 import { Organization } from '@/types';
 import SignUp from '@/components/common/signup_box';
 import ToolTip from '@/components/utils/tooltip';
+import UserCard from '@/components/cards/user';
 
 interface Props {
   username: string;
@@ -110,7 +111,13 @@ const User = ({ username }: Props) => {
       <MainWrapper>
         {clickedOnShare &&
           (loggedInUser.id != '' ? (
-            <ShareProfile user={user} setShow={setClickedOnShare} />
+            <ShareProfile
+              itemID={user.id}
+              itemType="profile"
+              setShow={setClickedOnShare}
+              clipboardURL={`explore/user/${user.username}?action=external`}
+              item={<UserCard user={user} />}
+            />
           ) : (
             <SignUp setShow={setClickedOnShare} />
           ))}

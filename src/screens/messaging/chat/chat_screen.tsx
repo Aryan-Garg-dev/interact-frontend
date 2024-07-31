@@ -5,7 +5,7 @@ import { currentChatIDSelector, setCurrentChatID } from '@/slices/messagingSlice
 import { initialChat, initialUser } from '@/types/initials';
 import Toaster from '@/utils/toaster';
 import { Chat, Message, TypingStatus } from '@/types';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '@/components/common/loader';
 import { groupBy } from 'lodash';
@@ -53,6 +53,7 @@ const ChatScreen = () => {
   };
 
   const fetchMessages = async (initialPage?: number) => {
+    setLoading(true);
     let URL = `${MESSAGING_URL}/content/${chatID}?page=${initialPage ? initialPage : page}&limit=10`;
     if (!initialPage && messages.length > 0) URL += `&timestamp=${messages[messages.length - 1].createdAt}`;
     const res = await getHandler(URL);
@@ -136,7 +137,7 @@ const ChatScreen = () => {
     <div className="w-full h-full bg-gray-100 dark:bg-transparent border-2 max-lg:border-0 border-primary_btn dark:border-dark_primary_btn rounded-lg max-lg:rounded-none p-3 relative max-lg:backdrop-blur-2xl max-lg:z-50">
       {chatID == '' ? (
         <></>
-      ) : loading ? (
+      ) : loading && page == 1 ? (
         <Loader />
       ) : clickedOnInfo ? (
         chat.isGroup ? (

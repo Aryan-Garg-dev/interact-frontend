@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setExploreTab } from '@/slices/feedSlice';
 import FollowBtn from '@/components/common/follow_btn';
 import { Buildings, Chat, Share, Warning } from '@phosphor-icons/react';
-import ShareProfile from '../lowers/share_profile';
+import ShareProfile from '../lowers/share';
 import { userIDSelector, userSelector } from '@/slices/userSlice';
 import SendMessage from './send_message';
 import { setCurrentChatID } from '@/slices/messagingSlice';
@@ -17,6 +17,7 @@ import Connections from './connections_view';
 import Report from '@/components/common/report';
 import SignUp from '@/components/common/signup_box';
 import { initialOrganization } from '@/types/initials';
+import UserCard from '@/components/cards/user';
 interface Props {
   user: User;
   organisation?: Organization;
@@ -57,7 +58,13 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
     <>
       {clickedOnShare &&
         (userID != '' ? (
-          <ShareProfile user={user} setShow={setClickedOnShare} />
+          <ShareProfile
+            itemID={user.id}
+            itemType="profile"
+            setShow={setClickedOnShare}
+            clipboardURL={`explore/user/${user.username}?action=external`}
+            item={<UserCard user={user} />}
+          />
         ) : (
           <SignUp setShow={setClickedOnShare} />
         ))}
