@@ -1,7 +1,7 @@
 import CopyClipboardButton from '@/components/buttons/copy_clipboard_btn';
 import Loader from '@/components/common/loader';
 import { SERVER_ERROR } from '@/config/errors';
-import { MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { GROUP_CHAT_PIC_URL, MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import postHandler from '@/handlers/post_handler';
 import { Chat } from '@/types';
@@ -33,13 +33,13 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
       return;
     }
 
-    const URL = `${MESSAGING_URL}/personal`;
+    const URL = `${MESSAGING_URL}/me`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
           const chatsData: Chat[] = res.data.chats;
 
-          setChats(chatsData || []);
+          setChats((chatsData || []).filter(chat => chat.isAccepted));
           setLoading(false);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -154,24 +154,50 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
                         onClick={() => {
                           handleSelectChat(chat.id);
                         }}
-                        className={`w-full flex gap-2 rounded-lg py-2 px-2 cursor-pointer ${
+                        className={`w-full flex-center gap-2 rounded-lg py-2 px-2 cursor-pointer ${
                           selectedChats.includes(chat.id)
                             ? 'bg-primary_comp_hover dark:bg-[#ffe1fc22]'
                             : 'hover:bg-primary_comp dark:hover:bg-[#ffe1fc10]'
                         } transition-all ease-in-out duration-200`}
                       >
-                        <Image
-                          crossOrigin="anonymous"
-                          width={50}
-                          height={50}
-                          alt={'User Pic'}
-                          src={`${USER_PROFILE_PIC_URL}/${getMessagingUser(chat).profilePic}`}
-                          className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
-                        />
-                        <div className="w-5/6 flex flex-col">
-                          <div className="text-lg font-bold">{getMessagingUser(chat).name}</div>
-                          <div className="text-sm">@{getMessagingUser(chat).username}</div>
-                        </div>
+                        {chat.isGroup ? (
+                          <>
+                            {' '}
+                            <Image
+                              crossOrigin="anonymous"
+                              width={50}
+                              height={50}
+                              alt={'User Pic'}
+                              src={`${GROUP_CHAT_PIC_URL}/${chat.coverPic}`}
+                              className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
+                            />
+                            <div className="w-5/6 h-fit flex flex-col">
+                              <div className="text-lg font-bold">{chat.title}</div>
+                              {chat.projectID ? (
+                                <div className="text-sm">@{chat.project?.title}</div>
+                              ) : (
+                                chat.organizationID && (
+                                  <div className="text-sm">@{chat.organization?.user?.username}</div>
+                                )
+                              )}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <Image
+                              crossOrigin="anonymous"
+                              width={50}
+                              height={50}
+                              alt={'User Pic'}
+                              src={`${USER_PROFILE_PIC_URL}/${getMessagingUser(chat).profilePic}`}
+                              className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
+                            />
+                            <div className="w-5/6 flex flex-col">
+                              <div className="text-lg font-bold">{getMessagingUser(chat).name}</div>
+                              <div className="text-sm">@{getMessagingUser(chat).username}</div>
+                            </div>
+                          </>
+                        )}
                       </div>
                     );
                   })}
