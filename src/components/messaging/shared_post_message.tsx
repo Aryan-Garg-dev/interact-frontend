@@ -24,7 +24,7 @@ const SharedPostMessage = ({ message }: Props) => {
         src={`${USER_PROFILE_PIC_URL}/${message.user.profilePic}`}
         className={'rounded-full w-8 h-8 cursor-pointer border-[1px] border-black'}
       />
-      <div className={`w-2/3 flex flex-wrap gap-2 ${message.userID === userID ? 'flex-row-reverse' : ''}`}>
+      <div className={`w-2/3 max-md:w-4/5 flex flex-wrap gap-2 ${message.userID === userID ? 'flex-row-reverse' : ''}`}>
         <div className="w-full max-w-[27rem] flex flex-col text-sm cursor-default dark:bg-dark_primary_comp_hover gap-2">
           <PostCard post={message.post} />
           {message.content != '' && <div className="bg-primary_comp rounded-lg px-4 py-2">{message.content}</div>}

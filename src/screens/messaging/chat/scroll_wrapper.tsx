@@ -76,6 +76,13 @@ const ScrollWrapper: React.FC<ScrollWrapperProps> = ({
 
   return (
     <div ref={containerRef} className="w-full h-[calc(100%-140px)] thin_scrollbar flex flex-col gap-6 overflow-y-auto">
+      {isFetching && (
+        <div className="w-full flex-center gap-2 pt-8">
+          <div className="w-2 h-2 rounded-full bg-primary_comp_active animate-bounce"></div>
+          <div className="w-2 h-2 rounded-full bg-primary_comp_active animate-bounce [animation-delay:-.3s]"></div>
+          <div className="w-2 h-2 rounded-full bg-primary_comp_active animate-bounce [animation-delay:-.5s]"></div>
+        </div>
+      )}
       {children}
     </div>
   );

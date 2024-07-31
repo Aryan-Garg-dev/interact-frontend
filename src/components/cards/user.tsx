@@ -13,7 +13,7 @@ const UserCard = ({ user }: Props) => {
     <Link
       href={`explore/user/${user.username}?action=external`}
       target="_blank"
-      className="w-full font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg p-4 flex flex-col items-center justify-center gap-2 transition-ease-300"
+      className="w-full bg-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg p-4 flex flex-col items-center justify-center gap-2 transition-ease-300"
     >
       <Image
         crossOrigin="anonymous"
@@ -25,7 +25,7 @@ const UserCard = ({ user }: Props) => {
       />
       <div className="text-2xl text-center font-bold text-gradient">{user.name}</div>
       <div className="text-sm text-center">{user.tagline}</div>
-      <div className="w-full flex justify-around">
+      <div className="w-full flex justify-around text-xs">
         <div className="flex gap-1">
           <div className="font-bold">{user.noFollowers}</div>
           <div>Follower{user.noFollowers != 1 ? 's' : ''}</div>
