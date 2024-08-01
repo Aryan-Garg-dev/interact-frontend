@@ -31,6 +31,9 @@ export const getTaskDeadlineColor = (task: Task | SubTask) =>
     ? warn
     : success;
 
+export const getTaskDifficultyColor = (task: Task | SubTask) =>
+  task.difficulty == 'high' ? danger : task.difficulty == 'medium' ? warn : success;
+
 export const getTaskStatusColor = (task: Task) =>
   task.isCompleted ? success : getCompletionPercentage(task) > 0 ? warn : danger;
 
