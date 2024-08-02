@@ -7,7 +7,7 @@ interface Props {
 }
 
 const ProgressBar = ({ step, setStep }: Props) => {
-  const steps: string[] = ['Name', 'Tagline', 'Bio', 'Skills', 'Pictures', 'Socials', 'Location'];
+  const steps: string[] = ['Name', 'Tagline', 'Bio', 'Skills', 'Pictures', 'Socials', 'Location', 'College'];
   return (
     <div className="w-full flex flex-col animate-fade_half">
       <div className="w-full h-full relative">

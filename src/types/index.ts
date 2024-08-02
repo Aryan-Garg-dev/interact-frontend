@@ -431,7 +431,7 @@ export interface SubTask {
 }
 
 export type PRIORITY = 'low' | 'medium' | 'high';
-export type DIFFICULTY = 'easy' | 'medium' | 'high';
+export type DIFFICULTY = 'basic' | 'proficient' | 'expert';
 
 export interface Task {
   id: string;
