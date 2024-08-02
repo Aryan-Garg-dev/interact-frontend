@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import ToolTip from '@/components/utils/tooltip';
-import { getPRStatusColor, getTaskDeadlineColor, getTaskPriorityColor } from '@/utils/funcs/task';
+import { getPRStatusColor, getTaskDeadlineColor, getTaskPriorityColor, getTaskDifficultyColor } from '@/utils/funcs/task';
 import UsersList from '@/components/common/users_list';
 import PictureList from '@/components/common/picture_list';
 import Tags from '@/components/common/tags';
@@ -155,6 +155,15 @@ const TaskComponent = ({
               className="uppercase px-3 py-1 rounded-lg text-sm font-medium"
             >
               {task.priority}
+            </div>
+          </div>
+          <div className="flex gap-2 items-center">
+            <div>Difficulty:</div>
+            <div
+              style={{ backgroundColor: getTaskDifficultyColor(task) }}
+              className="uppercase px-3 py-1 rounded-lg text-sm font-medium"
+            >
+              {task.difficulty}
             </div>
           </div>
           <div className="flex gap-2 items-center">
