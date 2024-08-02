@@ -400,7 +400,7 @@ export const initialTask: Task = {
   organization: initialOrganization,
   organizationID: '',
   priority: 'low',
-  difficulty: 'easy',
+  difficulty: 'basic',
   noComments: 0,
   histories: [],
   prID: '',
@@ -418,7 +418,7 @@ export const initialSubTask: SubTask = {
   isCompleted: false,
   taskID: '',
   priority: 'low',
-  difficulty: 'easy',
+  difficulty: 'basic',
 };
 
 export const initialEvent: Event = {
