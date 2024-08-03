@@ -7,7 +7,7 @@ import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import { SERVER_ERROR } from '@/config/errors';
 
-interface Organisation {
+interface Organization {
   id: string;
   user: {
     profilePic: string;
@@ -18,19 +18,19 @@ interface Organisation {
 interface Props {
   profile: Profile;
   org?: boolean;
-  organisations: Organisation[];
+  organizations: Organization[];
 }
 
-const About: React.FC<Props> = ({ profile, org = false, organisations }) => {
-  const [memberships, setMemberships] = useState<Organisation[]>([]);
+const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
+  const [memberships, setMemberships] = useState<Organization[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!org) return;
 
     const fetchMemberships = () => {
-      if (organisations.length > 0) {
-        const URL = `${ORG_URL}/${organisations[0].id}/explore_memberships`;
+      if (organizations.length > 0) {
+        const URL = `${ORG_URL}/${organizations[0].id}/explore_memberships`;
         getHandler(URL)
           .then(res => {
             if (res.statusCode === 200) {
@@ -48,7 +48,7 @@ const About: React.FC<Props> = ({ profile, org = false, organisations }) => {
     };
 
     fetchMemberships();
-  }, [org, organisations]);
+  }, [org, organizations]);
 
   return (
     <div className="w-[640px] max-md:w-screen text-primary_black mx-auto flex flex-col gap-4 max-md:px-6 pb-8 animate-fade_third">
@@ -75,11 +75,11 @@ const About: React.FC<Props> = ({ profile, org = false, organisations }) => {
                 <div>{profile.degree}</div>
               </div>
             )}
-            {organisations && organisations.length > 0 && (
+            {organizations && organizations.length > 0 && (
               <div className="flex flex-col gap-2">
                 <div className="text-sm font-medium">Member of:</div>
                 <div className="flex flex-wrap gap-4">
-                  {organisations.map((org, i) => (
+                  {organizations.map((org, i) => (
                     <div key={i} className="flex items-center gap-2">
                       <img
                         src={`${USER_PROFILE_PIC_URL}/${org.user.profilePic}`}
@@ -93,7 +93,7 @@ const About: React.FC<Props> = ({ profile, org = false, organisations }) => {
               </div>
             )}
           </div>
-          {(profile.school || profile.degree || (organisations && organisations.length > 0)) && (
+          {(profile.school || profile.degree || (organizations && organizations.length > 0)) && (
             <div className="w-full h-[1px] border-t-[1px] border-gray-400 border-dashed"></div>
           )}
         </>

@@ -30,7 +30,7 @@ const User = ({ username }: Props) => {
   const [active, setActive] = useState(0);
   const [user, setUser] = useState(initialUser);
   const [loading, setLoading] = useState(true);
-  const [organisations, setOrganisations] = useState([]);
+  const [organizations, setOrganizations] = useState([]);
 
   const open = useSelector(navbarOpenSelector);
   const loggedInUser = useSelector(userSelector);
@@ -42,7 +42,7 @@ const User = ({ username }: Props) => {
         if (res.statusCode === 200) {
           setUser(res.data.user);
           // Capture organisations
-          setOrganisations(res.data.organisations);
+          setOrganizations(res.data.organizations);
           setLoading(false);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -61,7 +61,7 @@ const User = ({ username }: Props) => {
   }, [username]);
 
   useEffect(() => {
-    if (user.isOrganization) window.location.replace(`/explore/organisation/${username}`);
+    if (user.isOrganization) window.location.replace(`/explore/organization/${username}`);
   }, [user]);
 
   return (
@@ -101,7 +101,7 @@ const User = ({ username }: Props) => {
             />
 
             <div className={`${active === 0 ? 'block' : 'hidden'}`}>
-              {loading ? <Loader /> : <About profile={user.profile || initialProfile} organisations={organisations} />}
+              {loading ? <Loader /> : <About profile={user.profile || initialProfile} organizations={organizations} />}
             </div>
             <div className={`${active === 1 ? 'block' : 'hidden'}`}>
               {loading ? (
