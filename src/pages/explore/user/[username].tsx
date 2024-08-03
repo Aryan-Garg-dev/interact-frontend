@@ -61,7 +61,7 @@ const User = ({ username }: Props) => {
   }, [username]);
 
   useEffect(() => {
-    if (user.isOrganization) window.location.replace(`/explore/organization/${username}`);
+    if (user.isOrganization) window.location.replace(`/explore/organisation/${username}`);
   }, [user]);
 
   return (

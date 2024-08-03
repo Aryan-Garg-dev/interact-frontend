@@ -1,19 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Profile } from '@/types';
+import React from 'react';
+import Image from 'next/image';
+import { Profile, Organization } from '@/types';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import { Buildings, CalendarBlank, Certificate, Envelope, MapPin, Phone } from '@phosphor-icons/react';
-import { USER_PROFILE_PIC_URL, ORG_URL } from '@/config/routes';
-import getHandler from '@/handlers/get_handler';
-import Toaster from '@/utils/toaster';
-import { SERVER_ERROR } from '@/config/errors';
-
-interface Organization {
-  id: string;
-  user: {
-    profilePic: string;
-  };
-  title: string;
-}
+import { USER_PROFILE_PIC_URL } from '@/config/routes';
 
 interface Props {
   profile: Profile;
@@ -22,34 +12,6 @@ interface Props {
 }
 
 const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
-  const [memberships, setMemberships] = useState<Organization[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!org) return;
-
-    const fetchMemberships = () => {
-      if (organizations.length > 0) {
-        const URL = `${ORG_URL}/${organizations[0].id}/explore_memberships`;
-        getHandler(URL)
-          .then(res => {
-            if (res.statusCode === 200) {
-              setMemberships(res.data.memberships);
-            } else {
-              Toaster.error(res.data.message || SERVER_ERROR, 'error_toaster');
-            }
-            setLoading(false);
-          })
-          .catch(() => {
-            Toaster.error(SERVER_ERROR, 'error_toaster');
-            setLoading(false);
-          });
-      }
-    };
-
-    fetchMemberships();
-  }, [org, organizations]);
-
   return (
     <div className="w-[640px] max-md:w-screen text-primary_black mx-auto flex flex-col gap-4 max-md:px-6 pb-8 animate-fade_third">
       {!org && (
@@ -81,10 +43,12 @@ const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
                 <div className="flex flex-wrap gap-4">
                   {organizations.map((org, i) => (
                     <div key={i} className="flex items-center gap-2">
-                      <img
+                      <Image
                         src={`${USER_PROFILE_PIC_URL}/${org.user.profilePic}`}
                         alt={org.title}
-                        className="w-8 h-8 rounded-full"
+                        width={32} // Set the width of the image
+                        height={32} // Set the height of the image
+                        className="rounded-full"
                       />
                       <span>{org.title}</span>
                     </div>
@@ -106,16 +70,18 @@ const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
               <div>{profile.degree}</div>
             </div>
           )}
-          {memberships.length > 0 && (
+          {organizations && organizations.length > 0 && (
             <div className="flex flex-col gap-2">
               <div className="text-sm font-medium">Member of:</div>
               <div className="flex flex-wrap gap-4">
-                {memberships.map((org, i) => (
+                {organizations.map((org, i) => (
                   <div key={i} className="flex items-center gap-2">
-                    <img
+                    <Image
                       src={`${USER_PROFILE_PIC_URL}/${org.user.profilePic}`}
                       alt={org.title}
-                      className="w-8 h-8 rounded-full"
+                      width={32} // Set the width of the image
+                      height={32} // Set the height of the image
+                      className="rounded-full"
                     />
                     <span>{org.title}</span>
                   </div>
