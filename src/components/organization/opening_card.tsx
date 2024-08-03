@@ -56,7 +56,7 @@ const OpeningCard = ({ opening, setOpenings }: Props) => {
           src={`${USER_PROFILE_PIC_URL}/${opening.organization?.user.profilePic}`}
           placeholder="blur"
           blurDataURL={opening.organization?.user.profilePicBlurHash || 'no-hash'}
-          className={'w-[120px] h-[120px] max-md:w-[90px] max-md:h-[90px] rounded-lg object-cover'}
+          className={'w-[120px] h-[120px] max-md:w-[90px] max-md:h-[90px] rounded-full object-cover'}
         />
 
         <div className="w-full h-full flex items-start justify-between">

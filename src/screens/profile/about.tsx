@@ -209,6 +209,3 @@ const About: React.FC<Props> = ({ profile, org = false, organisations }) => {
 };
 
 export default About;
-
-
-

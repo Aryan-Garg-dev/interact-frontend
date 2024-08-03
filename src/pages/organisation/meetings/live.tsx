@@ -29,7 +29,7 @@ export default function App() {
 
   return (
     <DyteProvider value={meeting}>
-      <Meeting callbackURL={`organisation/meetings/${meetingID}`} />
+      <Meeting callbackURL={`/organisation/meetings/${meetingID}`} />
     </DyteProvider>
   );
 }

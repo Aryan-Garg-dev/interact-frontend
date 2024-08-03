@@ -128,4 +128,19 @@ const App: React.FC = () => {
   );
 };
 
+export async function getServerSideProps() {
+  if (process.env.NODE_ENV != 'development') {
+    return {
+      redirect: {
+        permanent: true,
+        destination: '/home',
+      },
+      props: {},
+    };
+  } else
+    return {
+      props: {},
+    };
+}
+
 export default App;
