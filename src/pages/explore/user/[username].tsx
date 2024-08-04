@@ -30,6 +30,7 @@ const User = ({ username }: Props) => {
   const [active, setActive] = useState(0);
   const [user, setUser] = useState(initialUser);
   const [loading, setLoading] = useState(true);
+  const [organizations, setOrganizations] = useState([]);
 
   const open = useSelector(navbarOpenSelector);
   const loggedInUser = useSelector(userSelector);
@@ -40,6 +41,8 @@ const User = ({ username }: Props) => {
       .then(res => {
         if (res.statusCode === 200) {
           setUser(res.data.user);
+          // Capture organisations
+          setOrganizations(res.data.organizations);
           setLoading(false);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -48,7 +51,7 @@ const User = ({ username }: Props) => {
           }
         }
       })
-      .catch(err => {
+      .catch(() => {
         Toaster.error(SERVER_ERROR, 'error_toaster');
       });
   };
@@ -66,7 +69,7 @@ const User = ({ username }: Props) => {
       {loggedInUser.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={2} />}
       <MainWrapper>
         <div className="w-full flex max-lg:flex-col transition-ease-out-500 font-primary">
-          {user.coverPic != '' && (
+          {user.coverPic !== '' && (
             <Image
               crossOrigin="anonymous"
               priority={true}
@@ -82,8 +85,8 @@ const User = ({ username }: Props) => {
             />
           )}
           {loading ? <ProfileCardLoader width="400px" /> : <ProfileCard user={user} />}
-          <div className={`grow flex flex-col gap-12 pt-12 max-lg:pt-0`}>
-            {user.tagline && user.tagline != '' && (
+          <div className="grow flex flex-col gap-12 pt-12 max-lg:pt-0">
+            {user.tagline && user.tagline !== '' && (
               <div className="w-full h-24 font-bold text-5xl max-lg:text-3xl flex-center text-center dark:text-white">
                 {user.tagline}
               </div>
@@ -98,7 +101,7 @@ const User = ({ username }: Props) => {
             />
 
             <div className={`${active === 0 ? 'block' : 'hidden'}`}>
-              {loading ? <Loader /> : <About profile={user.profile || initialProfile} />}
+              {loading ? <Loader /> : <About profile={user.profile || initialProfile} organizations={organizations} />}
             </div>
             <div className={`${active === 1 ? 'block' : 'hidden'}`}>
               {loading ? (
