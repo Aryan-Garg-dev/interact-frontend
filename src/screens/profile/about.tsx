@@ -64,7 +64,7 @@ const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
               </div>
             )}
           </div>
-          {(hasEducation || hasOrganizations) && (
+          {(hasEducation) && (
             <div className="w-full h-[1px] border-t-[1px] border-gray-400 border-dashed"></div>
           )}
         </>
