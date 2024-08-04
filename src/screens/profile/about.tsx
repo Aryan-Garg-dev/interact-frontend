@@ -12,6 +12,13 @@ interface Props {
 }
 
 const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
+  const hasBasicInfo = profile.email || profile.phoneNo || profile.location;
+  const hasEducation = profile.school || profile.degree;
+  const hasOrganizations = organizations && organizations.length > 0;
+  const hasDescription = profile.description;
+  const hasCollaborationAreas = profile.areasOfCollaboration && profile.areasOfCollaboration.length > 0;
+  const hasHobbies = profile.hobbies && profile.hobbies.length > 0;
+
   return (
     <div className="w-[640px] max-md:w-screen text-primary_black mx-auto flex flex-col gap-4 max-md:px-6 pb-8 animate-fade_third">
       {!org && (
@@ -37,7 +44,7 @@ const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
                 <div>{profile.degree}</div>
               </div>
             )}
-            {organizations && organizations.length > 0 && (
+            {hasOrganizations && (
               <div className="flex flex-col gap-2">
                 <div className="text-sm font-medium">Member of:</div>
                 <div className="flex flex-wrap gap-4">
@@ -57,39 +64,7 @@ const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
               </div>
             )}
           </div>
-          {(profile.school || profile.degree || (organizations && organizations.length > 0)) && (
-            <div className="w-full h-[1px] border-t-[1px] border-gray-400 border-dashed"></div>
-          )}
-        </>
-      )}
-      {org && (
-        <>
-          {profile.degree && (
-            <div className="flex gap-2 items-center text-lg">
-              <Certificate weight="bold" size={24} />
-              <div>{profile.degree}</div>
-            </div>
-          )}
-          {organizations && organizations.length > 0 && (
-            <div className="flex flex-col gap-2">
-              <div className="text-sm font-medium">Member of:</div>
-              <div className="flex flex-wrap gap-4">
-                {organizations.map((org, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <Image
-                      src={`${USER_PROFILE_PIC_URL}/${org.user.profilePic}`}
-                      alt={org.title}
-                      width={32} // Set the width of the image
-                      height={32} // Set the height of the image
-                      className="rounded-full"
-                    />
-                    <span>{org.title}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-          {(profile.school || profile.degree) && (
+          {(hasEducation || hasOrganizations) && (
             <div className="w-full h-[1px] border-t-[1px] border-gray-400 border-dashed"></div>
           )}
         </>
@@ -117,16 +92,16 @@ const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
           </div>
         )}
       </div>
-      {(profile.email || profile.phoneNo || profile.location) && (
+      {(hasBasicInfo || profile.location) && (
         <div className="w-full h-[1px] border-t-[1px] border-gray-400 border-dashed"></div>
       )}
-      {profile.description && (
+      {hasDescription && (
         <>
           <div className="whitespace-pre-wrap">{renderContentWithLinks(profile.description)}</div>
           <div className="w-full h-[1px] border-t-[1px] border-gray-400 border-dashed"></div>
         </>
       )}
-      {profile.areasOfCollaboration && profile.areasOfCollaboration.length > 0 && (
+      {hasCollaborationAreas && (
         <>
           <div className="w-full flex flex-col gap-2">
             <div className="text-sm font-medium uppercase">
@@ -143,9 +118,9 @@ const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
           <div className="w-full h-[1px] border-t-[1px] border-gray-400 border-dashed"></div>
         </>
       )}
-      {profile.hobbies && profile.hobbies.length > 0 && (
+      {hasHobbies && (
         <div className="w-full flex flex-col gap-2">
-          <div className="text-sm font-medium uppercase">{org ? 'Message Board' : 'Hobbies and Interest'}</div>
+          <div className="text-sm font-medium uppercase">{org ? 'Message Board' : 'Hobbies and Interests'}</div>
           <div className="w-full flex flex-wrap">
             {profile.hobbies.map((el, i) => (
               <div
@@ -159,17 +134,15 @@ const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
         </div>
       )}
 
-      {(!profile.areasOfCollaboration || profile.areasOfCollaboration.length === 0) &&
-        (!profile.hobbies ||
-          (profile.hobbies.length === 0 &&
-            profile.degree === '' &&
-            profile.description === '' &&
-            profile.school === '' &&
-            profile.email === '' &&
-            profile.phoneNo === '' &&
-            profile.location === '' && (
-              <div className="w-fit mx-auto font-medium text-xl">No Content Here</div>
-            )))}
+      {!hasCollaborationAreas &&
+        !hasHobbies &&
+        !hasEducation &&
+        !hasDescription &&
+        !profile.email &&
+        !profile.phoneNo &&
+        !profile.location && (
+          <div className="w-fit mx-auto font-medium text-xl">No Content Here</div>
+        )}
     </div>
   );
 };
