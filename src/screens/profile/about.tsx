@@ -9,10 +9,10 @@ import Link from 'next/link';
 interface Props {
   profile: Profile;
   org?: boolean;
-  organizations: Organization[];
+  organizations?: Organization[];
 }
 
-const About: React.FC<Props> = ({ profile, org = false, organizations }) => {
+const About = ({ profile, org = false, organizations }: Props) => {
   const hasBasicInfo = profile.email || profile.phoneNo || profile.location;
   const hasEducation = profile.school || profile.degree;
   const hasOrganizations = organizations && organizations.length > 0;
