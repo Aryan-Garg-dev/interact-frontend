@@ -34,7 +34,7 @@ const About = ({ profile, org = false, organizations }: Props) => {
                   const suffix = isLast ? '.' : '';
 
                   return (
-                    <div key={i} className="flex-center gap-1">
+                    <div key={i} className="flex-center gap-2">
                       {i > 0 && separator}
                       <Link
                         href={`/explore/organisation/${org.user.username}`}
