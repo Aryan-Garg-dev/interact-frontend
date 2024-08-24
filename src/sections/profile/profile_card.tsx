@@ -24,6 +24,8 @@ import Link from 'next/link';
 import isArrEdited from '@/utils/funcs/check_array_edited';
 import Connections from '../explore/connections_view';
 import { SERVER_ERROR } from '@/config/errors';
+import CopyClipboardButton from '@/components/buttons/copy_clipboard_btn';
+import ToolTip from '@/components/utils/tooltip';
 
 interface Props {
   user: User;
@@ -181,7 +183,10 @@ const ProfileCard = ({ user, setUser, tagline, coverPic }: Props) => {
       {clickedOnFollowers ? <Connections type="followers" user={user} setShow={setClickedOnFollowers} /> : <></>}
       {clickedOnFollowing ? <Connections type="following" user={user} setShow={setClickedOnFollowing} /> : <></>}
       {/* <div className="w-[400px] overflow-y-auto overflow-x-hidden pb-4 max-md:mx-auto font-primary mt-base_padding max-md:mb-12 ml-base_padding h-base_md max-md:h-fit flex flex-col gap-4 dark:text-white items-center pt-12 max-md:pb-8 max-md:pt-4 px-4 bg-white dark:bg-[#84478023] backdrop-blur-md shadow-md dark:shadow-none border-[1px] border-gray-300  dark:border-dark_primary_btn sticky max-md:static top-[90px] max-md:bg-transparent rounded-md z-10"> */}
-      <div className="w-[400px] max-lg:w-[80%] overflow-y-auto overflow-x-hidden pb-4 max-lg:mx-auto font-primary mt-base_padding max-lg:mb-12 ml-base_padding h-fit flex flex-col gap-4 dark:text-white items-center pt-8 max-lg:pb-8 max-md:pt-4 px-4 bg-white dark:bg-[#84478023] backdrop-blur-md shadow-md dark:shadow-none border-[1px] border-gray-300  dark:border-dark_primary_btn max-md:bg-transparent rounded-md z-10">
+      <div className="w-[400px] max-lg:w-[80%] relative overflow-y-auto overflow-x-hidden pb-4 max-lg:mx-auto font-primary mt-base_padding max-lg:mb-12 ml-base_padding h-fit flex flex-col gap-4 dark:text-white items-center pt-8 max-lg:pb-8 max-md:pt-4 px-4 bg-white dark:bg-[#84478023] backdrop-blur-md shadow-md dark:shadow-none border-[1px] border-gray-300  dark:border-dark_primary_btn max-md:bg-transparent rounded-md z-10">
+        <div className="absolute group top-4 right-4">
+          <CopyClipboardButton url={`explore/user/${user.username}?external=true`} iconOnly={true} />
+        </div>
         <input
           type="file"
           className="hidden"

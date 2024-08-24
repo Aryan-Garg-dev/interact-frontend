@@ -14,8 +14,7 @@ import OrgSidebar from '@/components/common/org_sidebar';
 import AddMembers from '@/sections/organization/members/add_members';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import checkOrgAccess from '@/utils/funcs/access';
-import { ORG_MANAGER, ORG_SENIOR } from '@/config/constants';
-import WidthCheck from '@/utils/wrappers/widthCheck';
+import { ORG_MANAGER } from '@/config/constants';
 import AccessTree from '@/components/organization/access_tree';
 import OrgMembersTable from '@/components/tables/organization/members';
 import Mascot from '@/components/fillers/mascot';
@@ -62,14 +61,14 @@ const Members = () => {
           )}
           {clickedOnInfo && <AccessTree type="membership" setShow={setClickedOnInfo} />}
           <div className="w-full flex justify-between items-center p-base_padding">
-            <div className="text-6xl font-semibold dark:text-white font-primary">
+            <div className="text-6xl max-md:text-4xl font-semibold dark:text-white font-primary">
               {!clickedOnInvitations ? 'Members' : 'Invitations'}
             </div>
             <div className="w-fit flex items-center gap-2">
               <Users
                 onClick={() => setClickedOnTeams(true)}
                 size={42}
-                className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
+                className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer max-md:hidden"
                 weight="regular"
               />
               {checkOrgAccess(ORG_MANAGER) && (
@@ -99,25 +98,23 @@ const Members = () => {
           {loading ? (
             <Loader />
           ) : (
-            <>
-              <div className="w-full max-lg:w-screen mx-auto flex flex-col gap-8 px-6">
-                {clickedOnInvitations ? (
-                  organization.invitations && organization.invitations.length > 0 ? (
-                    <OrgInvitationsTable invitations={organization.invitations} setOrganization={setOrganization} />
-                  ) : (
-                    <Mascot message="No Invitations yet." />
-                  )
-                ) : organization.memberships && organization.memberships.length > 0 ? (
-                  <OrgMembersTable
-                    memberships={organization.memberships}
-                    organization={organization}
-                    setOrganization={setOrganization}
-                  />
+            <div className="w-full max-lg:w-screen mx-auto flex flex-col gap-8 px-6">
+              {clickedOnInvitations ? (
+                organization.invitations && organization.invitations.length > 0 ? (
+                  <OrgInvitationsTable invitations={organization.invitations} setOrganization={setOrganization} />
                 ) : (
-                  <Mascot message="No Members yet." />
-                )}
-              </div>
-            </>
+                  <Mascot message="No Invitations yet." />
+                )
+              ) : organization.memberships && organization.memberships.length > 0 ? (
+                <OrgMembersTable
+                  memberships={organization.memberships}
+                  organization={organization}
+                  setOrganization={setOrganization}
+                />
+              ) : (
+                <Mascot message="No Members yet." />
+              )}
+            </div>
           )}
         </div>
       </MainWrapper>
@@ -125,4 +122,4 @@ const Members = () => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Members));
+export default OrgMembersOnlyAndProtect(Members);

@@ -12,7 +12,7 @@ interface Props {
 
 const Input = ({ label, val, setVal, maxLength, placeholder, required = false, styles }: Props) => {
   return (
-    <div>
+    <div className="w-full">
       {label && (
         <div className="text-xs ml-1 font-medium uppercase text-gray-500">
           {label}

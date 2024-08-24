@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CaretRight, Pen, Plus, X } from '@phosphor-icons/react';
+import { X } from '@phosphor-icons/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import moment from 'moment';
@@ -8,7 +8,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import Toaster from '@/utils/toaster';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import { MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
-import getMessagingUser from '@/utils/funcs/get_messaging_user';
+import { getMessagingMembership, getMessagingUser } from '@/utils/funcs/messaging';
 import Cookies from 'js-cookie';
 import postHandler from '@/handlers/post_handler';
 import { useDispatch } from 'react-redux';
@@ -29,24 +29,19 @@ const ChatInfo = ({ chat, setChat, setShow, setChats }: Props) => {
 
   const dispatch = useDispatch();
 
-  const isBlockedByUser = (chat: Chat) => {
-    if (userID === chat.createdByID) return chat.blockedByCreatingUser;
-    return chat.blockedByAcceptingUser;
-  };
-
   const handleBlock = async () => {
     const toaster = Toaster.startLoad('Blocking Chat');
 
-    const URL = `${MESSAGING_URL}/chat/${isBlockedByUser(chat) ? 'unblock' : 'block'}`;
+    const URL = `${MESSAGING_URL}/chat/${getMessagingMembership(chat).isBlocked ? 'unblock' : 'block'}`;
 
     const res = await postHandler(URL, { chatID: chat.id });
     if (res.statusCode === 200) {
-      Toaster.stopLoad(toaster, `Chat ${isBlockedByUser(chat) ? 'Unblocked' : 'blocked'}`, 1);
+      Toaster.stopLoad(toaster, `Chat ${getMessagingMembership(chat).isBlocked ? 'Unblocked' : 'blocked'}`, 1);
 
-      setChat(prev => {
-        if (prev.acceptedByID == userID) return { ...prev, blockedByAcceptingUser: !prev.blockedByAcceptingUser };
-        else return { ...prev, blockedByCreatingUser: !prev.blockedByCreatingUser };
-      });
+      // setChat(prev => {
+      //   if (prev.acceptedByID == userID) return { ...prev, blockedByAcceptingUser: !prev.blockedByAcceptingUser };
+      //   else return { ...prev, blockedByCreatingUser: !prev.blockedByCreatingUser };
+      // });
       setClickedOnBlock(false);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
@@ -77,19 +72,15 @@ const ChatInfo = ({ chat, setChat, setShow, setChats }: Props) => {
   };
   return (
     <>
-      {clickedOnBlock ? (
+      {clickedOnBlock && (
         <ConfirmDelete
           setShow={setClickedOnBlock}
           handleDelete={handleBlock}
-          title={`Confirm ${isBlockedByUser(chat) ? 'Unblock' : 'Block'}?`}
+          title={`Confirm ${getMessagingMembership(chat).isBlocked ? 'Unblock' : 'Block'}?`}
         />
-      ) : (
-        <></>
       )}
-      {clickedOnDelete ? (
+      {clickedOnDelete && (
         <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} title="Confirm Delete?" />
-      ) : (
-        <></>
       )}
       <div className="w-full h-full overflow-y-auto flex flex-col gap-4">
         <div className="w-full flex items-center justify-between p-2">
@@ -114,15 +105,15 @@ const ChatInfo = ({ chat, setChat, setShow, setChats }: Props) => {
 
         <div className="text-center opacity-75 text-sm mt-4">
           Initiated By{' '}
-          {chat.createdBy.id == userID ? (
+          {chat.userID == userID ? (
             <span className="font-semibold underline underline-offset-2">You</span>
           ) : (
             <Link
-              href={`/explore/user/${chat.createdBy.username}`}
+              href={`/explore/user/${chat.user.username}`}
               target="_blank"
               className="font-semibold underline underline-offset-2"
             >
-              {chat.createdBy.name}
+              {chat.user.name}
             </Link>
           )}{' '}
           on {moment(chat.createdAt).format('DD MMM YYYY')}
@@ -133,7 +124,7 @@ const ChatInfo = ({ chat, setChat, setShow, setChats }: Props) => {
             onClick={() => setClickedOnBlock(true)}
             className="w-full py-4 text-center dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active text-primary_danger rounded-lg cursor-pointer transition-ease-300"
           >
-            {isBlockedByUser(chat) ? 'Unblock Chat' : 'Block Chat'}
+            {getMessagingMembership(chat).isBlocked ? 'Unblock Chat' : 'Block Chat'}
           </div>
           <div
             onClick={() => setClickedOnDelete(true)}

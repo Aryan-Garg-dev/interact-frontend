@@ -11,8 +11,6 @@ import { useSelector } from 'react-redux';
 import isStrongPassword from 'validator/lib/isStrongPassword';
 
 const Password = () => {
-  const [clickedOnChange, setClickedOnChange] = useState(false);
-
   const [mutex, setMutex] = useState(false);
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -65,7 +63,6 @@ const Password = () => {
       if (!user.isPasswordSetupComplete) dispatch(setPasswordSetupStatus(true));
       setMutex(false);
       Toaster.stopLoad(toaster, !user.isPasswordSetupComplete ? 'Password Added!' : 'Password Updated!', 1);
-      setClickedOnChange(false);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
       else {
@@ -76,6 +73,14 @@ const Password = () => {
   };
 
   const user = useSelector(userSelector);
+
+  const canSubmit = () => {
+    if (!user.isPasswordSetupComplete) {
+      return password && password === confirmPassword;
+    }
+    return newPassword && newPassword === confirmPassword;
+  };
+
   return (
     <div className="w-full flex justify-between">
       {clickedOnStrongPassInfo && (
@@ -85,12 +90,25 @@ const Password = () => {
           setShow={setClickedOnStrongPassInfo}
         />
       )}
-      <div className="flex flex-col gap-4">
-        <div className="w-fit flex-center gap-2 text-lg font-semibold">
-          {!user.isPasswordSetupComplete ? 'Setup Password' : 'Update Password'}
-          <PasswordIcon size={24} weight="duotone" />
+      <div className="w-full flex flex-col gap-4">
+        <div className="w-full flex items-center justify-between">
+          <div className="w-fit flex-center gap-2 text-lg font-semibold">
+            {!user.isPasswordSetupComplete ? 'Setup Password' : 'Update Password'}
+            <PasswordIcon size={24} weight="duotone" />
+          </div>
+          <div
+            onClick={() => {
+              if (canSubmit()) handleSubmit();
+            }}
+            className={`h-fit flex-center text-sm font-medium px-3 py-1 rounded-xl border-[1px]
+        ${canSubmit() ? 'cursor-pointer bg-white' : 'cursor-default bg-gray-100 opacity-60'}
+        `}
+          >
+            Update
+          </div>
         </div>
-        <div className="flex flex-col gap-4">
+
+        <div className="w-1/2 max-md:w-full flex flex-col gap-4">
           <div className="flex flex-col gap-1 ">
             <div className="flex items-center gap-2 font-medium">
               <div>{user.isPasswordSetupComplete && 'Current '}Password</div>
@@ -170,7 +188,7 @@ const Password = () => {
               </div>
             )}
 
-            <div className="flex flex-col gap-1">
+            <div className={`${!user.isPasswordSetupComplete && 'w-full'}flex flex-col gap-1`}>
               <div className="font-medium">Confirm {user.isPasswordSetupComplete && 'New'} Password</div>
               <div className="w-full relative">
                 <input
@@ -200,21 +218,6 @@ const Password = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div
-        onClick={() => {
-          if (password != newPassword && newPassword == confirmPassword) handleSubmit();
-        }}
-        className={`h-fit flex-center text-sm font-medium px-3 py-1 rounded-xl border-[1px]
-        ${
-          password != newPassword && newPassword == confirmPassword
-            ? 'cursor-pointer bg-white'
-            : 'cursor-default bg-gray-100 opacity-60'
-        }
-        
-        `}
-      >
-        Update
       </div>
     </div>
   );

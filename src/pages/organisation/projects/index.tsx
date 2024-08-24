@@ -18,7 +18,6 @@ import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_MANAGER } from '@/config/constants';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import AccessTree from '@/components/organization/access_tree';
 import ProjectCard from '@/components/workspace/project_card';
 import ProjectView from '@/sections/workspace/project_view';
@@ -91,7 +90,7 @@ const Projects = () => {
       <MainWrapper>
         <div className="w-full max-md:w-full mx-auto flex flex-col items-center relative gap-6 max-md:px-2 p-base_padding">
           <div className="w-full flex justify-between items-center">
-            <div className="w-fit text-6xl font-semibold dark:text-white font-primary">Projects</div>
+            <div className="w-fit text-6xl max-md:text-4xl font-semibold dark:text-white font-primary">Projects</div>
 
             <div className="flex items-center gap-2">
               {checkOrgAccess(ORG_MANAGER) && (
@@ -156,4 +155,4 @@ const Projects = () => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Projects));
+export default OrgMembersOnlyAndProtect(Projects);

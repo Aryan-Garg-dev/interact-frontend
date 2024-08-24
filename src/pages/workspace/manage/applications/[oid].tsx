@@ -11,7 +11,6 @@ import { ArrowArcLeft, SlidersHorizontal } from '@phosphor-icons/react';
 import { GetServerSidePropsContext } from 'next/types';
 import React, { useEffect, useState } from 'react';
 import ApplicationView from '@/sections/workspace/manage_project/application_view';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import OrgSidebar from '@/components/common/org_sidebar';
@@ -90,13 +89,13 @@ const Applications = ({ oid }: Props) => {
             <div className="flex gap-3">
               <ArrowArcLeft
                 onClick={() => window.history.back()}
-                className="w-10 h-10 p-2 dark:bg-dark_primary_comp_hover rounded-full cursor-pointer"
+                className="w-10 h-10 p-2 dark:bg-dark_primary_comp_hover rounded-full max-md:hidden cursor-pointer"
                 size={40}
               />
               <div className="text-5xl font-semibold dark:text-white font-primary">Applications</div>
             </div>
 
-            <div className="relative">
+            <div className="relative max-md:hidden">
               <div
                 onClick={() => setClickedOnFilter(prev => !prev)}
                 className={`w-28 flex items-center justify-center gap-2 text-xl font-medium cursor-pointer p-2 rounded-xl ${
@@ -175,7 +174,7 @@ const Applications = ({ oid }: Props) => {
   );
 };
 
-export default WidthCheck(Protect(Applications));
+export default Protect(Applications);
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { oid } = context.query;

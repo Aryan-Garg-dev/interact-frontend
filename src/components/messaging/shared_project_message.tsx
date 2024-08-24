@@ -1,12 +1,13 @@
-import { GroupChatMessage, Message } from '@/types';
+import { Message } from '@/types';
 import React from 'react';
 import Image from 'next/image';
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import Cookies from 'js-cookie';
 import moment from 'moment';
+import ProjectCard from '../cards/project';
 
 interface Props {
-  message: Message | GroupChatMessage;
+  message: Message;
 }
 
 const SharedProjectMessage = ({ message }: Props) => {
@@ -21,37 +22,13 @@ const SharedProjectMessage = ({ message }: Props) => {
         src={`${USER_PROFILE_PIC_URL}/${message.user.profilePic}`}
         className={'rounded-full w-8 h-8 cursor-pointer border-[1px] border-black'}
       />
-      <div className={`w-1/3 flex flex-wrap gap-2 ${message.userID === userID ? 'flex-row-reverse' : ''}`}>
-        <div className="w-fit max-w-[27rem] flex flex-col text-sm cursor-default rounded-xl px-4 py-2 bg-primary_comp dark:bg-dark_primary_comp_hover gap-2">
-          <div className="w-full min-w-[240px] font-primary dark:text-white border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-4 flex flex-col items-center gap-6 max-md:gap-4 transition-ease-300 cursor-pointer">
-            <Image
-              crossOrigin="anonymous"
-              width={100}
-              height={100}
-              alt={'User Pic'}
-              src={`${PROJECT_PIC_URL}/${message.project.coverPic}`}
-              className={'w-[200px] h-[200px] max-md:w-[120px] max-md:h-[120px] rounded-lg object-cover'}
-              placeholder="blur"
-              blurDataURL={message.project.blurHash || 'no-hash'}
-            />
-
-            <div className="w-full flex flex-col gap-4 max-md:gap-2 px-8">
-              <div className="w-full text-center flex flex-col items-center gap-1">
-                <div className="font-bold text-xl text-gradient">{message.project.title}</div>
-                <div className="text-xs">{message.project.tagline}</div>
-                <div className="text-xxs font-thin">{moment(message.project.createdAt).fromNow()}</div>
-              </div>
-            </div>
-          </div>
-
-          {message.content != '' ? (
-            <div className="border-t-[1px] border-white pt-2 border-dashed overflow-clip">{message.content}</div>
-          ) : (
-            <></>
-          )}
+      <div className={`w-1/2 max-md:w-2/3 flex flex-wrap gap-2 ${message.userID === userID ? 'flex-row-reverse' : ''}`}>
+        <div className="w-full max-w-[27rem] flex flex-col text-sm cursor-default dark:bg-dark_primary_comp_hover gap-2">
+          <ProjectCard project={message.project} />
+          {message.content != '' && <div className="bg-primary_comp rounded-lg px-4 py-2">{message.content}</div>}
         </div>
         <div
-          className={` flex items-center gap-1 text-xs self-end ${message.userID === userID ? 'flex-row-reverse' : ''}`}
+          className={`flex items-center gap-1 text-xs self-end ${message.userID === userID ? 'flex-row-reverse' : ''}`}
         >
           <div>•</div>
           <div> {moment(message.createdAt).format('hh:mm A')}</div>

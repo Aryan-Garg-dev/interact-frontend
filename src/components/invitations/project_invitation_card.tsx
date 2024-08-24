@@ -115,10 +115,10 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
           blurDataURL={invitation.project.blurHash || 'no-hash'}
         />
       </Link>
-      <div className="w-[calc(100%-80px)] flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between">
+      <div className="w-[calc(100%-80px)] max-md:w-full flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between">
         <div
           style={{ width: invitation.status == 0 ? '100%-50px' : '100%-20px' }}
-          className="w-[calc(100%-112px)] flex flex-col gap-1"
+          className="w-[calc(100%-112px)] max-md:w-full flex flex-col gap-1"
         >
           <Link
             target="_blank"

@@ -9,8 +9,8 @@ import getHandler from '@/handlers/get_handler';
 import EditChat from '@/sections/organization/chats/edit_chat';
 import NewChat from '@/sections/organization/chats/new_chat';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
-import { GroupChat } from '@/types';
-import { initialGroupChat, initialOrganization } from '@/types/initials';
+import { Chat } from '@/types';
+import { initialChat, initialOrganization } from '@/types/initials';
 import checkOrgAccess from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
@@ -23,14 +23,14 @@ import { useSelector } from 'react-redux';
 
 const Chats = () => {
   const [organization, setOrganization] = useState(initialOrganization);
-  const [chats, setChats] = useState<GroupChat[]>([]);
+  const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [clickedOnInfo, setClickedOnInfo] = useState(false);
 
   const [clickedOnNewChat, setClickedOnNewChat] = useState(false);
   const [clickedOnEditChat, setClickedOnEditChat] = useState(false);
-  const [clickedEditChat, setClickedEditChat] = useState(initialGroupChat);
+  const [clickedEditChat, setClickedEditChat] = useState(initialChat);
 
   const currentOrgID = useSelector(currentOrgIDSelector);
 
@@ -62,7 +62,7 @@ const Chats = () => {
           {clickedOnInfo && <AccessTree type="chat" setShow={setClickedOnInfo} />}
 
           <div className="w-full flex justify-between items-center p-base_padding">
-            <div className="text-6xl font-semibold dark:text-white font-primary">Chats</div>
+            <div className="text-6xl max-md:text-4xl font-semibold dark:text-white font-primary">Chats</div>
             <div className="flex items-center gap-2">
               {checkOrgAccess(ORG_MANAGER) && (
                 <Plus

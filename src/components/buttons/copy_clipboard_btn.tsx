@@ -19,7 +19,7 @@ const CopyClipboardButton = ({ url, size = 24, iconOnly = false }: Props) => {
       className={`${
         !iconOnly &&
         'w-full text-center flex justify-center gap-2 rounded-lg border-[1px] border-primary_btn hover:bg-primary_comp'
-      } p-1 cursor-pointer transition-ease-200`}
+      } py-2 cursor-pointer transition-ease-200`}
     >
       <ClipboardText size={size} />
       {!iconOnly && <div> Copy Link</div>}

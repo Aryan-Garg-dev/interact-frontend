@@ -1,11 +1,11 @@
+import UserCard from '@/components/cards/user';
 import { SERVER_ERROR } from '@/config/errors';
-import { MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { MESSAGING_URL } from '@/config/routes';
 import socketService from '@/config/ws';
 import postHandler from '@/handlers/post_handler';
 import { setPersonalChatSlices, userSelector } from '@/slices/userSlice';
 import { User } from '@/types';
 import Toaster from '@/utils/toaster';
-import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -79,27 +79,8 @@ const SendMessage = ({ user, setShow }: Props) => {
       <div className="w-1/2 max-md:w-5/6 fixed backdrop-blur-lg bg-white dark:bg-[#ffe1fc22] dark:max-md:bg-[#2a192eea] dark:text-white z-30 translate-x-1/2 -translate-y-1/4 top-64 max-lg:top-1/4 max-md:top-56 right-1/2 flex flex-col px-8 py-8 gap-6 border-2 border-primary_btn  dark:border-dark_primary_btn rounded-xl animate-fade_third">
         <div className="text-4xl text-center text-primary_black  font-bold">Message</div>
         <div className="w-full flex max-md:flex-col gap-4 items-center">
-          <div className="w-1/2 max-md:w-full font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg p-4 flex flex-col items-center justify-center gap-4 max-md:gap-4 transition-ease-300 cursor-default">
-            <Image
-              crossOrigin="anonymous"
-              width={200}
-              height={200}
-              alt={'User Pic'}
-              src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-              className={'rounded-full max-md:mx-auto w-44 h-44 cursor-default'}
-            />
-            <div className="text-3xl max-md:text-2xl text-center font-bold text-gradient">{user.name}</div>
-            <div className="text-sm text-center">{user.tagline}</div>
-            <div className="w-full flex justify-center gap-6">
-              <div className="flex gap-1">
-                <div className="font-bold">{user.noFollowers}</div>
-                <div>Follower{user.noFollowers != 1 ? 's' : ''}</div>
-              </div>
-              <div className="flex gap-1">
-                <div className="font-bold">{user.noFollowing}</div>
-                <div>Following</div>
-              </div>
-            </div>
+          <div className="w-1/2 max-md:w-full">
+            <UserCard user={user} />
           </div>
           <div className="w-1/2 max-md:w-full h-full max-h-base_md overflow-auto flex flex-col gap-2">
             <form onSubmit={el => handleSubmit(el)} className="w-full flex flex-col gap-1">

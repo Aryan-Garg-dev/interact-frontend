@@ -28,7 +28,6 @@ import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import { getNextSessionTime } from '@/utils/funcs/session_details';
 import Toaster from '@/utils/toaster';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import { Pen, Record, Trash } from '@phosphor-icons/react';
@@ -172,7 +171,7 @@ const Meeting = ({ id }: Props) => {
     const res = await postHandler(URL, {});
     if (res.statusCode === 200) {
       setMeeting(prev => {
-        return { ...prev, rsvp: [...prev.rsvp, getUserFromState(user)] };
+        return { ...prev, rsvp: [...prev.rsvp, getUserFromState()] };
       });
       Toaster.stopLoad(toaster, 'Participation Confirmed!', 1);
     } else {
@@ -216,12 +215,12 @@ const Meeting = ({ id }: Props) => {
             <div className="w-full flex flex-col gap-6">
               <div className="w-full flex flex-col gap-6">
                 <div className="w-full flex flex-col gap-1">
-                  <div className="w-full flex items-center justify-between flex-wrap mb-4">
+                  <div className="w-full flex max-md:flex-col max-md:gap-4 md:items-center justify-between flex-wrap mb-4">
                     <div className="flex-center gap-2">
                       {/*
                       //TODO back button
                       <ArrowLeft size={24} /> */}
-                      <div className="text-5xl font-semibold">{meeting.title}</div>
+                      <div className="max-md:w-full text-5xl max-md:text-3xl font-semibold">{meeting.title}</div>
                       <div className="relative group">
                         <ToolTip
                           content="Copy Meeting Link"
@@ -266,8 +265,8 @@ const Meeting = ({ id }: Props) => {
                       </button>
                     </div>
                   </div>
-                  <div className="w-full flex gap-8">
-                    <div className="w-2/3 flex flex-col gap-6">
+                  <div className="w-full flex max-md:flex-col gap-8">
+                    <div className="w-2/3 max-md:w-full flex flex-col gap-6">
                       <div className="flex items-center gap-2">
                         <div
                           className={`text-xs px-2 py-1 ${
@@ -396,7 +395,7 @@ const Meeting = ({ id }: Props) => {
                       moment()
                         .utcOffset('+05:30')
                         .isBefore(moment(getNextSessionTime(meeting), 'hh:mm A, ddd MMM DD').utcOffset('+05:30')) && (
-                        <div className="w-1/3 flex flex-col gap-4">
+                        <div className="w-1/3 max-md:w-full flex flex-col gap-4">
                           {meeting.rsvp && meeting.rsvp.length > 0 && (
                             <div className="w-full bg-white flex flex-col gap-2 rounded-md p-4 shadow-md">
                               <div className="w-full text-2xl font-semibold text-primary_black">
@@ -475,4 +474,4 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   };
 }
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Meeting));
+export default OrgMembersOnlyAndProtect(Meeting);

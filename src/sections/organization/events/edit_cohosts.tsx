@@ -193,7 +193,13 @@ const EditCoHosts = ({ event, setShow, setEvents }: Props) => {
 
   return (
     <>
-      <div className="fixed top-10 max-lg:top-0 w-1/2 max-lg:w-screen h-[80%] max-lg:h-screen backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col justify-between rounded-lg px-12 py-8 gap-8 max-lg:gap-4 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 shadow-2xl animate-fade_third z-50">
+      <div className="fixed top-10 max-lg:top-0 w-1/2 max-lg:w-screen h-[80%] max-lg:h-screen backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col justify-between rounded-lg px-12 max-md:px-4 py-8 gap-8 max-lg:gap-4 dark:text-white font-primary overflow-y-auto border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 shadow-2xl animate-fade_third z-50">
+        <X
+          onClick={() => setShow(false)}
+          className="lg:hidden absolute top-2 right-2 cursor-pointer"
+          weight="bold"
+          size={32}
+        />
         {step == 0 ? (
           <div className="w-full flex flex-col gap-4 ">
             <div className="w-full flex items-center justify-between">
@@ -212,7 +218,7 @@ const EditCoHosts = ({ event, setShow, setEvents }: Props) => {
               </div>
             </div>
 
-            <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
+            <div className="w-full h-[420px] max-md:h-fit overflow-y-auto flex flex-col gap-4">
               {clickedOnInvitations ? (
                 <>
                   {invitations.length == 0 ? (

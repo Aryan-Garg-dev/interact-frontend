@@ -24,8 +24,8 @@ const NotificationWrapper: React.FC<WrapperProps> = ({
   return (
     <div className="w-full relative p-3 hover:bg-gray-100 rounded-xl font-primary transition-ease-200">
       {/* {!notification.isRead ? <CircleDashed size={16} className="absolute top-0 right-0" weight="duotone" /> : <></>} */}
-      <div className="w-full flex items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
+      <div className="w-full flex items-center justify-between gap-2">
+        <div className="w-[calc(100%-16px)] flex items-center gap-2">
           {image && (
             <Link href={`/explore/user/${notification.sender.username}`} className="rounded-full">
               <Image
@@ -38,9 +38,9 @@ const NotificationWrapper: React.FC<WrapperProps> = ({
               />
             </Link>
           )}
-          <div className="flex flex-wrap items-center gap-2 gap-y-0">{children}</div>
+          <div className="w-[calc(100%-40px)] flex flex-wrap items-center gap-2 gap-y-0">{children}</div>
         </div>
-        <div className="text-xxs">{getDisplayTime(notification.createdAt, false)}</div>
+        <div className="w-4 text-xxs">{getDisplayTime(notification.createdAt, false)}</div>
       </div>
       <div className={`w-full ${image && 'pl-12'}`}> {extended}</div>
     </div>

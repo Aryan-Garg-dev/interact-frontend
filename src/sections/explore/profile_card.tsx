@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setExploreTab } from '@/slices/feedSlice';
 import FollowBtn from '@/components/common/follow_btn';
 import { Buildings, Chat, Share, Warning } from '@phosphor-icons/react';
-import ShareProfile from '../lowers/share_profile';
+import ShareProfile from '../lowers/share';
 import { userIDSelector, userSelector } from '@/slices/userSlice';
 import SendMessage from './send_message';
 import { setCurrentChatID } from '@/slices/messagingSlice';
@@ -17,6 +17,7 @@ import Connections from './connections_view';
 import Report from '@/components/common/report';
 import SignUp from '@/components/common/signup_box';
 import { initialOrganization } from '@/types/initials';
+import UserCard from '@/components/cards/user';
 interface Props {
   user: User;
   organisation?: Organization;
@@ -57,7 +58,13 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
     <>
       {clickedOnShare &&
         (userID != '' ? (
-          <ShareProfile user={user} setShow={setClickedOnShare} />
+          <ShareProfile
+            itemID={user.id}
+            itemType="profile"
+            setShow={setClickedOnShare}
+            clipboardURL={`explore/user/${user.username}?action=external`}
+            item={<UserCard user={user} />}
+          />
         ) : (
           <SignUp setShow={setClickedOnShare} />
         ))}
@@ -182,22 +189,28 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
           )}
         </div>
         <div className="dark:text-white w-fit absolute max-lg:mt-8 max-lg:static top-4 right-4 flex gap-2">
-          <div className="hover:text-white p-2 flex-center font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gradient-to-r hover:from-dark_secondary_gradient_start hover:to-dark_secondary_gradient_end rounded-full cursor-pointer">
-            <Chat onClick={handleChat} size={18} />
-          </div>
+          {userID != user.id && (
+            <div className="hover:text-white p-2 flex-center font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gradient-to-r hover:from-dark_secondary_gradient_start hover:to-dark_secondary_gradient_end rounded-full cursor-pointer">
+              <Chat onClick={handleChat} size={18} />
+            </div>
+          )}
           <div
             onClick={() => setClickedOnShare(true)}
             className="hover:text-white p-2 flex-center font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gradient-to-r hover:from-dark_secondary_gradient_start hover:to-dark_secondary_gradient_end rounded-full cursor-pointer"
           >
             <Share size={18} />
           </div>
-          <div className="hover:text-white lg:hidden p-2 flex-center font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gradient-to-r hover:from-dark_secondary_gradient_start hover:to-dark_secondary_gradient_end rounded-full cursor-pointer">
+          {userID != user.id && (
+            <div className="hover:text-white lg:hidden p-2 flex-center font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gradient-to-r hover:from-dark_secondary_gradient_start hover:to-dark_secondary_gradient_end rounded-full cursor-pointer">
+              <Warning onClick={() => setClickedOnReport(true)} size={18} />
+            </div>
+          )}
+        </div>
+        {userID != user.id && (
+          <div className="hover:text-white absolute max-lg:hidden top-4 left-4 p-2 flex-center font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gradient-to-r hover:from-dark_secondary_gradient_start hover:to-dark_secondary_gradient_end rounded-full cursor-pointer">
             <Warning onClick={() => setClickedOnReport(true)} size={18} />
           </div>
-        </div>
-        <div className="hover:text-white absolute max-lg:hidden top-4 left-4 p-2 flex-center font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gradient-to-r hover:from-dark_secondary_gradient_start hover:to-dark_secondary_gradient_end rounded-full cursor-pointer">
-          <Warning onClick={() => setClickedOnReport(true)} size={18} />
-        </div>
+        )}
       </div>
     </>
   );

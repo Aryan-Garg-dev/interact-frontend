@@ -5,18 +5,18 @@ import {
   SendMessageEvent,
   SendMessageReadEvent,
   SendNotificationEvent,
+  SendUpdateMembership,
   WSEvent,
   getWSEvent,
   routeChatListEvents,
   routeChatReadEvents,
-  routeGroupChatListEvents,
-  routeGroupMessagingWindowEvents,
   routeMessagingWindowEvents,
+  routeUpdateMembership,
   sendEvent,
 } from '@/helpers/ws';
 import { incrementUnreadNotifications, setUnreadChats } from '@/slices/feedSlice';
 import { store } from '@/store';
-import { Chat, GroupChat, GroupChatMessage, Message, TypingStatus, User } from '@/types';
+import { Chat, Message, TypingStatus, User } from '@/types';
 import { messageToastSettings } from '@/utils/toaster';
 import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
@@ -45,17 +45,29 @@ class SocketService {
   }
 
   public connect(userID: string | undefined = Cookies.get('id')): void {
-    if (!this.socket) {
-      if (!userID || userID == '') return;
-      const token = Cookies.get('token');
-      if (!token || token == '') return;
+    if (!userID || userID === '') return;
+
+    const token = Cookies.get('token');
+    if (!token || token === '') return;
+
+    if (this.socket) return;
+
+    const connectToSocket = () => {
       this.socket = new WebSocket(`${SOCKET_URL}?userID=${userID}&token=${token}`);
+
       this.socket.addEventListener('open', event => {
         this.setupChats();
         this.setupChatNotifications();
         this.setupPushNotifications();
+        this.setupUpdateMembership();
       });
-    }
+
+      this.socket.addEventListener('error', event => {
+        setTimeout(connectToSocket, 5000); // retry after 5 seconds
+      });
+    };
+
+    connectToSocket();
   }
 
   public disconnect(): void {
@@ -76,9 +88,9 @@ class SocketService {
     }
   }
 
-  public sendMessage(message: string, chatID: string, userID: string, self: User) {
+  public sendMessage(message: string, id: string, chatID: string, userID: string, self: User) {
     if (this.socket) {
-      const outgoingMessageEvent = new SendMessageEvent(message, chatID, userID, self);
+      const outgoingMessageEvent = new SendMessageEvent(message, id, chatID, userID, self);
       sendEvent('send_message', outgoingMessageEvent, this.socket);
     }
   }
@@ -102,10 +114,17 @@ class SocketService {
     }
   }
 
-  public sendReadMessage(userID: string, messageID: string, chatID: string) {
+  public sendReadMessage(user: User, messageID: string, chatID: string) {
     if (this.socket) {
-      const outgoingNotificationEvent = new SendMessageReadEvent(userID, messageID, chatID);
+      const outgoingNotificationEvent = new SendMessageReadEvent(user, messageID, chatID);
       sendEvent('send_read_message', outgoingNotificationEvent, this.socket);
+    }
+  }
+
+  public sendUpdateMembership(userID: string, organizationID: string, role: string) {
+    if (this.socket) {
+      const outgoingNotificationEvent = new SendUpdateMembership(userID, organizationID, role);
+      sendEvent('send_update_membership', outgoingNotificationEvent, this.socket);
     }
   }
 
@@ -115,25 +134,18 @@ class SocketService {
     setTypingStatus: React.Dispatch<React.SetStateAction<TypingStatus>>
   ) {
     if (this.socket) {
-      this.socket.addEventListener('message', function (evt) {
+      const handleMessage = (evt: MessageEvent) => {
         const eventData = JSON.parse(evt.data);
         const event = new WSEvent(eventData.type, eventData.payload);
         routeMessagingWindowEvents(event, setMessages, typingStatus, setTypingStatus);
-      });
-    }
-  }
+      };
 
-  public setupGroupChatWindowRoutes(
-    setMessages: React.Dispatch<React.SetStateAction<GroupChatMessage[]>>,
-    typingStatus: TypingStatus,
-    setTypingStatus: React.Dispatch<React.SetStateAction<TypingStatus>>
-  ) {
-    if (this.socket) {
-      this.socket.addEventListener('message', function (evt) {
-        const eventData = JSON.parse(evt.data);
-        const event = new WSEvent(eventData.type, eventData.payload);
-        routeGroupMessagingWindowEvents(event, setMessages, typingStatus, setTypingStatus);
-      });
+      this.socket.addEventListener('message', handleMessage);
+
+      // Return a cleanup function to remove the event listener
+      return () => {
+        if (this.socket) this.socket.removeEventListener('message', handleMessage);
+      };
     }
   }
 
@@ -147,23 +159,19 @@ class SocketService {
     }
   }
 
-  public setupGroupChatListRoutes(setChats: React.Dispatch<React.SetStateAction<GroupChat[]>>) {
+  public setupChatReadRoutes(setMessages: React.Dispatch<React.SetStateAction<Message[]>>) {
     if (this.socket) {
-      this.socket.addEventListener('message', function (evt) {
+      const handleMessage = (evt: MessageEvent) => {
         const eventData = JSON.parse(evt.data);
         const event = new WSEvent(eventData.type, eventData.payload);
-        routeGroupChatListEvents(event, setChats);
-      });
-    }
-  }
+        routeChatReadEvents(event, setMessages);
+      };
 
-  public setupChatReadRoutes(setChat: React.Dispatch<React.SetStateAction<Chat>>) {
-    if (this.socket) {
-      this.socket.addEventListener('message', function (evt) {
-        const eventData = JSON.parse(evt.data);
-        const event = new WSEvent(eventData.type, eventData.payload);
-        routeChatReadEvents(event, setChat);
-      });
+      this.socket.addEventListener('message', handleMessage);
+
+      return () => {
+        if (this.socket) this.socket.removeEventListener('message', handleMessage);
+      };
     }
   }
 
@@ -187,7 +195,7 @@ class SocketService {
               messageEventPayload.chatID != currentChatID
             )
               store.dispatch(setUnreadChats([...unreadChatIDs, messageEventPayload.chatID]));
-            if (store.getState().messaging.currentChatID == '' && store.getState().messaging.currentGroupChatID == '')
+            if (store.getState().messaging.currentChatID == '')
               toast.info('New Message from: ' + messageEventPayload.user.name, {
                 ...messageToastSettings,
                 toastId: messageEventPayload.chatID,
@@ -237,8 +245,16 @@ class SocketService {
       });
     }
   }
-}
 
+  public setupUpdateMembership() {
+    if (this.socket) {
+      this.socket.addEventListener('message', function (evt) {
+        const eventData = JSON.parse(evt.data);
+        const event = new WSEvent(eventData.type, eventData.payload);
+        routeUpdateMembership(event);
+      });
+    }
+  }
+}
 const socketService = SocketService.getInstance();
 export default socketService;
-

@@ -10,7 +10,8 @@ import { configSelector, setUpdatingLikes } from '@/slices/configSlice';
 import { ChatCircleText, HeartStraight, Lock, LockOpen } from '@phosphor-icons/react';
 import SignUp from '../common/signup_box';
 import CommentAnnouncement from '@/sections/lowers/comment_announcement';
-import ShareAnnouncement from '@/sections/lowers/share_announcement';
+import Share from '@/sections/lowers/share';
+import AnnouncementCard from '../cards/announcement';
 
 interface Props {
   announcement: Announcement;
@@ -78,7 +79,15 @@ const LowerAnnouncement = ({ announcement, setFeed }: Props) => {
           setNoComments={setNumComments}
         />
       )}
-      {clickedOnShare && <ShareAnnouncement setShow={setClickedOnShare} announcement={announcement} />}
+      {clickedOnShare && (
+        <Share
+          itemID={announcement.id}
+          itemType="announcement"
+          setShow={setClickedOnShare}
+          clipboardURL={`explore/announcement/${announcement.id}`}
+          item={<AnnouncementCard announcement={announcement} />}
+        />
+      )}
 
       <div className="w-full flex flex-col gap-2">
         <div className="flex gap-3 max-md:gap-3">

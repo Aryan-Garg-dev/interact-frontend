@@ -13,7 +13,6 @@ import { userSelector } from '@/slices/userSlice';
 import Openings from '@/screens/workspace/manage_project/openings';
 import Loader from '@/components/common/loader';
 import Collaborators from '@/screens/workspace/manage_project/collaborators';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { ORG_MANAGER, ORG_SENIOR, PROJECT_MANAGER } from '@/config/constants';
 import checkOrgAccess, { checkOrgProjectAccess } from '@/utils/funcs/access';
@@ -80,7 +79,7 @@ const ManageProject = ({ slug }: Props) => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(ManageProject));
+export default OrgMembersOnlyAndProtect(ManageProject);
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { slug } = context.query;

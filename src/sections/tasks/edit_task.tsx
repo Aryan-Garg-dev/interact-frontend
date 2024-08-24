@@ -1,5 +1,5 @@
 import { ORG_URL, TASK_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
-import { Organization, PRIORITY, Project, Task, User, DIFFICULTY} from '@/types';
+import { Organization, PRIORITY, Project, Task, User, DIFFICULTY } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -28,7 +28,6 @@ interface Props {
   org: boolean;
   task: Task;
   setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
-  setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
 const EditTask = ({
@@ -38,14 +37,13 @@ const EditTask = ({
   project = initialProject,
   task,
   setTasks,
-  setFilteredTasks,
 }: Props) => {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
   const [tags, setTags] = useState<string[]>(task.tags || []);
   const [deadline, setDeadline] = useState(getInputFieldFormatTime(task.deadline));
   const [priority, setPriority] = useState<PRIORITY>(task.priority);
-  const [difficulty, setDifficulty] = useState<DIFFICULTY>(task.difficulty); 
+  const [difficulty, setDifficulty] = useState<DIFFICULTY>(task.difficulty);
 
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
@@ -190,7 +188,8 @@ const EditTask = ({
         if (setTasks)
           setTasks(prev =>
             prev.map(t => {
-              if (t.id == task.id) return { ...t, title, description, priority, tags, deadline: new Date(deadline), difficulty };
+              if (t.id == task.id)
+                return { ...t, title, description, priority, tags, deadline: new Date(deadline), difficulty };
               else return t;
             })
           );
@@ -262,7 +261,12 @@ const EditTask = ({
               <TextArea label="Task Description" val={description} setVal={setDescription} maxLength={500} />
               <Tags label="Task Tags" tags={tags} setTags={setTags} maxTags={5} />
               <Select label="Task Priority" val={priority} setVal={setPriority} options={['low', 'medium', 'high']} />
-              <Select label="Task Difficulty" val={difficulty} setVal={setDifficulty} options={['low', 'medium', 'high']} /> {/* Added difficulty dropdown */}
+              <Select
+                label="Task Difficulty"
+                val={difficulty}
+                setVal={setDifficulty}
+                options={['basic', 'proficient', 'expert']}
+              />
               <Time
                 label="Task Deadline"
                 val={deadline}
@@ -334,7 +338,7 @@ const EditTask = ({
 
       <div
         onClick={() => setShow(false)}
-        className="bg-backdrop w-screen h-screen fixed top-0 left-0 animate-fade_third z-20 max-lg:z-[51]"
+        className="bg-backdrop w-screen h-screen fixed top-0 left-0 animate-fade_third z-20 max-lg:z-40"
       ></div>
     </>
   );

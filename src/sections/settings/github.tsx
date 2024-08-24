@@ -53,9 +53,9 @@ const Github = () => {
     <div className="w-full flex flex-col gap-2 pt-4 border-t-[1px] border-gray-400 text-primary_black">
       {clickedOnViewRepositories && <GithubRepos setShow={setClickedOnViewRepositories} />}
       <div className="text-xl font-semibold">Connect Interact to your Github!</div>
-      <div className="w-full flex items-center justify-between gap-4">
+      <div className="w-full flex max-md:flex-col md:items-center justify-between gap-4">
         {user.githubUsername && (
-          <div className="flex flex-col gap-1">
+          <div className="w-fit flex flex-col gap-1">
             <div className="flex-center gap-2">
               Your Github Username:
               <div className="font-semibold"> {user.githubUsername}</div>

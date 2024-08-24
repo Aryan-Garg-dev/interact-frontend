@@ -91,7 +91,7 @@ const NewResourceFile = ({
 
   return (
     <>
-      <div className="w-[60%] absolute bg-white border-2 border-primary_text shadow-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 p-6 rounded-xl flex flex-col gap-4 animate-fade_third">
+      <div className="w-[60%] max-md:w-5/6 absolute bg-white border-2 border-primary_text shadow-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 p-6 rounded-xl flex flex-col gap-4 animate-fade_third">
         <h1 className="text-2xl font-bold">Upload File</h1>
         <div className="w-full h-fit flex flex-col gap-4">
           <Input label="Resource File Title" val={title} setVal={setTitle} maxLength={50} required={true} />
@@ -112,7 +112,7 @@ const NewResourceFile = ({
         />
         <div className="flex flex-col gap-4 items-center mt-4">
           <div
-            className={`${selectedFile ? 'w-1/2 scale-110' : 'w-1/3'} ${
+            className={`${selectedFile ? 'w-1/2 md:scale-110' : 'w-1/3'} max-md:w-full ${
               fileLink == '' ? 'cursor-pointer hover:bg-primary_text hover:text-white' : 'cursor-default opacity-60'
             } flex-center text-center text-primary_text rounded-lg p-2 px-6 border-2 border-primary_text transition-ease-300`}
             onClick={() => {
@@ -144,15 +144,14 @@ const NewResourceFile = ({
             <div className="w-[45%] h-[1px] bg-gray-200"></div>
           </div>
           {selectedFile ? (
-            <div className="w-1/3 text-primary_text text-center rounded-lg p-2 px-6 border-2 border-primary_text opacity-60 cursor-default">
+            <div className="w-1/3 max-md:w-full text-primary_text text-center rounded-lg p-2 px-6 border-2 border-primary_text opacity-60 cursor-default">
               Enter Link to the file
             </div>
           ) : (
             <input
               type="text"
-              className="w-1/3 focus:w-1/2 focus:scale-110 bg-transparent focus:outline-none text-sm focus:text-base text-primary_text text-center rounded-lg p-2 px-6 border-2 border-primary_text transition-ease-300"
+              className="w-1/3 max-md:w-full md:focus:w-1/2 md:focus:scale-110 bg-transparent focus:outline-none text-sm md:focus:text-base text-primary_text text-center rounded-lg p-2 px-6 border-2 border-primary_text transition-ease-300"
               placeholder="Enter Link to the file"
-              maxLength={25}
               value={fileLink}
               onChange={el => setFileLink(el.target.value)}
             />

@@ -15,7 +15,6 @@ import Created from '@/components/history/organisation/created';
 import Deleted from '@/components/history/organisation/deleted';
 import Edited from '@/components/history/organisation/edited';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 
 const History = () => {
   const [history, setHistory] = useState<OrganizationHistory[]>([]);
@@ -48,7 +47,7 @@ const History = () => {
       <OrgSidebar index={7} />
       <MainWrapper>
         <div className="w-full flex flex-col items-center gap-6 max-md:px-2 p-base_padding">
-          <div className="w-full text-6xl font-semibold dark:text-white font-primary">History</div>
+          <div className="w-full text-6xl max-md:text-4xl font-semibold dark:text-white font-primary">History</div>
           <div className="w-full">
             {loading ? (
               <Loader />
@@ -122,4 +121,4 @@ const History = () => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(History));
+export default OrgMembersOnlyAndProtect(History);

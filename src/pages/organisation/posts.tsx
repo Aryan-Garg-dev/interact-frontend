@@ -18,7 +18,6 @@ import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import Masonry from 'react-masonry-css';
 import Loader from '@/components/common/loader';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import AccessTree from '@/components/organization/access_tree';
 import NoPosts from '@/components/fillers/posts';
 import { Post } from '@/types';
@@ -65,7 +64,7 @@ const Posts = () => {
       <MainWrapper>
         <div className="w-full flex flex-col items-center gap-4 max-md:px-2 p-base_padding">
           <div className="w-full flex justify-between items-center">
-            <div className="w-fit text-6xl font-semibold dark:text-white font-primary">Posts</div>
+            <div className="w-fit text-6xl max-md:text-4xl font-semibold dark:text-white font-primary">Posts</div>
             <div className="flex items-center gap-2">
               {checkOrgAccess(ORG_SENIOR) && (
                 <Plus
@@ -129,4 +128,4 @@ const Posts = () => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Posts));
+export default OrgMembersOnlyAndProtect(Posts);

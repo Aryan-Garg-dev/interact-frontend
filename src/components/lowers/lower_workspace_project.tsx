@@ -11,14 +11,15 @@ import { BOOKMARK_URL, PROJECT_URL } from '@/config/routes';
 import Semaphore from '@/utils/semaphore';
 import { configSelector, setUpdateBookmark, setUpdatingLikes } from '@/slices/configSlice';
 import { HeartStraight } from '@phosphor-icons/react';
-import ShareProject from '@/sections/lowers/share_project';
 import CommentProject from '@/sections/lowers/comment_project';
 import socketService from '@/config/ws';
 import Tasks from '@/sections/workspace/tasks';
 import NewTask from '@/sections/tasks/new_task';
 import History from '@/sections/workspace/history';
-import checkOrgAccess, { checkOrgProjectAccess, checkParticularOrgAccess } from '@/utils/funcs/access';
+import { checkOrgProjectAccess, checkParticularOrgAccess } from '@/utils/funcs/access';
 import { ORG_SENIOR, PROJECT_MEMBER } from '@/config/constants';
+import Share from '@/sections/lowers/share';
+import ProjectCard from '../cards/project';
 
 interface Props {
   project: Project;
@@ -168,7 +169,15 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false }: Pro
           setNoComments={setNumComments}
         />
       )}
-      {clickedOnShare && <ShareProject setShow={setClickedOnShare} project={project} setNoShares={setNumShares} />}
+      {clickedOnShare && (
+        <Share
+          itemID={project.id}
+          itemType="project"
+          setShow={setClickedOnShare}
+          clipboardURL={`explore?pid=${project.slug}&action=external`}
+          item={<ProjectCard project={project} />}
+        />
+      )}
       {clickedOnHistory && (
         <History
           setShow={setClickedOnHistory}

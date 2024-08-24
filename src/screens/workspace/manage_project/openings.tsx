@@ -19,7 +19,7 @@ const Openings = ({ project, setProject, org = false }: Props) => {
   const [clickedOnNewOpening, setClickedOnNewOpening] = useState(false);
   const user = useSelector(userSelector);
   return (
-    <div className="w-[70vw] max-lg:w-[75vw] max-md:w-[95%] mx-auto flex flex-col gap-6">
+    <div className="w-[70vw] max-lg:w-[75vw] max-md:w-[95vw] mx-auto flex flex-col gap-6 max-md:px-4">
       {clickedOnNewOpening && (
         <NewOpening setShow={setClickedOnNewOpening} project={project} setProject={setProject} org={org} />
       )}
@@ -29,7 +29,7 @@ const Openings = ({ project, setProject, org = false }: Props) => {
         (org && checkOrgAccess(ORG_SENIOR))) && (
         <div
           onClick={() => setClickedOnNewOpening(true)}
-          className="w-full max-lg:w-taskbar_md h-taskbar text-gray-400 dark:text-gray-200 bg-white dark:bg-gradient-to-l dark:from-dark_primary_gradient_start dark:to-dark_primary_gradient_end px-4 max-lg:px-2 py-3 rounded-lg cursor-pointer border-gray-300 border-[1px] dark:border-0 shadow-md hover:shadow-lg transition-ease-300 dark:hover:shadow-outer dark:shadow-outer flex justify-between items-center"
+          className="w-full max-lg:w-full mx-auto h-taskbar text-gray-400 dark:text-gray-200 bg-white dark:bg-gradient-to-l dark:from-dark_primary_gradient_start dark:to-dark_primary_gradient_end px-4 max-lg:px-2 py-3 rounded-lg cursor-pointer border-gray-300 border-[1px] dark:border-0 shadow-md hover:shadow-lg transition-ease-300 dark:hover:shadow-outer dark:shadow-outer flex justify-between items-center"
         >
           <div className="flex gap-2 items-center pl-2">
             <div className="font-primary dark:text-gray-200 text-lg">Create a new opening</div>

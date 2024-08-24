@@ -2,23 +2,19 @@ import OrgSidebar from '@/components/common/org_sidebar';
 import Sidebar from '@/components/common/sidebar';
 import TabMenu from '@/components/common/tab_menu';
 import SearchBar from '@/components/messaging/searchbar';
-import GroupChat from '@/screens/messaging/chat/group';
-import PersonalChat from '@/screens/messaging/chat/personal';
+import { SERVER_ERROR } from '@/config/errors';
+import { EXPLORE_URL, MESSAGING_URL } from '@/config/routes';
+import socketService from '@/config/ws';
+import getHandler from '@/handlers/get_handler';
+import ChatScreen from '@/screens/messaging/chat/chat_screen';
 import Group from '@/screens/messaging/group';
 import Personal from '@/screens/messaging/personal';
-import Project from '@/screens/messaging/project';
-import Request from '@/screens/messaging/request';
 import NewGroup from '@/sections/messaging/new_group';
 import { navbarOpenSelector } from '@/slices/feedSlice';
-import {
-  currentChatIDSelector,
-  currentGroupChatIDSelector,
-  messagingTabSelector,
-  setMessagingTab,
-} from '@/slices/messagingSlice';
+import { currentChatIDSelector, messagingTabSelector, setMessagingTab } from '@/slices/messagingSlice';
 import { userSelector } from '@/slices/userSlice';
+import Toaster from '@/utils/toaster';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import { PencilSimpleLine } from '@phosphor-icons/react';
@@ -30,21 +26,30 @@ const Messaging = () => {
 
   const open = useSelector(navbarOpenSelector);
   const currentChatID = useSelector(currentChatIDSelector);
-  const currentGroupChatID = useSelector(currentGroupChatIDSelector);
-  const [chatType, setChatType] = useState('personal');
 
   const [clickedOnNew, setClickedOnNew] = useState(false);
   const [clickedOnNewGroup, setClickedOnNewGroup] = useState(false);
+  const [unreadChatCounts, setUnreadChatCounts] = useState<number[]>([0, 0, 0, 0]);
 
   const dispatch = useDispatch();
 
   const user = useSelector(userSelector);
 
-  useEffect(() => {
-    setChatType(String(new URLSearchParams(window.location.search).get('chat')));
-  }, [window.location.search]);
+  const fetchCounts = async () => {
+    const URL = `${MESSAGING_URL}/unread/counts`;
+    const res = await getHandler(URL);
+    if (res.statusCode == 200) {
+      setUnreadChatCounts(res.data.counts || [0, 0, 0, 0]);
+    } else {
+      if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
+      else Toaster.error(SERVER_ERROR, 'error_toaster');
+    }
+  };
 
   useEffect(() => {
+    fetchCounts();
+    socketService.connect();
+
     const tab = new URLSearchParams(window.location.search).get('tab') || '';
     switch (tab) {
       case 'personal':
@@ -73,7 +78,13 @@ const Messaging = () => {
             open ? 'gap-2' : 'gap-16'
           } transition-ease-out-500 font-primary`}
         >
-          {clickedOnNewGroup ? <NewGroup setShow={setClickedOnNewGroup} /> : <></>}
+          {clickedOnNewGroup && (
+            <NewGroup
+              userFetchURL={`${EXPLORE_URL}/users/trending`}
+              submitURL={`${MESSAGING_URL}/group`}
+              setShow={setClickedOnNewGroup}
+            />
+          )}
           {/* 100-(navbar+1) */}
           <div className="w-[37.5vw] max-lg:w-screen h-full flex flex-col pt-4 pl-4 max-lg:pl-0 gap-4 ">
             <div className="w-full flex items-center justify-between max-lg:px-4 relative">
@@ -106,6 +117,7 @@ const Messaging = () => {
             <SearchBar />
             <TabMenu
               items={['Personal', 'Group', 'Project', 'Request']}
+              itemSupers={unreadChatCounts}
               active={active}
               setReduxState={setMessagingTab}
               width="100%"
@@ -113,31 +125,25 @@ const Messaging = () => {
             />
             <div className="w-full h-full overflow-y-auto">
               <div className={`${active === 0 ? 'block' : 'hidden'}`}>
-                <Personal />
+                <Personal setUnreadChatCounts={setUnreadChatCounts} />
               </div>
               <div className={`${active === 1 ? 'block' : 'hidden'}`}>
-                <Group />
+                <Group setUnreadChatCounts={setUnreadChatCounts} />
               </div>
               <div className={`${active === 2 ? 'block' : 'hidden'} `}>
-                <Project />
+                <Group setUnreadChatCounts={setUnreadChatCounts} type="projects" />
               </div>
               <div className={`${active === 3 ? 'block' : 'hidden'} `}>
-                <Request />
+                <Personal setUnreadChatCounts={setUnreadChatCounts} requests={true} />
               </div>
             </div>
           </div>
           <div
             className={`w-[37.5vw] max-lg:w-screen h-full max-lg:h-base sticky max-lg:fixed top-navbar p-2 max-lg:p-0 ${
-              currentChatID == '' && currentGroupChatID == '' ? 'hidden' : ''
+              currentChatID == '' ? 'hidden' : ''
             } z-40 max-lg:z-30`}
           >
-            {currentChatID == '' && currentGroupChatID == '' ? (
-              <></>
-            ) : chatType == 'group' ? (
-              <GroupChat />
-            ) : (
-              <PersonalChat />
-            )}
+            {currentChatID != '' && <ChatScreen />}
           </div>
         </div>
       </MainWrapper>
@@ -145,4 +151,4 @@ const Messaging = () => {
   );
 };
 
-export default WidthCheck(NonOrgOnlyAndProtect(Messaging));
+export default NonOrgOnlyAndProtect(Messaging);

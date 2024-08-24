@@ -31,8 +31,8 @@ const MeetingCard = ({ meeting }: Props) => {
       href={'/organisation/meetings/' + meeting.id}
       className="w-full flex gap-1 bg-white py-4 rounded-lg hover:shadow-xl transition-ease-out-500 animate-fade_third p-2"
     >
-      <div className="w-1/6 line-clamp-1 flex-center">{meeting.title}</div>
-      <div className="w-1/6 flex-center">
+      <div className="w-1/6 max-md:w-1/3 line-clamp-1 flex-center max-md:text-sm">{meeting.title}</div>
+      <div className="w-1/6 max-md:w-1/3 flex-center">
         <div
           className={`text-xs px-2 py-1 ${
             status == 'Live' ? 'bg-priority_low' : status == 'Ended' ? 'bg-priority_high' : 'bg-priority_mid'
@@ -41,10 +41,10 @@ const MeetingCard = ({ meeting }: Props) => {
           {status}
         </div>
       </div>
-      <div className="w-1/6 flex-center">
-        <Tags tags={meeting.tags} limit={8} center={true} />
+      <div className="w-1/6 max-md:hidden flex-center">
+        <Tags tags={meeting.tags} limit={20} center={true} />
       </div>
-      <div className="w-1/6 flex-center">
+      <div className="w-1/6 max-md:hidden flex-center">
         <div
           className={`text-xs px-2 py-1 ${
             meeting.frequency == 'none' ? 'bg-blue-200' : 'bg-priority_mid'
@@ -53,16 +53,16 @@ const MeetingCard = ({ meeting }: Props) => {
           {meeting.frequency == 'none' ? 'One Time' : meeting.frequency}
         </div>
       </div>
-      <div className="w-1/6 flex-center">
+      <div className="w-1/6 max-md:w-1/3 flex-center">
         <div
           className={`text-xs px-2 py-1 ${
             meeting.isOpenForMembers ? 'bg-priority_low' : 'bg-priority_high'
           } rounded-full `}
         >
-          {meeting.isOpenForMembers ? 'Open for members' : 'Restricted'}
+          {meeting.isOpenForMembers ? 'Open' : 'Restricted'}
         </div>
       </div>
-      <div className="w-1/6 text-sm flex-center flex-col">
+      <div className="w-1/6 max-md:hidden text-sm flex-center flex-col">
         {meeting.isLive ? (
           'Session is live'
         ) : (

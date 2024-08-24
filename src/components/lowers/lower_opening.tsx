@@ -4,13 +4,14 @@ import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 // import clickedOnSharePost from './clickedOnShare_project';
 import { Gear, Export } from '@phosphor-icons/react';
-import ShareOpening from '@/sections/lowers/share_opening';
 import OpeningBookmarkIcon from './opening_bookmark';
 import Report from '../common/report';
 import { WarningCircle } from '@phosphor-icons/react';
 import SignUp from '../common/signup_box';
 import { checkParticularOrgAccess } from '@/utils/funcs/access';
 import { ORG_MANAGER } from '@/config/constants';
+import Share from '@/sections/lowers/share';
+import OpeningCard from '../cards/opening';
 
 interface Props {
   opening: Opening;
@@ -26,7 +27,15 @@ const LowerOpening = ({ opening, org = false }: Props) => {
   return (
     <>
       {noUserClick && <SignUp setShow={setNoUserClick} />}
-      {clickedOnShare && <ShareOpening setShow={setClickedOnShare} opening={opening} org={org} />}
+      {clickedOnShare && (
+        <Share
+          itemID={opening.id}
+          itemType="opening"
+          setShow={setClickedOnShare}
+          clipboardURL={`explore?oid=${opening.id}&action=external`}
+          item={<OpeningCard opening={opening} />}
+        />
+      )}
       {clickedOnReport && <Report openingID={opening.id} setShow={setClickedOnReport} />}
 
       <div className="flex gap-4 items-center">
@@ -35,7 +44,9 @@ const LowerOpening = ({ opening, org = false }: Props) => {
               <Gear
                 className="cursor-pointer max-md:w-[32px] max-md:h-[32px]"
                 onClick={() => {
-                  window.location.assign(`/organisations?redirect_url=openings?action=edit&oid=${opening.id}`);
+                  window.location.assign(
+                    `/organisations?oid=${opening.organizationID}&redirect_url=openings&action=edit`
+                  );
                 }}
                 size={32}
                 weight="light"

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import ToolTip from '@/components/utils/tooltip';
-import { getPRStatusColor, getTaskDeadlineColor, getTaskPriorityColor } from '@/utils/funcs/task';
+import { getPRStatusColor, getTaskDeadlineColor, getTaskPriorityColor, getTaskDifficultyColor } from '@/utils/funcs/task';
 import UsersList from '@/components/common/users_list';
 import PictureList from '@/components/common/picture_list';
 import Tags from '@/components/common/tags';
@@ -73,7 +73,7 @@ const TaskComponent = ({
   return (
     <>
       {clickedOnUsers && <UsersList title="Task Users" users={task.users} setShow={setClickedOnUsers} />}
-      <div className="w-no_side_base_open h-base fixed bg-gray-50 top-navbar overflow-y-auto flex flex-col gap-4 p-8 pt-4 font-primary animate-fade_third z-10">
+      <div className="w-no_side_base_open max-md:w-screen h-base fixed bg-gray-50 top-navbar overflow-y-auto flex flex-col gap-4 p-8 pt-4 max-md:px-4 font-primary animate-fade_third z-10 max-md:z-20">
         <div className="w-full flex flex-col gap-2">
           <ArrowArcLeft
             className="cursor-pointer"
@@ -83,9 +83,12 @@ const TaskComponent = ({
               setShow(false);
             }}
           />
-          <div className="w-full flex justify-between items-center">
+          <div className="w-full flex max-md:flex-col gap-4 justify-between items-center">
             <div className="flex-center gap-2">
-              <div className="text-4xl font-semibold">{`${task.prID}: ${task.title}`}</div>
+              <div className="w-fit flex-center text-4xl font-semibold">
+                {task.prID && `${task.prID}: `}
+                {task.title}
+              </div>
               <div className="relative group">
                 <ToolTip
                   content="Copy Task Link"
@@ -110,12 +113,12 @@ const TaskComponent = ({
                 />
               </div>
             </div>
-            <div className="flex-center gap-2">
+            <div className="max-md:w-full max-md:justify-between flex-center gap-2">
               {accessChecker && (
-                <>
+                <div className="flex-center">
                   <Gear onClick={() => setClickedOnEditTask(true)} className="cursor-pointer" size={32} />
                   <Trash onClick={() => setClickedOnDeleteTask(true)} className="cursor-pointer" size={32} />
-                </>
+                </div>
               )}
               {(isAssignedUser(user.id) || accessChecker) && (
                 <div
@@ -144,7 +147,7 @@ const TaskComponent = ({
           <div>{renderContentWithLinks(task.description)}</div>
           <Tags tags={task.tags} displayAll={true} />
         </div>
-        <div className="w-fit flex-center gap-16">
+        <div className="w-fit flex-center gap-16 max-md:text-sm">
           <div className="flex gap-2 items-center">
             <div>Priority:</div>
             <div
@@ -155,6 +158,15 @@ const TaskComponent = ({
             </div>
           </div>
           <div className="flex gap-2 items-center">
+            <div>Difficulty:</div>
+            <div
+              style={{ backgroundColor: getTaskDifficultyColor(task) }}
+              className="uppercase px-3 py-1 rounded-lg text-sm font-medium"
+            >
+              {task.difficulty}
+            </div>
+          </div>
+          <div className="flex gap-2 items-center">
             <div>Deadline:</div>
             <div
               style={{ backgroundColor: getTaskDeadlineColor(task) }}
@@ -162,7 +174,7 @@ const TaskComponent = ({
             >
               <div className="font-semibold">{moment(task.deadline).format('DD-MMM-YY')}</div>
             </div>
-            <div className="text-xs">({moment(task.deadline).fromNow()})</div>
+            <div className="text-xs max-md:hidden">({moment(task.deadline).fromNow()})</div>
           </div>
         </div>
 

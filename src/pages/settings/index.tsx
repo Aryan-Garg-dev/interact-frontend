@@ -25,8 +25,8 @@ const Settings = () => {
         <div className="w-full dark:text-white flex flex-col gap-4 px-8 max-md:px-4 py-6 font-primary relative transition-ease-out-500">
           <div className="w-fit text-5xl font-extrabold text-gradient pb-2">Settings</div>
           <div className="w-full flex flex-col gap-4">
-            <div className="w-full flex gap-4">
-              <div className="w-4/5 flex flex-col gap-6">
+            <div className="w-full flex max-md:flex-col gap-4">
+              <div className="w-4/5 max-md:w-full flex flex-col gap-6">
                 {/* <Theme /> */}
                 <Email />
                 <Resume />
@@ -34,7 +34,7 @@ const Settings = () => {
                 <Password />
                 <Verify />
               </div>
-              <div className="w-1/5 flex flex-col gap-4 border-l-[1px] border-gray-400 pl-4">
+              <div className="w-1/5 max-md:w-full flex flex-col gap-4 md:border-l-[1px] max-md:border-t-[1px] border-gray-400 md:pl-4 max-md:pt-4">
                 <div>
                   <div className="font-semibold">Your username</div>
                   <div className="text-gray-800 text-sm">@{user.username}</div>

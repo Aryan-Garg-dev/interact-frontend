@@ -1,41 +1,65 @@
-import { GroupChat } from '@/types';
-import Cookies from 'js-cookie';
+import { Chat } from '@/types';
 import React from 'react';
 import Image from 'next/image';
 import getDisplayTime from '@/utils/funcs/get_display_time';
 import { useDispatch, useSelector } from 'react-redux';
-import { currentGroupChatIDSelector, setCurrentChatID, setCurrentGroupChatID } from '@/slices/messagingSlice';
-import { useRouter } from 'next/router';
+import { currentChatIDSelector, setCurrentChatID } from '@/slices/messagingSlice';
 import { GROUP_CHAT_PIC_URL } from '@/config/routes';
+import { userIDSelector } from '@/slices/userSlice';
+import { Circle } from '@phosphor-icons/react';
+import { isChatUnread } from '@/utils/funcs/messaging';
 
 interface Props {
-  chat: GroupChat;
+  chat: Chat;
+  setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
+  setUnreadChatCounts: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
-const GroupChatCard = ({ chat }: Props) => {
-  const userID = Cookies.get('id');
+const GroupChatCard = ({ chat, setChats, setUnreadChatCounts }: Props) => {
+  const userID = useSelector(userIDSelector);
   const dispatch = useDispatch();
 
-  const currentChatID = useSelector(currentGroupChatIDSelector);
-  const router = useRouter();
+  const currentChatID = useSelector(currentChatIDSelector);
 
   const handleClick = () => {
-    dispatch(setCurrentChatID(''));
-    dispatch(setCurrentGroupChatID(chat.id));
-    router.push({
-      pathname: router.pathname,
-      query: { ...router.query, chat: 'group' },
-    });
+    dispatch(setCurrentChatID(chat.id));
+    if (isChatUnread(chat))
+      setUnreadChatCounts(([personalCount, groupCount, projectCount, requestCount]) => [
+        personalCount,
+        chat.projectID ? groupCount : groupCount - 1,
+        chat.projectID ? projectCount - 1 : projectCount,
+        requestCount,
+      ]);
+    setChats(prev =>
+      prev.map(c => {
+        if (c.id == chat.id && c.latestMessageID && isChatUnread(c)) {
+          const readBy = c.latestMessage?.readBy || [];
+          readBy.push({ messageID: c.latestMessageID, userID, readAt: new Date(), user: null });
+          c.latestMessage.readBy = readBy;
+        }
+        return c;
+      })
+    );
   };
 
+  const getLatestMessageContent = () => {
+    if (chat.latestMessage.content != '') return chat.latestMessage.content;
+    if (chat.latestMessage.postID) return 'shared a post.';
+    if (chat.latestMessage.projectID) return 'shared a project.';
+    if (chat.latestMessage.openingID) return 'shared an opening.';
+    if (chat.latestMessage.profileID) return 'shared a profile.';
+    if (chat.latestMessage.announcementID) return 'shared an announcement.';
+    if (chat.latestMessage.eventID) return 'shared an event.';
+    return '';
+  };
   return (
     <div
       onClick={handleClick}
-      className={`w-full font-primary dark:text-white ${
+      className={`w-full relative font-primary dark:text-white ${
         chat.id == currentChatID
           ? 'bg-primary_comp_hover dark:bg-dark_primary_comp_active'
           : 'hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
-      } border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg flex gap-4 px-5 py-4 cursor-pointer transition-ease-300`}
+      } border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg flex gap-4 p-3 cursor-pointer transition-ease-300`}
     >
       <Image
         crossOrigin="anonymous"
@@ -45,33 +69,45 @@ const GroupChatCard = ({ chat }: Props) => {
         src={`${GROUP_CHAT_PIC_URL}/${chat.coverPic}`}
         className={'rounded-full w-14 h-14 cursor-pointer border-[1px] border-black'}
       />
-      <div className="w-full flex flex-col gap-1">
-        <div className="w-full flex items-center justify-between">
-          <div className="text-xl font-semibold">{chat.title}</div>
-          <div className="flex flex-col font text-xs">
-            {chat.latestMessage
-              ? getDisplayTime(chat.latestMessage.createdAt, false)
-              : getDisplayTime(chat.createdAt, false)}
-            {/* {chat.latestMessage.userID != userID && getLastReadMessageID() != chat.latestMessage.id ? (
-              <>Unread</>
-            ) : (
-              <></>
-            )} */}
+      <div className="w-[calc(100%-56px)] flex items-center justify-between">
+        <div className="grow flex flex-col gap-1">
+          <div className="w-fit flex-center gap-2">
+            <div className="text-xl font-semibold">{chat.title}</div>
+            <div className="text-xs">
+              {chat.projectID
+                ? '@' + chat.project?.title
+                : chat.organizationID && '@' + chat.organization?.user?.username}
+            </div>
           </div>
+          {chat.latestMessageID ? (
+            <div className="w-full line-clamp-2 font-light">
+              <span className="mr-2 font-medium">
+                {chat.latestMessage.userID == userID ? '• You' : `• ${chat.latestMessage.user.username}`}
+              </span>
+              {getLatestMessageContent()}
+            </div>
+          ) : (
+            <div className="w-fit flex-center gap-1 font-light text-sm">
+              <span className="font-medium">{chat.user.id == userID ? 'You' : `${chat.user.username}`}</span>
+              created this chat
+            </div>
+          )}
         </div>
-        {chat.latestMessage ? (
-          <div className="w-full line-clamp-2 font-light">
-            <span className="mr-2 font-medium">
-              • {chat.latestMessage.userID == userID ? 'You' : `${chat.latestMessage.user.username}`}
-            </span>
-            {chat.latestMessage.content}
-          </div>
-        ) : (
-          <div className="w-full line-clamp-2 font-light">
-            <span className="mr-2 font-medium">{chat.user.id == userID ? 'You' : `${chat.user.username}`}</span>
-            Created this chat
-          </div>
-        )}
+        <div className="flex-center flex-col font text-xs">
+          {chat.latestMessageID
+            ? getDisplayTime(chat.latestMessage.createdAt, false)
+            : getDisplayTime(chat.createdAt, false)}
+          {chat.latestMessageID && isChatUnread(chat) && (
+            <>
+              <div className="text-xxs text-primary_text font-medium">Unread</div>
+              <Circle
+                className="text-primary_text absolute top-0 right-0 translate-x-1/2 -translate-y-1/2"
+                size={16}
+                weight="fill"
+              />
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

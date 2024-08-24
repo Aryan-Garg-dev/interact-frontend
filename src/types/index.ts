@@ -216,7 +216,7 @@ export interface Project {
   memberships: Membership[];
   invitations: Invitation[];
   openings: Opening[];
-  chats: GroupChat[];
+  chats: Chat[];
   hashes: string[];
   isPrivate: boolean;
   views: number;
@@ -338,7 +338,6 @@ export interface Message {
   chat: Chat | null;
   userID: string;
   user: User;
-  read: boolean;
   postID: string;
   post: Post;
   projectID: string;
@@ -349,80 +348,53 @@ export interface Message {
   profile: User;
   announcementID: string;
   announcement: Announcement;
+  eventID: string;
+  event: Event | null;
   messageID: string;
   message: Message | null;
+  readBy: MessageReadStatus[];
   createdAt: Date;
 }
 
-export interface GroupChatMessage {
-  id: string;
-  content: string;
-  chatID: string;
-  chat: GroupChat | null;
-  userID: string;
-  user: User;
-  read: boolean;
-  postID: string;
-  post: Post;
-  projectID: string;
-  project: Project;
-  openingID: string;
-  opening: Opening;
-  profileID: string;
-  profile: User;
-  announcementID: string;
-  announcement: Announcement;
+export interface MessageReadStatus {
   messageID: string;
-  message: GroupChatMessage | null;
-  createdAt: Date;
+  userID: string;
+  user: User | null;
+  readAt: Date;
 }
 
 export interface Chat {
   id: string;
   title: string;
   description: string;
-  createdByID: string;
-  createdBy: User;
-  acceptedByID: string;
-  acceptedBy: User;
+  isGroup: boolean;
+  isAdminOnly: boolean;
+  isAccepted: boolean;
+  userID: string;
+  user: User;
+  coverPic: string;
+  organizationID: string;
+  organization: Organization | null;
+  projectID: string;
+  project: Project | null;
   createdAt: Date;
   messages: Message[];
   latestMessageID: string;
   latestMessage: Message;
-  lastReadMessageByCreatingUserID: string;
-  lastReadMessageByAcceptingUserID: string;
-  accepted: boolean;
-  blockedByCreatingUser: boolean;
-  blockedByAcceptingUser: boolean;
-}
-
-export interface GroupChat {
-  id: string;
-  title: string;
-  description: string;
-  coverPic: string;
-  adminOnly: boolean;
-  userID: string;
-  user: User;
-  organizationID: string;
-  organization: Organization;
-  projectID: string;
-  project: Project;
-  memberships: GroupChatMembership[];
-  messages: GroupChatMessage[];
+  noMembers: number;
+  memberships: ChatMembership[];
   invitations: Invitation[];
-  latestMessageID: string;
-  latestMessage: GroupChatMessage;
-  createdAt: Date;
 }
 
-export interface GroupChatMembership {
+export interface ChatMembership {
   id: string;
   userID: string;
   user: User;
   chatID: string;
-  chat: GroupChat;
-  role: string;
+  isAdmin: boolean;
+  lastReadMessageID: string;
+  lastReadMessage: Message;
+  isBlocked: boolean;
   createdAt: Date;
 }
 
@@ -437,7 +409,7 @@ export interface Invitation {
   organizationID: string;
   organization: Organization;
   chatID: string;
-  chat: GroupChat;
+  chat: Chat;
   eventID: string;
   event: Event | null;
   title: string;
@@ -460,7 +432,7 @@ export interface SubTask {
 }
 
 export type PRIORITY = 'low' | 'medium' | 'high';
-export type DIFFICULTY = 'easy' | 'medium' | 'high';
+export type DIFFICULTY = 'basic' | 'proficient' | 'expert';
 
 export interface Task {
   id: string;

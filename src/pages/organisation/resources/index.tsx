@@ -14,7 +14,6 @@ import { initialOrganization, initialResourceBucket } from '@/types/initials';
 import checkOrgAccess from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import { Info, Plus } from '@phosphor-icons/react';
@@ -76,7 +75,7 @@ const Resources = () => {
         {clickedOnInfo && <AccessTree type="resource" setShow={setClickedOnInfo} />}
         <div className="w-full flex flex-col relative">
           <div className="w-full flex justify-between items-center p-base_padding">
-            <div className="text-6xl font-semibold dark:text-white font-primary">Resources</div>
+            <div className="text-6xl max-md:text-4xl font-semibold dark:text-white font-primary">Resources</div>
 
             <div className="flex items-center gap-2">
               {checkOrgAccess(ORG_SENIOR) && (
@@ -100,7 +99,7 @@ const Resources = () => {
               <Loader />
             ) : resources.length > 0 ? (
               <div className="flex justify-evenly px-4">
-                <div className={`w-full flex-wrap max-lg:w-[720px] flex flex-row gap-4`}>
+                <div className={`w-full flex-wrap flex max-md:flex-col max-md:items-center flex-row gap-4`}>
                   {resources.map(resource => {
                     return (
                       <ResourceCard
@@ -132,4 +131,4 @@ const Resources = () => {
   );
 };
 
-export default WidthCheck(OrgMembersOnlyAndProtect(Resources));
+export default OrgMembersOnlyAndProtect(Resources);

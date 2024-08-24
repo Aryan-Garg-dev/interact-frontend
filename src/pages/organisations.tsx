@@ -17,7 +17,6 @@ import { Trash } from '@phosphor-icons/react';
 import { initialOrganizationMembership } from '@/types/initials';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import deleteHandler from '@/handlers/delete_handler';
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import ConfirmOTP from '@/components/common/confirm_otp';
 import { setOrganizationMemberships, userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
@@ -130,7 +129,7 @@ const Organizations = () => {
 
           <div className="text-5xl font-semibold dark:text-white font-primary">Memberships</div>
 
-          <div className="w-full grid grid-cols-2 gap-8">
+          <div className="w-full grid grid-cols-2 max-md:grid-cols-1 gap-8">
             {memberships.map(membership => (
               <div
                 key={membership.id}
@@ -147,8 +146,8 @@ const Organizations = () => {
                   blurDataURL={membership.organization.user.profilePicBlurHash || 'no-hash'}
                   className="rounded-full w-32 h-32"
                 />
-                <div className="w-[calc(100%-128px)] flex flex-col gap-2 max-md:text-center max-md:gap-4">
-                  <div className="w-full flex justify-between items-center">
+                <div className="w-[calc(100%-128px)] max-md:w-full flex flex-col gap-2 max-md:text-center max-md:gap-4">
+                  <div className="w-full flex justify-between max-md:justify-center items-center max-md:gap-2">
                     <div className="text-3xl font-bold text-gradient line-clamp-1">{membership.organization.title}</div>
                     <Trash
                       onClick={el => {
@@ -182,4 +181,4 @@ export const getServerSideProps: GetServerSideProps = async context => {
   };
 };
 
-export default WidthCheck(NonOrgOnlyAndProtect(Organizations));
+export default NonOrgOnlyAndProtect(Organizations);

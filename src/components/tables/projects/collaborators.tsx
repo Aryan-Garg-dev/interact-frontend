@@ -76,11 +76,11 @@ const CollaboratorsTable = ({ memberships, project, setProject, org }: Props) =>
           title="Confirm Remove?"
         />
       )}
-      <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold text-primary_black">
+      <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold max-md:text-sm text-primary_black">
         <div className="w-[35%] flex-center">Name</div>
         <div className="w-[20%] flex-center">Title</div>
         <div className="w-[10%] flex-center">Role</div>
-        <div className="w-[20%] flex-center">Joined At</div>
+        <div className="w-[20%] flex-center">Joined On</div>
         <div className="w-[15%] flex-center">Action</div>
       </div>
       {memberships.map(membership => (
@@ -99,29 +99,33 @@ const CollaboratorsTable = ({ memberships, project, setProject, org }: Props) =>
               blurDataURL={membership.user.profilePicBlurHash || 'no-hash'}
               className="w-8 h-8 rounded-full z-[1]"
             />
-            <div className="w-[calc(100%-32px)] flex items-center flex-wrap gap-1">
-              <div className="font-medium text-lg">{membership.user.name}</div>
-              <div className="text-xs">@{membership.user.username}</div>
+            <div className="w-[calc(100%-32px)] flex max-md:flex-col items-center flex-wrap gap-1 max-md:gap-0">
+              <div className="max-md:w-full font-medium text-base max-md:text-sm line-clamp-1">
+                {membership.user.name}
+              </div>
+              <div className="max-md:w-full text-xs max-md:text-xxs line-clamp-1">@{membership.user.username}</div>
             </div>
           </div>
           <div className="w-[20%] flex-center">{membership.title}</div>
           <div className="w-[10%] flex-center">
             <div
-              className="w-fit px-3 py-1 text-xs font-medium rounded-full"
+              className="w-fit px-3 max-md:px-2 py-1 text-xs max-md:text-xxs font-medium rounded-full"
               style={{ backgroundColor: getRoleColor(membership.role) }}
             >
               {membership.role}
             </div>
           </div>
-          <div className="w-[20%] flex-center">{moment(membership.createdAt).format('DD MMMM, YYYY')}</div>
-          <div className="w-[15%] flex-center gap-4">
+          <div className="w-[20%] flex-center max-md:text-xxs">
+            {moment(membership.createdAt).format('DD MMMM, YYYY')}
+          </div>
+          <div className="w-[15%] flex-center gap-4 max-md:gap-2">
             {project.userID == user.id || (org && checkOrgAccess(ORG_MANAGER)) ? (
               <Pen
                 onClick={() => {
                   setClickedMembership(membership);
                   setClickedOnEditCollaborator(true);
                 }}
-                className="cursor-pointer"
+                className="max-md:w-4 max-md:h-4 cursor-pointer"
                 size={20}
               />
             ) : (
@@ -132,7 +136,7 @@ const CollaboratorsTable = ({ memberships, project, setProject, org }: Props) =>
                     setClickedMembership(membership);
                     setClickedOnEditCollaborator(true);
                   }}
-                  className="cursor-pointer"
+                  className="max-md:w-4 max-md:h-4 cursor-pointer"
                   size={20}
                 />
               )

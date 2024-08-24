@@ -11,8 +11,8 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Image from 'next/image';
-import { USER_COVER_PIC_URL, USER_PROFILE_PIC_URL, USER_URL } from '@/config/routes';
-import { ArrowRight, Camera, ImageSquare, MapPin, X } from '@phosphor-icons/react';
+import { EXPLORE_URL, USER_COVER_PIC_URL, USER_PROFILE_PIC_URL, USER_URL } from '@/config/routes';
+import { ArrowLeft, ArrowRight, Buildings, Camera, ImageSquare, MapPin, X } from '@phosphor-icons/react';
 import Tags from '@/components/utils/edit_tags';
 import Links from '@/components/utils/edit_links';
 import { SERVER_ERROR } from '@/config/errors';
@@ -28,6 +28,10 @@ import UserCard from '@/components/onboarding/user_card';
 import DummyUserCard from '@/components/onboarding/dummy_user_card';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import { useRouter } from 'next/router';
+import { collegesData } from 'src/utils/colleges';
+import { College } from '@/types';
+import postHandler from '@/handlers/post_handler';
+import fuzzysort from 'fuzzysort';
 
 const Onboarding = () => {
   const [clickedOnBuild, setClickedOnBuild] = useState(false);
@@ -45,13 +49,23 @@ const Onboarding = () => {
   const [userCoverPicView, setUserCoverPicView] = useState(USER_COVER_PIC_URL + '/' + user.coverPic);
 
   const [location, setLocation] = useState('Vellore');
-  const [school, setSchool] = useState('VIT Vellore');
+  const [school, setSchool] = useState('');
+
+  const [schoolSearch, setSchoolSearch] = useState('');
+  const [clickedOnNewCollege, setClickedOnNewCollege] = useState(false);
+  const [colleges, setColleges] = useState<College[]>([]);
 
   const [mutex, setMutex] = useState(false);
 
   const [step, setStep] = useState(1);
 
   const dispatch = useDispatch();
+
+  const handleAddCollege = () => {
+    const URL = `${EXPLORE_URL}/colleges`;
+    postHandler(URL, { name: school, city: location }, 'multipart/form-data');
+    setClickedOnNewCollege(false);
+  };
 
   useEffect(() => {
     if (process.env.NODE_ENV != 'development') {
@@ -165,16 +179,24 @@ const Onboarding = () => {
         setStep(prev => prev + 1);
         break;
       case 7:
-        // if (clickedOnNewCollege) handleAddCollege();
-        setStep(prev => prev + 1);
-        break;
-      case 8:
         if (location.trim() == '') Toaster.error('Location cannot be empty');
         else setStep(prev => prev + 1);
+        break;
+      case 8:
+        if (clickedOnNewCollege) handleAddCollege();
+        setStep(prev => prev + 1);
         break;
       default:
     }
   };
+
+  useEffect(() => {
+    if (schoolSearch == '') setColleges([]);
+    else {
+      const results = fuzzysort.go(schoolSearch, collegesData, { key: 'fuzzy', limit: 10 });
+      setColleges(results.map(result => result.obj));
+    }
+  }, [schoolSearch]);
 
   return (
     <>
@@ -245,7 +267,7 @@ const Onboarding = () => {
                       ? 'Attach Your Socials'
                       : step == 7
                       ? 'Pin Your Spot'
-                      : ''}
+                      : step == 8 && 'About Your College'}
                   </div>
                   <div className="text-base max-md:text-base font-medium">
                     {step == 1
@@ -564,7 +586,107 @@ const Onboarding = () => {
                     </div>
                   </>
                 ) : (
-                  <></>
+                  step == 8 && (
+                    <>
+                      {clickedOnNewCollege ? (
+                        <>
+                          <div className="flex items-center gap-1 font-medium text-sm">
+                            <ArrowLeft
+                              onClick={() => {
+                                setSchool('');
+                                setClickedOnNewCollege(false);
+                              }}
+                              className="cursor-pointer"
+                            />{' '}
+                            Tell us about your college and we&apos;ll add it to the list!
+                          </div>
+                          <div className="w-full flex flex-col gap-2">
+                            <div className="w-full flex flex-col gap-1">
+                              <div className="text-xs ml-1 font-semibold uppercase text-black">
+                                Name of your College?
+                              </div>
+                              <div className="w-full flex items-center gap-2 bg-[#ffffff40] border-[1px] border-black rounded-lg p-2">
+                                <Buildings size={24} weight="duotone" />
+                                <input
+                                  className="grow bg-transparent text-lg max-md:text-base focus:outline-none"
+                                  type="text"
+                                  maxLength={50}
+                                  value={school}
+                                  onChange={el => setSchool(el.target.value)}
+                                />
+                              </div>
+                            </div>
+
+                            <div className="w-full flex flex-col gap-1">
+                              <div className="text-xs ml-1 font-semibold uppercase text-black">
+                                Which City is the College In?
+                              </div>
+                              <div className="w-full flex items-center gap-2 bg-[#ffffff40] border-[1px] border-black rounded-lg p-2">
+                                <MapPin size={24} weight="duotone" />
+                                <input
+                                  className="grow bg-transparent text-lg max-md:text-base focus:outline-none"
+                                  type="text"
+                                  maxLength={50}
+                                  value={location}
+                                  onChange={el => setLocation(el.target.value)}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="font-medium text-sm">
+                            Tell us the name of your college to help us find your niche (optional)
+                          </div>
+                          <div className="w-full flex items-center gap-2 bg-[#ffffff40] border-[1px] border-black rounded-lg p-2">
+                            <Buildings size={24} weight="duotone" />
+                            {school != '' ? (
+                              <div className="grow flex justify-between items-center">
+                                <div className="text-lg cursor-default">{school}</div>
+                                <X onClick={() => setSchool('')} className="cursor-pointer" />
+                              </div>
+                            ) : (
+                              <input
+                                className="grow bg-transparent text-lg max-md:text-base focus:outline-none"
+                                type="text"
+                                maxLength={50}
+                                value={schoolSearch}
+                                onChange={el => setSchoolSearch(el.target.value)}
+                              />
+                            )}
+                          </div>
+                          {school == '' && schoolSearch != '' && (
+                            <div className="w-full flex flex-col gap-2">
+                              {/* <div
+                                onClick={() => setClickedOnNewCollege(true)}
+                                className="w-fit h-5 text-sm font-medium hover-underline-animation after:bg-black cursor-pointer"
+                              >
+                                College not present here?
+                              </div> */}
+
+                              <div className="w-full flex flex-wrap gap-2">
+                                {colleges?.map(college => (
+                                  <div
+                                    key={college.name}
+                                    onClick={() => {
+                                      setSchool(college.name);
+                                      setSchoolSearch(college.name);
+                                      setLocation(college.city);
+                                      setColleges([]);
+                                    }}
+                                    className="border-[1px] border-primary_black rounded-lg px-2 py-1 text-xs cursor-pointer"
+                                  >
+                                    {college.name}
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      )}
+                    </>
+                  )
                 )}
                 <div className="w-full flex items-center justify-between">
                   {step != 1 ? (
@@ -594,7 +716,7 @@ const Onboarding = () => {
                       <div></div>
                     )}
 
-                    {step != 7 ? (
+                    {step != 8 ? (
                       <div
                         onClick={handleIncrementStep}
                         className="w-fit text-lg py-2 font-medium px-4 shadow-md hover:bg-primary_comp hover:shadow-lg transition-ease-500 rounded-xl cursor-pointer"

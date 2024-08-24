@@ -11,18 +11,10 @@ interface Props {
   clickedOpening?: Opening;
   setClickedOnOpening?: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedOpening?: React.Dispatch<React.SetStateAction<Opening>>;
-  org?: boolean;
   short?: boolean;
 }
 
-const OpeningCard = ({
-  opening,
-  clickedOpening,
-  setClickedOnOpening,
-  setClickedOpening,
-  org = false,
-  short = false,
-}: Props) => {
+const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedOpening, short = false }: Props) => {
   return (
     <div
       onClick={() => {
@@ -35,7 +27,7 @@ const OpeningCard = ({
         short ? 'p-2' : 'p-3'
       } transition-ease-300 cursor-pointer animate-fade_third`}
     >
-      {org ? (
+      {opening.organizationID && opening.organization ? (
         <Image
           crossOrigin="anonymous"
           width={200}
@@ -46,7 +38,7 @@ const OpeningCard = ({
           blurDataURL={opening.organization?.user?.profilePicBlurHash || 'no-hash'}
           className={`${
             short ? 'w-[90px] h-[90px]' : 'w-[110px] h-[110px]'
-          } max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover`}
+          } max-lg:w-[90px] max-lg:h-[90px] rounded-full object-cover`}
         />
       ) : (
         <Image
@@ -70,7 +62,7 @@ const OpeningCard = ({
           </div>
           <div className="w-fit font-medium flex-center gap-1 text-sm line-clamp-1">
             @
-            {org ? (
+            {opening.organizationID && opening.organization ? (
               <span className="w-fit flex-center gap-1">
                 {opening.organization?.title} <Buildings />
               </span>

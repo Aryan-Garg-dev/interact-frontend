@@ -1,5 +1,5 @@
 import { Project } from '@/types';
-import { Plus } from '@phosphor-icons/react';
+import { EnvelopeSimple, Plus } from '@phosphor-icons/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
@@ -23,17 +23,17 @@ const Collaborators = ({ project, setProject, org = false }: Props) => {
   const user = useSelector(userSelector);
 
   return (
-    <div className="w-[70vw] max-lg:w-screen mx-auto flex flex-col gap-6">
+    <div className="w-[70vw] max-lg:w-[75vw] max-md:w-[95vw] mx-auto flex flex-col gap-6">
       {clickedOnAddCollaborator && (
         <AddCollaborators setShow={setClickedOnAddCollaborator} project={project} setProject={setProject} org={org} />
       )}
-      <div className="w-full max-lg:w-[95%] h-taskbar flex gap-2 font-primary text-gray-200 text-lg">
+      <div className="w-full h-taskbar flex gap-2 font-primary text-gray-200 text-lg max-md:px-4">
         {(project.userID == user.id ||
           user.managerProjects.includes(project.id) ||
           (org && checkOrgAccess(ORG_MANAGER))) && (
           <div
             onClick={() => setClickedOnAddCollaborator(true)}
-            className="w-4/5 max-lg:w-2/3 h-full text-gray-400 dark:text-gray-200 bg-white dark:bg-gradient-to-l dark:from-dark_primary_gradient_start dark:to-dark_primary_gradient_end px-4 max-lg:px-2 py-3 rounded-lg cursor-pointer border-gray-300 border-[1px] dark:border-0 shadow-md hover:shadow-lg transition-ease-300 dark:hover:shadow-outer dark:shadow-outer flex justify-between items-center"
+            className="w-4/5 max-lg:grow h-full text-gray-400 dark:text-gray-200 bg-white dark:bg-gradient-to-l dark:from-dark_primary_gradient_start dark:to-dark_primary_gradient_end px-4 max-lg:px-2 py-3 rounded-lg cursor-pointer border-gray-300 border-[1px] dark:border-0 shadow-md hover:shadow-lg transition-ease-300 dark:hover:shadow-outer dark:shadow-outer flex justify-between items-center"
           >
             <div className="pl-2 max-lg:text-sm">Add Collaborators</div>
             <Plus
@@ -46,16 +46,17 @@ const Collaborators = ({ project, setProject, org = false }: Props) => {
 
         <div
           onClick={() => setClickedOnInvitations(prev => !prev)}
-          className={`w-1/5 max-lg:w-1/3  h-full max-lg:text-sm text-gray-400 dark:text-gray-200 ${
+          className={`w-1/5 max-lg:w-fit h-full max-lg:text-sm text-gray-400 dark:text-gray-200 ${
             clickedOnInvitations ? 'bg-primary_comp_hover dark:bg-white text-primary_text dark:text-white' : 'bg-white'
-          }  dark:bg-gradient-to-l dark:from-dark_primary_gradient_start dark:to-dark_primary_gradient_end px-4 max-lg:px-2 py-3 rounded-lg cursor-pointer border-gray-300 border-[1px] dark:border-0 shadow-md hover:shadow-lg transition-ease-300 dark:hover:shadow-outer dark:shadow-outer flex justify-between items-center`}
+          }  dark:bg-gradient-to-l dark:from-dark_primary_gradient_start dark:to-dark_primary_gradient_end px-4 max-lg:px-3 py-3 rounded-lg cursor-pointer border-gray-300 border-[1px] dark:border-0 shadow-md hover:shadow-lg transition-ease-300 dark:hover:shadow-outer dark:shadow-outer flex justify-between items-center`}
         >
           <div
             className={`w-full h-full rounded-lg ${
               clickedOnInvitations ? 'dark:bg-[#0E0C2A59] dark:shadow-inner' : ''
             } flex-center transition-ease-200`}
           >
-            Invitations
+            <div className="max-md:hidden">Invitations</div>
+            <EnvelopeSimple className="md:hidden" size={24} />
           </div>
         </div>
       </div>

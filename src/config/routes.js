@@ -25,7 +25,6 @@ export const SHARE_URL = `/share`;
 export const CONNECTION_URL = `/connection`;
 export const TASK_URL = `/tasks`;
 export const EVENT_URL = `/events`;
-
 export const ORG_URL = `/org`;
 
 export const USER_PROFILE_PIC_URL = `${GC_API}/${BUCKET}/users/profilePics`;

@@ -140,7 +140,6 @@ const Openings = () => {
                   clickedOpening={clickedOpening}
                   setClickedOnOpening={setClickedOnOpening}
                   setClickedOpening={setClickedOpening}
-                  org={isOrg(opening)}
                 />
               );
             })}
