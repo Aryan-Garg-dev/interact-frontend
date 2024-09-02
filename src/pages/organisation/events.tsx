@@ -28,6 +28,7 @@ import ViewInvitations from '@/sections/organization/events/view_invitations';
 import EditCoHosts from '@/sections/organization/events/edit_cohosts';
 import EventHistory from '@/sections/organization/events/history';
 import NoEvents from '@/components/fillers/events';
+import NewHackathon from '@/sections/organization/hackathons/new_hackathon';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -161,6 +162,7 @@ const Events = () => {
 
           <div className="w-full max-md:w-full mx-auto flex flex-col items-center gap-4">
             {clickedOnInfo && <AccessTree type="event" setShow={setClickedOnInfo} />}
+            {clickedOnNewHackathon && <NewHackathon setEvents={setEvents} setShow={setClickedOnNewHackathon} />}
             {clickedOnNewEvent && <NewEvent setEvents={setEvents} setShow={setClickedOnNewEvent} />}
             {clickedOnViewInvitations && <ViewInvitations setShow={setClickedOnViewInvitations} />}
             {clickedOnViewHistory && <EventHistory eventID={clickedEditEvent.id} setShow={setClickedOnViewHistory} />}
