@@ -63,6 +63,16 @@ const Events = () => {
           const addEvents = [...events, ...(res.data.events || [])];
           if (addEvents.length === events.length) setHasMore(false);
           setEvents(addEvents);
+          if (page == 1) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const eid = urlParams.get('eid');
+            const event = addEvents.filter(event => event.id == eid)[0];
+            if (event) {
+              setClickedEditEvent(event);
+              setClickedOnEditEvent(true);
+            }
+          }
+
           setPage(prev => prev + 1);
           setLoading(false);
         } else {

@@ -4,7 +4,6 @@ import {
   HackathonTrack,
   HackathonPrize,
   HackathonRound,
-  HackathonTeam,
   HackathonSponsor,
   HackathonFAQ,
   HackathonRoundScoreMetric,
