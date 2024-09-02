@@ -5,7 +5,7 @@ import OrgSidebar from '@/components/common/org_sidebar';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
-import { Info, Plus, Envelope } from '@phosphor-icons/react';
+import { Info, Plus, Envelope, Code } from '@phosphor-icons/react';
 import { EXPLORE_URL, ORG_URL } from '@/config/routes';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import { useSelector } from 'react-redux';
@@ -32,6 +32,7 @@ import NoEvents from '@/components/fillers/events';
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [clickedOnNewEvent, setClickedOnNewEvent] = useState(false);
+  const [clickedOnNewHackathon, setClickedOnNewHackathon] = useState(false);
   const [clickedOnViewInvitations, setClickedOnViewInvitations] = useState(false);
   const [clickedOnViewHistory, setClickedOnViewHistory] = useState(false);
   const [clickedOnEditEvent, setClickedOnEditEvent] = useState(false);
@@ -122,6 +123,12 @@ const Events = () => {
             <div className="flex items-center gap-2">
               {checkOrgAccess(ORG_SENIOR) && (
                 <>
+                  <Code
+                    onClick={() => setClickedOnNewHackathon(true)}
+                    size={42}
+                    className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
+                    weight="regular"
+                  />
                   <Plus
                     onClick={() => setClickedOnNewEvent(true)}
                     size={42}
