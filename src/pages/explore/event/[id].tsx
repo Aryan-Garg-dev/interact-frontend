@@ -163,7 +163,7 @@ const EventComponent = ({ id }: Props) => {
     const endTime = moment(event.meeting?.endTime).utcOffset('+05:30');
     const now = moment().utcOffset('+05:30');
     const isBeforeStart = now.isBefore(startTime);
-
+    const isAfterEnd = now.isAfter(endTime);
     let timeUntilStart = '';
 
     if (isBeforeStart) {
@@ -231,8 +231,7 @@ const EventComponent = ({ id }: Props) => {
 
   const AboutHackathon = () => {
     const isRegistered = user.registeredEvents?.includes(event.id);
-    const isLive = event.meeting?.isLive;
-
+    const isLive = !event.hackathon?.isEnded ?? false;
     const startTime = moment(event.hackathon?.startTime).utcOffset('+05:30');
     const endTime = moment(event.hackathon?.endTime).utcOffset('+05:30');
     const now = moment().utcOffset('+05:30');
@@ -290,7 +289,7 @@ const EventComponent = ({ id }: Props) => {
               type="submit"
               className="w-full relative p-2 bg-priority_high text-gray-700 rounded-lg cursor-default"
             >
-              Event has Ended
+              Event has Ended 3
             </button>
           )
         ) : (

@@ -763,6 +763,7 @@ export interface Hackathon {
   participants: User[];
   coordinators: User[];
   judges: User[];
+  isEnded?: boolean;
   eventID: string;
   history: HackathonHistory[];
 }
