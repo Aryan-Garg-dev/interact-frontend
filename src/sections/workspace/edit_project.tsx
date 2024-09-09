@@ -4,7 +4,7 @@ import Links from '@/components/form/links';
 import Select from '@/components/form/select';
 import Tags from '@/components/form/tags';
 import TextArea from '@/components/form/textarea';
-import Images from '@/components/utils/new_cover';
+import CoverPic from '@/components/utils/new_cover';
 import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL, PROJECT_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
@@ -139,7 +139,7 @@ const EditProject = ({ projectToEdit, setShow, setProjectToEdit, setProjects, or
     <ModalWrapper setShow={setShow} width="2/3" height="fit" blur={true} modalStyles={{ top: '50%' }}>
       <div className="w-full flex max-lg:flex-col justify-between rounded-lg max-lg:rounded-md p-2 gap-8 max-lg:gap-4 dark:text-white font-primary z-30">
         <div className="w-80 max-lg:w-full lg:sticky lg:top-0">
-          <Images initialImage={projectToEdit.coverPic} setSelectedFile={setImage} />
+          <CoverPic initialImage={projectToEdit.coverPic} setSelectedFile={setImage} />
         </div>
         <div className="w-[calc(100%-320px)] max-lg:w-full h-fit flex flex-col max-lg:items-center gap-4 max-lg:gap-6 max-lg:pb-4">
           <div className="w-fit text-5xl max-lg:text-3xl font-bold cursor-default">{projectToEdit.title}</div>

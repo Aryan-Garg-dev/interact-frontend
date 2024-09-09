@@ -142,13 +142,9 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
 
     const toaster = Toaster.startLoad('Adding the event...');
 
-    console.log(formData);
-
     const URL = `${ORG_URL}/${currentOrg.id}/hackathons`;
 
     const res = await postHandler(URL, formData);
-
-    console.log(res);
 
     if (res.statusCode === 201) {
       const event: Event = res.data.event;
@@ -466,10 +462,10 @@ const Rounds = ({ rounds, setRounds }: any) => {
   const addRound = () => {
     if (!roundName.trim() || !description.trim()) return;
     const newRound: HackathonRound = {
-      id: '', // Add logic to generate or handle ID
-      hackathonID: '', // Add logic to handle hackathonID
+      id: '',
+      hackathonID: '',
       title: roundName,
-      index: rounds.length, // Just an example; adjust as needed
+      index: rounds.length,
       isIdeation: isIdeationRound,
       startTime: new Date(startTime),
       endTime: new Date(endTime),
@@ -503,10 +499,10 @@ const Rounds = ({ rounds, setRounds }: any) => {
     const round = rounds[index];
     setRoundName(round.title);
     setDescription(round.description);
-    setStartTime(round.startTime.toISOString().split('T')[0]); // Format as needed
-    setEndTime(round.endTime.toISOString().split('T')[0]); // Format as needed
-    setJudgingStartTime(round.judgingStartTime.toISOString().split('T')[0]); // Format as needed
-    setJudgingEndTime(round.judgingEndTime.toISOString().split('T')[0]); // Format as needed
+    setStartTime(round.startTime.toISOString().split('T')[0]);
+    setEndTime(round.endTime.toISOString().split('T')[0]);
+    setJudgingStartTime(round.judgingStartTime.toISOString().split('T')[0]);
+    setJudgingEndTime(round.judgingEndTime.toISOString().split('T')[0]);
     setIsIdeationRound(round.isIdeation);
     setMetrics(round.metrics);
     setIsEditing(index);
