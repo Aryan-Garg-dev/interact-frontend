@@ -250,25 +250,29 @@ const EventComponent = ({ id }: Props) => {
     }
 
     const handleRedirect = async () => {
-      await getHandler(`/events/meeting/token/${id}`)
-        .then(res => {
-          if (res.statusCode === 200) {
-            const authToken = res.data.authToken;
-            if (!authToken || authToken == '') {
-              Toaster.error(SERVER_ERROR, 'error_toaster');
-              return;
+      if (event.hackathonID && event.hackathon) {
+        window.location.assign(`${process.env.NEXT_PUBLIC_HACKATHONS_URL}?action=sync`);
+      } else {
+        await getHandler(`/events/meeting/token/${id}`)
+          .then(res => {
+            if (res.statusCode === 200) {
+              const authToken = res.data.authToken;
+              if (!authToken || authToken == '') {
+                Toaster.error(SERVER_ERROR, 'error_toaster');
+                return;
+              }
+              window.location.assign(`/explore/event/live?id=${id}&token=${authToken}`);
+            } else {
+              if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
+              else {
+                Toaster.error(SERVER_ERROR, 'error_toaster');
+              }
             }
-            window.location.assign(`/explore/event/live?id=${id}&token=${authToken}`);
-          } else {
-            if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
-            else {
-              Toaster.error(SERVER_ERROR, 'error_toaster');
-            }
-          }
-        })
-        .catch(err => {
-          Toaster.error(SERVER_ERROR, 'error_toaster');
-        });
+          })
+          .catch(err => {
+            Toaster.error(SERVER_ERROR, 'error_toaster');
+          });
+      }
     };
 
     return (
