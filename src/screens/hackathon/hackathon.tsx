@@ -136,6 +136,13 @@ interface HackathonRound {
   metrics: HackathonMetric[];
 }
 
+interface HackathonTracks {
+  id: string;
+  hackathonID: string;
+  title: string;
+  description: string;
+}
+
 interface Hackathon {
   id: string;
   title: string;
@@ -186,6 +193,7 @@ interface Hackathon {
     eventID: string | null;
     history: string[] | null;
   };
+  tracks: HackathonTracks[];
   rounds: HackathonRound[];
   sponsors: Sponsor[];
   createdAt: string;
@@ -367,6 +375,20 @@ const Hackathon: React.FC<HackathonProps> = ({ hackathonID }) => {
                           <p className="font-primary">{formatDate(round.endTime)}</p>
                           <p className="font-primary">{new Date(round.endTime).toLocaleTimeString()}</p>
                         </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="w-full mt-8">
+                  <h2 className="text-4xl font-bold font-primary mb-6 text-center">Tracks</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {mockHackathon.tracks.map((track, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
+                      >
+                        <h3 className="text-2xl font-bold font-primary mb-4">{track.title}</h3>
+                        <p className="text-lg text-gray-700">{track.description}</p>
                       </div>
                     ))}
                   </div>
