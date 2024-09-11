@@ -18,6 +18,7 @@ const Home = () => {
   const user = useSelector(userSelector);
 
   useEffect(() => {
+    console.log(user);
     if (user.isOrganization) window.location.replace('/organisation/home');
     else if (user.isLoggedIn && !user.isVerified) {
       window.location.replace('/verification');
