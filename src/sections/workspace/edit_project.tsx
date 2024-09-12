@@ -1,4 +1,5 @@
 import PrimaryButton from '@/components/buttons/primary_btn';
+import Checkbox from '@/components/form/checkbox';
 import Input from '@/components/form/input';
 import Links from '@/components/form/links';
 import Select from '@/components/form/select';
@@ -117,11 +118,10 @@ const EditProject = ({ projectToEdit, setShow, setProjectToEdit, setProjects, or
       setLinks([]);
       setImage(undefined);
       setShow(false);
-    } else if (res.statusCode == 413) {
-      Toaster.stopLoad(toaster, 'Image too large', 0);
-    } else {
-      Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-    }
+    } else if (res.statusCode == 413) Toaster.stopLoad(toaster, 'Image too large', 0);
+    else if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+    else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+
     setMutex(false);
   };
 
@@ -148,7 +148,7 @@ const EditProject = ({ projectToEdit, setShow, setProjectToEdit, setProjects, or
           <TextArea label="Project Description" val={description} setVal={setDescription} maxLength={1000} />
           <Tags label="Project Tags" tags={tags} setTags={setTags} maxTags={10} required={true} />
           <Links label="Project Links" links={links} setLinks={setLinks} maxLinks={5} />
-          {/* <Checkbox label="Keep this Project Private" val={isPrivate} setVal={setIsPrivate} /> */}
+          <Checkbox label="Keep this Project Private" val={isPrivate} setVal={setIsPrivate} />
           <div className="w-full flex max-lg:justify-center justify-end">
             <PrimaryButton label="Edit Project" onClick={handleSubmit} width="40" />
           </div>
