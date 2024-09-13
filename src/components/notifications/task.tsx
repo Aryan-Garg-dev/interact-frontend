@@ -34,5 +34,3 @@ const Task = ({ notification }: Props) => {
 };
 
 export default Task;
-
-
