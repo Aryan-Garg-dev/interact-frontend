@@ -70,11 +70,11 @@ const EditProject = ({ projectToEdit, setShow, setProjectToEdit, setProjects, or
     if (tagline != projectToEdit.tagline) formData.append('tagline', tagline);
     if (description != projectToEdit.description) formData.append('description', description);
     // if (isArrEdited(tags, projectToEdit.tags))
-    tags.forEach(tag => formData.append('tags', tag));
+    tags?.forEach(tag => formData.append('tags', tag));
     // if (isArrEdited(links, projectToEdit.links))
-    links.forEach(link => formData.append('links', link));
+    links?.forEach(link => formData.append('links', link));
     // if (isArrEdited(privateLinks, projectToEdit.privateLinks))
-    privateLinks.forEach(link => formData.append('privateLinks', link));
+    privateLinks?.forEach(link => formData.append('privateLinks', link));
     if (category != projectToEdit.category) formData.append('category', category);
     formData.append('isPrivate', String(isPrivate));
     if (image) formData.append('coverPic', image);
