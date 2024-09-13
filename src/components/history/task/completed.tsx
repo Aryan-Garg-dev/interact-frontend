@@ -14,6 +14,15 @@ const Completed = ({ history }: Props) => {
       </TaskHistoryWrapper>
     );
   }
+  if (history.historyType === 7) {
+    return (
+      <TaskHistoryWrapper history={history}>
+        <div className="w-fit text-center flex-center gap-1">
+          marked the sub task: {history.subTask?.title} as completed.
+        </div>
+      </TaskHistoryWrapper>
+    );
+  }
   if (history.historyType === 13)
     // User requested review on PR
     return (

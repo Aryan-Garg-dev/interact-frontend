@@ -288,6 +288,8 @@ export const initialMessage: Message = {
   opening: initialOpening,
   profileID: '',
   profile: initialUser,
+  eventID: '',
+  event: null,
   messageID: '',
   message: null,
   announcementID: '',
@@ -398,7 +400,7 @@ export const initialTask: Task = {
   organization: initialOrganization,
   organizationID: '',
   priority: 'low',
-  difficulty: 'easy',
+  difficulty: 'basic',
   noComments: 0,
   histories: [],
   prID: '',
@@ -416,7 +418,7 @@ export const initialSubTask: SubTask = {
   isCompleted: false,
   taskID: '',
   priority: 'low',
-  difficulty: 'easy',
+  difficulty: 'basic',
 };
 
 export const initialEvent: Event = {
@@ -445,6 +447,8 @@ export const initialEvent: Event = {
   meeting: null,
   createdAt: new Date(),
   userID: '',
+  hackathonID: '',
+  hackathon: null,
 };
 
 export const initialReview: Review = {

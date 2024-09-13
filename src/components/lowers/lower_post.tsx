@@ -11,10 +11,11 @@ import Semaphore from '@/utils/semaphore';
 import { configSelector, setUpdateBookmark, setUpdatingLikes } from '@/slices/configSlice';
 import { ChatCircleText, HeartStraight, Repeat } from '@phosphor-icons/react';
 import RePost from '../../sections/home/repost';
-import SharePost from '@/sections/lowers/share_post';
 import CommentPost from '@/sections/lowers/comment_post';
 import socketService from '@/config/ws';
 import SignUp from '../common/signup_box';
+import Share from '@/sections/lowers/share';
+import PostCard from '../cards/post';
 
 interface Props {
   post: Post;
@@ -155,7 +156,15 @@ const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = 
           setNoComments={setNumComments}
         />
       )}
-      {clickedOnShare && <SharePost setShow={setClickedOnShare} post={post} />}
+      {clickedOnShare && (
+        <Share
+          itemID={post.id}
+          itemType="post"
+          setShow={setClickedOnShare}
+          clipboardURL={`/explore/post/${post.id}`}
+          item={<PostCard post={post} />}
+        />
+      )}
       {clickedOnRePost && <RePost setFeed={setFeed} setShow={setClickedOnRePost} post={post} />}
       <div className={`w-full flex flex-col gap-1 ${isRepost ? 'justify-start' : ''}`}>
         <div className={`flex gap-3 max-md:gap-3 ${isRepost ? 'w-fit scale-100' : ''}`}>

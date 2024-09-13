@@ -45,18 +45,30 @@ class SocketService {
   }
 
   public connect(userID: string | undefined = Cookies.get('id')): void {
-    if (!this.socket) {
-      if (!userID || userID == '') return;
-      const token = Cookies.get('token');
-      if (!token || token == '') return;
+    if (!userID || userID === '') return;
+
+    const token = Cookies.get('token');
+    if (!token || token === '') return;
+
+    if (this.socket) return;
+
+    const connectToSocket = () => {
       this.socket = new WebSocket(`${SOCKET_URL}?userID=${userID}&token=${token}`);
+
       this.socket.addEventListener('open', event => {
         this.setupChats();
         this.setupChatNotifications();
         this.setupPushNotifications();
         this.setupUpdateMembership();
       });
-    }
+
+      this.socket.addEventListener('error', event => {
+        setTimeout(connectToSocket, 5000); // retry after 5 seconds
+        this.disconnect();
+      });
+    };
+
+    connectToSocket();
   }
 
   public disconnect(): void {

@@ -4,6 +4,7 @@ import TabMenu from '@/components/common/tab_menu';
 import SearchBar from '@/components/messaging/searchbar';
 import { SERVER_ERROR } from '@/config/errors';
 import { EXPLORE_URL, MESSAGING_URL } from '@/config/routes';
+import socketService from '@/config/ws';
 import getHandler from '@/handlers/get_handler';
 import ChatScreen from '@/screens/messaging/chat/chat_screen';
 import Group from '@/screens/messaging/group';
@@ -47,6 +48,8 @@ const Messaging = () => {
 
   useEffect(() => {
     fetchCounts();
+    socketService.connect();
+
     const tab = new URLSearchParams(window.location.search).get('tab') || '';
     switch (tab) {
       case 'personal':

@@ -265,9 +265,8 @@ const EditTask = ({
                 label="Task Difficulty"
                 val={difficulty}
                 setVal={setDifficulty}
-                options={['low', 'medium', 'high']}
-              />{' '}
-              {/* Added difficulty dropdown */}
+                options={['basic', 'proficient', 'expert']}
+              />
               <Time
                 label="Task Deadline"
                 val={deadline}

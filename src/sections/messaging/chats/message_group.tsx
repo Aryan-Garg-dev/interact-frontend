@@ -7,6 +7,7 @@ import SharedProfileMessage from '@/components/messaging/shared_profile_message'
 import SharedAnnouncementMessage from '@/components/messaging/shared_announcement_message';
 import { useSelector } from 'react-redux';
 import { userIDSelector } from '@/slices/userSlice';
+import SharedEventMessage from '@/components/messaging/shared_event_message';
 
 interface Props {
   date: string;
@@ -33,23 +34,25 @@ const MessageGroup = ({ date, messages, chat }: Props) => {
                 <SharedProfileMessage message={message} />
               ) : message.announcementID != null ? (
                 <SharedAnnouncementMessage message={message} />
+              ) : message.eventID != null ? (
+                <SharedEventMessage message={message} />
               ) : (
                 <RegularMessage message={message} />
               )}
               {message.userID == userID && (
                 <>
-                  {chat.isGroup ? (
-                    <div className="w-fit text-xs self-end opacity-75">
-                      {message.readBy?.length == chat.noMembers
-                        ? ' • Seen'
-                        : message.readBy?.length - 1 != 0 && `• Seen by ${message.readBy?.length - 1} users`}
-                    </div>
-                  ) : (
-                    chat.isAccepted &&
-                    message.readBy?.length == chat.noMembers && (
-                      <div className="w-fit text-xs self-end opacity-75">• Seen</div>
-                    )
-                  )}
+                  {chat.isGroup
+                    ? message.readBy && (
+                        <div className="w-fit text-xs self-end opacity-75">
+                          {message.readBy?.length == chat.noMembers
+                            ? ' • Seen'
+                            : message.readBy?.length - 1 != 0 && `• Seen by ${message.readBy?.length - 1} users`}
+                        </div>
+                      )
+                    : chat.isAccepted &&
+                      message.readBy?.length == chat.noMembers && (
+                        <div className="w-fit text-xs self-end opacity-75">• Seen</div>
+                      )}
                 </>
               )}
             </div>

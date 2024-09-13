@@ -51,12 +51,7 @@ const Openings = () => {
               {openings.map(opening => {
                 return (
                   <Link key={opening.id} href={`/explore?tab=openings&oid=${opening.id}`}>
-                    <OpeningCard
-                      key={opening.id}
-                      opening={opening}
-                      org={opening?.organizationID != null}
-                      short={true}
-                    />
+                    <OpeningCard key={opening.id} opening={opening} short={true} />
                   </Link>
                 );
               })}

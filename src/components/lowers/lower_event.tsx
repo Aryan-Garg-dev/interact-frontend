@@ -9,8 +9,10 @@ import { Eye, HeartStraight, ChatCircleText, Export } from '@phosphor-icons/reac
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SignUp from '../common/signup_box';
-import ShareEvent from '@/sections/lowers/share_event';
 import EventBookmarkIcon from './event_bookmark';
+import Share from '@/sections/lowers/share';
+import EventCard from '../cards/event';
+import { Gear } from '@phosphor-icons/react/dist/ssr';
 
 interface Props {
   event: Event;
@@ -75,12 +77,32 @@ const LowerEvent = ({ event, numLikes, setNumLikes }: Props) => {
           setNoComments={setNumComments}
         />
       )}
-      {clickedOnShare && <ShareEvent setShow={setClickedOnShare} event={event} />}
+      {clickedOnShare && (
+        <Share
+          itemID={event.id}
+          itemType="event"
+          setShow={setClickedOnShare}
+          clipboardURL={`/explore/event/${event.id}`}
+          item={<EventCard event={event} />}
+        />
+      )}
       <div className="w-full flex items-center justify-between flex-wrap">
         <div className="flex items-center gap-2 cursor-default">
           <Eye size={24} />
           <div className="text-sm">{event.noImpressions}</div>
+          {user.organizationMemberships.map(membership => membership.organizationID).includes(event.organizationID) && (
+            <Gear
+              size={24}
+              onClick={() => {
+                window.location.assign(
+                  `/organisations?oid=${event.organizationID}&redirect_url=/events?eid=${event.id}`
+                );
+              }}
+              className="cursor-pointer"
+            />
+          )}
         </div>
+
         {/* <div className="flex flex-col items-center gap-2 p-4 cursor-default">
           <CursorClick size={24} />
           <div className="flex flex-col text-center items-center">

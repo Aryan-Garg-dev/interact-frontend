@@ -1,23 +1,26 @@
 import CopyClipboardButton from '@/components/buttons/copy_clipboard_btn';
 import Loader from '@/components/common/loader';
 import { SERVER_ERROR } from '@/config/errors';
-import { MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { GROUP_CHAT_PIC_URL, MESSAGING_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import postHandler from '@/handlers/post_handler';
-import { Chat, User } from '@/types';
+import { Chat } from '@/types';
 import { getMessagingUser } from '@/utils/funcs/messaging';
 import Toaster from '@/utils/toaster';
 import { X } from '@phosphor-icons/react';
 import Cookies from 'js-cookie';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 interface Props {
-  user: User;
+  item: ReactNode;
+  itemType: string;
+  itemID: string;
+  clipboardURL: string;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const ShareProfile = ({ user, setShow }: Props) => {
+const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
   const userID = Cookies.get('id');
   const [chats, setChats] = useState<Chat[]>([]);
   const [selectedChats, setSelectedChats] = useState<string[]>([]);
@@ -30,13 +33,13 @@ const ShareProfile = ({ user, setShow }: Props) => {
       return;
     }
 
-    const URL = `${MESSAGING_URL}/personal`;
+    const URL = `${MESSAGING_URL}/me`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
           const chatsData: Chat[] = res.data.chats;
 
-          setChats(chatsData || []);
+          setChats((chatsData || []).filter(chat => chat.isAccepted));
           setLoading(false);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -48,7 +51,7 @@ const ShareProfile = ({ user, setShow }: Props) => {
       .catch(err => {
         Toaster.error(SERVER_ERROR, 'error_toaster');
       });
-  }, [user]);
+  }, [item]);
 
   useEffect(() => {
     if ((document.documentElement.style.overflowY = 'auto')) {
@@ -62,21 +65,56 @@ const ShareProfile = ({ user, setShow }: Props) => {
     }
   }, []);
 
+  interface FormData {
+    content: string;
+    chats: string[];
+    postID?: string;
+    projectID?: string;
+    openingID?: string;
+    announcementID?: string;
+    profileID?: string;
+    eventID?: string;
+  }
+
   const handleSubmit = async () => {
     if (selectedChats.length == 0) {
       setShow(false);
       return;
     }
-    const toaster = Toaster.startLoad('Sharing Profile..');
-    const URL = `/share/profile/`;
-    const formData = {
-      content: message.trim() != '' ? message : 'Check Out this Profile!',
+    const toaster = Toaster.startLoad(`Sharing ${itemType}..`);
+    const URL = `/share/${itemType}/`;
+
+    const formData: FormData = {
+      content: message.trim(),
       chats: selectedChats,
-      profileID: user.id,
     };
+
+    switch (itemType) {
+      case 'post':
+        formData['postID'] = itemID;
+        break;
+      case 'project':
+        formData['projectID'] = itemID;
+        break;
+      case 'opening':
+        formData['openingID'] = itemID;
+        break;
+      case 'announcement':
+        formData['announcementID'] = itemID;
+        break;
+      case 'profile':
+        formData['profileID'] = itemID;
+        break;
+      case 'event':
+        formData['eventID'] = itemID;
+        break;
+      default:
+        break;
+    }
+
     const res = await postHandler(URL, formData);
     if (res.statusCode === 200) {
-      Toaster.stopLoad(toaster, 'Profile Shared!', 1);
+      Toaster.stopLoad(toaster, `${itemType} Shared!`, 1);
       setShow(false);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
@@ -93,36 +131,17 @@ const ShareProfile = ({ user, setShow }: Props) => {
 
   return (
     <>
-      <div className="w-1/2 max-md:h-5/6 overflow-y-auto max-lg:w-5/6 fixed backdrop-blur-lg bg-white dark:bg-[#ffe1fc22] dark:text-white z-30 translate-x-1/2 -translate-y-1/4 top-64 max-lg:top-56 right-1/2 flex flex-col px-8 py-8 gap-6 border-2 border-primary_btn dark:border-dark_primary_btn rounded-xl animate-fade_third">
+      <div className="w-1/2 max-h-[75%] max-md:h-4/5 overflow-y-auto max-lg:w-5/6 fixed backdrop-blur-lg bg-[#ffffff] dark:bg-[#ffe1fc22] z-50 translate-x-1/2 -translate-y-1/4 top-64 right-1/2 flex flex-col px-8 py-8 gap-2 border-2 border-primary_btn dark:border-dark_primary_btn rounded-xl animate-fade_third">
         <div onClick={() => setShow(false)} className="md:hidden absolute top-2 right-2">
           <X size={24} weight="bold" />
         </div>
-        <div className="text-3xl text-center text-gray-900 font-bold">Share this Profile</div>
-        <div className="w-full flex max-lg:flex-col gap-4 items-center">
-          <div className="w-1/2 max-lg:w-full font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg p-4 flex flex-col items-center justify-center gap-4 max-lg:gap-4 transition-ease-300 cursor-default">
-            <Image
-              crossOrigin="anonymous"
-              width={100}
-              height={100}
-              alt={'User Pic'}
-              src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-              className={'rounded-full max-lg:mx-auto w-44 h-44 cursor-default'}
-            />
-            <div className="text-3xl max-lg:text-2xl text-center font-bold text-gradient">{user.name}</div>
-            <div className="text-sm text-center">{user.tagline}</div>
-            <div className="w-full flex justify-center gap-6">
-              <div className="flex gap-1">
-                <div className="font-bold">{user.noFollowers}</div>
-                <div>Follower{user.noFollowers != 1 ? 's' : ''}</div>
-              </div>
-              <div className="flex gap-1">
-                <div className="font-bold">{user.noFollowing}</div>
-                <div>Following</div>
-              </div>
-            </div>
-            <CopyClipboardButton url={`explore/user/${user.username}?action=external`} />
+        <div className="text-3xl capitalize text-center text-gray-900 font-bold">Share this {itemType}</div>
+        <div className="w-full flex max-md:flex-col mt-4 gap-4">
+          <div className="w-1/2 flex flex-col gap-2">
+            {item}
+            <CopyClipboardButton url={clipboardURL} />
           </div>
-          <div className="w-1/2 max-lg:w-full h-[400px] overflow-auto flex flex-col justify-between gap-2">
+          <div className="w-1/2 max-h-[400px] overflow-y-auto flex flex-col justify-between gap-2">
             {loading ? (
               <Loader />
             ) : chats.length > 0 ? (
@@ -135,24 +154,50 @@ const ShareProfile = ({ user, setShow }: Props) => {
                         onClick={() => {
                           handleSelectChat(chat.id);
                         }}
-                        className={`w-full flex gap-2 rounded-lg py-2 px-2 cursor-pointer ${
+                        className={`w-full flex-center gap-2 rounded-lg py-2 px-2 cursor-pointer ${
                           selectedChats.includes(chat.id)
                             ? 'bg-primary_comp_hover dark:bg-[#ffe1fc22]'
                             : 'hover:bg-primary_comp dark:hover:bg-[#ffe1fc10]'
                         } transition-all ease-in-out duration-200`}
                       >
-                        <Image
-                          crossOrigin="anonymous"
-                          width={50}
-                          height={50}
-                          alt={'User Pic'}
-                          src={`${USER_PROFILE_PIC_URL}/${getMessagingUser(chat).profilePic}`}
-                          className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
-                        />
-                        <div className="w-5/6 flex flex-col">
-                          <div className="text-lg font-bold">{getMessagingUser(chat).name}</div>
-                          <div className="text-sm">@{getMessagingUser(chat).username}</div>
-                        </div>
+                        {chat.isGroup ? (
+                          <>
+                            {' '}
+                            <Image
+                              crossOrigin="anonymous"
+                              width={50}
+                              height={50}
+                              alt={'User Pic'}
+                              src={`${GROUP_CHAT_PIC_URL}/${chat.coverPic}`}
+                              className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
+                            />
+                            <div className="w-5/6 h-fit flex flex-col">
+                              <div className="text-lg font-bold">{chat.title}</div>
+                              {chat.projectID ? (
+                                <div className="text-sm">@{chat.project?.title}</div>
+                              ) : (
+                                chat.organizationID && (
+                                  <div className="text-sm">@{chat.organization?.user?.username}</div>
+                                )
+                              )}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <Image
+                              crossOrigin="anonymous"
+                              width={50}
+                              height={50}
+                              alt={'User Pic'}
+                              src={`${USER_PROFILE_PIC_URL}/${getMessagingUser(chat).profilePic}`}
+                              className={'rounded-full w-12 h-12 cursor-pointer border-[1px] border-black'}
+                            />
+                            <div className="w-5/6 flex flex-col">
+                              <div className="text-lg font-bold">{getMessagingUser(chat).name}</div>
+                              <div className="text-sm">@{getMessagingUser(chat).username}</div>
+                            </div>
+                          </>
+                        )}
                       </div>
                     );
                   })}
@@ -180,10 +225,10 @@ const ShareProfile = ({ user, setShow }: Props) => {
       </div>
       <div
         onClick={() => setShow(false)}
-        className=" bg-backdrop w-screen h-screen max-lg:h-base fixed top-0 right-0 animate-fade_third z-20"
+        className=" bg-backdrop w-screen h-screen fixed top-0 right-0 animate-fade_third z-20"
       ></div>
     </>
   );
 };
 
-export default ShareProfile;
+export default Share;
