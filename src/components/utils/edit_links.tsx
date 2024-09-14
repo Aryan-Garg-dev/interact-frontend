@@ -32,7 +32,7 @@ const Links = ({ links, showTitle = false, setLinks, maxLinks = 5, title = 'Link
     }
 
     if (isURL(newLink)) {
-      let formattedLink = newLink.toLowerCase().trim();
+      let formattedLink = newLink.trim();
 
       if (!formattedLink.startsWith('https://') && !formattedLink.startsWith('http://')) {
         formattedLink = 'https://' + formattedLink;
