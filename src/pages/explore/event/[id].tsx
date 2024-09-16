@@ -448,8 +448,8 @@ const EventComponent = ({ id }: Props) => {
     <BaseWrapper title={`${event.title}`}>
       {user.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={2} />}
       <MainWrapper>
-        {event.hackathonID ? (
-          <Hackathon hackathonID={event.hackathonID} />
+        {event.hackathon ? (
+          <Hackathon hackathon={event.hackathon} />
         ) : (
           <>
             {clickedOnChat &&

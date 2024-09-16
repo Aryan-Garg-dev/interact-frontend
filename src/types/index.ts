@@ -766,6 +766,9 @@ export interface Hackathon {
   isEnded?: boolean;
   eventID: string;
   history: HackathonHistory[];
+  tracks: HackathonTrack[];
+  sponsors: HackathonSponsor[];
+  rounds: HackathonRound[];
 }
 
 export interface HackathonTrack {
@@ -867,63 +870,4 @@ export interface HackathonHistory {
   user?: User;
   deletedText?: string;
   createdAt: Date;
-}
-
-export interface Hackathon {
-  id: string;
-  title: string;
-  tagline?: string;
-  coverPic: string;
-  blurHash: string;
-  description: string;
-  links?: string[];
-  tags?: string[];
-  noViews: number;
-  noLikes: number;
-  noShares: number;
-  noComments: number;
-  startTime: Date;
-  endTime: Date;
-  location: string;
-  category: string;
-  noImpressions: number;
-  organizationID: string;
-  organization: Organization;
-  meetingID: string | null;
-  meeting: Meeting;
-  hackathonID: string;
-  hackathon: {
-    id: string;
-    organizationID: string;
-    organization: Organization;
-    title: string;
-    tagline?: string;
-    coverPic: string;
-    blurHash: string;
-    description: string;
-    tags: string[] | null;
-    links: string[] | null;
-    startTime: string;
-    endTime: string;
-    isEnded: boolean;
-    location: string;
-    minTeamSize: number;
-    maxTeamSize: number;
-    teamFormationStartTime: string;
-    teamFormationEndTime: string;
-    createdAt: string;
-    noParticipants: number;
-    participants: string[] | null;
-    coordinators: string[] | null;
-    judges: string[] | null;
-    eventID: string | null;
-    history: string[] | null;
-  };
-  tracks: HackathonTrack[];
-  rounds: HackathonRound[];
-  sponsors: HackathonSponsor[];
-  createdAt: Date;
-  coordinators: User[];
-  comments: string[] | null;
-  coHosts: string[] | null;
 }

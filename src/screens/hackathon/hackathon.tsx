@@ -9,7 +9,7 @@ import { formatDate } from '@/utils/funcs/get_formatted_time';
 import Loader from '@/components/common/loader';
 
 interface HackathonProps {
-  hackathonID: string;
+  hackathon: Hackathon | null;
 }
 
 const ProgressBar: React.FC<{ hackathon: Hackathon }> = ({ hackathon }) => {
@@ -46,32 +46,8 @@ const ProgressBar: React.FC<{ hackathon: Hackathon }> = ({ hackathon }) => {
   );
 };
 
-const Hackathon: React.FC<HackathonProps> = ({ hackathonID }) => {
-  const [hackathon, setHackathon] = useState<Hackathon>();
-  const [loading, setLoading] = useState(true);
-
-  const fetchHackathon = () => {
-    const URL = `/hackathons/${hackathonID}/participants`;
-    getHandler(URL)
-      .then(res => {
-        if (res.statusCode === 200) {
-          setHackathon(res.data.hackathon);
-          setLoading(false);
-        } else {
-          if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
-          else {
-            Toaster.error(SERVER_ERROR, 'error_toaster');
-          }
-        }
-      })
-      .catch(err => {
-        Toaster.error(SERVER_ERROR, 'error_toaster');
-      });
-  };
-  useEffect(() => {
-    fetchHackathon();
-    setLoading(false);
-  }, []);
+const Hackathon: React.FC<HackathonProps> = ({ hackathon }) => {
+  const [loading, setLoading] = useState(false);
 
   return (
     <>
