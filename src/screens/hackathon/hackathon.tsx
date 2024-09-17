@@ -239,16 +239,38 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
           ) : (
             <SignUp setShow={setClickedOnReport} />
           ))}
-        <Image
-          width={500}
-          height={280}
-          src={`${EVENT_PIC_URL}/${hackathon.coverPic}`}
-          alt="Event Picture"
-          className="w-full h-90 max-md:h-52 rounded-xl"
-          placeholder="blur"
-          blurDataURL={hackathon.blurHash || 'no-hash'}
-        />
-        <div className="flex max-lg:flex-col py-8 gap-4 justify-center items-center md:justify-start md:items-start w-full">
+        <div className="w-full h-90 max-md:h-fit relative">
+          <Image
+            width={500}
+            height={280}
+            src={`${EVENT_PIC_URL}/${hackathon.coverPic}`}
+            alt="Event Picture"
+            className="w-full h-full max-md:h-52 rounded-xl"
+            placeholder="blur"
+            blurDataURL={hackathon.blurHash || 'no-hash'}
+          />
+          <div className="w-full absolute top-0 flex flex-col gap-4 max-md:gap-2 md:items-end p-4">
+            <div className="w-fit bg-white bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium">
+              Starts: {moment(hackathon.startTime).format('HH:mm DD MMMM, YYYY')}
+            </div>
+            <div className="w-fit bg-white bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium">
+              Ends: {moment(hackathon.endTime).format('HH:mm DD MMMM, YYYY')}
+            </div>
+          </div>
+          <div className="w-full absolute max-md:static bottom-0 flex gap-8 max-md:gap-2 justify-end p-4 max-md:px-0">
+            <div className="max-md:w-1/3 max-md:text-center bg-white bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium cursor-pointer">
+              Tracks
+            </div>
+            <div className="max-md:w-1/3 max-md:text-center bg-white bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium cursor-pointer">
+              Prizes
+            </div>
+            <div className="max-md:w-1/3 max-md:text-center bg-white bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium cursor-pointer">
+              Rounds
+            </div>
+          </div>
+        </div>
+
+        <div className="flex max-lg:flex-col py-8 max-md:py-0 gap-4 justify-center items-center md:justify-start md:items-start w-full">
           <div className="w-2/3 max-md:w-full flex justify-center items-start flex-col">
             <div className="w-full flex flex-col gap-6 items-start justify-center lg:mb-0">
               <h1 className="text-5xl font-primary font-bold">{hackathon.title}</h1>
