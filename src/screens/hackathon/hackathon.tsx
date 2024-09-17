@@ -18,6 +18,7 @@ import SignUp from '@/components/common/signup_box';
 import { formatHackathonDate, getHackathonStatus } from '@/utils/funcs/hackathon';
 import moment from 'moment';
 import SecondaryButton from '@/components/buttons/secondary_btn';
+import LowerEvent from '@/components/lowers/lower_event';
 
 interface HackathonProps {
   event: Event;
@@ -62,6 +63,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
   const [loading, setLoading] = useState(false);
   const [clickedOnChat, setClickedOnChat] = useState(false);
   const [clickedOnReport, setClickedOnReport] = useState(false);
+  const [eventLikes, setEventLikes] = useState(0);
 
   const hackathon = useMemo(() => event.hackathon, [event]);
 
@@ -117,7 +119,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
 
   const AboutHosts = () => (
     <div className="w-full bg-white rounded-xl max-md:w-full shadow-lg">
-      <div className="w-full flex flex-col gap-6 p-4 pt-2">
+      <div className="w-full flex flex-col gap-6 p-4">
         <div className="w-full flex flex-col gap-4">
           <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">HOSTED BY</div>
           <AboutUser user={event.organization.user} host={true} />
@@ -251,10 +253,10 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
           />
           <div className="w-full absolute top-0 flex flex-col gap-4 max-md:gap-2 md:items-end p-4">
             <div className="w-fit bg-white bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium">
-              Starts: {moment(hackathon.startTime).format('HH:mm DD MMMM, YYYY')}
+              Starts: {moment(hackathon.startTime).format('HH:mma DD MMMM, YYYY')}
             </div>
             <div className="w-fit bg-white bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium">
-              Ends: {moment(hackathon.endTime).format('HH:mm DD MMMM, YYYY')}
+              Ends: {moment(hackathon.endTime).format('HH:mma DD MMMM, YYYY')}
             </div>
           </div>
           <div className="w-full absolute max-md:static bottom-0 flex gap-8 max-md:gap-2 justify-end p-4 max-md:px-0">
@@ -358,8 +360,9 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
             </div>
           </div>
 
-          <div className="w-1/3 max-lg:w-full flex flex-col gap-8">
-            <div className="w-full flex flex-col gap-4">
+          <div className="w-1/3 max-lg:w-full flex flex-col gap-2">
+            <LowerEvent event={event} numLikes={eventLikes} setNumLikes={setEventLikes} />
+            <div className="w-full flex flex-col gap-4 mb-2">
               <RegisterButton />
               <h1 className="text-2xl font-semibold">{getHackathonStatus(hackathon)}</h1>
               <ProgressBar hackathon={hackathon} />
