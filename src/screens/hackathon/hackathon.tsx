@@ -5,7 +5,7 @@ import Toaster from '@/utils/toaster';
 import { EVENT_PIC_URL, EXPLORE_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
 import type { Hackathon } from '@/types';
-import { formatDate } from '@/utils/funcs/get_formatted_time';
+import { formatHackathonDate } from '@/utils/funcs/ formatHackathonDate';
 import Loader from '@/components/common/loader';
 
 interface HackathonProps {
@@ -83,7 +83,7 @@ const Hackathon: React.FC<HackathonProps> = ({ hackathon }) => {
                       <div className="flex flex-col items-center">
                         <div className="text-center mb-2 lg:mb-4">
                           <p className="font-primary font-bold text-lg lg:text-xl">
-                            {formatDate(hackathon.startTime)} - {formatDate(hackathon.endTime)}
+                            {formatHackathonDate(hackathon.startTime)} - {formatHackathonDate(hackathon.endTime)}
                           </p>
                         </div>
                         <div className="text-center">
@@ -132,10 +132,10 @@ const Hackathon: React.FC<HackathonProps> = ({ hackathon }) => {
                           </div>
                           <div className="flex flex-col items-center w-48 p-4 border rounded shadow-lg">
                             {round.title && <h3 className="text-lg font-semibold font-primary">{round.title}</h3>}
-                            <p className="font-primary mt-4">{formatDate(round.startTime)}</p>
+                            <p className="font-primary mt-4">{formatHackathonDate(round.startTime)}</p>
                             <p className="font-primary">{new Date(round.startTime).toLocaleTimeString()}</p>
                             <p className="font-primary my-4">to</p>
-                            <p className="font-primary">{formatDate(round.endTime)}</p>
+                            <p className="font-primary">{formatHackathonDate(round.endTime)}</p>
                             <p className="font-primary">{new Date(round.endTime).toLocaleTimeString()}</p>
                           </div>
                         </div>
@@ -162,7 +162,7 @@ const Hackathon: React.FC<HackathonProps> = ({ hackathon }) => {
                 <h1 className="text-4xl font-bold mb-4">Progress</h1>
                 <ProgressBar hackathon={hackathon} />
                 <p className="my-4 text-xl">
-                  Progress {formatDate(hackathon.startTime)} - {formatDate(hackathon.endTime)}
+                  Progress {formatHackathonDate(hackathon.startTime)} - {formatHackathonDate(hackathon.endTime)}
                 </p>
                 <div className="bg-[#DFDFDF] p-8 md:mt-12">
                   <Image

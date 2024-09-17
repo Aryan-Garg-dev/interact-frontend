@@ -1,4 +1,4 @@
-export const formatDate = (input: string | Date): string => {
+export const  formatHackathonDate = (input: string | Date): string => {
   const date = typeof input === 'string' ? new Date(input) : input;
   const day = date.getDate();
   const month = date.toLocaleString('default', { month: 'short' });
