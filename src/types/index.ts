@@ -766,6 +766,9 @@ export interface Hackathon {
   isEnded?: boolean;
   eventID: string;
   history: HackathonHistory[];
+  tracks: HackathonTrack[];
+  sponsors: HackathonSponsor[];
+  rounds: HackathonRound[];
 }
 
 export interface HackathonTrack {
