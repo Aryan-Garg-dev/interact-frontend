@@ -333,7 +333,6 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                       )}
                     </div>
                     <div className="flex flex-col items-center w-48 p-4 border rounded shadow-lg">
-                      {round.title && <h3 className="text-lg font-semibold font-primary">{round.title}</h3>}
                       <p className="font-primary mt-4">{formatHackathonDate(round.startTime)}</p>
                       <p className="font-primary">{new Date(round.startTime).toLocaleTimeString()}</p>
                       <p className="font-primary my-4">to</p>
