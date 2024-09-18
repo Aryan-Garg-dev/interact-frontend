@@ -829,9 +829,7 @@ export interface HackathonTeam {
 export interface HackathonRound {
   id: string;
   hackathonID: string;
-  title: string;
   index: number;
-  isIdeation: boolean;
   startTime: Date;
   endTime: Date;
   judgingStartTime: Date;

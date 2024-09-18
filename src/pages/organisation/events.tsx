@@ -29,8 +29,8 @@ import EditCoHosts from '@/sections/organization/events/edit_cohosts';
 import EventHistory from '@/sections/organization/events/history';
 import NoEvents from '@/components/fillers/events';
 import NewHackathon from '@/sections/organization/hackathons/new_hackathon';
-import EditHackathonCoordinators from '@/sections/organization/events/edit_hackathon_coordinators';
-import EditHackathonJudges from '@/sections/organization/events/edit_hackathon_judges';
+import EditHackathonCoordinators from '@/sections/organization/hackathons/edit_hackathon_coordinators';
+import EditHackathonJudges from '@/sections/organization/hackathons/edit_hackathon_judges';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
