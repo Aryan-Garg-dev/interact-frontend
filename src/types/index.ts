@@ -871,3 +871,39 @@ export interface HackathonHistory {
   deletedText?: string;
   createdAt: Date;
 }
+
+export interface HackathonEditDetails {
+  title: string;
+  tagline?: string;
+  coverPic: string;
+  description: string;
+  tags?: string[];
+  // links?: string[];
+  startTime: Date;
+  endTime: Date;
+  // teamFormationStartTime: Date;
+  // teamFormationEndTime: Date;
+  location: string;
+  minTeamSize: number;
+  maxTeamSize: number;
+  rounds: HackathonRound[];
+  sponsors: {
+    name: string;
+    title: string;
+    description: string;
+    link: string;
+  }[];
+  tracks: {
+    title: string;
+    description: string;
+    prizes: {
+      title: string;
+      description: string;
+      amount: number;
+    }[];
+  }[];
+  faqs: {
+    question: string;
+    answer: string;
+  }[];
+}
