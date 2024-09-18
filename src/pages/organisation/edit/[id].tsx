@@ -3,7 +3,7 @@ import { currentOrgSelector } from '@/slices/orgSlice';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
-import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { FloppyDisk, Link, Medal, PencilSimple, Plus, Trash, X } from '@phosphor-icons/react';
@@ -11,12 +11,21 @@ import { HackathonEditDetails } from '@/types';
 import Image from 'next/image';
 import Input from '@/components/form/input';
 import { EditableBox, EditableFAQBox, EditableSponsorBox, EditableTrackBox } from '@/components/form/EditableFields';
+import { EXPLORE_URL, ORG_URL, USER_URL } from '@/config/routes';
+import getHandler from '@/handlers/get_handler';
+import Toaster from '@/utils/toaster';
+import { SERVER_ERROR } from '@/config/errors';
+import postHandler from '@/handlers/post_handler';
 const boxWrapperClass = 'w-full px-4 py-2 bg-[#E6E7EB70] relative rounded-md';
 function EditEvent() {
   const router = useRouter();
   const { id } = router.query;
   const currentOrg = useSelector(currentOrgSelector);
+  const [eventData, setEventData] = useState<any>(null);
+  const [mutex, setMutex] = useState(false);
   const [eventDetails, setEventDetails] = useState<HackathonEditDetails>({
+    hackathonID: '',
+    organizationID: '',
     title: 'Hackathon Title',
     tagline: 'Hackathon Tagline',
     coverPic: '',
@@ -98,6 +107,106 @@ function EditEvent() {
       },
     ],
   });
+  useEffect(() => {
+    if (!eventData) {
+      return;
+    } else {
+      const data = {
+        ...eventDetails,
+        hackathonID: eventData.hackathonID,
+        organizationID: eventData.organizationID,
+        title: eventData.title,
+        tagline: eventData.tagline,
+        coverPic: eventData.coverPic.includes('https') ? eventData.coverPic : '',
+        description: eventData.description,
+        tags: eventData.tags,
+        startTime: new Date(eventData.startTime),
+        endTime: new Date(eventData.endTime),
+        minTeamSize: eventData.hackathon.minTeamSize?.toString(),
+        maxTeamSize: eventData.hackathon.maxTeamSize?.toString(),
+      };
+      setEventDetails(data);
+    }
+  }, [eventData]);
+  const getEvent = () => {
+    const URL = `${EXPLORE_URL}/events/${id}`;
+    getHandler(URL)
+      .then(res => {
+        if (res.statusCode === 200) {
+          setEventData(res.data.event);
+          console.log(res.data.event);
+        } else {
+          if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
+          else {
+            Toaster.error(SERVER_ERROR, 'error_toaster');
+          }
+        }
+      })
+      .catch(err => {
+        Toaster.error(SERVER_ERROR, 'error_toaster');
+      });
+  };
+  useEffect(() => {
+    if (id) {
+      getEvent();
+    }
+  }, [id]);
+  const handleCreateFAQ = async (data: { question: string; answer: string }) => {
+    if (mutex) return;
+    setMutex(true);
+    const toaster = Toaster.startLoad('Creating...');
+    const res = await postHandler(
+      `${ORG_URL}/${eventData.organizationID}/hackathons/${eventData.hackathonID}/faq`,
+      data
+    );
+    if (res.statusCode === 201) {
+      Toaster.stopLoad(toaster, 'FAQ Added!', 1);
+      setEventDetails({
+        ...eventDetails,
+        faqs: [
+          ...eventDetails.faqs,
+          {
+            id: res.data.faq.id,
+            question: 'Question New',
+            answer: 'Answer New',
+          },
+        ],
+      });
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    }
+    setMutex(false);
+  };
+  const handleAddSponsor = async (data: { name: string; link: string; title: string; description: string }) => {
+    if (mutex) return;
+    setMutex(true);
+    const toaster = Toaster.startLoad('Adding Sponsor...');
+    const res = await postHandler(
+      `${ORG_URL}/${eventData.organizationID}/hackathons/${eventData.hackathonID}/sponsor`,
+      data
+    );
+    if (res.statusCode === 201) {
+      Toaster.stopLoad(toaster, 'Sponsor Added!', 1);
+      setEventDetails({
+        ...eventDetails,
+        sponsors: [
+          ...eventDetails.sponsors,
+          {
+            id: res.data.sponsor.id,
+            name: 'Sponsor Name',
+            link: 'Sponsor Link',
+            title: 'Sponsor Title',
+            description: 'Sponsor Description',
+          },
+        ],
+      });
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    }
+    setMutex(false);
+  };
   if (!id) {
     return <div>Loading...</div>;
   }
@@ -213,17 +322,11 @@ function EditEvent() {
                     <button
                       className=" bg-[#dedede] p-2 rounded-lg w-full flex flex-col items-center justify-center "
                       onClick={() => {
-                        setEventDetails({
-                          ...eventDetails,
-                          sponsors: [
-                            ...eventDetails.sponsors,
-                            {
-                              name: 'Sponsor Name',
-                              title: 'Sponsor Title',
-                              link: 'Sponsor Link',
-                              description: 'Sponsor Description',
-                            },
-                          ],
+                        handleAddSponsor({
+                          name: 'Sponsor Name',
+                          link: 'Sponsor Link',
+                          title: 'Sponsor Title',
+                          description: 'Sponsor Description',
                         });
                       }}
                     >
@@ -270,16 +373,7 @@ function EditEvent() {
                     <button
                       className=" bg-[#dedede] p-2 rounded-lg w-full flex flex-col items-center justify-center "
                       onClick={() => {
-                        setEventDetails({
-                          ...eventDetails,
-                          faqs: [
-                            ...eventDetails.faqs,
-                            {
-                              question: 'Question New',
-                              answer: 'Answer New',
-                            },
-                          ],
-                        });
+                        handleCreateFAQ({ question: 'Question New', answer: 'Answer New' });
                       }}
                     >
                       <Plus size={24} weight="bold" />

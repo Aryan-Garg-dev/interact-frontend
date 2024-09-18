@@ -1,4 +1,9 @@
+import { SERVER_ERROR } from '@/config/errors';
+import { ORG_URL } from '@/config/routes';
+import deleteHandler from '@/handlers/delete_handler';
+import patchHandler from '@/handlers/patch_handler';
 import { HackathonEditDetails } from '@/types';
+import Toaster from '@/utils/toaster';
 import { FloppyDisk, Link, Medal, PencilSimple, Trash } from '@phosphor-icons/react';
 import { Dispatch, SetStateAction, useState } from 'react';
 const boxWrapperClass = 'w-full px-4 py-2 bg-[#E6E7EB70] relative rounded-md';
@@ -214,12 +219,38 @@ export function EditableBox({
   field,
 }: EditableBoxProps) {
   const [isEditable, setIsEditable] = useState(false);
+  const [mutex, setMutex] = useState(false);
+  const handleEditDetail = async (data: any): Promise<number> => {
+    if (mutex) return 0;
+    setMutex(true);
+    const toaster = Toaster.startLoad('Updating Details...');
+
+    const URL = `${ORG_URL}/${val.organizationID}/hackathons/${val.hackathonID}`;
+    const res = await patchHandler(URL, data);
+
+    if (res.statusCode === 200) {
+      Toaster.stopLoad(toaster, 'Details Updated!', 1);
+      setMutex(false);
+      return 1;
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else {
+        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+      }
+      setMutex(false);
+      return 0;
+    }
+  };
   return (
     <div className={`${boxWrapperClass}`}>
       <button
         className="bg-white rounded-md text-black p-1 absolute top-2 right-2 border-[1px] border-[#dedede]"
+        disabled={mutex}
         onClick={() => {
           setIsEditable(!isEditable);
+          if (isEditable) {
+            handleEditDetail({ field: val[field as keyof HackathonEditDetails] });
+          }
         }}
       >
         {!isEditable && <PencilSimple size={16} />}
@@ -255,6 +286,7 @@ export function EditableSponsorBox({
 }: {
   val: HackathonEditDetails;
   sponsor: {
+    id?: string;
     name: string;
     title: string;
     description: string;
@@ -265,23 +297,69 @@ export function EditableSponsorBox({
 }) {
   const [isEditable, setIsEditable] = useState(false);
   const [sponsorData, setSponsorData] = useState(sponsor);
+  const [mutex, setMutex] = useState(false);
+  const handleEditSponsor = async (
+    sponsorID: string,
+    data: { name: string; link: string; title: string; description: string }
+  ): Promise<number> => {
+    if (mutex) return 0;
+    setMutex(true);
+
+    const toaster = Toaster.startLoad('Updating the Sponsor...');
+
+    const URL = `${ORG_URL}/${val.organizationID}/hackathons/sponsor/${sponsorID}`;
+    const res = await patchHandler(URL, data);
+
+    if (res.statusCode === 200) {
+      Toaster.stopLoad(toaster, 'Sponsor Updated!', 1);
+      setMutex(false);
+      return 1;
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else {
+        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+      }
+      setMutex(false);
+      return 0;
+    }
+  };
+  const handleDeleteSponsor = async () => {
+    const URL = `${ORG_URL}/${val.organizationID}/hackathons/sponsor/${sponsorData.id}`;
+
+    const res = await deleteHandler(URL);
+    const toaster = Toaster.startLoad('Deleting Sponsor...');
+    if (res.statusCode === 204) {
+      setVal({ ...val, sponsors: val.sponsors.filter((_, i) => i !== index) });
+      Toaster.stopLoad(toaster, 'Sponsor Deleted!', 1);
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    }
+  };
   return (
     <div className={`${boxWrapperClass}`}>
       <div className="flex items-center gap-1 absolute top-2 right-2">
         <button
           className="bg-white rounded-md text-black p-1  border-[1px] border-[#dedede]"
           onClick={() => {
+            if (isEditable && sponsorData.id) {
+              handleEditSponsor(sponsorData.id, {
+                name: sponsorData.name,
+                link: sponsorData.link,
+                title: sponsorData.title,
+                description: sponsorData.description,
+              });
+            }
             setIsEditable(!isEditable);
           }}
+          disabled={mutex}
         >
           {!isEditable && <PencilSimple size={16} />}
           {isEditable && <FloppyDisk size={16} />}
         </button>
         <button
           className="bg-white rounded-md text-black p-1  border-[1px] border-[#dedede]"
-          onClick={() => {
-            setVal({ ...val, sponsors: val.sponsors.filter((_, i) => i !== index) });
-          }}
+          onClick={handleDeleteSponsor}
         >
           <Trash size={16} />
         </button>
@@ -364,6 +442,7 @@ export function EditableFAQBox({
 }: {
   val: HackathonEditDetails;
   faq: {
+    id?: string;
     question: string;
     answer: string;
   };
@@ -372,24 +451,62 @@ export function EditableFAQBox({
 }) {
   const [isEditable, setIsEditable] = useState(false);
   const [faqData, setFaqData] = useState(faq);
+  const [mutex, setMutex] = useState(false);
+  const handleEditFAQ = async (faqID: string, data: { question: string; answer: string }): Promise<number> => {
+    if (mutex) return 0;
+    setMutex(true);
+
+    const toaster = Toaster.startLoad('Updating the FAQ...');
+
+    const URL = `${ORG_URL}/${val.organizationID}/hackathons/faq/${val.hackathonID}`;
+    const res = await patchHandler(URL, data);
+
+    if (res.statusCode === 200) {
+      Toaster.stopLoad(toaster, 'FAQ Updated!', 1);
+      setMutex(false);
+      return 1;
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else {
+        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+      }
+      setMutex(false);
+      return 0;
+    }
+  };
+  const handleDeleteFaq = async () => {
+    const URL = `${ORG_URL}/${val.organizationID}/hackathons/faq/${faqData.id}`;
+
+    const res = await deleteHandler(URL);
+    const toaster = Toaster.startLoad('Deleting FAQ...');
+    if (res.statusCode === 204) {
+      setVal({ ...val, faqs: val.faqs.filter((_, i) => i !== index) });
+      Toaster.stopLoad(toaster, 'FAQ Deleted!', 1);
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    }
+  };
   return (
     <div className={`${boxWrapperClass}`}>
       <div className="flex items-center gap-1 absolute top-2 right-2">
         <button
           className="bg-white rounded-md text-black p-1  border-[1px] border-[#dedede]"
+          disabled={mutex}
           onClick={() => {
+            if (isEditable && faqData.id) {
+              handleEditFAQ(faqData.id, {
+                question: faqData.question,
+                answer: faqData.answer,
+              });
+            }
             setIsEditable(!isEditable);
           }}
         >
           {!isEditable && <PencilSimple size={16} />}
           {isEditable && <FloppyDisk size={16} />}
         </button>
-        <button
-          className="bg-white rounded-md text-black p-1  border-[1px] border-[#dedede]"
-          onClick={() => {
-            setVal({ ...val, faqs: val.faqs.filter((_, i) => i !== index) });
-          }}
-        >
+        <button className="bg-white rounded-md text-black p-1  border-[1px] border-[#dedede]" onClick={handleDeleteFaq}>
           <Trash size={16} />
         </button>
       </div>
@@ -403,7 +520,7 @@ export function EditableFAQBox({
               onChange={e => {
                 setVal({
                   ...val,
-                  sponsors: val.sponsors.map((s, i) => (i === index ? { ...s, answer: e.target.value } : s)),
+                  faqs: val.faqs.map((s, i) => (i === index ? { ...s, question: e.target.value } : s)),
                 });
                 setFaqData({ ...faqData, question: e.target.value });
               }}

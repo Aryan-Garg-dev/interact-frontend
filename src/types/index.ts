@@ -873,6 +873,8 @@ export interface HackathonHistory {
 }
 
 export interface HackathonEditDetails {
+  hackathonID: string;
+  organizationID: string;
   title: string;
   tagline?: string;
   coverPic: string;
@@ -888,6 +890,7 @@ export interface HackathonEditDetails {
   maxTeamSize: number;
   rounds: HackathonRound[];
   sponsors: {
+    id?: string;
     name: string;
     title: string;
     description: string;
@@ -903,6 +906,7 @@ export interface HackathonEditDetails {
     }[];
   }[];
   faqs: {
+    id?: string;
     question: string;
     answer: string;
   }[];
