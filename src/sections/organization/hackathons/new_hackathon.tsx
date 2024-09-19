@@ -130,8 +130,8 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
       endTime: getFormattedTime(endTime),
       teamFormationStartTime: getFormattedTime(teamFormationStartTime),
       teamFormationEndTime: getFormattedTime(teamFormationEndTime),
-      minTeamSize,
-      maxTeamSize,
+      minTeamSize: Number(minTeamSize),
+      maxTeamSize: Number(maxTeamSize),
       tracks,
       prizes,
       rounds: rounds.map(round => {
