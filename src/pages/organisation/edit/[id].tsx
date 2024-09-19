@@ -23,39 +23,17 @@ const boxWrapperClass = 'w-full px-4 py-2 bg-[#E6E7EB70] relative rounded-md';
 function EditEvent() {
   const router = useRouter();
   const { id } = router.query;
-  const currentOrg = useSelector(currentOrgSelector);
-  const [eventData, setEventData] = useState<any>(null);
   const [mutex, setMutex] = useState(false);
   const [hackathon, setHackathon] = useState<Hackathon>(initialHackathon);
 
-  useEffect(() => {
-    if (!eventData) {
-      return;
-    } else {
-      const data = {
-        ...hackathon,
-        hackathonID: eventData.hackathonID,
-        organizationID: eventData.organizationID,
-        title: eventData.title,
-        tagline: eventData.tagline,
-        coverPic: eventData.coverPic,
-        description: eventData.description,
-        tags: eventData.tags,
-        startTime: new Date(eventData.startTime),
-        endTime: new Date(eventData.endTime),
-        minTeamSize: eventData.hackathon.minTeamSize?.toString(),
-        maxTeamSize: eventData.hackathon.maxTeamSize?.toString(),
-      };
-      setHackathon(data);
-    }
-  }, [eventData]);
+  const currentOrg = useSelector(currentOrgSelector);
 
   const getEvent = () => {
     const URL = `${EXPLORE_URL}/events/${id}`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
-          setEventData(res.data.event);
+          setHackathon(res.data.event.hackathon);
           console.log(res.data.event);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -77,24 +55,14 @@ function EditEvent() {
   const handleCreateFAQ = async (data: { question: string; answer: string }) => {
     if (mutex) return;
     setMutex(true);
-    const toaster = Toaster.startLoad('Creating...');
-    const res = await postHandler(
-      `${ORG_URL}/${eventData.organizationID}/hackathons/${eventData.hackathonID}/faq`,
-      data
-    );
+    const toaster = Toaster.startLoad('Creating a FAQ...');
+    const res = await postHandler(`${ORG_URL}/${currentOrg.id}/hackathons/${hackathon.id}/faq`, data);
     if (res.statusCode === 201) {
+      const faq = res.data.faq;
       Toaster.stopLoad(toaster, 'FAQ Added!', 1);
       setHackathon({
         ...hackathon,
-        faqs: [
-          ...hackathon.faqs,
-          {
-            id: res.data.faq.id,
-            question: 'Question New',
-            answer: 'Answer New',
-            hackathonID: hackathon.id,
-          },
-        ],
+        faqs: [...hackathon.faqs, faq],
       });
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
@@ -107,27 +75,13 @@ function EditEvent() {
     if (mutex) return;
     setMutex(true);
     const toaster = Toaster.startLoad('Adding Sponsor...');
-    const res = await postHandler(
-      `${ORG_URL}/${eventData.organizationID}/hackathons/${eventData.hackathonID}/sponsor`,
-      data
-    );
+    const res = await postHandler(`${ORG_URL}/${currentOrg.id}/hackathons/${hackathon.id}/sponsor`, data);
     if (res.statusCode === 201) {
       Toaster.stopLoad(toaster, 'Sponsor Added!', 1);
+      const sponsor = res.data.sponsor;
       setHackathon({
         ...hackathon,
-        sponsors: [
-          ...hackathon.sponsors,
-          {
-            id: res.data.sponsor.id,
-            name: 'Sponsor Name',
-            link: 'Sponsor Link',
-            title: 'Sponsor Title',
-            description: 'Sponsor Description',
-            blurHash: '',
-            coverPic: '',
-            hackathonID: hackathon.id,
-          },
-        ],
+        sponsors: [...hackathon.sponsors, sponsor],
       });
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
