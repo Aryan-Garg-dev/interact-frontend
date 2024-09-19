@@ -75,119 +75,12 @@ export function EditableTrackBox({
               }}
             />
           </div>
-          <div className="flex flex-col gap-0">
-            <h2>Prizes</h2>
-            <div className="flex flex-col gap-1">
-              {' '}
-              {trackData.prizes.map((t, idx) => (
-                <div className="flex flex-col" key={idx}>
-                  <div className="flex w-full gap-1 items-center">
-                    <input
-                      className="text-sm bg-[#dedede]  p-1"
-                      value={trackData.prizes[idx].title}
-                      placeholder="Prize name"
-                      onChange={e => {
-                        setVal({
-                          ...val,
-                          tracks: val.tracks.map((s, i) =>
-                            i === index
-                              ? {
-                                  ...s,
-                                  prizes: trackData.prizes.map((prize, i) =>
-                                    i === idx ? { ...prize, title: e.target.value } : prize
-                                  ),
-                                }
-                              : s
-                          ),
-                        });
-                        setTrackData({
-                          ...trackData,
-                          prizes: trackData.prizes.map((prize, i) =>
-                            i === idx ? { ...prize, title: e.target.value } : prize
-                          ),
-                        });
-                      }}
-                    />
-                    <input
-                      className="text-sm bg-[#dedede]  p-1"
-                      value={trackData.prizes[idx].amount}
-                      type="number"
-                      placeholder="Amount"
-                      onChange={e => {
-                        setVal({
-                          ...val,
-                          tracks: val.tracks.map((s, i) =>
-                            i === index
-                              ? {
-                                  ...s,
-                                  prizes: trackData.prizes.map((prize, i) =>
-                                    i === idx ? { ...prize, amount: parseFloat(e.target.value) } : prize
-                                  ),
-                                }
-                              : s
-                          ),
-                        });
-                        setTrackData({
-                          ...trackData,
-                          prizes: trackData.prizes.map((prize, i) =>
-                            i === idx ? { ...prize, amount: parseFloat(e.target.value) } : prize
-                          ),
-                        });
-                      }}
-                    />
-                  </div>{' '}
-                  <input
-                    className="text-sm bg-[#dedede]  p-1 w-full"
-                    value={trackData.prizes[idx].description}
-                    placeholder="description"
-                    onChange={e => {
-                      setVal({
-                        ...val,
-                        tracks: val.tracks.map((s, i) =>
-                          i === index
-                            ? {
-                                ...s,
-                                prizes: trackData.prizes.map((prize, i) =>
-                                  i === idx ? { ...prize, description: e.target.value } : prize
-                                ),
-                              }
-                            : s
-                        ),
-                      });
-                      setTrackData({
-                        ...trackData,
-                        prizes: trackData.prizes.map((prize, i) =>
-                          i === idx ? { ...prize, description: e.target.value } : prize
-                        ),
-                      });
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
         </section>
       )}
       {!isEditable && (
         <section className=" w-full h-full">
           <h1 className="text-xl font-semibold">{trackData.title}</h1>
           <p>{trackData.description}</p>
-          <h3 className="text-sm font-medium mt-3">Prizes</h3>
-          <div className="flex flex-col gap-1">
-            {trackData.prizes.map((prize, index) => (
-              <div className="flex flex-col bg-[#dedede] p-1 rounded-md" key={index}>
-                <section className="flex items-center gap-2 text-sm">
-                  <span className="flex items-center gap-1">
-                    <Medal size={16} />
-
-                    <p>{prize.title}</p>
-                  </span>
-                  <p className="font-semibold">{prize.amount}</p>
-                </section>
-                <p className="text-xs">{prize.description}</p>
-              </div>
-            ))}
-          </div>
         </section>
       )}
     </div>

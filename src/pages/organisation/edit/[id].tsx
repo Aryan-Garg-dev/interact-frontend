@@ -10,7 +10,7 @@ import { FloppyDisk, Link, Medal, PencilSimple, Plus, Trash, X } from '@phosphor
 import Image from 'next/image';
 import Input from '@/components/form/input';
 import { EditableBox, EditableFAQBox, EditableSponsorBox, EditableTrackBox } from '@/components/form/EditableFields';
-import { EXPLORE_URL, ORG_URL, USER_URL } from '@/config/routes';
+import { EVENT_PIC_URL, EXPLORE_URL, ORG_URL, USER_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import { SERVER_ERROR } from '@/config/errors';
@@ -62,7 +62,7 @@ function EditEvent() {
       Toaster.stopLoad(toaster, 'FAQ Added!', 1);
       setHackathon({
         ...hackathon,
-        faqs: [...hackathon.faqs, faq],
+        faqs: [...(hackathon.faqs || []), faq],
       });
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
@@ -114,7 +114,13 @@ function EditEvent() {
               </section>
             )}
             {hackathon.coverPic && (
-              <Image src={hackathon.coverPic} alt="" width={1000} height={600} className="w-full h-full object-cover" />
+              <Image
+                src={`${EVENT_PIC_URL}/${hackathon.coverPic}`}
+                alt=""
+                width={1000}
+                height={600}
+                className="w-full h-full object-cover"
+              />
             )}
           </div>
           <div className="w-full flex items-start justify-between gap-4">
@@ -244,7 +250,7 @@ function EditEvent() {
                 <div className={boxWrapperClass}>
                   <h1 className="text-xl font-semibold mb-2">FAQs</h1>
                   <div className="w-full grid grid-cols-3 gap-2">
-                    {hackathon.faqs.map((faq, index) => (
+                    {hackathon.faqs?.map((faq, index) => (
                       <EditableFAQBox val={hackathon} faq={faq} index={index} key={index} setVal={setHackathon} />
                     ))}
                     <button

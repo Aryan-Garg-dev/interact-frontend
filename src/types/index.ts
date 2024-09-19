@@ -780,7 +780,6 @@ export interface HackathonTrack {
   hackathonID: string;
   title: string;
   description?: string;
-  prizes: HackathonPrize[];
 }
 
 export interface HackathonPrize {
