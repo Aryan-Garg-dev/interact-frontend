@@ -209,8 +209,8 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
       setEndTime(formData.endTime || '');
       setTeamFormationStartTime(formData.teamFormationStartTime || '');
       setTeamFormationEndTime(formData.teamFormationEndTime || '');
-      setMinTeamSize(formData.minTeamSize || 2);
-      setMaxTeamSize(formData.maxTeamSize || 5);
+      setMinTeamSize(Number(formData.minTeamSize) || 2);
+      setMaxTeamSize(Number(formData.maxTeamSize) || 5);
       setTracks(formData.tracks || []);
       setPrizes(formData.prizes || []);
       setRounds(formData.rounds || []);
@@ -777,8 +777,24 @@ const Teams = ({
 }: any) => {
   return (
     <div className="w-full flex flex-col gap-2">
-      <Input label="Min Team Size" val={minTeamSize} setVal={setMinTeamSize} type="number" maxLength={-1} />
-      <Input label="Max Team Size" val={maxTeamSize} setVal={setMaxTeamSize} type="number" maxLength={-1} />
+      <div className="w-full">
+        <div className="text-xs ml-1 font-medium uppercase text-gray-500">Min Team Size*</div>
+        <input
+          value={minTeamSize}
+          onChange={el => setMinTeamSize(Number(el.target.value))}
+          type="number"
+          className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
+        />
+      </div>
+      <div className="w-full">
+        <div className="text-xs ml-1 font-medium uppercase text-gray-500">Min Team Size*</div>
+        <input
+          value={maxTeamSize}
+          onChange={el => setMaxTeamSize(Number(el.target.value))}
+          type="number"
+          className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
+        />
+      </div>
       <Time
         label="Team Formation Start Time"
         val={teamFormationStartTime}
