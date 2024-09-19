@@ -7,7 +7,6 @@ import React, { Dispatch, ReactNode, SetStateAction, useEffect, useState } from 
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { FloppyDisk, Link, Medal, PencilSimple, Plus, Trash, X } from '@phosphor-icons/react';
-import { HackathonEditDetails } from '@/types';
 import Image from 'next/image';
 import Input from '@/components/form/input';
 import { EditableBox, EditableFAQBox, EditableSponsorBox, EditableTrackBox } from '@/components/form/EditableFields';
@@ -16,108 +15,30 @@ import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import { SERVER_ERROR } from '@/config/errors';
 import postHandler from '@/handlers/post_handler';
+import { Hackathon } from '@/types';
+import { initialHackathon } from '@/types/initials';
+
 const boxWrapperClass = 'w-full px-4 py-2 bg-[#E6E7EB70] relative rounded-md';
+
 function EditEvent() {
   const router = useRouter();
   const { id } = router.query;
   const currentOrg = useSelector(currentOrgSelector);
   const [eventData, setEventData] = useState<any>(null);
   const [mutex, setMutex] = useState(false);
-  const [eventDetails, setEventDetails] = useState<HackathonEditDetails>({
-    hackathonID: '',
-    organizationID: '',
-    title: 'Hackathon Title',
-    tagline: 'Hackathon Tagline',
-    coverPic: '',
-    location: 'Location',
-    description:
-      'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit qui, accusantium molestias enim possimus saepe veniam at tempore quaerat cupiditate natus ut, facere nam accusamus, minus asperiores odio eos! Molestiae.Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit qui, accusantium molestias enim possimus saepe veniam at tempore quaerat cupiditate natus ut, facere nam accusamus, minus asperiores odio eos! Molestiae.',
-    startTime: new Date('2021-09-01T10:00'),
-    endTime: new Date('2021-09-01T10:00'),
-    tags: ['tag1', 'tag2'],
-    minTeamSize: 1,
-    maxTeamSize: 4,
-    rounds: [],
-    sponsors: [
-      {
-        name: 'ABC Company',
-        title: 'Main Sponsor',
-        description: 'This is a description of the sponsor',
-        link: 'https://www.google.com',
-      },
-      {
-        name: 'XYZ Company',
-        title: 'Food Sponsor',
-        description: 'This is a description of the sponsor',
-        link: 'https://www.google.com',
-      },
-    ],
-    tracks: [
-      {
-        title: 'Track 1',
-        description: 'This is a description of the track 1',
-        prizes: [
-          {
-            title: 'First Prize',
-            description: 'This is a description of the prize',
-            amount: 1000,
-          },
-          {
-            title: 'Second  Prize',
-            description: 'This is a description of the prize',
-            amount: 600,
-          },
-          {
-            title: 'Third Prize',
-            description: 'This is a description of the prize',
-            amount: 200,
-          },
-        ],
-      },
-      {
-        title: 'Track 2',
-        description: 'This is a description of the track 2',
-        prizes: [
-          {
-            title: 'First Prize',
-            description: 'This is a description of the prize',
-            amount: 1000,
-          },
-          {
-            title: 'Second  Prize',
-            description: 'This is a description of the prize',
-            amount: 600,
-          },
-          {
-            title: 'Third Prize',
-            description: 'This is a description of the prize',
-            amount: 200,
-          },
-        ],
-      },
-    ],
-    faqs: [
-      {
-        question: 'What is the eligibility criteria?',
-        answer: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-      },
-      {
-        question: 'What is the eligibility criteria?',
-        answer: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.',
-      },
-    ],
-  });
+  const [hackathon, setHackathon] = useState<Hackathon>(initialHackathon);
+
   useEffect(() => {
     if (!eventData) {
       return;
     } else {
       const data = {
-        ...eventDetails,
+        ...hackathon,
         hackathonID: eventData.hackathonID,
         organizationID: eventData.organizationID,
         title: eventData.title,
         tagline: eventData.tagline,
-        coverPic: eventData.coverPic.includes('https') ? eventData.coverPic : '',
+        coverPic: eventData.coverPic,
         description: eventData.description,
         tags: eventData.tags,
         startTime: new Date(eventData.startTime),
@@ -125,9 +46,10 @@ function EditEvent() {
         minTeamSize: eventData.hackathon.minTeamSize?.toString(),
         maxTeamSize: eventData.hackathon.maxTeamSize?.toString(),
       };
-      setEventDetails(data);
+      setHackathon(data);
     }
   }, [eventData]);
+
   const getEvent = () => {
     const URL = `${EXPLORE_URL}/events/${id}`;
     getHandler(URL)
@@ -151,6 +73,7 @@ function EditEvent() {
       getEvent();
     }
   }, [id]);
+
   const handleCreateFAQ = async (data: { question: string; answer: string }) => {
     if (mutex) return;
     setMutex(true);
@@ -161,14 +84,15 @@ function EditEvent() {
     );
     if (res.statusCode === 201) {
       Toaster.stopLoad(toaster, 'FAQ Added!', 1);
-      setEventDetails({
-        ...eventDetails,
+      setHackathon({
+        ...hackathon,
         faqs: [
-          ...eventDetails.faqs,
+          ...hackathon.faqs,
           {
             id: res.data.faq.id,
             question: 'Question New',
             answer: 'Answer New',
+            hackathonID: hackathon.id,
           },
         ],
       });
@@ -178,6 +102,7 @@ function EditEvent() {
     }
     setMutex(false);
   };
+
   const handleAddSponsor = async (data: { name: string; link: string; title: string; description: string }) => {
     if (mutex) return;
     setMutex(true);
@@ -188,16 +113,19 @@ function EditEvent() {
     );
     if (res.statusCode === 201) {
       Toaster.stopLoad(toaster, 'Sponsor Added!', 1);
-      setEventDetails({
-        ...eventDetails,
+      setHackathon({
+        ...hackathon,
         sponsors: [
-          ...eventDetails.sponsors,
+          ...hackathon.sponsors,
           {
             id: res.data.sponsor.id,
             name: 'Sponsor Name',
             link: 'Sponsor Link',
             title: 'Sponsor Title',
             description: 'Sponsor Description',
+            blurHash: '',
+            coverPic: '',
+            hackathonID: hackathon.id,
           },
         ],
       });
@@ -207,6 +135,7 @@ function EditEvent() {
     }
     setMutex(false);
   };
+
   if (!id) {
     return <div>Loading...</div>;
   }
@@ -222,7 +151,7 @@ function EditEvent() {
                 'linear-gradient(-90deg,rgba(131, 58, 180, 1) 0%,rgba(253, 29, 29, 1) 50%,rgba(252, 176, 69, 1) 100%)',
             }}
           >
-            {!eventDetails.coverPic && (
+            {!hackathon.coverPic && (
               <section className="h-full w-full flex items-center justify-center gap-4">
                 <span className="bg-white text-black h-8 w-8 flex items-center justify-center rounded-lg">
                   <Plus size={24} />
@@ -230,21 +159,15 @@ function EditEvent() {
                 <p className="text-lg font-semibold text-white">Change Cover Image</p>
               </section>
             )}
-            {eventDetails.coverPic && (
-              <Image
-                src={eventDetails.coverPic}
-                alt=""
-                width={1000}
-                height={600}
-                className="w-full h-full object-cover"
-              />
+            {hackathon.coverPic && (
+              <Image src={hackathon.coverPic} alt="" width={1000} height={600} className="w-full h-full object-cover" />
             )}
           </div>
           <div className="w-full flex items-start justify-between gap-4">
             <section className="--main-details w-[75%] h-full flex flex-col gap-2">
               <div className="w-full flex items-center flex-wrap gap-2">
-                {eventDetails.tags &&
-                  eventDetails.tags?.map((tag, index) => (
+                {hackathon.tags &&
+                  hackathon.tags?.map((tag, index) => (
                     <span
                       className="bg-primary_text text-white rounded-full px-4 py-2 text-xs flex items-center gap-3"
                       key={index}
@@ -253,10 +176,10 @@ function EditEvent() {
                       <button
                         className="bg-white rounded-full text-black p-[1px]  border-[1px] border-[#dedede]"
                         onClick={() => {
-                          if (eventDetails.tags) {
-                            setEventDetails({
-                              ...eventDetails,
-                              tags: eventDetails.tags.filter((_, i) => i !== index),
+                          if (hackathon.tags) {
+                            setHackathon({
+                              ...hackathon,
+                              tags: hackathon.tags.filter((_, i) => i !== index),
                             });
                           }
                         }}
@@ -273,23 +196,23 @@ function EditEvent() {
               <div className="w-full flex items-start gap-2 ">
                 <div className="flex flex-col gap-2 w-full">
                   <EditableBox
-                    val={eventDetails}
-                    setVal={setEventDetails}
+                    val={hackathon}
+                    setVal={setHackathon}
                     field="title"
                     placeholder="Enter Hackathon Title"
                     maxLength={100}
                     className="text-4xl font-semibold"
                   />
                   <EditableBox
-                    val={eventDetails}
-                    setVal={setEventDetails}
+                    val={hackathon}
+                    setVal={setHackathon}
                     field="tagline"
                     placeholder="Enter a tagline for hackathon"
                     className="text-2xl font-semibold"
                   />
                   <EditableBox
-                    val={eventDetails}
-                    setVal={setEventDetails}
+                    val={hackathon}
+                    setVal={setHackathon}
                     field="location"
                     placeholder="Enter a location for hackathon"
                     className="text-base font-semibold"
@@ -299,8 +222,8 @@ function EditEvent() {
               </div>
 
               <EditableBox
-                val={eventDetails}
-                setVal={setEventDetails}
+                val={hackathon}
+                setVal={setHackathon}
                 field="description"
                 placeholder="Enter a detailed description for the hackathon (max 1000 characters)"
                 className="text-base font-semibold"
@@ -310,13 +233,13 @@ function EditEvent() {
                 <div className={boxWrapperClass}>
                   <h1 className="text-xl font-semibold mb-2">Sponsors</h1>
                   <div className="w-full grid grid-cols-3 gap-2">
-                    {eventDetails.sponsors.map((sponsor, index) => (
+                    {hackathon.sponsors.map((sponsor, index) => (
                       <EditableSponsorBox
-                        val={eventDetails}
+                        val={hackathon}
                         sponsor={sponsor}
                         index={index}
                         key={index}
-                        setVal={setEventDetails}
+                        setVal={setHackathon}
                       />
                     ))}
                     <button
@@ -342,8 +265,8 @@ function EditEvent() {
                   <span className="flex items-center gap-2 w-full">
                     <span className="flex items-center gap-1 w-1/2 relative">
                       <EditableBox
-                        val={eventDetails}
-                        setVal={setEventDetails}
+                        val={hackathon}
+                        setVal={setHackathon}
                         field="minTeamSize"
                         placeholder="MIN"
                         className="text-base font-semibold"
@@ -352,8 +275,8 @@ function EditEvent() {
                     </span>
                     <span className="flex items-center gap-1 w-1/2 relative">
                       <EditableBox
-                        val={eventDetails}
-                        setVal={setEventDetails}
+                        val={hackathon}
+                        setVal={setHackathon}
                         field="maxTeamSize"
                         placeholder="MIN"
                         className="text-base font-semibold"
@@ -367,8 +290,8 @@ function EditEvent() {
                 <div className={boxWrapperClass}>
                   <h1 className="text-xl font-semibold mb-2">FAQs</h1>
                   <div className="w-full grid grid-cols-3 gap-2">
-                    {eventDetails.faqs.map((faq, index) => (
-                      <EditableFAQBox val={eventDetails} faq={faq} index={index} key={index} setVal={setEventDetails} />
+                    {hackathon.faqs.map((faq, index) => (
+                      <EditableFAQBox val={hackathon} faq={faq} index={index} key={index} setVal={setHackathon} />
                     ))}
                     <button
                       className=" bg-[#dedede] p-2 rounded-lg w-full flex flex-col items-center justify-center "
@@ -386,43 +309,37 @@ function EditEvent() {
             <aside className="--tracks-details w-[25%] h-full">
               <h1 className="text-2xl font-semibold">Tracks</h1>
               <div className="flex flex-col gap-2 mt-2 max-h-[80vh] overflow-y-auto">
-                {eventDetails.tracks.map((track, index) => (
-                  <EditableTrackBox
-                    val={eventDetails}
-                    track={track}
-                    index={index}
-                    key={index}
-                    setVal={setEventDetails}
-                  />
+                {hackathon.tracks.map((track, index) => (
+                  <EditableTrackBox val={hackathon} track={track} index={index} key={index} setVal={setHackathon} />
                 ))}{' '}
                 <button
                   className=" bg-[#dedede] p-2 rounded-lg w-full flex gap-2 items-center justify-center "
                   onClick={() => {
-                    setEventDetails({
-                      ...eventDetails,
+                    setHackathon({
+                      ...hackathon,
                       tracks: [
-                        {
-                          title: 'Track Title',
-                          description: 'This is a description of the track',
-                          prizes: [
-                            {
-                              title: 'First Prize',
-                              description: 'This is a description of the prize',
-                              amount: 100,
-                            },
-                            {
-                              title: 'Second  Prize',
-                              description: 'This is a description of the prize',
-                              amount: 100,
-                            },
-                            {
-                              title: 'Third Prize',
-                              description: 'This is a description of the prize',
-                              amount: 100,
-                            },
-                          ],
-                        },
-                        ...eventDetails.tracks,
+                        // {
+                        //   title: 'Track Title',
+                        //   description: 'This is a description of the track',
+                        //   prizes: [
+                        //     {
+                        //       title: 'First Prize',
+                        //       description: 'This is a description of the prize',
+                        //       amount: 100,
+                        //     },
+                        //     {
+                        //       title: 'Second  Prize',
+                        //       description: 'This is a description of the prize',
+                        //       amount: 100,
+                        //     },
+                        //     {
+                        //       title: 'Third Prize',
+                        //       description: 'This is a description of the prize',
+                        //       amount: 100,
+                        //     },
+                        //   ],
+                        // },
+                        ...hackathon.tracks,
                       ],
                     });
                   }}

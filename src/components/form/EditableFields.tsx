@@ -2,29 +2,23 @@ import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
 import patchHandler from '@/handlers/patch_handler';
-import { HackathonEditDetails } from '@/types';
+import { Hackathon, HackathonPrize, HackathonSponsor, HackathonTrack } from '@/types';
 import Toaster from '@/utils/toaster';
 import { FloppyDisk, Link, Medal, PencilSimple, Trash } from '@phosphor-icons/react';
 import { Dispatch, SetStateAction, useState } from 'react';
+
 const boxWrapperClass = 'w-full px-4 py-2 bg-[#E6E7EB70] relative rounded-md';
+
 export function EditableTrackBox({
   val,
   setVal,
   track,
   index,
 }: {
-  val: HackathonEditDetails;
-  track: {
-    title: string;
-    description: string;
-    prizes: {
-      title: string;
-      description: string;
-      amount: number;
-    }[];
-  };
+  val: Hackathon;
+  track: HackathonTrack;
   index: number;
-  setVal: Dispatch<SetStateAction<HackathonEditDetails>>;
+  setVal: Dispatch<SetStateAction<Hackathon>>;
 }) {
   const [isEditable, setIsEditable] = useState(false);
   const [trackData, setTrackData] = useState(track);
@@ -200,8 +194,8 @@ export function EditableTrackBox({
   );
 }
 interface EditableBoxProps {
-  val: HackathonEditDetails;
-  setVal: Dispatch<SetStateAction<HackathonEditDetails>>;
+  val: Hackathon;
+  setVal: Dispatch<SetStateAction<Hackathon>>;
   placeholder: string;
   type?: 'text' | 'number' | 'email';
   maxLength?: number;
@@ -225,7 +219,7 @@ export function EditableBox({
     setMutex(true);
     const toaster = Toaster.startLoad('Updating Details...');
 
-    const URL = `${ORG_URL}/${val.organizationID}/hackathons/${val.hackathonID}`;
+    const URL = `${ORG_URL}/${val.organizationID}/hackathons/${val.id}`;
     const res = await patchHandler(URL, data);
 
     if (res.statusCode === 200) {
@@ -249,7 +243,7 @@ export function EditableBox({
         onClick={() => {
           setIsEditable(!isEditable);
           if (isEditable) {
-            handleEditDetail({ field: val[field as keyof HackathonEditDetails] });
+            handleEditDetail({ field: val[field as keyof Hackathon] });
           }
         }}
       >
@@ -259,7 +253,7 @@ export function EditableBox({
 
       {isEditable && (
         <input
-          value={val[field as keyof HackathonEditDetails]?.toString() || ''}
+          value={val[field as keyof Hackathon]?.toString() || ''}
           onChange={e => {
             const details = { ...val, [field]: e.target.value };
             setVal(details);
@@ -271,9 +265,7 @@ export function EditableBox({
         />
       )}
       {!isEditable && (
-        <span className={`w-full h-full  ${className}`}>
-          {val[field as keyof HackathonEditDetails]?.toString() || ''}
-        </span>
+        <span className={`w-full h-full  ${className}`}>{val[field as keyof Hackathon]?.toString() || ''}</span>
       )}
     </div>
   );
@@ -284,16 +276,10 @@ export function EditableSponsorBox({
   sponsor,
   index,
 }: {
-  val: HackathonEditDetails;
-  sponsor: {
-    id?: string;
-    name: string;
-    title: string;
-    description: string;
-    link: string;
-  };
+  val: Hackathon;
+  sponsor: HackathonSponsor;
   index: number;
-  setVal: Dispatch<SetStateAction<HackathonEditDetails>>;
+  setVal: Dispatch<SetStateAction<Hackathon>>;
 }) {
   const [isEditable, setIsEditable] = useState(false);
   const [sponsorData, setSponsorData] = useState(sponsor);
@@ -345,9 +331,9 @@ export function EditableSponsorBox({
             if (isEditable && sponsorData.id) {
               handleEditSponsor(sponsorData.id, {
                 name: sponsorData.name,
-                link: sponsorData.link,
-                title: sponsorData.title,
-                description: sponsorData.description,
+                link: sponsorData.link || '',
+                title: sponsorData.title || '',
+                description: sponsorData.description || '',
               });
             }
             setIsEditable(!isEditable);
@@ -425,8 +411,8 @@ export function EditableSponsorBox({
           </span>
           <p className="text-sm -mt-1">{sponsorData.title}</p>
           <p className="text-xs">
-            {sponsorData.description.length > 50
-              ? sponsorData.description.slice(0, 30) + '...'
+            {sponsorData?.description && sponsorData?.description?.length > 50
+              ? sponsorData?.description?.slice(0, 30) + '...'
               : sponsorData.description}
           </p>
         </section>
@@ -440,14 +426,14 @@ export function EditableFAQBox({
   faq,
   index,
 }: {
-  val: HackathonEditDetails;
+  val: Hackathon;
   faq: {
     id?: string;
     question: string;
     answer: string;
   };
   index: number;
-  setVal: Dispatch<SetStateAction<HackathonEditDetails>>;
+  setVal: Dispatch<SetStateAction<Hackathon>>;
 }) {
   const [isEditable, setIsEditable] = useState(false);
   const [faqData, setFaqData] = useState(faq);
@@ -458,7 +444,7 @@ export function EditableFAQBox({
 
     const toaster = Toaster.startLoad('Updating the FAQ...');
 
-    const URL = `${ORG_URL}/${val.organizationID}/hackathons/faq/${val.hackathonID}`;
+    const URL = `${ORG_URL}/${val.organizationID}/hackathons/faq/${val.id}`;
     const res = await patchHandler(URL, data);
 
     if (res.statusCode === 200) {
