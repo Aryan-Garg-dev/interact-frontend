@@ -769,6 +769,7 @@ export interface Hackathon {
   eventID: string;
   history: HackathonHistory[];
   tracks: HackathonTrack[];
+  prizes: HackathonPrize[];
   sponsors: HackathonSponsor[];
   rounds: HackathonRound[];
 }
