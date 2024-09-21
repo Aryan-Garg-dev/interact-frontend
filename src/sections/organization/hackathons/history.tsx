@@ -4,9 +4,10 @@ import Created from '@/components/history/hackathon/created';
 import Edited from '@/components/history/hackathon/edited';
 import Deleted from '@/components/history/hackathon/deleted';
 import ModalWrapper from '@/wrappers/modal';
-import { useRouter } from 'next/router'; 
+import { useRouter } from 'next/router';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
+import getHandler from '@/handlers/get_handler';
 
 interface Props {
   hackathonID: string;
@@ -19,25 +20,26 @@ const HackathonHistories: React.FC<Props> = ({ hackathonID, setShow }) => {
   const currentOrg = useSelector(currentOrgSelector);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchHistories = async () => {
-      if (!currentOrg || !hackathonID) return;
+  const fetchHistories = async () => {
+    if (!currentOrg || !hackathonID) return;
 
-      try {
-        const response = await fetch(`/org/${currentOrg.id}/hackathons/${hackathonID}/history`);
-        if (response.ok) {
-          const data: HackathonHistory[] = await response.json();
-          setHistories(data);
-        } else {
-          console.error('Failed to fetch hackathon history');
-        }
-      } catch (error) {
-        console.error('Error fetching hackathon history:', error);
-      } finally {
-        setIsLoading(false);
+    try {
+      const URL = `/org/${currentOrg.id}/hackathons/${hackathonID}/history`;
+      const res = await getHandler(URL);
+
+      if (res.statusCode === 200) {
+        setHistories(res.data || []);
+      } else {
+        console.error(res.data.message || 'Failed to fetch hackathon history');
       }
-    };
+    } catch (error) {
+      console.error('Error fetching hackathon history:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchHistories();
   }, [currentOrg, hackathonID]);
 

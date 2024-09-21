@@ -15,9 +15,6 @@ const Edited = ({ history }: Props) => {
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
             Hackathon details updated:{' '}
-            <Link target="_blank" href={'/organisation/events/' + history.hackathonID} className="font-semibold">
-              {history.user.title}
-            </Link>{' '}
           </div>
           : <div>{history.deletedText}</div>
         </HackathonHistoryWrapper>
@@ -25,24 +22,16 @@ const Edited = ({ history }: Props) => {
     case 4:
       return (
         <HackathonHistoryWrapper history={history}>
-          <Link
-            target="_blank"
-            href={'/organisation/events/' + history.hackathonTrack.id}
-            className="w-fit bg-priority_low px-1 rounded-md flex-center gap-2"
-          >
-            Track Updated!
-            <ArrowUpRight weight="bold" />
-          </Link>
+          <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
+            Track updated!{' '}
+          </div>
         </HackathonHistoryWrapper>
       );
     case 7:
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-            Prize Updated:{' '}
-            <Link target="_blank" href={'/organisation/events/' + history.hackathonPrizeID} className="font-semibold">
-              {history.hackathonPrize.title}
-            </Link>{' '}
+            Prize Updated!{' '}
           </div>
           : <div>{history.deletedText}</div>
         </HackathonHistoryWrapper>
@@ -52,9 +41,6 @@ const Edited = ({ history }: Props) => {
             <HackathonHistoryWrapper history={history}>
               <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
                 Sponsor Updated:{' '}
-                <Link target="_blank" href={'/organisation/events/' + history.hackathonSponsorID} className="font-semibold">
-                  {history.hackathonSponsor.title}
-                </Link>{' '}
               </div>
               : <div>{history.deletedText}</div>
             </HackathonHistoryWrapper>
@@ -64,8 +50,6 @@ const Edited = ({ history }: Props) => {
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
             FAQ Updated:{' '}
-            <Link target="_blank" href={'/organisation/events/' + history.hackathonFAQID} className="font-semibold">
-            </Link>{' '}
           </div>
         </HackathonHistoryWrapper>
       );
@@ -74,9 +58,6 @@ const Edited = ({ history }: Props) => {
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
             Round updated:{' '}
-            <Link target="_blank" href={'/organisation/events/'} className="font-semibold">
-              {history.hackathonRoundID}
-            </Link>{' '}
           </div>
         </HackathonHistoryWrapper>
       );

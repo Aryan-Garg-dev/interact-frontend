@@ -883,6 +883,4 @@ export interface HackathonHistory {
     hackathonRound: HackathonRound;
     deletedText: string;
     createdAt: Date;
-    coordinators: User[];
-    judges: User[];
 }
