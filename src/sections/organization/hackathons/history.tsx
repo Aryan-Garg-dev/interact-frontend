@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import getHandler from '@/handlers/get_handler';
+import Toaster from '@/utils/toaster';
 
 interface Props {
   hackathonID: string;
@@ -21,24 +22,30 @@ const HackathonHistories: React.FC<Props> = ({ hackathonID, setShow }) => {
   const router = useRouter();
 
   const fetchHistories = async () => {
-    if (!currentOrg || !hackathonID) return;
+  if (!currentOrg || !hackathonID) return;
 
-    try {
-      const URL = `/org/${currentOrg.id}/hackathons/${hackathonID}/history`;
-      const res = await getHandler(URL);
-
+  setIsLoading(true);
+  const URL = `/org/${currentOrg.id}/hackathons/${hackathonID}/history`;
+  
+  getHandler(URL)
+    .then(res => {
       if (res.statusCode === 200) {
-        setHistories(res.data || []);
+        setHistories(res.data.histories || []);
       } else {
-        console.error(res.data.message || 'Failed to fetch hackathon history');
+        if (res.data.message) {
+          Toaster.error(res.data.message, 'error_toaster');
+        } else {
+          Toaster.error('Failed to fetch hackathon history', 'error_toaster');
+        }
       }
-    } catch (error) {
-      console.error('Error fetching hackathon history:', error);
-    } finally {
+    })
+    .catch(err => {
+      Toaster.error('Error fetching hackathon history', 'error_toaster');
+    })
+    .finally(() => {
       setIsLoading(false);
-    }
-  };
-
+    });
+    };
   useEffect(() => {
     fetchHistories();
   }, [currentOrg, hackathonID]);

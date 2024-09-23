@@ -1,3 +1,5 @@
+import Hackathon from '@/screens/hackathon/hackathon';
+import HackathonHistories from '@/sections/organization/hackathons/history';
 import { HackathonHistory } from '@/types';
 import HackathonHistoryWrapper from '@/wrappers/hackathon_history';
 import { ArrowUpRight } from '@phosphor-icons/react';
@@ -14,7 +16,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            created a Hackathon:{' '}
+            created a Hackathon:{history.hackathonID}
             🎉
           </div>
         </HackathonHistoryWrapper>
@@ -23,8 +25,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            Added Tracks:
-            🎉
+          Added a Track: {history.hackathonTrack.title} 🎉
           </div>
         </HackathonHistoryWrapper>
       );
@@ -32,8 +33,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
            <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            Added Prize:
-            🎉
+           Added Prize: {history.hackathonPrize.amount} 🎉
           </div>
         </HackathonHistoryWrapper>
       );
@@ -41,7 +41,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            Added a Sponsor:{' '}
+            Added a Sponsor:{history.hackathonSponsor.name}
             🎉
           </div>
         </HackathonHistoryWrapper>
@@ -50,7 +50,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            Added a FAQ:{' '}
+            Added a FAQ:{history.hackathonFAQ.question}
             🎉
           </div>
         </HackathonHistoryWrapper>
@@ -59,7 +59,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            Added a Round:{' '}
+            Added a Round:{history.hackathonRound.id}
             🎉
           </div>
         </HackathonHistoryWrapper>
@@ -68,7 +68,10 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            Added a Coordinator:{' '}
+            Added Coordinator: 
+            {history.coordinators.map((coordinator, index) => (
+              <span key={index}>{coordinator.name}{index < history.coordinators.length - 1 ? ', ' : ''}</span>
+            ))}
             🎉
           </div>
         </HackathonHistoryWrapper>
@@ -77,7 +80,10 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-          Invited a Judge:{' '}
+            Added Coordinator: 
+            {history.judges.map((judge, index) => (
+              <span key={index}>{judge.name}{index < history.judges.length - 1 ? ', ' : ''}</span>
+            ))}
             🎉
           </div>
         </HackathonHistoryWrapper>
@@ -86,7 +92,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-          Created a Team:{' '}
+          Created a Team:{history.hackathonTeam.title}
             🎉
           </div>
         </HackathonHistoryWrapper>

@@ -14,7 +14,7 @@ const Edited = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-            Hackathon details updated:{' '}
+            Hackathon details updated:{history.hackathonID}
           </div>
           : <div>{history.deletedText}</div>
         </HackathonHistoryWrapper>
@@ -23,7 +23,7 @@ const Edited = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-            Track updated!{' '}
+            Track updated!{history.hackathonTrack.title}
           </div>
         </HackathonHistoryWrapper>
       );
@@ -31,7 +31,7 @@ const Edited = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-            Prize Updated!{' '}
+            Prize Updated!{history.hackathonPrize.amount}
           </div>
           : <div>{history.deletedText}</div>
         </HackathonHistoryWrapper>
@@ -40,7 +40,7 @@ const Edited = ({ history }: Props) => {
         return (
             <HackathonHistoryWrapper history={history}>
               <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-                Sponsor Updated:{' '}
+                Sponsor Updated:{history.hackathonSponsor.name}
               </div>
               : <div>{history.deletedText}</div>
             </HackathonHistoryWrapper>
@@ -49,7 +49,7 @@ const Edited = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-            FAQ Updated:{' '}
+            FAQ Updated:{history.hackathonFAQ.question}
           </div>
         </HackathonHistoryWrapper>
       );
@@ -57,7 +57,7 @@ const Edited = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-            Round updated:{' '}
+            Round updated:{history.hackathonRound.id}
           </div>
         </HackathonHistoryWrapper>
       );
