@@ -862,13 +862,27 @@ export interface HackathonRoundTeamScore {
 }
 
 export interface HackathonHistory {
-  id: string;
-  hackathonID: string;
-  historyType: number;
-  senderID: string;
-  sender: User;
-  userID?: string;
-  user?: User;
-  deletedText?: string;
-  createdAt: Date;
+    id: string;
+    hackathonID: string;
+    historyType: number;
+    senderID: string;
+    sender: User;
+    userID?: string;
+    user: User;
+    hackathonTrackID?: string;
+    hackathonTrack: HackathonTrack;
+    hackathonPrizeID?: string;
+    hackathonPrize: HackathonPrize;
+    hackathonSponsorID?: string;
+    hackathonSponsor: HackathonSponsor;
+    hackathonFAQID?: string;
+    hackathonFAQ: HackathonFAQ;
+    hackathonTeamID?: string;
+    hackathonTeam: HackathonTeam;
+    hackathonRoundID?: string;
+    hackathonRound: HackathonRound;
+    deletedText: string;
+    createdAt: Date;
+    coordinators: User[];
+    judges: User[];
 }

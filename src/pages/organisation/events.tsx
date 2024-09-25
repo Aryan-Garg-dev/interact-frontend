@@ -27,6 +27,7 @@ import AccessTree from '@/components/organization/access_tree';
 import ViewInvitations from '@/sections/organization/events/view_invitations';
 import EditCoHosts from '@/sections/organization/events/edit_cohosts';
 import EventHistory from '@/sections/organization/events/history';
+import HackathonHistories from '@/sections/organization/hackathons/history';
 import NoEvents from '@/components/fillers/events';
 import NewHackathon from '@/sections/organization/hackathons/new_hackathon';
 import EditHackathonCoordinators from '@/sections/organization/hackathons/edit_hackathon_coordinators';
@@ -178,7 +179,13 @@ const Events = () => {
             {clickedOnNewHackathon && <NewHackathon setEvents={setEvents} setShow={setClickedOnNewHackathon} />}
             {clickedOnNewEvent && <NewEvent setEvents={setEvents} setShow={setClickedOnNewEvent} />}
             {clickedOnViewInvitations && <ViewInvitations setShow={setClickedOnViewInvitations} />}
-            {clickedOnViewHistory && <EventHistory eventID={clickedEditEvent.id} setShow={setClickedOnViewHistory} />}
+            {clickedOnViewHistory && (
+            clickedEditEvent.hackathonID ? (
+            <HackathonHistories hackathonID={clickedEditEvent.hackathonID} setShow={setClickedOnViewHistory} />
+            ) : (
+            <EventHistory eventID={clickedEditEvent.id} setShow={setClickedOnViewHistory} />
+           )
+          )}
             {clickedOnEditEvent && (
               <EditEvent event={clickedEditEvent} setEvents={setEvents} setShow={setClickedOnEditEvent} />
             )}
