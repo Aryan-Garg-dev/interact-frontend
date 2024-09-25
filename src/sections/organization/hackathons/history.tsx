@@ -9,6 +9,7 @@ import { currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
+import Loader from '@/components/common/loader';
 
 interface Props {
   hackathonID: string;
@@ -22,39 +23,39 @@ const HackathonHistories: React.FC<Props> = ({ hackathonID, setShow }) => {
   const router = useRouter();
 
   const fetchHistories = async () => {
-  if (!currentOrg || !hackathonID) return;
+    if (!currentOrg || !hackathonID) return;
 
-  setIsLoading(true);
-  const URL = `/org/${currentOrg.id}/hackathons/${hackathonID}/history`;
-  
-  getHandler(URL)
-    .then(res => {
-      if (res.statusCode === 200) {
-        setHistories(res.data.histories || []);
-      } else {
-        if (res.data.message) {
-          Toaster.error(res.data.message, 'error_toaster');
+    setIsLoading(true);
+    const URL = `/org/${currentOrg.id}/hackathons/${hackathonID}/history`;
+
+    getHandler(URL)
+      .then(res => {
+        if (res.statusCode === 200) {
+          setHistories(res.data.history || []);
         } else {
-          Toaster.error('Failed to fetch hackathon history', 'error_toaster');
+          if (res.data.message) {
+            Toaster.error(res.data.message, 'error_toaster');
+          } else {
+            Toaster.error('Failed to fetch hackathon history', 'error_toaster');
+          }
         }
-      }
-    })
-    .catch(err => {
-      Toaster.error('Error fetching hackathon history', 'error_toaster');
-    })
-    .finally(() => {
-      setIsLoading(false);
-    });
-    };
+      })
+      .catch(err => {
+        Toaster.error('Error fetching hackathon history', 'error_toaster');
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
   useEffect(() => {
     fetchHistories();
   }, [currentOrg, hackathonID]);
 
   return (
-    <ModalWrapper setShow={setShow} width="1/3" height="fit" blur={true} modalStyles={{ top: '40%' }}>
+    <ModalWrapper setShow={setShow} width="1/3" height="fit" blur={true} modalStyles={{ top: '50%' }}>
       <div className="w-full flex flex-col gap-3">
         {isLoading ? (
-          <p>Loading...</p>
+          <Loader />
         ) : histories.length > 0 ? (
           histories.map(history => {
             switch (history.historyType) {
@@ -66,7 +67,6 @@ const HackathonHistories: React.FC<Props> = ({ hackathonID, setShow }) => {
               case 15:
               case 18:
               case 20:
-              case 22:
                 return <Created key={history.id} history={history} />;
               case 1:
               case 4:
@@ -74,6 +74,9 @@ const HackathonHistories: React.FC<Props> = ({ hackathonID, setShow }) => {
               case 10:
               case 13:
               case 16:
+              case 22:
+              case 23:
+              case 24:
                 return <Edited key={history.id} history={history} />;
               case 2:
               case 5:

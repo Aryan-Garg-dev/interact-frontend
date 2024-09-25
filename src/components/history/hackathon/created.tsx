@@ -15,25 +15,22 @@ const Created = ({ history }: Props) => {
     case 0:
       return (
         <HackathonHistoryWrapper history={history}>
-          <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            created a Hackathon:{' '}
-            🎉
-          </div>
+          <div className="w-fit bg-priority_low px-1 rounded-md gap-4">created a Hackathon: 🎉</div>
         </HackathonHistoryWrapper>
       );
     case 3:
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-          Added a Track: {history.hackathonTrack.title} 🎉
+            Added a Track: {history.hackathonTrack.title} 🎉
           </div>
         </HackathonHistoryWrapper>
       );
     case 6:
       return (
         <HackathonHistoryWrapper history={history}>
-           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-           Added Prize: {history.hackathonPrize.title} 🎉
+          <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
+            Added Prize: {history.hackathonPrize.title} 🎉
           </div>
         </HackathonHistoryWrapper>
       );
@@ -78,15 +75,6 @@ const Created = ({ history }: Props) => {
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
             Added a Judge:{history.user.name}
-            🎉
-          </div>
-        </HackathonHistoryWrapper>
-      );
-    case 22:
-      return (
-        <HackathonHistoryWrapper history={history}>
-          <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-          Created a Team:{history.hackathonTeam.title}
             🎉
           </div>
         </HackathonHistoryWrapper>

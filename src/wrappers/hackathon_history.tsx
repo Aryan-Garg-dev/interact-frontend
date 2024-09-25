@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 interface Props {
   children: ReactNode;
-  history: HackathonHistory | EventHistory;
+  history: HackathonHistory;
 }
 
 const HackathonHistoryWrapper = ({ children, history }: Props) => {
@@ -17,16 +17,16 @@ const HackathonHistoryWrapper = ({ children, history }: Props) => {
       className="w-full flex flex-col gap-1 p-3 dark:text-white hover:bg-primary_comp dark:hover:bg-[#ae8abd39] rounded-xl font-primary transition-ease-200"
     >
       <div className="w-full flex justify-between items-center">
-        <Link href={`/explore/user/${history.user.username}`} className="w-fit flex-center gap-1">
+        <Link href={`/explore/user/${history.sender.username}`} className="w-fit flex-center gap-1">
           <Image
             crossOrigin="anonymous"
             width={50}
             height={50}
             alt={'User Pic'}
-            src={`${USER_PROFILE_PIC_URL}/${history.user?.profilePic}`}
+            src={`${USER_PROFILE_PIC_URL}/${history.sender?.profilePic}`}
             className="rounded-full w-4 h-4 border-[1px] border-black"
           />
-          <div className="font-semibold">{history.user.name}</div>
+          <div className="font-semibold">{history.sender.name}</div>
         </Link>
         <div className="text-xxs">{getDisplayTime(history.createdAt, false)}</div>
       </div>

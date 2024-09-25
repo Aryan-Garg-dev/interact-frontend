@@ -13,10 +13,8 @@ const Edited = ({ history }: Props) => {
     case 1:
       return (
         <HackathonHistoryWrapper history={history}>
-          <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-            Hackathon details updated:{''}
-          </div>
-          : <div>{history.deletedText}</div>
+          <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">Hackathon details updated:{''}</div>:{' '}
+          <div>{history.deletedText}</div>
         </HackathonHistoryWrapper>
       );
     case 4:
@@ -37,20 +35,18 @@ const Edited = ({ history }: Props) => {
         </HackathonHistoryWrapper>
       );
     case 10:
-        return (
-            <HackathonHistoryWrapper history={history}>
-              <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-                Sponsor Updated:{history.hackathonSponsor.name}
-              </div>
-              : <div>{history.deletedText}</div>
-            </HackathonHistoryWrapper>
-          );
-    case 13:
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-            FAQ Updated:{history.hackathonFAQ.question}
+            Sponsor Updated:{history.hackathonSponsor.name}
           </div>
+          : <div>{history.deletedText}</div>
+        </HackathonHistoryWrapper>
+      );
+    case 13:
+      return (
+        <HackathonHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">FAQ Updated:{history.hackathonFAQ.question}</div>
         </HackathonHistoryWrapper>
       );
     case 16:
@@ -65,26 +61,26 @@ const Edited = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-          {history.user.name}Eliminated a Team:{history.hackathonTeam.title}
+            {history.user.name}Eliminated a Team:{history.hackathonTeam.title}
           </div>
         </HackathonHistoryWrapper>
       );
-      case 23:
-        return (
-          <HackathonHistoryWrapper history={history}>
-            <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
+    case 23:
+      return (
+        <HackathonHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
             {history.user.name}Un-eliminated a Team:{history.hackathonTeam.title}
-            </div>
-          </HackathonHistoryWrapper>
-        );
-        case 24:
-          return (
-            <HackathonHistoryWrapper history={history}>
-              <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-              {history.user.name}Scored a Team:{history.hackathonTeam.title}
-              </div>
-            </HackathonHistoryWrapper>
-          );
+          </div>
+        </HackathonHistoryWrapper>
+      );
+    case 24:
+      return (
+        <HackathonHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
+            {history.user.name}Scored a Team(Overall):{history.hackathonTeam.title}
+          </div>
+        </HackathonHistoryWrapper>
+      );
     default:
       return <></>;
   }

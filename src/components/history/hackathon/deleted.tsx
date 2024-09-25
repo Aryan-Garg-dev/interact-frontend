@@ -60,14 +60,14 @@ const Deleted = ({ history }: Props) => {
     case 19:
       return (
         <HackathonHistoryWrapper history={history}>
-          <div className="w-fit bg-priority_high px-1 rounded-md gap-4">Removed a coordinator</div>
+          <div className="w-fit bg-priority_high px-1 rounded-md gap-4">Removed a coordinator: {history.user.name}</div>
         </HackathonHistoryWrapper>
       );
     case 21:
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_high px-1 rounded-md gap-4 line-clamp-1">
-            Removed a judge: <span className="font-semibold">{history.deletedText}</span>
+            Removed a judge: <span className="font-semibold">{history.user.name}</span>
           </div>
         </HackathonHistoryWrapper>
       );
