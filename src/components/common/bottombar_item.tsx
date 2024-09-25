@@ -7,12 +7,13 @@ interface Props {
   active: number;
   setActive: React.Dispatch<React.SetStateAction<number>>;
   index: number;
+  org?: boolean;
 }
 
-const BottomBarItem = ({ title, icon, active, setActive, index }: Props) => {
+const BottomBarItem = ({ title, icon, active, setActive, index, org = false }: Props) => {
   return (
     <Link
-      href={`/${title.toLowerCase()}`}
+      href={`${org ? '/organisation' : ''}/${title.toLowerCase()}`}
       onClick={() => setActive(index)}
       className={`w-16 h-14 p-2 flex-center rounded-xl ${
         active == index
