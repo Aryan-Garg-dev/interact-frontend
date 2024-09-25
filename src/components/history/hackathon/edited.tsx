@@ -61,6 +61,30 @@ const Edited = ({ history }: Props) => {
           </div>
         </HackathonHistoryWrapper>
       );
+    case 22:
+      return (
+        <HackathonHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
+          {history.user.name}Eliminated a Team:{history.hackathonTeam.title}
+          </div>
+        </HackathonHistoryWrapper>
+      );
+      case 23:
+        return (
+          <HackathonHistoryWrapper history={history}>
+            <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
+            {history.user.name}Un-eliminated a Team:{history.hackathonTeam.title}
+            </div>
+          </HackathonHistoryWrapper>
+        );
+        case 24:
+          return (
+            <HackathonHistoryWrapper history={history}>
+              <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
+              {history.user.name}Scored a Team:{history.hackathonTeam.title}
+              </div>
+            </HackathonHistoryWrapper>
+          );
     default:
       return <></>;
   }
