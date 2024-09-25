@@ -14,7 +14,7 @@ const Edited = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-            Hackathon details updated:{history.hackathonID}
+            Hackathon details updated:{''}
           </div>
           : <div>{history.deletedText}</div>
         </HackathonHistoryWrapper>
@@ -31,7 +31,7 @@ const Edited = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-            Prize Updated!{history.hackathonPrize.amount}
+            Prize Updated!{history.hackathonPrize.title}
           </div>
           : <div>{history.deletedText}</div>
         </HackathonHistoryWrapper>
@@ -57,7 +57,7 @@ const Edited = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
-            Round updated:{history.hackathonRound.id}
+            Round updated:{history.hackathonRound.index}
           </div>
         </HackathonHistoryWrapper>
       );

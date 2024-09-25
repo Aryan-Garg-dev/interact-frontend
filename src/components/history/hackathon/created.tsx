@@ -16,7 +16,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            created a Hackathon:{history.hackathonID}
+            created a Hackathon:{' '}
             🎉
           </div>
         </HackathonHistoryWrapper>
@@ -33,7 +33,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
            <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-           Added Prize: {history.hackathonPrize.amount} 🎉
+           Added Prize: {history.hackathonPrize.title} 🎉
           </div>
         </HackathonHistoryWrapper>
       );
@@ -59,7 +59,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            Added a Round:{history.hackathonRound.id}
+            Added a Round:{history.hackathonRound.index}
             🎉
           </div>
         </HackathonHistoryWrapper>
@@ -68,10 +68,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            Added Coordinator: 
-            {history.coordinators.map((coordinator, index) => (
-              <span key={index}>{coordinator.name}{index < history.coordinators.length - 1 ? ', ' : ''}</span>
-            ))}
+            Added a Coordinator:{history.user.name}
             🎉
           </div>
         </HackathonHistoryWrapper>
@@ -80,10 +77,7 @@ const Created = ({ history }: Props) => {
       return (
         <HackathonHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
-            Added Coordinator: 
-            {history.judges.map((judge, index) => (
-              <span key={index}>{judge.name}{index < history.judges.length - 1 ? ', ' : ''}</span>
-            ))}
+            Added a Judge:{history.user.name}
             🎉
           </div>
         </HackathonHistoryWrapper>
