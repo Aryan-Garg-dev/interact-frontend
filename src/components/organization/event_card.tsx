@@ -70,17 +70,19 @@ const EventCard = ({
                 <Trash size={18} />
               </div>
             )}
-            <div
-              onClick={el => {
-                el.stopPropagation();
-                el.preventDefault();
-                if (setClickedEditEvent) setClickedEditEvent(event);
-                if (setClickedOnEditEvent) setClickedOnEditEvent(true);
-              }}
-              className="bg-white text-gray-500 text-xxs px-2 py-1 rounded-lg"
-            >
-              <PencilSimple size={18} />
-            </div>
+            {!event.hackathonID && (
+              <div
+                onClick={el => {
+                  el.stopPropagation();
+                  el.preventDefault();
+                  if (setClickedEditEvent) setClickedEditEvent(event);
+                  if (setClickedOnEditEvent) setClickedOnEditEvent(true);
+                }}
+                className="bg-white text-gray-500 text-xxs px-2 py-1 rounded-lg"
+              >
+                <PencilSimple size={18} />
+              </div>
+            )}
             <div
               onClick={el => {
                 el.stopPropagation();
