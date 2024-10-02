@@ -173,14 +173,12 @@ const Tasks = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {checkOrgAccess(ORG_SENIOR) && (
-                <Plus
-                  onClick={() => setClickedOnNewTask(true)}
-                  size={42}
-                  className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
-                  weight="regular"
-                />
-              )}
+              <Plus
+                onClick={() => setClickedOnNewTask(true)}
+                size={42}
+                className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
+                weight="regular"
+              />
               <Info
                 onClick={() => setClickedOnInfo(true)}
                 size={42}
