@@ -82,9 +82,15 @@ const ProjectView = ({
     try {
       slug = projectSlugs[clickedProjectIndex];
     } finally {
-      const URL = checkProjectAccess(PROJECT_MEMBER, clickedProject.id, clickedProject)
+      let URL = checkProjectAccess(PROJECT_MEMBER, clickedProject.id, clickedProject)
         ? `${PROJECT_URL}/${slug}`
         : `${ORG_URL}/${clickedProject.organizationID}/projects/${slug}`;
+
+      if (
+        !clickedProject.organizationID ||
+        !user.organizationMemberships?.map(m => m.organizationID).includes(clickedProject.organizationID)
+      )
+        URL = `${PROJECT_URL}/${slug}`;
 
       const res = await getHandler(URL, abortController.signal);
       if (res.statusCode == 200) {

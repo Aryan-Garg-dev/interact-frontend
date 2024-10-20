@@ -80,7 +80,7 @@ const accessDefinitions: Record<ACCESS_TYPE, Access[]> = {
   ],
   task: [
     { task: "See Organisation's Tasks", canMember: true, canSenior: true, canManager: true },
-    { task: 'Add new Tasks', canMember: false, canSenior: true, canManager: true },
+    { task: 'Add new Tasks', canMember: true, canSenior: true, canManager: true },
     { task: "Edit Tasks' Details", canMember: false, canSenior: true, canManager: true },
     { task: "Change Tasks' Users", canMember: false, canSenior: true, canManager: true },
     { task: 'Delete Tasks', canMember: false, canSenior: true, canManager: true },

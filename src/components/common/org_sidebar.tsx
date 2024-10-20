@@ -20,9 +20,9 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { navbarOpenSelector } from '@/slices/feedSlice';
 import useUserStateFetcher from '@/hooks/user_fetcher';
-import BottomBar from './bottombar';
 import { userSelector } from '@/slices/userSlice';
 import { currentOrgSelector, resetCurrentOrg } from '@/slices/orgSlice';
+import OrgBottomBar from './org_bottombar';
 
 interface Props {
   index: number;
@@ -243,7 +243,7 @@ const OrgSidebar = ({ index }: Props) => {
           size={24}
         /> */}
       </div>
-      <BottomBar index={index} />
+      <OrgBottomBar index={index} />
     </>
   );
 };
