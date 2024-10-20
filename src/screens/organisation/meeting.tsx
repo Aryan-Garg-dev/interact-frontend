@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 interface Props {
   callbackURL: string;
-  duration: number | null; // Duration in hours
+  duration?: number; // Duration in hours
 }
 
 function Meeting({ callbackURL, duration }: Props) {
@@ -21,7 +21,7 @@ function Meeting({ callbackURL, duration }: Props) {
   const [remainingMinutes, setRemainingMinutes] = useState(0);
 
   useEffect(() => {
-    if (duration !== null) {
+    if (duration !== undefined) {
       const target = new Date();
       target.setHours(target.getHours() + duration);
       setTargetTime(target);

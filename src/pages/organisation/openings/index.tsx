@@ -18,12 +18,8 @@ import { SERVER_ERROR } from '@/config/errors';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import AccessTree from '@/components/organization/access_tree';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
-<<<<<<< HEAD
-import WidthCheck from '@/utils/wrappers/widthCheck';
 import SubscriptionsConfig from '@/config/subscriptions';
 import Mascot from '@/components/fillers/mascot';
-=======
->>>>>>> dev
 
 const Openings = () => {
   const [loading, setLoading] = useState(true);

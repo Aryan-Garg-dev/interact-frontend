@@ -7,21 +7,14 @@ interface Props {
   required?: boolean;
   border?: boolean;
   disabled?: boolean;
-  border?: boolean;
 }
 
 const Checkbox = ({ label, val, setVal, required = false, disabled = false, border = true }: Props) => {
   return (
     <label
-<<<<<<< HEAD
-      className={`select-none text-sm gap-2 ${border && 'border-[1px] border-gray-400'} rounded-lg ${
-        label && 'w-full flex justify-between items-center p-2'
-      } ${disabled ? 'cursor-default' : 'cursor-pointer'}`}
-=======
       className={`w-full flex justify-between  select-none items-center text-sm gap-2 ${
         border && 'border-[1px] border-gray-400'
       } rounded-lg p-2 ${disabled ? 'cursor-default' : 'cursor-pointer'}`}
->>>>>>> dev
     >
       {label && (
         <div className="text-base font-medium text-gray-500">
