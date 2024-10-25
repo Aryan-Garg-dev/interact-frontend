@@ -21,8 +21,8 @@ const Projects = ({ bookmark, setClick, fetchBookmarks }: Props) => {
   const open = useSelector(navbarOpenSelector);
 
   return (
-    <div className="w-full m-auto max-lg:w-[90vw] flex flex-col gap-4 font-primary dark:text-white pt-8 max-lg:pt-4">
-      <div className="flex items-center gap-2">
+    <div className="w-full flex flex-col gap-4 font-primary dark:text-white pt-6">
+      <div className="flex items-center gap-2 pl-8">
         <ArrowArcLeft
           onClick={() => {
             if (fetchBookmarks) fetchBookmarks();
@@ -36,10 +36,14 @@ const Projects = ({ bookmark, setClick, fetchBookmarks }: Props) => {
       {bookmark.projectItems?.length > 0 ? (
         <div
           className={`w-full grid ${
-            open ? 'grid-cols-3' : 'grid-cols-4'
-          } max-lg:grid-cols-3 max-md:grid-cols-1 gap-1 transition-ease-out-500 justify-items-center`}
+            bookmark.projectItems?.length < 4
+              ? `grid-cols-${bookmark.projectItems?.length} px-12`
+              : open
+              ? 'grid-cols-3 px-8 gap-4'
+              : 'grid-cols-3 px-8 gap-8'
+          } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 max-md:px-4 transition-ease-out-500 justify-items-center`}
         >
-          {clickedOnProject ? (
+          {clickedOnProject && (
             <ProjectView
               projectSlugs={bookmark.projectItems.map(projectItem => projectItem.project.slug)}
               clickedProjectIndex={clickedProjectIndex}
@@ -48,14 +52,13 @@ const Projects = ({ bookmark, setClick, fetchBookmarks }: Props) => {
               fadeIn={fadeInProject}
               setFadeIn={setFadeInProject}
             />
-          ) : (
-            <></>
           )}
           {bookmark.projectItems.map((projectItem, index) => {
             return (
               <ProjectCard
                 key={projectItem.id}
                 index={index}
+                size={open || bookmark.projectItems.length < 4 ? '64' : '72'}
                 project={projectItem.project}
                 setClickedOnProject={setClickedOnProject}
                 setClickedProjectIndex={setClickedProjectIndex}

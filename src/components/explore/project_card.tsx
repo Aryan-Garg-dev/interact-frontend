@@ -39,7 +39,7 @@ const ProjectCard = ({ index, project, size = 72, setClickedOnProject, setClicke
       }}
       className={`w-${size} h-${size} max-lg:w-60 max-lg:h-60 max-md:w-72 max-md:h-72 rounded-lg relative group cursor-pointer transition-ease-out-500 animate-fade_third`}
     >
-      <div className="w-full h-full  absolute top-0 hidden group-hover:flex animate-fade_third justify-end z-[6] rounded-lg p-1">
+      <div className="w-full h-full absolute top-0 hidden group-hover:flex animate-fade_third justify-end z-[6] rounded-lg p-1">
         {/* <BookmarkSimple size={24}  className="opacity-75" /> */}
       </div>
       <div className="w-full h-full rounded-lg overflow-clip p-4 text-sm backdrop-blur-xl text-white absolute top-0 left-0 bg-gradient-to-b from-[#00000080] z-[5] to-transparent opacity-0 group-hover:opacity-100 transition-ease-300"></div>

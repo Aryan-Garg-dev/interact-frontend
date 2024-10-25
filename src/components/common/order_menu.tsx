@@ -6,7 +6,6 @@ interface Props {
   orders: string[];
   current: string;
   setState: React.Dispatch<React.SetStateAction<string>>;
-  smallerTextForMD?: boolean;
   addSearch?: boolean;
   search?: string;
   setSearch?: React.Dispatch<React.SetStateAction<string>>;
@@ -19,7 +18,6 @@ const OrderMenu = ({
   orders,
   current,
   setState,
-  smallerTextForMD = false,
   addSearch = false,
   search,
   setSearch,

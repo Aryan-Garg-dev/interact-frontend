@@ -4,12 +4,12 @@ interface WrapperProps {
   children: ReactNode;
 }
 
-const SideWrapper: React.FC<WrapperProps> = ({ children }) => {
-  return (
-    <div className="w-sidebar_open h-screen backdrop-blur-sm bg-sidebar dark:bg-dark_sidebar pt-navbar sticky top-0 py-6 flex flex-col gap-2 max-md:hidden">
-      {children}
-    </div>
-  );
+const SideBarWrapper: React.FC<WrapperProps> = ({ children }) => {
+  return <div className="w-1/3 flex flex-col gap-4 max-md:hidden">{children}</div>;
 };
 
-export default SideWrapper;
+export const SidePrimeWrapper: React.FC<WrapperProps> = ({ children }) => {
+  return <div className="w-full backdrop-blur-sm bg-white dark:bg-dark_sidebar">{children}</div>;
+};
+
+export default SideBarWrapper;

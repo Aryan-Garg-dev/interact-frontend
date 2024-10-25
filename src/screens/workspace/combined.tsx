@@ -12,10 +12,9 @@ import { useSelector } from 'react-redux';
 import NoProjects from '@/components/fillers/your_projects';
 import { navbarOpenSelector } from '@/slices/feedSlice';
 import { SERVER_ERROR } from '@/config/errors';
-import NewButton from '@/components/buttons/new_btn';
 import OrderMenu from '@/components/common/order_menu';
 
-const YourProjects = () => {
+const CombinedProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState('activity');
@@ -33,14 +32,11 @@ const YourProjects = () => {
 
   const getProjects = (abortController: AbortController) => {
     setLoading(true);
-    const URL = `${WORKSPACE_URL}/my?order=${order}&search=${search}`;
+    const URL = `${WORKSPACE_URL}/projects?order=${order}&search=${search}`;
     getHandler(URL, abortController.signal)
       .then(res => {
         if (res.statusCode === 200) {
-          let projectsData = res.data.projects || [];
-          projectsData = projectsData.map((project: Project) => {
-            return { ...project, user };
-          });
+          const projectsData = res.data.projects || [];
           setProjects(projectsData);
           const projectSlug = new URLSearchParams(window.location.search).get('project');
           if (projectSlug && projectSlug != '') {
@@ -83,9 +79,7 @@ const YourProjects = () => {
   }, [order, search]);
 
   return (
-    <div className="w-full px-2">
-      {clickedOnNewProject && <NewProject setShow={setClickedOnNewProject} setProjects={setProjects} />}
-      <NewButton show={!clickedOnNewProject} onClick={() => setClickedOnNewProject(true)} />
+    <div className="w-full pt-6">
       <OrderMenu
         orders={['activity', 'most_liked', 'most_viewed', 'latest']}
         current={order}
@@ -100,8 +94,12 @@ const YourProjects = () => {
       ) : projects.length > 0 ? (
         <div
           className={`w-full grid ${
-            navbarOpen ? 'grid-cols-3 px-12 gap-12' : 'grid-cols-4 px-12 gap-8'
-          } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 max-md:px-4 max-md:justify-items-center py-8 transition-ease-out-500`}
+            projects.length < 4
+              ? `grid-cols-${projects.length} px-12`
+              : navbarOpen
+              ? 'grid-cols-3 px-8 gap-4'
+              : 'grid-cols-3 px-8 gap-8'
+          } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 max-md:px-4 items-center justify-items-center transition-ease-out-500`}
         >
           {clickedOnProject && (
             <ProjectView
@@ -120,7 +118,7 @@ const YourProjects = () => {
               <ProjectCard
                 key={project.id}
                 index={index}
-                size="[24vw]"
+                size={navbarOpen || projects.length < 4 ? '64' : '72'}
                 project={project}
                 setProjects={setProjects}
                 setClickedOnProject={setClickedOnProject}
@@ -136,4 +134,4 @@ const YourProjects = () => {
   );
 };
 
-export default YourProjects;
+export default CombinedProjects;

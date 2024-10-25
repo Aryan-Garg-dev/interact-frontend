@@ -9,7 +9,7 @@ const NoProjectBookmarks = () => {
     <Link
       href={'/explore'}
       onClick={() => dispatch(setExploreTab(0))}
-      className="w-2/3 max-md:w-[90%] h-fit mx-auto my-5 px-12 max-md:px-8 py-8 rounded-md font-primary dark:text-white border-gray-300 border-[1px] bg-white dark:bg-dark_primary_comp hover:shadow-lg dark:hover:shadow-2xl flex-center flex-col gap-2 transition-ease-500"
+      className="w-full h-fit mx-auto px-12 max-md:px-8 py-8 rounded-md font-primary dark:text-white flex-center flex-col gap-2 transition-ease-500"
     >
       <div className="text-xl max-md:text-lg font-medium text-center">
         <span className="text-2xl font-semibold">Whoops! </span> aren&apos;t you saving your favorite projects?

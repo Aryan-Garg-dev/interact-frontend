@@ -65,7 +65,7 @@ const Projects = () => {
 
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      setProjects([res.data.project] || []);
+      setProjects([res.data.project]);
 
       if (res.data.project) {
         setClickedProjectIndex(0);
@@ -105,24 +105,28 @@ const Projects = () => {
 
   return (
     <div>
-      <OrderMenu
-        orders={['trending', 'most_liked', 'most_viewed', 'latest']}
-        current={order}
-        setState={setOrder}
-        zIndex={20}
-      />
+      <div className="w-full flex justify-between pt-4 px-8">
+        <OrderMenu
+          orders={['trending', 'most_liked', 'most_viewed', 'latest']}
+          current={order}
+          setState={setOrder}
+          fixed={false}
+          zIndex={20}
+        />
+      </div>
+
       {loading ? (
         <Loader />
       ) : (
-        <div className="w-full py-2">
+        <div className="w-full pt-4">
           {projects.length > 0 ? (
             <InfiniteScroll
               className={`w-full grid ${
                 projects.length < 4
                   ? `grid-cols-${projects.length} px-12`
                   : navbarOpen
-                  ? 'grid-cols-3 px-8 gap-8'
-                  : 'grid-cols-4 px-8 gap-8'
+                  ? 'grid-cols-3 px-8 gap-4'
+                  : 'grid-cols-3 px-8 gap-8'
               } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 max-md:px-4 items-center justify-items-center transition-ease-out-500`}
               // className={`${
               //   navbarOpen ? 'w-[calc(100vw-380px)]' : 'w-[calc(100vw-180px)]'
@@ -152,7 +156,7 @@ const Projects = () => {
                       key={project.id}
                       index={index}
                       // size={navbarOpen || projects.length < 4 ? '[21vw]' : '80'}
-                      size={navbarOpen || projects.length < 4 ? '[24vw]' : '72'}
+                      size={navbarOpen || projects.length < 4 ? '64' : '72'}
                       project={project}
                       setClickedOnProject={setClickedOnProject}
                       setClickedProjectIndex={setClickedProjectIndex}
