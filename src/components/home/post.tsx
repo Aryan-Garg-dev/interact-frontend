@@ -129,9 +129,9 @@ const PostComponent = ({
   return (
     <div
       onClick={() => setClickedOnOptions(false)}
-      className={`w-full relative bg-white dark:bg-transparent font-primary flex gap-1 rounded-lg dark:rounded-none dark:text-white border-gray-300 border-[1px] dark:border-x-0 dark:border-t-0 dark:border-dark_primary_btn ${
-        !isRepost ? 'dark:border-b-[1px] p-4' : 'dark:border-b-0 p-2'
-      } animate-fade_third`}
+      className={`w-full relative bg-white dark:bg-transparent font-primary flex gap-1 ${
+        !isRepost ? 'border-b-[1px] py-4' : 'rounded-lg border-[1px] p-2 my-2'
+      } border-gray-300 animate-fade_third`}
     >
       {noUserClick && <SignUp setShow={setNoUserClick} />}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
@@ -192,11 +192,11 @@ const PostComponent = ({
             src={`${USER_PROFILE_PIC_URL}/${post.user.profilePic}`}
             placeholder="blur"
             blurDataURL={post.user.profilePicBlurHash || 'no-hash'}
-            className={'rounded-full w-8 h-8'}
+            className="rounded-full w-8 h-8"
           />
         </Link>
       </div>
-      <div className="w-[calc(100%-40px)] flex flex-col gap-1">
+      <div className="w-[calc(100%-32px)] flex flex-col gap-1">
         <div className="w-full h-fit flex justify-between">
           <Link
             href={`${

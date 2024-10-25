@@ -44,7 +44,7 @@ const renderContentWithLinks = (caption: string, taggedUsers?: User[]) => {
     const lines = part.split('\n');
 
     return (
-      <React.Fragment key={partIndex}>
+      <div key={partIndex} className="w-full">
         {lines.map((line, lineIndex) => {
           // First, split by bold
           const boldParts = line.split(/(\*\*[^*]+\*\*)/g);
@@ -105,7 +105,7 @@ const renderContentWithLinks = (caption: string, taggedUsers?: User[]) => {
             </div>
           );
         })}
-      </React.Fragment>
+      </div>
     );
   });
 };

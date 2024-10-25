@@ -14,7 +14,11 @@ const MainWrapper: React.FC<WrapperProps> = ({ children, restrictWidth = false, 
   const cookiesDisabled = useSelector(cookiesDisabledSelector);
 
   if (sidebarLayout) {
-    children = <div className={`w-full flex ${open ? 'gap-8' : 'gap-12'} transition-ease-out-500`}>{children}</div>;
+    children = (
+      <div className={`w-full flex ${open ? 'gap-8' : restrictWidth ? 'gap-8' : 'gap-12'} transition-ease-out-500`}>
+        {children}
+      </div>
+    );
   }
 
   return (

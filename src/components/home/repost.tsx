@@ -111,7 +111,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
   return (
     <div
       onClick={() => setClickedOnOptions(false)}
-      className="w-full relative overflow-clip bg-white dark:bg-transparent font-primary flex gap-1 rounded-lg dark:rounded-none dark:text-white p-4 border-gray-300 border-[1px] dark:border-x-0 dark:border-t-0 dark:border-dark_primary_btn dark:border-b-[1px] max-md:p-4 animate-fade_third"
+      className="w-full relative overflow-clip bg-white dark:bg-transparent font-primary flex gap-1 border-b-[1px] border-gray-300 py-4 animate-fade_third"
     >
       {noUserClick && <SignUp setShow={setNoUserClick} />}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
@@ -169,7 +169,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
             src={`${USER_PROFILE_PIC_URL}/${post.user.profilePic}`}
             placeholder="blur"
             blurDataURL={post.user.profilePicBlurHash || 'no-hash'}
-            className={'rounded-full w-8 h-8'}
+            className="rounded-full w-8 h-8"
           />
         </Link>
       </div>

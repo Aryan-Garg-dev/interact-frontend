@@ -74,7 +74,7 @@ const Feed = () => {
       <div className="w-full max-md:px-0 flex flex-col gap-2">
         <div
           onClick={() => setClickedOnNewPost(true)}
-          className="w-full bg-white flex flex-col justify-between gap-2 px-4 max-md:px-2 py-3 rounded-lg shadow-md hover:shadow-xl border-gray-300 border-[1px] cursor-pointer transition-ease-300"
+          className="w-full bg-white flex flex-col justify-between gap-2 border-gray-300 border-b-[1px] pb-4 cursor-pointer"
         >
           <div className="text-xl font-semibold text-gray-700">
             <span className="">{getGreetings()}</span> , {user.name.split(' ')[0]}!
