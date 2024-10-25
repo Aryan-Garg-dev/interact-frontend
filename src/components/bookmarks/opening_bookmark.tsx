@@ -78,6 +78,7 @@ const OpeningBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit,
             </div>
           )}
         </div>
+        <div className="w-full h-full rounded-lg text-sm text-white absolute top-0 left-0 bg-white bg-opacity-50 opacity-0 group-hover:opacity-100 transition-ease-300"></div>
         {bookmark.openingItems &&
           (bookmark.openingItems.length == 0 ? (
             <div className="p-2">

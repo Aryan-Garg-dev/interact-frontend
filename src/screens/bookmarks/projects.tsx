@@ -120,7 +120,7 @@ const Projects = () => {
         <Loader />
       ) : bookmarks.length > 0 ? (
         <div
-          className={`w-full mx-auto justify-center p-4 max-md:px-0 grid grid-cols-2 ${
+          className={`w-full mx-auto justify-center grid grid-cols-2 ${
             open ? 'gap-x-4' : 'gap-x-12'
           } max-md:grid-cols-1  transition-ease-out-500`}
         >

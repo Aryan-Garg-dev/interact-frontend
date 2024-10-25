@@ -52,7 +52,7 @@ const Applications = () => {
       {loading ? (
         <Loader />
       ) : applications.length > 0 ? (
-        <div className="w-[50vw] max-lg:w-screen max-lg:px-6 mx-auto flex flex-col gap-4 py-8">
+        <div className="w-full flex flex-col gap-4">
           {applications.map(application => {
             return (
               <Link

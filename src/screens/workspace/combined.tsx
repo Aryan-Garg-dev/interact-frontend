@@ -79,7 +79,7 @@ const CombinedProjects = () => {
   }, [order, search]);
 
   return (
-    <div className="w-full pt-6">
+    <div className="w-full">
       <OrderMenu
         orders={['activity', 'most_liked', 'most_viewed', 'latest']}
         current={order}
@@ -95,11 +95,11 @@ const CombinedProjects = () => {
         <div
           className={`w-full grid ${
             projects.length < 4
-              ? `grid-cols-${projects.length} px-12`
+              ? `grid-cols-${projects.length}`
               : navbarOpen
-              ? 'grid-cols-3 px-8 gap-4'
-              : 'grid-cols-3 px-8 gap-8'
-          } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 max-md:px-4 items-center justify-items-center transition-ease-out-500`}
+              ? 'grid-cols-3 gap-4'
+              : 'grid-cols-3 gap-8'
+          } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 items-center justify-items-center transition-ease-out-500`}
         >
           {clickedOnProject && (
             <ProjectView

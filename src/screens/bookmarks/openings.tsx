@@ -119,11 +119,19 @@ const Openings = () => {
       ) : loading ? (
         <Loader />
       ) : bookmarks.length > 0 ? (
-        <div
-          className={`w-fit mx-auto justify-center p-4 max-md:px-0 grid grid-cols-3 ${
-            open ? 'gap-x-4' : 'gap-x-12'
-          } max-md:grid-cols-1 max-lg:grid-cols-2 transition-ease-out-500`}
-        >
+        <div className="w-full flex flex-wrap justify-center gap-6">
+          {bookmarks.map(bookmark => {
+            return (
+              <Bookmark
+                key={bookmark.id}
+                bookmark={bookmark}
+                setClick={setClickedOnBookmark}
+                setBookmark={setClickedBookmark}
+                handleEdit={handleEditBookmark}
+                handleDelete={handleDeleteBookmark}
+              />
+            );
+          })}
           {bookmarks.map(bookmark => {
             return (
               <Bookmark

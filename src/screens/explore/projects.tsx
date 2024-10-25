@@ -105,7 +105,7 @@ const Projects = () => {
 
   return (
     <div>
-      <div className="w-full flex justify-between pt-4 px-8">
+      <div className="w-full flex justify-between">
         <OrderMenu
           orders={['trending', 'most_liked', 'most_viewed', 'latest']}
           current={order}
@@ -118,16 +118,16 @@ const Projects = () => {
       {loading ? (
         <Loader />
       ) : (
-        <div className="w-full pt-4">
+        <div className="w-full pt-2">
           {projects.length > 0 ? (
             <InfiniteScroll
               className={`w-full grid ${
                 projects.length < 4
-                  ? `grid-cols-${projects.length} px-12`
+                  ? `grid-cols-${projects.length}`
                   : navbarOpen
-                  ? 'grid-cols-3 px-8 gap-4'
-                  : 'grid-cols-3 px-8 gap-8'
-              } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 max-md:px-4 items-center justify-items-center transition-ease-out-500`}
+                  ? 'grid-cols-3 gap-4'
+                  : 'grid-cols-3 gap-8'
+              } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 items-center justify-items-center transition-ease-out-500`}
               // className={`${
               //   navbarOpen ? 'w-[calc(100vw-380px)]' : 'w-[calc(100vw-180px)]'
               // } mx-auto flex justify-center gap-8 flex-wrap max-md:gap-6 max-md:px-4 max-md:justify-items-center transition-ease-out-500`}

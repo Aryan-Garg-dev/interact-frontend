@@ -89,7 +89,7 @@ const Openings = () => {
 
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      setOpenings([res.data.opening] || []);
+      setOpenings([res.data.opening]);
 
       if (res.data.opening) {
         setClickedOpening(res.data.opening || initialOpening);
@@ -119,12 +119,12 @@ const Openings = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 py-2">
+    <div className="w-full flex flex-col gap-6">
       <OrderMenu orders={['trending', 'most_viewed', 'latest']} current={order} setState={setOrder} zIndex={30} />
       {loading ? (
         <Loader />
       ) : openings.length > 0 ? (
-        <div className="w-full flex justify-evenly gap-4 px-4">
+        <div className="w-full flex justify-evenly gap-4">
           <InfiniteScroll
             className={`${clickedOnOpening ? 'w-[480px]' : 'w-[720px]'} max-lg:w-full flex flex-col gap-4`}
             dataLength={openings.length}
