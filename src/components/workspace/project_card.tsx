@@ -101,8 +101,8 @@ const ProjectCard = ({
   return (
     <>
       {clickedOnEdit && <EditProject projectToEdit={project} setShow={setClickedOnEdit} setProjects={setProjects} />}
-      {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={sendOTP} />}
-      {clickedOnConfirmDelete && <ConfirmOTP setShow={setClickedOnConfirmDelete} handleSubmit={handleDelete} />}
+      {/* {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={sendOTP} />} */}
+      {clickedOnDelete && <ConfirmOTP setShow={setClickedOnDelete} handleSubmit={handleDelete} />}
 
       <div
         onClick={() => {

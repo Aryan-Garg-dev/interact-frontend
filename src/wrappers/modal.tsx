@@ -46,7 +46,7 @@ const ModalWrapper = ({
     <>
       <div
         style={modalStyles}
-        className={`fixed top-${top} w-${width} h-${height} max-lg:w-5/6 max-h-[80%] overflow-y-auto -translate-y-1/2 flex flex-col items-center gap-2 right-1/2 translate-x-1/2 rounded-lg p-6 dark:text-white font-primary bg-white backdrop-blur-lg ${
+        className={`fixed top-${top} w-${width} h-${height} max-lg:w-5/6 max-h-[80%] overflow-y-auto overflow-x-hidden -translate-y-1/2 flex flex-col items-center gap-2 right-1/2 translate-x-1/2 rounded-lg p-6 dark:text-white font-primary bg-white backdrop-blur-lg ${
           border && 'border-2 border-primary_btn'
         } shadow-xl thin_scrollbar animate-fade_third z-${z + 10}`}
       >

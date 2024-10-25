@@ -121,6 +121,7 @@ const config: Config = {
         xxs: '0.5rem',
       },
       animation: {
+        'caret-blink': 'caret-blink 1.25s ease-out infinite',
         fade_third: 'fade 0.3s ease-in-out',
         fade_third_delay: 'fade 0.3s ease-in-out 0.5s',
         fade_half: 'fade 0.5s ease-in-out',
@@ -133,6 +134,10 @@ const config: Config = {
         onboarding_dummy_user_card_backwards: 'onboarding_dummy_user_card_backwards 3s ease-in-out 0.4s infinite',
       },
       keyframes: {
+        'caret-blink': {
+          '0%,70%,100%': { opacity: '1' },
+          '20%,50%': { opacity: '0' },
+        },
         shrink: {
           '0%': {
             scale: '100%',
