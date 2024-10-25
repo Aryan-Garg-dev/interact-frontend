@@ -11,6 +11,8 @@ import CombinedProjects from '@/screens/workspace/combined';
 import Discover from '@/screens/home/discover';
 import Feed from '@/screens/home/feed';
 import FeedSide from '@/sides/home/feed';
+import CommunitySide from '@/sides/home/community';
+import Communities from '@/screens/home/communities';
 
 const Home = () => {
   const [active, setActive] = useState(0);
@@ -31,14 +33,12 @@ const Home = () => {
           ) : (
             active == 2 && (
               <PrimeWrapper index={2} maxIndex={2}>
-                hello
+                <Communities />
               </PrimeWrapper>
             )
           )}
         </div>
-        <SideBarWrapper>
-          <FeedSide />
-        </SideBarWrapper>
+        <SideBarWrapper>{active == 0 || active == 1 ? <FeedSide /> : active == 2 && <CommunitySide />}</SideBarWrapper>
       </MainWrapper>
     </BaseWrapper>
   );

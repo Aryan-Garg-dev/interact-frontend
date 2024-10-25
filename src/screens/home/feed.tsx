@@ -71,7 +71,7 @@ const Feed = () => {
     <div className={`w-full flex ${open ? 'gap-2' : 'gap-12'} transition-ease-out-500`}>
       {clickedOnNewPost && <NewPost setFeed={setFeed} setShow={setClickedOnNewPost} />}
       {/* Create a New Post */}
-      <div className="w-full max-md:px-0 flex flex-col gap-2">
+      <div className="w-full flex flex-col gap-2">
         <div
           onClick={() => setClickedOnNewPost(true)}
           className="w-full bg-white flex flex-col justify-between gap-2 border-gray-300 border-b-[1px] pb-4 cursor-pointer"
