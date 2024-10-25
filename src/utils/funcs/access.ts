@@ -98,4 +98,24 @@ export const checkOrgProjectAccess = (
   return projectAccess || orgAccess;
 };
 
+export const checkCommunityAccess = (role: string, communityID: string) => {
+  const membership = user.communityMemberships.filter(m => m.communityID == communityID)[0];
+  if (membership) return compareRoleLevel(membership.role, role);
+  return false;
+};
+
+function compareRoleLevel(userRole: string, requiredRole: string): boolean {
+  const roleHierarchy: { [key: string]: number } = {
+    member: 0,
+    moderator: 1,
+    senior: 1,
+    editor: 1,
+    admin: 2,
+    manager: 2,
+    owner: 3,
+  };
+
+  return roleHierarchy[userRole.toLowerCase()] >= roleHierarchy[requiredRole.toLowerCase()];
+}
+
 export default checkOrgAccess;

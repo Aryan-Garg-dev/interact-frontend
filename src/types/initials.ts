@@ -5,6 +5,9 @@ import {
   Chat,
   ChatMembership,
   Comment,
+  Community,
+  CommunityMembership,
+  CommunityMembershipRequest,
   Education,
   Event,
   EventBookmark,
@@ -559,4 +562,41 @@ export const initialHackathon: Hackathon = {
   sponsors: [],
   rounds: [],
   faqs: [],
+};
+
+export const initialCommunity: Community = {
+  id: '',
+  title: '',
+  description: '',
+  userID: '',
+  user: initialUser,
+  coverPic: 'default.jpg',
+  blurHash: 'no-hash',
+  tags: [],
+  links: [],
+  category: '',
+  access: 'open',
+  noViews: 0,
+  impressions: 0,
+  noLikes: 0,
+  noMembers: 1,
+  createdAt: new Date(),
+};
+
+export const initialCommunityMembership: CommunityMembership = {
+  id: '',
+  communityID: '',
+  userID: '',
+  user: initialUser,
+  role: 'Member',
+  createdAt: new Date(),
+};
+
+export const initialCommunityMembershipRequest: CommunityMembershipRequest = {
+  id: '',
+  communityID: '',
+  userID: '',
+  user: initialUser,
+  status: 0,
+  createdAt: new Date(),
 };

@@ -2,6 +2,7 @@ import { PROJECT_EDITOR, PROJECT_MANAGER, PROJECT_MEMBER } from '@/config/consta
 import { SERVER_ERROR } from '@/config/errors';
 import {
   BOOKMARK_URL,
+  COMMUNITY_URL,
   CONNECTION_URL,
   INVITATION_URL,
   MESSAGING_URL,
@@ -23,6 +24,7 @@ import {
   setFetchedPostBookmarks,
   setFetchedProjectBookmarks,
   setFetchedProjects,
+  setLastFetchedCommunityMemberships,
   setLastFetchedOrganizationMemberships,
   setLastFetchedRegisteredEvents,
   setLastFetchedUnreadChats,
@@ -35,6 +37,7 @@ import {
   ChatSlice,
   setApplications,
   setChats,
+  setCommunityMemberships,
   setDisLikes,
   setEditorProjects,
   setEventBookmarks,
@@ -54,6 +57,7 @@ import {
 import {
   Application,
   Chat,
+  CommunityMembership,
   EventBookmark,
   Membership,
   OpeningBookmark,
@@ -318,6 +322,22 @@ const useUserStateFetcher = () => {
       });
   };
 
+  const fetchCommunityMemberships = () => {
+    if (moment().utc().diff(config.lastFetchedCommunityMemberships, 'minute') < 30) return;
+    const URL = `${COMMUNITY_URL}/me`;
+    getHandler(URL)
+      .then(res => {
+        if (res.statusCode === 200) {
+          const communityMemberships: CommunityMembership[] = res.data.memberships;
+          dispatch(setCommunityMemberships(communityMemberships));
+          dispatch(setLastFetchedCommunityMemberships(new Date().toUTCString()));
+        } else Toaster.error(res.data.message, 'error_toaster');
+      })
+      .catch(err => {
+        Toaster.error(SERVER_ERROR, 'error_toaster');
+      });
+  };
+
   const fetchVotedOptions = () => {
     if (moment().utc().diff(config.lastFetchedVotedOptions, 'minute') < 5) return;
     const URL = `${USER_URL}/me/polls/options`;
@@ -362,6 +382,7 @@ const useUserStateFetcher = () => {
     fetchUnreadInvitations();
     fetchUnreadChats();
     fetchOrganizationMemberships();
+    fetchCommunityMemberships();
     fetchVotedOptions();
     fetchRegisteredEvents();
   };

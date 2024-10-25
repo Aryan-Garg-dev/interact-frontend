@@ -20,6 +20,7 @@ interface ConfigState {
   lastFetchedUnreadInvitations: string;
   lastFetchedUnreadChats: string;
   lastFetchedOrganizationMemberships: string;
+  lastFetchedCommunityMemberships: string;
   lastFetchedVotedOptions: string;
   lastFetchedRegisteredEvents: string;
 }
@@ -60,6 +61,7 @@ const initialState: ConfigState = {
   lastFetchedUnreadInvitations: getInitialInvitationDate(),
   lastFetchedUnreadChats: getInitialInvitationDate(),
   lastFetchedOrganizationMemberships: getInitialDate(),
+  lastFetchedCommunityMemberships: getInitialDate(),
   lastFetchedVotedOptions: getInitialDate(),
   lastFetchedRegisteredEvents: getInitialDate(),
 };
@@ -87,6 +89,7 @@ export const configSlice = createSlice({
       state.lastFetchedUnreadInvitations = getInitialInvitationDate();
       state.lastFetchedUnreadChats = getInitialInvitationDate();
       state.lastFetchedOrganizationMemberships = getInitialDate();
+      state.lastFetchedCommunityMemberships = getInitialDate();
       state.lastFetchedVotedOptions = getInitialDate();
       state.lastFetchedRegisteredEvents = getInitialDate();
     },
@@ -115,6 +118,7 @@ export const configSlice = createSlice({
       state.lastFetchedUnreadNotifications = new Date().toUTCString();
       state.lastFetchedUnreadInvitations = new Date().toUTCString();
       state.lastFetchedOrganizationMemberships = new Date().toUTCString();
+      state.lastFetchedCommunityMemberships = new Date().toUTCString();
       state.lastFetchedVotedOptions = new Date().toUTCString();
       state.lastFetchedRegisteredEvents = new Date().toUTCString();
     },
@@ -160,6 +164,9 @@ export const configSlice = createSlice({
     setLastFetchedOrganizationMemberships: (state, action: PayloadAction<string>) => {
       state.lastFetchedOrganizationMemberships = action.payload;
     },
+    setLastFetchedCommunityMemberships: (state, action: PayloadAction<string>) => {
+      state.lastFetchedCommunityMemberships = action.payload;
+    },
     setLastFetchedVotedOptions: (state, action: PayloadAction<string>) => {
       state.lastFetchedVotedOptions = action.payload;
     },
@@ -190,6 +197,7 @@ export const {
   setLastFetchedUnreadInvitations,
   setLastFetchedUnreadChats,
   setLastFetchedOrganizationMemberships,
+  setLastFetchedCommunityMemberships,
   setLastFetchedVotedOptions,
   setLastFetchedRegisteredEvents,
 } = configSlice.actions;

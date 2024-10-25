@@ -887,3 +887,45 @@ export interface HackathonHistory {
   coordinators: User[];
   judges: User[];
 }
+
+type CommunityAccess = 'open' | 'restricted' | 'closed';
+
+type CommunityRole = 'Member' | 'Moderator' | 'Admin';
+
+export interface Community {
+  id: string;
+  title: string;
+  description?: string;
+  userID: string;
+  user: User;
+  coverPic: string;
+  blurHash: string;
+  tags: string[];
+  links: string[];
+  category: string;
+  access: CommunityAccess;
+  noViews: number;
+  impressions: number;
+  noLikes: number;
+  noMembers: number;
+  createdAt: Date;
+}
+
+export interface CommunityMembership {
+  id: string;
+  communityID: string;
+  community?: Community;
+  userID: string;
+  user: User;
+  role: CommunityRole;
+  createdAt: Date;
+}
+
+export interface CommunityMembershipRequest {
+  id: string;
+  communityID: string;
+  userID: string;
+  user: User;
+  status: -1 | 0 | 1; // -1 for rejected, 0 for submitted, 1 for accepted
+  createdAt: Date;
+}
