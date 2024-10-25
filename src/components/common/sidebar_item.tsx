@@ -1,5 +1,7 @@
+import { navbarOpenSelector } from '@/slices/feedSlice';
 import Link from 'next/link';
 import React, { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 
 interface Props {
   title: string;
@@ -7,13 +9,13 @@ interface Props {
   active: number;
   setActive: React.Dispatch<React.SetStateAction<number>>;
   index: number;
-  open: boolean;
   org?: boolean;
   url?: string;
   onClick?: () => void;
 }
 
-const SidebarItem = ({ title, icon, active, setActive, index, open, org = false, url = '', onClick }: Props) => {
+const SidebarItem = ({ title, icon, active, setActive, index, org = false, url = '', onClick }: Props) => {
+  const open = useSelector(navbarOpenSelector);
   return (
     <Link
       href={`/${org ? 'organisation/' : ''}${url != '' ? url : title.toLowerCase()}`}

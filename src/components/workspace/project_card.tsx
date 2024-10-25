@@ -13,7 +13,7 @@ import ConfirmDelete from '../common/confirm_delete';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import ConfirmOTP from '../common/confirm_otp';
-import checkOrgAccess, { checkOrgProjectAccess, checkParticularOrgAccess } from '@/utils/funcs/access';
+import { checkOrgProjectAccess, checkParticularOrgAccess } from '@/utils/funcs/access';
 import { ORG_MANAGER, ORG_SENIOR, PROJECT_EDITOR, PROJECT_MANAGER, PROJECT_OWNER } from '@/config/constants';
 
 interface Props {
@@ -101,8 +101,8 @@ const ProjectCard = ({
   return (
     <>
       {clickedOnEdit && <EditProject projectToEdit={project} setShow={setClickedOnEdit} setProjects={setProjects} />}
-      {/* {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={sendOTP} />} */}
-      {clickedOnDelete && <ConfirmOTP setShow={setClickedOnDelete} handleSubmit={handleDelete} />}
+      {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={sendOTP} />}
+      {clickedOnConfirmDelete && <ConfirmOTP setShow={setClickedOnConfirmDelete} handleSubmit={handleDelete} />}
 
       <div
         onClick={() => {
