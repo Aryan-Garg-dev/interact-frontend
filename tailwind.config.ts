@@ -2,12 +2,12 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
-  darkMode: 'class',
+  darkMode: ['class', 'class'],
   theme: {
     extend: {
       width: {
-        90: '360px',
-        108: '32rem',
+        '90': '360px',
+        '108': '32rem',
         sidebar_open: '280px',
         sidebar_close: '100px',
         base_open: 'calc(100vw - 560px)',
@@ -19,8 +19,8 @@ const config: Config = {
         bottomBar: '100px',
       },
       height: {
-        90: '360px',
-        108: '32rem',
+        '90': '360px',
+        '108': '32rem',
         navbar: '64px',
         base: 'calc(100vh - 64px)',
         taskbar: '48px',
@@ -63,6 +63,46 @@ const config: Config = {
         priority_high: '#fbbebe',
         priority_mid: '#fbf9be',
         priority_low: '#bffbbe',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        chart: {
+          '1': 'hsl(var(--chart-1))',
+          '2': 'hsl(var(--chart-2))',
+          '3': 'hsl(var(--chart-3))',
+          '4': 'hsl(var(--chart-4))',
+          '5': 'hsl(var(--chart-5))',
+        },
       },
       backgroundColor: {
         backdrop: '#0000003f',
@@ -94,35 +134,68 @@ const config: Config = {
       },
       keyframes: {
         shrink: {
-          '0%': { scale: '100%' },
-          '100%': { scale: '0%' },
+          '0%': {
+            scale: '100%',
+          },
+          '100%': {
+            scale: '0%',
+          },
         },
         fade: {
-          '0%': { opacity: '0' },
-          '100%': { opacity: '1' },
+          '0%': {
+            opacity: '0',
+          },
+          '100%': {
+            opacity: '1',
+          },
         },
         reveal: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
-          '100%': { transform: 'translateY(0px)', opacity: '1' },
+          '0%': {
+            transform: 'translateY(20px)',
+            opacity: '0',
+          },
+          '100%': {
+            transform: 'translateY(0px)',
+            opacity: '1',
+          },
         },
         reveal_reverse: {
-          '0%': { transform: 'translateY(0px)', opacity: '1' },
-          '100%': { transform: 'translateY(20px)', opacity: '0' },
+          '0%': {
+            transform: 'translateY(0px)',
+            opacity: '1',
+          },
+          '100%': {
+            transform: 'translateY(20px)',
+            opacity: '0',
+          },
         },
         onboarding_dummy_user_card: {
-          '0%': { transform: 'translateX(316px)' },
-          '100%': { transform: 'translateX(0px)' },
+          '0%': {
+            transform: 'translateX(316px)',
+          },
+          '100%': {
+            transform: 'translateX(0px)',
+          },
         },
         onboarding_dummy_user_card_backwards: {
-          '0%': { transform: 'translateX(0px)' },
-          '100%': { transform: 'translateX(316px)' },
+          '0%': {
+            transform: 'translateX(0px)',
+          },
+          '100%': {
+            transform: 'translateX(316px)',
+          },
         },
       },
       lineClamp: {
-        7: '7',
-        8: '8',
-        9: '9',
-        10: '10',
+        '7': '7',
+        '8': '8',
+        '9': '9',
+        '10': '10',
+      },
+      borderRadius: {
+        lg: 'var(--radius)',
+        md: 'calc(var(--radius) - 2px)',
+        sm: 'calc(var(--radius) - 4px)',
       },
     },
     screens: {
@@ -130,6 +203,6 @@ const config: Config = {
       lg: '1080px',
     },
   },
-  plugins: [require('@tailwindcss/line-clamp')],
+  plugins: [require('@tailwindcss/line-clamp'), require('tailwindcss-animate')],
 };
 export default config;
