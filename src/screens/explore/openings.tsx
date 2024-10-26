@@ -11,7 +11,7 @@ import Toaster from '@/utils/toaster';
 import { useWindowWidth } from '@react-hook/window-size';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import OrderMenu from '@/components/common/order_menu';
+import OrderMenu from '@/components/common/order_menu2';
 
 const Openings = () => {
   const [openings, setOpenings] = useState<Opening[]>([]);
@@ -120,7 +120,6 @@ const Openings = () => {
 
   return (
     <div className="w-full flex flex-col gap-6">
-      <OrderMenu orders={['trending', 'most_viewed', 'latest']} current={order} setState={setOrder} zIndex={30} />
       {loading ? (
         <Loader />
       ) : openings.length > 0 ? (
@@ -132,6 +131,11 @@ const Openings = () => {
             hasMore={hasMore}
             loader={<Loader />}
           >
+            <OrderMenu
+              orders={['trending', 'most_viewed', 'latest', 'last_viewed']}
+              current={order}
+              setState={setOrder}
+            />
             {openings.map(opening => {
               return (
                 <OpeningCard

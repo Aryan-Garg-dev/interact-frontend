@@ -13,9 +13,9 @@ const Projects = () => {
   const [active, setActive] = useState(0);
   return (
     <BaseWrapper>
-      <Sidebar index={5} />
+      <Sidebar index={2} />
       <MainWrapper sidebarLayout>
-        <div className="w-full">
+        <div className="w-2/3">
           <MenuBar items={['Explore', 'Workspace', 'Saved']} active={active} setState={setActive} />
           {active == 0 ? (
             <PrimeWrapper index={0} maxIndex={2}>
@@ -34,7 +34,6 @@ const Projects = () => {
           )}
         </div>
         <SideBarWrapper>
-          <SidePrimeWrapper>dawd</SidePrimeWrapper>
           <SidePrimeWrapper>dawd</SidePrimeWrapper>
           <SidePrimeWrapper>dawd</SidePrimeWrapper>
         </SideBarWrapper>

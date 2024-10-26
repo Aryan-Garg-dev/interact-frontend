@@ -118,7 +118,7 @@ const CombinedProjects = () => {
               <ProjectCard
                 key={project.id}
                 index={index}
-                size={navbarOpen || projects.length < 4 ? '64' : '72'}
+                size={projects.length < 3 ? '64' : navbarOpen ? '[14vw]' : '64'}
                 project={project}
                 setProjects={setProjects}
                 setClickedOnProject={setClickedOnProject}

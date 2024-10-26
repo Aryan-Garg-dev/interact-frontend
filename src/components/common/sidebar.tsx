@@ -5,9 +5,11 @@ import {
   Bell,
   BookmarkSimple,
   Buildings,
+  CalendarDots,
   Envelope,
   Gear,
   HouseLine,
+  ReadCvLogo,
   RocketLaunch,
   UserCircle,
   Wrench,
@@ -79,48 +81,34 @@ const Sidebar = ({ index }: Props) => {
           <SidebarItem index={1} title="Home" icon={<HouseLine size={24} />} active={active} setActive={setActive} />
           <SidebarItem
             index={2}
-            title="Explore"
+            title="Projects"
             icon={<RocketLaunch size={24} />}
             active={active}
             setActive={setActive}
           />
-          {user.id != '' && (
-            <>
-              <SidebarItem
-                index={3}
-                title="Workspace"
-                icon={<Wrench size={24} />}
-                active={active}
-                setActive={setActive}
-              />
-              <SidebarItem
-                index={5}
-                title="Invitations"
-                icon={
-                  <div className="w-fit relative">
-                    {unreadInvitations > 0 && (
-                      <div className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 w-3 h-3 flex-center text-xxs border-[1px] border-gray-500 rounded-full">
-                        {unreadInvitations}
-                      </div>
-                    )}
-
-                    <Envelope size={24} />
-                  </div>
-                }
-                active={active}
-                setActive={setActive}
-              />
-              <SidebarItem
-                index={6}
-                title="Bookmarks"
-                icon={<BookmarkSimple size={24} />}
-                active={active}
-                setActive={setActive}
-              />
-            </>
-          )}
+          <SidebarItem
+            index={3}
+            title="Events"
+            icon={<CalendarDots size={24} />}
+            active={active}
+            setActive={setActive}
+          />
+          <SidebarItem
+            index={4}
+            title="Organisations"
+            icon={<Buildings size={24} />}
+            active={active}
+            setActive={setActive}
+          />
+          <SidebarItem
+            index={5}
+            title="Openings"
+            icon={<ReadCvLogo size={24} />}
+            active={active}
+            setActive={setActive}
+          />
         </div>
-        {user.id != '' && user.organizationMemberships && user.organizationMemberships.length > 0 && <Organisations />}
+        {/* {user.id != '' && user.organizationMemberships && user.organizationMemberships.length > 0 && <Organisations />} */}
         {user.id != '' && (
           <div className="w-fit py-8 border-y-2 border-gray-300 dark:border-dark_primary_btn flex flex-col gap-2">
             <SidebarItem

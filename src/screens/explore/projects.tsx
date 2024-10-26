@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { navbarOpenSelector, setExploreTab } from '@/slices/feedSlice';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import OrderMenu from '@/components/common/order_menu';
+import OrderMenu from '@/components/common/order_menu2';
 
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -105,20 +105,15 @@ const Projects = () => {
 
   return (
     <div>
-      <div className="w-full flex justify-between">
-        <OrderMenu
-          orders={['trending', 'most_liked', 'most_viewed', 'latest']}
-          current={order}
-          setState={setOrder}
-          fixed={false}
-          zIndex={20}
-        />
-      </div>
-
+      <OrderMenu
+        orders={['trending', 'most_liked', 'most_viewed', 'latest', 'last_viewed']}
+        current={order}
+        setState={setOrder}
+      />
       {loading ? (
         <Loader />
       ) : (
-        <div className="w-full pt-2">
+        <div className="w-full pt-4">
           {projects.length > 0 ? (
             <InfiniteScroll
               className={`w-full grid ${
@@ -156,7 +151,7 @@ const Projects = () => {
                       key={project.id}
                       index={index}
                       // size={navbarOpen || projects.length < 4 ? '[21vw]' : '80'}
-                      size={navbarOpen || projects.length < 4 ? '64' : '72'}
+                      size={projects.length < 3 ? '64' : navbarOpen ? '[14vw]' : '64'}
                       project={project}
                       setClickedOnProject={setClickedOnProject}
                       setClickedProjectIndex={setClickedProjectIndex}

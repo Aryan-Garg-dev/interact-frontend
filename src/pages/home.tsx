@@ -1,59 +1,41 @@
+import MenuBar from '@/components/common/menu_bar';
 import Sidebar from '@/components/common/sidebar';
-import Discover from '@/screens/home/discover';
-import Feed from '@/screens/home/feed';
-import ProfileCompletion from '@/sections/home/profile_completion';
-import { homeTabSelector, onboardingSelector } from '@/slices/feedSlice';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import Onboarding from '@/components/common/onboarding';
-import { userSelector } from '@/slices/userSlice';
-import ProfileCard from '@/sections/home/profile_card';
-import TrendingCard from '@/sections/home/trending_card';
+import PrimeWrapper from '@/wrappers/prime';
+import SideBarWrapper from '@/wrappers/side';
+import React, { useState } from 'react';
+import Discover from '@/screens/home/discover';
+import Feed from '@/screens/home/feed';
+import FeedSide from '@/sides/home/feed';
+import CommunitySide from '@/sides/home/community';
+import Communities from '@/screens/home/communities';
 
 const Home = () => {
-  const active = useSelector(homeTabSelector);
-  const onboarding = useSelector(onboardingSelector);
-  const user = useSelector(userSelector);
-
-  useEffect(() => {
-    if (user.isOrganization) window.location.replace('/organisation/home');
-    else if (user.isLoggedIn && !user.isVerified) {
-      window.location.replace('/verification');
-    } else if (user.isLoggedIn && !user.isOnboardingComplete) {
-      sessionStorage.setItem('onboarding-redirect', 'home-callback');
-      window.location.replace('/onboarding');
-    }
-  }, []);
-
+  const [active, setActive] = useState(0);
   return (
-    <BaseWrapper title="Home">
+    <BaseWrapper>
       <Sidebar index={1} />
-      <MainWrapper>
-        {onboarding && user.id != '' && <Onboarding />}
-        <div className="w-full flex gap-6 px-12 max-md:px-4 py-base_padding">
-          <div className="w-[70%] max-md:w-full flex flex-col items-center relative">
-            {user.id != '' ? (
-              <>
-                <div className={`w-full ${active === 0 ? 'block' : 'hidden'}`}>
-                  <Feed />
-                </div>
-                <div className={`w-full ${active === 1 ? 'block' : 'hidden'}`}>
-                  <Discover />
-                </div>
-              </>
-            ) : (
+      <MainWrapper restrictWidth sidebarLayout>
+        <div className="w-2/3">
+          <MenuBar items={['Explore', 'Following', 'Communities']} active={active} setState={setActive} />
+          {active == 0 ? (
+            <PrimeWrapper index={0} maxIndex={2}>
               <Discover />
-            )}
-          </div>
-
-          <div className="w-[30%] h-fit max-md:hidden flex flex-col gap-4">
-            {user.id != '' && <ProfileCard />}
-            <TrendingCard />
-          </div>
-          <ProfileCompletion />
+            </PrimeWrapper>
+          ) : active == 1 ? (
+            <PrimeWrapper index={1} maxIndex={2}>
+              <Feed />
+            </PrimeWrapper>
+          ) : (
+            active == 2 && (
+              <PrimeWrapper index={2} maxIndex={2}>
+                <Communities />
+              </PrimeWrapper>
+            )
+          )}
         </div>
+        <SideBarWrapper>{active == 0 || active == 1 ? <FeedSide /> : active == 2 && <CommunitySide />}</SideBarWrapper>
       </MainWrapper>
     </BaseWrapper>
   );

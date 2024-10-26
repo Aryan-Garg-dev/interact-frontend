@@ -58,7 +58,7 @@ const Projects = ({ bookmark, setClick, fetchBookmarks }: Props) => {
               <ProjectCard
                 key={projectItem.id}
                 index={index}
-                size={open || bookmark.projectItems.length < 4 ? '64' : '72'}
+                size={bookmark.projectItems.length < 3 ? '64' : open ? '[14vw]' : '64'}
                 project={projectItem.project}
                 setClickedOnProject={setClickedOnProject}
                 setClickedProjectIndex={setClickedProjectIndex}

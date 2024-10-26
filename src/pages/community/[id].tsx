@@ -202,7 +202,7 @@ const Community = ({ id }: { id: string }) => {
                   <div className="w-full h-[1px] bg-gray-300 my-2"></div>
                   <div>
                     <div className="w-full flex items-center justify-between">
-                      <div className="text-lg font-medium">Rules</div>
+                      <div className="text-lg font-medium">Community Rules</div>
                       <AddRule communityID={community.id} setCommunity={setCommunity} />
                     </div>
                     <Accordion type="multiple">

@@ -18,18 +18,22 @@ const ProjectCard = ({ index, project, size = 72, setClickedOnProject, setClicke
     'w-80',
     'w-72',
     'w-64',
-    'w-[22vw]',
     'w-[24vw]',
+    'w-[22vw]',
+    'w-[20vw]',
     'w-[16vw]',
+    'w-[14vw]',
     'w-56',
     'w-80',
     'h-80',
     'h-72',
     'h-64',
     'h-56',
-    'h-[22vw]',
     'h-[24vw]',
+    'h-[22vw]',
+    'h-[20vw]',
     'h-[16vw]',
+    'h-[14vw]',
   ];
   return (
     <div
@@ -69,14 +73,14 @@ const ProjectCard = ({ index, project, size = 72, setClickedOnProject, setClicke
         blurDataURL={project.blurHash || 'no-hash'}
       />
       <div className="w-full glassMorphism text-white rounded-b-lg font-primary absolute bottom-0 right-0 flex flex-col px-4 py-2">
-        <div className={`${Number(size) <= 64 ? 'text-base' : size == 72 ? 'text-lg' : 'text-xl'} line-clamp-1`}>
+        <div className={`${Number(size) <= 64 ? 'text-base' : size == 72 && 'text-lg'} line-clamp-1`}>
           {project.title}
         </div>
         <div className="w-full flex items-center justify-between">
-          <div className={`w-full flex items-center gap-1 line-clamp-1 ${Number(size) <= 64 ? 'text-xs' : 'text-sm'}`}>
-            {project.user.name}{' '}
+          <div className={`w-full flex items-center gap-1 ${Number(size) <= 64 ? 'text-xs' : 'text-sm'}`}>
+            <div className="line-clamp-1"> {project.user.name} </div>
             {project.user.isOrganization ? (
-              <Buildings />
+              <Buildings size={16} />
             ) : (
               <div className="text-xs">
                 {project.memberships?.length > 0 && (
