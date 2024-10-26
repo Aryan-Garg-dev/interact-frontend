@@ -11,7 +11,6 @@ import {
   WORKSPACE_URL,
 } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
-
 import {
   configSelector,
   setFetchedApplications,
@@ -68,19 +67,16 @@ import {
 } from '@/types';
 import { getMessagingUser } from '@/utils/funcs/messaging';
 import Toaster from '@/utils/toaster';
-import Cookies from 'js-cookie';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 
-const useUserStateFetcher = () => {
+const useUserStateFetcher = (initialLogin = false) => {
   const dispatch = useDispatch();
 
   const config = useSelector(configSelector);
 
-  const userID = Cookies.get('id');
-
   const fetchFollowing = () => {
-    if (moment().utc().diff(config.lastFetchedFollowing, 'minute') < 30) return;
+    if (moment().utc().diff(config.lastFetchedFollowing, 'minute') < 30 && !initialLogin) return;
     const URL = `${CONNECTION_URL}/following/me`;
     getHandler(URL)
       .then(res => {
@@ -96,7 +92,7 @@ const useUserStateFetcher = () => {
   };
 
   const fetchLikes = () => {
-    if (moment().utc().diff(config.lastFetchedLikes, 'minute') < 30) return;
+    if (moment().utc().diff(config.lastFetchedLikes, 'minute') < 30 && !initialLogin) return;
     const LIKES_URL = `${USER_URL}/me/likes`;
     getHandler(LIKES_URL)
       .then(res => {
@@ -129,7 +125,8 @@ const useUserStateFetcher = () => {
       moment().utc().diff(config.lastFetchedPostBookmarks, 'minute') < 30 &&
       moment().utc().diff(config.lastFetchedProjectBookmarks, 'minute') < 30 &&
       moment().utc().diff(config.lastFetchedOpeningBookmarks, 'minute') < 30 &&
-      moment().utc().diff(config.lastFetchedEventBookmarks, 'minute') < 30
+      moment().utc().diff(config.lastFetchedEventBookmarks, 'minute') < 30 &&
+      !initialLogin
     )
       return;
 
@@ -157,7 +154,7 @@ const useUserStateFetcher = () => {
   };
 
   const fetchChats = () => {
-    if (moment().utc().diff(config.lastFetchedChats, 'minute') < 30) return;
+    if (moment().utc().diff(config.lastFetchedChats, 'minute') < 30 && !initialLogin) return;
     const URL = `${MESSAGING_URL}/me`;
     getHandler(URL)
       .then(res => {
@@ -183,7 +180,7 @@ const useUserStateFetcher = () => {
   };
 
   const fetchProjects = () => {
-    if (moment().utc().diff(config.lastFetchedProjects, 'minute') < 30) return;
+    if (moment().utc().diff(config.lastFetchedProjects, 'minute') < 30 && !initialLogin) return;
     const URL = `${WORKSPACE_URL}/my`;
     getHandler(URL)
       .then(res => {
@@ -203,7 +200,7 @@ const useUserStateFetcher = () => {
   };
 
   const fetchContributingProjects = () => {
-    if (moment().utc().diff(config.lastFetchedContributingProjects, 'minute') < 30) return;
+    if (moment().utc().diff(config.lastFetchedContributingProjects, 'minute') < 30 && !initialLogin) return;
     const URL = `${WORKSPACE_URL}/memberships`;
     getHandler(URL)
       .then(res => {
@@ -240,7 +237,7 @@ const useUserStateFetcher = () => {
   };
 
   const fetchApplications = () => {
-    if (moment().utc().diff(config.lastFetchedApplications, 'minute') < 30) return;
+    if (moment().utc().diff(config.lastFetchedApplications, 'minute') < 30 && !initialLogin) return;
     const URL = `${WORKSPACE_URL}/applications`;
     getHandler(URL)
       .then(res => {
@@ -259,7 +256,7 @@ const useUserStateFetcher = () => {
   };
 
   const fetchUnreadNotifications = () => {
-    if (moment().utc().diff(config.lastFetchedUnreadNotifications, 'seconds') < 30) return;
+    if (moment().utc().diff(config.lastFetchedUnreadNotifications, 'seconds') < 30 && !initialLogin) return;
     const URL = `${NOTIFICATION_URL}/unread/count`;
     getHandler(URL)
       .then(res => {
@@ -275,7 +272,7 @@ const useUserStateFetcher = () => {
   };
 
   const fetchUnreadInvitations = () => {
-    if (moment().utc().diff(config.lastFetchedUnreadInvitations, 'minute') < 2) return;
+    if (moment().utc().diff(config.lastFetchedUnreadInvitations, 'minute') < 2 && !initialLogin) return;
     const URL = `${INVITATION_URL}/unread/count`;
     getHandler(URL)
       .then(res => {
@@ -291,7 +288,7 @@ const useUserStateFetcher = () => {
   };
 
   const fetchUnreadChats = () => {
-    if (moment().utc().diff(config.lastFetchedUnreadChats, 'minute') < 2) return;
+    if (moment().utc().diff(config.lastFetchedUnreadChats, 'minute') < 2 && !initialLogin) return;
     const URL = `${MESSAGING_URL}/personal/unread`;
     getHandler(URL)
       .then(res => {
@@ -307,7 +304,7 @@ const useUserStateFetcher = () => {
   };
 
   const fetchOrganizationMemberships = () => {
-    if (moment().utc().diff(config.lastFetchedOrganizationMemberships, 'minute') < 30) return;
+    if (moment().utc().diff(config.lastFetchedOrganizationMemberships, 'minute') < 30 && !initialLogin) return;
     const URL = `${USER_URL}/me/organization/memberships`;
     getHandler(URL)
       .then(res => {
@@ -323,8 +320,8 @@ const useUserStateFetcher = () => {
   };
 
   const fetchCommunityMemberships = () => {
-    if (moment().utc().diff(config.lastFetchedCommunityMemberships, 'minute') < 30) return;
-    const URL = `${COMMUNITY_URL}/me`;
+    if (moment().utc().diff(config.lastFetchedCommunityMemberships, 'minute') < 30 && !initialLogin) return;
+    const URL = `${COMMUNITY_URL}/me?communityType=all`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
@@ -339,7 +336,7 @@ const useUserStateFetcher = () => {
   };
 
   const fetchVotedOptions = () => {
-    if (moment().utc().diff(config.lastFetchedVotedOptions, 'minute') < 5) return;
+    if (moment().utc().diff(config.lastFetchedVotedOptions, 'minute') < 5 && !initialLogin) return;
     const URL = `${USER_URL}/me/polls/options`;
     getHandler(URL)
       .then(res => {
@@ -355,7 +352,7 @@ const useUserStateFetcher = () => {
   };
 
   const fetchRegisteredEvents = () => {
-    if (moment().utc().diff(config.lastFetchedRegisteredEvents, 'minute') < 5) return;
+    if (moment().utc().diff(config.lastFetchedRegisteredEvents, 'minute') < 5 && !initialLogin) return;
     const URL = `${USER_URL}/me/events`;
     getHandler(URL)
       .then(res => {

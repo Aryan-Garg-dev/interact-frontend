@@ -31,7 +31,7 @@ const Login = () => {
 
   const dispatch = useDispatch();
 
-  const userStateFetcher = useUserStateFetcher();
+  const userStateFetcher = useUserStateFetcher(true);
 
   const handleSubmit = async (el: React.FormEvent<HTMLFormElement>) => {
     el.preventDefault();

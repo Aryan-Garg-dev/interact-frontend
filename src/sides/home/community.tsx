@@ -17,13 +17,15 @@ import Tags from '@/components/form/tags';
 import categories from '@/utils/categories';
 import Toaster from '@/utils/toaster';
 import postHandler from '@/handlers/post_handler';
-import { COMMUNITY_URL } from '@/config/routes';
+import { COMMUNITY_PROFILE_PIC_URL, COMMUNITY_URL } from '@/config/routes';
 import { Community } from '@/types';
 import { SERVER_ERROR } from '@/config/errors';
 import { useDispatch } from 'react-redux';
 import { setCommunityMemberships, userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
 import getHandler from '@/handlers/get_handler';
+import Image from 'next/image';
+import Link from 'next/link';
 
 const CommunitySide = () => {
   const [communities, setCommunities] = useState<Community[]>([]);
@@ -56,7 +58,22 @@ const CommunitySide = () => {
         <SidePrimeWrapper title="Owned Communities">
           <div className="w-full flex flex-col gap-2">
             {ownedCommunities.map(community => (
-              <div key={community.id}>hello</div>
+              <Link
+                href={`/explore/community/${community.id}`}
+                key={community.id}
+                className="w-fit flex items-center gap-2 group"
+              >
+                <Image
+                  width={50}
+                  height={50}
+                  src={`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`}
+                  placeholder="blur"
+                  blurDataURL={community.profilePicBlurHash || 'no-hash'}
+                  alt=""
+                  className="w-6 h-6 rounded-full cursor-pointer"
+                />
+                <div className="w-fit text-lg font-medium cursor-pointer">{community.title}</div>
+              </Link>
             ))}
           </div>
         </SidePrimeWrapper>
@@ -65,7 +82,22 @@ const CommunitySide = () => {
         <SidePrimeWrapper title="Joined Communities">
           <div className="w-full flex flex-col gap-2">
             {communities.map(community => (
-              <div key={community.id}></div>
+              <Link
+                href={`/explore/community/${community.id}`}
+                key={community.id}
+                className="w-fit flex items-center gap-2 group"
+              >
+                <Image
+                  width={50}
+                  height={50}
+                  src={`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`}
+                  placeholder="blur"
+                  blurDataURL={community.profilePicBlurHash || 'no-hash'}
+                  alt=""
+                  className="w-6 h-6 rounded-full cursor-pointer"
+                />
+                <div className="w-fit text-lg font-medium cursor-pointer">{community.title}</div>
+              </Link>
             ))}
           </div>
         </SidePrimeWrapper>

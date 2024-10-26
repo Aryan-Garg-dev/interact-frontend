@@ -20,7 +20,7 @@ interface Props {
 const LoginCallback = ({ token }: Props) => {
   const dispatch = useDispatch();
 
-  const userStateFetcher = useUserStateFetcher();
+  const userStateFetcher = useUserStateFetcher(true);
 
   useEffect(() => {
     configuredAxios
