@@ -6,17 +6,20 @@ import UserHoverCard from '@/components/common/user_hover_card';
 import PostComponent from '@/components/home/post';
 import RePostComponent from '@/components/home/repost';
 import PostsLoader from '@/components/loaders/posts';
-import { COMMUNITY_MODERATOR } from '@/config/constants';
+import { Button } from '@/components/ui/button';
+import { COMMUNITY_MEMBER, COMMUNITY_MODERATOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { COMMUNITY_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import EditCommunity from '@/sections/community/edit_community';
+import NewPost from '@/sections/home/new_post';
 import { Post, User } from '@/types';
 import { initialCommunity } from '@/types/initials';
 import { checkCommunityAccess } from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
+import PrimeWrapper from '@/wrappers/prime';
 import { Pen } from '@phosphor-icons/react';
 import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
@@ -33,6 +36,8 @@ const Community = ({ id }: { id: string }) => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+
+  const [clickedOnNewPost, setClickedOnNewPost] = useState(false);
 
   const fetchCommunity = async () => {
     const URL = `${COMMUNITY_URL}/${id}`;
@@ -78,15 +83,23 @@ const Community = ({ id }: { id: string }) => {
   return (
     <BaseWrapper>
       <Sidebar index={5} />
+      {clickedOnNewPost && (
+        <NewPost setFeed={setPosts} initialCommunityID={community.id} setShow={setClickedOnNewPost} />
+      )}
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-full flex flex-col gap-2">
           <div className="w-full relative">
             <div className="w-full h-32 bg-white rounded-lg"></div>
             <div className="w-full flex items-end gap-2 absolute -translate-y-1/2 pl-12">
               <div className="w-24 h-24 bg-black rounded-full border-gray-200 border-4"></div>
-              <div className="w-[calc(100%-96px)] flex justify-between items-center">
+              <div className="w-[calc(100%-96px)] flex justify-between items-center pb-1">
                 <div className="text-3xl max-md:text-xl font-semibold">{community.title}</div>
                 <div className="w-fit flex-center gap-2">
+                  {checkCommunityAccess(COMMUNITY_MEMBER, community.id) && (
+                    <Button onClick={() => setClickedOnNewPost(true)} variant="outline">
+                      New Post
+                    </Button>
+                  )}
                   {checkCommunityAccess(COMMUNITY_MODERATOR, community.id) && (
                     <EditCommunity community={community} setCommunity={setCommunity} />
                   )}
@@ -95,31 +108,33 @@ const Community = ({ id }: { id: string }) => {
               </div>
             </div>
           </div>
-          <div className="w-full flex gap-4 mt-12">
+          <div className="w-full flex gap-4 mt-14">
             <div className="w-2/3">
-              <div className="w-full">
-                {loading ? (
-                  <PostsLoader />
-                ) : posts.length === 0 ? (
-                  // <NoFeed />
-                  <></>
-                ) : (
-                  <InfiniteScroll
-                    className="w-full"
-                    dataLength={posts.length}
-                    next={getPosts}
-                    hasMore={hasMore}
-                    loader={<PostsLoader />}
-                  >
-                    {posts.map(post => {
-                      if (post.rePost) return <RePostComponent key={post.id} post={post} />;
-                      else return <PostComponent key={post.id} post={post} />;
-                    })}
-                  </InfiniteScroll>
-                )}
-              </div>
+              <PrimeWrapper index={0} maxIndex={0}>
+                <div className="w-full">
+                  {loading ? (
+                    <PostsLoader />
+                  ) : posts.length === 0 ? (
+                    // <NoFeed />
+                    <></>
+                  ) : (
+                    <InfiniteScroll
+                      className="w-full"
+                      dataLength={posts.length}
+                      next={getPosts}
+                      hasMore={hasMore}
+                      loader={<PostsLoader />}
+                    >
+                      {posts.map(post => {
+                        if (post.rePost) return <RePostComponent key={post.id} post={post} />;
+                        else return <PostComponent key={post.id} post={post} />;
+                      })}
+                    </InfiniteScroll>
+                  )}
+                </div>
+              </PrimeWrapper>
             </div>
-            <div className="w-1/3 h-fit max-h-[calc(100vh-80px)] overflow-y-auto sticky top-[80px] bg-white flex flex-col gap-2 p-4 rounded-xl">
+            <div className="w-1/3 h-fit max-h-[calc(100vh-80px)] overflow-y-auto sticky top-[80px] bg-white flex flex-col gap-2 p-4 rounded-lg">
               <div className="text-gray-600">{community.description}</div>
               <Tags tags={community.tags} displayAll />
               <div className="w-full flex items-center justify-center gap-8 my-2">

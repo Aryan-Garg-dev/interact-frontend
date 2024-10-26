@@ -10,25 +10,23 @@ import NewPostImages from '@/components/home/new_post_images';
 import NewPostHelper from '@/components/home/new_post_helper';
 import { User } from '@/types';
 import { useWindowWidth } from '@react-hook/window-size';
-import { currentOrgIDSelector, currentOrgSelector } from '@/slices/orgSlice';
+import { currentOrgSelector } from '@/slices/orgSlice';
 import getHandler from '@/handlers/get_handler';
 import TagUserUtils from '@/utils/funcs/tag_users';
 import ModalWrapper from '@/wrappers/modal';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-('use client');
 import { Check, ChevronsUpDown } from 'lucide-react';
-
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   setFeed?: React.Dispatch<React.SetStateAction<any[]>>;
   org?: boolean;
+  initialCommunityID?: string;
 }
 
-const NewPost = ({ setShow, setFeed, org = false }: Props) => {
+const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Props) => {
   const [content, setContent] = useState<string>('');
   const [images, setImages] = useState<File[]>([]);
   const [showTipsModal, setShowTipsModal] = useState<boolean>(false);
@@ -41,7 +39,7 @@ const NewPost = ({ setShow, setFeed, org = false }: Props) => {
   const currentOrg = useSelector(currentOrgSelector);
 
   const [openCommunityDropdown, setOpenCommunityDropdown] = React.useState(false);
-  const [communityID, setCommunityID] = React.useState('');
+  const [communityID, setCommunityID] = React.useState(initialCommunityID);
 
   useEffect(() => {
     document.documentElement.style.overflowY = 'hidden';
@@ -95,8 +93,6 @@ const NewPost = ({ setShow, setFeed, org = false }: Props) => {
     textarea.setSelectionRange(start + prefix.length, end + prefix.length);
   };
 
-  const currentOrgID = useSelector(currentOrgIDSelector);
-
   const handleSubmit = async () => {
     if (content.trim() == '' || content.replace(/\n/g, '').length == 0) {
       Toaster.error('Caption cannot be empty!');
@@ -112,7 +108,7 @@ const NewPost = ({ setShow, setFeed, org = false }: Props) => {
     formData.append('content', content.replace(/\n{3,}/g, '\n\n'));
     taggedUsernames.forEach(username => formData.append('taggedUsernames', username));
     const URL = org
-      ? `${ORG_URL}/${currentOrgID}/posts`
+      ? `${ORG_URL}/${currentOrg.id}/posts`
       : communityID
       ? `${COMMUNITY_URL}/${communityID}/posts`
       : POST_URL;

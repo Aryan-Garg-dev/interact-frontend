@@ -7,10 +7,12 @@ interface WrapperProps {
 }
 
 const PrimeWrapper: React.FC<WrapperProps> = ({ children, index, maxIndex }) => {
+  let includeBorder = true;
+  if (index == maxIndex) includeBorder = false;
   return (
     <div
-      className={`w-full bg-white rounded-sm ${
-        index == 0 ? 'rounded-tl-none' : index == maxIndex && 'rounded-tr-none'
+      className={`w-full bg-white rounded-lg ${
+        index == 0 && includeBorder ? 'rounded-tl-none' : index == maxIndex && includeBorder && 'rounded-tr-none'
       } p-base_padding`}
     >
       {children}
