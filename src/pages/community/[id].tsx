@@ -12,6 +12,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import { COMMUNITY_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import EditCommunity from '@/sections/community/edit_community';
+import EditMemberships from '@/sections/community/edit_memberships';
 import NewPost from '@/sections/home/new_post';
 import { Post, User } from '@/types';
 import { initialCommunity } from '@/types/initials';
@@ -20,7 +21,6 @@ import Toaster from '@/utils/toaster';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import PrimeWrapper from '@/wrappers/prime';
-import { Pen } from '@phosphor-icons/react';
 import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
@@ -102,6 +102,9 @@ const Community = ({ id }: { id: string }) => {
                   )}
                   {checkCommunityAccess(COMMUNITY_MODERATOR, community.id) && (
                     <EditCommunity community={community} setCommunity={setCommunity} />
+                  )}
+                  {checkCommunityAccess(COMMUNITY_MODERATOR, community.id) && (
+                    <EditMemberships community={community} setCommunity={setCommunity} />
                   )}
                   <CommunityJoinBtn communityID={community.id} communityAccess={community.access} smaller={false} />
                 </div>

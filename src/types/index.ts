@@ -888,9 +888,9 @@ export interface HackathonHistory {
   judges: User[];
 }
 
-type CommunityAccess = 'open' | 'restricted' | 'closed';
+export type CommunityAccess = 'open' | 'restricted' | 'closed';
 
-type CommunityRole = 'Member' | 'Moderator' | 'Admin';
+export type CommunityRole = 'Member' | 'Moderator' | 'Admin';
 
 export interface Community {
   id: string;
