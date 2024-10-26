@@ -90,7 +90,7 @@ const Community = ({ id }: { id: string }) => {
                   {checkCommunityAccess(COMMUNITY_MODERATOR, community.id) && (
                     <EditCommunity community={community} setCommunity={setCommunity} />
                   )}
-                  <CommunityJoinBtn communityID={community.id} communityAccess={community.access} />
+                  <CommunityJoinBtn communityID={community.id} communityAccess={community.access} smaller={false} />
                 </div>
               </div>
             </div>

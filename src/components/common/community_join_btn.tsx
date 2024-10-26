@@ -27,7 +27,15 @@ import { useDispatch } from 'react-redux';
 import { setCommunityMemberships, userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
 
-const CommunityJoinBtn = ({ communityID, communityAccess }: { communityID: string; communityAccess: string }) => {
+const CommunityJoinBtn = ({
+  communityID,
+  communityAccess,
+  smaller = true,
+}: {
+  communityID: string;
+  communityAccess: string;
+  smaller?: boolean;
+}) => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const user = useSelector(userSelector);
@@ -81,9 +89,15 @@ const CommunityJoinBtn = ({ communityID, communityAccess }: { communityID: strin
   return joinedCommunities.includes(communityID) ? (
     <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <AlertDialogTrigger>
-        <div className="w-16 h-fit py-1 text-sm font-medium bg-primary_comp flex-center rounded-xl border-[1px] cursor-pointer">
-          Joined
-        </div>
+        {smaller ? (
+          <div className="w-16 h-fit py-1 text-sm font-medium bg-primary_comp flex-center rounded-xl border-[1px] cursor-pointer">
+            Joined
+          </div>
+        ) : (
+          <Button className="w-32 text-sm font-medium hover:bg-priority_high hover:text-black transition-ease-300">
+            Joined
+          </Button>
+        )}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -100,12 +114,19 @@ const CommunityJoinBtn = ({ communityID, communityAccess }: { communityID: strin
     </AlertDialog>
   ) : (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <div
-        onClick={() => (communityAccess.toLowerCase() == 'open' ? handleJoin() : setDialogOpen(true))}
-        className="w-16 h-fit py-1 text-sm font-medium bg-primary_comp hover:bg-primary_comp_hover flex-center rounded-xl border-[1px] cursor-pointer transition-ease-300"
-      >
-        Join
-      </div>
+      {smaller ? (
+        <div
+          onClick={() => (communityAccess.toLowerCase() == 'open' ? handleJoin() : setDialogOpen(true))}
+          className="w-16 h-fit py-1 text-sm font-medium bg-primary_comp hover:bg-primary_comp_hover flex-center rounded-xl border-[1px] cursor-pointer transition-ease-300"
+        >
+          Join
+        </div>
+      ) : (
+        <Button onClick={() => (communityAccess.toLowerCase() == 'open' ? handleJoin() : setDialogOpen(true))}>
+          Join
+        </Button>
+      )}
+
       <DialogContent className="sm:max-w-md min-w-[30%]">
         <DialogHeader>
           <DialogTitle className="text-3xl">Join Community</DialogTitle>

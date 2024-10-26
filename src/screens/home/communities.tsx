@@ -6,7 +6,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { EXPLORE_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
 import Loader from '@/components/common/loader';
-import CommunityCard from '@/components/community_card';
+import CommunityCard from '@/components/explore/community_card';
 
 const Communities = () => {
   const [communities, setCommunities] = useState<Community[]>([]);

@@ -1,5 +1,5 @@
 import { SERVER_ERROR } from '@/config/errors';
-import { EXPLORE_URL, ORG_URL, POST_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { COMMUNITY_URL, EXPLORE_URL, ORG_URL, POST_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
@@ -14,7 +14,14 @@ import { currentOrgIDSelector, currentOrgSelector } from '@/slices/orgSlice';
 import getHandler from '@/handlers/get_handler';
 import TagUserUtils from '@/utils/funcs/tag_users';
 import ModalWrapper from '@/wrappers/modal';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+('use client');
+import { Check, ChevronsUpDown } from 'lucide-react';
 
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   setFeed?: React.Dispatch<React.SetStateAction<any[]>>;
@@ -32,6 +39,9 @@ const NewPost = ({ setShow, setFeed, org = false }: Props) => {
 
   const user = useSelector(userSelector);
   const currentOrg = useSelector(currentOrgSelector);
+
+  const [openCommunityDropdown, setOpenCommunityDropdown] = React.useState(false);
+  const [communityID, setCommunityID] = React.useState('');
 
   useEffect(() => {
     document.documentElement.style.overflowY = 'hidden';
@@ -101,7 +111,11 @@ const NewPost = ({ setShow, setFeed, org = false }: Props) => {
     });
     formData.append('content', content.replace(/\n{3,}/g, '\n\n'));
     taggedUsernames.forEach(username => formData.append('taggedUsernames', username));
-    const URL = org ? `${ORG_URL}/${currentOrgID}/posts` : POST_URL;
+    const URL = org
+      ? `${ORG_URL}/${currentOrgID}/posts`
+      : communityID
+      ? `${COMMUNITY_URL}/${communityID}/posts`
+      : POST_URL;
 
     const res = await postHandler(URL, formData, 'multipart/form-data');
 
@@ -141,10 +155,61 @@ const NewPost = ({ setShow, setFeed, org = false }: Props) => {
             />
             <div className="grow flex flex-col gap-4">
               <div className="flex justify-between items-center">
-                <div className="flex flex-col">
-                  <div className="text-2xl font-semibold">{org ? currentOrg.title : user.name}</div>
-                  {!org && <div className="text-sm">@{user.username}</div>}
+                <div className="w-fit flex-center gap-12">
+                  <div className="flex flex-col">
+                    <div className="text-2xl font-semibold">{org ? currentOrg.title : user.name}</div>
+                    {!org && <div className="text-sm">@{user.username}</div>}
+                  </div>
+
+                  {user.communityMemberships && user.communityMemberships.length > 0 && (
+                    <Popover open={openCommunityDropdown} onOpenChange={setOpenCommunityDropdown}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={openCommunityDropdown}
+                          className="w-[200px] justify-between"
+                        >
+                          {communityID
+                            ? '@' +
+                              user.communityMemberships?.find(membership => membership.communityID === communityID)
+                                ?.community?.title
+                            : 'Post in Community'}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[200px] p-0">
+                        <Command>
+                          <CommandInput placeholder="Search Community..." />
+                          <CommandList>
+                            <CommandEmpty>No Community Found.</CommandEmpty>
+                            <CommandGroup>
+                              {user.communityMemberships?.map(membership => (
+                                <CommandItem
+                                  key={membership.id}
+                                  value={membership.communityID}
+                                  onSelect={currentValue => {
+                                    setCommunityID(currentValue === communityID ? '' : currentValue);
+                                    setOpenCommunityDropdown(false);
+                                  }}
+                                >
+                                  {communityID === membership.communityID ? (
+                                    <Check className="mr-2 h-4 w-4" />
+                                  ) : (
+                                    <div className="w-4 h-4 bg-black rounded-full mr-2" />
+                                  )}
+
+                                  {membership.community?.title}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  )}
                 </div>
+
                 <div
                   onClick={handleSubmit}
                   className="max-md:hidden w-[120px] h-[48px] bg-primary_comp dark:bg-dark_primary_comp hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover active:bg-primary_comp_active dark:active:bg-dark_primary_comp_active transition-ease-300 shrink-0 flex-center text-lg font-semibold rounded-lg cursor-pointer"

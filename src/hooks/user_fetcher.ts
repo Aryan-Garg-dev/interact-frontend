@@ -56,6 +56,7 @@ import {
 import {
   Application,
   Chat,
+  Community,
   CommunityMembership,
   EventBookmark,
   Membership,
@@ -325,7 +326,13 @@ const useUserStateFetcher = (initialLogin = false) => {
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
-          const communityMemberships: CommunityMembership[] = res.data.memberships;
+          let communityMemberships: CommunityMembership[] = res.data.memberships || [];
+          const communities: Community[] = res.data.communities || [];
+
+          communityMemberships = communityMemberships.map(m => {
+            return { ...m, community: communities.find(c => c.id == m.communityID) };
+          });
+
           dispatch(setCommunityMemberships(communityMemberships));
           dispatch(setLastFetchedCommunityMemberships(new Date().toUTCString()));
         } else Toaster.error(res.data.message, 'error_toaster');
