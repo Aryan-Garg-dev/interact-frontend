@@ -935,6 +935,7 @@ export interface CommunityMembershipRequest {
 }
 
 export interface CommunityRule {
+  id: string;
   communityID: string;
   title: string;
   description: string;

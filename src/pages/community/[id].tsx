@@ -7,10 +7,11 @@ import PostComponent from '@/components/home/post';
 import RePostComponent from '@/components/home/repost';
 import PostsLoader from '@/components/loaders/posts';
 import { Button } from '@/components/ui/button';
-import { COMMUNITY_MEMBER, COMMUNITY_MODERATOR } from '@/config/constants';
+import { COMMUNITY_ADMIN, COMMUNITY_MEMBER, COMMUNITY_MODERATOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { COMMUNITY_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
+import AddRule from '@/sections/community/add_rule';
 import EditCommunity from '@/sections/community/edit_community';
 import EditMemberships from '@/sections/community/edit_memberships';
 import NewPost from '@/sections/home/new_post';
@@ -25,6 +26,8 @@ import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import EditRule from '@/sections/community/edit_rule';
 
 const Community = ({ id }: { id: string }) => {
   const [community, setCommunity] = useState(initialCommunity);
@@ -193,14 +196,30 @@ const Community = ({ id }: { id: string }) => {
                   </div>
                 </>
               )}
-              {community.rules && community.rules.length > 0 && (
+              {((community.rules && community.rules.length > 0) ||
+                checkCommunityAccess(COMMUNITY_ADMIN, community.id)) && (
                 <>
                   <div className="w-full h-[1px] bg-gray-300 my-2"></div>
-                  <div className="text-lg font-medium">Rules</div>
-                  <div className="w-full flex flex-col gap-1">
-                    {community.rules.map((rule, i) => (
-                      <div key={i}>{rule.title}</div>
-                    ))}
+                  <div>
+                    <div className="w-full flex items-center justify-between">
+                      <div className="text-lg font-medium">Rules</div>
+                      <AddRule communityID={community.id} setCommunity={setCommunity} />
+                    </div>
+                    <Accordion type="multiple">
+                      <div className="w-full flex flex-col gap-1">
+                        {community.rules?.map((rule, i) => (
+                          <AccordionItem key={i} value={rule.id}>
+                            <AccordionTrigger>{rule.title}</AccordionTrigger>
+                            <AccordionContent className="flex justify-between">
+                              <div>{rule.description}</div>
+                              {checkCommunityAccess(COMMUNITY_ADMIN, community.id) && (
+                                <EditRule rule={rule} communityID={community.id} setCommunity={setCommunity} />
+                              )}
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </div>
+                    </Accordion>
                   </div>
                 </>
               )}

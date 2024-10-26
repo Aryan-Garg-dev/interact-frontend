@@ -132,11 +132,17 @@ const config: Config = {
         reveal_reverse: 'reveal_reverse 0.3s ease-in-out',
         onboarding_dummy_user_card: 'onboarding_dummy_user_card 3s ease-in-out 0.4s infinite',
         onboarding_dummy_user_card_backwards: 'onboarding_dummy_user_card_backwards 3s ease-in-out 0.4s infinite',
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
       },
       keyframes: {
         'caret-blink': {
-          '0%,70%,100%': { opacity: '1' },
-          '20%,50%': { opacity: '0' },
+          '0%,70%,100%': {
+            opacity: '1',
+          },
+          '20%,50%': {
+            opacity: '0',
+          },
         },
         shrink: {
           '0%': {
@@ -188,6 +194,22 @@ const config: Config = {
           },
           '100%': {
             transform: 'translateX(316px)',
+          },
+        },
+        'accordion-down': {
+          from: {
+            height: '0',
+          },
+          to: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+        },
+        'accordion-up': {
+          from: {
+            height: 'var(--radix-accordion-content-height)',
+          },
+          to: {
+            height: '0',
           },
         },
       },

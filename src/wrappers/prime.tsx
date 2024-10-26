@@ -8,7 +8,7 @@ interface WrapperProps {
 
 const PrimeWrapper: React.FC<WrapperProps> = ({ children, index, maxIndex }) => {
   let includeBorder = true;
-  if (index == maxIndex) includeBorder = false;
+  if (index == 0 && index == maxIndex) includeBorder = false;
   return (
     <div
       className={`w-full bg-white rounded-lg ${

@@ -3,7 +3,6 @@ import '@/styles/loader.css';
 import '@/styles/toastify.css';
 import '@/styles/extras.tailwind.css';
 import '@/styles/project_card.css';
-import '@/styles/variables.module.scss';
 import '@/styles/landing.css';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';

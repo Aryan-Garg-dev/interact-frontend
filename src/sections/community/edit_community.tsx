@@ -3,14 +3,21 @@ import Select from '@/components/form/select';
 import Tags from '@/components/form/tags';
 import TextArea from '@/components/form/textarea';
 import { Button } from '@/components/ui/button';
-import { DialogHeader, DialogFooter } from '@/components/ui/dialog';
 import { SERVER_ERROR } from '@/config/errors';
 import { COMMUNITY_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
 import { Community } from '@/types';
 import categories from '@/utils/categories';
 import Toaster from '@/utils/toaster';
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+  DialogHeader,
+  DialogFooter,
+} from '@/components/ui/dialog';
 import React, { useState } from 'react';
 import isArrEdited from '@/utils/funcs/check_array_edited';
 
