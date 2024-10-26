@@ -64,8 +64,8 @@ const CommunitySide = () => {
                 className="w-fit flex items-center gap-2 group"
               >
                 <Image
-                  width={50}
-                  height={50}
+                  width={20}
+                  height={20}
                   src={`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`}
                   placeholder="blur"
                   blurDataURL={community.profilePicBlurHash || 'no-hash'}

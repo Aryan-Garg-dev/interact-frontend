@@ -9,7 +9,12 @@ import PostsLoader from '@/components/loaders/posts';
 import { Button } from '@/components/ui/button';
 import { COMMUNITY_ADMIN, COMMUNITY_MEMBER, COMMUNITY_MODERATOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
-import { COMMUNITY_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import {
+  COMMUNITY_COVER_PIC_URL,
+  COMMUNITY_PROFILE_PIC_URL,
+  COMMUNITY_URL,
+  USER_PROFILE_PIC_URL,
+} from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import AddRule from '@/sections/community/add_rule';
 import EditCommunity from '@/sections/community/edit_community';
@@ -92,9 +97,27 @@ const Community = ({ id }: { id: string }) => {
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-full flex flex-col gap-2">
           <div className="w-full relative">
-            <div className="w-full h-32 bg-white rounded-lg"></div>
+            <Image
+              crossOrigin="anonymous"
+              className="w-full h-full bg-gray-200 rounded-lg"
+              width={1000}
+              height={1000}
+              alt="cover pic"
+              placeholder="blur"
+              blurDataURL={community.coverPicBlurHash || 'no-hash'}
+              src={`${COMMUNITY_COVER_PIC_URL}/${community.coverPic}`}
+            />
             <div className="w-full flex items-end gap-2 absolute -translate-y-1/2 pl-12">
-              <div className="w-24 h-24 bg-black rounded-full border-gray-200 border-4"></div>
+              <Image
+                crossOrigin="anonymous"
+                className="w-24 h-24 rounded-full border-gray-200 border-4"
+                width={200}
+                height={200}
+                alt="profile pic"
+                placeholder="blur"
+                blurDataURL={community.profilePicBlurHash || 'no-hash'}
+                src={`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`}
+              />
               <div className="w-[calc(100%-96px)] flex justify-between items-center pb-1">
                 <div className="text-3xl max-md:text-xl font-semibold">{community.title}</div>
                 <div className="w-fit flex-center gap-2">

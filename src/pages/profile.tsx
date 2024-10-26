@@ -13,7 +13,7 @@ import { navbarOpenSelector } from '@/slices/feedSlice';
 import Posts from '@/screens/profile/posts';
 import Projects from '@/screens/profile/projects';
 import ProfileCard from '@/sections/profile/profile_card';
-import { Check, ImageSquare, Pen, PencilSimple, X } from '@phosphor-icons/react';
+import { Check, ImageSquare, PencilSimple, X } from '@phosphor-icons/react';
 import { resizeImage } from '@/utils/resize_image';
 import ProfileCardLoader from '@/components/loaders/profile_card';
 import { SERVER_ERROR } from '@/config/errors';

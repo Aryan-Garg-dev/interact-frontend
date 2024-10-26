@@ -4,7 +4,7 @@ import Tags from '@/components/form/tags';
 import TextArea from '@/components/form/textarea';
 import { Button } from '@/components/ui/button';
 import { SERVER_ERROR } from '@/config/errors';
-import { COMMUNITY_URL } from '@/config/routes';
+import { COMMUNITY_COVER_PIC_URL, COMMUNITY_PROFILE_PIC_URL, COMMUNITY_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
 import { Community } from '@/types';
 import categories from '@/utils/categories';
@@ -20,6 +20,9 @@ import {
 } from '@/components/ui/dialog';
 import React, { useState } from 'react';
 import isArrEdited from '@/utils/funcs/check_array_edited';
+import Image from 'next/image';
+import { PencilSimple } from '@phosphor-icons/react/dist/ssr';
+import { resizeImage } from '@/utils/resize_image';
 
 const EditCommunity = ({
   community,
@@ -35,6 +38,11 @@ const EditCommunity = ({
   const [access, setAccess] = useState(community.access);
   const [tags, setTags] = useState(community.tags);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [profilePic, setProfilePic] = useState<File>();
+  const [profilePicView, setProfilePicView] = useState(`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`);
+  const [coverPic, setCoverPic] = useState<File>();
+  const [coverPicView, setCoverPicView] = useState(`${COMMUNITY_COVER_PIC_URL}/${community.coverPic}`);
 
   const handleSubmit = async () => {
     if (title.trim() === '') {
@@ -55,14 +63,27 @@ const EditCommunity = ({
     if (isArrEdited(tags, community.tags, true)) tags.forEach(tag => formData.append('tags', tag));
     if (category != community.category) formData.append('category', category);
     if (access != community.access) formData.append('access', access);
+    if (profilePic) formData.append('profilePic', profilePic);
+    if (coverPic) formData.append('coverPic', coverPic);
 
     const URL = `${COMMUNITY_URL}/${community.id}`;
 
     const res = await patchHandler(URL, formData, 'multipart/form-data');
     if (res.statusCode === 200) {
+      const newCommunity = res.data.community;
       if (setCommunity)
         setCommunity(prev => {
-          return { ...prev, title, tagline, description, tags, category, access };
+          return {
+            ...prev,
+            title,
+            tagline,
+            description,
+            tags,
+            category,
+            access,
+            profilePic: newCommunity.profilePic,
+            coverPic: newCommunity.coverPic,
+          };
         });
       Toaster.stopLoad(toaster, 'Community Edited', 1);
       setIsDialogOpen(false);
@@ -90,6 +111,68 @@ const EditCommunity = ({
           <DialogDescription>Create your own niche and gather like-minded people.</DialogDescription>
         </DialogHeader>
         <div className="w-full max-lg:w-full text-primary_black flex flex-col gap-4 pb-8 max-lg:pb-4">
+          <div className="w-full relative mb-6">
+            <input
+              type="file"
+              className="hidden"
+              id="coverPic"
+              multiple={false}
+              onChange={async ({ target }) => {
+                if (target.files && target.files[0]) {
+                  const file = target.files[0];
+                  if (file.type.split('/')[0] == 'image') {
+                    const resizedPic = await resizeImage(file, 1800, 300);
+                    setCoverPicView(URL.createObjectURL(resizedPic));
+                    setCoverPic(resizedPic);
+                  } else Toaster.error('Only Image Files can be selected');
+                }
+              }}
+            />
+            <label
+              htmlFor="coverPic"
+              className="w-full h-full bg-white flex justify-end bg-opacity-50 absolute opacity-0 hover:opacity-100 top-0 right-0 rounded-lg p-2 transition-ease-300"
+            >
+              <PencilSimple weight="duotone" />
+            </label>
+            <Image
+              crossOrigin="anonymous"
+              className="w-full h-full rounded-lg"
+              width={200}
+              height={200}
+              alt="cover pic"
+              src={coverPicView}
+            />
+            <input
+              type="file"
+              className="hidden"
+              id="profilePic"
+              multiple={false}
+              onChange={async ({ target }) => {
+                if (target.files && target.files[0]) {
+                  const file = target.files[0];
+                  if (file.type.split('/')[0] == 'image') {
+                    const resizedPic = await resizeImage(file, 1280, 1280);
+                    setProfilePicView(URL.createObjectURL(resizedPic));
+                    setProfilePic(resizedPic);
+                  } else Toaster.error('Only Image Files can be selected');
+                }
+              }}
+            />
+            <label
+              htmlFor="profilePic"
+              className="w-20 h-20 flex-center absolute bg-white bg-opacity-50 opacity-0 hover:opacity-100 right-1/2 translate-x-1/2 -translate-y-1/2 rounded-full border-white border-4 transition-ease-300 z-10"
+            >
+              <PencilSimple weight="duotone" />
+            </label>
+            <Image
+              crossOrigin="anonymous"
+              className="w-20 h-20 absolute right-1/2 translate-x-1/2 -translate-y-1/2 rounded-full border-white border-4"
+              width={100}
+              height={100}
+              alt="profile pic"
+              src={profilePicView}
+            />
+          </div>
           <Input label="Community Name" val={title} setVal={setTitle} maxLength={25} type="text" required />
           <Input label="Community Tagline" val={tagline} setVal={setTagline} maxLength={100} type="text" required />
           <Select label="Community Category" val={category} setVal={setCategory} options={categories} required />
