@@ -16,7 +16,7 @@ const Discover = () => {
   const [loading, setLoading] = useState(true);
 
   const getFeed = () => {
-    const URL = `${EXPLORE_URL}/posts/trending?page=${page}&limit=${5}`;
+    const URL = `${EXPLORE_URL}/posts/trending?page=${page}&limit=${10}`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
@@ -57,9 +57,8 @@ const Discover = () => {
           loader={<PostsLoader />}
         >
           {feed.map(post => {
-            // if (post.rePost) return <RePostComponent key={post.id} post={post} />;
-            // else
-            return <PostComponent key={post.id} post={post} />;
+            if (post.rePost) return <RePostComponent key={post.id} post={post} />;
+            else return <PostComponent key={post.id} post={post} />;
           })}
         </InfiniteScroll>
       )}
