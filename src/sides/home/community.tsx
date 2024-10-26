@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -78,6 +77,7 @@ const CommunitySide = () => {
 const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<React.SetStateAction<Community[]>> }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [tagline, setTagline] = useState('');
   const [category, setCategory] = useState('');
   const [access, setAccess] = useState('Open');
   const [tags, setTags] = useState<string[]>([]);
@@ -101,6 +101,7 @@ const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<Re
     const formData = new FormData();
     formData.append('title', title);
     formData.append('description', description);
+    formData.append('tagline', tagline);
     tags.forEach(tag => formData.append('tags', tag));
     formData.append('category', category);
     formData.append('access', access);
@@ -114,6 +115,7 @@ const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<Re
       Toaster.stopLoad(toaster, 'Community Created!', 1);
       setTitle('');
       setDescription('');
+      setTagline('');
       setTags([]);
       setCategory('');
       setAccess('Open');
@@ -144,6 +146,7 @@ const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<Re
         </DialogHeader>
         <div className="w-full max-lg:w-full text-primary_black flex flex-col gap-4 pb-8 max-lg:pb-4">
           <Input label="Community Name" val={title} setVal={setTitle} maxLength={25} type="text" required />
+          <Input label="Community Tagline" val={tagline} setVal={setTagline} maxLength={100} type="text" required />
           <Select label="Community Category" val={category} setVal={setCategory} options={categories} required />
           <div className="flex flex-col gap-1">
             <Select

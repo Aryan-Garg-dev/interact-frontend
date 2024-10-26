@@ -896,10 +896,13 @@ export interface Community {
   id: string;
   title: string;
   description?: string;
+  tagline: string;
   userID: string;
   user: User;
+  profilePic: string;
+  profilePicBlurHash: string;
   coverPic: string;
-  blurHash: string;
+  coverPicBlurHash: string;
   tags: string[];
   links: string[];
   category: string;
