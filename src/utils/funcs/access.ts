@@ -99,7 +99,7 @@ export const checkOrgProjectAccess = (
 };
 
 export const checkCommunityAccess = (role: string, communityID: string) => {
-  const membership = user.communityMemberships.filter(m => m.communityID == communityID)[0];
+  const membership = user.communityMemberships?.filter(m => m.communityID == communityID)[0];
   if (membership) return compareRoleLevel(membership.role, role);
   return false;
 };

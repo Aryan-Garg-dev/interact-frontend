@@ -66,7 +66,7 @@ const CommunityJoinBtn = ({ communityID, communityAccess }: { communityID: strin
 
     const res = await postHandler(URL, {});
     if (res.statusCode === 204) {
-      dispatch(setCommunityMemberships(user.communityMemberships.filter(m => m.communityID == communityID)));
+      dispatch(setCommunityMemberships(user.communityMemberships.filter(m => m.communityID != communityID)));
       Toaster.stopLoad(toaster, 'Left the Community', 1);
       setDialogOpen(false);
     } else {

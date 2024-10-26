@@ -912,6 +912,7 @@ export interface Community {
   noLikes: number;
   noMembers: number;
   createdAt: Date;
+  rules?: CommunityRule[];
 }
 
 export interface CommunityMembership {
@@ -931,4 +932,10 @@ export interface CommunityMembershipRequest {
   user: User;
   status: -1 | 0 | 1; // -1 for rejected, 0 for submitted, 1 for accepted
   createdAt: Date;
+}
+
+export interface CommunityRule {
+  communityID: string;
+  title: string;
+  description: string;
 }
