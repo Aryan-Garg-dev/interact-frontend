@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import NoProjects from '@/components/fillers/your_projects';
 import { navbarOpenSelector } from '@/slices/feedSlice';
 import { SERVER_ERROR } from '@/config/errors';
-import OrderMenu from '@/components/common/order_menu';
+import OrderMenu from '@/components/common/order_menu2';
 
 const CombinedProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -80,20 +80,12 @@ const CombinedProjects = () => {
 
   return (
     <div className="w-full">
-      <OrderMenu
-        orders={['activity', 'most_liked', 'most_viewed', 'latest']}
-        current={order}
-        setState={setOrder}
-        addSearch={true}
-        search={search}
-        setSearch={setSearch}
-        zIndex={20}
-      />
+      <OrderMenu orders={['activity', 'most_liked', 'most_viewed', 'latest']} current={order} setState={setOrder} />
       {loading ? (
         <Loader />
       ) : projects.length > 0 ? (
         <div
-          className={`w-full grid ${
+          className={`w-full mt-4 grid ${
             projects.length < 4
               ? `grid-cols-${projects.length}`
               : navbarOpen

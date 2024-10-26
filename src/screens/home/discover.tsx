@@ -8,21 +8,27 @@ import RePostComponent from '@/components/home/repost';
 import { EXPLORE_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
 import PostsLoader from '@/components/loaders/posts';
+import OrderMenu from '@/components/common/order_menu2';
 
 const Discover = () => {
   const [feed, setFeed] = useState<Post[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [order, setOrder] = useState('recommended');
 
-  const getFeed = () => {
-    const URL = `${EXPLORE_URL}/posts/trending?page=${page}&limit=${10}`;
+  const getFeed = (initialPage?: number) => {
+    const URL = `${EXPLORE_URL}/posts/${order}?page=${initialPage ? initialPage : page}&limit=${10}`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
-          const addedFeed = [...feed, ...res.data.posts];
-          if (addedFeed.length === feed.length) setHasMore(false);
-          setFeed(addedFeed);
+          if (initialPage == 1) {
+            setFeed(res.data.posts || []);
+          } else {
+            const addedFeed = [...feed, ...res.data.posts];
+            if (addedFeed.length === feed.length) setHasMore(false);
+            setFeed(addedFeed);
+          }
           setPage(prev => prev + 1);
           setLoading(false);
         } else {
@@ -38,13 +44,20 @@ const Discover = () => {
   };
 
   useEffect(() => {
-    getFeed();
-  }, []);
+    setPage(1);
+    setFeed([]);
+    setHasMore(true);
+    setLoading(true);
+    getFeed(1);
+  }, [order]);
 
   return (
     <div className="w-full">
+      <OrderMenu orders={['recommended', 'trending', 'most_liked', 'latest']} current={order} setState={setOrder} />
       {loading ? (
-        <PostsLoader />
+        <div className="mt-4">
+          <PostsLoader />
+        </div>
       ) : feed.length === 0 ? (
         // <NoFeed />
         <></>
