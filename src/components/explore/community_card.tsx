@@ -20,7 +20,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
           className="w-10 h-10 rounded-full"
         /> */}
         <div className="w-10 h-10 bg-black rounded-full"></div>
-        <Link href={`/explore/community/${community.id}`} className="w-[calc(100%-40px-64px-16px)] h-10 flex flex-col">
+        <Link href={`/community/${community.id}`} className="w-[calc(100%-40px-64px-16px)] h-10 flex flex-col">
           <div className="w-full font-semibold line-clamp-1">{community.title}</div>
           <div className="text-xs text-gray-500">{community.noMembers} Members</div>
         </Link>

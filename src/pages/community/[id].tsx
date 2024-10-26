@@ -10,6 +10,7 @@ import { COMMUNITY_MODERATOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { COMMUNITY_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
+import EditCommunity from '@/sections/community/edit_community';
 import { Post, User } from '@/types';
 import { initialCommunity } from '@/types/initials';
 import { checkCommunityAccess } from '@/utils/funcs/access';
@@ -85,8 +86,10 @@ const Community = ({ id }: { id: string }) => {
               <div className="w-24 h-24 bg-black rounded-full border-gray-200 border-4"></div>
               <div className="w-[calc(100%-96px)] flex justify-between items-center">
                 <div className="text-3xl max-md:text-xl font-semibold">{community.title}</div>
-                <div className="w-fit flex-center">
-                  {checkCommunityAccess(COMMUNITY_MODERATOR, community.id) && <Pen />}
+                <div className="w-fit flex-center gap-2">
+                  {checkCommunityAccess(COMMUNITY_MODERATOR, community.id) && (
+                    <EditCommunity community={community} setCommunity={setCommunity} />
+                  )}
                   <CommunityJoinBtn communityID={community.id} communityAccess={community.access} />
                 </div>
               </div>

@@ -59,7 +59,7 @@ const CommunitySide = () => {
           <div className="w-full flex flex-col gap-2">
             {ownedCommunities.map(community => (
               <Link
-                href={`/explore/community/${community.id}`}
+                href={`/community/${community.id}`}
                 key={community.id}
                 className="w-fit flex items-center gap-2 group"
               >
@@ -83,7 +83,7 @@ const CommunitySide = () => {
           <div className="w-full flex flex-col gap-2">
             {communities.map(community => (
               <Link
-                href={`/explore/community/${community.id}`}
+                href={`/community/${community.id}`}
                 key={community.id}
                 className="w-fit flex items-center gap-2 group"
               >
