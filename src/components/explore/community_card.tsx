@@ -9,7 +9,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
   return (
     <div className="w-full bg-gray-50 flex flex-col gap-2 rounded-lg border-[1px] p-2">
       <div className="w-full flex gap-2 items-center">
-        <Link href={`/community/${community.id}`}>
+        <Link href={`/community/${community.id}`} target="_blank">
           <Image
             crossOrigin="anonymous"
             width={50}
@@ -21,13 +21,17 @@ const CommunityCard = ({ community }: { community: Community }) => {
             className="w-10 h-10 rounded-full"
           />
         </Link>
-        <Link href={`/community/${community.id}`} className="w-[calc(100%-40px-64px-16px)] h-10 flex flex-col">
+        <Link
+          href={`/community/${community.id}`}
+          target="_blank"
+          className="w-[calc(100%-40px-64px-16px)] h-10 flex flex-col"
+        >
           <div className="w-full font-semibold line-clamp-1">{community.title}</div>
           <div className="text-xs text-gray-500">{community.noMembers} Members</div>
         </Link>
         <CommunityJoinBtn communityID={community.id} communityAccess={community.access} />
       </div>
-      <Link href={`/community/${community.id}`} className="w-full text-xs font-medium">
+      <Link href={`/community/${community.id}`} target="_blank" className="w-full text-xs font-medium">
         {community.tagline}
       </Link>
     </div>

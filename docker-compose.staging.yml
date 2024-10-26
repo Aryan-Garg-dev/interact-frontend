@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  frontend-staging:
+    container_name: interact-frontend-staging
+    build:
+      context: .
+      dockerfile: staging.Dockerfile
+    ports:
+      - 3100:3100
+    env_file:
+      - .env

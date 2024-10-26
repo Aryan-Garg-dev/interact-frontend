@@ -90,7 +90,7 @@ const Community = ({ id }: { id: string }) => {
 
   return (
     <BaseWrapper>
-      <Sidebar index={5} />
+      <Sidebar index={1} />
       {clickedOnNewPost && (
         <NewPost setFeed={setPosts} initialCommunityID={community.id} setShow={setClickedOnNewPost} />
       )}
