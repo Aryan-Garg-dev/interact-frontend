@@ -930,7 +930,6 @@ export interface CommunityMembershipRequest {
   communityID: string;
   userID: string;
   user: User;
-  status: -1 | 0 | 1; // -1 for rejected, 0 for submitted, 1 for accepted
   createdAt: Date;
 }
 

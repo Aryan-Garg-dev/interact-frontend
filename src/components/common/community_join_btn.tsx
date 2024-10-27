@@ -86,6 +86,13 @@ const CommunityJoinBtn = ({
     }
   };
 
+  const handleClick = () =>
+    communityAccess.toLowerCase() == 'open'
+      ? handleJoin()
+      : communityAccess.toLowerCase() == 'restricted'
+      ? setDialogOpen(true)
+      : Toaster.error('This community is closed');
+
   return joinedCommunities.includes(communityID) ? (
     <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <AlertDialogTrigger>
@@ -116,15 +123,13 @@ const CommunityJoinBtn = ({
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       {smaller ? (
         <div
-          onClick={() => (communityAccess.toLowerCase() == 'open' ? handleJoin() : setDialogOpen(true))}
+          onClick={handleClick}
           className="w-16 h-fit py-1 text-sm font-medium bg-primary_comp hover:bg-primary_comp_hover flex-center rounded-xl border-[1px] cursor-pointer transition-ease-300"
         >
           Join
         </div>
       ) : (
-        <Button onClick={() => (communityAccess.toLowerCase() == 'open' ? handleJoin() : setDialogOpen(true))}>
-          Join
-        </Button>
+        <Button onClick={handleClick}>Join</Button>
       )}
 
       <DialogContent className="sm:max-w-md min-w-[30%]">

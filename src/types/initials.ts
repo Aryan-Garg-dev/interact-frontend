@@ -600,6 +600,5 @@ export const initialCommunityMembershipRequest: CommunityMembershipRequest = {
   communityID: '',
   userID: '',
   user: initialUser,
-  status: 0,
   createdAt: new Date(),
 };

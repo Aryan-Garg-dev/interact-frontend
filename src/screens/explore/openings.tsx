@@ -120,7 +120,7 @@ const Openings = () => {
     <div className="w-full flex flex-col gap-6">
       {loading ? (
         <Loader />
-      ) : openings.length > 0 ? (
+      ) : (
         <div className="w-full flex justify-evenly gap-4">
           <InfiniteScroll
             className={`${clickedOnOpening ? 'w-[480px]' : 'w-[720px]'} max-lg:w-full flex flex-col gap-4`}
@@ -134,17 +134,21 @@ const Openings = () => {
               current={order}
               setState={setOrder}
             />
-            {openings.map(opening => {
-              return (
-                <OpeningCard
-                  key={opening.id}
-                  opening={opening}
-                  clickedOpening={clickedOpening}
-                  setClickedOnOpening={setClickedOnOpening}
-                  setClickedOpening={setClickedOpening}
-                />
-              );
-            })}
+            {openings && openings.length > 0 ? (
+              openings.map(opening => {
+                return (
+                  <OpeningCard
+                    key={opening.id}
+                    opening={opening}
+                    clickedOpening={clickedOpening}
+                    setClickedOnOpening={setClickedOnOpening}
+                    setClickedOpening={setClickedOpening}
+                  />
+                );
+              })
+            ) : (
+              <NoSearch />
+            )}
           </InfiniteScroll>
           {clickedOnOpening && (
             <OpeningView
@@ -155,8 +159,6 @@ const Openings = () => {
             />
           )}
         </div>
-      ) : (
-        <NoSearch />
       )}
     </div>
   );

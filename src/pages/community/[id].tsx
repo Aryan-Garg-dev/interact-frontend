@@ -40,6 +40,8 @@ const Community = ({ id }: { id: string }) => {
   const [admins, setAdmins] = useState<User[]>([]);
   const [moderators, setModerators] = useState<User[]>([]);
   const [connections, setConnections] = useState<User[]>([]);
+  const [noProjects, setNoProjects] = useState(0);
+  const [noOpenings, setNoOpenings] = useState(0);
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -58,6 +60,8 @@ const Community = ({ id }: { id: string }) => {
       setAdmins(res.data.admins);
       setModerators(res.data.moderators);
       setConnections(res.data.connections);
+      setNoProjects(res.data.noProjects);
+      setNoOpenings(res.data.noOpenings);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
       else Toaster.error(SERVER_ERROR, 'error_toaster');
@@ -144,9 +148,7 @@ const Community = ({ id }: { id: string }) => {
                   {checkCommunityAccess(COMMUNITY_MODERATOR, community.id) && (
                     <EditCommunity community={community} setCommunity={setCommunity} />
                   )}
-                  {checkCommunityAccess(COMMUNITY_MODERATOR, community.id) && (
-                    <EditMemberships community={community} setCommunity={setCommunity} />
-                  )}
+                  {checkCommunityAccess(COMMUNITY_MODERATOR, community.id) && <EditMemberships community={community} />}
                   <CommunityJoinBtn communityID={community.id} communityAccess={community.access} smaller={false} />
                 </div>
               </div>
@@ -188,11 +190,11 @@ const Community = ({ id }: { id: string }) => {
                   <div className="text-sm text-gray-600">Members</div>
                 </div>
                 <div className="flex-center flex-col">
-                  <div className="text-lg font-medium">2</div>
+                  <div className="text-lg font-medium">{noProjects}</div>
                   <div className="text-sm text-gray-600">Projects</div>
                 </div>
                 <div className="flex-center flex-col">
-                  <div className="text-lg font-medium">5</div>
+                  <div className="text-lg font-medium">{noOpenings}</div>
                   <div className="text-sm text-gray-600">Openings</div>
                 </div>
               </div>

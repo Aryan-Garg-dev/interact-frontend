@@ -188,7 +188,7 @@ const Password = () => {
               </div>
             )}
 
-            <div className={`${!user.isPasswordSetupComplete && 'w-full'}flex flex-col gap-1`}>
+            <div className={`${!user.isPasswordSetupComplete && 'w-full '}flex flex-col gap-1`}>
               <div className="font-medium">Confirm {user.isPasswordSetupComplete && 'New'} Password</div>
               <div className="w-full relative">
                 <input

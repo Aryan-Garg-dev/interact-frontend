@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { SERVER_ERROR } from '@/config/errors';
 import { COMMUNITY_COVER_PIC_URL, COMMUNITY_PROFILE_PIC_URL, COMMUNITY_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
-import { Community } from '@/types';
+import { Community, CommunityAccess } from '@/types';
 import categories from '@/utils/categories';
 import Toaster from '@/utils/toaster';
 import {
@@ -35,7 +35,7 @@ const EditCommunity = ({
   const [description, setDescription] = useState(community.description || '');
   const [tagline, setTagline] = useState(community.tagline);
   const [category, setCategory] = useState(community.category);
-  const [access, setAccess] = useState(community.access);
+  const [access, setAccess] = useState(community.access as string);
   const [tags, setTags] = useState(community.tags);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -80,7 +80,7 @@ const EditCommunity = ({
             description,
             tags,
             category,
-            access,
+            access: access as CommunityAccess,
             profilePic: newCommunity.profilePic,
             coverPic: newCommunity.coverPic,
           };
@@ -179,15 +179,15 @@ const EditCommunity = ({
           <div className="flex flex-col gap-1">
             <Select
               label="Community Access"
-              val={access}
+              val={String(access).charAt(0).toUpperCase() + String(access).slice(1)}
               setVal={setAccess}
               options={['Open', 'Restricted', 'Closed']}
               required
             />
             <div className="text-xs text-gray-400">
-              {access === 'open'
+              {access === 'Open'
                 ? "Anyone can see community's posts and join."
-                : access === 'restricted'
+                : access === 'Restricted'
                 ? 'Community join and post seeing on request basis.'
                 : 'No one can either join your community or see its posts.'}
             </div>
