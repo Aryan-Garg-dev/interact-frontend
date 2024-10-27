@@ -575,6 +575,7 @@ export const initialCommunity: Community = {
   profilePicBlurHash: 'no-hash',
   coverPic: 'default.jpg',
   coverPicBlurHash: 'no-hash',
+  isOpen: true,
   tags: [],
   links: [],
   category: '',

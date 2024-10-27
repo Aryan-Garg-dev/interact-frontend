@@ -23,6 +23,7 @@ import isArrEdited from '@/utils/funcs/check_array_edited';
 import Image from 'next/image';
 import { PencilSimple } from '@phosphor-icons/react/dist/ssr';
 import { resizeImage } from '@/utils/resize_image';
+import Checkbox from '@/components/form/checkbox';
 
 const EditCommunity = ({
   community,
@@ -37,6 +38,7 @@ const EditCommunity = ({
   const [category, setCategory] = useState(community.category);
   const [access, setAccess] = useState(community.access as string);
   const [tags, setTags] = useState(community.tags);
+  const [isOpen, setIsOpen] = useState(community.isOpen);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [profilePic, setProfilePic] = useState<File>();
@@ -63,6 +65,7 @@ const EditCommunity = ({
     if (isArrEdited(tags, community.tags, true)) tags.forEach(tag => formData.append('tags', tag));
     if (category != community.category) formData.append('category', category);
     if (access != community.access) formData.append('access', access);
+    if (isOpen != community.isOpen) formData.append('isOpen', String(isOpen));
     if (profilePic) formData.append('profilePic', profilePic);
     if (coverPic) formData.append('coverPic', coverPic);
 
@@ -176,24 +179,31 @@ const EditCommunity = ({
           <Input label="Community Name" val={title} setVal={setTitle} maxLength={25} type="text" required />
           <Input label="Community Tagline" val={tagline} setVal={setTagline} maxLength={100} type="text" required />
           <Select label="Community Category" val={category} setVal={setCategory} options={categories} required />
-          <div className="flex flex-col gap-1">
-            <Select
-              label="Community Access"
-              val={String(access).charAt(0).toUpperCase() + String(access).slice(1)}
-              setVal={setAccess}
-              options={['Open', 'Restricted', 'Closed']}
-              required
-            />
-            <div className="text-xs text-gray-400">
-              {access === 'Open'
+
+          <Select
+            label="Community Access"
+            val={String(access).charAt(0).toUpperCase() + String(access).slice(1)}
+            setVal={setAccess}
+            options={['Open', 'Restricted', 'Closed']}
+            required
+            caption={
+              access === 'Open'
                 ? "Anyone can see community's posts and join."
                 : access === 'Restricted'
                 ? 'Community join and post seeing on request basis.'
-                : 'No one can either join your community or see its posts.'}
-            </div>
-          </div>
+                : 'No one can either join your community or see its posts.'
+            }
+          />
           <TextArea label="Community Description" val={description} setVal={setDescription} maxLength={1000} />
           <Tags label="Community Tags" tags={tags} setTags={setTags} maxTags={10} />
+          <Checkbox
+            label="Is the community open?"
+            val={isOpen}
+            setVal={setIsOpen}
+            caption={
+              isOpen ? "Anyone can see all of community's posts" : 'Non-members cannot see community-only posts.'
+            }
+          />
         </div>
         <DialogFooter className="w-full flex-center">
           <Button onClick={handleSubmit} type="button" variant="outline" className="w-1/2">

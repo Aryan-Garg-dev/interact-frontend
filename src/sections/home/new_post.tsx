@@ -1,5 +1,12 @@
 import { SERVER_ERROR } from '@/config/errors';
-import { COMMUNITY_URL, EXPLORE_URL, ORG_URL, POST_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import {
+  COMMUNITY_PROFILE_PIC_URL,
+  COMMUNITY_URL,
+  EXPLORE_URL,
+  ORG_URL,
+  POST_URL,
+  USER_PROFILE_PIC_URL,
+} from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
@@ -18,6 +25,7 @@ import { Check, ChevronsUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import Checkbox from '@/components/form/checkbox';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,6 +48,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
 
   const [openCommunityDropdown, setOpenCommunityDropdown] = React.useState(false);
   const [communityID, setCommunityID] = React.useState(initialCommunityID);
+  const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {
     document.documentElement.style.overflowY = 'hidden';
@@ -107,6 +116,8 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
     });
     formData.append('content', content.replace(/\n{3,}/g, '\n\n'));
     taggedUsernames.forEach(username => formData.append('taggedUsernames', username));
+    formData.append('isOpen', String(isOpen));
+
     const URL = org
       ? `${ORG_URL}/${currentOrg.id}/posts`
       : communityID
@@ -192,7 +203,14 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
                                   {communityID === membership.communityID ? (
                                     <Check className="mr-2 h-4 w-4" />
                                   ) : (
-                                    <div className="w-4 h-4 bg-black rounded-full mr-2" />
+                                    <Image
+                                      crossOrigin="anonymous"
+                                      className="w-4 h-4 rounded-full mr-2"
+                                      width={20}
+                                      height={20}
+                                      alt="profile pic"
+                                      src={`${COMMUNITY_PROFILE_PIC_URL}/${membership.community?.profilePic}`}
+                                    />
                                   )}
 
                                   {membership.community?.title}
@@ -228,6 +246,21 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
                     maxLength={2000}
                     placeholder="Start a conversation..."
                   ></textarea>
+                  {communityID && (
+                    <div className="w-full mt-4">
+                      <Checkbox
+                        label="Is the post open?"
+                        val={isOpen}
+                        setVal={setIsOpen}
+                        caption={
+                          isOpen
+                            ? 'Post will be shown on your profile as well.'
+                            : "Post will only be shown in the community's feed."
+                        }
+                        border={false}
+                      />
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -249,6 +282,21 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
                 maxLength={2000}
                 placeholder="Start a conversation..."
               ></textarea>
+              {communityID && (
+                <div className="w-full mt-4">
+                  <Checkbox
+                    label="Is the post open?"
+                    val={isOpen}
+                    setVal={setIsOpen}
+                    caption={
+                      isOpen
+                        ? 'Post will be shown on your profile as well.'
+                        : "Post will only be shown in the community's feed."
+                    }
+                    border={false}
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>

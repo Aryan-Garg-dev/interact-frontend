@@ -126,6 +126,9 @@ const Community = ({ id }: { id: string }) => {
               blurDataURL={community.coverPicBlurHash || 'no-hash'}
               src={`${COMMUNITY_COVER_PIC_URL}/${community.coverPic}`}
             />
+            <div className="w-fit bg-white text-xs rounded-lg flex-center px-2 py-1 capitalize absolute top-2 right-2">
+              {community.isOpen ? 'Posts open for all' : 'Posts restricted to members only'}
+            </div>
             <div className="w-full flex items-end gap-2 absolute -translate-y-1/2 pl-12">
               <Image
                 crossOrigin="anonymous"
@@ -172,6 +175,13 @@ const Community = ({ id }: { id: string }) => {
                       hasMore={hasMore}
                       loader={<PostsLoader />}
                     >
+                      {!community.isOpen &&
+                        !checkCommunityAccess(COMMUNITY_MEMBER, community.id) &&
+                        posts.length > 0 && (
+                          <div className="w-full text-center text-sm text-gray-500 font-medium my-4">
+                            Some posts are hidden from non members.
+                          </div>
+                        )}
                       {posts.map(post => {
                         if (post.rePost) return <RePostComponent key={post.id} post={post} />;
                         else return <PostComponent key={post.id} post={post} />;

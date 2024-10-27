@@ -907,6 +907,7 @@ export interface Community {
   links: string[];
   category: string;
   access: CommunityAccess;
+  isOpen: boolean;
   noViews: number;
   impressions: number;
   noLikes: number;

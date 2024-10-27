@@ -26,6 +26,7 @@ import { useSelector } from 'react-redux';
 import getHandler from '@/handlers/get_handler';
 import Image from 'next/image';
 import Link from 'next/link';
+import Checkbox from '@/components/form/checkbox';
 
 const CommunitySide = () => {
   const [communities, setCommunities] = useState<Community[]>([]);
@@ -113,6 +114,7 @@ const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<Re
   const [category, setCategory] = useState('');
   const [access, setAccess] = useState('Open');
   const [tags, setTags] = useState<string[]>([]);
+  const [isOpen, setIsOpen] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const user = useSelector(userSelector);
@@ -130,13 +132,15 @@ const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<Re
 
     const toaster = Toaster.startLoad('Creating your community...');
 
-    const formData = new FormData();
-    formData.append('title', title);
-    formData.append('description', description);
-    formData.append('tagline', tagline);
-    tags.forEach(tag => formData.append('tags', tag));
-    formData.append('category', category);
-    formData.append('access', access);
+    const formData = {
+      title,
+      description,
+      tagline,
+      tags,
+      category,
+      access,
+      isOpen,
+    };
 
     const res = await postHandler(COMMUNITY_URL, formData, 'multipart/form-data');
 
@@ -184,24 +188,30 @@ const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<Re
           <Input label="Community Name" val={title} setVal={setTitle} maxLength={25} type="text" required />
           <Input label="Community Tagline" val={tagline} setVal={setTagline} maxLength={100} type="text" required />
           <Select label="Community Category" val={category} setVal={setCategory} options={categories} required />
-          <div className="flex flex-col gap-1">
-            <Select
-              label="Community Access"
-              val={access}
-              setVal={setAccess}
-              options={['Open', 'Restricted', 'Closed']}
-              required
-            />
-            <div className="text-xs text-gray-400">
-              {access === 'Open'
+          <Select
+            label="Community Access"
+            val={access}
+            setVal={setAccess}
+            options={['Open', 'Restricted', 'Closed']}
+            required
+            caption={
+              access === 'Open'
                 ? "Anyone can see community's posts and join."
                 : access === 'Restricted'
                 ? 'Community join and post seeing on request basis.'
-                : 'No one can either join your community or see its posts.'}
-            </div>
-          </div>
+                : 'No one can either join your community or see its posts.'
+            }
+          />
           <TextArea label="Community Description" val={description} setVal={setDescription} maxLength={1000} />
           <Tags label="Community Tags" tags={tags} setTags={setTags} maxTags={10} />
+          <Checkbox
+            label="Is the community open?"
+            val={isOpen}
+            setVal={setIsOpen}
+            caption={
+              isOpen ? "Anyone can see all of community's posts" : 'Non-members cannot see community-only posts.'
+            }
+          />
         </div>
         <DialogFooter className="w-full flex-center">
           <Button onClick={handleSubmit} type="button" variant="outline" className="w-1/2">

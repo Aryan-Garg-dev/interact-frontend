@@ -26,6 +26,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import { useDispatch } from 'react-redux';
 import { setCommunityMemberships, userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
+import { CommunityAccess } from '@/types';
 
 const CommunityJoinBtn = ({
   communityID,
@@ -33,7 +34,7 @@ const CommunityJoinBtn = ({
   smaller = true,
 }: {
   communityID: string;
-  communityAccess: string;
+  communityAccess: CommunityAccess;
   smaller?: boolean;
 }) => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -129,7 +130,9 @@ const CommunityJoinBtn = ({
           Join
         </div>
       ) : (
-        <Button onClick={handleClick}>Join</Button>
+        <Button onClick={handleClick} disabled={communityAccess == 'closed'}>
+          {communityAccess == 'open' ? 'Join' : communityAccess == 'restricted' ? 'Request' : 'Closed'}
+        </Button>
       )}
 
       <DialogContent className="sm:max-w-md min-w-[30%]">

@@ -7,9 +7,10 @@ interface Props {
   setVal: any;
   required?: boolean;
   styles?: React.CSSProperties;
+  caption?: string;
 }
 
-const Select = ({ label, options, val, setVal, required = false, styles }: Props) => {
+const Select = ({ label, options, val, setVal, required = false, styles, caption }: Props) => {
   return (
     <div>
       {label && (
@@ -32,6 +33,7 @@ const Select = ({ label, options, val, setVal, required = false, styles }: Props
           );
         })}
       </select>
+      {caption && <div className="text-xs text-gray-400 mt-1">{caption}</div>}
     </div>
   );
 };
