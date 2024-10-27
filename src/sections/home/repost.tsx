@@ -79,7 +79,7 @@ const RePost = ({ post, setShow, setFeed, org = false }: Props) => {
   };
 
   const fetchUsers = async (search: string) => {
-    const URL = `${EXPLORE_URL}/users/trending?search=${search}&limit=${10}`;
+    const URL = `${EXPLORE_URL}/users?search=${search}&order=trending&limit=${10}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       const userData: User[] = res.data.users || [];

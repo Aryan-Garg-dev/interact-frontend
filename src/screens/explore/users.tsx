@@ -9,8 +9,6 @@ import UserCard from '@/components/explore/wide_user_card';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ProfileCompletion from '@/sections/explore/profile_completion';
-import { useSelector } from 'react-redux';
-import { userIDSelector } from '@/slices/userSlice';
 import OrderMenu from '@/components/common/order_menu';
 
 const Users = () => {
@@ -20,15 +18,11 @@ const Users = () => {
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState('trending');
 
-  const userID = useSelector(userIDSelector) || '';
-
   const fetchUsers = async (search: string | null, initialPage: number | null) => {
     const URL =
       search && search != ''
-        ? `${EXPLORE_URL}/users/trending?search=${search}&order=${order}`
-        : userID != '' && order == 'recommended'
-        ? `${EXPLORE_URL}/users/recommended?page=${initialPage ? initialPage : page}&limit=${10}`
-        : `${EXPLORE_URL}/users/trending?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
+        ? `${EXPLORE_URL}/users?search=${search}&order=${order}`
+        : `${EXPLORE_URL}/users?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       if (search && search != '') {

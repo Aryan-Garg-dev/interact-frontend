@@ -7,8 +7,6 @@ import React, { useEffect, useState } from 'react';
 import Loader from '@/components/common/loader';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useSelector } from 'react-redux';
-import { userIDSelector } from '@/slices/userSlice';
 import OrgCard from '@/components/explore/org_card';
 
 const Organisations = () => {
@@ -17,16 +15,12 @@ const Organisations = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
-  const userID = useSelector(userIDSelector) || '';
-
   const fetchUsers = async (search: string | null) => {
     const sub_url = 'orgs';
     const URL =
       search && search != ''
-        ? `${EXPLORE_URL}/${sub_url}/trending?${'search=' + search}`
-        : // : userID != ''
-          // ? `${EXPLORE_URL}/${sub_url}/recommended?page=${page}&limit=${10}`
-          `${EXPLORE_URL}/${sub_url}/trending?page=${page}&limit=${10}`;
+        ? `${EXPLORE_URL}/${sub_url}?${'search=' + search}`
+        : `${EXPLORE_URL}/${sub_url}?page=${page}&limit=${10}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       if (search && search != '') {

@@ -2,7 +2,7 @@ import React from 'react';
 
 const PostsLoader = () => {
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4 mt-4">
       {Array(2)
         .fill(1)
         .map((_, index) => (

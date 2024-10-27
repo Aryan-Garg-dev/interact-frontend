@@ -18,7 +18,7 @@ const Discover = () => {
   const [order, setOrder] = useState('recommended');
 
   const getFeed = (initialPage?: number) => {
-    const URL = `${EXPLORE_URL}/posts/${order}?page=${initialPage ? initialPage : page}&limit=${10}`;
+    const URL = `${EXPLORE_URL}/posts?order=${order}&page=${initialPage ? initialPage : page}&limit=${10}`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
@@ -55,9 +55,7 @@ const Discover = () => {
     <div className="w-full">
       <OrderMenu orders={['recommended', 'trending', 'most_liked', 'latest']} current={order} setState={setOrder} />
       {loading ? (
-        <div className="mt-4">
-          <PostsLoader />
-        </div>
+        <PostsLoader />
       ) : feed.length === 0 ? (
         // <NoFeed />
         <></>

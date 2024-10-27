@@ -34,8 +34,6 @@ const Projects = () => {
     const URL =
       search && search != ''
         ? `${EXPLORE_URL}/projects?${'search=' + search}&order=${order}`
-        : order == 'recommended'
-        ? `${EXPLORE_URL}/projects/recommended?page=${initialPage ? initialPage : page}&limit=${10}`
         : `${EXPLORE_URL}/projects?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {

@@ -76,7 +76,7 @@ const NewEvent = ({ setShow, setEvents }: Props) => {
   };
 
   const getOrganizations = async () => {
-    var URL = `${EXPLORE_URL}/orgs/trending?page=1&limit=${10}`;
+    var URL = `${EXPLORE_URL}/orgs?page=1&limit=${10}`;
     if (orgSearch != '') URL += `&search=${orgSearch}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {

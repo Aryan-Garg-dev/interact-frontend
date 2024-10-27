@@ -25,8 +25,6 @@ const Events = () => {
     const URL =
       search && search != ''
         ? `${EXPLORE_URL}/events?search=${search}&order=${order}`
-        : order == 'recommended'
-        ? `${EXPLORE_URL}/events/recommended?page=${initialPage ? initialPage : page}&limit=${10}`
         : `${EXPLORE_URL}/events?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {

@@ -35,7 +35,7 @@ const CommentInput = ({
   const user = useSelector(userSelector);
 
   const fetchUsers = async (search: string) => {
-    const URL = (userFetchURL ? userFetchURL : `${EXPLORE_URL}/users/trending`) + `?search=${search}&limit=${10}`;
+    const URL = (userFetchURL ? userFetchURL : `${EXPLORE_URL}/users?order=trending`) + `?search=${search}&limit=${10}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       const userData: User[] = res.data.users || [];

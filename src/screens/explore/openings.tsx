@@ -29,8 +29,6 @@ const Openings = () => {
     let URL =
       search && search != ''
         ? `${EXPLORE_URL}/openings?search=${search}&order=${order}`
-        : order == 'recommended'
-        ? `${EXPLORE_URL}/openings/recommended?page=${initialPage ? initialPage : page}&limit=${10}`
         : `${EXPLORE_URL}/openings?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
 
     const projectSlug = new URLSearchParams(window.location.search).get('pid');

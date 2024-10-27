@@ -33,6 +33,7 @@ import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import EditRule from '@/sections/community/edit_rule';
+import OrderMenu from '@/components/common/order_menu2';
 
 const Community = ({ id }: { id: string }) => {
   const [community, setCommunity] = useState(initialCommunity);
@@ -44,6 +45,8 @@ const Community = ({ id }: { id: string }) => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+
+  const [order, setOrder] = useState('trending');
 
   const [clickedOnNewPost, setClickedOnNewPost] = useState(false);
 
@@ -61,14 +64,18 @@ const Community = ({ id }: { id: string }) => {
     }
   };
 
-  const getPosts = () => {
-    const URL = `${COMMUNITY_URL}/${id}/posts?page=${page}&limit=${5}`;
+  const getPosts = (initialPage?: number) => {
+    const URL = `${COMMUNITY_URL}/${id}/posts?order=${order}&page=${initialPage ? initialPage : page}&limit=${5}`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
-          const addedPosts = [...posts, ...res.data.posts];
-          if (addedPosts.length === posts.length) setHasMore(false);
-          setPosts(addedPosts);
+          if (initialPage == 1) {
+            setPosts(res.data.posts || []);
+          } else {
+            const addedPosts = [...posts, ...res.data.posts];
+            if (addedPosts.length === posts.length) setHasMore(false);
+            setPosts(addedPosts);
+          }
           setPage(prev => prev + 1);
           setLoading(false);
         } else {
@@ -87,6 +94,14 @@ const Community = ({ id }: { id: string }) => {
     fetchCommunity();
     getPosts();
   }, [id]);
+
+  useEffect(() => {
+    setPage(1);
+    setPosts([]);
+    setHasMore(true);
+    setLoading(true);
+    getPosts(1);
+  }, [order]);
 
   return (
     <BaseWrapper>
@@ -141,6 +156,7 @@ const Community = ({ id }: { id: string }) => {
             <div className="w-2/3">
               <PrimeWrapper index={0} maxIndex={0}>
                 <div className="w-full">
+                  <OrderMenu orders={['trending', 'most_liked', 'latest']} current={order} setState={setOrder} />
                   {loading ? (
                     <PostsLoader />
                   ) : posts.length === 0 ? (

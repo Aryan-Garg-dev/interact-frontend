@@ -18,7 +18,7 @@ import categories from '@/utils/categories';
 import Toaster from '@/utils/toaster';
 import postHandler from '@/handlers/post_handler';
 import { COMMUNITY_PROFILE_PIC_URL, COMMUNITY_URL } from '@/config/routes';
-import { Community } from '@/types';
+import { Community, CommunityMembership } from '@/types';
 import { SERVER_ERROR } from '@/config/errors';
 import { useDispatch } from 'react-redux';
 import { setCommunityMemberships, userSelector } from '@/slices/userSlice';
@@ -141,10 +141,12 @@ const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<Re
     const res = await postHandler(COMMUNITY_URL, formData, 'multipart/form-data');
 
     if (res.statusCode === 201) {
-      const community = res.data.community;
-      const membership = res.data.membership;
+      const community: Community = res.data.community;
+      const membership: CommunityMembership = res.data.membership;
+
+      membership.community = community;
+
       if (setCommunities) setCommunities(prev => [community, ...prev]);
-      Toaster.stopLoad(toaster, 'Community Created!', 1);
       setTitle('');
       setDescription('');
       setTagline('');
@@ -152,6 +154,8 @@ const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<Re
       setCategory('');
       setAccess('Open');
       dispatch(setCommunityMemberships([...(user.communityMemberships || []), membership]));
+
+      Toaster.stopLoad(toaster, 'Community Created!', 1);
       setIsDialogOpen(false);
     } else if (res.statusCode === 413) {
       Toaster.stopLoad(toaster, 'Image too large', 0);

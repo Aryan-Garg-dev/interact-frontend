@@ -47,7 +47,7 @@ const TrendingCard = () => {
   };
 
   const fetchProfiles = () => {
-    const URL = `${EXPLORE_URL}/users/trending?limit=5`;
+    const URL = `${EXPLORE_URL}/users?order=trending&limit=5`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
