@@ -57,7 +57,7 @@ const ViewPermissions = ({ community, permissionConfig, setPermissionConfig }: P
             {permissionConfig &&
               Object.entries(permissionConfig).map(([action, role]) => (
                 <TableRow key={action}>
-                  <TableCell>{action}</TableCell>
+                  <TableCell className="capitalize">{action.replace('_', ' ')}</TableCell>
                   <TableCell className="w-full flex justify-end text-right">
                     {checkCommunityAccess(community.id, 'manage_permissions', permissionConfig) ? (
                       <Select

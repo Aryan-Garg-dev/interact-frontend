@@ -7,7 +7,7 @@ import PostComponent from '@/components/home/post';
 import RePostComponent from '@/components/home/repost';
 import PostsLoader from '@/components/loaders/posts';
 import { Button } from '@/components/ui/button';
-import { COMMUNITY_ADMIN, COMMUNITY_MEMBER, COMMUNITY_MODERATOR } from '@/config/constants';
+import { COMMUNITY_MEMBER } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import {
   COMMUNITY_COVER_PIC_URL,
@@ -111,7 +111,7 @@ const Community = ({ id }: { id: string }) => {
   }, [order]);
 
   return (
-    <BaseWrapper>
+    <BaseWrapper title={community.title}>
       <Sidebar index={1} />
       {clickedOnNewPost && (
         <NewPost setFeed={setPosts} initialCommunityID={community.id} setShow={setClickedOnNewPost} />
@@ -122,8 +122,8 @@ const Community = ({ id }: { id: string }) => {
             <Image
               crossOrigin="anonymous"
               className="w-full h-full bg-gray-200 rounded-lg"
-              width={1000}
-              height={1000}
+              width={1800}
+              height={300}
               alt="cover pic"
               placeholder="blur"
               blurDataURL={community.coverPicBlurHash || 'no-hash'}
@@ -204,8 +204,8 @@ const Community = ({ id }: { id: string }) => {
               </PrimeWrapper>
             </div>
             <div className="w-1/3 h-fit max-h-[calc(100vh-80px)] overflow-y-auto sticky top-[80px] bg-white flex flex-col gap-2 p-4 rounded-lg">
-              <div className="text-gray-600">{community.description}</div>
-              <Tags tags={community.tags} displayAll />
+              <div className="text-center text-gray-600">{community.description}</div>
+              <Tags tags={community.tags} displayAll center />
               <div className="w-full flex items-center justify-center gap-8 my-2">
                 <div className="flex-center flex-col">
                   <div className="text-lg font-medium">{community.noMembers}</div>
@@ -266,7 +266,9 @@ const Community = ({ id }: { id: string }) => {
                   <div>
                     <div className="w-full flex items-center justify-between">
                       <div className="text-lg font-medium">Community Rules</div>
-                      <AddRule communityID={community.id} setCommunity={setCommunity} />
+                      {checkCommunityAccess(community.id, 'manage_rules', permissionConfig) && (
+                        <AddRule communityID={community.id} setCommunity={setCommunity} />
+                      )}
                     </div>
                     <Accordion type="multiple">
                       <div className="w-full flex flex-col gap-1">

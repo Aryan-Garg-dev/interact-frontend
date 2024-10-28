@@ -132,18 +132,6 @@ const Openings = () => {
               />
             );
           })}
-          {bookmarks.map(bookmark => {
-            return (
-              <Bookmark
-                key={bookmark.id}
-                bookmark={bookmark}
-                setClick={setClickedOnBookmark}
-                setBookmark={setClickedBookmark}
-                handleEdit={handleEditBookmark}
-                handleDelete={handleDeleteBookmark}
-              />
-            );
-          })}
         </div>
       ) : (
         <NoOpeningBookmarks />

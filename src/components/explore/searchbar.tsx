@@ -1,105 +1,258 @@
-import { EXPLORE_URL } from '@/config/routes';
-import postHandler from '@/handlers/post_handler';
-import { MagnifyingGlass } from '@phosphor-icons/react';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import SearchSuggestions from './search_suggestions';
-import Filters from './filters';
+import { Command, CommandEmpty, CommandInput, CommandList, CommandSeparator } from '@/components/ui/command';
+import { SERVER_ERROR } from '@/config/errors';
+import {
+  COMMUNITY_PROFILE_PIC_URL,
+  EVENT_PIC_URL,
+  EXPLORE_URL,
+  PROJECT_PIC_URL,
+  USER_PROFILE_PIC_URL,
+} from '@/config/routes';
+import getHandler from '@/handlers/get_handler';
+import { Project, User, Opening, Event, Organization, Community } from '@/types';
+import Toaster from '@/utils/toaster';
+import { CommandLoading } from 'cmdk';
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import Loader from '../common/loader';
+import Image from 'next/image';
+import Link from 'next/link';
 
-interface Props {
-  initialValue?: string;
-}
+const SearchBar = () => {
+  const [results, setResults] = useState({
+    projects: [] as Project[],
+    users: [] as User[],
+    openings: [] as Opening[],
+    events: [] as Event[],
+    organizations: [] as Organization[],
+    communities: [] as Community[],
+  });
+  const [loading, setLoading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [filters, setFilters] = useState<string[]>([]);
 
-const SearchBar = ({ initialValue = '' }: Props) => {
-  const [search, setSearch] = useState(initialValue);
-  const [showSearchSuggestions, setShowSearchSuggestions] = useState(false);
-  const [clickedOnFilters, setClickedOnFilters] = useState(false);
+  //TODO add abort controller
+  const fetchResults = async (search?: string) => {
+    setLoading(true);
+    const URL = `${EXPLORE_URL}/quick?${'search=' + search}&limit=3`;
+    const res = await getHandler(URL);
 
-  const router = useRouter();
-
-  const submitSearch = async () => {
-    const URL = `${EXPLORE_URL}/search`;
-    await postHandler(URL, {
-      search,
-    });
-  };
-
-  const handleChange = (el: React.ChangeEvent<HTMLInputElement>) => {
-    setShowSearchSuggestions(true);
-    setSearch(el.target.value);
-  };
-
-  const handleSubmit = (el?: React.FormEvent<HTMLFormElement>) => {
-    el?.preventDefault();
-    if (search === '') router.push('/explore');
-    else {
-      submitSearch();
-      setShowSearchSuggestions(false);
-      router.push(`/explore?search=${search}`);
+    if (res.statusCode === 200) {
+      setResults({
+        projects: res.data.projects || [],
+        users: res.data.users || [],
+        openings: res.data.openings || [],
+        events: res.data.events || [],
+        organizations: res.data.orgs || [],
+        communities: res.data.communities || [],
+      });
+    } else {
+      Toaster.error(res.data.message || SERVER_ERROR, 'error_toaster');
     }
+
+    setLoading(false);
   };
+
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (search == '' && new URLSearchParams(window.location.search).get('pid') != null)
-      setSearch(new URLSearchParams(window.location.search).get('pid') || '');
-    else setSearch(new URLSearchParams(window.location.search).get('search') || '');
-  }, [window.location.search]);
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsDialogOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const noResults = useMemo(() => Object.values(results).every(group => group.length === 0), [results]);
 
   return (
-    <>
-      {clickedOnFilters ? <Filters setShow={setClickedOnFilters} /> : <></>}
-      {showSearchSuggestions ? <SearchSuggestions search={search} setShow={setShowSearchSuggestions} /> : <></>}
-      <div className="relative md:hidden w-taskbar max-md:w-[95%] mx-auto">
-        <form
-          onSubmit={handleSubmit}
-          className={`w-full h-taskbar px-4 text-gray-500 ${
-            search.trim().length > 0 ? 'bg-white' : 'bg-gray-100'
-          } dark:text-white flex items-center justify-between gap-8 mx-auto rounded-md border-white border-2 dark:border-0 shadow-lg dark:shadow-outer dark:bg-gradient-to-b dark:from-dark_primary_gradient_start dark:to-dark_primary_gradient_end transition-ease-200`}
-        >
-          <input
-            className="h-full grow bg-transparent focus:outline-none font-primary font-medium"
-            type="text"
-            onClick={() => setShowSearchSuggestions(true)}
-            placeholder="Search"
-            value={search}
-            onChange={handleChange}
-          />
-          <MagnifyingGlass size={32} className="opacity-75" />
-        </form>
-        {showSearchSuggestions && <SearchSuggestions search={search} setShow={setShowSearchSuggestions} />}
-      </div>
-      <div className="w-[640px] max-md:hidden flex items-center gap-2 fixed top-2 right-1/2 translate-x-1/2 max-md:w-taskbar_md mx-auto z-20">
-        <form
-          onSubmit={handleSubmit}
-          className="grow h-11 px-4 border-[1px] border-gray-300 text-gray-500 bg-gray-100 flex items-center justify-between gap-8 mx-auto rounded-md"
-        >
-          <input
-            className="h-full grow bg-transparent focus:outline-none font-primary font-medium"
-            type="text"
-            onClick={() => setShowSearchSuggestions(true)}
-            placeholder="Search"
-            onChange={handleChange}
-            value={search}
-          />
-          <MagnifyingGlass
-            onClick={() => handleSubmit()}
-            size={24}
-            className="opacity-75 cursor-pointer"
-            weight="bold"
-          />
-        </form>
-        {/* <SlidersHorizontal
-          onClick={() => {
-            setShowSearchSuggestions(false);
-            setClickedOnFilters(true);
+    <div
+      ref={menuRef}
+      className="w-[640px] max-md:hidden fixed top-2 right-1/2 translate-x-1/2 max-md:w-taskbar_md mx-auto z-50"
+    >
+      <Command className={`bg-gray-50 border-[1px] border-gray-200 ${isDialogOpen && !noResults && 'pb-2'}`}>
+        <CommandInput
+          placeholder="Search for users, projects, openings, events, etc."
+          onValueChange={value => {
+            if (value) fetchResults(value);
+            setIsDialogOpen(Boolean(value));
           }}
-          className="cursor-pointer text-gray-500 hover:bg-gray-100 rounded-full p-2 flex-center transition-ease-300"
-          size={42}
-          weight="duotone"
-        /> */}
-      </div>
-    </>
+        />
+        <CommandList>
+          {isDialogOpen &&
+            (loading ? (
+              <CommandLoading className="loader-container">
+                <Loader />
+              </CommandLoading>
+            ) : (
+              <>
+                {noResults ? (
+                  <CommandEmpty>No results found.</CommandEmpty>
+                ) : (
+                  <ToggleGroup
+                    className="w-full flex-center gap-4 my-2"
+                    value={filters}
+                    onValueChange={setFilters}
+                    type="multiple"
+                  >
+                    {['openings', 'projects', 'users', 'events', 'communities', 'organizations'].map(filterType => (
+                      <ToggleGroupItem key={filterType} value={filterType} className="capitalize">
+                        {filterType}
+                      </ToggleGroupItem>
+                    ))}
+                  </ToggleGroup>
+                )}
+                {Object.entries(results).map(([key, group]) => {
+                  return (
+                    (filters.length === 0 || filters.includes(key)) &&
+                    group.length > 0 && (
+                      <CommandGroup key={key} heading={key}>
+                        {group.map(item => (
+                          <SearchItem key={item.id} item={item} type={key} />
+                        ))}
+                        {/* {group.length === 3 && (
+                          <div className="w-full text-center text-xs font-medium text-gray-400">Load More</div>
+                        )} */}
+                        <CommandSeparator />
+                      </CommandGroup>
+                    )
+                  );
+                })}
+              </>
+            ))}
+        </CommandList>
+      </Command>
+    </div>
   );
+};
+
+const CommandGroup: React.FC<{ children: ReactNode; heading: string }> = ({ children, heading }) => (
+  <div className="w-full flex flex-col gap-2 px-2 mt-2">
+    <div className="text-gray-500 text-sm font-medium pl-1 capitalize">{heading}</div>
+    {children}
+  </div>
+);
+
+const CommandItem: React.FC<{ children: ReactNode; link: string }> = ({ children, link }) => (
+  <Link href={link} className="w-full flex items-center gap-1 hover:bg-gray-100 p-1 rounded-sm">
+    {children}
+  </Link>
+);
+
+const ProjectItem = ({ project }: { project: Project }) => (
+  <CommandItem link={`${EXPLORE_URL}?pid=${project.slug}`}>
+    <Image
+      crossOrigin="anonymous"
+      width={50}
+      height={50}
+      alt={'User Pic'}
+      src={`${PROJECT_PIC_URL}/${project.coverPic}`}
+      placeholder="blur"
+      blurDataURL={project.blurHash || 'no-hash'}
+      className="w-6 h-6 rounded-full mr-1"
+    />
+    <div className="text-sm">{project.title}</div>
+  </CommandItem>
+);
+
+const UserItem = ({ user }: { user: User }) => (
+  <CommandItem link={`${EXPLORE_URL}/user/${user.username}`}>
+    <Image
+      crossOrigin="anonymous"
+      width={50}
+      height={50}
+      alt={'User Pic'}
+      src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+      placeholder="blur"
+      blurDataURL={user.profilePicBlurHash || 'no-hash'}
+      className="w-6 h-6 rounded-full mr-1"
+    />
+    <div className="text-sm">{user.username}</div>
+  </CommandItem>
+);
+
+const OpeningItem = ({ opening }: { opening: Opening }) => (
+  <CommandItem link={`${EXPLORE_URL}?oid=${opening.id}`}>
+    <Image
+      crossOrigin="anonymous"
+      width={50}
+      height={50}
+      alt={'User Pic'}
+      src={`${PROJECT_PIC_URL}/${opening?.project?.coverPic}`}
+      placeholder="blur"
+      blurDataURL={opening?.project?.blurHash || 'no-hash'}
+      className="w-6 h-6 rounded-full mr-1"
+    />
+    <div className="text-sm">{opening.title}</div>
+  </CommandItem>
+);
+
+const EventItem = ({ event }: { event: Event }) => (
+  <CommandItem link={`${EXPLORE_URL}/event/${event.id}`}>
+    <Image
+      crossOrigin="anonymous"
+      width={50}
+      height={50}
+      alt={'User Pic'}
+      src={`${EVENT_PIC_URL}/${event.coverPic}`}
+      placeholder="blur"
+      blurDataURL={event.blurHash || 'no-hash'}
+      className="w-6 h-6 rounded-full mr-1"
+    />
+    <div className="text-sm">{event.title}</div>
+  </CommandItem>
+);
+
+const OrgItem = ({ org }: { org: Organization }) => (
+  <CommandItem link={`${EXPLORE_URL}/organisation/${org.user.username}`}>
+    <Image
+      crossOrigin="anonymous"
+      width={50}
+      height={50}
+      alt={'User Pic'}
+      src={`${USER_PROFILE_PIC_URL}/${org.user.profilePic}`}
+      placeholder="blur"
+      blurDataURL={org.user.profilePicBlurHash || 'no-hash'}
+      className="w-6 h-6 rounded-full mr-1"
+    />
+    <div className="text-sm">{org.title}</div>
+  </CommandItem>
+);
+
+const CommunityItem = ({ community }: { community: Community }) => (
+  <CommandItem link={`community/${community.id}`}>
+    <Image
+      crossOrigin="anonymous"
+      width={50}
+      height={50}
+      alt={'User Pic'}
+      src={`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`}
+      placeholder="blur"
+      blurDataURL={community.profilePicBlurHash || 'no-hash'}
+      className="w-6 h-6 rounded-full mr-1"
+    />
+    <div className="text-sm">{community.title}</div>
+  </CommandItem>
+);
+
+const SearchItem = ({ item, type }: { item: any; type: string }) => {
+  switch (type) {
+    case 'projects':
+      return <ProjectItem project={item} />;
+    case 'users':
+      return <UserItem user={item} />;
+    case 'openings':
+      return <OpeningItem opening={item} />;
+    case 'events':
+      return <EventItem event={item} />;
+    case 'organizations':
+      return <OrgItem org={item} />;
+    case 'communities':
+      return <CommunityItem community={item} />;
+    default:
+      return <></>;
+  }
 };
 
 export default SearchBar;

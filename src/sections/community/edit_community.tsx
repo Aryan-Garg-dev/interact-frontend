@@ -140,8 +140,8 @@ const EditCommunity = ({
             <Image
               crossOrigin="anonymous"
               className="w-full h-full rounded-lg"
-              width={200}
-              height={200}
+              width={600}
+              height={100}
               alt="cover pic"
               src={coverPicView}
             />
@@ -179,7 +179,6 @@ const EditCommunity = ({
           <Input label="Community Name" val={title} setVal={setTitle} maxLength={25} type="text" required />
           <Input label="Community Tagline" val={tagline} setVal={setTagline} maxLength={100} type="text" required />
           <Select label="Community Category" val={category} setVal={setCategory} options={categories} required />
-
           <Select
             label="Community Access"
             val={String(access).charAt(0).toUpperCase() + String(access).slice(1)}

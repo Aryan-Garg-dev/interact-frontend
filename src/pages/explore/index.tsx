@@ -16,8 +16,6 @@ import { useSelector } from 'react-redux';
 
 const Explore = () => {
   const active = useSelector(exploreTabSelector);
-  const initialSearch = new URLSearchParams(window.location.search).get('search') || '';
-
   const user = useSelector(userSelector);
 
   useEffect(() => {
@@ -34,7 +32,7 @@ const Explore = () => {
             setReduxState={setExploreTab}
             width="840px"
           />
-          <SearchBar initialValue={initialSearch} />
+          <SearchBar />
           <div className={`w-full ${active === 0 ? 'block' : 'hidden'}`}>
             <Projects />
           </div>
