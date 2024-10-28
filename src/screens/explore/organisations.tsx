@@ -15,26 +15,22 @@ const Organisations = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
 
-  const fetchUsers = async (search: string | null) => {
+  const fetchUsers = async (search: string | null, initialPage?: number) => {
     const sub_url = 'orgs';
-    const URL =
-      search && search != ''
-        ? `${EXPLORE_URL}/${sub_url}?${'search=' + search}`
-        : `${EXPLORE_URL}/${sub_url}?page=${page}&limit=${10}`;
+    const URL = `${EXPLORE_URL}/${sub_url}?page=${initialPage ? initialPage : page}&limit=${10}${
+      search && `&search=${search}`
+    }`;
+
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      if (search && search != '') {
+      if (initialPage == 1) {
         setUsers(res.data.users || []);
-        setHasMore(false);
       } else {
-        if (!search && page == 1) setUsers(res.data.users || []);
-        else {
-          const addedUsers = [...users, ...(res.data.users || [])];
-          if (addedUsers.length === users.length) setHasMore(false);
-          setUsers(addedUsers);
-        }
-        setPage(prev => prev + 1);
+        const addedUsers = [...users, ...(res.data.users || [])];
+        if (addedUsers.length === users.length) setHasMore(false);
+        setUsers(addedUsers);
       }
+      setPage(prev => prev + 1);
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -44,9 +40,12 @@ const Organisations = () => {
 
   useEffect(() => {
     setPage(1);
+    setUsers([]);
+    setHasMore(true);
+    setLoading(true);
     const orgId = new URLSearchParams(window.location.search).get('orgId');
-    if (orgId && orgId != '') fetchUsers(orgId);
-    else fetchUsers(new URLSearchParams(window.location.search).get('search'));
+    if (orgId && orgId != '') fetchUsers(orgId, 1);
+    else fetchUsers(new URLSearchParams(window.location.search).get('search'), 1);
   }, [window.location.search]);
 
   return (

@@ -18,25 +18,21 @@ const Users = () => {
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState('trending');
 
-  const fetchUsers = async (search: string | null, initialPage: number | null) => {
-    const URL =
-      search && search != ''
-        ? `${EXPLORE_URL}/users?search=${search}&order=${order}`
-        : `${EXPLORE_URL}/users?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
+  const fetchUsers = async (search: string | null, initialPage?: number) => {
+    const URL = `${EXPLORE_URL}/users?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
+      search && `&search=${search}`
+    }`;
+
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      if (search && search != '') {
+      if (initialPage == 1) {
         setUsers(res.data.users || []);
-        setHasMore(false);
       } else {
-        if ((!search && page == 1) || initialPage == 1) setUsers(res.data.users || []);
-        else {
-          const addedUsers = [...users, ...(res.data.users || [])];
-          if (addedUsers.length === users.length) setHasMore(false);
-          setUsers(addedUsers);
-        }
-        setPage(prev => prev + 1);
+        const addedUsers = [...users, ...(res.data.users || [])];
+        if (addedUsers.length === users.length) setHasMore(false);
+        setUsers(addedUsers);
       }
+      setPage(prev => prev + 1);
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -46,12 +42,12 @@ const Users = () => {
 
   useEffect(() => {
     setPage(1);
-    setPage(1);
     setUsers([]);
     setHasMore(true);
     setLoading(true);
     fetchUsers(new URLSearchParams(window.location.search).get('search'), 1);
   }, [window.location.search, order]);
+
   return (
     <div className="w-full flex flex-col gap-6">
       <OrderMenu
@@ -66,7 +62,7 @@ const Users = () => {
         <InfiniteScroll
           className="w-full px-8 pt-2 pb-12 mx-auto flex flex-wrap gap-6 justify-center"
           dataLength={users.length}
-          next={() => fetchUsers(new URLSearchParams(window.location.search).get('search'), null)}
+          next={() => fetchUsers(new URLSearchParams(window.location.search).get('search'))}
           hasMore={hasMore}
           loader={<Loader />}
         >

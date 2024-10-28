@@ -25,55 +25,50 @@ const Openings = () => {
 
   const windowWidth = useWindowWidth();
 
-  const fetchOpenings = async (search: string | null, initialPage: number | null) => {
-    let URL =
-      search && search != ''
-        ? `${EXPLORE_URL}/openings?search=${search}&order=${order}`
-        : `${EXPLORE_URL}/openings?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
+  const fetchOpenings = async (search: string | null, initialPage?: number) => {
+    let URL = `${EXPLORE_URL}/openings?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
+      search && `&search=${search}`
+    }`;
 
     const projectSlug = new URLSearchParams(window.location.search).get('pid');
     if (projectSlug) URL = `${EXPLORE_URL}/openings/${projectSlug}`;
 
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      if (search && search != '') {
-        setOpenings(res.data.openings || []);
-        setHasMore(false);
-      } else {
-        if (initialPage == 1) {
-          const openingData = res.data.openings || [];
+      if (initialPage == 1) {
+        const openingData = res.data.openings || [];
 
-          setOpenings(openingData);
+        setOpenings(openingData);
 
-          if (clickedOnOpening) {
-            if (openingData.length > 0) setClickedOpening(openingData[0]);
-            else {
-              setClickedOnOpening(false);
-              setClickedOpening(initialOpening);
-            }
-          } else if (openingData.length > 0 && windowWidth > 640) {
-            setClickedOnOpening(true);
-            setClickedOpening(openingData[0]);
+        if (clickedOnOpening) {
+          if (openingData.length > 0) setClickedOpening(openingData[0]);
+          else {
+            setClickedOnOpening(false);
+            setClickedOpening(initialOpening);
           }
-        } else {
-          const addedOpenings = [...openings, ...(res.data.openings || [])];
-          if (addedOpenings.length === openings.length) setHasMore(false);
-          setOpenings(addedOpenings);
-
-          if (clickedOnOpening && page == 1) {
-            if (addedOpenings.length > 0) setClickedOpening(addedOpenings[0]);
-            else {
-              setClickedOnOpening(false);
-              setClickedOpening(initialOpening);
-            }
-          } else if (page == 1 && addedOpenings.length > 0 && windowWidth > 640) {
-            setClickedOnOpening(true);
-            setClickedOpening(addedOpenings[0]);
-          }
+        } else if (openingData.length > 0 && windowWidth > 640) {
+          setClickedOnOpening(true);
+          setClickedOpening(openingData[0]);
         }
+      } else {
+        const addedOpenings = [...openings, ...(res.data.openings || [])];
+        if (addedOpenings.length === openings.length) setHasMore(false);
+        setOpenings(addedOpenings);
 
-        setPage(prev => prev + 1);
+        if (clickedOnOpening && page == 1) {
+          if (addedOpenings.length > 0) setClickedOpening(addedOpenings[0]);
+          else {
+            setClickedOnOpening(false);
+            setClickedOpening(initialOpening);
+          }
+        } else if (page == 1 && addedOpenings.length > 0 && windowWidth > 640) {
+          setClickedOnOpening(true);
+          setClickedOpening(addedOpenings[0]);
+        }
       }
+
+      setPage(prev => prev + 1);
+
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -125,15 +120,18 @@ const Openings = () => {
           <InfiniteScroll
             className={`${clickedOnOpening ? 'w-[480px]' : 'w-[720px]'} max-lg:w-full flex flex-col gap-4`}
             dataLength={openings.length}
-            next={() => fetchOpenings(new URLSearchParams(window.location.search).get('search'), null)}
+            next={() => fetchOpenings(new URLSearchParams(window.location.search).get('search'))}
             hasMore={hasMore}
             loader={<Loader />}
           >
-            <OrderMenu
-              orders={['trending', 'most_viewed', 'latest', 'last_viewed']}
-              current={order}
-              setState={setOrder}
-            />
+            {(openings.length > 0 || order == 'last_viewed') && (
+              <OrderMenu
+                orders={['trending', 'most_viewed', 'latest', 'last_viewed']}
+                current={order}
+                setState={setOrder}
+              />
+            )}
+
             {openings && openings.length > 0 ? (
               openings.map(opening => {
                 return (

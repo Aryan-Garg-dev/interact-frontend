@@ -1,4 +1,4 @@
-import { Command, CommandEmpty, CommandInput, CommandList, CommandSeparator } from '@/components/ui/command';
+import { Command, CommandEmpty, CommandInput, CommandList } from '@/components/ui/command';
 import { SERVER_ERROR } from '@/config/errors';
 import {
   COMMUNITY_PROFILE_PIC_URL,
@@ -90,18 +90,20 @@ const SearchBar = () => {
                 {noResults ? (
                   <CommandEmpty>No results found.</CommandEmpty>
                 ) : (
-                  <ToggleGroup
-                    className="w-full flex-center gap-4 my-2"
-                    value={filters}
-                    onValueChange={setFilters}
-                    type="multiple"
-                  >
-                    {['openings', 'projects', 'users', 'events', 'communities', 'organizations'].map(filterType => (
-                      <ToggleGroupItem key={filterType} value={filterType} className="capitalize">
-                        {filterType}
-                      </ToggleGroupItem>
-                    ))}
-                  </ToggleGroup>
+                  <>
+                    <ToggleGroup
+                      className="w-full flex-center gap-4 my-2"
+                      value={filters}
+                      onValueChange={setFilters}
+                      type="multiple"
+                    >
+                      {['openings', 'projects', 'users', 'events', 'communities', 'organizations'].map(filterType => (
+                        <ToggleGroupItem key={filterType} value={filterType} className="capitalize">
+                          {filterType}
+                        </ToggleGroupItem>
+                      ))}
+                    </ToggleGroup>
+                  </>
                 )}
                 {Object.entries(results).map(([key, group]) => {
                   return (
@@ -114,7 +116,6 @@ const SearchBar = () => {
                         {/* {group.length === 3 && (
                           <div className="w-full text-center text-xs font-medium text-gray-400">Load More</div>
                         )} */}
-                        <CommandSeparator />
                       </CommandGroup>
                     )
                   );
@@ -129,6 +130,7 @@ const SearchBar = () => {
 
 const CommandGroup: React.FC<{ children: ReactNode; heading: string }> = ({ children, heading }) => (
   <div className="w-full flex flex-col gap-2 px-2 mt-2">
+    <CommandSeparator />
     <div className="text-gray-500 text-sm font-medium pl-1 capitalize">{heading}</div>
     {children}
   </div>
@@ -139,6 +141,8 @@ const CommandItem: React.FC<{ children: ReactNode; link: string }> = ({ children
     {children}
   </Link>
 );
+
+const CommandSeparator: React.FC = () => <div className="w-full h-px bg-gray-300"></div>;
 
 const ProjectItem = ({ project }: { project: Project }) => (
   <CommandItem link={`${EXPLORE_URL}?pid=${project.slug}`}>

@@ -21,25 +21,22 @@ const Events = () => {
 
   const open = useSelector(navbarOpenSelector);
 
-  const fetchEvents = async (search: string | null, initialPage: number | null) => {
-    const URL =
-      search && search != ''
-        ? `${EXPLORE_URL}/events?search=${search}&order=${order}`
-        : `${EXPLORE_URL}/events?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
+  const fetchEvents = async (search: string | null, initialPage?: number) => {
+    const URL = `${EXPLORE_URL}/events?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
+      search && `&search=${search}`
+    }`;
+
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      if (search && search != '') {
+      if (initialPage == 1) {
         setEvents(res.data.events || []);
-        setHasMore(false);
       } else {
-        if ((!search && page == 1) || initialPage == 1) setEvents(res.data.events || []);
-        else {
-          const addedEvents = [...events, ...(res.data.events || [])];
-          if (addedEvents.length === events.length) setHasMore(false);
-          setEvents(addedEvents);
-        }
-        setPage(prev => prev + 1);
+        const addedEvents = [...events, ...(res.data.events || [])];
+        if (addedEvents.length === events.length) setHasMore(false);
+        setEvents(addedEvents);
       }
+      setPage(prev => prev + 1);
+
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -54,6 +51,7 @@ const Events = () => {
     setLoading(true);
     fetchEvents(new URLSearchParams(window.location.search).get('search'), 1);
   }, [window.location.search, order]);
+
   return (
     <div className="w-full flex flex-col gap-6 pt-2">
       <OrderMenu
@@ -70,7 +68,7 @@ const Events = () => {
             open ? 'px-2 gap-4' : 'px-8 gap-8'
           } pb-12 flex flex-wrap justify-center transition-ease-out-500`}
           dataLength={events.length}
-          next={() => fetchEvents(new URLSearchParams(window.location.search).get('search'), null)}
+          next={() => fetchEvents(new URLSearchParams(window.location.search).get('search'))}
           hasMore={hasMore}
           loader={<Loader />}
         >

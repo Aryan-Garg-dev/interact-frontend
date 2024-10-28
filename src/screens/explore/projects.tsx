@@ -30,26 +30,21 @@ const Projects = () => {
   const dispatch = useDispatch();
   const checkSet = new Set();
 
-  const fetchProjects = async (search: string | null, initialPage: number | null) => {
-    const URL =
-      search && search != ''
-        ? `${EXPLORE_URL}/projects?${'search=' + search}&order=${order}`
-        : `${EXPLORE_URL}/projects?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}`;
+  const fetchProjects = async (search: string | null, initialPage?: number) => {
+    const URL = `${EXPLORE_URL}/projects?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
+      search && `&search=${search}`
+    }`;
+
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      if (search && search != '') {
+      if (initialPage == 1) {
         setProjects(res.data.projects || []);
-        setHasMore(false);
       } else {
-        if (initialPage == 1) {
-          setProjects(res.data.projects || []);
-        } else {
-          const addedProjects = [...projects, ...(res.data.projects || [])];
-          if (addedProjects.length === projects.length) setHasMore(false);
-          setProjects(addedProjects);
-        }
-        setPage(prev => prev + 1);
+        const addedProjects = [...projects, ...(res.data.projects || [])];
+        if (addedProjects.length === projects.length) setHasMore(false);
+        setProjects(addedProjects);
       }
+      setPage(prev => prev + 1);
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -103,11 +98,14 @@ const Projects = () => {
 
   return (
     <div>
-      <OrderMenu
-        orders={['trending', 'most_liked', 'most_viewed', 'latest', 'last_viewed']}
-        current={order}
-        setState={setOrder}
-      />
+      {(projects.length > 0 || order == 'last_viewed') && (
+        <OrderMenu
+          orders={['trending', 'most_liked', 'most_viewed', 'latest', 'last_viewed']}
+          current={order}
+          setState={setOrder}
+        />
+      )}
+
       {loading ? (
         <Loader />
       ) : (
@@ -125,7 +123,7 @@ const Projects = () => {
               //   navbarOpen ? 'w-[calc(100vw-380px)]' : 'w-[calc(100vw-180px)]'
               // } mx-auto flex justify-center gap-8 flex-wrap max-md:gap-6 max-md:px-4 max-md:justify-items-center transition-ease-out-500`}
               dataLength={projects.length}
-              next={() => fetchProjects(new URLSearchParams(window.location.search).get('search'), null)}
+              next={() => fetchProjects(new URLSearchParams(window.location.search).get('search'))}
               hasMore={hasMore}
               loader={<Loader />}
             >

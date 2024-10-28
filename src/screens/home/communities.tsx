@@ -7,45 +7,63 @@ import { EXPLORE_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
 import Loader from '@/components/common/loader';
 import CommunityCard from '@/components/explore/community_card';
+import NoSearch from '@/components/fillers/search';
 
 const Communities = () => {
   const [communities, setCommunities] = useState<Community[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const fetchCommunities = async () => {
-    setLoading(true);
+  const fetchCommunities = async (search: string | null, initialPage?: number) => {
+    const URL = `${EXPLORE_URL}/communities?page=${initialPage ? initialPage : page}&limit=${10}${
+      search && `&search=${search}`
+    }`;
 
-    const URL = `${EXPLORE_URL}/communities?page=${page}&limit=${10}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      const addedCommunity: Community[] = [...communities, ...(res.data.communities || [])];
-      if (addedCommunity.length === history.length) setHasMore(false);
-      setCommunities(addedCommunity);
+      if (initialPage == 1) {
+        setCommunities(res.data.communities || []);
+      } else {
+        const addedCommunity: Community[] = [...communities, ...(res.data.communities || [])];
+        if (addedCommunity.length === history.length) setHasMore(false);
+        setCommunities(addedCommunity);
+      }
       setPage(prev => prev + 1);
+
+      setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
       else Toaster.error(SERVER_ERROR, 'error_toaster');
     }
-
-    setLoading(false);
   };
 
   useEffect(() => {
-    fetchCommunities();
-  }, []);
+    setPage(1);
+    setCommunities([]);
+    setHasMore(true);
+    setLoading(true);
+    fetchCommunities(new URLSearchParams(window.location.search).get('search'), 1);
+  }, [window.location.search]);
 
   return (
     <div className="w-full flex flex-col gap-2">
-      {loading && page == 1 ? (
+      {loading ? (
         <Loader />
-      ) : (
-        <div className="w-full grid grid-cols-2 gap-1">
+      ) : communities.length > 0 ? (
+        <InfiniteScroll
+          className="w-full grid grid-cols-2 gap-1"
+          dataLength={communities.length}
+          next={() => fetchCommunities(new URLSearchParams(window.location.search).get('search'))}
+          hasMore={hasMore}
+          loader={<></>}
+        >
           {communities.map(community => (
             <CommunityCard key={community.id} community={community} />
           ))}
-        </div>
+        </InfiniteScroll>
+      ) : (
+        <NoSearch />
       )}
     </div>
   );
