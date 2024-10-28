@@ -1,4 +1,4 @@
-import { COMMUNITY_PROFILE_PIC_URL, COMMUNITY_URL } from '@/config/routes';
+import { COMMUNITY_COVER_PIC_URL, COMMUNITY_PROFILE_PIC_URL, COMMUNITY_URL } from '@/config/routes';
 import { Community } from '@/types';
 import Image from 'next/image';
 import React, { useState } from 'react';
@@ -7,8 +7,18 @@ import CommunityJoinBtn from '../common/community_join_btn';
 
 const CommunityCard = ({ community }: { community: Community }) => {
   return (
-    <div className="w-full bg-gray-50 flex flex-col gap-2 rounded-lg border-[1px] p-2">
-      <div className="w-full flex gap-2 items-center">
+    <div className="w-full bg-gray-50 relative flex flex-col gap-2 rounded-lg border-[1px] p-2">
+      <Image
+        crossOrigin="anonymous"
+        width={600}
+        height={100}
+        alt="Community Pic"
+        placeholder="blur"
+        blurDataURL={community.coverPicBlurHash || 'no-hash'}
+        src={`${COMMUNITY_COVER_PIC_URL}/${community.coverPic}`}
+        className="w-full h-full absolute rounded-lg opacity-10 top-0 right-0"
+      />
+      <div className="w-full flex gap-2 items-center z-10">
         <Link href={`/community/${community.id}`} target="_blank">
           <Image
             crossOrigin="anonymous"
@@ -31,7 +41,7 @@ const CommunityCard = ({ community }: { community: Community }) => {
         </Link>
         <CommunityJoinBtn communityID={community.id} communityAccess={community.access} />
       </div>
-      <Link href={`/community/${community.id}`} target="_blank" className="w-full text-xs font-medium">
+      <Link href={`/community/${community.id}`} target="_blank" className="w-full text-xs font-medium z-10">
         {community.tagline}
       </Link>
     </div>

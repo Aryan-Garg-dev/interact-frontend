@@ -20,9 +20,9 @@ import AddRule from '@/sections/community/add_rule';
 import EditCommunity from '@/sections/community/edit_community';
 import EditMemberships from '@/sections/community/edit_memberships';
 import NewPost from '@/sections/home/new_post';
-import { Post, User } from '@/types';
+import { PermissionConfig, Post, User } from '@/types';
 import { initialCommunity } from '@/types/initials';
-import { checkCommunityAccess } from '@/utils/funcs/access';
+import { checkCommunityAccess, checkCommunityStaticAccess } from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
@@ -34,6 +34,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import EditRule from '@/sections/community/edit_rule';
 import OrderMenu from '@/components/common/order_menu2';
+import ViewPermissions from '@/sections/community/view_permissions';
 
 const Community = ({ id }: { id: string }) => {
   const [community, setCommunity] = useState(initialCommunity);
@@ -42,6 +43,7 @@ const Community = ({ id }: { id: string }) => {
   const [connections, setConnections] = useState<User[]>([]);
   const [noProjects, setNoProjects] = useState(0);
   const [noOpenings, setNoOpenings] = useState(0);
+  const [permissionConfig, setPermissionConfig] = useState<PermissionConfig | undefined>({});
 
   const [posts, setPosts] = useState<Post[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -62,6 +64,7 @@ const Community = ({ id }: { id: string }) => {
       setConnections(res.data.connections);
       setNoProjects(res.data.noProjects);
       setNoOpenings(res.data.noOpenings);
+      setPermissionConfig(res.data.permissionConfig);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
       else Toaster.error(SERVER_ERROR, 'error_toaster');
@@ -143,15 +146,24 @@ const Community = ({ id }: { id: string }) => {
               <div className="w-[calc(100%-96px)] flex justify-between items-center pb-1">
                 <div className="text-3xl max-md:text-xl font-semibold">{community.title}</div>
                 <div className="w-fit flex-center gap-2">
-                  {checkCommunityAccess(COMMUNITY_MEMBER, community.id) && (
+                  {checkCommunityAccess(community.id, 'create_post', permissionConfig) && (
                     <Button onClick={() => setClickedOnNewPost(true)} variant="outline">
                       New Post
                     </Button>
                   )}
-                  {checkCommunityAccess(COMMUNITY_MODERATOR, community.id) && (
+                  {checkCommunityAccess(community.id, 'edit_community', permissionConfig) && (
                     <EditCommunity community={community} setCommunity={setCommunity} />
                   )}
-                  {checkCommunityAccess(COMMUNITY_MODERATOR, community.id) && <EditMemberships community={community} />}
+                  {checkCommunityAccess(community.id, 'edit_memberships', permissionConfig) && (
+                    <EditMemberships community={community} />
+                  )}
+                  {checkCommunityStaticAccess(community.id, COMMUNITY_MEMBER) && (
+                    <ViewPermissions
+                      community={community}
+                      permissionConfig={permissionConfig}
+                      setPermissionConfig={setPermissionConfig}
+                    />
+                  )}
                   <CommunityJoinBtn communityID={community.id} communityAccess={community.access} smaller={false} />
                 </div>
               </div>
@@ -176,7 +188,7 @@ const Community = ({ id }: { id: string }) => {
                       loader={<PostsLoader />}
                     >
                       {!community.isOpen &&
-                        !checkCommunityAccess(COMMUNITY_MEMBER, community.id) &&
+                        !checkCommunityStaticAccess(community.id, COMMUNITY_MEMBER) &&
                         posts.length > 0 && (
                           <div className="w-full text-center text-sm text-gray-500 font-medium my-4">
                             Some posts are hidden from non members.
@@ -248,7 +260,7 @@ const Community = ({ id }: { id: string }) => {
                 </>
               )}
               {((community.rules && community.rules.length > 0) ||
-                checkCommunityAccess(COMMUNITY_ADMIN, community.id)) && (
+                checkCommunityAccess(community.id, 'manage_rules', permissionConfig)) && (
                 <>
                   <div className="w-full h-[1px] bg-gray-300 my-2"></div>
                   <div>
@@ -263,7 +275,7 @@ const Community = ({ id }: { id: string }) => {
                             <AccordionTrigger>{rule.title}</AccordionTrigger>
                             <AccordionContent className="flex justify-between">
                               <div>{rule.description}</div>
-                              {checkCommunityAccess(COMMUNITY_ADMIN, community.id) && (
+                              {checkCommunityAccess(community.id, 'manage_rules', permissionConfig) && (
                                 <EditRule rule={rule} communityID={community.id} setCommunity={setCommunity} />
                               )}
                             </AccordionContent>

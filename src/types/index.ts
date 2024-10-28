@@ -940,3 +940,7 @@ export interface CommunityRule {
   title: string;
   description: string;
 }
+
+export interface PermissionConfig {
+  [action: string]: string;
+}

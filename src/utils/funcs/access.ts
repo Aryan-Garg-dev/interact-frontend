@@ -8,7 +8,7 @@ import {
   PROJECT_OWNER,
 } from '@/config/constants';
 import { store } from '@/store';
-import { Organization, Project } from '@/types';
+import { Organization, PermissionConfig, Project } from '@/types';
 import { initialOrganization, initialOrganizationMembership } from '@/types/initials';
 
 const user = store.getState().user;
@@ -98,9 +98,24 @@ export const checkOrgProjectAccess = (
   return projectAccess || orgAccess;
 };
 
-export const checkCommunityAccess = (role: string, communityID: string) => {
+export const checkCommunityAccess = (communityID: string, action: string, config?: PermissionConfig) => {
   const membership = user.communityMemberships?.filter(m => m.communityID == communityID)[0];
-  if (membership) return compareRoleLevel(membership.role, role);
+
+  if (membership) {
+    const requiredRole = config ? config[action] : undefined;
+
+    if (!requiredRole) return false;
+
+    return compareRoleLevel(membership.role, requiredRole);
+  }
+
+  return false;
+};
+
+export const checkCommunityStaticAccess = (communityID: string, requiredRole: string) => {
+  const membership = user.communityMemberships?.filter(m => m.communityID == communityID)[0];
+
+  if (membership) return compareRoleLevel(membership.role, requiredRole);
   return false;
 };
 
