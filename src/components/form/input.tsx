@@ -26,7 +26,7 @@ const Input = ({
   return (
     <div className="w-full">
       {label && (
-        <div className="text-xs ml-1 font-medium uppercase text-gray-500">
+        <div className="text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300">
           {label}
           {required && '*'}{' '}
           {type == 'text' && (
@@ -41,7 +41,7 @@ const Input = ({
         onChange={el => setVal(el.target.value)}
         maxLength={maxLength}
         type={type}
-        className={`w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2 ${className}`}
+        className={`w-full font-medium bg-transparent dark:text-white focus:outline-none border-[1px] border-gray-400 rounded-lg p-2 ${className}`}
         placeholder={placeholder}
         style={styles}
       />

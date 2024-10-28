@@ -14,7 +14,7 @@ const TextArea = ({ label, val, setVal, maxLength, placeholder, required = false
   return (
     <div className="w-full">
       {label && (
-        <div className="text-xs ml-1 font-medium uppercase text-gray-500">
+        <div className="text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300">
           {label}
           {required && '*'} ({val.trim().length}/{maxLength})
         </div>
@@ -23,7 +23,7 @@ const TextArea = ({ label, val, setVal, maxLength, placeholder, required = false
         value={val}
         onChange={el => setVal(el.target.value)}
         maxLength={maxLength}
-        className="w-full min-h-[80px] max-h-80 bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
+        className="w-full min-h-[80px] max-h-80 dark:text-white bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
         placeholder={placeholder}
         style={styles}
       />

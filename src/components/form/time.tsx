@@ -14,7 +14,7 @@ const Time = ({ label, val, setVal, required = false, onChange, styles, includeD
   return (
     <div>
       {label && (
-        <div className="text-xs ml-1 font-medium uppercase text-gray-500">
+        <div className="text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300">
           {label}
           {required && '*'}
         </div>

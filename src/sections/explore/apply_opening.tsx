@@ -78,7 +78,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
 
   return (
     <>
-      <div className="w-2/3 h-[560px] max-lg:h-base_md max-lg:overflow-y-auto max-md:w-screen max-md:h-screen dark:text-white fixed backdrop-blur-lg bg-white dark:bg-[#ffe1fc22] dark:max-lg:bg-[#2a192eea] z-50 max-lg:z-[100] translate-x-1/2 -translate-y-1/4 max-md:translate-y-0 top-64 max-lg:top-1/4 max-md:top-0 right-1/2 flex flex-col font-primary p-8 gap-6 border-2 border-primary_btn dark:border-dark_primary_btn rounded-xl max-md:rounded-none animate-fade_third">
+      <div className="w-2/3 h-[560px] max-lg:h-base_md max-lg:overflow-y-auto max-md:w-screen max-md:h-screen dark:text-white fixed backdrop-blur-lg bg-white dark:bg-dark_primary_comp z-50 max-lg:z-[100] translate-x-1/2 -translate-y-1/4 max-md:translate-y-0 top-64 max-lg:top-1/4 max-md:top-0 right-1/2 flex flex-col font-primary p-8 gap-6 border-2 border-primary_btn dark:border-dark_primary_btn rounded-xl max-md:rounded-none animate-fade_third">
         <div className="w-fit text-gradient mx-auto text-3xl max-md:text-2xl text-primary_black flex justify-between items-center gap-2 font-bold">
           Your Application
         </div>
@@ -131,7 +131,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                   setContent(el.target.value);
                 }}
                 maxLength={500}
-                className="w-full px-4 py-2 rounded-lg text-black bg-primary_comp dark:bg-dark_primary_comp min-h-[27rem] max-h-[27rem] focus:outline-none"
+                className="w-full px-4 py-2 rounded-lg text-black dark:text-white bg-primary_comp dark:bg-dark_primary_comp min-h-[27rem] max-h-[27rem] focus:outline-none"
                 placeholder="Add a Message of maximum 500 characters"
               />
             </div>
@@ -150,7 +150,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                       if (val >= 0 && val <= 10) setYoe(val);
                     }}
                     type="number"
-                    className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
+                    className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 dark:border-dark_primary_btn rounded-lg p-2"
                   />
                 </div>
               </div>

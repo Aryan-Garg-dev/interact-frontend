@@ -19,7 +19,7 @@ const Checkbox = ({ label, val, setVal, required = false, disabled = false, bord
         } rounded-lg ${disabled ? 'cursor-default' : 'cursor-pointer'}`}
       >
         {label && (
-          <div className="text-base font-medium text-gray-500">
+          <div className="text-base font-medium text-gray-500 dark:text-gray-300">
             {label} {required && '*'}
           </div>
         )}

@@ -13,7 +13,7 @@ const Tags = ({ label, tags, setTags, maxTags, required = false }: Props) => {
   return (
     <div>
       {label && (
-        <div className="text-xs ml-1 font-medium uppercase text-gray-500">
+        <div className="text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300">
           {label}
           {required && '*'} ({tags.length}/{maxTags})
         </div>

@@ -129,13 +129,13 @@ const Community = ({ id }: { id: string }) => {
               blurDataURL={community.coverPicBlurHash || 'no-hash'}
               src={`${COMMUNITY_COVER_PIC_URL}/${community.coverPic}`}
             />
-            <div className="w-fit bg-white text-xs rounded-lg flex-center px-2 py-1 capitalize absolute top-2 right-2">
+            <div className="w-fit bg-white dark:bg-dark_primary_comp text-xs rounded-lg flex-center px-2 py-1 capitalize absolute top-2 right-2">
               {community.isOpen ? 'Posts open for all' : 'Posts restricted to members only'}
             </div>
             <div className="w-full flex items-end gap-2 absolute -translate-y-1/2 pl-12">
               <Image
                 crossOrigin="anonymous"
-                className="w-24 h-24 rounded-full border-gray-200 border-4"
+                className="w-24 h-24 rounded-full border-gray-200 dark:border-[#252525] border-4"
                 width={200}
                 height={200}
                 alt="profile pic"
@@ -203,21 +203,21 @@ const Community = ({ id }: { id: string }) => {
                 </div>
               </PrimeWrapper>
             </div>
-            <div className="w-1/3 h-fit max-h-[calc(100vh-80px)] overflow-y-auto sticky top-[80px] bg-white flex flex-col gap-2 p-4 rounded-lg">
-              <div className="text-center text-gray-600">{community.description}</div>
+            <div className="w-1/3 h-fit max-h-[calc(100vh-80px)] overflow-y-auto sticky top-[80px] bg-white dark:bg-dark_primary_comp flex flex-col gap-2 p-4 rounded-lg">
+              <div className="text-center">{community.description}</div>
               <Tags tags={community.tags} displayAll center />
               <div className="w-full flex items-center justify-center gap-8 my-2">
                 <div className="flex-center flex-col">
                   <div className="text-lg font-medium">{community.noMembers}</div>
-                  <div className="text-sm text-gray-600">Members</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Members</div>
                 </div>
                 <div className="flex-center flex-col">
                   <div className="text-lg font-medium">{noProjects}</div>
-                  <div className="text-sm text-gray-600">Projects</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Projects</div>
                 </div>
                 <div className="flex-center flex-col">
                   <div className="text-lg font-medium">{noOpenings}</div>
-                  <div className="text-sm text-gray-600">Openings</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Openings</div>
                 </div>
               </div>
               {connections && connections.length > 0 && (

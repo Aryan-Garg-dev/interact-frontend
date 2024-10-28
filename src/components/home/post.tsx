@@ -140,7 +140,7 @@ const PostComponent = ({
         (clickedOnEdit || (post.userID == loggedInUser.id && isRepost) ? (
           <></>
         ) : (
-          <div className="w-1/4 h-fit flex flex-col bg-gray-100 bg-opacity-75 dark:bg-transparent absolute top-2 right-12 rounded-xl glassMorphism text-sm p-2 z-10 animate-fade_third">
+          <div className="w-1/4 h-fit flex flex-col bg-gray-100 bg-opacity-75 dark:bg-transparent absolute top-2 right-12 rounded-xl text-sm p-2 z-10 animate-fade_third">
             {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
               <div
                 onClick={() => setClickedOnEdit(true)}

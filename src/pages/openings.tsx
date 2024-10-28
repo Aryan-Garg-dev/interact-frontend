@@ -12,7 +12,7 @@ import Applications from '@/screens/workspace/applications';
 const Openings = () => {
   const [active, setActive] = useState(0);
   return (
-    <BaseWrapper>
+    <BaseWrapper title="Openings">
       <Sidebar index={5} />
       <MainWrapper sidebarLayout>
         <div className="w-full">

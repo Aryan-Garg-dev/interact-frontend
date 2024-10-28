@@ -93,7 +93,7 @@ const SearchBar = () => {
   return (
     <div
       ref={menuRef}
-      className="w-[640px] max-md:hidden fixed top-2 right-1/2 translate-x-1/2 max-md:w-taskbar_md mx-auto z-50"
+      className="w-[640px] max-md:hidden fixed top-2 right-1/2 translate-x-1/2 max-md:w-taskbar_md mx-auto z-30"
     >
       <Command
         className={`bg-gray-50 dark:bg-dark_primary_comp border-[1px] border-gray-200 dark:border-gray-800 ${

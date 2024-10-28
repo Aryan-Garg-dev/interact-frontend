@@ -22,8 +22,10 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
         if (setClickedOnOpening) setClickedOnOpening(true);
       }}
       className={`w-full ${
-        opening.id == clickedOpening?.id ? 'bg-primary_comp_hover' : 'hover:bg-primary_comp'
-      } font-primary border-[1px] border-primary_btn rounded-lg flex items-center gap-3 ${
+        opening.id == clickedOpening?.id
+          ? 'bg-primary_comp_hover dark:bg-dark_primary_comp_active'
+          : 'hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
+      } font-primary border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg flex items-center gap-3 ${
         short ? 'p-2' : 'p-3'
       } transition-ease-300 cursor-pointer animate-fade_third`}
     >

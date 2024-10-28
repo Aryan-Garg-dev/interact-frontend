@@ -10,7 +10,14 @@ class Toaster {
     pauseOnHover: false,
     draggable: true,
     progress: undefined,
-    theme: 'light',
+    theme: (() => {
+      try {
+        const theme = localStorage.getItem('theme');
+        return theme === 'dark' ? 'dark' : 'light';
+      } catch (error) {
+        return 'light';
+      }
+    })(),
     transition: Slide,
   };
 

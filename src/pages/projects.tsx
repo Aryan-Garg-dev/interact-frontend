@@ -12,7 +12,7 @@ import CombinedProjects from '@/screens/workspace/combined';
 const Projects = () => {
   const [active, setActive] = useState(0);
   return (
-    <BaseWrapper>
+    <BaseWrapper title="Projects">
       <Sidebar index={2} />
       <MainWrapper sidebarLayout>
         <div className="w-2/3">

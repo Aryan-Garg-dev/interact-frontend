@@ -14,7 +14,7 @@ import Communities from '@/screens/home/communities';
 const Home = () => {
   const [active, setActive] = useState(0);
   return (
-    <BaseWrapper>
+    <BaseWrapper title="Home">
       <Sidebar index={1} />
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-2/3">
