@@ -29,6 +29,7 @@ const SearchBar = () => {
   const [loading, setLoading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [filters, setFilters] = useState<string[]>([]);
+  const [search, setSearch] = useState('');
 
   //TODO add abort controller
   const fetchResults = async (search?: string) => {
@@ -64,19 +65,48 @@ const SearchBar = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    setSearch(new URLSearchParams(window.location.search).get('search') || '');
+  }, [window.location.search]);
+
   const noResults = useMemo(() => Object.values(results).every(group => group.length === 0), [results]);
+
+  const getLoadMoreURL = (type: string) => {
+    switch (type) {
+      case 'projects':
+        return `/projects?search=${search}`;
+      case 'users':
+        return `/explore/users?search=${search}`;
+      case 'openings':
+        return `/openings?search=${search}`;
+      case 'events':
+        return `/events?search=${search}`;
+      case 'organizations':
+        return `/organizations?search=${search}`;
+      case 'communities':
+        return `/home?search=${search}`;
+      default:
+        return '/';
+    }
+  };
 
   return (
     <div
       ref={menuRef}
       className="w-[640px] max-md:hidden fixed top-2 right-1/2 translate-x-1/2 max-md:w-taskbar_md mx-auto z-50"
     >
-      <Command className={`bg-gray-50 border-[1px] border-gray-200 ${isDialogOpen && !noResults && 'pb-2'}`}>
+      <Command
+        className={`bg-gray-50 border-[1px] border-gray-200 ${
+          isDialogOpen && !noResults && 'pb-2 shadow-xl'
+        } transition-shadow ease-in duration-300`}
+      >
         <CommandInput
-          placeholder="Search for users, projects, openings, events, etc."
+          placeholder="Search for users, projects, openings, communities, events, etc."
+          value={search}
           onValueChange={value => {
             if (value) fetchResults(value);
             setIsDialogOpen(Boolean(value));
+            setSearch(value);
           }}
         />
         <CommandList>
@@ -109,13 +139,15 @@ const SearchBar = () => {
                   return (
                     (filters.length === 0 || filters.includes(key)) &&
                     group.length > 0 && (
-                      <CommandGroup key={key} heading={key}>
+                      <CommandGroup
+                        key={key}
+                        heading={key}
+                        loadMoreURL={getLoadMoreURL(key)}
+                        showLoadMore={group.length === 3}
+                      >
                         {group.map(item => (
                           <SearchItem key={item.id} item={item} type={key} />
                         ))}
-                        {/* {group.length === 3 && (
-                          <div className="w-full text-center text-xs font-medium text-gray-400">Load More</div>
-                        )} */}
                       </CommandGroup>
                     )
                   );
@@ -128,13 +160,28 @@ const SearchBar = () => {
   );
 };
 
-const CommandGroup: React.FC<{ children: ReactNode; heading: string }> = ({ children, heading }) => (
-  <div className="w-full flex flex-col gap-2 px-2 mt-2">
-    <CommandSeparator />
-    <div className="text-gray-500 text-sm font-medium pl-1 capitalize">{heading}</div>
-    {children}
-  </div>
-);
+const CommandGroup: React.FC<{ children: ReactNode; heading: string; loadMoreURL: string; showLoadMore: boolean }> = ({
+  children,
+  heading,
+  loadMoreURL,
+  showLoadMore,
+}) => {
+  return (
+    <div className="w-full flex flex-col gap-2 px-2 mt-2">
+      <CommandSeparator />
+      <div className="text-gray-500 text-sm font-medium pl-1 capitalize">{heading}</div>
+      {children}
+      {showLoadMore && (
+        <Link
+          href={loadMoreURL}
+          className="w-fit mx-auto text-xs font-medium text-gray-400 hover:underline underline-offset-2"
+        >
+          Load More
+        </Link>
+      )}
+    </div>
+  );
+};
 
 const CommandItem: React.FC<{ children: ReactNode; link: string }> = ({ children, link }) => (
   <Link href={link} className="w-full flex items-center gap-1 hover:bg-gray-100 p-1 rounded-sm">
