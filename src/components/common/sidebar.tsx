@@ -3,19 +3,16 @@ import SidebarItem from './sidebar_item';
 import {
   ArrowLineLeft,
   Bell,
-  BookmarkSimple,
   Buildings,
   CalendarDots,
-  Envelope,
   Gear,
   HouseLine,
   ReadCvLogo,
   RocketLaunch,
   UserCircle,
-  Wrench,
 } from '@phosphor-icons/react';
 import { useDispatch, useSelector } from 'react-redux';
-import { navbarOpenSelector, toggleNavbarOpen, unreadInvitationsSelector } from '@/slices/feedSlice';
+import { navbarOpenSelector, toggleNavbarOpen } from '@/slices/feedSlice';
 import useUserStateFetcher from '@/hooks/user_fetcher';
 import BottomBar from './bottombar';
 import { resetUser, userSelector } from '@/slices/userSlice';
@@ -24,12 +21,11 @@ import { currentOrgSelector, resetCurrentOrg } from '@/slices/orgSlice';
 import Cookies from 'js-cookie';
 import ConfirmDelete from './confirm_delete';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import Image from 'next/image';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
+import Theme from '@/sections/settings/theme';
 interface Props {
   index: number;
 }
@@ -39,7 +35,6 @@ const Sidebar = ({ index }: Props) => {
 
   const open = useSelector(navbarOpenSelector);
   const user = useSelector(userSelector);
-  const unreadInvitations = useSelector(unreadInvitationsSelector);
 
   const dispatch = useDispatch();
 
@@ -126,6 +121,7 @@ const Sidebar = ({ index }: Props) => {
               setActive={setActive}
             />
             <SidebarItem index={9} title="Settings" icon={<Gear size={24} />} active={active} setActive={setActive} />
+            {open && <Theme />}
           </div>
         )}
         {user.id && (

@@ -121,7 +121,7 @@ const FeedSide = () => {
               <Link
                 href={`/organisations?oid=${meeting.organizationID}&redirect_url=/meetings/${meeting.id}`}
                 key={meeting.id}
-                className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp rounded-lg px-2 py-1 transition-ease-300"
+                className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg px-2 py-1 transition-ease-300"
               >
                 <div className="w-[calc(100%-112px)]">
                   <div className="font-medium line-clamp-1">{meeting.title}</div>
@@ -133,7 +133,6 @@ const FeedSide = () => {
           </div>
         </SidePrimeWrapper>
       )}
-
       {tasks && tasks.length > 0 && (
         <SidePrimeWrapper title="Pending Tasks">
           <div className="w-full flex flex-col gap-1">
@@ -145,7 +144,7 @@ const FeedSide = () => {
                     : `/organisations?oid=${task.organizationID}&redirect_url=/tasks?tid=${task.id}`
                 }
                 key={task.id}
-                className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp rounded-lg px-2 py-1 transition-ease-300"
+                className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg px-2 py-1 transition-ease-300"
               >
                 <div className="w-[calc(100%-112px)]">
                   <div className="font-medium line-clamp-1">{task.title}</div>
@@ -173,7 +172,7 @@ const FeedSide = () => {
                 <Link
                   href={`/explore?search=${str}`}
                   key={i}
-                  className="w-fit flex items-center gap-2 bg-slate-100 rounded-lg px-4 py-1 hover:scale-105 transition-ease-300"
+                  className="w-fit flex items-center gap-2 bg-slate-100 dark:bg-dark_primary_comp_hover rounded-lg px-4 py-1 hover:scale-105 transition-ease-300"
                 >
                   <div>{str}</div>
                   {i < 3 && <ChartLineUp />}

@@ -25,8 +25,8 @@ const SidebarItem = ({ title, icon, active, setActive, index, org = false, url =
       }}
       className={`${open ? 'w-[220px]' : 'w-10 '} h-10 p-[8.5px] rounded-lg ${
         active == index
-          ? 'bg-primary_comp_hover text-primary_text dark:text-white dark:bg-[#0e0c2a59]'
-          : 'hover:bg-primary_comp dark:hover:bg-[#0000002b] text-gray-500 dark:text-white'
+          ? 'bg-primary_comp_hover dark:bg-dark_primary_comp_active text-primary_text dark:text-white'
+          : 'hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover text-gray-500 dark:text-white'
       } relative font-primary font-medium items-center transition-ease-out-500`}
     >
       {icon}

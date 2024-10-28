@@ -96,8 +96,8 @@ const SearchBar = () => {
       className="w-[640px] max-md:hidden fixed top-2 right-1/2 translate-x-1/2 max-md:w-taskbar_md mx-auto z-50"
     >
       <Command
-        className={`bg-gray-50 border-[1px] border-gray-200 ${
-          isDialogOpen && !noResults && 'pb-2 shadow-xl'
+        className={`bg-gray-50 dark:bg-dark_primary_comp border-[1px] border-gray-200 dark:border-gray-800 ${
+          isDialogOpen && !noResults && 'pb-2 shadow-xl dark:shadow-[#2b2828]'
         } transition-shadow ease-in duration-300`}
       >
         <CommandInput
@@ -184,7 +184,10 @@ const CommandGroup: React.FC<{ children: ReactNode; heading: string; loadMoreURL
 };
 
 const CommandItem: React.FC<{ children: ReactNode; link: string }> = ({ children, link }) => (
-  <Link href={link} className="w-full flex items-center gap-1 hover:bg-gray-100 p-1 rounded-sm">
+  <Link
+    href={link}
+    className="w-full flex items-center gap-1 hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover p-1 rounded-sm transition-ease-300"
+  >
     {children}
   </Link>
 );

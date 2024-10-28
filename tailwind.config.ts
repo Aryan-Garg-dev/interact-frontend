@@ -2,7 +2,7 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
-  darkMode: ['class', 'class'],
+  darkMode: ['class'],
   theme: {
     extend: {
       width: {
@@ -50,13 +50,13 @@ const config: Config = {
         dark_secondary_gradient_start: '#be76bf',
         dark_secondary_gradient_end: '#607ee7',
         primary_btn: '#9ca3af',
-        dark_primary_btn: '#9275b9ba',
+        dark_primary_btn: '#4B4A4A',
         primary_comp: '#478eeb18',
-        dark_primary_comp: '#c578bf1b',
+        dark_primary_comp: '#1c1c1c',
         primary_comp_hover: '#478eeb38',
-        dark_primary_comp_hover: '#c578bf36',
+        dark_primary_comp_hover: '#2e2e2e',
         primary_comp_active: '#478eeb86',
-        dark_primary_comp_active: '#c578bf5d',
+        dark_primary_comp_active: '#383838',
         primary_danger: '#ea333e',
         primary_black: '#2e2c2c',
         heart_filled: '#fe251baa',
@@ -107,11 +107,11 @@ const config: Config = {
       backgroundColor: {
         backdrop: '#0000003f',
         navbar: '#ffffff',
-        dark_navbar: '#070615be',
+        dark_navbar: '#1b1b1b',
         main: '#e5e7eb',
-        dark_main: '#070615be',
+        dark_main: '#252525',
         sidebar: '#ffffff',
-        dark_sidebar: '#43434385',
+        dark_sidebar: '#1b1b1b',
       },
       fontFamily: {
         primary: ['var(--inter-font)'],

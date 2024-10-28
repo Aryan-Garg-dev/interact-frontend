@@ -22,7 +22,9 @@ const MenuBar = ({ items, active, setReduxState, setState }: Props) => {
               else if (setState) setState(index);
             }}
             className={`relative ${
-              active === index ? 'bg-white text-primary_text' : 'hover:bg-gray-100 text-gray-500'
+              active === index
+                ? 'bg-white dark:bg-dark_primary_comp text-primary_text'
+                : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover text-gray-500'
             } w-1/2 max-md:w-fit max-md:px-4 h-full font-primary font-medium flex-center text-lg max-md:text-sm rounded-t-full pt-2 pb-1 transition-ease-300 cursor-pointer`}
           >
             {item}

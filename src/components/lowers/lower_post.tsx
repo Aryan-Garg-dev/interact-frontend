@@ -174,7 +174,7 @@ const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = 
               else likeHandler();
             }}
             className={`cursor-pointer max-md:w-6 max-md:h-6 ${
-              liked ? 'text-heart_filled' : 'text-black opacity-60'
+              liked ? 'text-heart_filled' : 'text-black opacity-60 dark:text-gray-50'
             } transition-ease-300`}
             size={24}
             weight={liked ? 'fill' : 'regular'}
@@ -209,7 +209,9 @@ const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = 
             weight="regular"
           />
           <BookmarkSimple
-            className="cursor-pointer max-md:w-6 max-md:h-6 opacity-60"
+            className={`cursor-pointer max-md:w-6 max-md:h-6 opacity-60 ${
+              bookmarkStatus.isBookmarked ? 'text-[#7cb9ff]' : 'text-black opacity-60 dark:text-gray-50'
+            } transition-ease-300`}
             onClick={() => {
               if (userID == '') setNoUserClick(true);
               else {
@@ -219,7 +221,6 @@ const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = 
             }}
             size={24}
             weight={bookmarkStatus.isBookmarked ? 'fill' : 'light'}
-            fill={bookmarkStatus.isBookmarked ? '#478EE1' : '#000000'}
           />
         </div>
 
