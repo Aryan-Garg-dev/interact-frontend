@@ -32,7 +32,7 @@ const Explore = () => {
             setReduxState={setExploreTab}
             width="720px"
           />
-          <SearchBar initialValue={initialSearch} />
+          <SearchBar />
           <div className={`w-full ${active === 0 ? 'block' : 'hidden'}`}>
             <Projects />
           </div>

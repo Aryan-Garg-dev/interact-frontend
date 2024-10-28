@@ -118,7 +118,7 @@ const SearchBar = () => {
             ) : (
               <>
                 {noResults ? (
-                  <CommandEmpty>No results found.</CommandEmpty>
+                  <CommandEmpty> No results found for &quot;{search}&quot;</CommandEmpty>
                 ) : (
                   <>
                     <ToggleGroup
