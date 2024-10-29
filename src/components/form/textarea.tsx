@@ -23,7 +23,7 @@ const TextArea = ({ label, val, setVal, maxLength, placeholder, required = false
         value={val}
         onChange={el => setVal(el.target.value)}
         maxLength={maxLength}
-        className="w-full min-h-[80px] max-h-80 dark:text-white bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
+        className="w-full min-h-[80px] max-h-80 dark:text-white bg-transparent focus:outline-none border-[1px] border-gray-400 dark:border-dark_primary_btn rounded-lg p-2"
         placeholder={placeholder}
         style={styles}
       />

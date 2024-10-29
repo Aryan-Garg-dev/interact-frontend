@@ -41,7 +41,7 @@ const Input = ({
         onChange={el => setVal(el.target.value)}
         maxLength={maxLength}
         type={type}
-        className={`w-full font-medium bg-transparent dark:text-white focus:outline-none border-[1px] border-gray-400 rounded-lg p-2 ${className}`}
+        className={`w-full font-medium bg-transparent dark:text-white focus:outline-none border-[1px] border-gray-400 dark:border-dark_primary_btn rounded-lg p-2 ${className}`}
         placeholder={placeholder}
         style={styles}
       />

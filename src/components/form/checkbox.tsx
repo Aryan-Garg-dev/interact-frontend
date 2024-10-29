@@ -15,7 +15,7 @@ const Checkbox = ({ label, val, setVal, required = false, disabled = false, bord
     <div>
       <label
         className={`w-full flex justify-between  select-none items-center text-sm gap-2 ${
-          border && 'border-[1px] border-gray-400 p-2'
+          border && 'border-[1px] border-gray-400 dark:border-dark_primary_btn p-2'
         } rounded-lg ${disabled ? 'cursor-default' : 'cursor-pointer'}`}
       >
         {label && (

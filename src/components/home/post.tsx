@@ -22,6 +22,7 @@ import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
 import isArrEdited from '@/utils/funcs/check_array_edited';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Props {
   post: Post;
@@ -45,7 +46,6 @@ const PostComponent = ({
   initialCommentShowState = false,
 }: Props) => {
   const loggedInUser = useSelector(userSelector);
-  const [clickedOnOptions, setClickedOnOptions] = useState(false);
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
   const [clickedOnDelete, setClickedOnDelete] = useState(false);
   const [clickedOnReport, setClickedOnReport] = useState(false);
@@ -128,7 +128,6 @@ const PostComponent = ({
 
   return (
     <div
-      onClick={() => setClickedOnOptions(false)}
       className={`w-full relative bg-white dark:bg-transparent font-primary flex gap-1 ${
         !isRepost ? 'border-b-[1px] py-4' : 'rounded-lg border-[1px] p-2 my-2'
       } border-gray-300 animate-fade_third`}
@@ -136,45 +135,6 @@ const PostComponent = ({
       {noUserClick && <SignUp setShow={setNoUserClick} />}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
       {clickedOnReport && <Report postID={post.id} setShow={setClickedOnReport} />}
-      {clickedOnOptions &&
-        (clickedOnEdit || (post.userID == loggedInUser.id && isRepost) ? (
-          <></>
-        ) : (
-          <div className="w-1/4 h-fit flex flex-col bg-gray-100 bg-opacity-75 dark:bg-transparent absolute top-2 right-12 rounded-xl text-sm p-2 z-10 animate-fade_third">
-            {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
-              <div
-                onClick={() => setClickedOnEdit(true)}
-                className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] transition-ease-100 rounded-lg cursor-pointer"
-              >
-                Edit
-              </div>
-            )}
-            {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
-              <div
-                onClick={el => {
-                  el.stopPropagation();
-                  setClickedOnDelete(true);
-                }}
-                className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg cursor-pointer"
-              >
-                Delete
-              </div>
-            )}
-
-            {post.userID != loggedInUser.id && (
-              <div
-                onClick={el => {
-                  el.stopPropagation();
-                  if (userID == '') setNoUserClick(true);
-                  else setClickedOnReport(true);
-                }}
-                className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg cursor-pointer"
-              >
-                Report
-              </div>
-            )}
-          </div>
-        ))}
       <div className="h-full">
         <Link
           href={`${
@@ -217,15 +177,44 @@ const PostComponent = ({
               <></>
             ) : (
               showLowerPost && (
-                <div
-                  onClick={el => {
-                    el.stopPropagation();
-                    setClickedOnOptions(prev => !prev);
-                  }}
-                  className="text-xxs cursor-pointer"
-                >
-                  •••
-                </div>
+                <Popover>
+                  <PopoverTrigger>
+                    <div className="text-xxs cursor-pointer">•••</div>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-40 p-2 text-sm">
+                    {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
+                      <div
+                        onClick={() => setClickedOnEdit(true)}
+                        className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg cursor-pointer transition-ease-300"
+                      >
+                        Edit
+                      </div>
+                    )}
+                    {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
+                      <div
+                        onClick={el => {
+                          el.stopPropagation();
+                          setClickedOnDelete(true);
+                        }}
+                        className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover hover:text-primary_danger rounded-lg cursor-pointer transition-ease-100 "
+                      >
+                        Delete
+                      </div>
+                    )}
+                    {post.userID != loggedInUser.id && (
+                      <div
+                        onClick={el => {
+                          el.stopPropagation();
+                          if (userID == '') setNoUserClick(true);
+                          else setClickedOnReport(true);
+                        }}
+                        className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover hover:text-primary_danger rounded-lg cursor-pointer transition-ease-100 "
+                      >
+                        Report
+                      </div>
+                    )}
+                  </PopoverContent>
+                </Popover>
               )
             )}
           </div>

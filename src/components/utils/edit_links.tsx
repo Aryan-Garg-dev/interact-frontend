@@ -73,7 +73,7 @@ const Links = ({ links, showTitle = false, setLinks, maxLinks = 5, title = 'Link
                 </div>
 
                 <Link
-                  className={`text-xs border-[1px] border-black border-dashed rounded-lg px-2 py-1 ${
+                  className={`text-xs border-[1px] border-black dark:border-dark_primary_btn border-dashed rounded-lg px-2 py-1 ${
                     showURL !== index ? 'hidden' : ''
                   }`}
                   href={link}

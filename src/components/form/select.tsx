@@ -22,7 +22,7 @@ const Select = ({ label, options, val, setVal, required = false, styles, caption
       <select
         onChange={el => setVal(el.target.value)}
         value={val}
-        className="w-full max-lg:w-full h-11 border-[1px] border-primary_btn dark:border-dark_primary_btn dark:text-white bg-primary_comp dark:bg-[#10013b30] focus:outline-nonetext-sm rounded-lg block p-2"
+        className="w-full max-lg:w-full h-11 border-[1px] border-primary_btn dark:border-dark_primary_btn dark:text-white bg-primary_comp dark:bg-dark_primary_comp focus:outline-none rounded-lg block p-2"
         style={styles}
       >
         {options.map((c, i) => {
