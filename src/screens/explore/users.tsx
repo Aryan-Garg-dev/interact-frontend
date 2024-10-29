@@ -20,7 +20,7 @@ const Users = () => {
 
   const fetchUsers = async (search: string | null, initialPage?: number) => {
     const URL = `${EXPLORE_URL}/users?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
-      search && `&search=${search}`
+      search ? `&search=${search}` : ''
     }`;
 
     const res = await getHandler(URL);

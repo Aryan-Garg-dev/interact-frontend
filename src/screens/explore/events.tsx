@@ -23,7 +23,7 @@ const Events = () => {
 
   const fetchEvents = async (search: string | null, initialPage?: number) => {
     const URL = `${EXPLORE_URL}/events?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
-      search && `&search=${search}`
+      search ? `&search=${search}` : ''
     }`;
 
     const res = await getHandler(URL);

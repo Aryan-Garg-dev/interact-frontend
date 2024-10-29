@@ -17,7 +17,7 @@ const Communities = () => {
 
   const fetchCommunities = async (search: string | null, initialPage?: number) => {
     const URL = `${EXPLORE_URL}/communities?page=${initialPage ? initialPage : page}&limit=${10}${
-      search && `&search=${search}`
+      search ? `&search=${search}` : ''
     }`;
 
     const res = await getHandler(URL);

@@ -28,7 +28,7 @@ const Openings = () => {
   const fetchOpenings = async (search: string | null, initialPage?: number) => {
     let URL = `${EXPLORE_URL}/openings?page=${initialPage ? initialPage : page}&limit=${10}&order=${
       order == 'last_searched' ? 'last_viewed' : order
-    }${search && `&search=${search}`}`;
+    }${search ? `&search=${search}` : ''}`;
 
     const projectSlug = new URLSearchParams(window.location.search).get('pid');
     if (projectSlug) URL = `${EXPLORE_URL}/openings/${projectSlug}`;

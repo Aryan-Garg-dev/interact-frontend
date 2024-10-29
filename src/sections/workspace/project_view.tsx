@@ -19,7 +19,7 @@ import {
   setOwnerProjects,
   userSelector,
 } from '@/slices/userSlice';
-import EditProject from './edit_project';
+import EditProject from './edit_project2';
 import Links from '@/components/explore/show_links';
 import deleteHandler from '@/handlers/delete_handler';
 import { useSwipeable } from 'react-swipeable';
@@ -39,6 +39,7 @@ import {
 } from '@/config/constants';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
+import EditProjectImages from './edit_project_images';
 
 interface Props {
   projectSlugs: string[];
@@ -266,14 +267,14 @@ const ProjectView = ({
           {...swipeHandler}
           className="w-screen h-screen dark:text-white font-primary fixed top-0 left-0 z-50 flex dark:bg-backdrop backdrop-blur-2xl"
         >
-          {clickedOnEdit && (
+          {/* {clickedOnEdit && (
             <EditProject
               projectToEdit={project}
               setShow={setClickedOnEdit}
               setProjects={setProjects}
               setProjectToEdit={setProject}
             />
-          )}
+          )} */}
           {clickedOnLeave && (
             <ConfirmDelete setShow={setClickedOnLeave} handleDelete={handleLeaveProject} title="Confirm Leave?" />
           )}
@@ -394,13 +395,21 @@ const ProjectView = ({
                 </div>
 
                 <div className="w-full mx-auto flex flex-col gap-2 pb-4">
+                  <EditProjectImages projectToEdit={project} setProjects={setProjects} setProjectToEdit={setProject} />
                   {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
-                    <div
-                      onClick={() => setClickedOnEdit(true)}
-                      className="w-full text-lg font-medium border-[1px] border-gray-400 hover:bg-primary_comp_hover active:bg-primary_comp_active  dark:border-dark_primary_btn dark:active:bg-dark_primary_gradient_end py-2 flex-center hover:bg-gradient-to-r dark:hover:from-dark_secondary_gradient_start dark:hover:to-dark_secondary_gradient_end rounded-lg cursor-pointer transition-ease-300"
-                    >
-                      Edit Project
-                    </div>
+                    <EditProject
+                      projectToEdit={project}
+                      setShow={setClickedOnEdit}
+                      setProjects={setProjects}
+                      setProjectToEdit={setProject}
+                    />
+
+                    //  <div
+                    //     onClick={() => setClickedOnEdit(true)}
+                    //     className="w-full text-lg font-medium border-[1px] border-gray-400 hover:bg-primary_comp_hover active:bg-primary_comp_active  dark:border-dark_primary_btn dark:active:bg-dark_primary_gradient_end py-2 flex-center hover:bg-gradient-to-r dark:hover:from-dark_secondary_gradient_start dark:hover:to-dark_secondary_gradient_end rounded-lg cursor-pointer transition-ease-300"
+                    //   >
+                    //     Edit Project
+                    //   </div>
                   )}
                   {checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR, project.organization) && (
                     <Link

@@ -7,8 +7,8 @@ import { Project } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useState, useEffect } from 'react';
 import ProjectView from '@/sections/explore/project_view';
-import { useDispatch, useSelector } from 'react-redux';
-import { navbarOpenSelector, setExploreTab } from '@/slices/feedSlice';
+import { useDispatch } from 'react-redux';
+import { setExploreTab } from '@/slices/feedSlice';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import OrderMenu from '@/components/common/order_menu2';
@@ -25,18 +25,17 @@ const Projects = () => {
 
   const [fadeInProjectView, setFadeInProjectView] = useState(true);
 
-  const navbarOpen = useSelector(navbarOpenSelector);
-
   const dispatch = useDispatch();
   const checkSet = new Set();
 
   const fetchProjects = async (search: string | null, initialPage?: number) => {
     const URL = `${EXPLORE_URL}/projects?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
-      search && `&search=${search}`
+      search ? `&search=${search}` : ''
     }`;
 
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
+      console.log(res.data.projects || []);
       if (initialPage == 1) {
         setProjects(res.data.projects || []);
       } else {
@@ -94,8 +93,6 @@ const Projects = () => {
     else if (tab && tab == 'organisations') dispatch(setExploreTab(3));
   }, []);
 
-  const variants = ['grid-cols-1', 'grid-cols-2', 'grid-cols-3'];
-
   return (
     <div>
       {(projects.length > 0 || order == 'last_viewed') && (
@@ -112,16 +109,7 @@ const Projects = () => {
         <div className="w-full pt-4">
           {projects.length > 0 ? (
             <InfiniteScroll
-              className={`w-full grid ${
-                projects.length < 4
-                  ? `grid-cols-${projects.length}`
-                  : navbarOpen
-                  ? 'grid-cols-3 gap-4'
-                  : 'grid-cols-3 gap-8'
-              } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 items-center justify-items-center transition-ease-out-500`}
-              // className={`${
-              //   navbarOpen ? 'w-[calc(100vw-380px)]' : 'w-[calc(100vw-180px)]'
-              // } mx-auto flex justify-center gap-8 flex-wrap max-md:gap-6 max-md:px-4 max-md:justify-items-center transition-ease-out-500`}
+              className="w-full"
               dataLength={projects.length}
               next={() => fetchProjects(new URLSearchParams(window.location.search).get('search'))}
               hasMore={hasMore}
@@ -147,7 +135,6 @@ const Projects = () => {
                       key={project.id}
                       index={index}
                       // size={navbarOpen || projects.length < 4 ? '[21vw]' : '80'}
-                      size={projects.length < 3 ? '64' : navbarOpen ? '[14vw]' : '64'}
                       project={project}
                       setClickedOnProject={setClickedOnProject}
                       setClickedProjectIndex={setClickedProjectIndex}

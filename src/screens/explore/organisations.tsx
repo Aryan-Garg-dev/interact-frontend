@@ -18,7 +18,7 @@ const Organisations = () => {
   const fetchUsers = async (search: string | null, initialPage?: number) => {
     const sub_url = 'orgs';
     const URL = `${EXPLORE_URL}/${sub_url}?page=${initialPage ? initialPage : page}&limit=${10}${
-      search && `&search=${search}`
+      search ? `&search=${search}` : ''
     }`;
 
     const res = await getHandler(URL);

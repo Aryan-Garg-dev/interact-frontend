@@ -1,105 +1,80 @@
 import React from 'react';
 import { Project } from '@/types';
 import Image from 'next/image';
-import { Buildings, Eye, HeartStraight } from '@phosphor-icons/react';
+import { Eye, HeartStraight } from '@phosphor-icons/react';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import { USER_PROFILE_PIC_URL } from '@/config/routes';
 
 interface Props {
   index: number;
   project: Project;
-  size?: number | string;
   setClickedOnProject?: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedProjectIndex?: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const ProjectCard = ({ index, project, size = 72, setClickedOnProject, setClickedProjectIndex }: Props) => {
-  const variants = [
-    'w-80',
-    'w-80',
-    'w-72',
-    'w-64',
-    'w-[24vw]',
-    'w-[22vw]',
-    'w-[20vw]',
-    'w-[16vw]',
-    'w-[14vw]',
-    'w-56',
-    'w-80',
-    'h-80',
-    'h-72',
-    'h-64',
-    'h-56',
-    'h-[24vw]',
-    'h-[22vw]',
-    'h-[20vw]',
-    'h-[16vw]',
-    'h-[14vw]',
-  ];
+const ProjectCard = ({ index, project, setClickedOnProject, setClickedProjectIndex }: Props) => {
   return (
     <div
       onClick={() => {
         if (setClickedOnProject) setClickedOnProject(true);
         if (setClickedProjectIndex) setClickedProjectIndex(index);
       }}
-      className={`w-${size} h-${size} max-lg:w-60 max-lg:h-60 max-md:w-72 max-md:h-72 rounded-lg relative group cursor-pointer transition-ease-out-500 animate-fade_third`}
+      className="w-full flex items-center gap-4 hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover rounded-md p-2 cursor-pointer transition-ease-out-500 animate-fade_third"
     >
-      <div className="w-full h-full absolute top-0 hidden group-hover:flex animate-fade_third justify-end z-[6] rounded-lg p-1">
-        {/* <BookmarkSimple size={24}  className="opacity-75" /> */}
-      </div>
-      <div className="w-full h-full rounded-lg overflow-clip p-4 text-sm backdrop-blur-xl text-white absolute top-0 left-0 bg-gradient-to-b from-[#00000080] z-[5] to-transparent opacity-0 group-hover:opacity-100 transition-ease-300"></div>
-      <div className="w-full h-full flex flex-col gap-2 rounded-lg overflow-clip p-4 text-sm fade-img backdrop-blur-sm text-white absolute top-0 left-0 z-[5] opacity-0 group-hover:opacity-100 transition-ease-300">
-        <div className="font-bold">{project.tagline}</div>
-        <div className="flex flex-wrap gap-2">
-          {project.tags?.map(tag => (
-            <div
-              key={tag}
-              className="flex-center px-2 py-1 border-[1px] border-dashed border-gray-400 text-xs rounded-lg"
-            >
-              {tag}
-            </div>
-          ))}
-        </div>
-        <div className="whitespace-pre-line">{project.description}</div>
-      </div>
       <Image
         crossOrigin="anonymous"
-        className="w-full h-full rounded-lg object-cover absolute top-0 left-0"
+        className="w-1/5 rounded-lg"
         src={getProjectPicURL(project)}
         alt="Project Cover"
-        sizes="(max-width: 768px) 50vw, (max-width: 1200px) 40vw, 20vw"
         width={100}
         height={100}
         placeholder="blur"
         blurDataURL={getProjectPicHash(project)}
       />
-      <div className="w-full glassMorphism text-white rounded-b-lg font-primary absolute bottom-0 right-0 flex flex-col px-4 py-2">
-        <div className={`${Number(size) <= 64 ? 'text-base' : size == 72 && 'text-lg'} line-clamp-1`}>
-          {project.title}
-        </div>
-        <div className="w-full flex items-center justify-between">
-          <div className={`w-full flex items-center gap-1 ${Number(size) <= 64 ? 'text-xs' : 'text-sm'}`}>
-            <div className="line-clamp-1"> {project.user.name} </div>
-            {project.user.isOrganization ? (
-              <Buildings size={16} />
-            ) : (
-              <div className="text-xs">
-                {project.memberships?.length > 0 && (
-                  <>
-                    + {project.memberships.length} other{project.memberships.length == 1 ? '' : 's'}
-                  </>
-                )}
-              </div>
-            )}
+      <div className="w-4/5 flex items-center justify-between text-white">
+        <div className="grow">
+          <div className="text-lg font-medium line-clamp-1">{project.title}</div>
+          <div className="text-sm line-clamp-1">{project.tagline}</div>
+          <div className="w-full flex gap-1 mt-2 text-xs line-clamp-1">
+            By{' '}
+            <HoverCard>
+              <HoverCardTrigger>
+                <div className="hover:underline underline-offset-2">{project.user.name}</div>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-80">
+                <div className="flex justify-between space-x-4">
+                  <Image
+                    crossOrigin="anonymous"
+                    width={100}
+                    height={100}
+                    alt={'User Pic'}
+                    src={`${USER_PROFILE_PIC_URL}/${project.user.profilePic}`}
+                    className="w-10 h-10 rounded-full mt-1"
+                  />
+                  <div className="w-[calc(100%-40px)]">
+                    <div className="w-fit flex-center gap-1">
+                      <h4 className="text-lg font-semibold">{project.user.name}</h4>
+                      <h4 className="text-xs font-medium text-gray-500">@{project.user.username}</h4>
+                    </div>
+                    <p className="text-sm">{project.user.tagline}</p>
+                    <div className="text-xs text-muted-foreground font-medium mt-2">
+                      {project.user.noFollowers} Follower{project.user.noFollowers !== 1 && 's'}
+                    </div>
+                  </div>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 text-xs">
-              <HeartStraight size={16} />
-              <div>{project.noLikes}</div>
-            </div>
-            <div className="flex items-center gap-1 text-xs">
-              <Eye size={16} />
-              <div>{project.noImpressions}</div>
-            </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1 text-xs">
+            <HeartStraight size={20} />
+            <div>{project.noLikes}</div>
+          </div>
+          <div className="flex items-center gap-1 text-xs">
+            <Eye size={20} />
+            <div>{project.noImpressions}</div>
           </div>
         </div>
       </div>

@@ -7,13 +7,13 @@ export default function SafeExtractArray(obj: any) {
 }
 
 export const getProjectPicURL = (project?: Project | null): string => {
-  if (!project || !project.images) return `${PROJECT_PIC_URL}/default.jpg`;
+  if (!project || !project.images || project.images.length == 0) return `${PROJECT_PIC_URL}/default.jpg`;
 
   return `${PROJECT_PIC_URL}/${project.images[0]}`;
 };
 
 export const getProjectPicHash = (project?: Project | null): string => {
-  if (!project || !project.hashes) return 'no-hash';
+  if (!project || !project.hashes || project.hashes.length == 0) return 'no-hash';
 
   return project.hashes[0];
 };
