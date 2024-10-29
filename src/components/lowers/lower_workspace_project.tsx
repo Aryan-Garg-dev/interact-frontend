@@ -159,7 +159,12 @@ const LowerWorkspaceProject = ({ project, initialCommentShowState = false }: Pro
       {clickedOnNewTask && <NewTask setShow={setClickedOnNewTask} setShowTasks={setClickedOnTasks} project={project} />}
 
       {clickedOnBookmark && (
-        <BookmarkProject setShow={setClickedOnBookmark} project={project} setBookmark={setBookmark} />
+        <BookmarkProject
+          show={clickedOnBookmark}
+          setShow={setClickedOnBookmark}
+          project={project}
+          setBookmark={setBookmark}
+        />
       )}
       {clickedOnComment && (
         <CommentProject
