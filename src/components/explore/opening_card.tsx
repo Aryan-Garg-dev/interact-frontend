@@ -1,10 +1,11 @@
 import { Opening } from '@/types';
 import React from 'react';
 import Image from 'next/image';
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import moment from 'moment';
 import { Buildings } from '@phosphor-icons/react';
 import Tags from '../common/tags';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   opening: Opening;
@@ -48,12 +49,12 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
           width={200}
           height={200}
           alt={'Project Pic'}
-          src={`${PROJECT_PIC_URL}/${opening.project?.coverPic}`}
+          src={getProjectPicURL(opening.project)}
           className={`${
             short ? 'w-[90px] h-[90px]' : 'w-[110px] h-[110px]'
           } max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover`}
           placeholder="blur"
-          blurDataURL={opening.project?.blurHash || 'no-hash'}
+          blurDataURL={getProjectPicHash(opening.project)}
         />
       )}
 

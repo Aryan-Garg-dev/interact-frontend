@@ -100,7 +100,7 @@ const Verification = () => {
             <ReactSVG src="/onboarding_logo.svg" />
           </div>
           <div className="w-3/5 max-md:w-full flex flex-col items-center gap-6">
-            {sentOTP ? (
+            {!sentOTP ? (
               <div className="w-fit flex-center flex-col gap-2">
                 <div className="text-lg">Sending OTP to</div>
                 <div className="font-semibold text-2xl">{user.email}</div>

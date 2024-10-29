@@ -26,9 +26,9 @@ const Openings = () => {
   const windowWidth = useWindowWidth();
 
   const fetchOpenings = async (search: string | null, initialPage?: number) => {
-    let URL = `${EXPLORE_URL}/openings?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
-      search && `&search=${search}`
-    }`;
+    let URL = `${EXPLORE_URL}/openings?page=${initialPage ? initialPage : page}&limit=${10}&order=${
+      order == 'last_searched' ? 'last_viewed' : order
+    }${search && `&search=${search}`}`;
 
     const projectSlug = new URLSearchParams(window.location.search).get('pid');
     if (projectSlug) URL = `${EXPLORE_URL}/openings/${projectSlug}`;
@@ -124,9 +124,9 @@ const Openings = () => {
             hasMore={hasMore}
             loader={<Loader />}
           >
-            {(openings.length > 0 || order == 'last_viewed') && (
+            {(openings.length > 0 || order == 'last_searched') && (
               <OrderMenu
-                orders={['trending', 'most_viewed', 'latest', 'last_viewed']}
+                orders={['trending', 'most_viewed', 'latest', 'last_searched']}
                 current={order}
                 setState={setOrder}
               />

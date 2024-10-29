@@ -1,5 +1,5 @@
 import { SERVER_ERROR } from '@/config/errors';
-import { EXPLORE_URL, PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { EXPLORE_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
 import { initialProject } from '@/types/initials';
@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import LowerWorkspaceProject from '@/components/lowers/lower_workspace_project';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   projectSlugs: string[];
@@ -214,12 +215,12 @@ const ProjectView = ({
             priority={true}
             crossOrigin="anonymous"
             className="w-[calc(100vh-56px)] max-lg:w-full h-full max-lg:h-96 rounded-tl-md max-lg:rounded-none object-cover"
-            src={`${PROJECT_PIC_URL}/${project.coverPic}`}
+            src={getProjectPicURL(project)}
             alt="Project Cover"
             width={10000}
             height={10000}
             placeholder="blur"
-            blurDataURL={project.blurHash || 'no-hash'}
+            blurDataURL={getProjectPicHash(project)}
           />
 
           <div className="w-[calc(100vw-128px-(100vh-56px))] lg:h-full lg:overflow-y-auto max-lg:w-full border-gray-300 border-t-[1px] border-r-[1px] dark:border-0 p-4 bg-white dark:bg-dark_primary_comp_hover flex flex-col gap-6 z-10">
@@ -281,7 +282,7 @@ const ProjectView = ({
             }
             <Collaborators memberships={project.memberships} />
             <Links links={project.links} />
-            <Openings openings={project.openings} slug={project.slug} projectCoverPic={project.coverPic} />
+            <Openings openings={project.openings} slug={project.slug} projectCoverPic={getProjectPicURL(project)} />
             <SimilarProjects slug={project.slug} />
           </div>
         </div>

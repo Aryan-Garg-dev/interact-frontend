@@ -1,5 +1,5 @@
 import Loader from '@/components/common/loader';
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL, WORKSPACE_URL } from '@/config/routes';
+import { USER_PROFILE_PIC_URL, WORKSPACE_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Application } from '@/types';
 import Toaster from '@/utils/toaster';
@@ -12,6 +12,7 @@ import { setExploreTab } from '@/slices/feedSlice';
 import NoApplications from '@/components/fillers/applications';
 import { SERVER_ERROR } from '@/config/errors';
 import { X, Plus, Check, Buildings } from '@phosphor-icons/react';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 const Applications = () => {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -112,10 +113,10 @@ const Applications = () => {
                     width={100}
                     height={100}
                     alt={'User Pic'}
-                    src={`${PROJECT_PIC_URL}/${application.project?.coverPic}`}
+                    src={getProjectPicURL(application.project)}
                     className={'w-[120px] h-[120px] max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover'}
                     placeholder="blur"
-                    blurDataURL={application.project?.blurHash || 'no-hash'}
+                    blurDataURL={getProjectPicHash(application.project)}
                   />
                 )}
 

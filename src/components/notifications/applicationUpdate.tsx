@@ -2,7 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { Notification } from '@/types';
 import NotificationWrapper from '@/wrappers/notification';
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { USER_PROFILE_PIC_URL } from '@/config/routes';
+import { getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   notification: Notification;
@@ -15,7 +16,7 @@ const ApplicationUpdate = ({ notification, status }: Props) => {
       case 20:
         return `${USER_PROFILE_PIC_URL}/${notification.opening.organization?.user.profilePic}`;
       default:
-        return `${PROJECT_PIC_URL}/${notification.opening.project?.coverPic}`;
+        return getProjectPicURL(notification.opening.project);
     }
   };
 

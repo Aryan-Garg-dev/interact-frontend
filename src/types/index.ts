@@ -199,8 +199,8 @@ export interface Project {
   userID: string;
   title: string;
   tagline: string;
-  coverPic: string;
-  blurHash: string;
+  images: string[] | null;
+  hashes: string[] | null;
   description: string;
   page: string;
   user: User;
@@ -216,7 +216,6 @@ export interface Project {
   invitations: Invitation[];
   openings: Opening[];
   chats: Chat[];
-  hashes: string[];
   isPrivate: boolean;
   views: number;
   totalNoViews: number;

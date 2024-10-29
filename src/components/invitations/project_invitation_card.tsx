@@ -1,7 +1,7 @@
 import { Invitation } from '@/types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-import { INVITATION_URL, PROJECT_PIC_URL } from '@/config/routes';
+import { INVITATION_URL } from '@/config/routes';
 import moment from 'moment';
 import Link from 'next/link';
 import Toaster from '@/utils/toaster';
@@ -13,6 +13,7 @@ import ConfirmDelete from '../common/confirm_delete';
 import { setUnreadInvitations, unreadInvitationsSelector } from '@/slices/feedSlice';
 import socketService from '@/config/ws';
 import getInvitationStatus, { getInvitationStatusColor } from '@/utils/funcs/invitation';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   invitation: Invitation;
@@ -109,10 +110,10 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
           width={100}
           height={100}
           alt={'User Pic'}
-          src={`${PROJECT_PIC_URL}/${invitation.project.coverPic}`}
+          src={getProjectPicURL(invitation.project)}
           className={'rounded-md w-20 h-20'}
           placeholder="blur"
-          blurDataURL={invitation.project.blurHash || 'no-hash'}
+          blurDataURL={getProjectPicHash(invitation.project)}
         />
       </Link>
       <div className="w-[calc(100%-80px)] max-md:w-full flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between">

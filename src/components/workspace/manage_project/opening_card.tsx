@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { Opening, Project } from '@/types';
-import { OPENING_URL, ORG_URL, PROJECT_PIC_URL } from '@/config/routes';
+import { OPENING_URL, ORG_URL } from '@/config/routes';
 import { Pen, TrashSimple } from '@phosphor-icons/react';
 import EditOpening from '@/sections/workspace/manage_project/edit_opening';
 import { userSelector } from '@/slices/userSlice';
@@ -15,6 +15,7 @@ import moment from 'moment';
 import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import { currentOrgSelector } from '@/slices/orgSlice';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   opening: Opening;
@@ -80,10 +81,10 @@ const OpeningCard = ({ opening, project, setProject, org = false }: Props) => {
           width={50}
           height={50}
           alt={'User Pic'}
-          src={`${PROJECT_PIC_URL}/${project.coverPic}`}
+          src={getProjectPicURL(opening.project)}
           className={'w-[120px] h-[120px] max-md:w-[90px] max-md:h-[90px] rounded-lg object-cover'}
           placeholder="blur"
-          blurDataURL={project.blurHash || 'no-hash'}
+          blurDataURL={getProjectPicHash(opening.project)}
         />
 
         <div className="w-full h-full flex items-start justify-between">

@@ -1,4 +1,4 @@
-import { OPENING_URL, ORG_URL, PROJECT_PIC_URL } from '@/config/routes';
+import { OPENING_URL, ORG_URL } from '@/config/routes';
 import { Opening, Project } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useState } from 'react';
@@ -9,6 +9,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import { useSelector } from 'react-redux';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import PrimaryButton from '@/components/buttons/primary_btn';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -77,10 +78,10 @@ const EditOpening = ({ setShow, opening, project, setProject, org = false }: Pro
               width={100}
               height={100}
               alt={'User Pic'}
-              src={`${PROJECT_PIC_URL}/${project.coverPic}`}
+              src={getProjectPicURL(project)}
               className={'w-[180px] h-[180px] max-lg:w-[120px] max-lg:h-[120px] rounded-lg object-cover'}
               placeholder="blur"
-              blurDataURL={project.blurHash || 'no-hash'}
+              blurDataURL={getProjectPicHash(project)}
             />
             <div className="grow flex flex-col gap-2 max-md:text-center">
               <div className="w-full text-4xl max-lg:text-3xl font-bold text-gradient cursor-default">

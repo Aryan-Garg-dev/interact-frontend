@@ -1,9 +1,9 @@
-import { PROJECT_PIC_URL } from '@/config/routes';
 import { ProjectBookmark } from '@/types';
 import { Check } from '@phosphor-icons/react';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import ConfirmDelete from '../common/confirm_delete';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   bookmark: ProjectBookmark;
@@ -87,7 +87,7 @@ const ProjectBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit,
               <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
             </div>
           ) : bookmark.projectItems.length == 1 ? (
-            bookmark.projectItems[0].project.coverPic ? (
+            bookmark.projectItems[0].project.images ? (
               <div className="p-2">
                 <Image
                   crossOrigin="anonymous"
@@ -95,9 +95,9 @@ const ProjectBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit,
                   width={500}
                   height={500}
                   alt=""
-                  src={`${PROJECT_PIC_URL}/${bookmark.projectItems[0].project.coverPic}`}
+                  src={getProjectPicURL(bookmark.projectItems[0].project)}
                   placeholder="blur"
-                  blurDataURL={bookmark.projectItems[0].project.blurHash || 'no-hash'}
+                  blurDataURL={getProjectPicHash(bookmark.projectItems[0].project)}
                 />
               </div>
             ) : (
@@ -108,7 +108,7 @@ const ProjectBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit,
           ) : (
             <div className="w-full h-96 max-md:h-80 flex flex-wrap gap-2 p-2 items-center justify-center">
               {bookmark.projectItems.map(projectItem => {
-                if (count >= 4 || !projectItem.project.coverPic) {
+                if (count >= 4 || !projectItem.project.images) {
                   return <></>;
                 }
                 count++;
@@ -120,9 +120,9 @@ const ProjectBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit,
                     width={500}
                     height={500}
                     alt=""
-                    src={`${PROJECT_PIC_URL}/${projectItem.project.coverPic}`}
+                    src={getProjectPicURL(projectItem.project)}
                     placeholder="blur"
-                    blurDataURL={projectItem.project.blurHash || 'no-hash'}
+                    blurDataURL={getProjectPicHash(projectItem.project)}
                   />
                 );
               })}

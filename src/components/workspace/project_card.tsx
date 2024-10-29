@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Project } from '@/types';
 import Image from 'next/image';
-import { ORG_URL, PROJECT_PIC_URL, PROJECT_URL } from '@/config/routes';
+import { ORG_URL, PROJECT_URL } from '@/config/routes';
 import { Eye, EyeSlash, HeartStraight } from '@phosphor-icons/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setOwnerProjects, userSelector } from '@/slices/userSlice';
@@ -15,6 +15,7 @@ import getHandler from '@/handlers/get_handler';
 import ConfirmOTP from '../common/confirm_otp';
 import { checkOrgProjectAccess, checkParticularOrgAccess } from '@/utils/funcs/access';
 import { ORG_MANAGER, ORG_SENIOR, PROJECT_EDITOR, PROJECT_MANAGER, PROJECT_OWNER } from '@/config/constants';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   index: number;
@@ -163,12 +164,12 @@ const ProjectCard = ({
         <Image
           crossOrigin="anonymous"
           className="w-full h-full rounded-lg object-cover absolute top-0 left-0 "
-          src={`${PROJECT_PIC_URL}/${project.coverPic}`}
+          src={getProjectPicURL(project)}
           alt="Project Cover"
           width={200}
           height={200}
           placeholder="blur"
-          blurDataURL={project.blurHash || 'no-hash'}
+          blurDataURL={getProjectPicHash(project)}
         />
         <div className="w-full glassMorphism text-white rounded-b-lg font-primary absolute bottom-0 right-0 flex flex-col px-4 py-2">
           <div className="text-xl max-lg:text-base max-md:text-xl line-clamp-1">{project.title}</div>

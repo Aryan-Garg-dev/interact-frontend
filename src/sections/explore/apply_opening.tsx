@@ -1,10 +1,11 @@
 import Links from '@/components/utils/edit_links';
 import { SERVER_ERROR } from '@/config/errors';
-import { APPLICATION_URL, PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { APPLICATION_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import socketService from '@/config/ws';
 import postHandler from '@/handlers/post_handler';
 import { setApplications, userSelector } from '@/slices/userSlice';
 import { Opening } from '@/types';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 import Toaster from '@/utils/toaster';
 import { ArrowUpRight, X } from '@phosphor-icons/react';
 import moment from 'moment';
@@ -106,12 +107,10 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                 width={200}
                 height={200}
                 alt={'User Pic'}
-                src={`${PROJECT_PIC_URL}/${opening.project?.coverPic}`}
-                className={
-                  'w-[240px] h-[240px] max-lg:hidden max-lg:w-[120px] max-lg:h-[120px] rounded-lg object-cover'
-                }
+                src={getProjectPicURL(opening.project)}
+                className="w-[240px] h-[240px] max-lg:hidden max-lg:w-[120px] max-lg:h-[120px] rounded-lg object-cover"
                 placeholder="blur"
-                blurDataURL={opening.project?.blurHash || 'no-hash'}
+                blurDataURL={getProjectPicHash(opening.project)}
               />
             )}
 

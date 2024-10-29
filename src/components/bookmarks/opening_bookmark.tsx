@@ -1,9 +1,10 @@
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import { OpeningBookmark } from '@/types';
 import { Check } from '@phosphor-icons/react';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import ConfirmDelete from '../common/confirm_delete';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   bookmark: OpeningBookmark;
@@ -85,7 +86,7 @@ const OpeningBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit,
               <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
             </div>
           ) : bookmark.openingItems.length == 1 ? (
-            bookmark.openingItems[0].opening.project?.coverPic ? (
+            bookmark.openingItems[0].opening.project?.images ? (
               <div className="p-2">
                 <Image
                   crossOrigin="anonymous"
@@ -93,9 +94,9 @@ const OpeningBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit,
                   width={500}
                   height={500}
                   alt=""
-                  src={`${PROJECT_PIC_URL}/${bookmark.openingItems[0].opening.project.coverPic}`}
+                  src={getProjectPicURL(bookmark.openingItems[0].opening?.project)}
                   placeholder="blur"
-                  blurDataURL={bookmark.openingItems[0].opening.project.blurHash || 'no-hash'}
+                  blurDataURL={getProjectPicHash(bookmark.openingItems[0].opening?.project)}
                 />
               </div>
             ) : bookmark.openingItems[0].opening.organization?.user.profilePic ? (
@@ -121,12 +122,12 @@ const OpeningBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit,
               {bookmark.openingItems.map(openingItem => {
                 if (
                   count >= 4 ||
-                  (!openingItem.opening.project?.coverPic && !openingItem.opening.organization?.user.profilePic)
+                  (!openingItem.opening.project?.images && !openingItem.opening.organization?.user.profilePic)
                 ) {
                   return <></>;
                 }
                 count++;
-                return openingItem.opening.project?.coverPic ? (
+                return openingItem.opening.project?.images ? (
                   <Image
                     key={openingItem.openingID}
                     crossOrigin="anonymous"
@@ -134,9 +135,9 @@ const OpeningBookmarkComponent = ({ bookmark, setClick, setBookmark, handleEdit,
                     width={500}
                     height={500}
                     alt=""
-                    src={`${PROJECT_PIC_URL}/${openingItem.opening.project.coverPic}`}
+                    src={getProjectPicURL(openingItem.opening.project)}
                     placeholder="blur"
-                    blurDataURL={openingItem.opening.project.blurHash || 'no-hash'}
+                    blurDataURL={getProjectPicHash(openingItem.opening.project)}
                   />
                 ) : (
                   <Image

@@ -1,12 +1,6 @@
 import { Command, CommandEmpty, CommandInput, CommandList } from '@/components/ui/command';
 import { SERVER_ERROR } from '@/config/errors';
-import {
-  COMMUNITY_PROFILE_PIC_URL,
-  EVENT_PIC_URL,
-  EXPLORE_URL,
-  PROJECT_PIC_URL,
-  USER_PROFILE_PIC_URL,
-} from '@/config/routes';
+import { COMMUNITY_PROFILE_PIC_URL, EVENT_PIC_URL, EXPLORE_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project, User, Opening, Event, Organization, Community } from '@/types';
 import Toaster from '@/utils/toaster';
@@ -16,6 +10,7 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import Loader from '../common/loader';
 import Image from 'next/image';
 import Link from 'next/link';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 const SearchBar = () => {
   const [results, setResults] = useState({
@@ -201,9 +196,9 @@ const ProjectItem = ({ project }: { project: Project }) => (
       width={50}
       height={50}
       alt={'User Pic'}
-      src={`${PROJECT_PIC_URL}/${project.coverPic}`}
+      src={getProjectPicURL(project)}
       placeholder="blur"
-      blurDataURL={project.blurHash || 'no-hash'}
+      blurDataURL={getProjectPicHash(project)}
       className="w-6 h-6 rounded-full mr-1"
     />
     <div className="text-sm">{project.title}</div>
@@ -233,9 +228,9 @@ const OpeningItem = ({ opening }: { opening: Opening }) => (
       width={50}
       height={50}
       alt={'User Pic'}
-      src={`${PROJECT_PIC_URL}/${opening?.project?.coverPic}`}
+      src={getProjectPicURL(opening.project)}
       placeholder="blur"
-      blurDataURL={opening?.project?.blurHash || 'no-hash'}
+      blurDataURL={getProjectPicHash(opening.project)}
       className="w-6 h-6 rounded-full mr-1"
     />
     <div className="text-sm">{opening.title}</div>

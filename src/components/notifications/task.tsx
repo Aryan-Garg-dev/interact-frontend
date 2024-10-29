@@ -1,4 +1,3 @@
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import { Notification } from '@/types';
 import NotificationWrapper from '@/wrappers/notification';
 import Link from 'next/link';

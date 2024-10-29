@@ -1,5 +1,5 @@
-import { PROJECT_PIC_URL } from '@/config/routes';
 import { Project } from '@/types';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 import { Buildings, HeartStraight, Eye } from '@phosphor-icons/react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -33,13 +33,13 @@ const ProjectCard = ({ project }: Props) => (
     <Image
       crossOrigin="anonymous"
       className="w-full h-full rounded-lg object-cover absolute top-0 left-0 "
-      src={`${PROJECT_PIC_URL}/${project.coverPic}`}
+      src={getProjectPicURL(project)}
       alt="Project Cover"
       sizes="(max-width: 768px) 50vw, (max-width: 1200px) 40vw, 20vw"
       width={100}
       height={100}
       placeholder="blur"
-      blurDataURL={project.blurHash || 'no-hash'}
+      blurDataURL={getProjectPicHash(project)}
     />
     <div className="w-full glassMorphism text-white rounded-b-lg font-primary absolute bottom-0 right-0 flex flex-col px-4 py-2">
       <div className="line-clamp-1">{project.title}</div>

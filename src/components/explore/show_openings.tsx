@@ -1,8 +1,7 @@
 import React from 'react';
-import { Opening, Project } from '@/types';
+import { Opening } from '@/types';
 import Link from 'next/link';
 import Image from 'next/image';
-import { PROJECT_PIC_URL } from '@/config/routes';
 import OpeningBookmarkIcon from '../lowers/opening_bookmark';
 
 interface Props {
@@ -70,7 +69,7 @@ const Openings = ({ openings, slug, projectCoverPic }: Props) => {
                     <Image
                       crossOrigin="anonymous"
                       className="w-full h-full object-cover absolute top-0 right-0 opacity-30 blur-[1px]"
-                      src={`${PROJECT_PIC_URL}/${projectCoverPic}`}
+                      src={projectCoverPic}
                       alt="Project Cover"
                       width={200}
                       height={200}
@@ -91,7 +90,7 @@ const Openings = ({ openings, slug, projectCoverPic }: Props) => {
                 <Image
                   crossOrigin="anonymous"
                   className="w-full h-full object-cover absolute top-0 right-0 opacity-30 blur-[1px]"
-                  src={`${PROJECT_PIC_URL}/${projectCoverPic}`}
+                  src={projectCoverPic}
                   alt="Project Cover"
                   width={500}
                   height={500}

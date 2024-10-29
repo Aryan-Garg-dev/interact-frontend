@@ -1,4 +1,4 @@
-import { OPENING_URL, ORG_URL, PROJECT_PIC_URL } from '@/config/routes';
+import { OPENING_URL, ORG_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
 import { Project } from '@/types';
 import Toaster from '@/utils/toaster';
@@ -9,6 +9,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import { useSelector } from 'react-redux';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import PrimaryButton from '@/components/buttons/primary_btn';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -85,10 +86,10 @@ const NewOpening = ({ setShow, project, setProject, org = false }: Props) => {
               width={100}
               height={100}
               alt={'User Pic'}
-              src={`${PROJECT_PIC_URL}/${project.coverPic}`}
+              src={getProjectPicURL(project)}
               className={'w-[180px] h-[180px] max-lg:w-[200px] max-lg:h-[200px] rounded-lg object-cover'}
               placeholder="blur"
-              blurDataURL={project.blurHash || 'no-hash'}
+              blurDataURL={getProjectPicHash(project)}
             />
             <div className="max-lg:w-full grow flex flex-col gap-4">
               <input
