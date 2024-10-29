@@ -97,11 +97,12 @@ const OpeningBookmarkIcon = ({ opening }: Props) => {
   return (
     <>
       {noUserClick ? <SignUp setShow={setNoUserClick} /> : <></>}
-      {clickedOnBookmark ? (
-        <BookmarkOpening setShow={setClickedOnBookmark} opening={opening} setBookmark={setBookmark} />
-      ) : (
-        <></>
-      )}
+      <BookmarkOpening
+        show={clickedOnBookmark}
+        setShow={setClickedOnBookmark}
+        opening={opening}
+        setBookmark={setBookmark}
+      />
       <BookmarkSimple
         className="cursor-pointer max-md:w-[32px] max-md:h-[32px]"
         onClick={() => {

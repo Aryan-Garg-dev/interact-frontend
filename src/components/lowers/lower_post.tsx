@@ -147,7 +147,6 @@ const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = 
   return (
     <>
       {noUserClick && <SignUp setShow={setNoUserClick} />}
-      {clickedOnBookmark && <BookmarkPost setShow={setClickedOnBookmark} post={post} setBookmark={setBookmark} />}
       {clickedOnComment && (
         <CommentPost
           setShow={setClickedOnComment}
@@ -222,6 +221,7 @@ const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = 
             size={24}
             weight={bookmarkStatus.isBookmarked ? 'fill' : 'light'}
           />
+          <BookmarkPost show={clickedOnBookmark} setShow={setClickedOnBookmark} post={post} setBookmark={setBookmark} />
         </div>
 
         <div

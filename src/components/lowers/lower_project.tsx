@@ -148,9 +148,6 @@ const LowerProject = ({ project, initialCommentShowState = false }: Props) => {
   return (
     <>
       {noUserClick && <SignUp setShow={setNoUserClick} />}
-      {clickedOnBookmark && (
-        <BookmarkProject setShow={setClickedOnBookmark} project={project} setBookmark={setBookmark} />
-      )}
       {clickedOnComment && (
         <CommentProject
           setShow={setClickedOnComment}
@@ -171,6 +168,12 @@ const LowerProject = ({ project, initialCommentShowState = false }: Props) => {
       {clickedOnReport && <Report projectID={project.id} setShow={setClickedOnReport} />}
 
       <div className="flex flex-col gap-12 max-lg:gap-2 max-lg:flex-row">
+        <BookmarkProject
+          show={clickedOnBookmark}
+          setShow={setClickedOnBookmark}
+          project={project}
+          setBookmark={setBookmark}
+        />
         <BookmarkSimple
           className="cursor-pointer max-lg:w-6 max-lg:h-6"
           onClick={() => {
