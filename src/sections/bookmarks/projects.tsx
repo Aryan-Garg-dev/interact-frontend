@@ -3,8 +3,6 @@ import { ProjectBookmark } from '@/types';
 import React, { useState } from 'react';
 import ProjectView from '../../sections/explore/project_view';
 import { ArrowArcLeft } from '@phosphor-icons/react';
-import { useSelector } from 'react-redux';
-import { navbarOpenSelector } from '@/slices/feedSlice';
 
 interface Props {
   bookmark: ProjectBookmark;
@@ -17,8 +15,6 @@ const Projects = ({ bookmark, setClick, fetchBookmarks }: Props) => {
   const [clickedProjectIndex, setClickedProjectIndex] = useState(-1);
 
   const [fadeInProject, setFadeInProject] = useState(true);
-
-  const open = useSelector(navbarOpenSelector);
 
   return (
     <div className="w-full flex flex-col gap-4 font-primary dark:text-white pt-6">
@@ -34,15 +30,7 @@ const Projects = ({ bookmark, setClick, fetchBookmarks }: Props) => {
         <div className="font-medium text-xl cursor-default">{bookmark.title}</div>
       </div>
       {bookmark.projectItems?.length > 0 ? (
-        <div
-          className={`w-full grid ${
-            bookmark.projectItems?.length < 4
-              ? `grid-cols-${bookmark.projectItems?.length} px-12`
-              : open
-              ? 'grid-cols-3 px-8 gap-4'
-              : 'grid-cols-3 px-8 gap-8'
-          } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 max-md:px-4 transition-ease-out-500 justify-items-center`}
-        >
+        <div className="w-full">
           {clickedOnProject && (
             <ProjectView
               projectSlugs={bookmark.projectItems.map(projectItem => projectItem.project.slug)}
@@ -58,7 +46,6 @@ const Projects = ({ bookmark, setClick, fetchBookmarks }: Props) => {
               <ProjectCard
                 key={projectItem.id}
                 index={index}
-                size={bookmark.projectItems.length < 3 ? '64' : open ? '[14vw]' : '64'}
                 project={projectItem.project}
                 setClickedOnProject={setClickedOnProject}
                 setClickedProjectIndex={setClickedProjectIndex}

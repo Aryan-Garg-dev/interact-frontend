@@ -199,7 +199,7 @@ const ProjectItem = ({ project }: { project: Project }) => (
       src={getProjectPicURL(project)}
       placeholder="blur"
       blurDataURL={getProjectPicHash(project)}
-      className="w-6 h-6 rounded-full mr-1"
+      className="h-6 rounded-md mr-1"
     />
     <div className="text-sm">{project.title}</div>
   </CommandItem>
@@ -231,7 +231,7 @@ const OpeningItem = ({ opening }: { opening: Opening }) => (
       src={getProjectPicURL(opening.project)}
       placeholder="blur"
       blurDataURL={getProjectPicHash(opening.project)}
-      className="w-6 h-6 rounded-full mr-1"
+      className="h-6 rounded-md mr-1"
     />
     <div className="text-sm">{opening.title}</div>
   </CommandItem>
@@ -247,7 +247,7 @@ const EventItem = ({ event }: { event: Event }) => (
       src={`${EVENT_PIC_URL}/${event.coverPic}`}
       placeholder="blur"
       blurDataURL={event.blurHash || 'no-hash'}
-      className="w-6 h-6 rounded-full mr-1"
+      className="h-6 rounded-md mr-1"
     />
     <div className="text-sm">{event.title}</div>
   </CommandItem>

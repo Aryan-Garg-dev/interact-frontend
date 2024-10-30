@@ -18,7 +18,6 @@ const SimilarProjects = ({ slug }: Props) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
-  const checkSet = new Set();
 
   const fetchProjects = () => {
     const URL = `${EXPLORE_URL}/projects/similar/${slug}?page=${page}&limit=${6}`;
@@ -52,26 +51,17 @@ const SimilarProjects = ({ slug }: Props) => {
     <div className="w-full flex flex-col gap-2 border-t-[1px] border-black border-dashed mt-4 py-4">
       <div className="text-lg font-semibold">Similar Projects</div>
       <InfiniteScroll
-        className={`w-full flex flex-wrap ${
-          projects.length == 1 ? 'justify-start' : 'justify-evenly'
-        } max-md:justify-center gap-4`}
+        className="w-full"
         dataLength={projects.length}
         next={() => fetchProjects()}
         hasMore={hasMore}
         loader={<Loader />}
       >
-        {projects.map((project, index) => {
-          if (checkSet.has(project.id)) {
-            return;
-          } else {
-            checkSet.add(project.id);
-            return (
-              <Link key={project.id} href={`/explore?pid=${project.slug}`} target="_blank">
-                <ProjectCard index={index} project={project} size={'[16vw]'} />
-              </Link>
-            );
-          }
-        })}
+        {projects.map((project, index) => (
+          <Link key={project.id} href={`/explore?pid=${project.slug}`} target="_blank">
+            <ProjectCard index={index} project={project} />
+          </Link>
+        ))}
       </InfiniteScroll>
     </div>
   ) : (

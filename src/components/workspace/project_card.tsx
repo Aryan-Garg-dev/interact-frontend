@@ -1,199 +1,123 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Project } from '@/types';
 import Image from 'next/image';
-import { ORG_URL, PROJECT_URL } from '@/config/routes';
-import { Eye, EyeSlash, HeartStraight } from '@phosphor-icons/react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setOwnerProjects, userSelector } from '@/slices/userSlice';
-import EditProject from '@/sections/workspace/edit_project';
-import Link from 'next/link';
-import Toaster from '@/utils/toaster';
-import deleteHandler from '@/handlers/delete_handler';
-import ConfirmDelete from '../common/confirm_delete';
-import { SERVER_ERROR } from '@/config/errors';
-import getHandler from '@/handlers/get_handler';
-import ConfirmOTP from '../common/confirm_otp';
-import { checkOrgProjectAccess, checkParticularOrgAccess } from '@/utils/funcs/access';
-import { ORG_MANAGER, ORG_SENIOR, PROJECT_EDITOR, PROJECT_MANAGER, PROJECT_OWNER } from '@/config/constants';
+import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { Eye, HeartStraight } from '@phosphor-icons/react';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 
 interface Props {
   index: number;
   project: Project;
-  size?: number | string;
-  setProjects?: React.Dispatch<React.SetStateAction<Project[]>>;
   setClickedOnProject: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedProjectIndex: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const ProjectCard = ({
-  index,
-  project,
-  size = 72,
-  setProjects,
-  setClickedOnProject,
-  setClickedProjectIndex,
-}: Props) => {
-  const [clickedOnSettings, setClickedOnSettings] = useState(false);
-  const [clickedOnEdit, setClickedOnEdit] = useState(false);
-  const [clickedOnDelete, setClickedOnDelete] = useState(false);
-
-  const [clickedOnConfirmDelete, setClickedOnConfirmDelete] = useState(false);
-
-  const user = useSelector(userSelector);
-
-  const dispatch = useDispatch();
-
-  const sendOTP = async () => {
-    const toaster = Toaster.startLoad('Sending OTP');
-
-    const URL = checkParticularOrgAccess(ORG_MANAGER, project.organization)
-      ? `${ORG_URL}/${project.organizationID}/projects/delete/${project.id}`
-      : `${PROJECT_URL}/delete/${project.id}`;
-
-    const res = await getHandler(URL);
-
-    if (res.statusCode === 200) {
-      Toaster.stopLoad(toaster, 'OTP Sent to your registered mail', 1);
-      setClickedOnDelete(false);
-      setClickedOnConfirmDelete(true);
-    } else {
-      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-      else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-    }
-  };
-
-  const handleDelete = async (otp: string) => {
-    const toaster = Toaster.startLoad('Deleting your project...');
-
-    const URL = checkParticularOrgAccess(ORG_MANAGER, project.organization)
-      ? `${ORG_URL}/${project.organizationID}/projects/${project.id}`
-      : `${PROJECT_URL}/${project.id}`;
-
-    const res = await deleteHandler(URL, { otp });
-
-    if (res.statusCode === 204) {
-      if (setProjects) setProjects(prev => prev.filter(p => p.id != project.id));
-      dispatch(setOwnerProjects(user.ownerProjects.filter(projectID => projectID != project.id)));
-      setClickedOnConfirmDelete(false);
-      Toaster.stopLoad(toaster, 'Project Deleted', 1);
-    } else {
-      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-      else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-    }
-  };
-
-  const variants = [
-    'w-80',
-    'w-80',
-    'w-72',
-    'w-64',
-    'w-[22vw]',
-    'w-[24vw]',
-    'w-56',
-    'w-80',
-    'h-80',
-    'h-72',
-    'h-64',
-    'h-56',
-    'h-[22vw]',
-    'h-[24vw]',
-  ];
+const ProjectCard = ({ index, project, setClickedOnProject, setClickedProjectIndex }: Props) => {
   return (
-    <>
-      {clickedOnEdit && <EditProject projectToEdit={project} setShow={setClickedOnEdit} setProjects={setProjects} />}
-      {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={sendOTP} />}
-      {clickedOnConfirmDelete && <ConfirmOTP setShow={setClickedOnConfirmDelete} handleSubmit={handleDelete} />}
+    <div
+      onClick={() => {
+        if (setClickedOnProject) setClickedOnProject(true);
+        if (setClickedProjectIndex) setClickedProjectIndex(index);
+      }}
+      className="w-full flex items-center gap-4 hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover rounded-md p-2 cursor-pointer transition-ease-out-500 animate-fade_third"
+    >
+      {project.images && project.images.length > 1 ? (
+        <Carousel
+          className="w-1/5"
+          opts={{
+            align: 'center',
+            loop: true,
+            dragFree: false,
+            duration: 2,
+            active: true,
+          }}
+        >
+          <CarouselContent>
+            {project.images.map((image, index) => {
+              let imageHash = 'no-hash';
+              if (project.hashes && index < project.hashes.length) imageHash = project.hashes[index];
 
-      <div
-        onClick={() => {
-          setClickedOnProject(true);
-          setClickedProjectIndex(index);
-        }}
-        onMouseLeave={() => setClickedOnSettings(false)}
-        className={`w-${size} h-${size} max-lg:w-56 max-lg:h-56 max-md:w-72 max-md:h-72 rounded-lg relative group cursor-pointer transition-ease-out-500 animate-fade_third`}
-      >
-        <div className="w-full h-full absolute top-0 hidden group-hover:flex justify-between gap-4 text-white animate-fade_third z-[6] rounded-lg p-2">
-          {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
-            <div
-              onClick={el => {
-                el.stopPropagation();
-                setClickedOnSettings(prev => !prev);
-              }}
-              className="h-8 w-8 flex-center glassMorphism rounded-full p-1"
-            >
-              •••
-            </div>
-          )}
-
-          {clickedOnSettings && (
-            <div
-              onClick={el => el.stopPropagation()}
-              className="w-1/2 h-fit flex flex-col absolute top-2 left-12 rounded-2xl glassMorphism p-2"
-            >
-              {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
-                <div
-                  onClick={() => setClickedOnEdit(true)}
-                  className="w-full px-4 py-3 hover:bg-[#ffffff78] dark:hover:bg-[#ffffff19] transition-ease-100 rounded-lg"
-                >
-                  Edit
-                </div>
-              )}
-              {checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR, project.organization) && (
-                <Link
-                  href={`/workspace/manage/${project.slug}`}
-                  target="_blank"
-                  className="w-full px-4 py-3 hover:bg-[#ffffff78] dark:hover:bg-[#ffffff19] transition-ease-100 rounded-lg"
-                >
-                  Manage
-                </Link>
-              )}
-              {checkOrgProjectAccess(PROJECT_OWNER, project.id, ORG_MANAGER, project.organization) && (
-                <div
-                  onClick={() => setClickedOnDelete(true)}
-                  className="w-full px-4 py-3 hover:bg-[#ffffff78] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg"
-                >
-                  Delete
-                </div>
-              )}
-            </div>
-          )}
-          {project.isPrivate && <EyeSlash size={24} />}
-        </div>
-        <div className="w-full h-full rounded-lg absolute top-0 left-0 bg-gradient-to-b from-[#00000084] z-[5] to-transparent opacity-0 group-hover:opacity-100 transition-ease-300"></div>
+              return (
+                <CarouselItem key={image}>
+                  <Image
+                    crossOrigin="anonymous"
+                    width={430}
+                    height={270}
+                    className="w-full rounded-lg"
+                    alt={'Project Pic'}
+                    src={`${PROJECT_PIC_URL}/${image}`}
+                    placeholder="blur"
+                    blurDataURL={imageHash}
+                  />
+                </CarouselItem>
+              );
+            })}
+          </CarouselContent>
+        </Carousel>
+      ) : (
         <Image
           crossOrigin="anonymous"
-          className="w-full h-full rounded-lg object-cover absolute top-0 left-0 "
+          className="w-1/5 rounded-lg"
           src={getProjectPicURL(project)}
           alt="Project Cover"
-          width={200}
-          height={200}
+          width={100}
+          height={100}
           placeholder="blur"
           blurDataURL={getProjectPicHash(project)}
         />
-        <div className="w-full glassMorphism text-white rounded-b-lg font-primary absolute bottom-0 right-0 flex flex-col px-4 py-2">
-          <div className="text-xl max-lg:text-base max-md:text-xl line-clamp-1">{project.title}</div>
-          <div className="w-full flex items-center justify-between">
-            {project.userID != user.id ? (
-              <div className="text-sm max-lg:text-xs max-md:text-sm">{project.user.name}</div>
-            ) : (
-              <div className="text-sm line-clamp-1 max-lg:hidden max-md:flex">{project.tagline}</div>
-            )}
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-1 text-xs">
-                <HeartStraight size={16} />
-                <div>{project.noLikes}</div>
-              </div>
-              <div className="flex items-center gap-1 text-xs">
-                <Eye size={16} />
-                <div>{project.noImpressions}</div>{' '}
-              </div>
-            </div>
+      )}
+
+      <div className="w-4/5 flex items-center justify-between text-white">
+        <div className="grow">
+          <div className="text-lg font-medium line-clamp-1">{project.title}</div>
+          <div className="text-sm line-clamp-1">{project.tagline}</div>
+          <div className="w-full flex gap-1 mt-2 text-xs line-clamp-1">
+            By{' '}
+            <HoverCard>
+              <HoverCardTrigger>
+                <div className="hover:underline underline-offset-2">{project.user.name}</div>
+              </HoverCardTrigger>
+              <HoverCardContent className="w-80">
+                <div className="flex justify-between space-x-4">
+                  <Image
+                    crossOrigin="anonymous"
+                    width={100}
+                    height={100}
+                    alt={'User Pic'}
+                    src={`${USER_PROFILE_PIC_URL}/${project.user.profilePic}`}
+                    className="w-10 h-10 rounded-full mt-1"
+                  />
+                  <div className="w-[calc(100%-40px)]">
+                    <div className="w-fit flex-center gap-1">
+                      <h4 className="text-lg font-semibold">{project.user.name}</h4>
+                      <h4 className="text-xs font-medium text-gray-500">@{project.user.username}</h4>
+                    </div>
+                    <p className="text-sm">{project.user.tagline}</p>
+                    <div className="text-xs text-muted-foreground font-medium mt-2">
+                      {project.user.noFollowers} Follower{project.user.noFollowers !== 1 && 's'}
+                    </div>
+                  </div>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1 text-xs">
+            <HeartStraight size={20} />
+            <div>{project.noLikes}</div>
+          </div>
+          <div className="flex items-center gap-1 text-xs">
+            <Eye size={20} />
+            <div>{project.noImpressions}</div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
 export default ProjectCard;
+
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';

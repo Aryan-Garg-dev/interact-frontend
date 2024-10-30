@@ -91,15 +91,7 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
         next={getProjects}
         hasMore={hasMore}
         loader={<Loader />}
-        className={`${projects?.length > 0 ? 'w-fit grid' : 'w-5/6'} ${
-          projects.length == 1
-            ? 'grid-cols-1'
-            : navbarOpen
-            ? org
-              ? 'grid-cols-3 gap-6'
-              : 'grid-cols-2 gap-6'
-            : 'grid-cols-3 gap-8'
-        } max-md:grid-cols-1 mx-auto max-md:gap-6 max-md:px-4 max-md:justify-items-center transition-ease-out-500`}
+        className="w-full"
       >
         {projects?.length > 0 ? (
           <>
@@ -119,7 +111,6 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
                   key={project.id}
                   index={index}
                   project={project}
-                  size={org ? 72 : 64}
                   setClickedOnProject={setClickedOnProject}
                   setClickedProjectIndex={setClickedProjectIndex}
                 />

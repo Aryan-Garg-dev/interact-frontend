@@ -84,15 +84,7 @@ const CombinedProjects = () => {
       {loading ? (
         <Loader />
       ) : projects.length > 0 ? (
-        <div
-          className={`w-full mt-4 grid ${
-            projects.length < 4
-              ? `grid-cols-${projects.length}`
-              : navbarOpen
-              ? 'grid-cols-3 gap-4'
-              : 'grid-cols-3 gap-8'
-          } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 items-center justify-items-center transition-ease-out-500`}
-        >
+        <div className="w-full mt-4">
           {clickedOnProject && (
             <ProjectView
               projectSlugs={projects.map(project => project.slug)}
@@ -110,9 +102,7 @@ const CombinedProjects = () => {
               <ProjectCard
                 key={project.id}
                 index={index}
-                size={projects.length < 3 ? '64' : navbarOpen ? '[14vw]' : '64'}
                 project={project}
-                setProjects={setProjects}
                 setClickedOnProject={setClickedOnProject}
                 setClickedProjectIndex={setClickedProjectIndex}
               />
