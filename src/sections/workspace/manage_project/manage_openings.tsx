@@ -131,7 +131,7 @@ const ManageOpenings = ({
                 <TableCell>{opening.noApplications}</TableCell>
                 <TableCell>{moment(opening.createdAt).format('DD MMMM, YYYY')}</TableCell>
                 <TableCell className="flex items-center justify-end gap-4">
-                  <EditOpening opening={opening} project={project} setProject={setProject} />
+                  <EditOpening opening={opening} project={project} setProject={setProject} org={org} />
                   <AlertDialog>
                     <AlertDialogTrigger>
                       <X size={20} />

@@ -1,17 +1,15 @@
-import { Button } from '@/components/ui/button';
-import { DialogFooter, DialogHeader } from '@/components/ui/dialog';
+import { DialogHeader } from '@/components/ui/dialog';
 import { SERVER_ERROR } from '@/config/errors';
 import { INVITATION_URL, MEMBERSHIP_URL, ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
 import { Project } from '@/types';
 import Toaster from '@/utils/toaster';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Check, Gear, PencilSimple, X } from '@phosphor-icons/react';
+import { Gear, X } from '@phosphor-icons/react';
 import Image from 'next/image';
 import moment from 'moment';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ORG_MANAGER, PROJECT_EDITOR, PROJECT_MANAGER, PROJECT_MEMBER, PROJECT_OWNER } from '@/config/constants';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
@@ -26,14 +24,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import postHandler from '@/handlers/post_handler';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import checkOrgAccess, { checkProjectAccess } from '@/utils/funcs/access';
 import deleteHandler from '@/handlers/delete_handler';
 import getInvitationStatus, { getInvitationStatusColor } from '@/utils/funcs/invitation';
-import Input from '@/components/form/input';
 import { getRoleColor } from '@/utils/funcs/membership';
+import EditCollaborator from './manage_project/edit_collaborator';
 
 const ManageMemberships = ({
   project,
@@ -189,43 +186,7 @@ const ManageMemberships = ({
               {user.id != membership.userID && (
                 <>
                   {checkProjectAccess(PROJECT_MANAGER, project.id) && membership.role != PROJECT_MANAGER && (
-                    <Dialog>
-                      <DialogTrigger>
-                        <PencilSimple
-                          onClick={() => setClickedMembershipID(membership.id)}
-                          className="cursor-pointer"
-                        />
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Edit User Membership</DialogTitle>
-                        </DialogHeader>
-                        <Input
-                          label="Title"
-                          val={clickedMembershipTitle}
-                          setVal={setClickedMembershipTitle}
-                          maxLength={25}
-                          placeholder={membership.title}
-                        />
-                        <Select onValueChange={val => setClickedMembershipRole(val)} defaultValue={membership.role}>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select Role" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {canEditRoles.map((c, i) => {
-                              return (
-                                <SelectItem key={i} value={c}>
-                                  {c}
-                                </SelectItem>
-                              );
-                            })}
-                          </SelectContent>
-                        </Select>
-                        <DialogFooter>
-                          <Button onClick={handleEditMembership}>Save changes</Button>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
+                    <EditCollaborator membership={membership} project={project} setProject={setProject} org={org} />
                   )}
                   {(checkProjectAccess(PROJECT_OWNER, project.id) ||
                     (checkProjectAccess(PROJECT_MANAGER, project.id) && membership.role != PROJECT_MANAGER) ||
