@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Project } from '@/types';
-import Link from 'next/link';
 import { SERVER_ERROR } from '@/config/errors';
 import { EXPLORE_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
@@ -48,7 +47,7 @@ const SimilarProjects = ({ slug }: Props) => {
   }, [slug]);
 
   return projects.length > 0 ? (
-    <div className="w-full flex flex-col gap-2 border-t-[1px] border-black border-dashed mt-4 py-4">
+    <div className="w-full flex flex-col gap-2">
       <div className="text-lg font-semibold">Similar Projects</div>
       <InfiniteScroll
         className="w-full"
@@ -57,10 +56,8 @@ const SimilarProjects = ({ slug }: Props) => {
         hasMore={hasMore}
         loader={<Loader />}
       >
-        {projects.map((project, index) => (
-          <Link key={project.id} href={`/explore?pid=${project.slug}`} target="_blank">
-            <ProjectCard index={index} project={project} />
-          </Link>
+        {projects.map(project => (
+          <ProjectCard key={project.id} project={project} isLink smaller />
         ))}
       </InfiniteScroll>
     </div>

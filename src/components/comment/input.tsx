@@ -5,6 +5,7 @@ import { userSelector } from '@/slices/userSlice';
 import { User } from '@/types';
 import TagUserUtils from '@/utils/funcs/tag_users';
 import Toaster from '@/utils/toaster';
+import { ArrowUpRight } from '@phosphor-icons/react';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -60,48 +61,50 @@ const CommentInput = ({
 
   return (
     <div className="relative">
-      <div className="w-full flex gap-2">
+      <div className="w-full flex gap-2 border-[1px] border-primary_btn dark:border-dark_primary_btn p-3 rounded-[30px]">
         <Image
           crossOrigin="anonymous"
-          className={`${type == 'comment' ? 'w-6 h-6' : 'w-8 h-8'} rounded-full cursor-default mt-2`}
+          className={`${type == 'comment' ? 'w-6 h-6' : 'w-8 h-8'} rounded-full`}
           width={50}
           height={50}
           alt="user"
           src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
         />
-        <div className="w-full flex justify-between gap-3 max-md:flex-col relative max-md:gap-2 max-md:items-end">
-          <textarea
-            value={content}
-            onChange={tagsUserUtils.handleContentChange}
-            onKeyDown={el => {
-              if (el.key === 'Enter') handleSubmit();
-            }}
-            className={`w-5/6 ${
-              type == 'comment' ? 'text-sm' : 'max-md:text-sm'
-            } border-[1px] border-dashed p-2 rounded-lg dark:text-white dark:bg-dark_primary_comp focus:outline-none min-h-[3rem] max-h-64 max-md:w-full`}
-            placeholder={`${type == 'comment' ? 'Reply to' : 'Comment on'} this ${type}`}
-          />
-          <div
-            className={`w-1/6 h-fit ${
-              type == 'comment' ? 'text-xs' : 'text-sm max-md:text-xs'
-            } dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-md py-2 px-3  flex-center cursor-pointer max-md:h-10 max-md:w-fit transition-ease-300`}
-            onClick={handleSubmit}
-          >
-            {type == 'comment' ? 'Reply' : 'Comment'}
-          </div>
-        </div>
+        <textarea
+          value={content}
+          onChange={tagsUserUtils.handleContentChange}
+          onKeyDown={el => {
+            if (el.key === 'Enter') handleSubmit();
+          }}
+          className={`${
+            type == 'comment'
+              ? `w-[calc(100%-48px)] min-h-[24px] h-[24px] ${content.length == 0 ? 'max-h-[24px]' : 'max-h-64'} text-sm`
+              : `w-[calc(100%-64px)] min-h-[32px] h-[32px] ${
+                  content.length == 0 ? 'max-h-[32px]' : 'max-h-64'
+                } max-md:text-sm`
+          } dark:text-white dark:bg-dark_primary_comp focus:outline-none max-md:w-full`}
+          placeholder={`${type == 'comment' ? 'Reply to' : 'Comment on'} this ${type}`}
+        />
+        <ArrowUpRight
+          className={`${
+            type == 'comment' ? 'w-6 h-6' : 'w-8 h-8'
+          } self-end p-2 dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-full flex-center cursor-pointer transition-ease-300`}
+          onClick={handleSubmit}
+        />
       </div>
       {showUsers && users.length > 0 && (
         <div
           className={`w-full absolute bg-gradient-to-b ${
-            type == 'task' ? 'from-gray-50 via-[#ffffffca]' : 'from-white via-[#ffffffb2]'
+            type == 'task'
+              ? 'from-gray-50 dark:from-black via-[#ffffffca] dark:via-gray-700'
+              : 'from-white dark:from-dark_primary_comp via-[#ffffffb2] dark:via-dark_primary_comp'
           } via-[90%] flex flex-wrap justify-center gap-2 py-4 z-10`}
         >
           {users.map(user => (
             <div
               key={user.id}
               onClick={() => tagsUserUtils.handleTagUser(user.username)}
-              className="w-1/3 hover:scale-105 flex items-center gap-1 rounded-md border-[1px] border-primary_btn p-2 hover:bg-primary_comp cursor-pointer transition-ease-300"
+              className="w-1/3 hover:scale-105 flex items-center gap-1 rounded-md border-[1px] border-primary_btn p-2 hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover cursor-pointer transition-ease-300"
             >
               <Image
                 crossOrigin="anonymous"

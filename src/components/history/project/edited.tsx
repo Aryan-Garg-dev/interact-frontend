@@ -12,7 +12,7 @@ const Edited = ({ history }: Props) => {
     case 2: //User edited project details
       return (
         <ProjectHistoryWrapper history={history}>
-          <div className="w-fit text-center flex-center gap-1">edited Project Details.</div>:{' '}
+          <div className="w-fit text-center flex-center gap-1">edited Project Details: </div>
           <div>{history.deletedText}</div>
         </ProjectHistoryWrapper>
       );

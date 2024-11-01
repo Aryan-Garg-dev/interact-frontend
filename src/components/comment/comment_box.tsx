@@ -120,7 +120,7 @@ const CommentBox = ({ type, item, setNoComments, userFetchURL }: Props) => {
   const loggedInUser = useSelector(userSelector);
 
   return (
-    <div className={`w-full h-full flex flex-col p-4 font-primary gap-4 max-md:px-4`}>
+    <div className="w-full h-full flex flex-col font-primary gap-4">
       <CommentInput
         content={commentBody}
         setContent={setCommentBody}
@@ -133,7 +133,7 @@ const CommentBox = ({ type, item, setNoComments, userFetchURL }: Props) => {
       {loading && page == 1 ? (
         <CommentsLoader />
       ) : comments.length > 0 ? (
-        <div className="w-full flex flex-col gap-4">
+        <div className="w-full flex flex-col gap-4 px-3">
           {comments.map(comment => (
             <CommentComponent
               key={comment.id}

@@ -1,28 +1,56 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Project } from '@/types';
 import Image from 'next/image';
 import { Eye, HeartStraight } from '@phosphor-icons/react';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { PROJECT_PIC_URL } from '@/config/routes';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import Link from 'next/link';
+import UserHoverCard from './user_hover_card';
 
 interface Props {
-  index: number;
+  index?: number;
   project: Project;
   setClickedOnProject?: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedProjectIndex?: React.Dispatch<React.SetStateAction<number>>;
+  isLink?: boolean;
+  smaller?: boolean;
 }
 
-const ProjectCard = ({ index, project, setClickedOnProject, setClickedProjectIndex }: Props) => {
+const ProjectCard = ({
+  index,
+  project,
+  setClickedOnProject,
+  setClickedProjectIndex,
+  isLink = false,
+  smaller = false,
+}: Props) => {
+  const Wrapper: React.FC<{ children: ReactNode }> = ({ children }) =>
+    isLink ? (
+      <Link
+        href={`/projects/${project.slug}`}
+        className={`w-full flex items-center ${
+          smaller ? 'gap-2' : 'gap-4'
+        } hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_active rounded-md p-2 transition-ease-out-500 animate-fade_third`}
+      >
+        {children}
+      </Link>
+    ) : (
+      <div
+        onClick={() => {
+          if (setClickedOnProject) setClickedOnProject(true);
+          if (setClickedProjectIndex && index) setClickedProjectIndex(index);
+        }}
+        className={`w-full flex items-center ${
+          smaller ? 'gap-2' : 'gap-4'
+        } hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover rounded-md p-2 cursor-pointer transition-ease-out-500 animate-fade_third`}
+      >
+        {children}
+      </div>
+    );
+
   return (
-    <div
-      onClick={() => {
-        if (setClickedOnProject) setClickedOnProject(true);
-        if (setClickedProjectIndex) setClickedProjectIndex(index);
-      }}
-      className="w-full flex items-center gap-4 hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover rounded-md p-2 cursor-pointer transition-ease-out-500 animate-fade_third"
-    >
+    <Wrapper>
       {project.images && project.images.length > 1 ? (
         <Carousel
           className="w-1/5"
@@ -70,51 +98,32 @@ const ProjectCard = ({ index, project, setClickedOnProject, setClickedProjectInd
       )}
       <div className="w-4/5 flex items-center justify-between text-white">
         <div className="grow">
-          <div className="text-lg font-medium line-clamp-1">{project.title}</div>
+          <div className={`${!smaller && 'text-lg'} font-medium line-clamp-1`}>{project.title}</div>
           <div className="text-sm line-clamp-1">{project.tagline}</div>
-          <div className="w-full flex gap-1 mt-2 text-xs line-clamp-1">
-            By{' '}
-            <HoverCard>
-              <HoverCardTrigger>
-                <div className="hover:underline underline-offset-2">{project.user.name}</div>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80">
-                <div className="flex justify-between space-x-4">
-                  <Image
-                    crossOrigin="anonymous"
-                    width={100}
-                    height={100}
-                    alt={'User Pic'}
-                    src={`${USER_PROFILE_PIC_URL}/${project.user.profilePic}`}
-                    className="w-10 h-10 rounded-full mt-1"
-                  />
-                  <div className="w-[calc(100%-40px)]">
-                    <div className="w-fit flex-center gap-1">
-                      <h4 className="text-lg font-semibold">{project.user.name}</h4>
-                      <h4 className="text-xs font-medium text-gray-500">@{project.user.username}</h4>
-                    </div>
-                    <p className="text-sm">{project.user.tagline}</p>
-                    <div className="text-xs text-muted-foreground font-medium mt-2">
-                      {project.user.noFollowers} Follower{project.user.noFollowers !== 1 && 's'}
-                    </div>
-                  </div>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
-          </div>
+          {!smaller && (
+            <div className="w-full flex gap-1 mt-2 text-xs line-clamp-1">
+              By{' '}
+              <UserHoverCard
+                trigger={<div className="hover:underline underline-offset-2">{project.user.name}</div>}
+                user={project.user}
+              />
+            </div>
+          )}
         </div>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1 text-xs">
-            <HeartStraight size={20} />
-            <div>{project.noLikes}</div>
+        {!smaller && (
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-1 text-xs">
+              <HeartStraight size={20} />
+              <div>{project.noLikes}</div>
+            </div>
+            <div className="flex items-center gap-1 text-xs">
+              <Eye size={20} />
+              <div>{project.noImpressions}</div>
+            </div>
           </div>
-          <div className="flex items-center gap-1 text-xs">
-            <Eye size={20} />
-            <div>{project.noImpressions}</div>
-          </div>
-        </div>
+        )}
       </div>
-    </div>
+    </Wrapper>
   );
 };
 

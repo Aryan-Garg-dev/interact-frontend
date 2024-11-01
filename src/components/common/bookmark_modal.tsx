@@ -1,5 +1,5 @@
 import { GenericBookmark } from '@/types';
-import React, { FormEvent, useEffect } from 'react';
+import React, { FormEvent } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Props {

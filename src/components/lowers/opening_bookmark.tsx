@@ -96,25 +96,27 @@ const OpeningBookmarkIcon = ({ opening }: Props) => {
 
   return (
     <>
-      {noUserClick ? <SignUp setShow={setNoUserClick} /> : <></>}
-      <BookmarkOpening
-        show={clickedOnBookmark}
-        setShow={setClickedOnBookmark}
-        opening={opening}
-        setBookmark={setBookmark}
-      />
-      <BookmarkSimple
-        className="cursor-pointer max-md:w-[32px] max-md:h-[32px]"
-        onClick={() => {
-          if (userID == '') setNoUserClick(true);
-          else {
-            if (bookmarkStatus.isBookmarked) removeBookmarkItemHandler();
-            else setClickedOnBookmark(prev => !prev);
-          }
-        }}
-        size={32}
-        weight={bookmarkStatus.isBookmarked ? 'duotone' : 'light'}
-      />
+      {noUserClick && <SignUp setShow={setNoUserClick} />}
+      <div className="w-fit flex">
+        <BookmarkOpening
+          show={clickedOnBookmark}
+          setShow={setClickedOnBookmark}
+          opening={opening}
+          setBookmark={setBookmark}
+        />
+        <BookmarkSimple
+          className="cursor-pointer max-md:w-[32px] max-md:h-[32px]"
+          onClick={() => {
+            if (userID == '') setNoUserClick(true);
+            else {
+              if (bookmarkStatus.isBookmarked) removeBookmarkItemHandler();
+              else setClickedOnBookmark(prev => !prev);
+            }
+          }}
+          size={24}
+          weight={bookmarkStatus.isBookmarked ? 'duotone' : 'light'}
+        />
+      </div>
     </>
   );
 };

@@ -51,6 +51,7 @@ const PostComponent = ({
   const [clickedOnReport, setClickedOnReport] = useState(false);
 
   const [noUserClick, setNoUserClick] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [caption, setCaption] = useState(post.content);
 
@@ -177,14 +178,17 @@ const PostComponent = ({
               <></>
             ) : (
               showLowerPost && (
-                <Popover>
+                <Popover open={isDialogOpen} onOpenChange={val => setIsDialogOpen(val)}>
                   <PopoverTrigger>
                     <div className="text-xxs cursor-pointer">•••</div>
                   </PopoverTrigger>
                   <PopoverContent className="w-40 p-2 text-sm">
                     {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
                       <div
-                        onClick={() => setClickedOnEdit(true)}
+                        onClick={() => {
+                          setClickedOnEdit(true);
+                          setIsDialogOpen(false);
+                        }}
                         className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg cursor-pointer transition-ease-300"
                       >
                         Edit
@@ -195,6 +199,7 @@ const PostComponent = ({
                         onClick={el => {
                           el.stopPropagation();
                           setClickedOnDelete(true);
+                          setIsDialogOpen(false);
                         }}
                         className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover hover:text-primary_danger rounded-lg cursor-pointer transition-ease-100 "
                       >
@@ -207,6 +212,7 @@ const PostComponent = ({
                           el.stopPropagation();
                           if (userID == '') setNoUserClick(true);
                           else setClickedOnReport(true);
+                          setIsDialogOpen(false);
                         }}
                         className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover hover:text-primary_danger rounded-lg cursor-pointer transition-ease-100 "
                       >

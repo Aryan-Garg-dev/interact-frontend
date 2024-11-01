@@ -4,23 +4,22 @@ import deleteHandler from '@/handlers/delete_handler';
 import getHandler from '@/handlers/get_handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLikes, setProjectBookmarks, userIDSelector, userSelector } from '@/slices/userSlice';
-import { BookmarkSimple, ChatTeardrop, Export } from '@phosphor-icons/react';
+import { BookmarkSimple, DotsThreeVertical, Export } from '@phosphor-icons/react';
 import BookmarkProject from '../../sections/lowers/bookmark_project';
 import { BOOKMARK_URL, PROJECT_URL } from '@/config/routes';
 import Semaphore from '@/utils/semaphore';
 import { configSelector, setUpdateBookmark, setUpdatingLikes } from '@/slices/configSlice';
 import { HeartStraight, WarningCircle } from '@phosphor-icons/react';
-import CommentProject from '@/sections/lowers/comment_project';
 import socketService from '@/config/ws';
 import Report from '../common/report';
 import Toaster from '@/utils/toaster';
 import SignUp from '../common/signup_box';
 import Share from '@/sections/lowers/share';
 import ProjectCard from '../cards/project';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Props {
   project: Project;
-  initialCommentShowState?: boolean;
 }
 
 interface bookMarkStatus {
@@ -29,22 +28,21 @@ interface bookMarkStatus {
   bookmarkID: string;
 }
 
-const LowerProject = ({ project, initialCommentShowState = false }: Props) => {
+const LowerProject = ({ project }: Props) => {
   const [liked, setLiked] = useState(false);
   const [numLikes, setNumLikes] = useState(project.noLikes);
-  const [numComments, setNumComments] = useState(project.noComments);
   const [bookmarkStatus, setBookmarkStatus] = useState<bookMarkStatus>({
     isBookmarked: false,
     projectItemID: '',
     bookmarkID: '',
   });
-  const [clickedOnComment, setClickedOnComment] = useState(initialCommentShowState);
   const [clickedOnShare, setClickedOnShare] = useState(false);
   const [clickedOnBookmark, setClickedOnBookmark] = useState(false);
   const [clickedOnReport, setClickedOnReport] = useState(false);
   const [mutex, setMutex] = useState(false);
 
   const [noUserClick, setNoUserClick] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const user = useSelector(userSelector);
   const likes = user.likes;
@@ -148,14 +146,6 @@ const LowerProject = ({ project, initialCommentShowState = false }: Props) => {
   return (
     <>
       {noUserClick && <SignUp setShow={setNoUserClick} />}
-      {clickedOnComment && (
-        <CommentProject
-          setShow={setClickedOnComment}
-          project={project}
-          numComments={numComments}
-          setNoComments={setNumComments}
-        />
-      )}
       {clickedOnShare && (
         <Share
           itemID={project.id}
@@ -166,16 +156,31 @@ const LowerProject = ({ project, initialCommentShowState = false }: Props) => {
         />
       )}
       {clickedOnReport && <Report projectID={project.id} setShow={setClickedOnReport} />}
-
-      <div className="flex flex-col gap-12 max-lg:gap-2 max-lg:flex-row">
+      <div className="flex-center gap-6">
         <BookmarkProject
           show={clickedOnBookmark}
           setShow={setClickedOnBookmark}
           project={project}
           setBookmark={setBookmark}
         />
+        <div className="flex-center gap-2">
+          <HeartStraight
+            onClick={() => {
+              if (userID == '') setNoUserClick(true);
+              else likeHandler();
+            }}
+            className={`cursor-pointer max-md:w-6 max-md:h-6 ${
+              liked ? 'text-heart_filled' : 'text-black opacity-60 dark:text-white dark:opacity-100'
+            } transition-ease-300`}
+            size={28}
+            weight={liked ? 'fill' : 'regular'}
+          />
+          <div className=""> {numLikes}</div>
+        </div>
         <BookmarkSimple
-          className="cursor-pointer max-lg:w-6 max-lg:h-6"
+          className={`cursor-pointer max-md:w-6 max-md:h-6 opacity-60 ${
+            bookmarkStatus.isBookmarked ? 'text-[#7cb9ff]' : 'text-black opacity-60 dark:text-white dark:opacity-100'
+          } transition-ease-300`}
           onClick={() => {
             if (userID == '') setNoUserClick(true);
             else {
@@ -183,48 +188,38 @@ const LowerProject = ({ project, initialCommentShowState = false }: Props) => {
               else setClickedOnBookmark(prev => !prev);
             }
           }}
-          size={32}
+          size={28}
           weight={bookmarkStatus.isBookmarked ? 'fill' : 'light'}
-          fill={bookmarkStatus.isBookmarked ? '#478EE1' : '#000000'}
         />
-        <HeartStraight
-          onClick={() => {
-            if (userID == '') setNoUserClick(true);
-            else likeHandler();
-          }}
-          className={`cursor-pointer max-md:w-6 max-md:h-6 ${
-            liked ? 'text-heart_filled' : 'text-black opacity-60'
-          } transition-ease-300`}
-          size={32}
-          weight={liked ? 'fill' : 'regular'}
-        />
-        <Export
-          onClick={() => {
-            if (userID == '') setNoUserClick(true);
-            else setClickedOnShare(true);
-          }}
-          className="cursor-pointer max-lg:w-6 max-lg:h-6"
-          size={32}
-          weight="regular"
-        />
-        <ChatTeardrop
-          onClick={() => {
-            if (userID == '') setNoUserClick(true);
-            else setClickedOnComment(true);
-          }}
-          className="cursor-pointer max-lg:w-6 max-lg:h-6"
-          size={32}
-        />
-        {project.userID != user.id && (
-          <WarningCircle
-            onClick={() => {
-              if (userID == '') setNoUserClick(true);
-              else setClickedOnReport(true);
-            }}
-            className="cursor-pointer max-lg:w-6 max-lg:h-6"
-            size={32}
-          />
-        )}
+        <Popover open={isDialogOpen} onOpenChange={val => setIsDialogOpen(val)}>
+          <PopoverTrigger>
+            <DotsThreeVertical className="cursor-pointer max-lg:w-6 max-lg:h-6" size={28} weight="bold" />
+          </PopoverTrigger>
+          <PopoverContent className="flex flex-col gap-2 text-sm w-48 p-3">
+            <div
+              onClick={() => {
+                if (userID == '') setNoUserClick(true);
+                else setClickedOnShare(true);
+                setIsDialogOpen(false);
+              }}
+              className="w-full p-2 flex items-center gap-2 hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg cursor-pointer transition-ease-300"
+            >
+              <Export className="cursor-pointer max-lg:w-6 max-lg:h-6" size={20} weight="regular" />
+              Share
+            </div>
+
+            <div
+              onClick={() => {
+                if (userID == '') setNoUserClick(true);
+                else setClickedOnReport(true);
+                setIsDialogOpen(false);
+              }}
+              className="w-full p-2 flex items-center gap-2 hover:bg-primary_comp hover:text-primary_danger dark:hover:bg-dark_primary_comp_hover rounded-lg cursor-pointer transition-ease-300"
+            >
+              <WarningCircle className="cursor-pointer max-lg:w-6 max-lg:h-6" size={20} /> Report
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </>
   );

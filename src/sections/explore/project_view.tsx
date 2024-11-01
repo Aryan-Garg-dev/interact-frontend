@@ -17,7 +17,6 @@ import { useSwipeable } from 'react-swipeable';
 import SimilarProjects from '@/components/explore/similar_projects';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
-import LowerWorkspaceProject from '@/components/lowers/lower_workspace_project';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
@@ -227,11 +226,11 @@ const ProjectView = ({
             <div className="flex flex-wrap justify-between items-center gap-2">
               <div className="font-bold text-4xl text-gradient">{project.title}</div>
               <div className="lg:hidden w-fit">
-                {isProjectMember(project) ? (
+                {/* {isProjectMember(project) ? (
                   <LowerWorkspaceProject project={project} />
                 ) : (
                   <LowerProject project={project} />
-                )}
+                )} */}
               </div>
             </div>
             <div className="font-semibold text-lg">{project.tagline}</div>
@@ -282,7 +281,7 @@ const ProjectView = ({
             }
             <Collaborators memberships={project.memberships} />
             <Links links={project.links} />
-            <Openings openings={project.openings} slug={project.slug} projectCoverPic={getProjectPicURL(project)} />
+            <Openings openings={project.openings} slug={project.slug} />
             <SimilarProjects slug={project.slug} />
           </div>
         </div>
@@ -297,11 +296,11 @@ const ProjectView = ({
         </div>
 
         <div className="max-lg:hidden">
-          {isProjectMember(project) ? (
+          {/* {isProjectMember(project) ? (
             <LowerWorkspaceProject project={project} initialCommentShowState={showComments} />
           ) : (
             <LowerProject project={project} initialCommentShowState={showComments} />
-          )}
+          )} */}
         </div>
 
         {clickedProjectIndex != projectSlugs.length - 1 ? (

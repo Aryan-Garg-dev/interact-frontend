@@ -2,20 +2,11 @@ import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL, PROJECT_PIC_URL, PROJECT_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
-import { userSelector } from '@/slices/userSlice';
 import { Project } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-  DialogHeader,
-  DialogFooter,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogHeader } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { resizeImage } from '@/utils/resize_image';
@@ -25,22 +16,22 @@ import { X } from '@phosphor-icons/react';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 interface Props {
-  projectToEdit: Project;
-  setProjectToEdit?: React.Dispatch<React.SetStateAction<Project>>;
+  project: Project;
+  setProject?: React.Dispatch<React.SetStateAction<Project>>;
+  isDialogOpen: boolean;
+  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setProjects?: React.Dispatch<React.SetStateAction<Project[]>>;
   org?: boolean;
 }
 
-const EditProjectImages = ({ projectToEdit, setProjectToEdit, setProjects, org = false }: Props) => {
+const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen, setProjects, org = false }: Props) => {
   const [newImage, setNewImage] = useState<File>();
   const [newImageUrl, setNewImageUrl] = useState<string>('');
-  const [images, setImages] = useState<string[]>(projectToEdit.images || []);
+  const [images, setImages] = useState<string[]>(project.images || []);
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [stage, setStage] = useState(0);
   const [mutex, setMutex] = useState(false);
 
-  const user = useSelector(userSelector);
   const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleAddNewImage = async () => {
@@ -53,8 +44,8 @@ const EditProjectImages = ({ projectToEdit, setProjectToEdit, setProjects, org =
     if (newImage) formData.append('image', newImage);
 
     const URL = org
-      ? `${ORG_URL}/${currentOrgID}/projects/image/${projectToEdit.slug}`
-      : `${PROJECT_URL}/image/${projectToEdit.slug}`;
+      ? `${ORG_URL}/${currentOrgID}/projects/image/${project.slug}`
+      : `${PROJECT_URL}/image/${project.slug}`;
 
     const res = await postHandler(URL, formData, 'multipart/form-data');
 
@@ -64,13 +55,13 @@ const EditProjectImages = ({ projectToEdit, setProjectToEdit, setProjects, org =
       if (setProjects)
         setProjects(prev =>
           prev.map(project => {
-            if (project.id == projectToEdit.id) {
-              return { ...projectToEdit, images: newProject.images, hashes: newProject.hashes };
+            if (project.id == project.id) {
+              return { ...project, images: newProject.images, hashes: newProject.hashes };
             } else return project;
           })
         );
-      if (setProjectToEdit) {
-        setProjectToEdit(prev => {
+      if (setProject) {
+        setProject(prev => {
           return {
             ...prev,
             images: newProject.images,
@@ -99,8 +90,8 @@ const EditProjectImages = ({ projectToEdit, setProjectToEdit, setProjects, org =
     const formData = { image };
 
     const URL = org
-      ? `${ORG_URL}/${currentOrgID}/projects/image/${projectToEdit.slug}`
-      : `${PROJECT_URL}/image/${projectToEdit.slug}`;
+      ? `${ORG_URL}/${currentOrgID}/projects/image/${project.slug}`
+      : `${PROJECT_URL}/image/${project.slug}`;
 
     const res = await patchHandler(URL, formData);
 
@@ -110,13 +101,13 @@ const EditProjectImages = ({ projectToEdit, setProjectToEdit, setProjects, org =
       if (setProjects)
         setProjects(prev =>
           prev.map(project => {
-            if (project.id == projectToEdit.id) {
-              return { ...projectToEdit, images: newProject.images, hashes: newProject.hashes };
+            if (project.id == project.id) {
+              return { ...project, images: newProject.images, hashes: newProject.hashes };
             } else return project;
           })
         );
-      if (setProjectToEdit) {
-        setProjectToEdit(prev => {
+      if (setProject) {
+        setProject(prev => {
           return {
             ...prev,
             images: newProject.images,
@@ -140,8 +131,8 @@ const EditProjectImages = ({ projectToEdit, setProjectToEdit, setProjects, org =
     const toaster = Toaster.startLoad('Editing your project...');
 
     const URL = org
-      ? `${ORG_URL}/${currentOrgID}/projects/image/rearrange/${projectToEdit.slug}`
-      : `${PROJECT_URL}/image/rearrange/${projectToEdit.slug}`;
+      ? `${ORG_URL}/${currentOrgID}/projects/image/rearrange/${project.slug}`
+      : `${PROJECT_URL}/image/rearrange/${project.slug}`;
 
     const res = await patchHandler(URL, { images });
 
@@ -151,13 +142,13 @@ const EditProjectImages = ({ projectToEdit, setProjectToEdit, setProjects, org =
       if (setProjects)
         setProjects(prev =>
           prev.map(project => {
-            if (project.id == projectToEdit.id) {
-              return { ...projectToEdit, images: newProject.images, hashes: newProject.hashes };
+            if (project.id == project.id) {
+              return { ...project, images: newProject.images, hashes: newProject.hashes };
             } else return project;
           })
         );
-      if (setProjectToEdit) {
-        setProjectToEdit(prev => {
+      if (setProject) {
+        setProject(prev => {
           return {
             ...prev,
             images: newProject.images,
@@ -185,16 +176,11 @@ const EditProjectImages = ({ projectToEdit, setProjectToEdit, setProjects, org =
   };
 
   useEffect(() => {
-    setImages(projectToEdit.images || []);
-  }, [projectToEdit]);
+    setImages(project.images || []);
+  }, [project]);
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
-          Edit Project Images
-        </Button>
-      </DialogTrigger>
       <DialogContent className={`sm:max-w-md ${stage == 0 ? 'min-w-[50%] px-16' : 'min-w-[30%]'} overflow-x-hidden`}>
         <DialogHeader>
           <DialogTitle className="text-3xl">Edit Project Images</DialogTitle>
@@ -206,11 +192,10 @@ const EditProjectImages = ({ projectToEdit, setProjectToEdit, setProjects, org =
             }}
           >
             <CarouselContent>
-              {projectToEdit.images &&
-                projectToEdit.images.map((image, index) => {
+              {project.images &&
+                project.images.map((image, index) => {
                   let imageHash = 'no-hash';
-                  if (projectToEdit.hashes && index < projectToEdit.hashes.length)
-                    imageHash = projectToEdit.hashes[index];
+                  if (project.hashes && index < project.hashes.length) imageHash = project.hashes[index];
 
                   return (
                     <CarouselItem
@@ -235,7 +220,7 @@ const EditProjectImages = ({ projectToEdit, setProjectToEdit, setProjects, org =
                   );
                 })}
 
-              {!(projectToEdit.images && projectToEdit.images.length >= 5) && (
+              {!(project.images && project.images.length >= 5) && (
                 <CarouselItem className="w-full rounded-lg">
                   {newImageUrl ? (
                     <div className="w-full relative">
@@ -308,8 +293,7 @@ const EditProjectImages = ({ projectToEdit, setProjectToEdit, setProjects, org =
                 <div {...provided.droppableProps} ref={provided.innerRef} className="w-full flex flex-col gap-4">
                   {images.map((image, index) => {
                     let imageHash = 'no-hash';
-                    if (projectToEdit.hashes && index < projectToEdit.hashes.length)
-                      imageHash = projectToEdit.hashes[index];
+                    if (project.hashes && index < project.hashes.length) imageHash = project.hashes[index];
                     return (
                       <Draggable key={index} draggableId={index.toString()} index={index}>
                         {provided => (

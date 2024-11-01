@@ -2,11 +2,11 @@ import React, { ReactNode } from 'react';
 
 interface WrapperProps {
   children: ReactNode;
-  index: number;
-  maxIndex: number;
+  index?: number;
+  maxIndex?: number;
 }
 
-const PrimeWrapper: React.FC<WrapperProps> = ({ children, index, maxIndex }) => {
+const PrimeWrapper: React.FC<WrapperProps> = ({ children, index = 0, maxIndex = 0 }) => {
   let includeBorder = true;
   if (index == 0 && index == maxIndex) includeBorder = false;
   return (

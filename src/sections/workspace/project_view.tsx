@@ -7,7 +7,6 @@ import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Buildings, CaretLeft, CaretRight, X } from '@phosphor-icons/react';
-import LowerWorkspaceProject from '@/components/lowers/lower_workspace_project';
 import ProjectViewLoader from '@/components/loaders/workspace_project_view';
 import { useRouter } from 'next/router';
 import Collaborators from '@/components/explore/collaborators';
@@ -360,9 +359,7 @@ const ProjectView = ({
                 <div className="w-full h-fit flex flex-col gap-6">
                   <div className="flex flex-wrap justify-between items-center gap-2">
                     <div className="font-bold text-3xl text-gradient">{project.title}</div>
-                    <div className="lg:hidden w-fit">
-                      <LowerWorkspaceProject project={project} />
-                    </div>
+                    <div className="lg:hidden w-fit">{/* <LowerWorkspaceProject project={project} /> */}</div>
                   </div>
                   <div className="font-semibold text-lg">{project.tagline}</div>
 
@@ -395,13 +392,13 @@ const ProjectView = ({
                 </div>
 
                 <div className="w-full mx-auto flex flex-col gap-2 pb-4">
-                  <EditProjectImages projectToEdit={project} setProjects={setProjects} setProjectToEdit={setProject} />
+                  {/* <EditProjectImages project={project} setProjects={setProjects} setProject={setProject} /> */}
                   {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
                     <EditProject
-                      projectToEdit={project}
+                      project={project}
                       setShow={setClickedOnEdit}
                       setProjects={setProjects}
-                      setProjectToEdit={setProject}
+                      setProject={setProject}
                     />
 
                     //  <div
@@ -455,9 +452,7 @@ const ProjectView = ({
               <X size={24} weight="bold" />
             </div>
 
-            <div className="max-lg:hidden">
-              <LowerWorkspaceProject project={project} />
-            </div>
+            <div className="max-lg:hidden">{/* <LowerWorkspaceProject project={project} /> */}</div>
 
             {clickedProjectIndex != projectSlugs.length - 1 ? (
               <div

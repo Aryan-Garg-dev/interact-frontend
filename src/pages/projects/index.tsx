@@ -34,8 +34,8 @@ const Projects = () => {
           )}
         </div>
         <SideBarWrapper>
-          <SidePrimeWrapper>dawd</SidePrimeWrapper>
-          <SidePrimeWrapper>dawd</SidePrimeWrapper>
+          <SidePrimeWrapper>Top 10 list, etc</SidePrimeWrapper>
+          <SidePrimeWrapper>This section to promote new projects</SidePrimeWrapper>
         </SideBarWrapper>
       </MainWrapper>
     </BaseWrapper>

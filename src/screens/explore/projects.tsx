@@ -132,9 +132,9 @@ const Projects = () => {
                   checkSet.add(project.id);
                   return (
                     <ProjectCard
+                      isLink
                       key={project.id}
                       index={index}
-                      // size={navbarOpen || projects.length < 4 ? '[21vw]' : '80'}
                       project={project}
                       setClickedOnProject={setClickedOnProject}
                       setClickedProjectIndex={setClickedProjectIndex}

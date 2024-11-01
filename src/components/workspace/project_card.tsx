@@ -1,10 +1,11 @@
 import React from 'react';
 import { Project } from '@/types';
 import Image from 'next/image';
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { PROJECT_PIC_URL } from '@/config/routes';
 import { Eye, HeartStraight } from '@phosphor-icons/react';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import UserHoverCard from '../explore/user_hover_card';
 
 interface Props {
   index: number;
@@ -74,33 +75,10 @@ const ProjectCard = ({ index, project, setClickedOnProject, setClickedProjectInd
           <div className="text-sm line-clamp-1">{project.tagline}</div>
           <div className="w-full flex gap-1 mt-2 text-xs line-clamp-1">
             By{' '}
-            <HoverCard>
-              <HoverCardTrigger>
-                <div className="hover:underline underline-offset-2">{project.user.name}</div>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80">
-                <div className="flex justify-between space-x-4">
-                  <Image
-                    crossOrigin="anonymous"
-                    width={100}
-                    height={100}
-                    alt={'User Pic'}
-                    src={`${USER_PROFILE_PIC_URL}/${project.user.profilePic}`}
-                    className="w-10 h-10 rounded-full mt-1"
-                  />
-                  <div className="w-[calc(100%-40px)]">
-                    <div className="w-fit flex-center gap-1">
-                      <h4 className="text-lg font-semibold">{project.user.name}</h4>
-                      <h4 className="text-xs font-medium text-gray-500">@{project.user.username}</h4>
-                    </div>
-                    <p className="text-sm">{project.user.tagline}</p>
-                    <div className="text-xs text-muted-foreground font-medium mt-2">
-                      {project.user.noFollowers} Follower{project.user.noFollowers !== 1 && 's'}
-                    </div>
-                  </div>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
+            <UserHoverCard
+              trigger={<div className="hover:underline underline-offset-2">{project.user.name}</div>}
+              user={project.user}
+            />
           </div>
         </div>
         <div className="flex items-center gap-4">
@@ -119,5 +97,3 @@ const ProjectCard = ({ index, project, setClickedOnProject, setClickedProjectInd
 };
 
 export default ProjectCard;
-
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
