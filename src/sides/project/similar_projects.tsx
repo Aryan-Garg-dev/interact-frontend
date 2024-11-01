@@ -4,9 +4,10 @@ import { SERVER_ERROR } from '@/config/errors';
 import { EXPLORE_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
-import ProjectCard from './project_card';
+import ProjectCard from '../../components/explore/project_card';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Loader from '../common/loader';
+import Loader from '../../components/common/loader';
+import { SidePrimeWrapper } from '@/wrappers/side';
 
 interface Props {
   slug: string;
@@ -47,20 +48,22 @@ const SimilarProjects = ({ slug }: Props) => {
   }, [slug]);
 
   return projects.length > 0 ? (
-    <div className="w-full flex flex-col gap-2">
-      <div className="text-lg font-semibold">Similar Projects</div>
-      <InfiniteScroll
-        className="w-full"
-        dataLength={projects.length}
-        next={() => fetchProjects()}
-        hasMore={hasMore}
-        loader={<Loader />}
-      >
-        {projects.map(project => (
-          <ProjectCard key={project.id} project={project} isLink smaller />
-        ))}
-      </InfiniteScroll>
-    </div>
+    <SidePrimeWrapper>
+      <div className="w-full flex flex-col gap-2">
+        <div className="text-lg font-semibold">Similar Projects</div>
+        <InfiniteScroll
+          className="w-full"
+          dataLength={projects.length}
+          next={() => fetchProjects()}
+          hasMore={hasMore}
+          loader={<Loader />}
+        >
+          {projects.map(project => (
+            <ProjectCard key={project.id} project={project} isLink smaller />
+          ))}
+        </InfiniteScroll>
+      </div>
+    </SidePrimeWrapper>
   ) : (
     <></>
   );

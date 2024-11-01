@@ -18,14 +18,14 @@ const Projects = ({ bookmark, setClick, fetchBookmarks }: Props) => {
 
   return (
     <div className="w-full flex flex-col gap-4 font-primary dark:text-white pt-6">
-      <div className="flex items-center gap-2 pl-8">
+      <div className="flex items-center gap-2">
         <ArrowArcLeft
           onClick={() => {
             if (fetchBookmarks) fetchBookmarks();
             setClick(false);
           }}
           className="cursor-pointer"
-          size={32}
+          size={24}
         />
         <div className="font-medium text-xl cursor-default">{bookmark.title}</div>
       </div>

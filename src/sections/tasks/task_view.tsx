@@ -5,7 +5,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import ToolTip from '@/components/utils/tooltip';
-import { getPRStatusColor, getTaskDeadlineColor, getTaskPriorityColor, getTaskDifficultyColor } from '@/utils/funcs/task';
+import {
+  getPRStatusColor,
+  getTaskDeadlineColor,
+  getTaskPriorityColor,
+  getTaskDifficultyColor,
+} from '@/utils/funcs/task';
 import UsersList from '@/components/common/users_list';
 import PictureList from '@/components/common/picture_list';
 import Tags from '@/components/common/tags';
@@ -73,7 +78,7 @@ const TaskComponent = ({
   return (
     <>
       {clickedOnUsers && <UsersList title="Task Users" users={task.users} setShow={setClickedOnUsers} />}
-      <div className="w-no_side_base_open max-md:w-screen h-base fixed bg-gray-50 top-navbar overflow-y-auto flex flex-col gap-4 p-8 pt-4 max-md:px-4 font-primary animate-fade_third z-10 max-md:z-20">
+      <div className="w-no_side_base_open max-md:w-screen h-base fixed bg-gray-50 dark:bg-dark_primary_comp_hover top-navbar overflow-y-auto flex flex-col gap-4 p-8 pt-4 max-md:px-4 font-primary animate-fade_third z-10 max-md:z-20">
         <div className="w-full flex flex-col gap-2">
           <ArrowArcLeft
             className="cursor-pointer"

@@ -4,7 +4,7 @@ import { Invitation, Project, User } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { MagnifyingGlass } from '@phosphor-icons/react';
+import { MagnifyingGlass, Plus } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import Loader from '@/components/common/loader';
@@ -12,9 +12,9 @@ import { useSelector } from 'react-redux';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import PrimaryButton from '@/components/buttons/primary_btn';
 import { userIDSelector } from '@/slices/userSlice';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 interface Props {
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
   project: Project;
   setProject?: React.Dispatch<React.SetStateAction<Project>>;
   org?: boolean;
@@ -25,10 +25,11 @@ interface InvitationSlice {
   title: string;
 }
 
-const AddCollaborators = ({ setShow, project, setProject, org = false }: Props) => {
+const AddCollaborators = ({ project, setProject, org = false }: Props) => {
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [status, setStatus] = useState(0);
   const [mutex, setMutex] = useState(false);
@@ -111,7 +112,7 @@ const AddCollaborators = ({ setShow, project, setProject, org = false }: Props) 
     invitationSlices.forEach(async invitation => {
       const formData = {
         ...invitation,
-        title: invitation.title.trim() === '' ? '-' : invitation.title.trim()
+        title: invitation.title.trim() === '' ? '-' : invitation.title.trim(),
       };
       const res = await postHandler(URL, formData);
       attemptedCount++;
@@ -124,7 +125,7 @@ const AddCollaborators = ({ setShow, project, setProject, org = false }: Props) 
         completeCount++;
         if (completeCount == invitationSlices.length) {
           setSearch('');
-          setShow(false);
+          setIsDialogOpen(false);
           Toaster.stopLoad(toaster, 'Invitations sent!', 1);
         }
       } else {
@@ -138,12 +139,15 @@ const AddCollaborators = ({ setShow, project, setProject, org = false }: Props) 
   };
 
   return (
-    <>
-      <div className="fixed top-24 max-md:top-20 w-[640px] max-md:w-5/6 backdrop-blur-2xl bg-gray-100 dark:bg-[#ffe1fc22] flex flex-col gap-4 rounded-lg p-10 max-md:p-5 dark:text-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-30">
-        <div className="text-3xl max-md:text-xl font-semibold">
-          {status == 0 ? 'Select Users' : 'Confirm Invitations'}
-        </div>
-        <div className="w-full h-[420px] overflow-y-auto flex flex-col gap-4">
+    <Dialog open={isDialogOpen} onOpenChange={val => setIsDialogOpen(val)}>
+      <DialogTrigger>
+        <Plus className="cursor-pointer" size={20} />
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Invite Members</DialogTitle>
+        </DialogHeader>
+        <div className="w-full flex flex-col gap-4">
           {status == 0 ? (
             <>
               <div className="w-full h-12 flex items-center px-4 gap-4 dark:bg-dark_primary_comp_hover rounded-md">
@@ -258,13 +262,8 @@ const AddCollaborators = ({ setShow, project, setProject, org = false }: Props) 
             </>
           )}
         </div>
-      </div>
-
-      <div
-        onClick={() => setShow(false)}
-        className="bg-backdrop w-screen h-screen fixed top-0 left-0 animate-fade_third z-20"
-      ></div>
-    </>
+      </DialogContent>
+    </Dialog>
   );
 };
 

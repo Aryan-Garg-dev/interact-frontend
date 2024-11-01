@@ -48,7 +48,7 @@ const ProjectTasks = ({ slug, org = false }: Props) => {
   const currentOrgID = useSelector(currentOrgIDSelector);
 
   const getProject = () => {
-    const URL = `${EXPLORE_URL}/projects/${slug}`;
+    const URL = `${PROJECT_URL}/${slug}`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode == 200) setProject(res.data.project);
@@ -130,7 +130,7 @@ const ProjectTasks = ({ slug, org = false }: Props) => {
     <MainWrapper>
       {clickedOnNewTask && <NewTask org={false} setShow={setClickedOnNewTask} project={project} setTasks={setTasks} />}
       <div className="w-full flex flex-col">
-        <div className="w-full flex justify-between items-center p-base_padding">
+        <div className="w-full flex justify-between items-center p-base_padding pt-0">
           <div className="flex-center gap-4">
             <div className="w-fit text-6xl font-semibold dark:text-white font-primary ">Tasks</div>
             <div className="flex-center gap-2 max-md:hidden">

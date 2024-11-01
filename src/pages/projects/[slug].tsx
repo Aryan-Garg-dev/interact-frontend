@@ -17,8 +17,8 @@ import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carouse
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import CommentProject from '@/sections/lowers/comment_project';
 import UserSideCard from '@/components/explore/user_side_card';
-import SimilarProjects from '@/components/explore/similar_projects';
-import Openings from '@/components/explore/show_openings';
+import SimilarProjects from '@/sides/project/similar_projects';
+import Openings from '@/sides/project/openings';
 import Tags from '@/components/common/tags';
 import Links from '@/components/explore/show_links';
 import { useDispatch } from 'react-redux';
@@ -30,20 +30,15 @@ import LowerProject from '@/components/lowers/lower_project';
 import EditProject from '@/sections/workspace/edit_project2';
 import { PencilSimple } from '@phosphor-icons/react/dist/ssr';
 import EditProjectImages from '@/sections/workspace/edit_project_images';
-import Loader from '@/components/common/loader';
-import Created from '@/components/history/project/created';
-import Deleted from '@/components/history/project/deleted';
-import Edited from '@/components/history/project/edited';
-import Membership from '@/components/history/project/membership';
-import History from '@/sections/workspace/history';
 import Tasks from '@/sections/workspace/tasks';
+import Collaborators from '@/sides/project/collaborators';
+import Activity from '@/sides/project/activity';
 
 const ProjectComponent = ({ slug }: { slug: string }) => {
   const [project, setProject] = useState<Project>(initialProject);
   const [loading, setLoading] = useState(true);
 
   const [clickedOnReadMore, setClickedOnReadMore] = useState(false);
-  const [clickedOnEditProject, setClickedOnEditProject] = useState(false);
   const [clickedOnEditProjectImages, setClickedOnEditProjectImages] = useState(false);
 
   const user = useSelector(userSelector);
@@ -145,7 +140,7 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
                   <div className="w-fit font-bold text-4xl text-gradient">{project.title}</div>
                   <div className="flex-center gap-6">
                     {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR) && (
-                      <EditProject project={project} setProject={setProject} setShow={setClickedOnEditProject} />
+                      <EditProject project={project} setProject={setProject} />
                     )}
                     <LowerProject project={project} />
                   </div>
@@ -185,67 +180,16 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
               <UserSideCard user={project.user} />
             </div>
           </SidePrimeWrapper>
-          {project.memberships && project.memberships.length > 0 && (
-            <SidePrimeWrapper>
-              <div className="w-full flex flex-col gap-2">
-                <div className="text-lg font-medium">Collaborators</div>
-                {project.memberships.map(membership => (
-                  <UserSideCard key={membership.id} user={membership.user} />
-                ))}
-              </div>
-            </SidePrimeWrapper>
-          )}
-          {project.openings && project.openings.length > 0 && (
-            <SidePrimeWrapper>
-              <Openings openings={project.openings} slug={project.slug} />
-            </SidePrimeWrapper>
-          )}
+          <Collaborators project={project} setProject={setProject} />
+          <Openings project={project} />
           {project.id && (
             <>
               {!checkProjectAccess(PROJECT_MEMBER, project.id) ? (
-                <SidePrimeWrapper>
-                  <SimilarProjects slug={project.slug} />
-                </SidePrimeWrapper>
+                <SimilarProjects slug={project.slug} />
               ) : (
                 <>
-                  <SidePrimeWrapper>
-                    <div className="w-full flex flex-col gap-2">
-                      <div className="w-full flex items-center justify-between">
-                        <div className="text-lg font-medium">Activity</div>
-                        <History project={project} />
-                      </div>
-                      <div className="w-full flex flex-col gap-2">
-                        {project.history?.map(history => {
-                          switch (history.historyType) {
-                            case -1:
-                            case 3:
-                            case 8:
-                            case 9:
-                              return <Created history={history} />;
-                            case 0:
-                            case 1:
-                            case 6:
-                            case 7:
-                            case 10:
-                            case 11:
-                              return <Membership history={history} />;
-                            case 2:
-                            case 4:
-                            case 13:
-                              return <Edited history={history} />;
-                            case 5:
-                            case 12:
-                              return <Deleted history={history} />;
-                            default:
-                              return <></>;
-                          }
-                        })}
-                      </div>
-                    </div>
-                  </SidePrimeWrapper>
-                  <SidePrimeWrapper>
-                    <Tasks project={project} />
-                  </SidePrimeWrapper>
+                  <Activity project={project} />
+                  <Tasks project={project} />
                 </>
               )}
             </>

@@ -11,6 +11,7 @@ import TasksLoader from '@/components/loaders/tasks';
 import { checkProjectAccess } from '@/utils/funcs/access';
 import { PROJECT_MANAGER } from '@/config/constants';
 import PictureList from '@/components/common/picture_list';
+import { SidePrimeWrapper } from '@/wrappers/side';
 
 interface Props {
   project: Project;
@@ -47,7 +48,7 @@ const Tasks = ({ project, org = false }: Props) => {
   }, []);
 
   return (
-    <>
+    <SidePrimeWrapper>
       <div className="flex gap-2 items-center">
         <Gavel className="max-md:hidden" size={24} weight="duotone" />
         <div className="grow flex justify-between items-center text-lg font-medium">
@@ -102,7 +103,7 @@ const Tasks = ({ project, org = false }: Props) => {
           </Link>
         ))
       )}
-    </>
+    </SidePrimeWrapper>
   );
 };
 

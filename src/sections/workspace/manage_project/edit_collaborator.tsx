@@ -93,7 +93,7 @@ const EditCollaborator = ({ setShow, membership, project, setProject, org = fals
             <div className="grow h-fit flex flex-wrap justify-between">
               <div className="flex flex-col">
                 <div className="text-lg font-bold">{membership.user.name}</div>
-                <div className="text-sm dakr:text-gray-200">@{membership.user.username}</div>
+                <div className="text-sm dark:text-gray-200">@{membership.user.username}</div>
               </div>
             </div>
           </div>

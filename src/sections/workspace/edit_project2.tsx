@@ -20,13 +20,12 @@ import { PencilSimple } from '@phosphor-icons/react/dist/ssr';
 
 interface Props {
   project: Project;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
   setProject?: React.Dispatch<React.SetStateAction<Project>>;
   setProjects?: React.Dispatch<React.SetStateAction<Project[]>>;
   org?: boolean;
 }
 
-const EditProject = ({ project, setShow, setProject, setProjects, org = false }: Props) => {
+const EditProject = ({ project, setProject, setProjects, org = false }: Props) => {
   const [description, setDescription] = useState(project.description);
   const [tagline, setTagline] = useState(project.tagline);
   const [isPrivate, setIsPrivate] = useState(project.isPrivate);
