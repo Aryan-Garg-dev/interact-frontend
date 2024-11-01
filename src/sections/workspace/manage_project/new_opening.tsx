@@ -3,25 +3,27 @@ import postHandler from '@/handlers/post_handler';
 import { Project } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useState } from 'react';
-import Image from 'next/image';
-import Tags from '@/components/utils/edit_tags';
 import { SERVER_ERROR } from '@/config/errors';
 import { useSelector } from 'react-redux';
 import { currentOrgSelector } from '@/slices/orgSlice';
-import PrimaryButton from '@/components/buttons/primary_btn';
-import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Plus } from '@phosphor-icons/react';
+import Input from '@/components/form/input';
+import Tags from '@/components/form/tags';
+import TextArea from '@/components/form/textarea';
+import { Button } from '@/components/ui/button';
 
 interface Props {
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
   project: Project;
   setProject?: React.Dispatch<React.SetStateAction<Project>>;
   org?: boolean;
 }
 
-const NewOpening = ({ setShow, project, setProject, org = false }: Props) => {
+const AddOpening = ({ project, setProject, org = false }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tags, setTags] = useState<string[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [mutex, setMutex] = useState(false);
 
@@ -66,7 +68,7 @@ const NewOpening = ({ setShow, project, setProject, org = false }: Props) => {
       setTitle('');
       setDescription('');
       setTags([]);
-      setShow(false);
+      setIsDialogOpen(false);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
       else {
@@ -77,55 +79,23 @@ const NewOpening = ({ setShow, project, setProject, org = false }: Props) => {
   };
 
   return (
-    <>
-      <div className="fixed top-24 max-lg:top-20 w-[953px] max-lg:w-5/6 h-[540px] max-lg:h-3/4 backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col justify-between rounded-lg p-10 max-lg:p-6 dark:text-white font-primary overflow-y-auto border-[1px] border-gray-400  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-30">
-        <div className="w-full flex flex-col gap-8">
-          <div className="w-full flex max-lg:flex-col gap-8 max-lg:gap-6 items-start max-md:items-center">
-            <Image
-              crossOrigin="anonymous"
-              width={100}
-              height={100}
-              alt={'User Pic'}
-              src={getProjectPicURL(project)}
-              className={'w-[180px] h-[180px] max-lg:w-[200px] max-lg:h-[200px] rounded-lg object-cover'}
-              placeholder="blur"
-              blurDataURL={getProjectPicHash(project)}
-            />
-            <div className="max-lg:w-full grow flex flex-col gap-4">
-              <input
-                value={title}
-                onChange={el => setTitle(el.target.value)}
-                maxLength={25}
-                type="text"
-                placeholder="Opening Title"
-                className="w-full text-4xl max-lg:text-3xl font-bold bg-transparent focus:outline-none"
-              />
-              <div className="text-lg font-medium cursor-default max-md:hidden">@{project.title}</div>
-              <div className="w-full flex flex-col gap-2">
-                <div className="text-xs ml-1 font-medium uppercase text-gray-500">Tags ({tags.length || 0}/10)</div>
-                <Tags tags={tags} setTags={setTags} maxTags={10} />
-              </div>
-            </div>
-          </div>
-          <textarea
-            value={description}
-            onChange={el => setDescription(el.target.value)}
-            maxLength={500}
-            className="w-full min-h-[48px] max-h-40 bg-transparent focus:outline-none"
-            placeholder="Start typing role description..."
-          />
+    <Dialog open={isDialogOpen} onOpenChange={val => setIsDialogOpen(val)}>
+      <DialogTrigger>
+        <Plus className="cursor-pointer" size={20} />
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Add Opening</DialogTitle>
+        </DialogHeader>
+        <div className="w-full flex flex-col gap-4">
+          <Input label="Opening Title" val={title} setVal={setTitle} required maxLength={25} />
+          <TextArea label="Opening Description" val={description} setVal={setDescription} required maxLength={1000} />
+          <Tags label="Opening Tags" tags={tags} setTags={setTags} maxTags={10} />
         </div>
-        <div className="w-full flex justify-end">
-          <PrimaryButton onClick={handleSubmit} width="40" label="Add Opening" />
-        </div>
-      </div>
-
-      <div
-        onClick={() => setShow(false)}
-        className="bg-backdrop w-screen h-screen fixed top-0 left-0 animate-fade_third z-20"
-      ></div>
-    </>
+        <Button onClick={handleSubmit}>Add Opening</Button>
+      </DialogContent>
+    </Dialog>
   );
 };
 
-export default NewOpening;
+export default AddOpening;

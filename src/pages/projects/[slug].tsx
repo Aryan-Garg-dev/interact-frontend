@@ -181,7 +181,7 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
             </div>
           </SidePrimeWrapper>
           <Collaborators project={project} setProject={setProject} />
-          <Openings project={project} />
+          <Openings project={project} setProject={setProject} />
           {project.id && (
             <>
               {!checkProjectAccess(PROJECT_MEMBER, project.id) ? (
