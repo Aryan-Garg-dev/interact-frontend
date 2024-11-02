@@ -34,7 +34,7 @@ const Tagged = ({ notification, short = true }: Props) => {
         return '/explore/announcement/' + notification.announcementID;
       case 23:
         if (notification.comment.postID) return `/explore/post/${notification.comment.postID}?action=comments`;
-        if (notification.comment.projectID) return `/explore?pid=${notification.comment.project.slug}&action=comments`;
+        if (notification.comment.projectID) return `/projects/${notification.comment.project.slug}&action=comments`;
         if (notification.comment.announcementID)
           return `/explore/announcement/${notification.comment.announcementID}?action=comments`;
         if (notification.comment.taskID) {

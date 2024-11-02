@@ -58,7 +58,7 @@ const Created = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
             Created a Project:{' '}
-            <Link target="_blank" href={'/explore/project/' + history.project?.slug} className="font-semibold">
+            <Link target="_blank" href={'/projects/' + history.project?.slug} className="font-semibold">
               {history.project?.title}
             </Link>{' '}
             🎉
@@ -106,7 +106,7 @@ const Created = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
             Added an Opening:{' '}
-            <Link target="_blank" href={'/explore?oid=' + history.openingID} className="font-semibold">
+            <Link target="_blank" href={'/openings?oid=' + history.openingID} className="font-semibold">
               {history.opening?.title}
             </Link>{' '}
             🎉

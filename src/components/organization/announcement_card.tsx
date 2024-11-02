@@ -166,7 +166,7 @@ const AnnouncementCard = ({ announcement, setAnnouncements }: Props) => {
         href={
           userID == announcement.organization?.userID
             ? '/organisation/profile'
-            : `/explore/organisation/${announcement.organization?.user.username}`
+            : `/organisations/${announcement.organization?.user.username}`
         }
         target="_blank"
         className="h-fit flex items-center gap-2"
@@ -189,7 +189,7 @@ const AnnouncementCard = ({ announcement, setAnnouncements }: Props) => {
             href={
               userID == announcement.organization?.userID
                 ? '/organisation/profile'
-                : `/explore/organisation/${announcement.organization?.user.username}`
+                : `/organisations/${announcement.organization?.user.username}`
             }
             target="_blank"
             className="flex max-md:flex-col md:items-center gap-2 max-md:gap-0 font-medium"

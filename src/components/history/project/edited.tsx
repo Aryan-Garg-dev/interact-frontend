@@ -21,7 +21,7 @@ const Edited = ({ history }: Props) => {
         <ProjectHistoryWrapper history={history}>
           <div className="w-fit text-center flex-center gap-1">
             edited Opening Details -{' '}
-            <Link href={`/explore?oid=${history.openingID}`} className="font-semibold">
+            <Link href={`/openings?oid=${history.openingID}`} className="font-semibold">
               {history.opening.title}
             </Link>
             : <div>{history.deletedText}</div>.
@@ -33,7 +33,7 @@ const Edited = ({ history }: Props) => {
         <ProjectHistoryWrapper history={history}>
           <div className="w-fit text-center flex-center gap-1">
             edited Memberships Details -{' '}
-            <Link href={`/explore?pid=${history.membership.projectID}`} className="font-semibold">
+            <Link href={`/projects?pid=${history.membership.projectID}`} className="font-semibold">
               {history.membership.user.name}
             </Link>
             .

@@ -20,7 +20,7 @@ const Created = ({ history }: Props) => {
         <ProjectHistoryWrapper history={history}>
           <div className="w-fit text-center flex-center gap-1">
             created an Opening{' '}
-            <Link href={`/explore?oid=${history.openingID}`} className="font-semibold">
+            <Link href={`/openings?oid=${history.openingID}`} className="font-semibold">
               {history.opening.title}
             </Link>
             .

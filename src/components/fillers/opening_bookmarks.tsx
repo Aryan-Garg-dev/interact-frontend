@@ -1,14 +1,10 @@
-import { setExploreTab } from '@/slices/feedSlice';
 import Link from 'next/link';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 const NoOpeningBookmarks = () => {
-  const dispatch = useDispatch();
   return (
     <Link
-      href={'/explore'}
-      onClick={() => dispatch(setExploreTab(1))}
+      href={'/openings'}
       className="w-full h-fit mx-auto px-12 pt-base_padding max-md:px-8 rounded-md font-primary flex-center flex-col gap-2"
     >
       <div className="text-xl max-md:text-lg font-medium text-center">

@@ -13,7 +13,7 @@ interface Props {
 const UserSideCard = ({ user }: Props) => {
   return (
     <Link
-      href={`${`/explore/${user.isOrganization ? 'organisation' : 'user'}/${user.username}`}`}
+      href={`${`/${user.isOrganization ? 'organisation' : 'user'}/${user.username}`}`}
       target="_blank"
       className="w-full flex items-center gap-4 hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_active rounded-md p-2 transition-ease-out-500 animate-fade_third"
     >

@@ -19,7 +19,7 @@ const Removal = ({ notification }: Props) => {
   const getRedirectURL = () => {
     switch (notification.notificationType) {
       case 8:
-        return '/explore?pid=' + notification.project.slug;
+        return '/projects?pid=' + notification.project.slug;
       default:
         return '';
     }

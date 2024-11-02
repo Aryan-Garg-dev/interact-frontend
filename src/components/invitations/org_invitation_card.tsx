@@ -107,7 +107,7 @@ const OrgInvitationCard = ({ invitation, setInvitations }: Props) => {
       <Link
         onClick={() => dispatch(setExploreTab(3))}
         target="_blank"
-        href={`/explore/organisation/${invitation.organization.user.username}`}
+        href={`/organisations/${invitation.organization.user.username}`}
       >
         <Image
           crossOrigin="anonymous"
@@ -123,7 +123,7 @@ const OrgInvitationCard = ({ invitation, setInvitations }: Props) => {
       <Link
         target="_blank"
         onClick={() => dispatch(setExploreTab(3))}
-        href={`/explore/organisation/${invitation.organization.user.username}`}
+        href={`/organisations/${invitation.organization.user.username}`}
         className="w-[calc(100%-80px)] max-md:w-full flex max-md:flex-col max-md:text-center max-md:gap-4 items-center justify-between"
       >
         <div

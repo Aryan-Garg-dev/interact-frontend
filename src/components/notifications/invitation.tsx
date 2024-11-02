@@ -19,7 +19,7 @@ const Invitation = ({ notification }: Props) => {
   const getRedirectURL = () => {
     switch (notification.notificationType) {
       case 10:
-        return '/explore?pid=' + notification.project.slug;
+        return '/projects?pid=' + notification.project.slug;
       default:
         return '';
     }

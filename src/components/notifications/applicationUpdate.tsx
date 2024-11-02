@@ -23,9 +23,9 @@ const ApplicationUpdate = ({ notification, status }: Props) => {
   const getLinkURL = () => {
     switch (notification.notificationType) {
       case 20:
-        return `/explore/organisations/${notification.opening.organizationID}`;
+        return `/organisations/${notification.opening.organizationID}`;
       default:
-        return `/explore/project/${notification.opening.projectID}`;
+        return `/project?pid=${notification.opening.projectID}`;
     }
   };
 

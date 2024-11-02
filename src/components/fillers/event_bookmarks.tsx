@@ -1,14 +1,10 @@
-import { setExploreTab } from '@/slices/feedSlice';
 import Link from 'next/link';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 const NoEventBookmarks = () => {
-  const dispatch = useDispatch();
   return (
     <Link
-      href={'/explore'}
-      onClick={() => dispatch(setExploreTab(4))}
+      href={'/events'}
       className="h-fit mx-auto px-12 rounded-md font-primary dark:text-white bg-white dark:bg-dark_primary_comp hover:shadow-lg dark:hover:shadow-2xl flex-center flex-col gap-2 transition-ease-500"
     >
       <div className="text-xl max-md:text-lg font-medium text-center">

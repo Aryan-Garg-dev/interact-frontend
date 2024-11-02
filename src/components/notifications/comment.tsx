@@ -29,7 +29,7 @@ const Comment = ({ notification, short = true }: Props) => {
       case 2:
         return '/explore/post/' + notification.postID;
       case 4:
-        return '/explore?pid=' + notification.project.slug;
+        return '/projects?pid=' + notification.project.slug;
       case 13:
         return '/events/' + notification.eventID;
       case 19:

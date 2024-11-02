@@ -184,7 +184,7 @@ const ProjectView = ({
                 <div
                   onClick={() =>
                     window.location.assign(
-                      `/explore/${project.user.isOrganization ? 'organisation' : 'user'}/${project.user.username}`
+                      `/${project.user.isOrganization ? 'organisations' : 'users'}/${project.user.username}`
                     )
                   }
                   className="cursor-pointer hover-underline-animation after:bg-black"

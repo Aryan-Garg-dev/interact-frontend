@@ -104,7 +104,7 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
       {clickedOnReject && (
         <ConfirmDelete setShow={setClickedOnReject} handleDelete={handleReject} title="Confirm Reject?" />
       )}
-      <Link target="_blank" href={`/explore?pid=${invitation.project.slug}`}>
+      <Link target="_blank" href={`/projects?pid=${invitation.project.slug}`}>
         <Image
           crossOrigin="anonymous"
           width={100}
@@ -123,7 +123,7 @@ const ProjectInvitationCard = ({ invitation, setInvitations }: Props) => {
         >
           <Link
             target="_blank"
-            href={`/explore?pid=${invitation.project.slug}`}
+            href={`/projects/${invitation.project.slug}`}
             className="text-xl font-bold text-gradient line-clamp-1"
           >
             {invitation.project.title}

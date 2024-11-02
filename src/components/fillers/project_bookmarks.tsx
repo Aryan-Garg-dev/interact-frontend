@@ -1,14 +1,10 @@
-import { setExploreTab } from '@/slices/feedSlice';
 import Link from 'next/link';
 import React from 'react';
-import { useDispatch } from 'react-redux';
 
 const NoProjectBookmarks = () => {
-  const dispatch = useDispatch();
   return (
     <Link
-      href={'/explore'}
-      onClick={() => dispatch(setExploreTab(0))}
+      href={'/projects'}
       className="w-full h-fit mx-auto px-12 max-md:px-8 rounded-md font-primary dark:text-white flex-center flex-col gap-2 transition-ease-500"
     >
       <div className="text-xl max-md:text-lg font-medium text-center">

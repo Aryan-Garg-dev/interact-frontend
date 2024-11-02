@@ -17,7 +17,7 @@ const OrgCard = ({ user }: Props) => {
   const loggedInUser = useSelector(userSelector);
   return (
     <Link
-      href={`/explore/organisation/${user.username}`}
+      href={`/organisations/${user.username}`}
       target="_blank"
       className="w-72 max-md:w-4/5 flex flex-col gap-2 rounded-xl bg-white font-primary hover:shadow-xl transition-ease-300 animate-fade_third"
     >

@@ -52,7 +52,7 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
         } transition-ease-300 z-[1] animate-fade_third`}
       >
         <Link
-          href={`/explore/organisation/${organisation.user.username}`}
+          href={`/organisations/${organisation.user.username}`}
           target="_blank"
           className="h-full flex items-center gap-2"
         >
@@ -74,7 +74,7 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
               href={
                 user.id == organisation.userID
                   ? '/organisation/profile'
-                  : `/explore/organisation/${organisation.user.username}`
+                  : `/organisations/${organisation.user.username}`
               }
               target="_blank"
               className="flex max-md:flex-col md:items-center gap-2 max-md:gap-0 font-medium"

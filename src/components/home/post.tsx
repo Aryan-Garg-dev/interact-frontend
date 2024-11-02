@@ -160,11 +160,7 @@ const PostComponent = ({
       <div className="w-[calc(100%-32px)] flex flex-col gap-1">
         <div className="w-full h-fit flex justify-between">
           <Link
-            href={`${
-              post.user.username != loggedInUser.username
-                ? `/explore/${post.user.isOrganization ? 'organisation' : 'user'}/${post.user.username}`
-                : `/${post.user.isOrganization ? 'organisation/' : ''}profile`
-            }`}
+            href={`${post.user.isOrganization ? 'organisations' : 'users'}/${post.user.username}`}
             className="font-medium flex items-center gap-1"
           >
             {post.user.name}

@@ -32,7 +32,7 @@ const About = ({ profile, org = false, organizations }: Props) => {
                   {organizations.map((org, i) => (
                     <Link
                       key={i}
-                      href={`/explore/organisation/${org.user.username}`}
+                      href={`/organisations/${org.user.username}`}
                       target="_blank"
                       className="flex items-center gap-1"
                     >

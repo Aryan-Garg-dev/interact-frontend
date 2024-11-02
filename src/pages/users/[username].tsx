@@ -79,7 +79,7 @@ const User = ({ username }: Props) => {
   }, [username]);
 
   useEffect(() => {
-    if (user.isOrganization) window.location.replace(`/explore/organisation/${username}`);
+    if (user.isOrganization) window.location.replace(`/organisations/${username}`);
   }, [user]);
 
   const dispatch = useDispatch();

@@ -84,7 +84,7 @@ const OpeningView = ({ opening, setShow, setOpening, org = false, showBack = fal
             <div className="w-full flex items-center justify-between flex-wrap gap-2 text-sm">
               {org ? (
                 <Link
-                  href={`/explore/organisation/${opening.organization?.user.username}`}
+                  href={`/organisations/${opening.organization?.user.username}`}
                   target="_blank"
                   className="flex-center gap-1 hover-underline-animation after:bg-black font-semibold text-lg"
                 >
