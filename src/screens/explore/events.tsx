@@ -8,9 +8,7 @@ import Loader from '@/components/common/loader';
 import EventCard from '@/components/organization/event_card';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useSelector } from 'react-redux';
-import { navbarOpenSelector } from '@/slices/feedSlice';
-import OrderMenu from '@/components/common/order_menu';
+import OrderMenu from '@/components/common/order_menu2';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -18,8 +16,6 @@ const Events = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState('trending');
-
-  const open = useSelector(navbarOpenSelector);
 
   const fetchEvents = async (search: string | null, initialPage?: number) => {
     const URL = `${EXPLORE_URL}/events?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
@@ -53,20 +49,13 @@ const Events = () => {
   }, [window.location.search, order]);
 
   return (
-    <div className="w-full flex flex-col gap-6 pt-2">
-      <OrderMenu
-        orders={['trending', 'most_liked', 'most_viewed', 'latest']}
-        current={order}
-        setState={setOrder}
-        zIndex={20}
-      />
+    <div className="w-full flex flex-col gap-6">
+      <OrderMenu orders={['trending', 'most_liked', 'most_viewed', 'latest']} current={order} setState={setOrder} />
       {loading ? (
         <Loader />
       ) : events.length > 0 ? (
         <InfiniteScroll
-          className={`w-full ${
-            open ? 'px-2 gap-4' : 'px-8 gap-8'
-          } pb-12 flex flex-wrap justify-center transition-ease-out-500`}
+          className="w-full px-2 gap-4 flex flex-wrap justify-center"
           dataLength={events.length}
           next={() => fetchEvents(new URLSearchParams(window.location.search).get('search'))}
           hasMore={hasMore}

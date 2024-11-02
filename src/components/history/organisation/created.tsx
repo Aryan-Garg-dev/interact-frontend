@@ -21,7 +21,7 @@ const Created = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
             Created an Event:{' '}
-            <Link target="_blank" href={'/explore/event/' + history.event?.id} className="font-semibold">
+            <Link target="_blank" href={'/events/' + history.event?.id} className="font-semibold">
               {history.event?.title}
             </Link>{' '}
             🎉

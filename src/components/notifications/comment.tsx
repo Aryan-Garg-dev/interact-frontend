@@ -31,7 +31,7 @@ const Comment = ({ notification, short = true }: Props) => {
       case 4:
         return '/explore?pid=' + notification.project.slug;
       case 13:
-        return '/explore/event/' + notification.eventID;
+        return '/events/' + notification.eventID;
       case 19:
         return '/explore/announcement/' + notification.announcementID;
       default:

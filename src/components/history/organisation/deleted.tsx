@@ -107,7 +107,7 @@ const Deleted = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_high px-1 rounded-md gap-4">
             Withdrew Co-Host Invitations for the Event:{' '}
-            <Link target="_blank" href={'/explore/event/' + history.event?.id} className="font-semibold">
+            <Link target="_blank" href={'/events/' + history.event?.id} className="font-semibold">
               {history.event?.title}
             </Link>{' '}
           </div>

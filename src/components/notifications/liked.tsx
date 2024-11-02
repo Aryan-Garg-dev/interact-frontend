@@ -30,7 +30,7 @@ const Liked = ({ notification, short = true }: Props) => {
       case 3:
         return '/explore?pid=' + notification.project.slug;
       case 12:
-        return '/explore/event/' + notification.eventID;
+        return '/events/' + notification.eventID;
       case 18:
         return '/explore/announcement/' + notification.announcementID;
       default:

@@ -180,7 +180,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
 
   const RegisterButton = () => {
     const isRegistered = user.registeredEvents?.includes(event.id);
-    const isLive = !hackathon?.isEnded ?? false;
+    const isLive = !hackathon?.isEnded;
     const startTime = moment(hackathon?.startTime).utcOffset('+05:30');
     const endTime = moment(hackathon?.endTime).utcOffset('+05:30');
     const now = moment().utcOffset('+05:30');

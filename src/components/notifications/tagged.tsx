@@ -43,7 +43,7 @@ const Tagged = ({ notification, short = true }: Props) => {
             return `/organisations?oid=${task.organizationID}&redirect_url=/tasks?tid=${notification.comment.taskID}`;
           return `/workspace/tasks/${task?.project?.slug}?tid=${notification.comment.taskID}`;
         }
-        if (notification.comment.eventID) return `/explore/events/${notification.comment.eventID}?action=comments`;
+        if (notification.comment.eventID) return `/eventss/${notification.comment.eventID}?action=comments`;
         return '#';
       default:
         return '#';

@@ -82,7 +82,7 @@ const LowerEvent = ({ event, numLikes, setNumLikes }: Props) => {
           itemID={event.id}
           itemType="event"
           setShow={setClickedOnShare}
-          clipboardURL={`/explore/event/${event.id}`}
+          clipboardURL={`/events/${event.id}`}
           item={<EventCard event={event} />}
         />
       )}

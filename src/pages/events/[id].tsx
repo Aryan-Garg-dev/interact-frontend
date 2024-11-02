@@ -186,7 +186,7 @@ const EventComponent = ({ id }: Props) => {
               Toaster.error(SERVER_ERROR, 'error_toaster');
               return;
             }
-            window.location.assign(`/explore/event/live?id=${id}&token=${authToken}`);
+            window.location.assign(`/events/live?id=${id}&token=${authToken}`);
           } else {
             if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
             else {
@@ -371,7 +371,7 @@ const EventComponent = ({ id }: Props) => {
 
   return (
     <BaseWrapper title={`${event.title}`}>
-      {user.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={2} />}
+      {user.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={3} />}
       <MainWrapper>
         {event.hackathonID ? (
           <Hackathon event={event} handleRegister={handleRegister} />
