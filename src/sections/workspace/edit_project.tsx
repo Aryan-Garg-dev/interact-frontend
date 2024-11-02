@@ -138,9 +138,6 @@ const EditProject = ({ project, setProject, setProjects, org = false }: Props) =
           <Tags label="Project Tags" tags={tags} setTags={setTags} maxTags={10} required={true} />
           <Links label="Project Links" links={links} setLinks={setLinks} maxLinks={5} />
           <Checkbox label="Keep this Project Private" val={isPrivate} setVal={setIsPrivate} />
-          {/* <div className="w-full flex max-lg:justify-center justify-end">
-            <PrimaryButton label="Edit Project" onClick={handleSubmit} width="40" />
-          </div> */}
         </div>
         <DialogFooter className="w-full flex-center">
           <Button onClick={handleSubmit} type="button" variant="outline" className="w-1/2">

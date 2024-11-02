@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import ExploreProjects from '@/screens/projects/explore';
 import BookmarkProjects from '@/screens/projects/bookmarks';
 import CombinedProjects from '@/screens/projects/workspace';
+import NewProject from '@/sections/workspace/new_project';
 
 const Projects = () => {
   const [active, setActive] = useState(0);
@@ -34,7 +35,9 @@ const Projects = () => {
           )}
         </div>
         <SideBarWrapper>
-          <SidePrimeWrapper>Top 10 list, etc</SidePrimeWrapper>
+          <SidePrimeWrapper>
+            <NewProject />
+          </SidePrimeWrapper>
           <SidePrimeWrapper>This section to promote new projects</SidePrimeWrapper>
         </SideBarWrapper>
       </MainWrapper>

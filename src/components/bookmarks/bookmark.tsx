@@ -95,7 +95,7 @@ const BookmarkComponent = <T extends { id: string; title: string; [key: string]:
         </div>
         {items.length === 0 ? (
           <div className="p-2">
-            <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+            <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-dark_primary_comp_hover rounded-md"></div>
           </div>
         ) : items.length === 1 ? (
           <div className="p-2">
@@ -126,7 +126,7 @@ const BookmarkComponent = <T extends { id: string; title: string; [key: string]:
               />
             ))}
             {[...Array(4 - items.length)].map((_, index) => (
-              <div key={index} className="w-[48%] h-[49%] bg-gray-300 dark:bg-[#c578bf63] rounded-md"></div>
+              <div key={index} className="w-[48%] h-[49%] bg-gray-300 dark:bg-dark_primary_comp_hover rounded-md"></div>
             ))}
           </div>
         )}
