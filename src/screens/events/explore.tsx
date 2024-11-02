@@ -8,7 +8,7 @@ import Loader from '@/components/common/loader';
 import EventCard from '@/components/organization/event_card';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import OrderMenu from '@/components/common/order_menu2';
+import OrderMenu from '@/components/common/order_menu';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);

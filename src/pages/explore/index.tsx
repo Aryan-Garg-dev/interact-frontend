@@ -1,10 +1,9 @@
 import Sidebar from '@/components/common/sidebar';
 import TabMenu from '@/components/common/tab_menu';
 import SearchBar from '@/components/explore/searchbar';
-import Events from '@/screens/eventss';
-import Openings from '@/screens/explore/openings';
+import Openings from '@/screens/openings/explore';
 import Organisations from '@/screens/explore/organisations';
-import Projects from '@/screens/explore/projects';
+import Projects from '@/screens/projects/explore';
 import Users from '@/screens/explore/users';
 import ProfileCompletion from '@/sections/home/profile_completion';
 import { exploreTabSelector, setExploreTab } from '@/slices/feedSlice';
@@ -44,9 +43,6 @@ const Explore = () => {
           </div>
           <div className={`w-full ${active === 3 ? 'block' : 'hidden'} `}>
             <Organisations />
-          </div>
-          <div className={`w-full ${active === 4 ? 'block' : 'hidden'} `}>
-            <Events />
           </div>
         </div>
         <ProfileCompletion />

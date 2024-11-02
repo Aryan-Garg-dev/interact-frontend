@@ -18,24 +18,16 @@ import {
   setOwnerProjects,
   userSelector,
 } from '@/slices/userSlice';
-import EditProject from './edit_project2';
+import EditProject from './edit_project';
 import Links from '@/components/explore/show_links';
 import deleteHandler from '@/handlers/delete_handler';
 import { useSwipeable } from 'react-swipeable';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import ConfirmOTP from '@/components/common/confirm_otp';
-import Link from 'next/link';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Tags from '@/components/common/tags';
 import { checkOrgProjectAccess, checkParticularOrgAccess, checkProjectAccess } from '@/utils/funcs/access';
-import {
-  ORG_MANAGER,
-  ORG_SENIOR,
-  PROJECT_EDITOR,
-  PROJECT_MANAGER,
-  PROJECT_MEMBER,
-  PROJECT_OWNER,
-} from '@/config/constants';
+import { ORG_MANAGER, ORG_SENIOR, PROJECT_EDITOR, PROJECT_MEMBER, PROJECT_OWNER } from '@/config/constants';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 import EditProjectImages from './edit_project_images';
@@ -65,7 +57,6 @@ const ProjectView = ({
   const [loading, setLoading] = useState(true);
 
   const [clickedOnReadMore, setClickedOnReadMore] = useState(false);
-  const [clickedOnEdit, setClickedOnEdit] = useState(false);
   const [clickedOnLeave, setClickedOnLeave] = useState(false);
   const [clickedOnDelete, setClickedOnDelete] = useState(false);
 
@@ -187,25 +178,6 @@ const ProjectView = ({
   useEffect(() => {
     const abortController = new AbortController();
     fetchProject(abortController);
-
-    // router.replace({
-    //   pathname: router.pathname,
-    //   query: { ...router.query, project: projectSlugs[clickedProjectIndex] },
-    // });
-
-    // return () => {
-    //   abortController.abort();
-
-    //   const { query } = router;
-    //   if (router.pathname == '/workspace') {
-    //     delete query.project;
-
-    //     router.push({
-    //       pathname: router.pathname,
-    //       query: { ...query },
-    //     });
-    //   }
-    // };
   }, [clickedProjectIndex]);
 
   useEffect(() => {
@@ -394,34 +366,7 @@ const ProjectView = ({
                 <div className="w-full mx-auto flex flex-col gap-2 pb-4">
                   {/* <EditProjectImages project={project} setProjects={setProjects} setProject={setProject} /> */}
                   {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
-                    <EditProject
-                      project={project}
-                      setShow={setClickedOnEdit}
-                      setProjects={setProjects}
-                      setProject={setProject}
-                    />
-
-                    //  <div
-                    //     onClick={() => setClickedOnEdit(true)}
-                    //     className="w-full text-lg font-medium border-[1px] border-gray-400 hover:bg-primary_comp_hover active:bg-primary_comp_active  dark:border-dark_primary_btn dark:active:bg-dark_primary_gradient_end py-2 flex-center hover:bg-gradient-to-r dark:hover:from-dark_secondary_gradient_start dark:hover:to-dark_secondary_gradient_end rounded-lg cursor-pointer transition-ease-300"
-                    //   >
-                    //     Edit Project
-                    //   </div>
-                  )}
-                  {checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR, project.organization) && (
-                    <Link
-                      target="_blank"
-                      href={
-                        checkParticularOrgAccess(ORG_SENIOR, project.organization)
-                          ? currentOrg.id == project.organizationID
-                            ? `/organisation/projects/manage/${projectSlugs[clickedProjectIndex]}`
-                            : `/organisations?oid=${project.organizationID}&redirect_url=/projects/manage/${projectSlugs[clickedProjectIndex]}`
-                          : `/workspace/manage/${projectSlugs[clickedProjectIndex]}`
-                      }
-                      className="w-full text-lg font-medium border-[1px] border-gray-400 hover:bg-primary_comp_hover active:bg-primary_comp_active dark:active:bg-dark_primary_gradient_end dark:border-dark_primary_btn py-2 flex-center hover:bg-gradient-to-r dark:hover:from-dark_secondary_gradient_start dark:hover:to-dark_secondary_gradient_end rounded-lg cursor-pointer transition-ease-300"
-                    >
-                      Manage Project
-                    </Link>
+                    <EditProject project={project} setProjects={setProjects} setProject={setProject} />
                   )}
                   {checkOrgProjectAccess(PROJECT_OWNER, project.id, ORG_MANAGER, project.organization) ? (
                     <div

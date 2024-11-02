@@ -50,12 +50,7 @@ const Users = () => {
 
   return (
     <div className="w-full flex flex-col gap-6">
-      <OrderMenu
-        orders={['trending', 'most_viewed', 'latest', 'followers']}
-        current={order}
-        setState={setOrder}
-        zIndex={20}
-      />
+      <OrderMenu orders={['trending', 'most_viewed', 'latest', 'followers']} current={order} setState={setOrder} />
       {loading ? (
         <Loader />
       ) : users.length > 0 ? (

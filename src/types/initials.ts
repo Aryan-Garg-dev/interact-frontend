@@ -132,6 +132,7 @@ export const initialProject: Project = {
   organizationID: '',
   organization: null,
   noMembers: 1,
+  history: [],
 };
 
 export const initialOpening: Opening = {

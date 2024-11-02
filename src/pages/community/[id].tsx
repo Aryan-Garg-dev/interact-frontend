@@ -33,7 +33,7 @@ import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import EditRule from '@/sections/community/edit_rule';
-import OrderMenu from '@/components/common/order_menu2';
+import OrderMenu from '@/components/common/order_menu';
 import ViewPermissions from '@/sections/community/view_permissions';
 
 const Community = ({ id }: { id: string }) => {

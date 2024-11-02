@@ -11,7 +11,7 @@ import Toaster from '@/utils/toaster';
 import { useWindowWidth } from '@react-hook/window-size';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import OrderMenu from '@/components/common/order_menu2';
+import OrderMenu from '@/components/common/order_menu';
 
 const Openings = () => {
   const [openings, setOpenings] = useState<Opening[]>([]);

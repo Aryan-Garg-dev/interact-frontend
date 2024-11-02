@@ -281,7 +281,7 @@ const ProjectView = ({
             }
             <Collaborators memberships={project.memberships} />
             <Links links={project.links} />
-            <Openings openings={project.openings} slug={project.slug} />
+            <Openings project={project} setProject={setProject} />
             <SimilarProjects slug={project.slug} />
           </div>
         </div>

@@ -11,9 +11,7 @@ import Toaster from '@/utils/toaster';
 import { GetServerSidePropsContext } from 'next/types';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
-import Openings from '@/screens/workspace/manage_project/openings';
 import Loader from '@/components/common/loader';
-import Collaborators from '@/screens/workspace/manage_project/collaborators';
 import Chats from '@/screens/workspace/manage_project/chats';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import { checkParticularOrgAccess } from '@/utils/funcs/access';
@@ -61,20 +59,8 @@ const ManageProject = ({ slug }: Props) => {
             <Loader />
           ) : (
             <>
-              <div className={`${active === 0 ? 'block' : 'hidden'}`}>
-                <Openings
-                  project={project}
-                  setProject={setProject}
-                  org={checkParticularOrgAccess(ORG_SENIOR, project.organization)}
-                />
-              </div>
-              <div className={`${active === 1 ? 'block' : 'hidden'}`}>
-                <Collaborators
-                  project={project}
-                  setProject={setProject}
-                  org={checkParticularOrgAccess(ORG_MANAGER, project.organization)}
-                />
-              </div>
+              <div className={`${active === 0 ? 'block' : 'hidden'}`}></div>
+              <div className={`${active === 1 ? 'block' : 'hidden'}`}></div>
               <div className={`${active === 2 ? 'block' : 'hidden'}`}>
                 <Chats project={project} />
               </div>

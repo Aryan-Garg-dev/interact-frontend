@@ -5,9 +5,9 @@ import MainWrapper from '@/wrappers/main';
 import PrimeWrapper from '@/wrappers/prime';
 import SideBarWrapper, { SidePrimeWrapper } from '@/wrappers/side';
 import React, { useState } from 'react';
-import ExploreOpenings from '@/screens/explore/openings';
-import BookmarkOpenings from '@/screens/bookmarks/openings';
-import Applications from '@/screens/workspace/applications';
+import ExploreOpenings from '@/screens/openings/explore';
+import BookmarkOpenings from '@/screens/openings/bookmarks';
+import Applications from '@/screens/openings/applications';
 
 const Openings = () => {
   const [active, setActive] = useState(0);

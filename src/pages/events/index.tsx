@@ -5,8 +5,8 @@ import MainWrapper from '@/wrappers/main';
 import PrimeWrapper from '@/wrappers/prime';
 import SideBarWrapper, { SidePrimeWrapper } from '@/wrappers/side';
 import React, { useState } from 'react';
-import ExploreEvents from '@/screens/explore/events';
-import BookmarkEvents from '@/screens/bookmarks/events';
+import ExploreEvents from '@/screens/events/explore';
+import BookmarkEvents from '@/screens/events/bookmarks';
 import RegisteredEvents from '@/screens/events/registered';
 
 const Events = () => {

@@ -8,7 +8,7 @@ import RePostComponent from '@/components/home/repost';
 import { EXPLORE_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
 import PostsLoader from '@/components/loaders/posts';
-import OrderMenu from '@/components/common/order_menu2';
+import OrderMenu from '@/components/common/order_menu';
 
 const Discover = () => {
   const [feed, setFeed] = useState<Post[]>([]);

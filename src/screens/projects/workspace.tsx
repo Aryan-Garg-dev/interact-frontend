@@ -12,10 +12,9 @@ import { useSelector } from 'react-redux';
 import NoProjects from '@/components/fillers/your_projects';
 import { navbarOpenSelector } from '@/slices/feedSlice';
 import { SERVER_ERROR } from '@/config/errors';
-import NewButton from '@/components/buttons/new_btn';
 import OrderMenu from '@/components/common/order_menu';
 
-const YourProjects = () => {
+const CombinedProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState('activity');
@@ -33,14 +32,11 @@ const YourProjects = () => {
 
   const getProjects = (abortController: AbortController) => {
     setLoading(true);
-    const URL = `${WORKSPACE_URL}/my?order=${order}&search=${search}`;
+    const URL = `${WORKSPACE_URL}/projects?order=${order}&search=${search}`;
     getHandler(URL, abortController.signal)
       .then(res => {
         if (res.statusCode === 200) {
-          let projectsData = res.data.projects || [];
-          projectsData = projectsData.map((project: Project) => {
-            return { ...project, user };
-          });
+          const projectsData = res.data.projects || [];
           setProjects(projectsData);
           const projectSlug = new URLSearchParams(window.location.search).get('project');
           if (projectSlug && projectSlug != '') {
@@ -83,22 +79,12 @@ const YourProjects = () => {
   }, [order, search]);
 
   return (
-    <div className="w-full px-2">
-      {clickedOnNewProject && <NewProject setShow={setClickedOnNewProject} setProjects={setProjects} />}
-      <NewButton show={!clickedOnNewProject} onClick={() => setClickedOnNewProject(true)} />
-      <OrderMenu
-        orders={['activity', 'most_liked', 'most_viewed', 'latest']}
-        current={order}
-        setState={setOrder}
-        addSearch={true}
-        search={search}
-        setSearch={setSearch}
-        zIndex={20}
-      />
+    <div className="w-full">
+      <OrderMenu orders={['activity', 'most_liked', 'most_viewed', 'latest']} current={order} setState={setOrder} />
       {loading ? (
         <Loader />
       ) : projects.length > 0 ? (
-        <div className="w-full">
+        <div className="w-full mt-4">
           {clickedOnProject && (
             <ProjectView
               projectSlugs={projects.map(project => project.slug)}
@@ -130,4 +116,4 @@ const YourProjects = () => {
   );
 };
 
-export default YourProjects;
+export default CombinedProjects;

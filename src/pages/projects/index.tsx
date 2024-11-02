@@ -5,9 +5,9 @@ import MainWrapper from '@/wrappers/main';
 import PrimeWrapper from '@/wrappers/prime';
 import SideBarWrapper, { SidePrimeWrapper } from '@/wrappers/side';
 import React, { useState } from 'react';
-import ExploreProjects from '@/screens/explore/projects';
-import BookmarkProjects from '@/screens/bookmarks/projects';
-import CombinedProjects from '@/screens/workspace/combined';
+import ExploreProjects from '@/screens/projects/explore';
+import BookmarkProjects from '@/screens/projects/bookmarks';
+import CombinedProjects from '@/screens/projects/workspace';
 
 const Projects = () => {
   const [active, setActive] = useState(0);

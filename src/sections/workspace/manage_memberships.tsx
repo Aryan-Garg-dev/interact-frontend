@@ -1,7 +1,6 @@
 import { DialogHeader } from '@/components/ui/dialog';
 import { SERVER_ERROR } from '@/config/errors';
 import { INVITATION_URL, MEMBERSHIP_URL, ORG_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
-import patchHandler from '@/handlers/patch_handler';
 import { Project } from '@/types';
 import Toaster from '@/utils/toaster';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -10,7 +9,7 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 import { Gear, X } from '@phosphor-icons/react';
 import Image from 'next/image';
 import moment from 'moment';
-import { ORG_MANAGER, PROJECT_EDITOR, PROJECT_MANAGER, PROJECT_MEMBER, PROJECT_OWNER } from '@/config/constants';
+import { ORG_MANAGER, PROJECT_MANAGER, PROJECT_OWNER } from '@/config/constants';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import {
@@ -92,55 +91,7 @@ const ManageMemberships = ({
     }
   };
 
-  const handleEditMembership = async () => {
-    const title = clickedMembershipTitle;
-    const role = clickedMembershipRole;
-
-    if (!title || !role) return;
-
-    const toaster = Toaster.startLoad('Editing the membership...');
-
-    const formData = {
-      title,
-      role,
-    };
-
-    const URL = org
-      ? `${ORG_URL}/${currentOrgID}/project/membership/${clickedMembershipID}`
-      : `${MEMBERSHIP_URL}/${clickedMembershipID}`;
-
-    const res = await patchHandler(URL, formData);
-
-    if (res.statusCode === 200) {
-      setProject(prev => {
-        return {
-          ...prev,
-          memberships: prev.memberships.map(m => {
-            if (m.id == clickedMembershipID)
-              return {
-                ...m,
-                title,
-                role,
-              };
-            else return m;
-          }),
-        };
-      });
-      setClickedMembershipID(null);
-      setClickedMembershipTitle('');
-      setClickedMembershipRole(null);
-      Toaster.stopLoad(toaster, 'Membership Edited', 1);
-    } else {
-      Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-    }
-  };
-
   const user = useSelector(userSelector);
-
-  const canEditRoles =
-    project.userID == user.id || (org && checkOrgAccess(ORG_MANAGER))
-      ? [PROJECT_MEMBER, PROJECT_EDITOR, PROJECT_MANAGER]
-      : [PROJECT_MEMBER, PROJECT_EDITOR];
 
   const ManageMembers = () => (
     <Table>

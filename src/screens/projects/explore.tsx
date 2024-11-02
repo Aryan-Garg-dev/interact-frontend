@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { setExploreTab } from '@/slices/feedSlice';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import OrderMenu from '@/components/common/order_menu2';
+import OrderMenu from '@/components/common/order_menu';
 
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);

@@ -15,12 +15,12 @@ interface Props {
 
 const Openings = ({ project, setProject }: Props) => {
   return (project.openings && project.openings.length > 0) ||
-    checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR) ? (
+    checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR, project.organization) ? (
     <SidePrimeWrapper>
       <div className="w-full flex flex-col gap-2">
         <div className="w-full flex items-center justify-between">
           <div className="text-lg font-medium">Active Openings</div>
-          {checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR) ? (
+          {checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR, project.organization) ? (
             <div className="flex-center gap-2">
               <AddOpening project={project} setProject={setProject} org={checkOrgAccess(ORG_SENIOR)} />
               <ManageOpenings project={project} setProject={setProject} org={checkOrgAccess(ORG_SENIOR)} />
