@@ -31,7 +31,7 @@ const ProfileDropdown = ({ setShow }: Props) => {
     <>
       <div className="w-64 max-md:border-b-[1px] max-md:border-primary_black bg-gray-50 max-md:bg-white bg-opacity-60 font-primary max-md:w-full max-h-[480px] max-md:max-h-none overflow-y-auto fixed top-[72px] max-md:top-0 right-4 max-md:right-0 rounded-xl max-md:rounded-none backdrop-blur-lg backdrop p-2 z-[150] animate-fade_third">
         <Link
-          href={`${user.isOrganization ? '/organisation' : ''}/profile`}
+          href={user.isOrganization ? '/organisation/profile' : `/users/${user.username}`}
           className="w-full group flex-center gap-3 py-4 rounded-lg cursor-pointer transition-ease-200 hover:bg-gray-100 dark:hover:bg-[#52525246]"
         >
           <Image

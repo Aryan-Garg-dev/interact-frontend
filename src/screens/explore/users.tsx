@@ -11,7 +11,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import ProfileCompletion from '@/sections/explore/profile_completion';
 import OrderMenu from '@/components/common/order_menu';
 
-const Users = () => {
+const ExploreUsers = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
@@ -73,4 +73,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default ExploreUsers;

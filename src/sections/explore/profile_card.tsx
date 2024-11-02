@@ -90,7 +90,7 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
         />
       )}
 
-      <SidePrimeWrapper>
+      <SidePrimeWrapper stickTop>
         <div className="w-full flex-center flex-col gap-4 py-2">
           <div className="relative w-48 h-48 rounded-full">
             <Image

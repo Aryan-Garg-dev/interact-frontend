@@ -136,8 +136,8 @@ const EditTask = ({
         )
       ) {
         const oldUserIDs = task.users.map(user => user.id);
-        let addUsersSuccess = true;
-        let removeUsersSuccess = true;
+        let addusersuccess = true;
+        let removeusersuccess = true;
 
         const usersToAdd = userIDs.filter(userID => !oldUserIDs.includes(userID));
         const usersToRemove = oldUserIDs.filter(userID => !userIDs.includes(userID));
@@ -145,22 +145,22 @@ const EditTask = ({
         for (const userID of usersToAdd) {
           const result = await addUser(userID, toaster);
           if (result !== 1) {
-            addUsersSuccess = false;
+            addusersuccess = false;
             break;
           }
         }
 
-        if (addUsersSuccess) {
+        if (addusersuccess) {
           for (const userID of usersToRemove) {
             const result = await removeUser(userID, toaster);
             if (result !== 1) {
-              removeUsersSuccess = false;
+              removeusersuccess = false;
               break;
             }
           }
         }
 
-        if (addUsersSuccess && removeUsersSuccess) {
+        if (addusersuccess && removeusersuccess) {
           if (setTasks)
             setTasks(prev =>
               prev.map(t => {

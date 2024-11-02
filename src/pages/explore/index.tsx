@@ -4,7 +4,7 @@ import SearchBar from '@/components/explore/searchbar';
 import Openings from '@/screens/openings/explore';
 import Organisations from '@/screens/explore/organisations';
 import Projects from '@/screens/projects/explore';
-import Users from '@/screens/userss';
+import Users from '@/screens/users';
 import ProfileCompletion from '@/sections/home/profile_completion';
 import { exploreTabSelector, setExploreTab } from '@/slices/feedSlice';
 import { userSelector } from '@/slices/userSlice';

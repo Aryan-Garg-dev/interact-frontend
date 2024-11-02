@@ -158,7 +158,7 @@ const ProfileCard = ({ user, setUser }: Props) => {
     <>
       {clickedOnFollowers ? <Connections type="followers" user={user} setShow={setClickedOnFollowers} /> : <></>}
       {clickedOnFollowing ? <Connections type="following" user={user} setShow={setClickedOnFollowing} /> : <></>}
-      <SidePrimeWrapper>
+      <SidePrimeWrapper stickTop>
         <div className="w-full flex-center flex-col gap-4 py-2">
           <div className="absolute group top-4 right-4">
             <CopyClipboardButton url={`users/${user.username}?external=true`} iconOnly={true} />

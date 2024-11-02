@@ -183,7 +183,7 @@ const FeedSide = () => {
         </SidePrimeWrapper>
       )}
       {users && users.length > 0 && (
-        <SidePrimeWrapper title="Profiles to Follow" style={{ position: 'sticky', top: '84px' }}>
+        <SidePrimeWrapper title="Profiles to Follow" stickTop>
           {user.id == '' && (
             <div className="w-full h-[calc(100%-48px)] flex-center flex-col gap-1 absolute top-12 right-0 backdrop-blur-sm rounded-lg z-10">
               <div className="bg-white flex-center gap-1 border-primary_black border-[1px] rounded-lg px-2 py-1">

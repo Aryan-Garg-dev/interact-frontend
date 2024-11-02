@@ -108,7 +108,7 @@ const ProfileCompletion = () => {
       >
         <div className="text-gradient font-bold text-5xl">Complete Profile </div>
         <Link
-          href={'/profile'}
+          href={`/users/${user.username}`}
           className="w-fit flex items-center gap-1 hover-underline-animation after:bg-black dark:after:bg-dark_primary_btn"
         >
           <div>to increase your Reach!</div>
@@ -140,7 +140,7 @@ const ProfileCompletion = () => {
             <div className="cursor-default">Add Links to your social media</div>
           ) : (
             <Link
-              href={'/profile?action=edit&tag=links'}
+              href={`/users/${user.username}?action=edit&tag=links`}
               onClick={() => dispatch(setProfileCompletionOpen(false))}
               className="hover-underline-animation after:bg-black dark:after:bg-dark_primary_btn"
             >
@@ -168,7 +168,7 @@ const ProfileCompletion = () => {
             <div className="cursor-default">Add a Tagline</div>
           ) : (
             <Link
-              href={'/profile?action=edit&tag=tagline'}
+              href={`/users/${user.username}?action=edit&tag=tagline`}
               onClick={() => dispatch(setProfileCompletionOpen(false))}
               className="hover-underline-animation after:bg-black dark:after:bg-dark_primary_btn"
             >
