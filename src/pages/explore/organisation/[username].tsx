@@ -115,7 +115,7 @@ const User = ({ username }: Props) => {
               itemID={user.id}
               itemType="profile"
               setShow={setClickedOnShare}
-              clipboardURL={`explore/user/${user.username}?action=external`}
+              clipboardURL={`users/${user.username}?action=external`}
               item={<UserCard user={user} />}
             />
           ) : (

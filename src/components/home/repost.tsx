@@ -117,7 +117,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
         <Link
           href={`${
             post.user.username != loggedInUser.username
-              ? `/explore/user/${post.user.isOrganization ? 'organisation/' : ''}${post.user.username}`
+              ? `/users/${post.user.isOrganization ? 'organisation/' : ''}${post.user.username}`
               : `/${post.user.isOrganization ? 'organisation/' : ''}profile`
           }`}
           className="rounded-full"

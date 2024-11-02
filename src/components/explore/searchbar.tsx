@@ -1,6 +1,6 @@
 import { Command, CommandEmpty, CommandInput, CommandList } from '@/components/ui/command';
 import { SERVER_ERROR } from '@/config/errors';
-import { COMMUNITY_PROFILE_PIC_URL, EVENT_PIC_URL, EXPLORE_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { COMMUNITY_PROFILE_PIC_URL, EVENT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project, User, Opening, Event, Organization, Community } from '@/types';
 import Toaster from '@/utils/toaster';
@@ -29,7 +29,7 @@ const SearchBar = () => {
   //TODO add abort controller
   const fetchResults = async (search?: string) => {
     setLoading(true);
-    const URL = `${EXPLORE_URL}/quick?${'search=' + search}&limit=3`;
+    const URL = `/explore/quick?${'search=' + search}&limit=3`;
     const res = await getHandler(URL);
 
     if (res.statusCode === 200) {
@@ -71,7 +71,7 @@ const SearchBar = () => {
       case 'projects':
         return `/projects?search=${search}`;
       case 'users':
-        return `/explore/users?search=${search}`;
+        return `/userss?search=${search}`;
       case 'openings':
         return `/openings?search=${search}`;
       case 'events':
@@ -190,7 +190,7 @@ const CommandItem: React.FC<{ children: ReactNode; link: string }> = ({ children
 const CommandSeparator: React.FC = () => <div className="w-full h-px bg-gray-300"></div>;
 
 const ProjectItem = ({ project }: { project: Project }) => (
-  <CommandItem link={`${EXPLORE_URL}?pid=${project.slug}`}>
+  <CommandItem link={`/projects/${project.slug}`}>
     <Image
       crossOrigin="anonymous"
       width={50}
@@ -206,7 +206,7 @@ const ProjectItem = ({ project }: { project: Project }) => (
 );
 
 const UserItem = ({ user }: { user: User }) => (
-  <CommandItem link={`${EXPLORE_URL}/user/${user.username}`}>
+  <CommandItem link={`/users/${user.username}`}>
     <Image
       crossOrigin="anonymous"
       width={50}
@@ -222,7 +222,7 @@ const UserItem = ({ user }: { user: User }) => (
 );
 
 const OpeningItem = ({ opening }: { opening: Opening }) => (
-  <CommandItem link={`${EXPLORE_URL}?oid=${opening.id}`}>
+  <CommandItem link={`/openings?oid=${opening.id}`}>
     <Image
       crossOrigin="anonymous"
       width={50}
@@ -238,7 +238,7 @@ const OpeningItem = ({ opening }: { opening: Opening }) => (
 );
 
 const EventItem = ({ event }: { event: Event }) => (
-  <CommandItem link={`${EXPLORE_URL}/event/${event.id}`}>
+  <CommandItem link={`/events/${event.id}`}>
     <Image
       crossOrigin="anonymous"
       width={50}
@@ -254,7 +254,7 @@ const EventItem = ({ event }: { event: Event }) => (
 );
 
 const OrgItem = ({ org }: { org: Organization }) => (
-  <CommandItem link={`${EXPLORE_URL}/organisation/${org.user.username}`}>
+  <CommandItem link={`/organisations/${org.user.username}`}>
     <Image
       crossOrigin="anonymous"
       width={50}

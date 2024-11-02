@@ -33,11 +33,7 @@ const Created = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
             Invited a User :
-            <Link
-              target="_blank"
-              href={'/explore/user/' + history.invitation?.user?.username}
-              className="font-semibold"
-            >
+            <Link target="_blank" href={'/users/' + history.invitation?.user?.username} className="font-semibold">
               {history.invitation?.user.username}
             </Link>{' '}
             🎉
@@ -122,11 +118,7 @@ const Created = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
             Accepted the Application of :{' '}
-            <Link
-              target="_blank"
-              href={'/explore/user/' + history.application?.user.username}
-              className="font-semibold"
-            >
+            <Link target="_blank" href={'/users/' + history.application?.user.username} className="font-semibold">
               {history.application?.user.name}
             </Link>{' '}
             🎉
@@ -162,7 +154,7 @@ const Created = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_low px-1 rounded-md gap-4">
             Added{' '}
-            <Link target="_blank" href={'/explore/user/' + history.membership?.user.username} className="font-semibold">
+            <Link target="_blank" href={'/users/' + history.membership?.user.username} className="font-semibold">
               {history.membership?.user.name}
             </Link>{' '}
             to team:{' '}

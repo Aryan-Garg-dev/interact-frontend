@@ -1,7 +1,7 @@
 import ProjectCard from '@/components/explore/project_card';
 import Loader from '@/components/common/loader';
 import { SERVER_ERROR } from '@/config/errors';
-import { EXPLORE_URL } from '@/config/routes';
+import { EXPLORE_URL, PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
 import Toaster from '@/utils/toaster';
@@ -29,7 +29,7 @@ const Projects = () => {
   const checkSet = new Set();
 
   const fetchProjects = async (search: string | null, initialPage?: number) => {
-    const URL = `${EXPLORE_URL}/projects?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
+    const URL = `${PROJECT_URL}?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
       search ? `&search=${search}` : ''
     }`;
 
@@ -53,7 +53,7 @@ const Projects = () => {
 
   const fetchProject = async (id: string | null) => {
     setLoading(true);
-    const URL = `${EXPLORE_URL}/projects/${id}`;
+    const URL = `${PROJECT_URL}/${id}`;
 
     const res = await getHandler(URL);
     if (res.statusCode == 200) {

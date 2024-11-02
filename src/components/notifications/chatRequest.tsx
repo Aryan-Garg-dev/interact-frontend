@@ -22,7 +22,7 @@ const ChatRequest = ({ notification }: Props) => {
   const getRedirectURL = () => {
     switch (notification.notificationType) {
       case 9:
-        return `/explore/user/${notification.sender.username}`;
+        return `/users/${notification.sender.username}`;
       default:
         return '';
     }

@@ -82,7 +82,7 @@ const Tagged = ({ notification, short = true }: Props) => {
         )
       }
     >
-      <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
+      <Link className="font-bold" href={`/users/${notification.sender.username}`}>
         {notification.sender.name}
       </Link>
       Tagged you in a{' '}

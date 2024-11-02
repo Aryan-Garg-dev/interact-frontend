@@ -92,11 +92,7 @@ const Deleted = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_high px-1 rounded-md gap-4">
             Rejected the Application of :{' '}
-            <Link
-              target="_blank"
-              href={'/explore/user/' + history.application?.user.username}
-              className="font-semibold"
-            >
+            <Link target="_blank" href={'/users/' + history.application?.user.username} className="font-semibold">
               {history.application?.user.name}
             </Link>{' '}
           </div>
@@ -134,7 +130,7 @@ const Deleted = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_high px-1 rounded-md gap-4">
             Removed{' '}
-            <Link target="_blank" href={'/explore/user/' + history.membership?.user.username} className="font-semibold">
+            <Link target="_blank" href={'/users/' + history.membership?.user.username} className="font-semibold">
               {history.membership?.user.name}
             </Link>{' '}
             form Team: <span className="font-semibold">{history.deletedText}</span>

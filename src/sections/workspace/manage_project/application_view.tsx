@@ -225,11 +225,7 @@ const ApplicationView = ({
               className="rounded-full w-36 h-36"
             />
             <div className="w-[calc(100%-144px)] max-lg:w-3/5 max-md:w-full flex flex-col max-lg:items-center max-lg:text-center gap-1">
-              <Link
-                target="_blank"
-                href={`/explore/user/${application.user.username}`}
-                className="flex items-center gap-1"
-              >
+              <Link target="_blank" href={`/users/${application.user.username}`} className="flex items-center gap-1">
                 <div className="text-2xl font-semibold hover-underline-animation after:bg-black">
                   {application.user.name}
                 </div>

@@ -197,7 +197,7 @@ const FeedSide = () => {
 
           <div className="w-full flex flex-col gap-2">
             {users.map(user => (
-              <UserCard key={user.id} user={user} forTrending={true} />
+              <UserCard key={user.id} user={user} forTrending />
             ))}
           </div>
         </SidePrimeWrapper>

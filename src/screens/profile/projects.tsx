@@ -2,15 +2,11 @@ import ProjectCard from '@/components/explore/project_card';
 import { Project } from '@/types';
 import React, { useEffect, useState } from 'react';
 import ProjectView from '../../sections/explore/project_view';
-import { useSelector } from 'react-redux';
-import { navbarOpenSelector } from '@/slices/feedSlice';
 import NoUserItems from '@/components/fillers/user_items';
 import { EXPLORE_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import Loader from '@/components/common/loader';
 import Mascot from '@/components/fillers/mascot';
 
 interface Props {
@@ -27,25 +23,16 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
 
   const [fadeInProject, setFadeInProject] = useState(true);
 
-  const navbarOpen = useSelector(navbarOpenSelector);
-
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
 
   const getProjects = () => {
     setLoading(true);
-    const URL = `${EXPLORE_URL}/users/projects${
-      contributing ? '/contributing' : ''
-    }/${userID}?page=${page}&limit=${10}`;
+    const URL = `${EXPLORE_URL}/users/projects${contributing ? '/contributing' : ''}/${userID}`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
-          const addProjects = [...projects, ...(res.data.projects || [])];
-          if (addProjects.length === projects.length) setHasMore(false);
-          setProjects(addProjects);
-          setPage(prev => prev + 1);
+          setProjects(res.data.projects || []);
           setLoading(false);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -61,10 +48,10 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
 
   useEffect(() => {
     getProjects();
-  }, [userID]);
+  }, [userID, contributing]);
 
   return (
-    <div className="w-full px-2 pb-base_padding max-md:px-0 max-md:pb-2 z-50">
+    <div>
       {/* {displayOnProfile && (
         <>
           {clickedOnNewProject ? <NewProject setShow={setClickedOnNewProject} setProjects={setProjects} /> : <></>}
@@ -86,13 +73,7 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
           )}
         </>
       )} */}
-      <InfiniteScroll
-        dataLength={projects.length}
-        next={getProjects}
-        hasMore={hasMore}
-        loader={<Loader />}
-        className="w-full"
-      >
+      <div className="w-full">
         {projects?.length > 0 ? (
           <>
             {clickedOnProject && (
@@ -124,7 +105,7 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
         ) : (
           <NoUserItems />
         )}
-      </InfiniteScroll>
+      </div>
     </div>
   );
 };

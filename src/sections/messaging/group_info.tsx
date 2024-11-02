@@ -319,7 +319,7 @@ const GroupInfo = ({ chat, setChat, setStateChats, setShow, access }: Props) => 
                   className="w-full py-2 dark:p-4 dark:bg-dark_primary_comp_hover rounded-md flex items-center justify-between"
                 >
                   <div className="flex items-center gap-2">
-                    <Link href={`/explore/user/${m.user.username}`} className="rounded-full">
+                    <Link href={`/users/${m.user.username}`} className="rounded-full">
                       <Image
                         crossOrigin="anonymous"
                         width={50}
@@ -330,7 +330,7 @@ const GroupInfo = ({ chat, setChat, setStateChats, setShow, access }: Props) => 
                       />
                     </Link>
                     <div className="flex flex-col">
-                      <Link href={`/explore/user/${m.user.username}`} className="text-lg font-medium">
+                      <Link href={`/users/${m.user.username}`} className="text-lg font-medium">
                         {m.user.name}
                       </Link>
                       <div className="text-xs">{m.isAdmin ? 'Admin' : 'Member'}</div>
@@ -364,7 +364,7 @@ const GroupInfo = ({ chat, setChat, setStateChats, setShow, access }: Props) => 
                     key={invitation.id}
                     className="w-full py-2 dark:p-4 dark:bg-dark_primary_comp_hover rounded-md flex items-center justify-between"
                   >
-                    <Link href={`/explore/user/${invitation.user.username}`} className="flex items-center gap-2">
+                    <Link href={`/users/${invitation.user.username}`} className="flex items-center gap-2">
                       <Image
                         crossOrigin="anonymous"
                         width={50}
@@ -415,7 +415,7 @@ const GroupInfo = ({ chat, setChat, setStateChats, setShow, access }: Props) => 
         <div className="text-center opacity-75 text-sm">
           Created By{' '}
           <Link
-            href={`/explore/user/${chat.user.username}`}
+            href={`/users/${chat.user.username}`}
             target="_blank"
             className="font-semibold underline underline-offset-2"
           >

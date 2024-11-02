@@ -28,7 +28,7 @@ const Application = ({ notification }: Props) => {
 
   return (
     <NotificationWrapper notification={notification}>
-      <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
+      <Link className="font-bold" href={`/users/${notification.sender.username}`}>
         {notification.sender.name}
       </Link>
       Applied for the opening of {notification.opening.title} at{' '}

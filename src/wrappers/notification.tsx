@@ -27,7 +27,7 @@ const NotificationWrapper: React.FC<WrapperProps> = ({
       <div className="w-full flex items-center justify-between gap-2">
         <div className="w-[calc(100%-16px)] flex items-center gap-2">
           {image && (
-            <Link href={`/explore/user/${notification.sender.username}`} className="rounded-full">
+            <Link href={`/users/${notification.sender.username}`} className="rounded-full">
               <Image
                 crossOrigin="anonymous"
                 width={50}

@@ -17,7 +17,7 @@ const HackathonHistoryWrapper = ({ children, history }: Props) => {
       className="w-full flex flex-col gap-1 p-3 dark:text-white hover:bg-primary_comp dark:hover:bg-[#ae8abd39] rounded-xl font-primary transition-ease-200"
     >
       <div className="w-full flex justify-between items-center">
-        <Link href={`/explore/user/${history.sender.username}`} className="w-fit flex-center gap-1">
+        <Link href={`/users/${history.sender.username}`} className="w-fit flex-center gap-1">
           <Image
             crossOrigin="anonymous"
             width={50}

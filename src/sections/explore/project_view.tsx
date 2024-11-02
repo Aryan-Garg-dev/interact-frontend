@@ -1,5 +1,5 @@
 import { SERVER_ERROR } from '@/config/errors';
-import { EXPLORE_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { EXPLORE_URL, PROJECT_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
 import { initialProject } from '@/types/initials';
@@ -50,7 +50,7 @@ const ProjectView = ({
     try {
       slug = projectSlugs[clickedProjectIndex];
     } finally {
-      const URL = `${EXPLORE_URL}/projects/${slug}`;
+      const URL = `${PROJECT_URL}/${slug}`;
       const res = await getHandler(URL, abortController.signal);
       if (res.statusCode == 200) {
         setProject(res.data.project);

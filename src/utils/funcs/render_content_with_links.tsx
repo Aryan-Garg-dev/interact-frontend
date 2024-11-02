@@ -149,7 +149,7 @@ const Word: React.FC<WordProps> = ({ word, taggedUsers }) => {
       <UserHoverCard
         trigger={
           <Link
-            href={`/explore/user/${word.replace('@', '')}`}
+            href={`/users/${word.replace('@', '')}`}
             className="font-semibold hover:text-primary_text transition-ease-200"
             target="_blank"
           >

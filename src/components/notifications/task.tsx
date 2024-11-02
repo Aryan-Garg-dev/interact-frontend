@@ -14,7 +14,7 @@ const Task = ({ notification }: Props) => {
   };
   return (
     <NotificationWrapper notification={notification}>
-      <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
+      <Link className="font-bold" href={`/users/${notification.sender.username}`}>
         {notification.sender.name}
       </Link>
       assigned you a{' '}

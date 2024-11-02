@@ -10,7 +10,7 @@ interface Props {
 const Follow = ({ notification }: Props) => {
   return (
     <NotificationWrapper notification={notification}>
-      <Link className="font-bold capitalize" href={`/explore/user/${notification.sender.username}`}>
+      <Link className="font-bold capitalize" href={`/users/${notification.sender.username}`}>
         {notification.sender.name}
       </Link>{' '}
       started following you.

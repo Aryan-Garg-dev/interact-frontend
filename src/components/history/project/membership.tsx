@@ -14,7 +14,7 @@ const Membership = ({ history }: Props) => {
         <ProjectHistoryWrapper history={history}>
           <div className="w-fit text-center flex-center gap-1">
             invited{' '}
-            <Link href={`/explore/user/${history.user.username}`} className="font-semibold">
+            <Link href={`/users/${history.user.username}`} className="font-semibold">
               {history.user.name}
             </Link>{' '}
             to join this Project!
@@ -32,7 +32,7 @@ const Membership = ({ history }: Props) => {
         <ProjectHistoryWrapper history={history}>
           <div className="w-fit text-center flex-center gap-1">
             accepted the application of{' '}
-            <Link href={`/explore/user/${history.user.username}`} className="font-semibold">
+            <Link href={`/users/${history.user.username}`} className="font-semibold">
               {history.user.name}
             </Link>
             !
@@ -44,7 +44,7 @@ const Membership = ({ history }: Props) => {
         <ProjectHistoryWrapper history={history}>
           <div className="w-fit text-center flex-center gap-1">
             rejected the application of{' '}
-            <Link href={`/explore/user/${history.user.username}`} className="font-semibold">
+            <Link href={`/users/${history.user.username}`} className="font-semibold">
               {history.user.name}
             </Link>
             .
@@ -62,7 +62,7 @@ const Membership = ({ history }: Props) => {
         <ProjectHistoryWrapper history={history}>
           <div className="w-fit text-center flex-center gap-1">
             removed{' '}
-            <Link href={`/explore/user/${history.user.username}`} className="font-semibold">
+            <Link href={`/users/${history.user.username}`} className="font-semibold">
               {history.user.name}
             </Link>{' '}
             from this Project.

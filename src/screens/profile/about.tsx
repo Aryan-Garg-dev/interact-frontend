@@ -21,7 +21,7 @@ const About = ({ profile, org = false, organizations }: Props) => {
   const hasHobbies = profile.hobbies && profile.hobbies.length > 0;
 
   return (
-    <div className="w-[640px] max-md:w-screen text-primary_black mx-auto flex flex-col gap-6 max-md:px-6 pb-8 animate-fade_third">
+    <div className="w-full text-primary_black dark:text-white mx-auto flex flex-col gap-6 max-md:px-6 pb-8 animate-fade_third">
       {!org && (
         <>
           {hasOrganizations && (
@@ -119,7 +119,7 @@ const About = ({ profile, org = false, organizations }: Props) => {
               {profile.areasOfCollaboration.map((el, i) => (
                 <div
                   key={i}
-                  className="bg-white p-3 py-2 text-xs rounded-lg cursor-default hover:scale-105 transition-ease-500"
+                  className="bg-white dark:text-primary_black p-3 py-2 text-xs rounded-lg cursor-default hover:scale-105 transition-ease-500"
                 >
                   {el}
                 </div>
@@ -136,7 +136,7 @@ const About = ({ profile, org = false, organizations }: Props) => {
             {profile.hobbies.map((el, i) => (
               <div
                 key={i}
-                className="bg-white p-3 py-2 text-xs rounded-lg cursor-default hover:scale-105 transition-ease-500"
+                className="bg-white dark:text-primary_black p-3 py-2 text-xs rounded-lg cursor-default hover:scale-105 transition-ease-500"
               >
                 {el}
               </div>

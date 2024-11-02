@@ -276,7 +276,7 @@ const EditChat = ({ chat, organization, setStateChats, setShow }: Props) => {
                 className="w-full p-4 dark:bg-dark_primary_comp_hover rounded-md flex items-center justify-between"
               >
                 <div className="flex items-center gap-4">
-                  <Link href={`/explore/user/${m.user.username}`} className="rounded-full">
+                  <Link href={`/users/${m.user.username}`} className="rounded-full">
                     <Image
                       crossOrigin="anonymous"
                       width={50}
@@ -287,7 +287,7 @@ const EditChat = ({ chat, organization, setStateChats, setShow }: Props) => {
                     />
                   </Link>
                   <div className="flex flex-col">
-                    <Link href={`/explore/user/${m.user.username}`} className="text-lg font-medium">
+                    <Link href={`/users/${m.user.username}`} className="text-lg font-medium">
                       {m.user.name}
                     </Link>
                     <div className="text-sm">{m.isAdmin ? 'Admin' : 'Member'}</div>
@@ -318,7 +318,7 @@ const EditChat = ({ chat, organization, setStateChats, setShow }: Props) => {
       <div className="text-center opacity-75 text-sm">
         Created By{' '}
         <Link
-          href={`/explore/user/${chat.user.username}`}
+          href={`/users/${chat.user.username}`}
           target="_blank"
           className="font-semibold underline underline-offset-2"
         >

@@ -109,7 +109,7 @@ const ChatInfo = ({ chat, setChat, setShow, setChats }: Props) => {
             <span className="font-semibold underline underline-offset-2">You</span>
           ) : (
             <Link
-              href={`/explore/user/${chat.user.username}`}
+              href={`/users/${chat.user.username}`}
               target="_blank"
               className="font-semibold underline underline-offset-2"
             >

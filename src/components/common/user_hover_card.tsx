@@ -28,7 +28,7 @@ const UserHoverCard = ({ user, title, scaleTransition = false }: Props) => {
         alt=""
         className="w-12 h-12 rounded-full"
       />
-      <Link href={'/explore/user/' + user.username} target="_blank" className="w-fit flex flex-wrap items-center gap-2">
+      <Link href={'/users/' + user.username} target="_blank" className="w-fit flex flex-wrap items-center gap-2">
         <div className="text-xl font-semibold">{user.name}</div>
         <div className="text-gray-400 text-xs">@{user.username}</div>
       </Link>

@@ -44,9 +44,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
     <div key={comment.id} className="w-full h-full flex gap-2">
       <div className="w-fit h-full flex flex-col items-center gap-2">
         <Link
-          href={`${
-            comment.user.username != loggedInUser.username ? `/explore/user/${comment.user.username}` : '/profile'
-          }`}
+          href={`${comment.user.username != loggedInUser.username ? `/users/${comment.user.username}` : '/profile'}`}
           target="_blank"
         >
           <Image
@@ -72,7 +70,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
           <div className="flex gap-2">
             <Link
               href={`${
-                comment.user.username != loggedInUser.username ? `/explore/user/${comment.user.username}` : '/profile'
+                comment.user.username != loggedInUser.username ? `/users/${comment.user.username}` : '/profile'
               }`}
               target="_blank"
               className="flex-center gap-1"

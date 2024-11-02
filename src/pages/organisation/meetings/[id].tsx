@@ -350,10 +350,7 @@ const Meeting = ({ id }: Props) => {
                         label="Scheduled by"
                         child={
                           <div className="w-fit flex-center gap-1 mt-1">
-                            <Link
-                              href={`/explore/user/${meeting.user.username}`}
-                              className="flex-center gap-1 font-medium"
-                            >
+                            <Link href={`/users/${meeting.user.username}`} className="flex-center gap-1 font-medium">
                               <Image
                                 crossOrigin="anonymous"
                                 width={200}
