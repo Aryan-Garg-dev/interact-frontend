@@ -124,15 +124,6 @@ const Sidebar = ({ index }: Props) => {
             {open && <Theme />}
           </div>
         )}
-        {user.id && (
-          <ArrowLineLeft
-            onClick={() => setClickedOnLogout(true)}
-            className={`cursor-pointer ml-2 mt-2 ${
-              open ? 'rotate-0' : '-rotate-180'
-            } text-gray-500 dark:text-white transition-ease-500`}
-            size={24}
-          />
-        )}
         <ArrowLineLeft
           onClick={() => dispatch(toggleNavbarOpen())}
           className={`cursor-pointer ml-2 mt-2 ${

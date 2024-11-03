@@ -29,13 +29,12 @@ const Projects = () => {
   const checkSet = new Set();
 
   const fetchProjects = async (search: string | null, initialPage?: number) => {
-    const URL = `${PROJECT_URL}?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
+    const URL = `${EXPLORE_URL}/projects?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
       search ? `&search=${search}` : ''
     }`;
 
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
-      console.log(res.data.projects || []);
       if (initialPage == 1) {
         setProjects(res.data.projects || []);
       } else {

@@ -96,7 +96,7 @@ const ProjectCard = ({
           blurDataURL={getProjectPicHash(project)}
         />
       )}
-      <div className="w-4/5 flex items-center justify-between text-white">
+      <div className="w-4/5 flex items-center justify-between dark:text-white">
         <div className="grow">
           <div className={`${!smaller && 'text-lg'} font-medium line-clamp-1`}>{project.title}</div>
           <div className="text-sm line-clamp-1">{project.tagline}</div>

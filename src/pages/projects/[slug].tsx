@@ -109,8 +109,8 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
                           <CarouselItem key={image}>
                             <Image
                               crossOrigin="anonymous"
-                              width={430}
-                              height={240}
+                              width={1920}
+                              height={1080}
                               className="w-full rounded-lg"
                               alt={'Project Pic'}
                               src={`${PROJECT_PIC_URL}/${image}`}
@@ -128,8 +128,8 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
                     className="w-full rounded-lg"
                     src={getProjectPicURL(project)}
                     alt="Project Cover"
-                    width={100}
-                    height={100}
+                    width={1920}
+                    height={1080}
                     placeholder="blur"
                     blurDataURL={getProjectPicHash(project)}
                   />

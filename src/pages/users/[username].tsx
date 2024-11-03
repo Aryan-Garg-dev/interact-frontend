@@ -146,7 +146,7 @@ const User = ({ username }: Props) => {
 
   return (
     <BaseWrapper title={`${user.name}`}>
-      <Sidebar index={2} />
+      <Sidebar index={-1} />
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-2/3 relative">
           {username == loggedInUser.username ? (
@@ -261,7 +261,7 @@ const User = ({ username }: Props) => {
             <PrimeWrapper index={0} maxIndex={2}>
               {loading ? (
                 <Loader />
-              ) : username == user.username ? (
+              ) : username == loggedInUser.username ? (
                 <MyAbout profile={user.profile ? user.profile : initialProfile} setUser={setUser} />
               ) : (
                 <About profile={user.profile || initialProfile} organizations={organizations} />

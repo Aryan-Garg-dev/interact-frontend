@@ -144,7 +144,6 @@ const About = ({ profile, org = false, organizations }: Props) => {
           </div>
         </div>
       )}
-
       {!hasCollaborationAreas &&
         !hasHobbies &&
         !hasEducation &&

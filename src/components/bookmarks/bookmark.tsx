@@ -42,7 +42,7 @@ const BookmarkComponent = <T extends { id: string; title: string; [key: string]:
   };
 
   return (
-    <div className="w-96 h-108 max-md:w-80 max-md:h-[28rem] font-primary dark:text-white">
+    <div className="w-72 h-90 font-primary dark:text-white">
       {clickedOnDelete && (
         <ConfirmDelete
           setShow={setClickedOnDelete}
@@ -95,13 +95,13 @@ const BookmarkComponent = <T extends { id: string; title: string; [key: string]:
         </div>
         {items.length === 0 ? (
           <div className="p-2">
-            <div className="w-full h-[368px] max-md:h-[304px] bg-gray-300 dark:bg-dark_primary_comp_hover rounded-md"></div>
+            <div className="w-full h-72 max-md:h-[304px] bg-gray-300 dark:bg-dark_primary_comp_hover rounded-md"></div>
           </div>
         ) : items.length === 1 ? (
           <div className="p-2">
             <Image
               crossOrigin="anonymous"
-              className="w-full h-[368px] max-md:h-[304px] rounded-md object-cover"
+              className="w-full h-72 max-md:h-[304px] rounded-md object-cover"
               width={500}
               height={500}
               alt=""
@@ -111,7 +111,7 @@ const BookmarkComponent = <T extends { id: string; title: string; [key: string]:
             />
           </div>
         ) : (
-          <div className="w-full h-96 max-md:h-80 flex flex-wrap gap-2 p-2 items-center justify-center">
+          <div className="w-full h-72 max-md:h-80 flex flex-wrap gap-2 p-2 items-center justify-center">
             {items.slice(0, 4).map((item: any) => (
               <Image
                 key={item[config.itemIDKey]}
@@ -144,12 +144,14 @@ const BookmarkComponent = <T extends { id: string; title: string; [key: string]:
             </button>
           </form>
         ) : (
-          <div className="w-full text-3xl font-semibold">{bookmark.title}</div>
+          <>
+            <div className="w-full text-3xl font-semibold">{bookmark.title}</div>
+            <div>
+              {items.length || 0} {config.itemCountLabel}
+              {items.length !== 1 ? 's' : ''}
+            </div>
+          </>
         )}
-        <div>
-          {items.length || 0} {config.itemCountLabel}
-          {items.length !== 1 ? 's' : ''}
-        </div>
       </div>
     </div>
   );
