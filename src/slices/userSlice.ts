@@ -1,3 +1,4 @@
+import { SUBSCRIPTIONS } from '@/config/constants';
 import { RootState } from '@/store';
 import {
   CommunityMembership,
@@ -51,6 +52,7 @@ export interface UserState {
   registeredEvents: string[];
   votedOptions: string[];
   githubUsername: string;
+  subscription: string;
   createdAt: string;
 }
 
@@ -90,6 +92,7 @@ const initialState: UserState = {
   votedOptions: [],
   registeredEvents: [],
   githubUsername: '',
+  subscription: SUBSCRIPTIONS.USER_FREE,
   createdAt: '',
 };
 
@@ -133,6 +136,7 @@ export const userSlice = createSlice({
       state.votedOptions = [];
       state.registeredEvents = [];
       state.githubUsername = action.payload.githubUsername;
+      state.subscription = action.payload.subscriptionType;
       state.createdAt = action.payload.createdAt;
     },
     resetUser: state => {
@@ -272,6 +276,9 @@ export const userSlice = createSlice({
     setGithubUsername: (state, action: PayloadAction<string>) => {
       state.githubUsername = action.payload;
     },
+    setSubscription: (state, action: PayloadAction<string>) => {
+      state.subscription = action.payload;
+    },
   },
 });
 
@@ -311,6 +318,7 @@ export const {
   setVotedOptions,
   setRegisteredEvents,
   setGithubUsername,
+  setSubscription,
 } = userSlice.actions;
 
 export default userSlice.reducer;

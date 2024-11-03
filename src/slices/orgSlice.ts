@@ -1,3 +1,4 @@
+import { SUBSCRIPTIONS } from '@/config/constants';
 import { RootState } from '@/store';
 import { Organization, OrganizationMembership, Team } from '@/types';
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -9,6 +10,7 @@ interface OrgSlice {
   title: string;
   coverPic: string;
   teams: Team[];
+  subscription: string;
 }
 
 interface OrganizationMembershipSlice {
@@ -31,6 +33,7 @@ const initialState: OrgState = {
     title: '',
     coverPic: 'default.jpg',
     teams: [],
+    subscription: SUBSCRIPTIONS.ORG_FREE,
   },
   currentOrgMembership: {
     id: '',
@@ -51,9 +54,10 @@ export const orgSlice = createSlice({
       state.currentOrg.title = action.payload.title;
       state.currentOrg.coverPic = action.payload.user?.profilePic;
       state.currentOrg.teams = action.payload.teams || [];
+      state.currentOrg.subscription = action.payload.user?.subscriptionType || SUBSCRIPTIONS.ORG_FREE;
     },
-    setCurrentOrgRole:(state, action: PayloadAction<string>) => {
-      state.currentOrgMembership.role= action.payload;
+    setCurrentOrgRole: (state, action: PayloadAction<string>) => {
+      state.currentOrgMembership.role = action.payload;
     },
     setCurrentOrgTeams: (state, action: PayloadAction<Team[]>) => {
       state.currentOrg.teams = action.payload;
@@ -72,6 +76,7 @@ export const orgSlice = createSlice({
         title: '',
         coverPic: '',
         teams: [],
+        subscription: SUBSCRIPTIONS.ORG_FREE,
       };
       state.currentOrgMembership = {
         id: '',
@@ -84,7 +89,8 @@ export const orgSlice = createSlice({
   },
 });
 
-export const { setCurrentOrg, setCurrentOrgRole, setCurrentOrgTeams, setCurrentOrgMembership, resetCurrentOrg } = orgSlice.actions;
+export const { setCurrentOrg, setCurrentOrgRole, setCurrentOrgTeams, setCurrentOrgMembership, resetCurrentOrg } =
+  orgSlice.actions;
 
 export default orgSlice.reducer;
 

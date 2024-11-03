@@ -15,3 +15,12 @@ export const COMMUNITY_MODERATOR = 'Moderator';
 export const COMMUNITY_ADMIN = 'Admin';
 
 export const MAX_IMAGE_SIZE = 5;
+
+export const SUBSCRIPTIONS = {
+  USER_FREE: 'USER_FREE',
+  USER_PREMIUM: 'USER_PREMIUM',
+
+  ORG_FREE: 'ORG_FREE',
+  ORG_BASE: 'ORG_BASE',
+  ORG_PREMIUM: 'ORG_PREMIUM',
+};

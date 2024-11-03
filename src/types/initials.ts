@@ -1,3 +1,4 @@
+import { SUBSCRIPTIONS } from '@/config/constants';
 import {
   Achievement,
   Announcement,
@@ -97,6 +98,7 @@ export const initialUser: User = {
   isOrganization: false,
   githubUsername: '',
   organization: null,
+  subscriptionType: SUBSCRIPTIONS.USER_FREE,
   createdAt: '',
 };
 
