@@ -61,7 +61,7 @@ const ProfileCompletion = () => {
           : 'w-[64px] h-[64px] pb-0 gap-0 pt-16 px-0 bottom-4 right-4 hover:shadow-lg '
       } ${
         hide ? 'hidden' : ''
-      } rounded-xl shadow-md transition-ease-500 max-md:h-fit fixed overflow-y-hidden overflow-x-hidden max-md:mx-auto font-primary flex flex-col dark:text-white items-center bg-white dark:bg-[#84478023] backdrop-blur-md border-[1px] border-gray-400 dark:border-dark_primary_btn max-md:hidden max-md:bg-transparent z-20`}
+      } rounded-xl shadow-md transition-ease-500 max-md:h-fit fixed overflow-y-hidden overflow-x-hidden max-md:mx-auto font-primary flex flex-col dark:text-white items-center bg-white dark:bg-dark_primary_comp backdrop-blur-md border-[1px] border-gray-400 dark:border-dark_primary_btn max-md:hidden max-md:bg-transparent z-20`}
     >
       <div
         onClick={() => dispatch(setProfileCompletionOpen(!open))}
@@ -154,7 +154,7 @@ const ProfileCompletion = () => {
             <div className="cursor-default">Follow at least 3 Profiles</div>
           ) : (
             <Link
-              href={'/explore?tab=users'}
+              href={'/users'}
               onClick={() => dispatch(setProfileCompletionOpen(false))}
               className="hover-underline-animation after:bg-black dark:after:bg-dark_primary_btn"
             >

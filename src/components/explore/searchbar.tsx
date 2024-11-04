@@ -1,6 +1,6 @@
 import { Command, CommandEmpty, CommandInput, CommandList } from '@/components/ui/command';
 import { SERVER_ERROR } from '@/config/errors';
-import { COMMUNITY_PROFILE_PIC_URL, EVENT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { COMMUNITY_PROFILE_PIC_URL, EVENT_PIC_URL, EXPLORE_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project, User, Opening, Event, Organization, Community } from '@/types';
 import Toaster from '@/utils/toaster';
@@ -11,6 +11,7 @@ import Loader from '../common/loader';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
+import postHandler from '@/handlers/post_handler';
 
 const SearchBar = () => {
   const [results, setResults] = useState({
@@ -50,18 +51,15 @@ const SearchBar = () => {
 
   const menuRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsDialogOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  const submitSearch = async (search: string) => {
+    const URL = `${EXPLORE_URL}/search`;
+    await postHandler(URL, { search });
+  };
 
   useEffect(() => {
-    setSearch(new URLSearchParams(window.location.search).get('search') || '');
+    const search = new URLSearchParams(window.location.search).get('search');
+    setSearch(search || '');
+    if (search) submitSearch(search);
   }, [window.location.search]);
 
   const noResults = useMemo(() => Object.values(results).every(group => group.length === 0), [results]);

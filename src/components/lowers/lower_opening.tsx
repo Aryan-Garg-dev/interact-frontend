@@ -32,7 +32,7 @@ const LowerOpening = ({ opening, org = false }: Props) => {
           itemID={opening.id}
           itemType="opening"
           setShow={setClickedOnShare}
-          clipboardURL={`explore?oid=${opening.id}&action=external`}
+          clipboardURL={`openings?oid=${opening.id}&action=external`}
           item={<OpeningCard opening={opening} />}
         />
       )}

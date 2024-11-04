@@ -274,11 +274,11 @@ const ResourceView = ({
                       <select
                         onChange={el => setViewAccess(el.target.value)}
                         value={viewAccess}
-                        className="w-1/2 max-lg:w-full h-12 border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:text-white bg-primary_comp dark:bg-[#10013b30] focus:outline-nonetext-sm rounded-lg block p-2"
+                        className="w-1/2 max-lg:w-full h-12 border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:text-white bg-primary_comp dark:bg-dark_primary_comp focus:outline-nonetext-sm rounded-lg block p-2"
                       >
                         {[ORG_MEMBER, ORG_SENIOR, ORG_MANAGER].map((c, i) => {
                           return (
-                            <option className="bg-primary_comp_hover dark:bg-[#10013b30]" key={i} value={c}>
+                            <option className="bg-primary_comp_hover dark:bg-dark_primary_comp" key={i} value={c}>
                               {c}
                             </option>
                           );
@@ -290,11 +290,11 @@ const ResourceView = ({
                       <select
                         onChange={el => setEditAccess(el.target.value)}
                         value={editAccess}
-                        className="w-1/2 max-lg:w-full h-12 border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:text-white bg-primary_comp dark:bg-[#10013b30] focus:outline-nonetext-sm rounded-lg block p-2"
+                        className="w-1/2 max-lg:w-full h-12 border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:text-white bg-primary_comp dark:bg-dark_primary_comp focus:outline-nonetext-sm rounded-lg block p-2"
                       >
                         {[ORG_MEMBER, ORG_SENIOR, ORG_MANAGER].map((c, i) => {
                           return (
-                            <option className="bg-primary_comp_hover dark:bg-[#10013b30]" key={i} value={c}>
+                            <option className="bg-primary_comp_hover dark:bg-dark_primary_comp" key={i} value={c}>
                               {c}
                             </option>
                           );

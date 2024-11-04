@@ -260,10 +260,10 @@ const ProjectView = ({
                 project.tags.map(tag => {
                   return (
                     <Link
-                      href={`/explore?search=${tag}&tab=projects`}
+                      href={`/projects?search=${tag}`}
                       target="_blank"
                       key={tag}
-                      className="flex-center p-2 font-primary text-xs dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gray-200 dark:bg-[#20032c41] rounded-lg"
+                      className="flex-center p-2 font-primary text-xs dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gray-200 dark:bg-dark_primary_comp rounded-lg"
                     >
                       {tag}
                     </Link>

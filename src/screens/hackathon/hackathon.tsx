@@ -312,7 +312,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                       {hackathon.tags.map(tag => (
                         <Link
                           key={tag}
-                          href={'/explore?search=' + tag}
+                          href={'/events?search=' + tag}
                           target="_blank"
                           className="flex-center bg-gray-100 px-2 py-1 border-[1px] border-dashed border-gray-400 text-xs rounded-lg"
                         >

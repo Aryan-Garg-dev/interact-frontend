@@ -12,6 +12,13 @@ import UserCard from '@/components/explore/user_card';
 import { getNextSessionTime } from '@/utils/funcs/session_details';
 import moment from 'moment';
 import { SidePrimeWrapper } from '@/wrappers/side';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const FeedSide = () => {
   const [searches, setSearches] = useState<string[]>([]);
@@ -169,14 +176,27 @@ const FeedSide = () => {
           <div className="w-full gap-2 mt-2 flex flex-wrap">
             {searches.map((str, i) => {
               return (
-                <Link
-                  href={`/explore?search=${str}`}
-                  key={i}
-                  className="w-fit flex items-center gap-2 bg-slate-100 dark:bg-dark_primary_comp_hover rounded-lg px-4 py-1 hover:scale-105 transition-ease-300"
-                >
-                  <div>{str}</div>
-                  {i < 3 && <ChartLineUp />}
-                </Link>
+                <DropdownMenu key={i}>
+                  <DropdownMenuTrigger>
+                    <div className="w-fit flex items-center gap-2 bg-slate-100 dark:bg-dark_primary_comp_hover rounded-lg px-4 py-1 hover:scale-105 transition-ease-300">
+                      <div>{str}</div>
+                      {i < 3 && <ChartLineUp />}
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel className="w-full text-center">Search For</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    {['user', 'project', 'opening', 'event', 'organisation'].map((type, i) => (
+                      <Link
+                        className="px-2 hover:underline underline-offset-2 text-sm font-medium"
+                        key={i}
+                        href={`/${type}s?search=${str}`}
+                      >
+                        {type.charAt(0).toUpperCase() + type.slice(1)}
+                      </Link>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               );
             })}
           </div>

@@ -26,7 +26,7 @@ const Openings = ({ project, setProject }: Props) => {
               <ManageOpenings project={project} setProject={setProject} org={checkOrgAccess(ORG_SENIOR)} />
             </div>
           ) : (
-            <Link href={`/explore?pid=${project.slug}&tab=openings`} target="_blank" className="text-xs">
+            <Link href={`/openings?pid=${project.slug}`} target="_blank" className="text-xs">
               view all
             </Link>
           )}
@@ -41,7 +41,7 @@ const Openings = ({ project, setProject }: Props) => {
               return (
                 <Link
                   key={opening.id}
-                  href={`/explore?pid=${project.slug}&tab=openings`}
+                  href={`/openings?pid=${project.slug}`}
                   target="_blank"
                   className="w-full relative border-[1px] border-gray-500 dark:border-dark_primary_btn p-3 flex flex-col gap-2 rounded-md dark:hover:bg-dark_primary_comp_hover transition-ease-300"
                 >
@@ -65,7 +65,7 @@ const Openings = ({ project, setProject }: Props) => {
             })}
             {project.openings.length > 5 && (
               <Link
-                href={`/explore?pid=${project.slug}&tab=openings`}
+                href={`/openings?pid=${project.slug}`}
                 target="_blank"
                 className="w-full relative border-[1px] text-primary_black border-gray-500 p-4 flex-center flex-col gap-2 rounded-md hover:shadow-2xl transition-ease-300"
               >

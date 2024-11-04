@@ -43,7 +43,7 @@ const TabMenu = ({
             }}
             className={`relative ${
               active === index
-                ? 'bg-primary_comp_hover dark:bg-[#0E0C2A59] dark:shadow-inner text-primary_text dark:text-white'
+                ? 'bg-primary_comp_hover dark:bg-dark_primary_comp dark:shadow-inner text-primary_text dark:text-white'
                 : 'hover:bg-primary_comp dark:hover:bg-dark_primary_comp_active text-gray-500 dark:text-white'
             } w-1/2 max-md:w-fit max-md:px-4 h-full font-primary font-medium flex-center text-lg ${
               smallerTextForMD ? 'max-md:text-xs' : 'max-md:text-sm'

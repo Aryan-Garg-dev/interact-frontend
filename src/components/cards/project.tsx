@@ -10,7 +10,7 @@ interface Props {
 
 const ProjectCard = ({ project }: Props) => (
   <Link
-    href={`explore?pid=${project.slug}&action=external`}
+    href={`projects/${project.slug}&action=external`}
     target="_blank"
     className="relative w-full rounded-lg group transition-ease-out-500 animate-fade_third"
     style={{ paddingTop: '100%' }}

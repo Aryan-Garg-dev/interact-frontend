@@ -149,7 +149,7 @@ const About = ({ profile, organisation }: Props) => {
                 {organisation.user?.tags?.map(tag => (
                   <Link
                     key={tag}
-                    href={'/explore?search=' + tag}
+                    href={'/organisations?search=' + tag}
                     target="_blank"
                     className="flex-center bg-gray-100 px-2 py-1 border-[1px] border-dashed border-gray-400 text-xs rounded-lg"
                   >

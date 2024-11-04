@@ -131,7 +131,7 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
 
   return (
     <>
-      <div className="w-1/2 max-h-[75%] max-md:h-4/5 overflow-y-auto max-lg:w-5/6 fixed backdrop-blur-lg bg-[#ffffff] dark:bg-[#ffe1fc22] z-50 translate-x-1/2 -translate-y-1/4 top-64 right-1/2 flex flex-col px-8 py-8 gap-2 border-2 border-primary_btn dark:border-dark_primary_btn rounded-xl animate-fade_third">
+      <div className="w-1/2 max-h-[75%] max-md:h-4/5 overflow-y-auto max-lg:w-5/6 fixed backdrop-blur-lg bg-[#ffffff] dark:bg-dark_primary_comp z-50 translate-x-1/2 -translate-y-1/4 top-64 right-1/2 flex flex-col px-8 py-8 gap-2 border-2 border-primary_btn dark:border-dark_primary_btn rounded-xl animate-fade_third">
         <div onClick={() => setShow(false)} className="md:hidden absolute top-2 right-2">
           <X size={24} weight="bold" />
         </div>
@@ -156,7 +156,7 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
                         }}
                         className={`w-full flex-center gap-2 rounded-lg py-2 px-2 cursor-pointer ${
                           selectedChats.includes(chat.id)
-                            ? 'bg-primary_comp_hover dark:bg-[#ffe1fc22]'
+                            ? 'bg-primary_comp_hover dark:bg-dark_primary_comp'
                             : 'hover:bg-primary_comp dark:hover:bg-[#ffe1fc10]'
                         } transition-all ease-in-out duration-200`}
                       >
@@ -204,7 +204,7 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
                 </div>
                 <div className="w-full flex flex-col gap-1">
                   <textarea
-                    className="bg-primary_comp dark:bg-[#ffe1fc22] text-sm focus:outline-none p-2 rounded-xl min-h-[6rem] max-h-64"
+                    className="bg-primary_comp dark:bg-dark_primary_comp text-sm focus:outline-none p-2 rounded-xl min-h-[6rem] max-h-64"
                     placeholder="Add a message"
                     value={message}
                     onChange={el => setMessage(el.target.value)}

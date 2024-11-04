@@ -57,7 +57,7 @@ const Applications = () => {
           {applications.map(application => {
             return (
               <Link
-                href={`/explore?oid=${application.openingID}`}
+                href={`/openings?oid=${application.openingID}`}
                 onClick={() => dispatch(setExploreTab(1))}
                 key={application.id}
                 className="w-full relative font-primary dark:text-white border-[1px] border-gray-400 bg-gray-100 dark:bg-transparent  dark:border-dark_primary_btn rounded-lg p-6 max-lg:p-4 flex items-center gap-6 max-lg:gap-4 dark:hover:bg-dark_primary_comp_hover transition-ease-300 cursor-pointer animate-fade_third"

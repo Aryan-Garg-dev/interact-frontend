@@ -151,7 +151,7 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
                     user.tags.map(tag => {
                       return (
                         <Link
-                          href={`/explore?search=` + tag}
+                          href={`/users?search=` + tag}
                           target="_blank"
                           onClick={() => dispatch(setExploreTab(2))}
                           className="flex-center text-xs px-2 py-1 border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-full cursor-pointer"

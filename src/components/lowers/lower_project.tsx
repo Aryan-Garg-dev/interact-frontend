@@ -151,7 +151,7 @@ const LowerProject = ({ project }: Props) => {
           itemID={project.id}
           itemType="project"
           setShow={setClickedOnShare}
-          clipboardURL={`explore?pid=${project.slug}&action=external`}
+          clipboardURL={`projects/${project.slug}&action=external`}
           item={<ProjectCard project={project} />}
         />
       )}
