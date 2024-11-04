@@ -138,11 +138,7 @@ const PostComponent = ({
       {clickedOnReport && <Report postID={post.id} setShow={setClickedOnReport} />}
       <div className="h-full">
         <Link
-          href={`${
-            post.user.username != loggedInUser.username
-              ? `/users/${post.user.isOrganization ? 'organisation/' : ''}${post.user.username}`
-              : `/${post.user.isOrganization ? 'organisation/' : ''}profile`
-          }`}
+          href={`/users/${post.user.isOrganization ? 'organisations/' : ''}${post.user.username}`}
           className="rounded-full"
         >
           <Image

@@ -115,11 +115,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
       {clickedOnReport && <Report postID={post.id} setShow={setClickedOnReport} />}
       <div className="h-full">
         <Link
-          href={`${
-            post.user.username != loggedInUser.username
-              ? `/users/${post.user.isOrganization ? 'organisation/' : ''}${post.user.username}`
-              : `/${post.user.isOrganization ? 'organisation/' : ''}profile`
-          }`}
+          href={`/users/${post.user.isOrganization ? 'organisations/' : ''}${post.user.username}`}
           className="rounded-full"
         >
           <Image
@@ -210,7 +206,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
             <div className="dark:text-white flex items-center gap-4 absolute -bottom-8 right-0">
               <div
                 onClick={() => setClickedOnEdit(false)}
-                className="text-sm hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-white cursor-pointer"
+                className="text-sm hover-underline-animation after:bg-black dark:after:bg-white cursor-pointer"
               >
                 cancel
               </div>

@@ -9,7 +9,7 @@ import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import OrgCard from '@/components/explore/org_card';
 
-const Organisations = () => {
+const ExploreOrganisations = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
@@ -71,4 +71,4 @@ const Organisations = () => {
   );
 };
 
-export default Organisations;
+export default ExploreOrganisations;

@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '@/components/common/sidebar';
 import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL, USER_PROFILE_PIC_URL, USER_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { OrganizationMembership } from '@/types';
 import Toaster from '@/utils/toaster';
-import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
-import BaseWrapper from '@/wrappers/base';
-import MainWrapper from '@/wrappers/main';
 import Image from 'next/image';
 import moment from 'moment';
 import { useRouter } from 'next/router';
@@ -20,9 +16,8 @@ import deleteHandler from '@/handlers/delete_handler';
 import ConfirmOTP from '@/components/common/confirm_otp';
 import { setOrganizationMemberships, userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
-import { GetServerSideProps } from 'next';
 
-const Organizations = () => {
+const MemberOrganizations = () => {
   const [memberships, setMemberships] = useState<OrganizationMembership[]>([]);
   const [clickedOnLeaveOrg, setClickedOnLeaveOrg] = useState(false);
   const [clickedOnConfirmLeave, setClickedOnConfirmLeave] = useState(false);
@@ -118,67 +113,52 @@ const Organizations = () => {
   };
 
   return (
-    <BaseWrapper title="Organizations">
-      <Sidebar index={4} />
-      <MainWrapper>
-        <div className="w-full flex flex-col gap-6 px-8 py-6">
-          {clickedOnLeaveOrg && (
-            <ConfirmDelete setShow={setClickedOnLeaveOrg} handleDelete={sendOTP} title="Leave Organisation?" />
-          )}
-          {clickedOnConfirmLeave && <ConfirmOTP setShow={setClickedOnConfirmLeave} handleSubmit={handleLeaveOrg} />}
+    <div className="w-full flex flex-col gap-6 px-8 py-6">
+      {clickedOnLeaveOrg && (
+        <ConfirmDelete setShow={setClickedOnLeaveOrg} handleDelete={sendOTP} title="Leave Organisation?" />
+      )}
+      {clickedOnConfirmLeave && <ConfirmOTP setShow={setClickedOnConfirmLeave} handleSubmit={handleLeaveOrg} />}
 
-          <div className="text-5xl font-semibold dark:text-white font-primary">Memberships</div>
+      <div className="text-5xl font-semibold dark:text-white font-primary">Memberships</div>
 
-          <div className="w-full grid grid-cols-2 max-md:grid-cols-1 gap-8">
-            {memberships.map(membership => (
-              <div
-                key={membership.id}
-                onClick={() => handleClick(membership)}
-                className="w-full hover:scale-105 hover:shadow-xl font-primary bg-white border-[1px] border-primary_btn rounded-md flex max-md:flex-col items-center justify-start gap-6 p-4 transition-ease-300 cursor-pointer animate-reveal"
-              >
-                <Image
-                  crossOrigin="anonymous"
-                  width={100}
-                  height={100}
-                  alt={'User Pic'}
-                  src={`${USER_PROFILE_PIC_URL}/${membership.organization.user.profilePic}`}
-                  placeholder="blur"
-                  blurDataURL={membership.organization.user.profilePicBlurHash || 'no-hash'}
-                  className="rounded-full w-32 h-32"
+      <div className="w-full grid grid-cols-2 max-md:grid-cols-1 gap-8">
+        {memberships.map(membership => (
+          <div
+            key={membership.id}
+            onClick={() => handleClick(membership)}
+            className="w-full hover:scale-105 hover:shadow-xl font-primary bg-white border-[1px] border-primary_btn rounded-md flex max-md:flex-col items-center justify-start gap-6 p-4 transition-ease-300 cursor-pointer animate-reveal"
+          >
+            <Image
+              crossOrigin="anonymous"
+              width={100}
+              height={100}
+              alt={'User Pic'}
+              src={`${USER_PROFILE_PIC_URL}/${membership.organization.user.profilePic}`}
+              placeholder="blur"
+              blurDataURL={membership.organization.user.profilePicBlurHash || 'no-hash'}
+              className="rounded-full w-32 h-32"
+            />
+            <div className="w-[calc(100%-128px)] max-md:w-full flex flex-col gap-2 max-md:text-center max-md:gap-4">
+              <div className="w-full flex justify-between max-md:justify-center items-center max-md:gap-2">
+                <div className="text-3xl font-bold text-gradient line-clamp-1">{membership.organization.title}</div>
+                <Trash
+                  onClick={el => {
+                    el.stopPropagation();
+                    setClickedMembership(membership);
+                    setClickedOnLeaveOrg(true);
+                  }}
+                  size={24}
                 />
-                <div className="w-[calc(100%-128px)] max-md:w-full flex flex-col gap-2 max-md:text-center max-md:gap-4">
-                  <div className="w-full flex justify-between max-md:justify-center items-center max-md:gap-2">
-                    <div className="text-3xl font-bold text-gradient line-clamp-1">{membership.organization.title}</div>
-                    <Trash
-                      onClick={el => {
-                        el.stopPropagation();
-                        setClickedMembership(membership);
-                        setClickedOnLeaveOrg(true);
-                      }}
-                      size={24}
-                    />
-                  </div>
-                  <div className="line-clamp-1">{membership.title}</div>
-                  <div className="font-medium">{membership.role}</div>
-                  <div className="text-xs">Joined {moment(membership.createdAt).format('DD MMM YYYY')}</div>
-                </div>
               </div>
-            ))}
+              <div className="line-clamp-1">{membership.title}</div>
+              <div className="font-medium">{membership.role}</div>
+              <div className="text-xs">Joined {moment(membership.createdAt).format('DD MMM YYYY')}</div>
+            </div>
           </div>
-        </div>
-      </MainWrapper>
-    </BaseWrapper>
+        ))}
+      </div>
+    </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  const { query } = context;
-
-  return {
-    props: {
-      query,
-    },
-  };
-};
-
-export default NonOrgOnlyAndProtect(Organizations);
+export default MemberOrganizations;

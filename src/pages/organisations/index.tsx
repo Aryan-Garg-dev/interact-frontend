@@ -5,58 +5,47 @@ import MainWrapper from '@/wrappers/main';
 import PrimeWrapper from '@/wrappers/prime';
 import SideBarWrapper, { SidePrimeWrapper } from '@/wrappers/side';
 import React, { useState } from 'react';
-import ExploreProjects from '@/screens/projects/explore';
-import BookmarkProjects from '@/screens/projects/bookmarks';
-import CombinedProjects from '@/screens/projects/workspace';
-import NewProject from '@/sections/workspace/new_project';
 import { useSelector } from 'react-redux';
 import { userIDSelector } from '@/slices/userSlice';
+import ExploreOrganisations from '@/screens/organisations/explore';
+import MemberOrganizations from '@/screens/organisations/memberships';
 
-const Projects = () => {
+const Organisations = () => {
   const [active, setActive] = useState(0);
   const userID = useSelector(userIDSelector);
 
   return (
-    <BaseWrapper title="Projects">
-      <Sidebar index={2} />
+    <BaseWrapper title="Organisations">
+      <Sidebar index={4} />
       <MainWrapper sidebarLayout>
         <div className="w-2/3">
           {userID ? (
             <>
-              <MenuBar items={['Explore', 'Workspace', 'Saved']} active={active} setState={setActive} />
+              <MenuBar items={['Explore', 'Joined']} active={active} setState={setActive} />
               {active == 0 ? (
                 <PrimeWrapper index={0} maxIndex={2}>
-                  <ExploreProjects />
-                </PrimeWrapper>
-              ) : active == 1 ? (
-                <PrimeWrapper index={1} maxIndex={2}>
-                  <CombinedProjects />
+                  <ExploreOrganisations />
                 </PrimeWrapper>
               ) : (
-                active == 2 && (
-                  <PrimeWrapper index={2} maxIndex={2}>
-                    <BookmarkProjects />
+                active == 1 && (
+                  <PrimeWrapper index={1} maxIndex={2}>
+                    <MemberOrganizations />
                   </PrimeWrapper>
                 )
               )}
             </>
           ) : (
             <PrimeWrapper>
-              <ExploreProjects />
+              <ExploreOrganisations />
             </PrimeWrapper>
           )}
         </div>
         <SideBarWrapper>
-          {userID && (
-            <SidePrimeWrapper>
-              <NewProject />
-            </SidePrimeWrapper>
-          )}
-          <SidePrimeWrapper>This section to promote new projects</SidePrimeWrapper>
+          <SidePrimeWrapper>This section to promote organisations</SidePrimeWrapper>
         </SideBarWrapper>
       </MainWrapper>
     </BaseWrapper>
   );
 };
 
-export default Projects;
+export default Organisations;
