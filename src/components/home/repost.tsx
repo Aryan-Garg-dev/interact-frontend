@@ -210,7 +210,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
             <div className="dark:text-white flex items-center gap-4 absolute -bottom-8 right-0">
               <div
                 onClick={() => setClickedOnEdit(false)}
-                className="text-sm hover-underline-animation after:bg-black dark:after:bg-white cursor-pointer"
+                className="text-sm hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-white cursor-pointer"
               >
                 cancel
               </div>

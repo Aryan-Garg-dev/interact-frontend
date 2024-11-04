@@ -8,29 +8,41 @@ import React, { useState } from 'react';
 import ExploreEvents from '@/screens/events/explore';
 import BookmarkEvents from '@/screens/events/bookmarks';
 import RegisteredEvents from '@/screens/events/registered';
+import { useSelector } from 'react-redux';
+import { userIDSelector } from '@/slices/userSlice';
 
 const Events = () => {
   const [active, setActive] = useState(0);
+  const userID = useSelector(userIDSelector);
+
   return (
     <BaseWrapper title="Events">
       <Sidebar index={3} />
       <MainWrapper sidebarLayout restrictWidth>
         <div className="w-2/3">
-          <MenuBar items={['Explore', 'Registered', 'Saved']} active={active} setState={setActive} />
-          {active == 0 ? (
-            <PrimeWrapper index={0} maxIndex={2}>
+          {userID ? (
+            <>
+              <MenuBar items={['Explore', 'Registered', 'Saved']} active={active} setState={setActive} />
+              {active == 0 ? (
+                <PrimeWrapper index={0} maxIndex={2}>
+                  <ExploreEvents />
+                </PrimeWrapper>
+              ) : active == 1 ? (
+                <PrimeWrapper index={1} maxIndex={2}>
+                  <RegisteredEvents />
+                </PrimeWrapper>
+              ) : (
+                active == 2 && (
+                  <PrimeWrapper index={2} maxIndex={2}>
+                    <BookmarkEvents />
+                  </PrimeWrapper>
+                )
+              )}
+            </>
+          ) : (
+            <PrimeWrapper>
               <ExploreEvents />
             </PrimeWrapper>
-          ) : active == 1 ? (
-            <PrimeWrapper index={1} maxIndex={2}>
-              <RegisteredEvents />
-            </PrimeWrapper>
-          ) : (
-            active == 2 && (
-              <PrimeWrapper index={2} maxIndex={2}>
-                <BookmarkEvents />
-              </PrimeWrapper>
-            )
           )}
         </div>
         <SideBarWrapper>

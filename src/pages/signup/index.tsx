@@ -21,6 +21,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import generateRandomProfilePicture from '@/utils/generate_profile_picture';
 import StrongPassInfo from '@/components/common/strong_pass_info';
 import RegistrationButton from '@/components/buttons/registration_btn';
+import Link from 'next/link';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
@@ -164,7 +165,7 @@ const SignUp = () => {
           content="Sign up for Interact! Interact is a groundbreaking web platform designed for college-going students, freelancers, professionals, and creatives."
         />
       </Head>
-      <div className="h-full flex">
+      <div className="h-full flex dark:bg-dark_primary_comp">
         {clickedOnStrongPassInfo ? (
           <StrongPassInfo password={password} confirmPassword={confirmPassword} setShow={setClickedOnStrongPassInfo} />
         ) : (
@@ -172,7 +173,12 @@ const SignUp = () => {
         )}
         <div className="w-[45%] max-lg:w-full h-full min-h-screen font-primary gap-12 py-8 px-8 flex flex-col justify-between items-center">
           <div className="w-full flex justify-start items-center">
-            <ReactSVG src="/onboarding_logo.svg" />
+            <Link href="/" className="hidden dark:flex">
+              <ReactSVG src="/onboarding_logo_dark.svg" />
+            </Link>
+            <Link href="/" className="static dark:hidden">
+              <ReactSVG src="/onboarding_logo.svg" />
+            </Link>{' '}
           </div>
           <form onSubmit={handleSubmit} className="w-3/5 max-md:w-full flex flex-col items-center gap-6">
             <div className="flex flex-col gap-2 text-center">
@@ -181,7 +187,7 @@ const SignUp = () => {
             </div>
             <div
               onClick={handleGoogleLogin}
-              className="w-full flex gap-4 justify-center cursor-pointer shadow-md  border-[#D4D9E1] hover:bg-[#F2F2F2] active:bg-[#EDEDED] border-2 rounded-xl px-4 py-2"
+              className="w-full flex gap-4 justify-center cursor-pointer shadow-md  border-[#D4D9E1] hover:bg-[#F2F2F2] dark:hover:bg-dark_primary_comp_hover active:bg-[#EDEDED] dark:active:bg-dark_primary_comp_active border-2 rounded-xl px-4 py-2"
             >
               <div>
                 <ReactSVG src="/assets/google.svg" />

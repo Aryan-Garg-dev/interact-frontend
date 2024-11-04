@@ -86,7 +86,7 @@ const OpeningView = ({ opening, setShow, setOpening, org = false, showBack = fal
                 <Link
                   href={`/organisations/${opening.organization?.user.username}`}
                   target="_blank"
-                  className="flex-center gap-1 hover-underline-animation after:bg-black font-semibold text-lg"
+                  className="flex-center gap-1 hover-underline-animation after:bg-black dark:after:bg-white font-semibold text-lg"
                 >
                   {opening.organization?.title} <Buildings />
                 </Link>
@@ -94,7 +94,7 @@ const OpeningView = ({ opening, setShow, setOpening, org = false, showBack = fal
                 <Link
                   href={`/projects/${opening.project?.slug}`}
                   target="_blank"
-                  className="hover-underline-animation after:bg-black font-semibold text-lg"
+                  className="hover-underline-animation after:bg-black dark:after:bg-white font-semibold text-lg"
                 >
                   {opening.project?.title}
                 </Link>

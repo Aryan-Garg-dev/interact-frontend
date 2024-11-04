@@ -65,7 +65,7 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
 
   useEffect(() => {
     fetchProject();
-  }, []);
+  }, [slug]);
   return (
     <BaseWrapper title="Projects">
       <Sidebar index={2} />

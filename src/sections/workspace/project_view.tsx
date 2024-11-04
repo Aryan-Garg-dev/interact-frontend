@@ -293,7 +293,7 @@ const ProjectView = ({
                           `/${project.user.isOrganization ? 'organisations' : 'users'}/${project.user.username}`
                         )
                       }
-                      className="cursor-pointer hover-underline-animation after:bg-black"
+                      className="cursor-pointer hover-underline-animation after:bg-black dark:after:bg-white"
                     >
                       {project.user.name}
                     </div>

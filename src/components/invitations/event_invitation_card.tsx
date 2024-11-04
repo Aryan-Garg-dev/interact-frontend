@@ -94,7 +94,7 @@ const EventInvitationCard = ({ invitation, setInvitations }: Props) => {
           <Link
             target="_blank"
             href={`/organisations/${invitation.event?.organization.user.username}`}
-            className="font-medium hover-underline-animation after:bg-black"
+            className="font-medium hover-underline-animation after:bg-black dark:after:bg-white"
           >
             Hosted by {invitation.event?.organization.title}
           </Link>

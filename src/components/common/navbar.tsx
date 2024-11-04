@@ -10,6 +10,7 @@ import { userSelector } from '@/slices/userSlice';
 import ProfileDropdown from '@/sections/navbar/profile_dropdown';
 import Link from 'next/link';
 import Feedback from './feedback';
+import { Button } from '../ui/button';
 
 const Navbar = () => {
   const [clickedOnNotifications, setClickedOnNotifications] = useState(false);
@@ -34,7 +35,7 @@ const Navbar = () => {
         <Link href={'/home'} className="static dark:hidden px-4 max-md:px-0">
           <ReactSVG src="/onboarding_logo.svg" />
         </Link>
-        {user.isLoggedIn && (
+        {user.isLoggedIn ? (
           <div className="flex items-center gap-2 max-md:gap-0 z-0">
             <div
               onClick={() => setClickedOnFeedback(true)}
@@ -81,6 +82,8 @@ const Navbar = () => {
               src={`${USER_PROFILE_PIC_URL}/${user.profilePic != '' ? user.profilePic : 'default.jpg'}`}
             />
           </div>
+        ) : (
+          <Button onClick={() => window.location.assign('/login')}>Register Now!</Button>
         )}
       </div>
     </>

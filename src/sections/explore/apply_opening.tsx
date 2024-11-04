@@ -158,7 +158,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                 {user.resume == '' ? (
                   <div onClick={() => setAddResume(true)} className="flex gap-2 items-center">
                     <ArrowUpRight weight="bold" size={24} />{' '}
-                    <div className="font-medium cursor-pointer hover-underline-animation after:bg-black">
+                    <div className="font-medium cursor-pointer hover-underline-animation after:bg-black dark:after:bg-white">
                       Upload your resume
                     </div>
                   </div>

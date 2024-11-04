@@ -120,7 +120,7 @@ const LowerEvent = ({ event, numLikes, setNumLikes }: Props) => {
           >
             <HeartStraight
               className={`cursor-pointer max-md:w-6 max-md:h-6 ${
-                liked ? 'text-heart_filled' : 'text-black'
+                liked ? 'text-heart_filled' : 'text-black dark:text-white'
               } transition-ease-300`}
               size={24}
               weight={liked ? 'fill' : 'regular'}

@@ -31,7 +31,10 @@ const Openings = () => {
     }${search ? `&search=${search}` : ''}`;
 
     const projectSlug = new URLSearchParams(window.location.search).get('pid');
-    if (projectSlug) URL = `${EXPLORE_URL}/openings/${projectSlug}`;
+    if (projectSlug) {
+      URL = `${EXPLORE_URL}/openings/${projectSlug}`;
+      setHasMore(false);
+    }
 
     const res = await getHandler(URL);
     if (res.statusCode == 200) {

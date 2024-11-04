@@ -10,22 +10,30 @@ import Feed from '@/screens/home/feed';
 import FeedSide from '@/sides/home/feed';
 import CommunitySide from '@/sides/home/community';
 import Communities from '@/screens/home/communities';
+import { useSelector } from 'react-redux';
+import { userIDSelector } from '@/slices/userSlice';
 
 const Home = () => {
   const [active, setActive] = useState(0);
+  const userID = useSelector(userIDSelector);
+
   return (
     <BaseWrapper title="Home">
       <Sidebar index={1} />
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-2/3">
-          <MenuBar items={['Explore', 'Following', 'Communities']} active={active} setState={setActive} />
+          <MenuBar
+            items={userID ? ['Explore', 'Following', 'Communities'] : ['Explore', 'Communities']}
+            active={active}
+            setState={setActive}
+          />
           {active == 0 ? (
             <PrimeWrapper index={0} maxIndex={2}>
               <Discover />
             </PrimeWrapper>
           ) : active == 1 ? (
             <PrimeWrapper index={1} maxIndex={2}>
-              <Feed />
+              {userID ? <Feed /> : <Communities />}
             </PrimeWrapper>
           ) : (
             active == 2 && (

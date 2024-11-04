@@ -661,7 +661,7 @@ const Onboarding = () => {
                             <div className="w-full flex flex-col gap-2">
                               {/* <div
                                 onClick={() => setClickedOnNewCollege(true)}
-                                className="w-fit h-5 text-sm font-medium hover-underline-animation after:bg-black cursor-pointer"
+                                className="w-fit h-5 text-sm font-medium hover-underline-animation after:bg-black dark:after:bg-white cursor-pointer"
                               >
                                 College not present here?
                               </div> */}

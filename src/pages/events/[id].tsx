@@ -30,6 +30,7 @@ import SendMessage from '@/sections/explore/send_message';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import SecondaryButton from '@/components/buttons/secondary_btn';
 import Hackathon from '@/screens/hackathon/hackathon';
+import PrimeWrapper from '@/wrappers/prime';
 
 interface Props {
   id: string;
@@ -222,15 +223,17 @@ const EventComponent = ({ id }: Props) => {
               Event has Ended
             </button>
           )
-        ) : (
+        ) : user.id ? (
           <SecondaryButton label="Register Now!" onClick={handleRegister} />
+        ) : (
+          <SecondaryButton label="Sign Up To Register!" onClick={() => window.location.assign('/login')} />
         )}
       </div>
     );
   };
 
   const AboutHosts = () => (
-    <div className="w-2/5 bg-white rounded-xl max-md:w-full shadow-lg">
+    <div className="w-2/5 bg-white dark:bg-dark_primary_comp_hover rounded-xl max-md:w-full shadow-lg">
       <Image
         width={500}
         height={280}
@@ -244,12 +247,16 @@ const EventComponent = ({ id }: Props) => {
         <LowerEvent event={event} numLikes={eventLikes} setNumLikes={setEventLikes} />
         {event.meetingID && <AboutSession />}
         <div className="w-full flex flex-col gap-4">
-          <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">HOSTED BY</div>
+          <div className="text-sm font-medium text-gray-500 dark:text-white border-b-2 border-gray-300 pb-2">
+            HOSTED BY
+          </div>
           <AboutUser user={event.organization.user} host={true} />
         </div>
         {event.coHosts && event.coHosts.length > 0 && (
           <div className="w-full flex flex-col gap-4">
-            <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">CO HOSTS</div>
+            <div className="text-sm font-medium text-gray-500 dark:text-white border-b-2 border-gray-300 pb-2">
+              CO HOSTS
+            </div>
             <div className="w-full flex flex-col gap-2">
               {event.coHosts?.map(org => (
                 <AboutUser key={org.id} user={org.user} />
@@ -259,7 +266,9 @@ const EventComponent = ({ id }: Props) => {
         )}
         {event.coordinators && event.coordinators.length > 0 && (
           <div className="w-full flex flex-col gap-4">
-            <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">COORDINATORS</div>
+            <div className="text-sm font-medium text-gray-500 dark:text-white border-b-2 border-gray-300 pb-2">
+              COORDINATORS
+            </div>
             <div className="flex flex-col gap-2">
               {event.coordinators.map(user => (
                 <AboutUser key={user.id} user={user} />
@@ -284,13 +293,13 @@ const EventComponent = ({ id }: Props) => {
         <div className="w-full flex flex-col gap-1 text-sm">
           <div
             onClick={handleChat}
-            className="w-fit font-medium text-primary_black hover:text-gray-600 transition-ease-300 cursor-pointer"
+            className="w-fit font-medium text-primary_black dark:text-gray-300 hover:text-gray-600 dark:hover:text-white transition-ease-300 cursor-pointer"
           >
             Message the Host
           </div>
           <div
             onClick={() => setClickedOnReport(true)}
-            className="w-fit font-medium text-primary_black hover:text-primary_danger transition-ease-300 cursor-pointer"
+            className="w-fit font-medium text-primary_black dark:text-gray-300 hover:text-primary_danger dark:hover:text-primary_danger transition-ease-300 cursor-pointer"
           >
             Report Event
           </div>
@@ -306,9 +315,9 @@ const EventComponent = ({ id }: Props) => {
         <div className="w-full flex flex-col gap-2">
           <div className="text-sm font-medium text-gray-500">FROM</div>
           <div className="flex gap-3 items-center">
-            <div className="w-12 h-12 bg-gray-100 flex flex-col rounded-xl text-center p-1">
+            <div className="w-12 h-12 bg-gray-100 dark:bg-dark_primary_comp flex flex-col rounded-xl text-center p-1">
               <div className="w-full h-2/5 flex-center text-xxs uppercase">{moment(event.startTime).format('MMM')}</div>
-              <div className="w-full h-3/5 bg-gray-200 flex-center rounded-t-sm rounded-b-lg">
+              <div className="w-full h-3/5 bg-gray-200 dark:bg-dark_primary_comp_hover flex-center rounded-t-sm rounded-b-lg">
                 {moment(event.startTime).format('DD')}
               </div>
             </div>
@@ -321,9 +330,9 @@ const EventComponent = ({ id }: Props) => {
         <div className="w-full flex flex-col gap-2">
           <div className="text-sm font-medium text-gray-500">TO</div>
           <div className="flex gap-3 items-center">
-            <div className="w-12 h-12 bg-gray-100 flex flex-col rounded-xl text-center p-1">
+            <div className="w-12 h-12 bg-gray-100 dark:bg-dark_primary_comp flex flex-col rounded-xl text-center p-1">
               <div className="w-full h-2/5 flex-center text-xxs uppercase">{moment(event.endTime).format('MMM')}</div>
-              <div className="w-full h-3/5 bg-gray-200 flex-center rounded-t-sm rounded-b-lg">
+              <div className="w-full h-3/5 bg-gray-200 dark:bg-dark_primary_comp_hover flex-center rounded-t-sm rounded-b-lg">
                 {moment(event.endTime).format('DD')}
               </div>
             </div>
@@ -337,7 +346,7 @@ const EventComponent = ({ id }: Props) => {
       <div className="w-full flex flex-col gap-2">
         <div className="text-sm font-medium text-gray-500">LOCATION</div>
         <div className="flex items-center gap-2">
-          <div className="w-12 h-12 border-gray-100 border-4 flex-center p-2 rounded-xl">
+          <div className="w-12 h-12 border-gray-100 dark:border-dark_primary_btn border-4 flex-center p-2 rounded-xl">
             <MapPin size={20} />
           </div>
           <div>{event.location}</div>
@@ -353,7 +362,7 @@ const EventComponent = ({ id }: Props) => {
                 key={tag}
                 href={'/events?search=' + tag}
                 target="_blank"
-                className="flex-center bg-gray-100 px-2 py-1 border-[1px] border-dashed border-gray-400 text-xs rounded-lg"
+                className="flex-center bg-gray-100 dark:bg-dark_primary_comp px-2 py-1 border-[1px] border-dashed border-gray-400 text-xs rounded-lg"
               >
                 {tag}
               </Link>
@@ -372,7 +381,7 @@ const EventComponent = ({ id }: Props) => {
   return (
     <BaseWrapper title={`${event.title}`}>
       {user.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={3} />}
-      <MainWrapper>
+      <MainWrapper restrictWidth>
         {event.hackathonID ? (
           <Hackathon event={event} handleRegister={handleRegister} />
         ) : (
@@ -389,7 +398,7 @@ const EventComponent = ({ id }: Props) => {
               ) : (
                 <SignUp setShow={setClickedOnReport} />
               ))}
-            <div className="w-full p-12 max-md:p-2 flex flex-col transition-ease-out-500 font-primary">
+            <PrimeWrapper>
               {loading ? (
                 <Loader />
               ) : (
@@ -410,7 +419,7 @@ const EventComponent = ({ id }: Props) => {
                   )}
                 </div>
               )}
-            </div>
+            </PrimeWrapper>
           </>
         )}
       </MainWrapper>

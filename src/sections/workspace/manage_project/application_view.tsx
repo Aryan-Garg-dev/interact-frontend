@@ -226,7 +226,7 @@ const ApplicationView = ({
             />
             <div className="w-[calc(100%-144px)] max-lg:w-3/5 max-md:w-full flex flex-col max-lg:items-center max-lg:text-center gap-1">
               <Link target="_blank" href={`/users/${application.user.username}`} className="flex items-center gap-1">
-                <div className="text-2xl font-semibold hover-underline-animation after:bg-black">
+                <div className="text-2xl font-semibold hover-underline-animation after:bg-black dark:after:bg-white">
                   {application.user.name}
                 </div>
                 <ArrowUpRight size={24} />

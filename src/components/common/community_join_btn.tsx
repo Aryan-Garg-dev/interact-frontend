@@ -46,6 +46,11 @@ const CommunityJoinBtn = ({
   const dispatch = useDispatch();
 
   const handleJoin = async () => {
+    if (!user.id) {
+      Toaster.error('You are Not Logged In.');
+      return;
+    }
+
     const toaster = Toaster.startLoad('Joining Community');
 
     const URL = `${COMMUNITY_URL}/${communityID}/join`;

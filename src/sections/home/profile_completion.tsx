@@ -109,7 +109,7 @@ const ProfileCompletion = () => {
         <div className="text-gradient font-bold text-5xl">Complete Profile </div>
         <Link
           href={`/users/${user.username}`}
-          className="w-fit flex items-center gap-1 hover-underline-animation after:bg-black dark:after:bg-dark_primary_btn"
+          className="w-fit flex items-center gap-1 hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-dark_primary_btn"
         >
           <div>to increase your Reach!</div>
           <ArrowUpRight weight="bold" />
@@ -128,7 +128,7 @@ const ProfileCompletion = () => {
             <Link
               href={'/workspace?action=new_project'}
               onClick={() => dispatch(setProfileCompletionOpen(false))}
-              className="hover-underline-animation after:bg-black dark:after:bg-dark_primary_btn"
+              className="hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-dark_primary_btn"
             >
               Create a Project
             </Link>
@@ -142,7 +142,7 @@ const ProfileCompletion = () => {
             <Link
               href={`/users/${user.username}?action=edit&tag=links`}
               onClick={() => dispatch(setProfileCompletionOpen(false))}
-              className="hover-underline-animation after:bg-black dark:after:bg-dark_primary_btn"
+              className="hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-dark_primary_btn"
             >
               Add Links to your social media
             </Link>
@@ -156,7 +156,7 @@ const ProfileCompletion = () => {
             <Link
               href={'/users'}
               onClick={() => dispatch(setProfileCompletionOpen(false))}
-              className="hover-underline-animation after:bg-black dark:after:bg-dark_primary_btn"
+              className="hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-dark_primary_btn"
             >
               Follow at least 3 Profiles
             </Link>
@@ -170,7 +170,7 @@ const ProfileCompletion = () => {
             <Link
               href={`/users/${user.username}?action=edit&tag=tagline`}
               onClick={() => dispatch(setProfileCompletionOpen(false))}
-              className="hover-underline-animation after:bg-black dark:after:bg-dark_primary_btn"
+              className="hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-dark_primary_btn"
             >
               Add a Tagline
             </Link>

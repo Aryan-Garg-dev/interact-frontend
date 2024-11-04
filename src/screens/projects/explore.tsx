@@ -12,6 +12,8 @@ import { setExploreTab } from '@/slices/feedSlice';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import OrderMenu from '@/components/common/order_menu';
+import { useSelector } from 'react-redux';
+import { userIDSelector, userSelector } from '@/slices/userSlice';
 
 const Projects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -92,11 +94,17 @@ const Projects = () => {
     else if (tab && tab == 'organisations') dispatch(setExploreTab(3));
   }, []);
 
+  const userID = useSelector(userIDSelector);
+
   return (
     <div>
       {(projects.length > 0 || order == 'last_viewed') && (
         <OrderMenu
-          orders={['trending', 'most_liked', 'most_viewed', 'latest', 'last_viewed']}
+          orders={
+            userID
+              ? ['trending', 'most_liked', 'most_viewed', 'latest', 'last_viewed']
+              : ['trending', 'most_liked', 'most_viewed', 'latest']
+          }
           current={order}
           setState={setOrder}
         />
