@@ -36,6 +36,7 @@ import { Organization } from '@/types';
 import SignUp from '@/components/common/signup_box';
 import ToolTip from '@/components/utils/tooltip';
 import UserCard from '@/components/cards/user';
+import PrimeWrapper from '@/wrappers/prime';
 
 interface Props {
   username: string;
@@ -108,7 +109,7 @@ const User = ({ username }: Props) => {
   return (
     <BaseWrapper title={`${user.name}`}>
       {loggedInUser.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={2} />}
-      <MainWrapper>
+      <MainWrapper restrictWidth>
         {clickedOnShare &&
           (loggedInUser.id != '' ? (
             <ShareProfile
@@ -135,7 +136,7 @@ const User = ({ username }: Props) => {
           ))}
 
         {clickedOnFollowers && <Connections type="followers" user={user} setShow={setClickedOnFollowers} />}
-        <div className="w-full flex flex-col items-center font-primary">
+        <PrimeWrapper>
           <div className="w-full relative">
             <Image
               crossOrigin="anonymous"
@@ -147,7 +148,7 @@ const User = ({ username }: Props) => {
               placeholder="blur"
               blurDataURL={user.coverPicBlurHash || 'no-hash'}
               // className="w-5/6 h-72 mx-auto object-cover rounded-b-md"
-              className="w-full h-80 max-md:h-fit object-cover"
+              className="w-full rounded-md"
             />
             <div className="w-full flex items-end max-md:items-center gap-4 absolute -translate-y-1/3 max-md:translate-y-0 px-36 max-md:px-4 max-md:pt-4">
               <Image
@@ -164,12 +165,16 @@ const User = ({ username }: Props) => {
                 <div className="w-full flex flex-wrap justify-between items-center">
                   <div className="flex items-center gap-2">
                     <div className="text-3xl max-md:text-xl font-semibold">{user.name}</div>
-                    <div className="text-sm max-md:text-xs font-medium text-gray-600">@{user.username}</div>
+                    <div className="text-sm max-md:text-xs font-medium text-gray-600 dark:text-gray-300">
+                      @{user.username}
+                    </div>
                   </div>
                   {loggedInUser.id != '' && <FollowBtn toFollowID={user.id} setFollowerCount={setNumFollowers} />}
                 </div>
                 <div className="w-full flex justify-between items-center">
-                  <div className="text-lg max-md:text-sm font-medium text-gray-600">{user.tagline}</div>
+                  <div className="text-lg max-md:text-sm font-medium text-gray-600 dark:text-gray-300">
+                    {user.tagline}
+                  </div>
                   <div className="w-fit max-md:hidden flex items-center gap-1">
                     <div
                       onClick={handleChat}
@@ -196,7 +201,7 @@ const User = ({ username }: Props) => {
                     onClick={() => {
                       if (loggedInUser.id != '') setClickedOnFollowers(true);
                     }}
-                    className={`flex items-center text-sm max-md:text-xs font-medium text-gray-700 ${
+                    className={`flex items-center text-sm max-md:text-xs font-medium text-gray-700 dark:text-gray-300 ${
                       loggedInUser.id != '' ? 'cursor-pointer' : 'cursor-default'
                     }`}
                   >
@@ -266,7 +271,7 @@ const User = ({ username }: Props) => {
               {loading ? <Loader /> : <Openings orgID={organisation.id} />}
             </div>
           </div>
-        </div>
+        </PrimeWrapper>
       </MainWrapper>
     </BaseWrapper>
   );
