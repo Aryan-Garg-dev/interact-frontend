@@ -75,7 +75,7 @@ const Projects = () => {
     setProjects([]);
     setHasMore(true);
     setLoading(true);
-    const pid = new URLSearchParams(window.location.search).get('pid');
+    const pid = new URLSearchParams(window.location.search).get('id');
     if (pid && pid != '') fetchProject(pid);
     else fetchProjects(new URLSearchParams(window.location.search).get('search'), 1);
   }, [window.location.search, order]);

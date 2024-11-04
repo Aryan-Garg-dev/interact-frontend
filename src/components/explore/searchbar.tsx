@@ -12,6 +12,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 import postHandler from '@/handlers/post_handler';
+import { X } from '@phosphor-icons/react';
 
 const SearchBar = () => {
   const [results, setResults] = useState({
@@ -26,6 +27,14 @@ const SearchBar = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [filters, setFilters] = useState<string[]>([]);
   const [search, setSearch] = useState('');
+
+  const [project, setProject] = useState<Project | null>(null);
+  const [opening, setOpening] = useState<Opening | null>(null);
+
+  const fetchItem = async (query: string, setter: (res: any) => void) => {
+    const res = await getHandler(`${EXPLORE_URL}/quick/item?${query}`);
+    if (res.statusCode == 200) setter(res);
+  };
 
   //TODO add abort controller
   const fetchResults = async (search?: string) => {
@@ -49,8 +58,6 @@ const SearchBar = () => {
     setLoading(false);
   };
 
-  const menuRef = useRef<HTMLDivElement>(null);
-
   const submitSearch = async (search: string) => {
     const URL = `${EXPLORE_URL}/search`;
     await postHandler(URL, { search });
@@ -60,6 +67,16 @@ const SearchBar = () => {
     const search = new URLSearchParams(window.location.search).get('search');
     setSearch(search || '');
     if (search) submitSearch(search);
+
+    const projectSlug = new URLSearchParams(window.location.search).get('pid');
+    const projectID = new URLSearchParams(window.location.search).get('id');
+    if (projectSlug) fetchItem(`slug=${projectSlug}`, res => setProject(res.data.project));
+    else if (projectID) fetchItem(`id=${projectID}`, res => setProject(res.data.project));
+    else setProject(null);
+
+    const openingID = new URLSearchParams(window.location.search).get('oid');
+    if (openingID) fetchItem(`oid=${openingID}`, res => setOpening(res.data.opening));
+    else setOpening(null);
   }, [window.location.search]);
 
   const noResults = useMemo(() => Object.values(results).every(group => group.length === 0), [results]);
@@ -83,6 +100,28 @@ const SearchBar = () => {
     }
   };
 
+  const handleRemoveItem = () => {
+    const url = new URL(window.location.href);
+
+    url.searchParams.delete('pid');
+    url.searchParams.delete('id');
+    url.searchParams.delete('oid');
+
+    window.location.href = url.toString();
+  };
+
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsDialogOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   return (
     <div
       ref={menuRef}
@@ -93,15 +132,31 @@ const SearchBar = () => {
           isDialogOpen && !noResults && 'pb-2 shadow-xl dark:shadow-[#2b2828]'
         } transition-shadow ease-in duration-300`}
       >
-        <CommandInput
-          placeholder="Search for users, projects, openings, communities, events, etc."
-          value={search}
-          onValueChange={value => {
-            if (value) fetchResults(value);
-            setIsDialogOpen(Boolean(value));
-            setSearch(value);
-          }}
-        />
+        <div className="w-full flex items-center">
+          {project && (
+            <div className="w-fit h-8 flex-center gap-3 max-w-[240px] mx-1 text-xs rounded-md text-primary_text border-primary_text border-[1px] py-1 px-2">
+              <div className="line-clamp-1">{project.title}</div>
+              <X className="cursor-pointer" onClick={handleRemoveItem} />
+            </div>
+          )}
+          {opening && (
+            <div className="w-fit h-8 flex-center gap-3 max-w-[240px] mx-1 text-xs rounded-md text-primary_text border-primary_text border-[1px] py-1 px-2">
+              <div className="line-clamp-1">{opening.title}</div>
+              <X className="cursor-pointer" onClick={handleRemoveItem} />
+            </div>
+          )}
+          <CommandInput
+            className={`w-[640px]`}
+            placeholder="Search for users, projects, openings, communities, events, etc."
+            value={search}
+            onValueChange={value => {
+              if (value) fetchResults(value);
+              setIsDialogOpen(Boolean(value));
+              setSearch(value);
+            }}
+          />
+        </div>
+
         <CommandList>
           {isDialogOpen &&
             (loading ? (
@@ -193,7 +248,7 @@ const ProjectItem = ({ project }: { project: Project }) => (
       crossOrigin="anonymous"
       width={50}
       height={50}
-      alt={'User Pic'}
+      alt="Project Pic"
       src={getProjectPicURL(project)}
       placeholder="blur"
       blurDataURL={getProjectPicHash(project)}

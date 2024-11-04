@@ -270,12 +270,12 @@ const ProjectView = ({
                   );
                 })}
             </div>
-            {isProjectMember(project) && (
+            {/* {isProjectMember(project) && (
               <Link href={'/workspace?pid=' + project.id} className="w-fit flex-center gap-1 font-semibold">
                 <div className="hover-underline-animation after:bg-gray-700">Open in workspace</div>
                 <ArrowUpRight size={18} weight="bold" />
               </Link>
-            )}
+            )} */}
             {
               //TODO Project Owner Details
             }
