@@ -11,20 +11,12 @@ import UserHoverCard from './user_hover_card';
 interface Props {
   index?: number;
   project: Project;
-  setClickedOnProject?: React.Dispatch<React.SetStateAction<boolean>>;
-  setClickedProjectIndex?: React.Dispatch<React.SetStateAction<number>>;
+  setClickedProject?: React.Dispatch<React.SetStateAction<Project | null>>;
   isLink?: boolean;
   smaller?: boolean;
 }
 
-const ProjectCard = ({
-  index,
-  project,
-  setClickedOnProject,
-  setClickedProjectIndex,
-  isLink = false,
-  smaller = false,
-}: Props) => {
+const ProjectCard = ({ index, project, setClickedProject, isLink = false, smaller = false }: Props) => {
   const Wrapper: React.FC<{ children: ReactNode }> = ({ children }) =>
     isLink ? (
       <Link
@@ -38,8 +30,7 @@ const ProjectCard = ({
     ) : (
       <div
         onClick={() => {
-          if (setClickedOnProject) setClickedOnProject(true);
-          if (setClickedProjectIndex && index) setClickedProjectIndex(index);
+          if (setClickedProject) setClickedProject(project);
         }}
         className={`w-full flex items-center ${
           smaller ? 'gap-2' : 'gap-4'

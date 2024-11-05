@@ -20,9 +20,10 @@ import { Button } from '@/components/ui/button';
 
 interface Props {
   setProjects?: React.Dispatch<React.SetStateAction<Project[]>>;
+  setTriggerReload?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const NewProject = ({ setProjects }: Props) => {
+const NewProject = ({ setProjects, setTriggerReload }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tagline, setTagline] = useState('');
@@ -82,8 +83,10 @@ const NewProject = ({ setProjects }: Props) => {
     if (res.statusCode === 201) {
       const project = res.data.project;
       project.user = user;
+
       if (setProjects) setProjects(prev => [project, ...prev]);
-      Toaster.stopLoad(toaster, 'Project Added', 1);
+      if (setTriggerReload) setTriggerReload(prev => !prev);
+
       setTitle('');
       setTagline('');
       setDescription('');
@@ -91,6 +94,8 @@ const NewProject = ({ setProjects }: Props) => {
       setLinks([]);
       setIsDialogOpen(false);
       dispatch(setOwnerProjects([...(user.ownerProjects || []), project.id]));
+
+      Toaster.stopLoad(toaster, 'Project Added', 1);
     } else if (res.statusCode == 413) {
       Toaster.stopLoad(toaster, 'Image too large', 0);
     } else {
@@ -104,13 +109,8 @@ const NewProject = ({ setProjects }: Props) => {
   };
 
   useEffect(() => {
-    document.documentElement.style.overflowY = 'hidden';
-    document.documentElement.style.height = '100vh';
-
-    return () => {
-      document.documentElement.style.overflowY = 'auto';
-      document.documentElement.style.height = 'auto';
-    };
+    const action = new URLSearchParams(window.location.search).get('action');
+    if (action && action == 'new_project') setIsDialogOpen(true);
   }, []);
 
   return (

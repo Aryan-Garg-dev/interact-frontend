@@ -110,6 +110,30 @@ const Community = ({ id }: { id: string }) => {
     getPosts(1);
   }, [order]);
 
+  const CommunityOptions = () => (
+    <>
+      {checkCommunityAccess(community.id, 'create_post', permissionConfig) && (
+        <Button onClick={() => setClickedOnNewPost(true)} variant="outline">
+          New Post
+        </Button>
+      )}
+      {checkCommunityAccess(community.id, 'edit_community', permissionConfig) && (
+        <EditCommunity community={community} setCommunity={setCommunity} />
+      )}
+      {checkCommunityAccess(community.id, 'edit_memberships', permissionConfig) && (
+        <EditMemberships community={community} />
+      )}
+      {checkCommunityStaticAccess(community.id, COMMUNITY_MEMBER) && (
+        <ViewPermissions
+          community={community}
+          permissionConfig={permissionConfig}
+          setPermissionConfig={setPermissionConfig}
+        />
+      )}
+      <CommunityJoinBtn communityID={community.id} communityAccess={community.access} smaller={false} />
+    </>
+  );
+
   return (
     <BaseWrapper title={community.title}>
       <Sidebar index={1} />
@@ -132,10 +156,10 @@ const Community = ({ id }: { id: string }) => {
             <div className="w-fit bg-white dark:bg-dark_primary_comp text-xs rounded-lg flex-center px-2 py-1 capitalize absolute top-2 right-2">
               {community.isOpen ? 'Posts open for all' : 'Posts restricted to members only'}
             </div>
-            <div className="w-full flex items-end gap-2 absolute -translate-y-1/2 pl-12">
+            <div className="w-full flex items-end gap-2 absolute -translate-y-1/2 pl-12 max-md:pl-4">
               <Image
                 crossOrigin="anonymous"
-                className="w-24 h-24 rounded-full border-gray-200 dark:border-[#252525] border-4"
+                className="w-24 max-md:w-16 h-24 max-md:h-16 rounded-full border-gray-200 dark:border-[#252525] border-4"
                 width={200}
                 height={200}
                 alt="profile pic"
@@ -143,33 +167,18 @@ const Community = ({ id }: { id: string }) => {
                 blurDataURL={community.profilePicBlurHash || 'no-hash'}
                 src={`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`}
               />
-              <div className="w-[calc(100%-96px)] flex justify-between items-center pb-1">
+              <div className="w-[calc(100%-96px)] flex justify-between items-center pb-1 flex-wrap">
                 <div className="text-3xl max-md:text-xl font-semibold">{community.title}</div>
-                <div className="w-fit flex-center gap-2">
-                  {checkCommunityAccess(community.id, 'create_post', permissionConfig) && (
-                    <Button onClick={() => setClickedOnNewPost(true)} variant="outline">
-                      New Post
-                    </Button>
-                  )}
-                  {checkCommunityAccess(community.id, 'edit_community', permissionConfig) && (
-                    <EditCommunity community={community} setCommunity={setCommunity} />
-                  )}
-                  {checkCommunityAccess(community.id, 'edit_memberships', permissionConfig) && (
-                    <EditMemberships community={community} />
-                  )}
-                  {checkCommunityStaticAccess(community.id, COMMUNITY_MEMBER) && (
-                    <ViewPermissions
-                      community={community}
-                      permissionConfig={permissionConfig}
-                      setPermissionConfig={setPermissionConfig}
-                    />
-                  )}
-                  <CommunityJoinBtn communityID={community.id} communityAccess={community.access} smaller={false} />
+                <div className="w-fit flex-center gap-2 flex-wrap max-md:hidden">
+                  <CommunityOptions />
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-full flex gap-4 mt-14">
+          <div className="w-fit flex-center gap-2 flex-wrap md:hidden mt-10">
+            <CommunityOptions />
+          </div>
+          <div className="w-full flex max-md:flex-col-reverse gap-4 mt-14 max-md:mt-2">
             <div className="w-2/3 max-md:w-full">
               <PrimeWrapper index={0} maxIndex={0}>
                 <div className="w-full">
@@ -203,7 +212,7 @@ const Community = ({ id }: { id: string }) => {
                 </div>
               </PrimeWrapper>
             </div>
-            <div className="w-1/3 h-fit max-h-[calc(100vh-80px)] overflow-y-auto sticky top-[80px] bg-white dark:bg-dark_primary_comp flex flex-col gap-2 p-4 rounded-lg">
+            <div className="w-1/3 max-md:w-full h-fit max-h-[calc(100vh-80px)] max-md:static overflow-y-auto sticky top-[80px] bg-white dark:bg-dark_primary_comp flex flex-col gap-2 p-4 rounded-lg">
               <div className="text-center">{community.description}</div>
               <Tags tags={community.tags} displayAll center />
               <div className="w-full flex items-center justify-center gap-8 my-2">

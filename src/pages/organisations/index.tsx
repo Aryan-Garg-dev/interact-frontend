@@ -17,32 +17,32 @@ const Organisations = () => {
   return (
     <BaseWrapper title="Organisations">
       <Sidebar index={4} />
-      <MainWrapper sidebarLayout>
-        <div className="w-2/3 max-md:w-full">
-          {userID ? (
-            <>
-              <MenuBar items={['Explore', 'Joined']} active={active} setState={setActive} />
-              {active == 0 ? (
-                <PrimeWrapper index={0} maxIndex={2}>
-                  <ExploreOrganisations />
+      <MainWrapper restrictWidth>
+        {/* <div className="w-2/3 max-md:w-full"> */}
+        {userID ? (
+          <>
+            <MenuBar items={['Explore', 'Joined']} active={active} setState={setActive} />
+            {active == 0 ? (
+              <PrimeWrapper index={0} maxIndex={2}>
+                <ExploreOrganisations />
+              </PrimeWrapper>
+            ) : (
+              active == 1 && (
+                <PrimeWrapper index={1} maxIndex={2}>
+                  <MemberOrganizations />
                 </PrimeWrapper>
-              ) : (
-                active == 1 && (
-                  <PrimeWrapper index={1} maxIndex={2}>
-                    <MemberOrganizations />
-                  </PrimeWrapper>
-                )
-              )}
-            </>
-          ) : (
-            <PrimeWrapper>
-              <ExploreOrganisations />
-            </PrimeWrapper>
-          )}
-        </div>
-        <SideBarWrapper>
+              )
+            )}
+          </>
+        ) : (
+          <PrimeWrapper>
+            <ExploreOrganisations />
+          </PrimeWrapper>
+        )}
+        {/* </div> */}
+        {/* <SideBarWrapper>
           <SidePrimeWrapper>This section to promote organisations</SidePrimeWrapper>
-        </SideBarWrapper>
+        </SideBarWrapper> */}
       </MainWrapper>
     </BaseWrapper>
   );

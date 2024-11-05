@@ -91,7 +91,7 @@ const SearchBar = ({
       case 'projects':
         return `/projects?search=${search}`;
       case 'users':
-        return `/userss?search=${search}`;
+        return `/users?search=${search}`;
       case 'openings':
         return `/openings?search=${search}`;
       case 'events':

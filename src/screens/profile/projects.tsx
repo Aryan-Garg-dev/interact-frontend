@@ -1,7 +1,7 @@
 import ProjectCard from '@/components/explore/project_card';
 import { Project } from '@/types';
 import React, { useEffect, useState } from 'react';
-import ProjectView from '../../sections/explore/project_view';
+import ProjectView from '../../sides/project/project_view';
 import NoUserItems from '@/components/fillers/user_items';
 import { EXPLORE_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';

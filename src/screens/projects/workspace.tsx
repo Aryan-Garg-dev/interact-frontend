@@ -1,38 +1,31 @@
 import Loader from '@/components/common/loader';
-import ProjectCard from '@/components/workspace/project_card';
+import ProjectCard from '@/components/explore/project_card';
 import { WORKSPACE_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
-import ProjectView from '@/sections/workspace/project_view';
-import NewProject from '@/sections/workspace/new_project';
-import { userSelector } from '@/slices/userSlice';
-import { useSelector } from 'react-redux';
 import NoProjects from '@/components/fillers/your_projects';
-import { navbarOpenSelector } from '@/slices/feedSlice';
 import { SERVER_ERROR } from '@/config/errors';
 import OrderMenu from '@/components/common/order_menu';
+import { useWindowWidth } from '@react-hook/window-size';
 
-const CombinedProjects = () => {
+const CombinedProjects = ({
+  triggerReload,
+  setClickedProject,
+}: {
+  triggerReload?: boolean;
+  setClickedProject?: React.Dispatch<React.SetStateAction<Project | null>>;
+}) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState('activity');
-  const [search, setSearch] = useState('');
-
-  const [clickedOnProject, setClickedOnProject] = useState(false);
-  const [clickedProjectIndex, setClickedProjectIndex] = useState(-1);
-
-  const [clickedOnNewProject, setClickedOnNewProject] = useState(false);
 
   const [fadeIn, setFadeIn] = useState(true);
 
-  const navbarOpen = useSelector(navbarOpenSelector);
-  const user = useSelector(userSelector);
-
   const getProjects = (abortController: AbortController) => {
     setLoading(true);
-    const URL = `${WORKSPACE_URL}/projects?order=${order}&search=${search}`;
+    const URL = `${WORKSPACE_URL}/projects?order=${order}`;
     getHandler(URL, abortController.signal)
       .then(res => {
         if (res.statusCode === 200) {
@@ -42,8 +35,6 @@ const CombinedProjects = () => {
           if (projectSlug && projectSlug != '') {
             projectsData.forEach((project: Project, index: number) => {
               if (project.slug == projectSlug) {
-                setClickedOnProject(true);
-                setClickedProjectIndex(index);
               }
             });
           }
@@ -60,11 +51,6 @@ const CombinedProjects = () => {
       });
   };
 
-  useEffect(() => {
-    const action = new URLSearchParams(window.location.search).get('action');
-    if (action && action == 'new_project') setClickedOnNewProject(true);
-  }, []);
-
   let oldAbortController: AbortController | null = null;
 
   useEffect(() => {
@@ -76,7 +62,10 @@ const CombinedProjects = () => {
     return () => {
       abortController.abort();
     };
-  }, [order, search]);
+  }, [order, triggerReload]);
+
+  const width = useWindowWidth();
+  const isMD = width < 768;
 
   return (
     <div className="w-full">
@@ -85,32 +74,20 @@ const CombinedProjects = () => {
         <Loader />
       ) : projects.length > 0 ? (
         <div className="w-full mt-4">
-          {clickedOnProject && (
-            <ProjectView
-              projectSlugs={projects.map(project => project.slug)}
-              clickedProjectIndex={clickedProjectIndex}
-              clickedProject={projects[clickedProjectIndex]}
-              setClickedProjectIndex={setClickedProjectIndex}
-              setClickedOnProject={setClickedOnProject}
-              fadeIn={fadeIn}
-              setFadeIn={setFadeIn}
-              setProjects={setProjects}
-            />
-          )}
           {projects.map((project, index) => {
             return (
               <ProjectCard
                 key={project.id}
                 index={index}
                 project={project}
-                setClickedOnProject={setClickedOnProject}
-                setClickedProjectIndex={setClickedProjectIndex}
+                setClickedProject={setClickedProject}
+                isLink={isMD}
               />
             );
           })}
         </div>
       ) : (
-        <NoProjects setClickedOnNewProject={setClickedOnNewProject} />
+        <NoProjects />
       )}
     </div>
   );

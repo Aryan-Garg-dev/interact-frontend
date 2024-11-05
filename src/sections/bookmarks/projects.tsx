@@ -1,7 +1,7 @@
 import ProjectCard from '@/components/explore/project_card';
 import { ProjectBookmark } from '@/types';
 import React, { useState } from 'react';
-import ProjectView from '../../sections/explore/project_view';
+import ProjectView from '../../sides/project/project_view';
 import { ArrowArcLeft } from '@phosphor-icons/react';
 
 interface Props {

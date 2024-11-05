@@ -18,37 +18,37 @@ const Events = () => {
   return (
     <BaseWrapper title="Events">
       <Sidebar index={3} />
-      <MainWrapper sidebarLayout restrictWidth>
-        <div className="w-2/3 max-md:w-full">
-          {userID ? (
-            <>
-              <MenuBar items={['Explore', 'Registered', 'Saved']} active={active} setState={setActive} />
-              {active == 0 ? (
-                <PrimeWrapper index={0} maxIndex={2}>
-                  <ExploreEvents />
+      <MainWrapper restrictWidth>
+        {/* <div className="w-2/3 max-md:w-full"> */}
+        {userID ? (
+          <>
+            <MenuBar items={['Explore', 'Registered', 'Saved']} active={active} setState={setActive} />
+            {active == 0 ? (
+              <PrimeWrapper index={0} maxIndex={2}>
+                <ExploreEvents />
+              </PrimeWrapper>
+            ) : active == 1 ? (
+              <PrimeWrapper index={1} maxIndex={2}>
+                <RegisteredEvents />
+              </PrimeWrapper>
+            ) : (
+              active == 2 && (
+                <PrimeWrapper index={2} maxIndex={2}>
+                  <BookmarkEvents />
                 </PrimeWrapper>
-              ) : active == 1 ? (
-                <PrimeWrapper index={1} maxIndex={2}>
-                  <RegisteredEvents />
-                </PrimeWrapper>
-              ) : (
-                active == 2 && (
-                  <PrimeWrapper index={2} maxIndex={2}>
-                    <BookmarkEvents />
-                  </PrimeWrapper>
-                )
-              )}
-            </>
-          ) : (
-            <PrimeWrapper>
-              <ExploreEvents />
-            </PrimeWrapper>
-          )}
-        </div>
-        <SideBarWrapper>
+              )
+            )}
+          </>
+        ) : (
+          <PrimeWrapper>
+            <ExploreEvents />
+          </PrimeWrapper>
+        )}
+        {/* </div> */}
+        {/* <SideBarWrapper>
           <SidePrimeWrapper>Top 10 list, etc</SidePrimeWrapper>
           <SidePrimeWrapper>This section to promote new events</SidePrimeWrapper>
-        </SideBarWrapper>
+        </SideBarWrapper> */}
       </MainWrapper>
     </BaseWrapper>
   );

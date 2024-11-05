@@ -136,7 +136,7 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
                 )}
               </div>
               <div className="w-full flex flex-col gap-4">
-                <div className="w-full flex items-center justify-between">
+                <div className="w-full flex items-center justify-between flex-wrap gap-4">
                   <div className="w-fit font-bold text-4xl text-gradient">{project.title}</div>
                   <div className="flex-center gap-6">
                     {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (

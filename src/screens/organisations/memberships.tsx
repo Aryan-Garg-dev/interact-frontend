@@ -126,7 +126,7 @@ const MemberOrganizations = () => {
           <div
             key={membership.id}
             onClick={() => handleClick(membership)}
-            className="w-full hover:scale-105 hover:shadow-xl font-primary bg-white border-[1px] border-primary_btn rounded-md flex max-md:flex-col items-center justify-start gap-6 p-4 transition-ease-300 cursor-pointer animate-reveal"
+            className="w-full hover:shadow-xl font-primary bg-white hover:bg-primary_comp_hover dark:bg-dark_primary_comp dark:hover:bg-dark_primary_comp_hover border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-md flex max-md:flex-col items-center justify-start gap-6 p-4 transition-ease-300 cursor-pointer animate-reveal"
           >
             <Image
               crossOrigin="anonymous"

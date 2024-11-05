@@ -157,12 +157,6 @@ const LowerProject = ({ project }: Props) => {
       )}
       {clickedOnReport && <Report projectID={project.id} setShow={setClickedOnReport} />}
       <div className="flex-center gap-6">
-        <BookmarkProject
-          show={clickedOnBookmark}
-          setShow={setClickedOnBookmark}
-          project={project}
-          setBookmark={setBookmark}
-        />
         <div className="flex-center gap-2">
           <HeartStraight
             onClick={() => {
@@ -220,6 +214,12 @@ const LowerProject = ({ project }: Props) => {
             </div>
           </PopoverContent>
         </Popover>
+        <BookmarkProject
+          show={clickedOnBookmark}
+          setShow={setClickedOnBookmark}
+          project={project}
+          setBookmark={setBookmark}
+        />
       </div>
     </>
   );

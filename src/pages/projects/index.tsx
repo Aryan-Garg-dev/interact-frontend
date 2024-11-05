@@ -11,10 +11,15 @@ import CombinedProjects from '@/screens/projects/workspace';
 import NewProject from '@/sections/workspace/new_project';
 import { useSelector } from 'react-redux';
 import { userIDSelector } from '@/slices/userSlice';
+import { Project } from '@/types';
+import ProjectView from '@/sides/project/project_view';
 
 const Projects = () => {
   const [active, setActive] = useState(0);
   const userID = useSelector(userIDSelector);
+
+  const [triggerWorkspaceReload, setTriggerWorkspaceReload] = useState(false);
+  const [clickedProject, setClickedProject] = useState<Project | null>(null);
 
   return (
     <BaseWrapper title="Projects">
@@ -26,16 +31,16 @@ const Projects = () => {
               <MenuBar items={['Explore', 'Workspace', 'Saved']} active={active} setState={setActive} />
               {active == 0 ? (
                 <PrimeWrapper index={0} maxIndex={2}>
-                  <ExploreProjects />
+                  <ExploreProjects setClickedProject={setClickedProject} />
                 </PrimeWrapper>
               ) : active == 1 ? (
                 <PrimeWrapper index={1} maxIndex={2}>
-                  <CombinedProjects />
+                  <CombinedProjects setClickedProject={setClickedProject} triggerReload={triggerWorkspaceReload} />
                 </PrimeWrapper>
               ) : (
                 active == 2 && (
                   <PrimeWrapper index={2} maxIndex={2}>
-                    <BookmarkProjects />
+                    <BookmarkProjects setClickedProject={setClickedProject} />
                   </PrimeWrapper>
                 )
               )}
@@ -49,10 +54,10 @@ const Projects = () => {
         <SideBarWrapper>
           {userID && (
             <SidePrimeWrapper>
-              <NewProject />
+              <NewProject setTriggerReload={setTriggerWorkspaceReload} />
             </SidePrimeWrapper>
           )}
-          <SidePrimeWrapper>This section to promote new projects</SidePrimeWrapper>
+          {clickedProject && <ProjectView project={clickedProject} />}
         </SideBarWrapper>
       </MainWrapper>
     </BaseWrapper>

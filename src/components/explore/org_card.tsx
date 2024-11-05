@@ -19,7 +19,7 @@ const OrgCard = ({ user }: Props) => {
     <Link
       href={`/organisations/${user.username}`}
       target="_blank"
-      className="w-72 max-md:w-full flex flex-col gap-2 rounded-xl bg-white font-primary hover:shadow-xl transition-ease-300 animate-fade_third"
+      className="w-72 max-md:w-full flex flex-col gap-2 rounded-xl bg-gray-50 font-primary hover:shadow-xl transition-ease-300 animate-fade_third"
     >
       <div className="w-full relative">
         <Image
@@ -54,7 +54,7 @@ const OrgCard = ({ user }: Props) => {
       <div className="w-full h-full flex flex-col justify-between gap-4 p-4 pt-12">
         <div className="w-full flex flex-col gap-4">
           <div className="w-full flex flex-col items-center">
-            <div className="w-full text-center text-2xl font-semibold line-clamp-1">{user.name}</div>
+            <div className="w-full text-center text-primary_black text-2xl font-semibold line-clamp-1">{user.name}</div>
             <div className="text-sm text-gray-500 font-medium">@{user.username}</div>
           </div>
 

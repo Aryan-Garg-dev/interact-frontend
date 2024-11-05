@@ -180,16 +180,6 @@ const ProjectView = ({
     fetchProject(abortController);
   }, [clickedProjectIndex]);
 
-  useEffect(() => {
-    document.documentElement.style.overflowY = 'hidden';
-    document.documentElement.style.height = '100vh';
-
-    return () => {
-      document.documentElement.style.overflowY = 'auto';
-      document.documentElement.style.height = 'auto';
-    };
-  }, []);
-
   const handleClickPrev = () => {
     if (clickedProjectIndex != 0) {
       setClickedProjectIndex(prev => prev - 1);
