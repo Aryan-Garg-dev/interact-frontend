@@ -116,9 +116,9 @@ const NewProject = ({ setProjects, setTriggerReload }: Props) => {
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <div className="flex-center gap-2 cursor-pointer">
+        <Button className="w-full dark:bg-dark_primary_comp_hover dark:hover:bg-dark_primary_comp_active">
           Create a New Project <Plus size={20} />
-        </div>
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md min-w-[40%]">
         <DialogHeader>

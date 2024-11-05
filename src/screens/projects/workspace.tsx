@@ -9,6 +9,8 @@ import NoProjects from '@/components/fillers/your_projects';
 import { SERVER_ERROR } from '@/config/errors';
 import OrderMenu from '@/components/common/order_menu';
 import { useWindowWidth } from '@react-hook/window-size';
+import NewProject from '@/sections/workspace/new_project';
+import { Button } from '@/components/ui/button';
 
 const CombinedProjects = ({
   triggerReload,
@@ -70,10 +72,15 @@ const CombinedProjects = ({
   return (
     <div className="w-full">
       <OrderMenu orders={['activity', 'most_liked', 'most_viewed', 'latest']} current={order} setState={setOrder} />
+
+      <div className="w-full my-4">
+        <NewProject setProjects={setProjects} />
+      </div>
+
       {loading ? (
         <Loader />
       ) : projects.length > 0 ? (
-        <div className="w-full mt-4">
+        <div className="w-full">
           {projects.map((project, index) => {
             return (
               <ProjectCard

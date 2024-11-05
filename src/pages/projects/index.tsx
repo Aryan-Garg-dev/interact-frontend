@@ -51,7 +51,7 @@ const Projects = () => {
             </PrimeWrapper>
           )}
         </div>
-        <SideBarWrapper>
+        <SideBarWrapper hideMD>
           {userID && (
             <SidePrimeWrapper>
               <NewProject setTriggerReload={setTriggerWorkspaceReload} />

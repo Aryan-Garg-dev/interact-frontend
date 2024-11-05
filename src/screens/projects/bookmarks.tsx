@@ -117,6 +117,7 @@ const Projects = ({
           bookmark={clickedBookmark}
           setClick={setClickedOnBookmark}
           fetchBookmarks={checkAndFetchBookmarks}
+          setClickedProject={setClickedProject}
         />
       ) : loading ? (
         <Loader />

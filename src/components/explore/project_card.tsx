@@ -16,7 +16,7 @@ interface Props {
   smaller?: boolean;
 }
 
-const ProjectCard = ({ index, project, setClickedProject, isLink = false, smaller = false }: Props) => {
+const ProjectCard = ({ project, setClickedProject, isLink = false, smaller = false }: Props) => {
   const Wrapper: React.FC<{ children: ReactNode }> = ({ children }) =>
     isLink ? (
       <Link

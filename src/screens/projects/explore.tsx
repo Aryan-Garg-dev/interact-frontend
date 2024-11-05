@@ -36,14 +36,23 @@ const Projects = ({
 
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
+      const projectsData = res.data.projects || [];
+
       if (initialPage == 1) {
-        setProjects(res.data.projects || []);
+        setProjects(projectsData);
       } else {
-        const addedProjects = [...projects, ...(res.data.projects || [])];
+        const addedProjects = [...projects, ...projectsData];
         if (addedProjects.length === projects.length) setHasMore(false);
         setProjects(addedProjects);
       }
       setPage(prev => prev + 1);
+
+      if (setClickedProject && projectsData.length > 0)
+        setClickedProject(prev => {
+          if (prev) return prev;
+          return projectsData[0];
+        });
+
       setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -130,7 +139,6 @@ const Projects = ({
                   return (
                     <ProjectCard
                       key={project.id}
-                      index={index}
                       project={project}
                       setClickedProject={setClickedProject}
                       isLink={isMD}
