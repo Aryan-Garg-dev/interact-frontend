@@ -75,29 +75,9 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
       )} */}
       <div className="w-full">
         {projects?.length > 0 ? (
-          <>
-            {clickedOnProject && (
-              <ProjectView
-                projectSlugs={projects.map(project => project.slug)}
-                clickedProjectIndex={clickedProjectIndex}
-                setClickedProjectIndex={setClickedProjectIndex}
-                setClickedOnProject={setClickedOnProject}
-                fadeIn={fadeInProject}
-                setFadeIn={setFadeInProject}
-              />
-            )}
-            {projects.map((project, index) => {
-              return (
-                <ProjectCard
-                  key={project.id}
-                  index={index}
-                  project={project}
-                  setClickedOnProject={setClickedOnProject}
-                  setClickedProjectIndex={setClickedProjectIndex}
-                />
-              );
-            })}
-          </>
+          projects.map((project, index) => {
+            return <ProjectCard key={project.id} index={index} project={project} isLink />;
+          })
         ) : org ? (
           <div className="w-5/6 mx-auto">
             <Mascot message="This organization is as quiet as a library at midnight. Shh, no projects yet." />

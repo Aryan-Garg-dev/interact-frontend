@@ -141,7 +141,7 @@ const Projects = () => {
               })}
             </div>
           ) : (
-            <NoProjects setClickedOnNewProject={setClickedOnNewProject} />
+            <NoProjects />
           )}
         </div>
       </MainWrapper>
