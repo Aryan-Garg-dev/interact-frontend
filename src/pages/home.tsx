@@ -21,7 +21,7 @@ const Home = () => {
     <BaseWrapper title="Home">
       <Sidebar index={1} />
       <MainWrapper restrictWidth sidebarLayout>
-        <div className="w-2/3">
+        <div className="w-2/3 max-md:w-full">
           <MenuBar
             items={userID ? ['Explore', 'Following', 'Communities'] : ['Explore', 'Communities']}
             active={active}

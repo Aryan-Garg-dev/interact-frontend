@@ -5,6 +5,7 @@ import {
   Bell,
   Buildings,
   CalendarDots,
+  Envelope,
   Gear,
   HouseLine,
   ReadCvLogo,
@@ -115,9 +116,9 @@ const Sidebar = ({ index }: Props) => {
               setActive={setActive}
             />
             <SidebarItem
-              index={8}
-              title="Notifications"
-              icon={<Bell size={24} />}
+              index={10}
+              title="Invitations"
+              icon={<Envelope size={24} />}
               active={active}
               setActive={setActive}
             />

@@ -11,8 +11,9 @@ import ProfileDropdown from '@/sections/navbar/profile_dropdown';
 import Link from 'next/link';
 import Feedback from './feedback';
 import { Button } from '../ui/button';
+import { DialogSearchBar } from '../explore/searchbar';
 
-const Navbar = () => {
+const Navbar = ({ includeExplore = false }: { includeExplore?: boolean }) => {
   const [clickedOnNotifications, setClickedOnNotifications] = useState(false);
   const [clickedOnProfile, setClickedOnProfile] = useState(false);
   const [clickedOnFeedback, setClickedOnFeedback] = useState(false);
@@ -37,6 +38,7 @@ const Navbar = () => {
         </Link>
         {user.isLoggedIn ? (
           <div className="flex items-center gap-2 max-md:gap-0 z-0">
+            {includeExplore && <DialogSearchBar />}
             <div
               onClick={() => setClickedOnFeedback(true)}
               className="w-10 h-10 rounded-full flex-center hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover cursor-pointer transition-ease-300"

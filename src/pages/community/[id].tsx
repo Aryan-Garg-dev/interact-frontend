@@ -170,7 +170,7 @@ const Community = ({ id }: { id: string }) => {
             </div>
           </div>
           <div className="w-full flex gap-4 mt-14">
-            <div className="w-2/3">
+            <div className="w-2/3 max-md:w-full">
               <PrimeWrapper index={0} maxIndex={0}>
                 <div className="w-full">
                   <OrderMenu orders={['trending', 'most_liked', 'latest']} current={order} setState={setOrder} />

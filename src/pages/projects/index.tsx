@@ -20,7 +20,7 @@ const Projects = () => {
     <BaseWrapper title="Projects">
       <Sidebar index={2} />
       <MainWrapper sidebarLayout>
-        <div className="w-2/3">
+        <div className="w-2/3 max-md:w-full">
           {userID ? (
             <>
               <MenuBar items={['Explore', 'Workspace', 'Saved']} active={active} setState={setActive} />

@@ -18,7 +18,7 @@ const Organisations = () => {
     <BaseWrapper title="Organisations">
       <Sidebar index={4} />
       <MainWrapper sidebarLayout>
-        <div className="w-2/3">
+        <div className="w-2/3 max-md:w-full">
           {userID ? (
             <>
               <MenuBar items={['Explore', 'Joined']} active={active} setState={setActive} />

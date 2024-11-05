@@ -1,20 +1,26 @@
-import { Command, CommandEmpty, CommandInput, CommandList } from '@/components/ui/command';
+import { Command, CommandDialog, CommandEmpty, CommandInput, CommandList } from '@/components/ui/command';
 import { SERVER_ERROR } from '@/config/errors';
 import { COMMUNITY_PROFILE_PIC_URL, EVENT_PIC_URL, EXPLORE_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project, User, Opening, Event, Organization, Community } from '@/types';
 import Toaster from '@/utils/toaster';
 import { CommandLoading } from 'cmdk';
-import { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { Dispatch, ReactNode, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import Loader from '../common/loader';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 import postHandler from '@/handlers/post_handler';
-import { X } from '@phosphor-icons/react';
+import { MagnifyingGlass, X } from '@phosphor-icons/react';
 
-const SearchBar = () => {
+const SearchBar = ({
+  isDialogOpen,
+  setIsDialogOpen,
+}: {
+  isDialogOpen: boolean;
+  setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
+}) => {
   const [results, setResults] = useState({
     projects: [] as Project[],
     users: [] as User[],
@@ -24,7 +30,6 @@ const SearchBar = () => {
     communities: [] as Community[],
   });
   const [loading, setLoading] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [filters, setFilters] = useState<string[]>([]);
   const [search, setSearch] = useState('');
 
@@ -110,6 +115,90 @@ const SearchBar = () => {
     window.location.href = url.toString();
   };
 
+  return (
+    <Command
+      className={`bg-gray-50 dark:bg-dark_primary_comp border-[1px] border-gray-200 dark:border-gray-800 ${
+        isDialogOpen && !noResults && 'pb-2 shadow-xl dark:shadow-[#2b2828]'
+      } transition-shadow ease-in duration-300`}
+    >
+      <div className="w-full flex items-center">
+        {project && (
+          <div className="w-fit h-8 flex-center gap-3 max-w-[240px] mx-1 text-xs rounded-md text-primary_text border-primary_text border-[1px] py-1 px-2">
+            <div className="line-clamp-1">{project.title}</div>
+            <X className="cursor-pointer" onClick={handleRemoveItem} />
+          </div>
+        )}
+        {opening && (
+          <div className="w-fit h-8 flex-center gap-3 max-w-[240px] mx-1 text-xs rounded-md text-primary_text border-primary_text border-[1px] py-1 px-2">
+            <div className="line-clamp-1">{opening.title}</div>
+            <X className="cursor-pointer" onClick={handleRemoveItem} />
+          </div>
+        )}
+        <CommandInput
+          className="w-[640px]"
+          placeholder="Search for users, projects, openings, communities, events, etc."
+          value={search}
+          onValueChange={value => {
+            if (value) fetchResults(value);
+            setIsDialogOpen(Boolean(value));
+            setSearch(value);
+          }}
+        />
+      </div>
+
+      <CommandList>
+        {isDialogOpen &&
+          (loading ? (
+            <CommandLoading className="loader-container">
+              <Loader />
+            </CommandLoading>
+          ) : (
+            <>
+              {noResults ? (
+                search && <CommandEmpty> No results found for &quot;{search}&quot;</CommandEmpty>
+              ) : (
+                <>
+                  <ToggleGroup
+                    className="w-full flex-center gap-4 my-2 flex-wrap"
+                    value={filters}
+                    onValueChange={setFilters}
+                    type="multiple"
+                  >
+                    {['openings', 'projects', 'users', 'events', 'communities', 'organizations'].map(filterType => (
+                      <ToggleGroupItem key={filterType} value={filterType} className="capitalize">
+                        {filterType}
+                      </ToggleGroupItem>
+                    ))}
+                  </ToggleGroup>
+                </>
+              )}
+              {Object.entries(results).map(([key, group]) => {
+                return (
+                  (filters.length === 0 || filters.includes(key)) &&
+                  group.length > 0 && (
+                    <CommandGroup
+                      key={key}
+                      heading={key}
+                      loadMoreURL={getLoadMoreURL(key)}
+                      showLoadMore={group.length === 3}
+                    >
+                      {group.map(item => (
+                        <SearchItem key={item.id} item={item} type={key} />
+                      ))}
+                    </CommandGroup>
+                  )
+                );
+              })}
+            </>
+          ))}
+      </CommandList>
+    </Command>
+  );
+};
+
+const FixedSearchBar = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -125,86 +214,28 @@ const SearchBar = () => {
   return (
     <div
       ref={menuRef}
-      className="w-[640px] max-md:hidden fixed top-2 right-1/2 translate-x-1/2 max-md:w-taskbar_md mx-auto z-20"
+      className="w-[640px]  max-md:hidden fixed top-2 right-1/2 translate-x-1/2 max-md:w-taskbar_md mx-auto z-20"
     >
-      <Command
-        className={`bg-gray-50 dark:bg-dark_primary_comp border-[1px] border-gray-200 dark:border-gray-800 ${
-          isDialogOpen && !noResults && 'pb-2 shadow-xl dark:shadow-[#2b2828]'
-        } transition-shadow ease-in duration-300`}
-      >
-        <div className="w-full flex items-center">
-          {project && (
-            <div className="w-fit h-8 flex-center gap-3 max-w-[240px] mx-1 text-xs rounded-md text-primary_text border-primary_text border-[1px] py-1 px-2">
-              <div className="line-clamp-1">{project.title}</div>
-              <X className="cursor-pointer" onClick={handleRemoveItem} />
-            </div>
-          )}
-          {opening && (
-            <div className="w-fit h-8 flex-center gap-3 max-w-[240px] mx-1 text-xs rounded-md text-primary_text border-primary_text border-[1px] py-1 px-2">
-              <div className="line-clamp-1">{opening.title}</div>
-              <X className="cursor-pointer" onClick={handleRemoveItem} />
-            </div>
-          )}
-          <CommandInput
-            className={`w-[640px]`}
-            placeholder="Search for users, projects, openings, communities, events, etc."
-            value={search}
-            onValueChange={value => {
-              if (value) fetchResults(value);
-              setIsDialogOpen(Boolean(value));
-              setSearch(value);
-            }}
-          />
-        </div>
-
-        <CommandList>
-          {isDialogOpen &&
-            (loading ? (
-              <CommandLoading className="loader-container">
-                <Loader />
-              </CommandLoading>
-            ) : (
-              <>
-                {noResults ? (
-                  <CommandEmpty> No results found for &quot;{search}&quot;</CommandEmpty>
-                ) : (
-                  <>
-                    <ToggleGroup
-                      className="w-full flex-center gap-4 my-2"
-                      value={filters}
-                      onValueChange={setFilters}
-                      type="multiple"
-                    >
-                      {['openings', 'projects', 'users', 'events', 'communities', 'organizations'].map(filterType => (
-                        <ToggleGroupItem key={filterType} value={filterType} className="capitalize">
-                          {filterType}
-                        </ToggleGroupItem>
-                      ))}
-                    </ToggleGroup>
-                  </>
-                )}
-                {Object.entries(results).map(([key, group]) => {
-                  return (
-                    (filters.length === 0 || filters.includes(key)) &&
-                    group.length > 0 && (
-                      <CommandGroup
-                        key={key}
-                        heading={key}
-                        loadMoreURL={getLoadMoreURL(key)}
-                        showLoadMore={group.length === 3}
-                      >
-                        {group.map(item => (
-                          <SearchItem key={item.id} item={item} type={key} />
-                        ))}
-                      </CommandGroup>
-                    )
-                  );
-                })}
-              </>
-            ))}
-        </CommandList>
-      </Command>
+      <SearchBar isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
     </div>
+  );
+};
+
+export const DialogSearchBar = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  return (
+    <>
+      <div
+        onClick={() => setIsDialogOpen(true)}
+        className="w-10 h-10 rounded-full flex-center hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover cursor-pointer transition-ease-300"
+      >
+        <MagnifyingGlass className="max-md:w-6 max-md:h-6" size={24} weight="regular" />
+      </div>
+      <CommandDialog open={isDialogOpen} onOpenChange={val => setIsDialogOpen(val)}>
+        <SearchBar isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
+      </CommandDialog>
+    </>
   );
 };
 
@@ -357,4 +388,4 @@ const SearchItem = ({ item, type }: { item: any; type: string }) => {
   }
 };
 
-export default SearchBar;
+export default FixedSearchBar;

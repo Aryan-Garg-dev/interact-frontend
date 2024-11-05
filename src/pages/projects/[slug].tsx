@@ -70,7 +70,7 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
     <BaseWrapper title="Projects">
       <Sidebar index={2} />
       <MainWrapper restrictWidth sidebarLayout>
-        <div className="w-2/3">
+        <div className="w-2/3 max-md:w-full">
           <PrimeWrapper>
             <div className="w-full flex flex-col gap-8">
               <div className="w-full relative group">

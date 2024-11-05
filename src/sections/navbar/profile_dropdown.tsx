@@ -51,6 +51,12 @@ const ProfileDropdown = ({ setShow }: Props) => {
           </div>
         </Link>
         <Link
+          href="/invitations"
+          className="w-full md:hidden flex-center py-4 rounded-lg cursor-pointer transition-ease-200 hover:bg-gray-100 dark:hover:bg-[#52525246]"
+        >
+          Invitations
+        </Link>
+        <Link
           href={`${user.isOrganization ? '/organisation' : ''}/settings`}
           className="w-full flex-center py-4 rounded-lg cursor-pointer transition-ease-200 hover:bg-gray-100 dark:hover:bg-[#52525246]"
         >

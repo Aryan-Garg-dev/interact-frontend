@@ -119,11 +119,7 @@ const Projects = () => {
       ) : loading ? (
         <Loader />
       ) : bookmarks.length > 0 ? (
-        <div
-          className={`w-full mx-auto justify-center grid grid-cols-2 ${
-            open ? 'gap-x-4' : 'gap-x-12'
-          } max-md:grid-cols-1  transition-ease-out-500`}
-        >
+        <div className="w-full flex flex-wrap justify-center gap-6">
           {bookmarks.map(bookmark => {
             return (
               <Bookmark

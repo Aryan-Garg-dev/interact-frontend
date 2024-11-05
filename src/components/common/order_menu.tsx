@@ -10,7 +10,7 @@ interface Props {
 const OrderMenu = ({ orders, current, setState }: Props) => {
   return (
     <ToggleGroup
-      className="w-full flex-center gap-4"
+      className="w-full flex-center gap-4 max-md:flex-wrap"
       value={current}
       onValueChange={value => setState(value)}
       type="single"

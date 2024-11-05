@@ -19,7 +19,7 @@ const Events = () => {
     <BaseWrapper title="Events">
       <Sidebar index={3} />
       <MainWrapper sidebarLayout restrictWidth>
-        <div className="w-2/3">
+        <div className="w-2/3 max-md:w-full">
           {userID ? (
             <>
               <MenuBar items={['Explore', 'Registered', 'Saved']} active={active} setState={setActive} />
