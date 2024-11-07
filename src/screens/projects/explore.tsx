@@ -6,8 +6,6 @@ import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { setExploreTab } from '@/slices/feedSlice';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import OrderMenu from '@/components/common/order_menu';
@@ -25,9 +23,6 @@ const Projects = ({
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState('trending');
-
-  const dispatch = useDispatch();
-  const checkSet = new Set();
 
   const fetchProjects = async (search: string | null, initialPage?: number) => {
     const URL = `${EXPLORE_URL}/projects?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
@@ -88,18 +83,6 @@ const Projects = ({
     else fetchProjects(new URLSearchParams(window.location.search).get('search'), 1);
   }, [window.location.search, order]);
 
-  useEffect(() => {
-    const oid = new URLSearchParams(window.location.search).get('oid');
-    const action = new URLSearchParams(window.location.search).get('action');
-    if (oid && action == 'external') dispatch(setExploreTab(1)); //TODO add tab query to this url
-
-    const tab = new URLSearchParams(window.location.search).get('tab');
-    if (tab && tab == 'projects') dispatch(setExploreTab(0));
-    else if (tab && tab == 'openings') dispatch(setExploreTab(1));
-    else if (tab && tab == 'users') dispatch(setExploreTab(2));
-    else if (tab && tab == 'organisations') dispatch(setExploreTab(3));
-  }, []);
-
   const userID = useSelector(userIDSelector);
 
   const width = useWindowWidth();
@@ -131,21 +114,9 @@ const Projects = ({
               hasMore={hasMore}
               loader={<Loader />}
             >
-              {projects.map((project, index) => {
-                if (checkSet.has(project.id)) {
-                  return;
-                } else {
-                  checkSet.add(project.id);
-                  return (
-                    <ProjectCard
-                      key={project.id}
-                      project={project}
-                      setClickedProject={setClickedProject}
-                      isLink={isMD}
-                    />
-                  );
-                }
-              })}
+              {projects.map(project => (
+                <ProjectCard key={project.id} project={project} setClickedProject={setClickedProject} isLink={isMD} />
+              ))}
             </InfiniteScroll>
           ) : (
             <NoSearch />
@@ -156,4 +127,4 @@ const Projects = ({
   );
 };
 
-export default Projects;
+export default React.memo(Projects);

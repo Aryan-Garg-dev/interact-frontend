@@ -7,11 +7,8 @@ import Link from 'next/link';
 import Links from '@/components/explore/show_links';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import { SidePrimeWrapper } from '@/wrappers/side';
-import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
-import { PROJECT_PIC_URL } from '@/config/routes';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import LowerProject from '@/components/lowers/lower_project';
-import { Button } from '@/components/ui/button';
+import ProjectCardCarousel from '@/components/explore/project_card_carousel';
 
 interface Props {
   project: Project;
@@ -22,7 +19,10 @@ const ProjectView = ({ project }: Props) => {
 
   return (
     <SidePrimeWrapper stickTop>
-      <div className="w-full max-h-base_md overflow-y-auto flex flex-col gap-4 dark:text-white font-primary">
+      <div
+        key={project.id}
+        className="w-full max-h-base_md overflow-y-auto flex flex-col gap-4 dark:text-white font-primary animate-fade_third"
+      >
         <div className="w-full flex gap-2 max-lg:gap-4">
           <Image
             crossOrigin="anonymous"
@@ -55,59 +55,20 @@ const ProjectView = ({ project }: Props) => {
             </div>
           </div>
         </div>
-        {project.images && project.images.length > 1 ? (
-          <Carousel
-            className="w-full"
-            opts={{
-              align: 'center',
-              loop: true,
-              dragFree: false,
-              duration: 2,
-              active: true,
-            }}
-          >
-            <CarouselContent>
-              {project.images.map((image, index) => {
-                let imageHash = 'no-hash';
-                if (project.hashes && index < project.hashes.length) imageHash = project.hashes[index];
-
-                return (
-                  <CarouselItem key={image}>
-                    <Image
-                      crossOrigin="anonymous"
-                      width={430}
-                      height={270}
-                      className="w-full rounded-lg"
-                      alt={'Project Pic'}
-                      src={`${PROJECT_PIC_URL}/${image}`}
-                      placeholder="blur"
-                      blurDataURL={imageHash}
-                    />
-                  </CarouselItem>
-                );
-              })}
-            </CarouselContent>
-          </Carousel>
-        ) : (
-          <Image
-            crossOrigin="anonymous"
-            className="w-full rounded-lg"
-            src={getProjectPicURL(project)}
-            alt="Project Cover"
-            width={430}
-            height={270}
-            placeholder="blur"
-            blurDataURL={getProjectPicHash(project)}
-          />
-        )}
-
+        <ProjectCardCarousel project={project} />
         <div className="w-full flex flex-col gap-4">
           <div className="flex flex-wrap justify-between items-center gap-2">
             <div className="font-bold text-3xl text-gradient">{project.title}</div>
             <LowerProject project={project} />
           </div>
           <div className="font-semibold text-lg">{project.tagline}</div>
-
+          <Link
+            href={`/projects/${project.slug}`}
+            target="_blank"
+            className="w-full flex-center py-2 bg-primary_comp dark:bg-dark_primary_comp_hover hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_active rounded-lg transition-ease-300"
+          >
+            Open Project <ArrowUpRight size={20} weight="bold" />
+          </Link>
           <div className="text-sm whitespace-pre-line">
             {project.description.length > 200 ? (
               clickedOnReadMore ? (
@@ -141,13 +102,6 @@ const ProjectView = ({ project }: Props) => {
               })}
           </div>
           <Links links={project.links} />
-          <Link
-            href={`/projects/${project.slug}`}
-            target="_blank"
-            className="w-full flex-center py-2 bg-primary_comp dark:bg-dark_primary_comp_hover hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_active rounded-lg transition-ease-300"
-          >
-            Open Project <ArrowUpRight size={20} weight="bold" />
-          </Link>
         </div>
       </div>
     </SidePrimeWrapper>

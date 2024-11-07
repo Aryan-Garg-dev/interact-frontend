@@ -33,6 +33,7 @@ import EditProjectImages from '@/sections/workspace/edit_project_images';
 import Tasks from '@/sections/workspace/tasks';
 import Collaborators from '@/sides/project/collaborators';
 import Activity from '@/sides/project/activity';
+import moment from 'moment';
 
 const ProjectComponent = ({ slug }: { slug: string }) => {
   const [project, setProject] = useState<Project>(initialProject);
@@ -176,7 +177,10 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
         <SideBarWrapper>
           <SidePrimeWrapper>
             <div className="w-full flex flex-col gap-2">
-              <div className="text-lg font-medium">Project By</div>
+              <div className="w-full flex items-center justify-between">
+                <div className="text-lg font-medium">Project By</div>
+                <div className="text-xs font-medium">{moment(project.createdAt).fromNow()}</div>
+              </div>
               <UserSideCard user={project.user} />
             </div>
           </SidePrimeWrapper>

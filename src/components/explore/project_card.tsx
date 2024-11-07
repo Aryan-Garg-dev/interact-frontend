@@ -1,12 +1,9 @@
 import React, { ReactNode } from 'react';
 import { Project } from '@/types';
-import Image from 'next/image';
 import { Eye, HeartStraight } from '@phosphor-icons/react';
-import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
-import { PROJECT_PIC_URL } from '@/config/routes';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import Link from 'next/link';
 import UserHoverCard from './user_hover_card';
+import ProjectCardCarousel from './project_card_carousel';
 
 interface Props {
   index?: number;
@@ -42,51 +39,7 @@ const ProjectCard = ({ project, setClickedProject, isLink = false, smaller = fal
 
   return (
     <Wrapper>
-      {project.images && project.images.length > 1 ? (
-        <Carousel
-          className="w-1/5"
-          opts={{
-            align: 'center',
-            loop: true,
-            dragFree: false,
-            duration: 2,
-            active: true,
-          }}
-        >
-          <CarouselContent>
-            {project.images.map((image, index) => {
-              let imageHash = 'no-hash';
-              if (project.hashes && index < project.hashes.length) imageHash = project.hashes[index];
-
-              return (
-                <CarouselItem key={image}>
-                  <Image
-                    crossOrigin="anonymous"
-                    width={430}
-                    height={270}
-                    className="w-full rounded-lg"
-                    alt={'Project Pic'}
-                    src={`${PROJECT_PIC_URL}/${image}`}
-                    placeholder="blur"
-                    blurDataURL={imageHash}
-                  />
-                </CarouselItem>
-              );
-            })}
-          </CarouselContent>
-        </Carousel>
-      ) : (
-        <Image
-          crossOrigin="anonymous"
-          className="w-1/5 rounded-lg"
-          src={getProjectPicURL(project)}
-          alt="Project Cover"
-          width={100}
-          height={100}
-          placeholder="blur"
-          blurDataURL={getProjectPicHash(project)}
-        />
-      )}
+      <ProjectCardCarousel project={project} width="1/5" />
       <div className="w-4/5 flex items-center justify-between dark:text-white">
         <div className="grow">
           <div className={`${!smaller && 'text-lg'} font-medium line-clamp-1`}>{project.title}</div>
@@ -118,4 +71,4 @@ const ProjectCard = ({ project, setClickedProject, isLink = false, smaller = fal
   );
 };
 
-export default ProjectCard;
+export default React.memo(ProjectCard);

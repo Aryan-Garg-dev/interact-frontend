@@ -10,7 +10,6 @@ import { SERVER_ERROR } from '@/config/errors';
 import OrderMenu from '@/components/common/order_menu';
 import { useWindowWidth } from '@react-hook/window-size';
 import NewProject from '@/sections/workspace/new_project';
-import { Button } from '@/components/ui/button';
 
 const CombinedProjects = ({
   triggerReload,
@@ -22,8 +21,6 @@ const CombinedProjects = ({
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [order, setOrder] = useState('activity');
-
-  const [fadeIn, setFadeIn] = useState(true);
 
   const getProjects = (abortController: AbortController) => {
     setLoading(true);
@@ -81,17 +78,15 @@ const CombinedProjects = ({
         <Loader />
       ) : projects.length > 0 ? (
         <div className="w-full">
-          {projects.map((project, index) => {
-            return (
-              <ProjectCard
-                key={project.id}
-                index={index}
-                project={project}
-                setClickedProject={setClickedProject}
-                isLink={isMD}
-              />
-            );
-          })}
+          {projects.map((project, index) => (
+            <ProjectCard
+              key={project.id}
+              index={index}
+              project={project}
+              setClickedProject={setClickedProject}
+              isLink={isMD}
+            />
+          ))}
         </div>
       ) : (
         <NoProjects />
@@ -100,4 +95,4 @@ const CombinedProjects = ({
   );
 };
 
-export default CombinedProjects;
+export default React.memo(CombinedProjects);
