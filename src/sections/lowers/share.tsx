@@ -135,7 +135,9 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
         <div onClick={() => setShow(false)} className="md:hidden absolute top-2 right-2">
           <X size={24} weight="bold" />
         </div>
-        <div className="text-3xl capitalize text-center text-gray-900 font-bold">Share this {itemType}</div>
+        <div className="text-3xl capitalize text-center text-gray-900 dark:text-white font-bold">
+          Share this {itemType}
+        </div>
         <div className="w-full flex max-md:flex-col mt-4 gap-4">
           <div className="w-1/2 flex flex-col gap-2">
             {item}
@@ -156,13 +158,12 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
                         }}
                         className={`w-full flex-center gap-2 rounded-lg py-2 px-2 cursor-pointer ${
                           selectedChats.includes(chat.id)
-                            ? 'bg-primary_comp_hover dark:bg-dark_primary_comp'
-                            : 'hover:bg-primary_comp dark:hover:bg-[#ffe1fc10]'
+                            ? 'bg-primary_comp_hover dark:bg-dark_primary_comp_active'
+                            : 'hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
                         } transition-all ease-in-out duration-200`}
                       >
                         {chat.isGroup ? (
                           <>
-                            {' '}
                             <Image
                               crossOrigin="anonymous"
                               width={50}

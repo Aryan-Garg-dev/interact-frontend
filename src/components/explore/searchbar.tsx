@@ -115,13 +115,21 @@ const SearchBar = ({
     window.location.href = url.toString();
   };
 
+  const handleRemoveSearch = () => {
+    const url = new URL(window.location.href);
+
+    url.searchParams.delete('search');
+
+    window.location.href = url.toString();
+  };
+
   return (
     <Command
       className={`bg-gray-50 dark:bg-dark_primary_comp border-[1px] border-gray-200 dark:border-gray-800 ${
         isDialogOpen && !noResults && 'pb-2 shadow-xl dark:shadow-[#2b2828]'
       } transition-shadow ease-in duration-300`}
     >
-      <div className="w-full flex items-center">
+      <div className="w-full flex items-center justify-between">
         {project && (
           <div className="w-fit h-8 flex-center gap-3 max-w-[240px] mx-1 text-xs rounded-md text-primary_text border-primary_text border-[1px] py-1 px-2">
             <div className="line-clamp-1">{project.title}</div>
@@ -135,7 +143,7 @@ const SearchBar = ({
           </div>
         )}
         <CommandInput
-          className="w-[640px]"
+          className="w-[560px]"
           placeholder="Search for users, projects, openings, communities, events, etc."
           value={search}
           onValueChange={value => {
@@ -144,6 +152,7 @@ const SearchBar = ({
             setSearch(value);
           }}
         />
+        {search && <X onClick={handleRemoveSearch} className="cursor-pointer mr-2" size={16} weight="regular" />}
       </div>
 
       <CommandList>
@@ -181,6 +190,7 @@ const SearchBar = ({
                       heading={key}
                       loadMoreURL={getLoadMoreURL(key)}
                       showLoadMore={group.length === 3}
+                      setIsDialogOpen={setIsDialogOpen}
                     >
                       {group.map(item => (
                         <SearchItem key={item.id} item={item} type={key} />
@@ -239,12 +249,13 @@ export const DialogSearchBar = () => {
   );
 };
 
-const CommandGroup: React.FC<{ children: ReactNode; heading: string; loadMoreURL: string; showLoadMore: boolean }> = ({
-  children,
-  heading,
-  loadMoreURL,
-  showLoadMore,
-}) => {
+const CommandGroup: React.FC<{
+  children: ReactNode;
+  heading: string;
+  loadMoreURL: string;
+  showLoadMore: boolean;
+  setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
+}> = ({ children, heading, loadMoreURL, showLoadMore, setIsDialogOpen }) => {
   return (
     <div className="w-full flex flex-col gap-2 px-2 mt-2">
       <CommandSeparator />
@@ -253,6 +264,7 @@ const CommandGroup: React.FC<{ children: ReactNode; heading: string; loadMoreURL
       {showLoadMore && (
         <Link
           href={loadMoreURL}
+          onClick={() => setIsDialogOpen(false)}
           className="w-fit mx-auto text-xs font-medium text-gray-400 hover:underline underline-offset-2"
         >
           Load More

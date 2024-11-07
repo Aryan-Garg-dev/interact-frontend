@@ -95,4 +95,4 @@ const CombinedProjects = ({
   );
 };
 
-export default React.memo(CombinedProjects);
+export default CombinedProjects;

@@ -12,7 +12,7 @@ const ProjectCardCarousel = ({ project, width = 'full' }: { project: Project; wi
       className={`w-${width}`}
       opts={{
         align: 'center',
-        loop: true,
+        loop: false,
         dragFree: false,
         duration: 2,
         active: true,

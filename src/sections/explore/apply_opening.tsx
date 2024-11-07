@@ -1,3 +1,4 @@
+import ProjectCardCarousel from '@/components/explore/project_card_carousel';
 import Links from '@/components/utils/edit_links';
 import { SERVER_ERROR } from '@/config/errors';
 import { APPLICATION_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
@@ -5,7 +6,6 @@ import socketService from '@/config/ws';
 import postHandler from '@/handlers/post_handler';
 import { setApplications, userSelector } from '@/slices/userSlice';
 import { Opening } from '@/types';
-import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 import Toaster from '@/utils/toaster';
 import { ArrowUpRight, X } from '@phosphor-icons/react';
 import moment from 'moment';
@@ -87,7 +87,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
           <X size={24} weight="bold" />
         </div>
         <div className="w-full h-full flex max-lg:flex-col gap-4 items-center">
-          <div className="w-1/3 h-full max-lg:h-fit max-lg:w-full font-primary dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg p-4 flex flex-col items-center justify-center gap-4 max-lg:gap-4 transition-ease-300 cursor-default">
+          <div className="w-1/3 h-full max-lg:h-fit max-lg:w-full font-primary dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg p-4 flex-center flex-col gap-4 max-lg:gap-4 transition-ease-300 cursor-default">
             {org ? (
               <Image
                 crossOrigin="anonymous"
@@ -102,16 +102,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                 }
               />
             ) : (
-              <Image
-                crossOrigin="anonymous"
-                width={200}
-                height={200}
-                alt={'User Pic'}
-                src={getProjectPicURL(opening.project)}
-                className="w-[240px] h-[240px] max-lg:hidden max-lg:w-[120px] max-lg:h-[120px] rounded-lg object-cover"
-                placeholder="blur"
-                blurDataURL={getProjectPicHash(opening.project)}
-              />
+              opening.project && <ProjectCardCarousel project={opening.project} />
             )}
 
             <div className="w-full flex flex-col gap-4 max-lg:gap-2 px-8">
@@ -130,7 +121,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                   setContent(el.target.value);
                 }}
                 maxLength={500}
-                className="w-full px-4 py-2 rounded-lg text-black dark:text-white bg-primary_comp dark:bg-dark_primary_comp min-h-[27rem] max-h-[27rem] focus:outline-none"
+                className="w-full px-4 py-2 rounded-lg text-black dark:text-white bg-primary_comp dark:bg-dark_primary_comp_hover min-h-[27rem] max-h-[27rem] focus:outline-none"
                 placeholder="Add a Message of maximum 500 characters"
               />
             </div>
@@ -146,7 +137,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                     value={yoe}
                     onChange={el => {
                       const val = Number(el.target.value);
-                      if (val >= 0 && val <= 10) setYoe(val);
+                      if (val >= 0 && val <= 50) setYoe(val);
                     }}
                     type="number"
                     className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 dark:border-dark_primary_btn rounded-lg p-2"
@@ -191,7 +182,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                 </div>
 
                 <div
-                  className="h-10 rounded-xl max-lg:mt-6 dark:bg-dark_primary_comp bg-primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active flex-center text-lg cursor-pointer dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active transition-ease-300"
+                  className="h-10 rounded-xl max-lg:mt-6 dark:bg-dark_primary_comp_hover bg-primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active flex-center text-lg cursor-pointer dark:hover:bg-dark_primary_comp_active dark:active:bg-dark_primary_comp_active transition-ease-300"
                   onClick={handleSubmit}
                 >
                   Apply!

@@ -224,21 +224,21 @@ const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen,
                 <CarouselItem className="w-full rounded-lg">
                   {newImageUrl ? (
                     <div className="w-full relative">
-                      <div className="w-full h-full absolute top-0 right-0 flex z-10">
+                      <div className="w-full h-full absolute top-0 right-0 flex text-lg font-medium z-10">
                         <div
                           onClick={handleAddNewImage}
-                          className="w-1/2 h-full flex-center hover:bg-[#ffffff4e] opacity-0 hover:opacity-100 rounded-l-lg transition-ease-300 cursor-pointer"
+                          className="w-1/2 h-full flex-center hover:bg-[#7fb06e4e] opacity-0 hover:opacity-100 rounded-l-lg transition-ease-300 cursor-pointer"
                         >
-                          Yes
+                          Confirm
                         </div>
                         <div
                           onClick={() => {
                             setNewImage(undefined);
                             setNewImageUrl('');
                           }}
-                          className="w-1/2 h-full flex-center hover:bg-[#ffffff4e] opacity-0 hover:opacity-100 rounded-r-lg transition-ease-300 cursor-pointer"
+                          className="w-1/2 h-full flex-center hover:bg-[#9960604e] opacity-0 hover:opacity-100 rounded-r-lg transition-ease-300 cursor-pointer"
                         >
-                          No
+                          Discard
                         </div>
                       </div>
                       <Image
@@ -247,7 +247,7 @@ const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen,
                         height={1080}
                         alt="project cover"
                         src={newImageUrl}
-                        className="w-full h-full rounded-lg"
+                        className="w-full h-full rounded-lg border-2 border-white border-dashed"
                       />
                     </div>
                   ) : (
@@ -275,7 +275,10 @@ const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen,
                           }
                         }}
                       />
-                      <label className="w-full h-full flex-center cursor-pointer" htmlFor="image">
+                      <label
+                        className="w-full h-80 hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover rounded-md flex-center cursor-pointer transition-ease-300"
+                        htmlFor="image"
+                      >
                         Click Here to Add Picture
                       </label>
                     </div>
@@ -319,15 +322,17 @@ const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen,
             </Droppable>
           </DragDropContext>
         )}
-        <Button
-          onClick={() => {
-            if (stage == 0) setStage(1);
-            else handleRearrangeImages();
-          }}
-          className="dark:bg-dark_primary_comp_hover dark:hover:bg-dark_primary_comp_active"
-        >
-          {stage == 0 ? 'Rearrange Photos' : 'Submit'}
-        </Button>
+        {images.length > 1 && (
+          <Button
+            onClick={() => {
+              if (stage == 0) setStage(1);
+              else handleRearrangeImages();
+            }}
+            className="dark:bg-dark_primary_comp_hover dark:hover:bg-dark_primary_comp_active"
+          >
+            {stage == 0 ? 'Rearrange Photos' : 'Submit'}
+          </Button>
+        )}
         {stage == 1 && (
           <Button
             onClick={() => setStage(0)}

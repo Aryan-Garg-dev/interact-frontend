@@ -148,7 +148,7 @@ const User = ({ username }: Props) => {
     <BaseWrapper title={`${user.name}`}>
       <Sidebar index={-1} />
       <MainWrapper restrictWidth sidebarLayout>
-        <div className="w-2/3 relative">
+        <div className="w-2/3 max-md:w-full relative">
           {username == loggedInUser.username ? (
             <>
               <input

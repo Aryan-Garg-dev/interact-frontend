@@ -40,9 +40,6 @@ const ManageMemberships = ({
   setProject: React.Dispatch<React.SetStateAction<Project>>;
   org?: boolean;
 }) => {
-  const [clickedMembershipID, setClickedMembershipID] = useState<string | null>(null);
-  const [clickedMembershipTitle, setClickedMembershipTitle] = useState<string>('');
-  const [clickedMembershipRole, setClickedMembershipRole] = useState<string | null>(null);
   const currentOrgID = useSelector(currentOrgSelector).id;
 
   const handleRemoveMember = async (membershipID: string) => {

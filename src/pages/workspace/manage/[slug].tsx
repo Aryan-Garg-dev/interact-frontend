@@ -14,8 +14,6 @@ import { userSelector } from '@/slices/userSlice';
 import Loader from '@/components/common/loader';
 import Chats from '@/screens/workspace/manage_project/chats';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
-import { checkParticularOrgAccess } from '@/utils/funcs/access';
-import { ORG_MANAGER, ORG_SENIOR } from '@/config/constants';
 
 interface Props {
   slug: string;
@@ -48,7 +46,7 @@ const ManageProject = ({ slug }: Props) => {
 
   return (
     <BaseWrapper title={`Manage | ${project.title}`}>
-      <Sidebar index={3} />
+      <Sidebar index={2} />
       <MainWrapper>
         <div className="w-full flex flex-col items-center gap-4">
           <div className="w-[70vw] max-lg:w-[75vw] max-md:w-[95%] flex items-start gap-3 p-base_padding pl-0 pt-28 max-md:pt-16">

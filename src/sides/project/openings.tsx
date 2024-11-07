@@ -23,7 +23,9 @@ const Openings = ({ project, setProject }: Props) => {
           {checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR, project.organization) ? (
             <div className="flex-center gap-2">
               <AddOpening project={project} setProject={setProject} org={checkOrgAccess(ORG_SENIOR)} />
-              <ManageOpenings project={project} setProject={setProject} org={checkOrgAccess(ORG_SENIOR)} />
+              {project.openings && project.openings.length > 0 && (
+                <ManageOpenings project={project} setProject={setProject} org={checkOrgAccess(ORG_SENIOR)} />
+              )}
             </div>
           ) : (
             <Link href={`/openings?pid=${project.slug}`} target="_blank" className="text-xs">

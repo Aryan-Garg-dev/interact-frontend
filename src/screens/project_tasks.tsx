@@ -128,7 +128,15 @@ const ProjectTasks = ({ slug, org = false }: Props) => {
   }, []);
   return (
     <MainWrapper>
-      {clickedOnNewTask && <NewTask org={false} setShow={setClickedOnNewTask} project={project} setTasks={setTasks} />}
+      {clickedOnNewTask && (
+        <NewTask
+          org={false}
+          show={clickedOnNewTask}
+          setShow={setClickedOnNewTask}
+          project={project}
+          setTasks={setTasks}
+        />
+      )}
       <div className="w-full flex flex-col">
         <div className="w-full flex justify-between items-center p-base_padding pt-0">
           <div className="flex-center gap-4">
