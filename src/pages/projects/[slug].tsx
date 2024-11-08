@@ -95,7 +95,7 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
                     className="w-full"
                     opts={{
                       align: 'center',
-                      loop: true,
+                      loop: false,
                       dragFree: false,
                       duration: 2,
                       active: true,
