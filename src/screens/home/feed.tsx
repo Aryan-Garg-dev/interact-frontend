@@ -34,7 +34,7 @@ const Feed = () => {
 
   const getFeed = () => {
     const URL = `/feed/combined?page=${page}&limit=${5}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           const addedFeed = [...feed, ...(res.data.feed || [])];

@@ -19,7 +19,7 @@ const Discover = () => {
 
   const getFeed = (initialPage?: number) => {
     const URL = `${EXPLORE_URL}/posts?order=${order}&page=${initialPage ? initialPage : page}&limit=${10}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           if (initialPage == 1) {

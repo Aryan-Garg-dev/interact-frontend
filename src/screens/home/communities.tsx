@@ -20,7 +20,7 @@ const Communities = () => {
       search ? `&search=${search}` : ''
     }`;
 
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
     if (res.statusCode == 200) {
       if (initialPage == 1) {
         setCommunities(res.data.communities || []);
