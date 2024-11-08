@@ -35,18 +35,14 @@ const Projects = ({
 
       if (initialPage == 1) {
         setProjects(projectsData);
+
+        if (setClickedProject && projectsData.length > 0) setClickedProject(projectsData[0]);
       } else {
         const addedProjects = [...projects, ...projectsData];
         if (addedProjects.length === projects.length) setHasMore(false);
         setProjects(addedProjects);
       }
       setPage(prev => prev + 1);
-
-      if (setClickedProject && projectsData.length > 0)
-        setClickedProject(prev => {
-          if (prev) return prev;
-          return projectsData[0];
-        });
 
       setLoading(false);
     } else {

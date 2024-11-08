@@ -95,7 +95,7 @@ const Tags = ({
           borderColor: `${borderColor ? borderColor : onboardingDesign ? 'black' : '#9ca3af'}`,
         }}
         className={`w-full ${
-          onboardingDesign ? 'p-4 placeholder:text-[#202020c6] bg-[#ffffff40]' : 'p-2 bg-transparent'
+          onboardingDesign ? 'p-3 placeholder:text-[#202020c6] bg-[#ffffff40]' : 'p-2 bg-transparent'
         } dark:text-white border-[1px] flex flex-wrap items-center gap-2 rounded-md`}
       >
         {tags.map((tag, i) => (
@@ -104,7 +104,7 @@ const Tags = ({
               borderColor: `${borderColor ? borderColor : onboardingDesign ? 'black' : '#9ca3af'}`,
             }}
             key={tag}
-            className="flex-center text-sm px-2 py-1 border-[1px] rounded-full cursor-default active:border-2 active:border-black"
+            className="flex-center text-xs px-2 py-1 border-[1px] rounded-full cursor-default active:border-2 active:border-black"
             onDragStart={e => dragStart(e, i)}
             onDragEnter={e => dragEnter(e, i)}
             onDragEnd={drop}

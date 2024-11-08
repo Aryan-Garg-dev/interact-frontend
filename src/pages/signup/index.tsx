@@ -178,7 +178,7 @@ const SignUp = () => {
             </Link>
             <Link href="/" className="static dark:hidden">
               <ReactSVG src="/onboarding_logo.svg" />
-            </Link>{' '}
+            </Link>
           </div>
           <form onSubmit={handleSubmit} className="w-3/5 max-md:w-full flex flex-col items-center gap-6">
             <div className="flex flex-col gap-2 text-center">

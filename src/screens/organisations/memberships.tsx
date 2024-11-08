@@ -113,14 +113,11 @@ const MemberOrganizations = () => {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 px-8 py-6">
+    <div className="w-full flex flex-col gap-6">
       {clickedOnLeaveOrg && (
         <ConfirmDelete setShow={setClickedOnLeaveOrg} handleDelete={sendOTP} title="Leave Organisation?" />
       )}
       {clickedOnConfirmLeave && <ConfirmOTP setShow={setClickedOnConfirmLeave} handleSubmit={handleLeaveOrg} />}
-
-      <div className="text-5xl font-semibold dark:text-white font-primary">Memberships</div>
-
       <div className="w-full grid grid-cols-2 max-md:grid-cols-1 gap-8">
         {memberships.map(membership => (
           <div

@@ -29,6 +29,9 @@ const CombinedProjects = ({
       .then(res => {
         if (res.statusCode === 200) {
           const projectsData = res.data.projects || [];
+
+          if (setClickedProject && projectsData.length > 0) setClickedProject(projectsData[0]);
+
           setProjects(projectsData);
           const projectSlug = new URLSearchParams(window.location.search).get('project');
           if (projectSlug && projectSlug != '') {

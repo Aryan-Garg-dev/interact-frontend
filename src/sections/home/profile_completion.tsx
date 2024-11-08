@@ -128,7 +128,7 @@ const ProfileCompletion = () => {
             <Link
               href={'/workspace?action=new_project'}
               onClick={() => dispatch(setProfileCompletionOpen(false))}
-              className="hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-dark_primary_btn"
+              className="hover-underline-animation after:bg-black dark:after:bg-white"
             >
               Create a Project
             </Link>
@@ -142,7 +142,7 @@ const ProfileCompletion = () => {
             <Link
               href={`/users/${user.username}?action=edit&tag=links`}
               onClick={() => dispatch(setProfileCompletionOpen(false))}
-              className="hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-dark_primary_btn"
+              className="hover-underline-animation after:bg-black dark:after:bg-white"
             >
               Add Links to your social media
             </Link>
@@ -156,7 +156,7 @@ const ProfileCompletion = () => {
             <Link
               href={'/users'}
               onClick={() => dispatch(setProfileCompletionOpen(false))}
-              className="hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-dark_primary_btn"
+              className="hover-underline-animation after:bg-black dark:after:bg-white"
             >
               Follow at least 3 Profiles
             </Link>
