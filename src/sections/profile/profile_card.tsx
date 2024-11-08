@@ -161,7 +161,7 @@ const ProfileCard = ({ user, setUser }: Props) => {
       <SidePrimeWrapper stickTop>
         <div className="w-full flex-center flex-col gap-4 py-2">
           <div className="absolute group top-4 right-4">
-            <CopyClipboardButton url={`users/${user.username}?external=true`} iconOnly={true} />
+            <CopyClipboardButton url={`/users/${user.username}?external=true`} iconOnly={true} />
           </div>
           <input
             type="file"

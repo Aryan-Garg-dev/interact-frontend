@@ -223,6 +223,13 @@ const FeedSide = () => {
               <UserCard key={user.id} user={user} forTrending />
             ))}
           </div>
+
+          <Link
+            href={'/users'}
+            className="w-fit mx-auto text-sm font-medium mt-2 hover-underline-animation after:bg-gray-700 dark:after:bg-white"
+          >
+            view all
+          </Link>
         </SidePrimeWrapper>
       )}
     </>

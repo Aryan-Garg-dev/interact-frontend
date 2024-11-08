@@ -11,7 +11,7 @@ interface Props {
 const UserCard = ({ user }: Props) => {
   return (
     <Link
-      href={`users/${user.username}?action=external`}
+      href={`/users/${user.username}?action=external`}
       target="_blank"
       className="w-full bg-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg p-4 flex flex-col items-center justify-center gap-2 transition-ease-300"
     >

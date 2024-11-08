@@ -1,7 +1,6 @@
 import ProjectCard from '@/components/explore/project_card';
 import { Project } from '@/types';
 import React, { useEffect, useState } from 'react';
-import ProjectView from '../../sides/project/project_view';
 import NoUserItems from '@/components/fillers/user_items';
 import { EXPLORE_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
@@ -17,12 +16,6 @@ interface Props {
 }
 
 const Projects = ({ userID, displayOnProfile = false, contributing = false, org = false }: Props) => {
-  const [clickedOnProject, setClickedOnProject] = useState(false);
-  const [clickedProjectIndex, setClickedProjectIndex] = useState(-1);
-  const [clickedOnNewProject, setClickedOnNewProject] = useState(false);
-
-  const [fadeInProject, setFadeInProject] = useState(true);
-
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 

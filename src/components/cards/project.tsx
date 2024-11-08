@@ -9,7 +9,7 @@ interface Props {
 
 const ProjectCard = ({ project }: Props) => (
   <Link
-    href={`projects/${project.slug}&action=external`}
+    href={`/projects/${project.slug}&action=external`}
     target="_blank"
     className="relative w-full rounded-lg flex flex-col gap-2 transition-ease-out-500 animate-fade_third"
   >

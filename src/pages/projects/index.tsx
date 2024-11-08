@@ -54,7 +54,7 @@ const Projects = () => {
         <SideBarWrapper hideMD>
           {userID && (
             <SidePrimeWrapper>
-              <NewProject setTriggerReload={setTriggerWorkspaceReload} />
+              <NewProject setTriggerReload={setTriggerWorkspaceReload} setActiveTab={setActive} />
             </SidePrimeWrapper>
           )}
           {clickedProject && <ProjectView project={clickedProject} />}

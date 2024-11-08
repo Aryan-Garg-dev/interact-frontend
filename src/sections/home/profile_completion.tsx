@@ -109,7 +109,7 @@ const ProfileCompletion = () => {
         <div className="text-gradient font-bold text-5xl">Complete Profile </div>
         <Link
           href={`/users/${user.username}`}
-          className="w-fit flex items-center gap-1 hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-dark_primary_btn"
+          className="w-fit flex items-center gap-1 hover-underline-animation after:bg-black dark:after:bg-white"
         >
           <div>to increase your Reach!</div>
           <ArrowUpRight weight="bold" />
@@ -170,7 +170,7 @@ const ProfileCompletion = () => {
             <Link
               href={`/users/${user.username}?action=edit&tag=tagline`}
               onClick={() => dispatch(setProfileCompletionOpen(false))}
-              className="hover-underline-animation after:bg-black dark:after:bg-white dark:after:bg-dark_primary_btn"
+              className="hover-underline-animation after:bg-black dark:after:bg-white"
             >
               Add a Tagline
             </Link>

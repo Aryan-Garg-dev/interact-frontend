@@ -21,9 +21,10 @@ import { Button } from '@/components/ui/button';
 interface Props {
   setProjects?: React.Dispatch<React.SetStateAction<Project[]>>;
   setTriggerReload?: React.Dispatch<React.SetStateAction<boolean>>;
+  setActiveTab?: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const NewProject = ({ setProjects, setTriggerReload }: Props) => {
+const NewProject = ({ setProjects, setTriggerReload, setActiveTab }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tagline, setTagline] = useState('');
@@ -94,6 +95,8 @@ const NewProject = ({ setProjects, setTriggerReload }: Props) => {
       setLinks([]);
       setIsDialogOpen(false);
       dispatch(setOwnerProjects([...(user.ownerProjects || []), project.id]));
+
+      if (setActiveTab) setActiveTab(1);
 
       Toaster.stopLoad(toaster, 'Project Added', 1);
     } else if (res.statusCode == 413) {
