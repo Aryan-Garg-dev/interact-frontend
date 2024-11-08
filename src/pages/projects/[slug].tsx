@@ -13,7 +13,7 @@ import SideBarWrapper, { SidePrimeWrapper } from '@/wrappers/side';
 import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import CommentProject from '@/sections/lowers/comment_project';
 import UserSideCard from '@/components/explore/user_side_card';
@@ -27,7 +27,6 @@ import { setEditorProjects, setManagerProjects, setMemberProjects, userSelector 
 import { checkOrgProjectAccess, checkProjectAccess } from '@/utils/funcs/access';
 import { ORG_SENIOR, PROJECT_EDITOR, PROJECT_MANAGER, PROJECT_MEMBER } from '@/config/constants';
 import LowerProject from '@/components/lowers/lower_project';
-import EditProject from '@/sections/workspace/edit_project';
 import { PencilSimple } from '@phosphor-icons/react/dist/ssr';
 import EditProjectImages from '@/sections/workspace/edit_project_images';
 import Tasks from '@/sections/workspace/tasks';
@@ -122,6 +121,8 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
                         );
                       })}
                     </CarouselContent>
+                    <CarouselPrevious />
+                    <CarouselNext />
                   </Carousel>
                 ) : (
                   <Image
@@ -139,12 +140,7 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
               <div className="w-full flex flex-col gap-4">
                 <div className="w-full flex items-center justify-between flex-wrap gap-4">
                   <div className="w-fit font-bold text-4xl text-gradient">{project.title}</div>
-                  <div className="flex-center gap-6">
-                    {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
-                      <EditProject project={project} setProject={setProject} />
-                    )}
-                    <LowerProject project={project} />
-                  </div>
+                  <LowerProject project={project} setProject={setProject} />
                 </div>
                 <div className="font-semibold text-lg">{project.tagline}</div>
                 <Tags tags={project.tags} displayAll />

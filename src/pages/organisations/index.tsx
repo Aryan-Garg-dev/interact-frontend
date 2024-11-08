@@ -4,7 +4,7 @@ import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import PrimeWrapper from '@/wrappers/prime';
 import SideBarWrapper, { SidePrimeWrapper } from '@/wrappers/side';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userIDSelector } from '@/slices/userSlice';
 import ExploreOrganisations from '@/screens/organisations/explore';
@@ -14,11 +14,15 @@ const Organisations = () => {
   const [active, setActive] = useState(0);
   const userID = useSelector(userIDSelector);
 
+  useEffect(() => {
+    const oid = new URLSearchParams(window.location.search).get('oid');
+    if (oid) setActive(1);
+  }, [window.location.search]);
+
   return (
     <BaseWrapper title="Organisations">
       <Sidebar index={4} />
       <MainWrapper restrictWidth>
-        {/* <div className="w-2/3 max-md:w-full"> */}
         {userID ? (
           <>
             <MenuBar items={['Explore', 'Joined']} active={active} setState={setActive} />

@@ -12,7 +12,7 @@ const getHandler = async (URL: string, signal?: GenericAbortSignal, cache = fals
     statusCode: 500,
   };
   await configuredAxios
-    .get(URL, { headers, signal, cache: cache ? { ttl: 1 * 60 * 1000 } : false })
+    .get(URL, { headers, signal, cache: cache ? { ttl: 3 * 60 * 1000 } : false })
     .then(res => {
       response.status = 1;
       response.data = res.data;

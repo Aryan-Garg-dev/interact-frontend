@@ -18,7 +18,7 @@ const UserCard = ({ user, forTrending = false }: Props) => {
   const loggedInUser = useSelector(userSelector);
   return (
     <Link
-      href={`/${user.isOrganization ? 'organisation' : 'user'}/${user.username}`}
+      href={`/${user.isOrganization ? 'organisations' : 'users'}/${user.username}`}
       target="_blank"
       className={`w-full font-primary border-[1px] rounded-lg flex flex-col ${
         !forTrending

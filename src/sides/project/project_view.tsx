@@ -12,9 +12,10 @@ import ProjectCardCarousel from '@/components/explore/project_card_carousel';
 
 interface Props {
   project: Project;
+  setProject?: React.Dispatch<React.SetStateAction<Project>>;
 }
 
-const ProjectView = ({ project }: Props) => {
+const ProjectView = ({ project, setProject }: Props) => {
   const [clickedOnReadMore, setClickedOnReadMore] = useState(false);
 
   return (
@@ -59,7 +60,7 @@ const ProjectView = ({ project }: Props) => {
         <div className="w-full flex flex-col gap-4">
           <div className="flex flex-wrap justify-between items-center gap-2">
             <div className="font-bold text-3xl text-gradient">{project.title}</div>
-            <LowerProject project={project} />
+            <LowerProject project={project} setProject={setProject} />
           </div>
           <div className="font-semibold text-lg">{project.tagline}</div>
           <Link

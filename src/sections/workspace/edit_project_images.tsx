@@ -261,7 +261,7 @@ const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen,
                           if (target.files && target.files.length > 0) {
                             if (target.files[0].type.split('/')[0] === 'image') {
                               try {
-                                const resizedPic = await resizeImage(target.files[0], 1920, 1080);
+                                const resizedPic = await resizeImage(target.files[0], 1280, 720);
                                 setNewImageUrl(URL.createObjectURL(resizedPic));
                                 setNewImage(resizedPic);
                               } catch (error) {

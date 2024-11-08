@@ -68,7 +68,7 @@ const AddCollaborators = ({ project, setProject, org = false }: Props) => {
   useEffect(() => {
     const abortController = new AbortController();
     oldAbortController = abortController;
-    fetchUsers('', abortController);
+    if (project.id) fetchUsers('', abortController);
   }, []);
 
   const handleClickUser = (user: User) => {

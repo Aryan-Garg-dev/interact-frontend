@@ -57,7 +57,12 @@ const Projects = () => {
               <NewProject setTriggerReload={setTriggerWorkspaceReload} setActiveTab={setActive} />
             </SidePrimeWrapper>
           )}
-          {clickedProject && <ProjectView project={clickedProject} />}
+          {clickedProject && (
+            <ProjectView
+              project={clickedProject}
+              setProject={setClickedProject as React.Dispatch<React.SetStateAction<Project>>}
+            />
+          )}
         </SideBarWrapper>
       </MainWrapper>
     </BaseWrapper>

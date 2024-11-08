@@ -125,7 +125,10 @@ const EditProject = ({ project, setProject, setProjects, org = false }: Props) =
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <PencilSimple className="cursor-pointer" size={32} />
+        <div className="w-full p-2 flex items-center gap-2 hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg cursor-pointer transition-ease-300">
+          <PencilSimple className="cursor-pointer max-lg:w-6 max-lg:h-6" size={20} weight="regular" />
+          Edit
+        </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md min-w-[40%]">
         <DialogHeader>
