@@ -16,6 +16,7 @@ import socketService from '@/config/ws';
 import SignUp from '../common/signup_box';
 import Share from '@/sections/lowers/share';
 import PostCard from '../cards/post';
+import Link from 'next/link';
 
 interface Props {
   post: Post;
@@ -225,18 +226,31 @@ const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = 
         </div>
 
         <div
-          className={`flex items-center font-primary text-sm gap-2 text-gray-400 dark:text-[#ffffffb6] ${
+          className={`flex items-end justify-between font-primary text-sm gap-2 text-gray-400 dark:text-[#ffffffb6] ${
             isRepost ? 'w-fit scale-100' : 'w-full '
           }`}
         >
-          <div onClick={likeHandler} className="cursor-pointer">
-            {numLikes} like{numLikes == 1 ? '' : 's'}
+          <div className="w-fit flex-center gap-2">
+            <div onClick={likeHandler} className="cursor-pointer">
+              {numLikes} like{numLikes == 1 ? '' : 's'}
+            </div>
+            <div className="text-xs">•</div>
+            <div onClick={() => setClickedOnComment(true)} className="cursor-pointer">
+              {numComments} comment{numComments == 1 ? '' : 's'}
+            </div>
           </div>
-          <div className="text-xs">•</div>
-          <div onClick={() => setClickedOnComment(true)} className="cursor-pointer">
-            {' '}
-            {numComments} comment{numComments == 1 ? '' : 's'}
-          </div>
+          {post.communityID && post.community && post.community.title && (
+            <div className="text-xs">
+              Posted in{' '}
+              <Link
+                href={`/community/${post.community.id}`}
+                className="font-semibold hover:text-primary_text transition-ease-200"
+                target="_blank"
+              >
+                {post.community.title}
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </>

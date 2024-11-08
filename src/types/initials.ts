@@ -171,6 +171,8 @@ export const initialPost: Post = {
   rePostID: '',
   rePost: null,
   userID: '',
+  communityID: null,
+  community: null,
   images: [],
   content: '',
   user: initialUser,

@@ -238,6 +238,8 @@ export interface Post {
   id: string;
   userID: string;
   rePostID: string;
+  communityID: string | null;
+  community: Community | null;
   rePost: Post | null;
   images: string[];
   content: string;
