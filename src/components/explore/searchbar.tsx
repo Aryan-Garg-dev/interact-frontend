@@ -37,7 +37,7 @@ const SearchBar = ({
   const [opening, setOpening] = useState<Opening | null>(null);
 
   const fetchItem = async (query: string, setter: (res: any) => void) => {
-    const res = await getHandler(`${EXPLORE_URL}/quick/item?${query}`);
+    const res = await getHandler(`${EXPLORE_URL}/quick/item?${query}`, undefined, true);
     if (res.statusCode == 200) setter(res);
   };
 
@@ -45,7 +45,7 @@ const SearchBar = ({
   const fetchResults = async (search?: string) => {
     setLoading(true);
     const URL = `/explore/quick?${'search=' + search}&limit=3`;
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
 
     if (res.statusCode === 200) {
       setResults({

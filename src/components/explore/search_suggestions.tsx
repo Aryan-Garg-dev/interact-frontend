@@ -30,7 +30,7 @@ const SearchSuggestions = ({ search, setShow }: Props) => {
 
   const fetchSearches = (abortController: AbortController) => {
     const URL = `${EXPLORE_URL}/trending_searches?limit=10${search != '' ? '&search=' + search : ''}`;
-    getHandler(URL, abortController.signal)
+    getHandler(URL, abortController.signal, true)
       .then(res => {
         if (res.statusCode === 200) {
           setSearches(res.data.searches || []);

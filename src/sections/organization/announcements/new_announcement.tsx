@@ -39,7 +39,7 @@ const NewAnnouncement = ({ organisation, setShow, setAnnouncements }: Props) => 
 
   const fetchUsers = async (search: string) => {
     const URL = `${EXPLORE_URL}/users?search=${search}&order=trending&limit=${10}`;
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
     if (res.statusCode == 200) {
       setUsers(res.data.users || []);
     } else {

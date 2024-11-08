@@ -22,7 +22,7 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
   const getProjects = () => {
     setLoading(true);
     const URL = `${EXPLORE_URL}/users/projects${contributing ? '/contributing' : ''}/${userID}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           setProjects(res.data.projects || []);

@@ -4,7 +4,6 @@ import Created from '@/components/history/hackathon/created';
 import Edited from '@/components/history/hackathon/edited';
 import Deleted from '@/components/history/hackathon/deleted';
 import ModalWrapper from '@/wrappers/modal';
-import { useRouter } from 'next/router';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import getHandler from '@/handlers/get_handler';
@@ -20,7 +19,6 @@ const HackathonHistories: React.FC<Props> = ({ hackathonID, setShow }) => {
   const [histories, setHistories] = useState<HackathonHistory[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const currentOrg = useSelector(currentOrgSelector);
-  const router = useRouter();
 
   const fetchHistories = async () => {
     if (!currentOrg || !hackathonID) return;

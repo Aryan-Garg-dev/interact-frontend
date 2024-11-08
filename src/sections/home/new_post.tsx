@@ -62,7 +62,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
 
   const fetchUsers = async (search: string) => {
     const URL = `${EXPLORE_URL}/users?search=${search}&order=trending&limit=${10}&include=org`;
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
     if (res.statusCode == 200) {
       const userData: User[] = res.data.users || [];
       setUsers(org ? userData : userData.filter(u => u.id != user.id));

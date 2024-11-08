@@ -73,7 +73,7 @@ const Community = ({ id }: { id: string }) => {
 
   const getPosts = (initialPage?: number) => {
     const URL = `${COMMUNITY_URL}/${id}/posts?order=${order}&page=${initialPage ? initialPage : page}&limit=${5}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           if (initialPage == 1) {

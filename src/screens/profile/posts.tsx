@@ -34,7 +34,7 @@ const Posts = ({ userID, org = false }: Props) => {
       user.id == userID
         ? `${POST_URL}/me?page=${page}&limit=${10}`
         : `${EXPLORE_URL}/users/posts/${userID}?page=${page}&limit=${10}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           const addedPosts = [...posts, ...(res.data.posts || [])];

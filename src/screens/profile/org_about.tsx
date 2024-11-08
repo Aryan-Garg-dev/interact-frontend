@@ -30,7 +30,7 @@ const About = ({ profile, organisation }: Props) => {
 
   const fetchMemberships = () => {
     const URL = `${ORG_URL}/${organisation.id}/explore_memberships?limit=12`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           setMemberships(res.data.memberships);

@@ -71,7 +71,7 @@ const EventComponent = ({ id }: Props) => {
 
   const getSimilarEvents = () => {
     const URL = `${EXPLORE_URL}/events/similar/${id}?limit=10`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           setSimilarEvents(res.data.events || []);

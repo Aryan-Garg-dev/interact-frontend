@@ -38,7 +38,7 @@ const AddGroupMembers = ({ setShow, chat, setChat, setChats }: Props) => {
   const fetchUsers = async (key: string, abortController: AbortController) => {
     setLoading(true);
     const URL = `${MESSAGING_URL}/group/non_members/${chat.id}?search=${key}`;
-    const res = await getHandler(URL, abortController.signal);
+    const res = await getHandler(URL, abortController.signal, true);
     if (res.statusCode == 200) {
       setUsers(res.data.users || []);
       setLoading(false);

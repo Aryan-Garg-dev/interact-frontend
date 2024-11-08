@@ -28,7 +28,7 @@ const TrendingCard = () => {
 
   const fetchSearches = () => {
     const URL = `${EXPLORE_URL}/trending_searches`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           const searchData: string[] = res.data.searches || [];
@@ -48,7 +48,7 @@ const TrendingCard = () => {
 
   const fetchProfiles = () => {
     const URL = `${EXPLORE_URL}/users?order=trending&limit=5`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           const profileData: User[] = res.data.users || [];
@@ -68,7 +68,7 @@ const TrendingCard = () => {
 
   const fetchTasks = () => {
     const URL = `${USER_URL}/me/tasks?limit=5`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           setTasks(res.data.tasks || []);
@@ -87,7 +87,7 @@ const TrendingCard = () => {
 
   const fetchMeetings = () => {
     const URL = `${USER_URL}/me/meetings?limit=5`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           setMeetings(res.data.meetings || []);

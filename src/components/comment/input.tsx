@@ -37,7 +37,7 @@ const CommentInput = ({
 
   const fetchUsers = async (search: string) => {
     const URL = (userFetchURL ? userFetchURL : `${EXPLORE_URL}/users?order=trending`) + `?search=${search}&limit=${10}`;
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
     if (res.statusCode == 200) {
       const userData: User[] = res.data.users || [];
       setUsers(userData.filter(u => u.id != user.id));

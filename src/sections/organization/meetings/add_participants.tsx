@@ -37,7 +37,7 @@ const AddMeetingParticipants = ({ meeting, setShow, setMeeting }: Props) => {
       meeting.isOpenForMembers
     }&allowExternalParticipants=${meeting.allowExternalParticipants}&meetingID=${meeting.id}`;
 
-    const res = await getHandler(URL, abortController?.signal);
+    const res = await getHandler(URL, abortController?.signal, true);
     if (res.statusCode == 200) {
       const userData: User[] = res.data.users || [];
       setUsers(userData.filter(u => u.id != userID));

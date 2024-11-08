@@ -54,7 +54,7 @@ const AddCollaborators = ({ project, setProject, org = false }: Props) => {
   const fetchUsers = async (key: string, abortController: AbortController) => {
     setLoading(true);
     const URL = `${MEMBERSHIP_URL}/non_members/${project.id}?search=${key}`;
-    const res = await getHandler(URL, abortController.signal);
+    const res = await getHandler(URL, abortController.signal, true);
     if (res.statusCode == 200) {
       const userData: User[] = res.data.users || [];
       setUsers(userData.filter(u => u.id != loggedInUserID));

@@ -35,7 +35,6 @@ const Projects = () => {
 
   const [fadeIn, setFadeIn] = useState(true);
 
-  const navbarOpen = useSelector(navbarOpenSelector);
   const user = useSelector(userSelector);
 
   const currentOrg = useSelector(currentOrgSelector);

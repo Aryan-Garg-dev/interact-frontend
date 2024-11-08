@@ -29,7 +29,7 @@ const Tasks = ({ project, setShow, setClickedOnNewTask, org = false }: Props) =>
     const URL = org
       ? `${ORG_URL}/${project.organizationID}/projects/tasks/${project.slug}`
       : `${PROJECT_URL}/tasks/${project.slug}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           setTasks(res.data.tasks || []);

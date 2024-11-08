@@ -68,7 +68,7 @@ const EditCoHosts = ({ event, setShow, setEvents }: Props) => {
   const getOrganizations = async () => {
     var URL = `${EXPLORE_URL}/orgs?page=1&limit=${10}`;
     if (orgSearch != '') URL += `&search=${orgSearch}`;
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
     if (res.statusCode == 200) {
       let orgUsers: User[] = res.data.users || [];
       orgUsers = orgUsers.filter(u => u.id != currentOrg.userID);

@@ -30,7 +30,7 @@ const Connections = ({ type, user, setShow, orgID = '', org = false }: Props) =>
     setLoading(true);
     const BASE_URL = org ? `${ORG_URL}/${orgID}/explore_memberships` : `${CONNECTION_URL}/${type}/${user.id}`;
     const URL = `${BASE_URL}?page=${page}&limit=${limit}`;
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
     if (res.statusCode == 200) {
       var newUsers: User[] = res.data.users || [];
       if (org) {

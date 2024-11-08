@@ -15,7 +15,7 @@ const Openings = () => {
   const fetchOpenings = async () => {
     const URL = `${EXPLORE_URL}/openings?limit=8&order=trending`;
 
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
     if (res.statusCode == 200) {
       setOpenings(res.data.openings || []);
       setLoading(false);

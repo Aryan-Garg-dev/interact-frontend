@@ -56,7 +56,7 @@ const NewGroup = ({ userFetchURL, submitURL, userFetchURLQuery, setShow, setStat
     setLoading(true);
     let URL = `${userFetchURL}?search=${key}`;
     if (userFetchURLQuery) URL += userFetchURLQuery;
-    const res = await getHandler(URL, abortController.signal);
+    const res = await getHandler(URL, abortController.signal, true);
     if (res.statusCode == 200) {
       setUsers(res.data.users || []);
       setLoading(false);

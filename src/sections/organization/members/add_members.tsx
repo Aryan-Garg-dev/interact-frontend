@@ -48,7 +48,7 @@ const AddMembers = ({ setShow, setOrganization }: Props) => {
   const fetchUsers = async (key: string, abortController: AbortController) => {
     setLoading(true);
     const URL = `${ORG_URL}/${currentOrgID}/membership/non_members?search=${key}&invitations=exclude`;
-    const res = await getHandler(URL, abortController.signal);
+    const res = await getHandler(URL, abortController.signal, true);
     if (res.statusCode == 200) {
       setUsers(res.data.users || []);
       setLoading(false);

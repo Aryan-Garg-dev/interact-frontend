@@ -21,7 +21,7 @@ const SimilarProjects = ({ slug }: Props) => {
 
   const fetchProjects = () => {
     const URL = `${EXPLORE_URL}/projects/similar/${slug}?page=${page}&limit=${6}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           const addedProjects = Array.from(new Set([...projects, ...(res.data.projects || [])]));
