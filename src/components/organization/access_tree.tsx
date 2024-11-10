@@ -66,16 +66,10 @@ const accessDefinitions: Record<ACCESS_TYPE, Access[]> = {
   project: [
     { task: "See Organisation's Projects", canMember: true, canSenior: true, canManager: true },
     { task: "See Projects' History", canMember: true, canSenior: true, canManager: true },
-    { task: "See Projects' Tasks", canMember: false, canSenior: true, canManager: true },
-    { task: "See Projects' Openings", canMember: false, canSenior: true, canManager: true },
     { task: 'Add new Projects', canMember: false, canSenior: false, canManager: true },
     { task: "Edit Projects' Details", canMember: false, canSenior: true, canManager: true },
-    { task: 'Add Openings to Projects', canMember: false, canSenior: true, canManager: true },
-    { task: 'Edit Opening Details of Projects', canMember: false, canSenior: true, canManager: true },
-    { task: 'Invite new external members to Projects', canMember: false, canSenior: false, canManager: true },
     { task: 'Add org members to Projects', canMember: false, canSenior: false, canManager: true },
     { task: 'Remove members from Projects', canMember: false, canSenior: false, canManager: true },
-    { task: 'Review Opening Applications', canMember: false, canSenior: false, canManager: true },
     { task: 'Delete Projects', canMember: false, canSenior: false, canManager: true },
   ],
   task: [

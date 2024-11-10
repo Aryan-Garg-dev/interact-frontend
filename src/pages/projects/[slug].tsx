@@ -95,10 +95,6 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
                     className="w-full"
                     opts={{
                       align: 'center',
-                      loop: false,
-                      dragFree: false,
-                      duration: 2,
-                      active: true,
                     }}
                   >
                     <CarouselContent>
@@ -121,8 +117,8 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
                         );
                       })}
                     </CarouselContent>
-                    {/* <CarouselPrevious />
-                    <CarouselNext /> */}
+                    <CarouselPrevious />
+                    <CarouselNext />
                   </Carousel>
                 ) : (
                   <Image

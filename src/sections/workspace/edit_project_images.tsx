@@ -13,7 +13,7 @@ import { resizeImage } from '@/utils/resize_image';
 import Image from 'next/image';
 import postHandler from '@/handlers/post_handler';
 import { X } from '@phosphor-icons/react';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+// import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
 interface Props {
   project: Project;
@@ -166,14 +166,14 @@ const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen,
     setMutex(false);
   };
 
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
+  // const onDragEnd = (result: DropResult) => {
+  //   if (!result.destination) return;
 
-    const newItems = [...images];
-    const [removed] = newItems.splice(result.source.index, 1);
-    newItems.splice(result.destination.index, 0, removed);
-    setImages(newItems);
-  };
+  //   const newItems = [...images];
+  //   const [removed] = newItems.splice(result.source.index, 1);
+  //   newItems.splice(result.destination.index, 0, removed);
+  //   setImages(newItems);
+  // };
 
   useEffect(() => {
     setImages(project.images || []);
@@ -290,39 +290,40 @@ const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen,
             <CarouselNext />
           </Carousel>
         ) : (
-          <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-              {provided => (
-                <div {...provided.droppableProps} ref={provided.innerRef} className="w-full flex flex-col gap-4">
-                  {images.map((image, index) => {
-                    let imageHash = 'no-hash';
-                    if (project.hashes && index < project.hashes.length) imageHash = project.hashes[index];
-                    return (
-                      <Draggable key={index} draggableId={index.toString()} index={index}>
-                        {provided => (
-                          <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                            <Image
-                              crossOrigin="anonymous"
-                              width={430}
-                              height={270}
-                              className="w-full rounded-lg"
-                              alt={'Project Pic'}
-                              src={`${PROJECT_PIC_URL}/${image}`}
-                              placeholder="blur"
-                              blurDataURL={imageHash}
-                            />
-                          </div>
-                        )}
-                      </Draggable>
-                    );
-                  })}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
+          // <DragDropContext onDragEnd={onDragEnd}>
+          //   <Droppable droppableId="droppable">
+          //     {provided => (
+          //       <div {...provided.droppableProps} ref={provided.innerRef} className="w-full flex flex-col gap-4">
+          //         {images.map((image, index) => {
+          //           let imageHash = 'no-hash';
+          //           if (project.hashes && index < project.hashes.length) imageHash = project.hashes[index];
+          //           return (
+          //             <Draggable key={index} draggableId={index.toString()} index={index}>
+          //               {provided => (
+          //                 <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+          //                   <Image
+          //                     crossOrigin="anonymous"
+          //                     width={430}
+          //                     height={270}
+          //                     className="w-full rounded-lg"
+          //                     alt={'Project Pic'}
+          //                     src={`${PROJECT_PIC_URL}/${image}`}
+          //                     placeholder="blur"
+          //                     blurDataURL={imageHash}
+          //                   />
+          //                 </div>
+          //               )}
+          //             </Draggable>
+          //           );
+          //         })}
+          //         {provided.placeholder}
+          //       </div>
+          //     )}
+          //   </Droppable>
+          // </DragDropContext>
+          <></>
         )}
-        {images.length > 1 && (
+        {/* {images.length > 1 && (
           <Button
             onClick={() => {
               if (stage == 0) setStage(1);
@@ -332,7 +333,7 @@ const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen,
           >
             {stage == 0 ? 'Rearrange Photos' : 'Submit'}
           </Button>
-        )}
+        )} */}
         {stage == 1 && (
           <Button
             onClick={() => setStage(0)}
