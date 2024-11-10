@@ -153,7 +153,7 @@ const Meeting = ({ id }: Props) => {
 
   const Block = ({ label, child, alignEnd = false }: BlockProps) => (
     <div className={`flex flex-col ${alignEnd && 'items-end'} gap-1`}>
-      <div className="text-sm font-medium uppercase text-gray-700">{label}</div>
+      <div className="text-sm font-medium uppercase text-gray-700 dark:text-white">{label}</div>
       {child}
     </div>
   );
@@ -269,14 +269,14 @@ const Meeting = ({ id }: Props) => {
                     <div className="w-2/3 max-md:w-full flex flex-col gap-6">
                       <div className="flex items-center gap-2">
                         <div
-                          className={`text-xs px-2 py-1 ${
+                          className={`text-xs px-2 py-1 dark:text-primary_black ${
                             meeting.isOpenForMembers ? 'bg-priority_low' : 'bg-priority_high'
                           } rounded-full `}
                         >
                           {meeting.isOpenForMembers ? 'Open for members' : 'Restricted'}
                         </div>
                         <div
-                          className={`text-xs px-2 py-1 ${
+                          className={`text-xs px-2 py-1 dark:text-primary_black ${
                             meeting.allowExternalParticipants ? 'bg-priority_low' : 'bg-priority_high'
                           } rounded-full `}
                         >
@@ -295,7 +295,7 @@ const Meeting = ({ id }: Props) => {
                           label="Status"
                           child={
                             <div
-                              className={`w-fit text-sm px-2 py-1 ${
+                              className={`w-fit text-sm px-2 py-1 dark:text-primary_black ${
                                 status == 'Live'
                                   ? 'bg-priority_low'
                                   : status == 'Ended'
@@ -311,7 +311,7 @@ const Meeting = ({ id }: Props) => {
                           label="Frequency"
                           child={
                             <div
-                              className={`w-fit text-sm px-2 py-1 ${
+                              className={`w-fit text-sm px-2 py-1 dark:text-primary_black ${
                                 meeting.frequency == 'none' ? 'bg-blue-200' : 'bg-priority_mid'
                               } rounded-full capitalize`}
                             >
@@ -371,7 +371,9 @@ const Meeting = ({ id }: Props) => {
 
                       {(!meeting.isOpenForMembers || meeting.allowExternalParticipants) && (
                         <div className="w-fit flex flex-col gap-1">
-                          <div className="text-sm font-medium uppercase text-gray-700">Accepted Users</div>
+                          <div className="text-sm font-medium uppercase text-gray-700 dark:text-white">
+                            Accepted Users
+                          </div>
                           {meeting.participants && meeting.participants.length > 0 ? (
                             <span
                               onClick={() => setClickedOnViewParticipants(true)}
@@ -427,8 +429,10 @@ const Meeting = ({ id }: Props) => {
                           )}
 
                           {isParticipant() && !meeting?.rsvp.map(u => u.id).includes(user.id) && (
-                            <div className="w-full bg-white flex flex-col gap-2 rounded-md p-4 shadow-md">
-                              <div className="w-full text-2xl font-semibold text-primary_black">RSVP Now!</div>
+                            <div className="w-full bg-white dark:bg-dark_primary_comp flex flex-col gap-2 rounded-md p-4 shadow-md">
+                              <div className="w-full text-2xl font-semibold text-primary_black dark:text-white">
+                                RSVP Now!
+                              </div>
                               <div className="text-sm">
                                 Looks like you haven&apos;t confirmed your presence yet. Click the button below and let
                                 other participants know you&apos;ll be joining the meeting!

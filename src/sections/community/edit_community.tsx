@@ -37,7 +37,7 @@ const EditCommunity = ({
   const [tagline, setTagline] = useState(community.tagline);
   const [category, setCategory] = useState(community.category);
   const [access, setAccess] = useState(community.access as string);
-  const [tags, setTags] = useState(community.tags);
+  const [tags, setTags] = useState(community.tags || []);
   const [isOpen, setIsOpen] = useState(community.isOpen);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -62,7 +62,7 @@ const EditCommunity = ({
     if (title != community.title) formData.append('title', title);
     if (description != community.description) formData.append('description', description);
     if (tagline != community.tagline) formData.append('tagline', tagline);
-    if (isArrEdited(tags, community.tags, true)) tags.forEach(tag => formData.append('tags', tag));
+    if (isArrEdited(tags, community.tags, true)) tags?.forEach(tag => formData.append('tags', tag));
     if (category != community.category) formData.append('category', category);
     if (access != community.access) formData.append('access', access);
     if (isOpen != community.isOpen) formData.append('isOpen', String(isOpen));

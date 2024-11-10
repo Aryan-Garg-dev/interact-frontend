@@ -14,7 +14,7 @@ import Select from '@/components/form/select';
 import Input from '@/components/form/input';
 import TextArea from '@/components/form/textarea';
 import Tags from '@/components/form/tags';
-import categories from '@/utils/categories';
+import { communityCategories } from '@/utils/categories';
 import Toaster from '@/utils/toaster';
 import postHandler from '@/handlers/post_handler';
 import { COMMUNITY_PROFILE_PIC_URL, COMMUNITY_URL } from '@/config/routes';
@@ -187,7 +187,13 @@ const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<Re
         <div className="w-full max-lg:w-full text-primary_black flex flex-col gap-4 pb-8 max-lg:pb-4">
           <Input label="Community Name" val={title} setVal={setTitle} maxLength={25} type="text" required />
           <Input label="Community Tagline" val={tagline} setVal={setTagline} maxLength={100} type="text" required />
-          <Select label="Community Category" val={category} setVal={setCategory} options={categories} required />
+          <Select
+            label="Community Category"
+            val={category}
+            setVal={setCategory}
+            options={communityCategories}
+            required
+          />
           <Select
             label="Community Access"
             val={access}

@@ -126,7 +126,10 @@ const Meetings = () => {
           </div>
         </div>
 
-        <div className="w-[calc(100%-48px)] h-16 max-md:h-12 bg-white rounded-xl mx-auto border-gray-400 flex font-semibold text-primary_black mb-2">
+        <div
+          className="w-[calc(100%-48px)] h-16 max-md:h-12 bg-white dark:bg-dark_primary_comp rounded-xl mx-auto border-gray-400 dark:border-dark_primary_btn flex font-semibold text-primary_black dark:text-white
+         mb-2"
+        >
           <div className="w-1/6 max-md:w-1/3 flex-center">Title</div>
           <div className="w-1/6 max-md:w-1/3 flex-center">Status</div>
           <div className="w-1/6 max-md:hidden flex-center">Tags</div>

@@ -1,4 +1,4 @@
-import { ORG_MEMBER, ORG_SENIOR } from '@/config/constants';
+import { ORG_MEMBER } from '@/config/constants';
 import { Session } from '@/types';
 import checkOrgAccess from '@/utils/funcs/access';
 import moment from 'moment';
@@ -14,7 +14,7 @@ const SessionTable = ({ sessions, setClickedOnSession, setClickedSessionID }: Pr
   return (
     <div className="w-full flex flex-col gap-2">
       <div className="text-3xl font-semibold my-2">Sessions</div>
-      <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold text-primary_black">
+      <div className="w-full h-12 bg-white dark:bg-dark_primary_comp rounded-xl border-gray-400 dark:border-dark_primary_btn flex font-semibold text-primary_black dark:text-white">
         <div className="w-[30%] flex-center">ID</div>
         <div className="w-[30%] flex-center">Started At</div>
         <div className="w-[30%] flex-center">Ended At</div>
@@ -29,8 +29,10 @@ const SessionTable = ({ sessions, setClickedOnSession, setClickedSessionID }: Pr
               setClickedOnSession(true);
             }
           }}
-          className={`w-full h-12 bg-white rounded-xl border-gray-400 flex text-sm text-primary_black ${
-            checkOrgAccess(ORG_MEMBER) ? 'hover:bg-slate-100 cursor-pointer' : 'cursor-default'
+          className={`w-full h-12 bg-white dark:bg-dark_primary_comp rounded-xl border-gray-400 dark:border-dark_primary_btn flex text-sm text-primary_black dark:text-white ${
+            checkOrgAccess(ORG_MEMBER)
+              ? 'hover:bg-slate-100 dark:hover:bg-dark_primary_comp_hover cursor-pointer'
+              : 'cursor-default'
           } transition-ease-300`}
         >
           <div className="w-[30%] flex-center">{session.id}</div>

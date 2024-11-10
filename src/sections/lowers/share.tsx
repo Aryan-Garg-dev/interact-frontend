@@ -212,7 +212,7 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
                   />
                   <div
                     onClick={handleSubmit}
-                    className="w-full text-center py-2 rounded-lg border-[1px] bg-primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active border-[#ffe1fc10] dark:hover:bg-[#ffe1fc10] cursor-pointer transition-ease-200"
+                    className="w-full text-center py-2 rounded-lg border-[1px] bg-primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active border-[#ffe1fc10] dark:border-dark_primary_btn dark:bg-dark_primary_comp dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active cursor-pointer transition-ease-200"
                   >
                     Send Message
                   </div>

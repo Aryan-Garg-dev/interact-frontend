@@ -121,8 +121,8 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
                         );
                       })}
                     </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
+                    {/* <CarouselPrevious />
+                    <CarouselNext /> */}
                   </Carousel>
                 ) : (
                   <Image
@@ -180,10 +180,10 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
               <UserSideCard user={project.user} />
             </div>
           </SidePrimeWrapper>
-          <Collaborators project={project} setProject={setProject} />
-          <Openings project={project} setProject={setProject} />
           {project.id && (
             <>
+              <Collaborators project={project} setProject={setProject} />
+              <Openings project={project} setProject={setProject} />
               {!checkProjectAccess(PROJECT_MEMBER, project.id) ? (
                 <SimilarProjects slug={project.slug} />
               ) : (

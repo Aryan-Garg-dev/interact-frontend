@@ -52,7 +52,7 @@ const Communities = () => {
         <Loader />
       ) : communities.length > 0 ? (
         <InfiniteScroll
-          className="w-full grid grid-cols-2 max-md:grid-cols-1 gap-1"
+          className="w-full grid grid-cols-2 max-md:grid-cols-1 gap-2"
           dataLength={communities.length}
           next={() => fetchCommunities(new URLSearchParams(window.location.search).get('search'))}
           hasMore={hasMore}
