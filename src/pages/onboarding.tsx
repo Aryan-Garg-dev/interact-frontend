@@ -32,6 +32,7 @@ import { College } from '@/types';
 import postHandler from '@/handlers/post_handler';
 import fuzzysort from 'fuzzysort';
 import Input from '@/components/form/input';
+import { useTheme } from 'next-themes';
 
 const Onboarding = () => {
   const [clickedOnBuild, setClickedOnBuild] = useState(false);
@@ -177,6 +178,16 @@ const Onboarding = () => {
     }
   }, [schoolSearch]);
 
+  const { setTheme } = useTheme();
+
+  useEffect(() => {
+    if (document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      setTheme('light');
+    }
+  }, []);
+
   return (
     <>
       <Head>
@@ -209,10 +220,10 @@ const Onboarding = () => {
                   clickedOnBuild ? 'cursor-default' : 'cursor-pointer'
                 } transition-ease-300 group rounded-lg`}
               >
-                <div className="w-fit flex gap-1 relative">
-                  <div className="text-sm"> Click here to get started!</div>
+                <div className="w-fit flex-center gap-1 relative">
+                  <div className="text-sm text-primary_black"> Click here to get started!</div>
                   <ArrowRight
-                    className="absolute -right-2 opacity-0 group-hover:-right-5 group-hover:opacity-100 transition-ease-300"
+                    className="absolute -right-2 opacity-0 group-hover:-right-5 group-hover:opacity-100 text-primary_black transition-ease-300"
                     weight="bold"
                   />
                 </div>
@@ -220,7 +231,7 @@ const Onboarding = () => {
             </div>
           </div>
         ) : (
-          <div className="w-full h-full text-primary_black flex justify-between items-center max-md:px-4 font-primary">
+          <div className="w-full h-full text-primary_black dark:text-white flex justify-between items-center max-md:px-4 font-primary">
             <div className="w-3/5 max-lg:w-full h-full p-8 max-md:px-2 font-primary flex flex-col gap-8 items-center">
               <div className="w-full flex justify-start items-center">
                 <div className="hidden dark:flex">
@@ -233,7 +244,7 @@ const Onboarding = () => {
               <div className="w-5/6 max-md:w-full">
                 <ProgressBar step={step} setStep={setStep} />
               </div>
-              <div className="w-5/6 max-md:w-full max-md:max-h-full flex flex-col gap-4 backdrop-blur-xl rounded-xl shadow-xl p-6 mt-4 animate-fade_half">
+              <div className="w-5/6 max-md:w-full max-md:max-h-full flex flex-col gap-4 backdrop-blur-xl rounded-xl shadow-xl dark:shadow-gray-600 p-6 mt-4 animate-fade_half">
                 <div className="w-full flex items-center justify-between flex-wrap">
                   <div className="text-3xl max-md:text-2xl font-bold">
                     {step == 1

@@ -19,6 +19,7 @@ const Theme = () => {
       setTheme('dark');
     }
   };
+
   return (
     <div className="w-full">
       <div className="text-lg font-semibold">Select the theme</div>
@@ -28,12 +29,12 @@ const Theme = () => {
           <input type="checkbox" onChange={toggleTheme} className="sr-only" />
           <div
             className={`box block h-6 w-10 rounded-full ${
-              inputTheme == 'dark' ? 'bg-white' : 'bg-black'
+              inputTheme.toLowerCase() == 'dark' ? 'bg-white' : 'bg-black'
             } transition-ease-300`}
           ></div>
           <div
             className={`absolute left-1 top-1 flex h-4 w-4 items-center justify-center rounded-full ${
-              inputTheme == 'dark' ? 'translate-x-full bg-black' : 'bg-white'
+              inputTheme.toLowerCase() == 'dark' ? 'translate-x-full bg-black' : 'bg-white'
             } transition-ease-300`}
           ></div>
         </div>
