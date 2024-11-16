@@ -172,7 +172,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
                       College Name ({school.trim().length}/25)
                     </div>
                     {school != '' ? (
-                      <div className="w-full relative group rounded-lg p-2 flex justify-between items-center bg-gray-100">
+                      <div className="w-full relative group rounded-lg p-2 flex justify-between items-center bg-gray-100 dark:bg-dark_primary_comp_hover">
                         <div className="text-lg cursor-default">{school}</div>
                         <X
                           onClick={() => {

@@ -28,7 +28,7 @@ const renderContentWithLinks = (caption: string, taggedUsers?: User[]) => {
               navigator.clipboard.writeText(codeContent.trim());
               Toaster.success('Copied to Clipboard!');
             }}
-            className="bg-white absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-ease-300 cursor-pointer"
+            className="bg-white dark:bg-dark_primary_comp_active absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 rounded-sm transition-ease-300 cursor-pointer"
             size={24}
             weight="duotone"
           />
