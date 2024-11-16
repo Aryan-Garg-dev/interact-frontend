@@ -76,7 +76,7 @@ const config: Config = {
       fontFamily: {
         primary: ['var(--inter-font)'],
         title: ['var(--fraunces-font)'],
-        birthstone: ['var(--birthstone-font)'],
+        cursive: ['var(--parisienne-font)'],
       },
       fontSize: {
         xxs: '0.5rem',

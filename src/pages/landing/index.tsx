@@ -1,8 +1,6 @@
 import React from 'react';
 import Navbar from '@/sections/landing/navbar';
-import { FloatingImages } from '@/sections/landing/floatingimages';
-import { HeroTitle } from '@/sections/landing/herotitle';
-import { CTASection } from '@/sections/landing/CTAsection';
+import HeroSection from '@/sections/landing/heroSection';
 import Features from '@/sections/landing/features';
 import WhyChooseUs from '@/sections/landing/whyechosseus';
 import Community from '@/sections/landing/community';
@@ -10,32 +8,25 @@ import Footer from '@/sections/landing/footer';
 import ExploreCommunity from '@/sections/landing/explore';
 import Testimonials from '@/sections/landing/testimonails';
 
+const Separator = () => {
+  return <div className="h-[3px] w-full bg-gradient-to-r from-white via-gray-300 to-white my-2"></div>;
+};
+
 const LandingPage = () => {
   return (
     <div
-      className="w-full flex flex-col"
+      className="w-full"
       style={{
         cursor: `url('/landing/cursor.svg'), auto`,
       }}
     >
-      <div className="md:min-h-screen">
-        <div className="flex flex-col items-center justify-center h-[10vh] ">
-          <Navbar />
-          <div className="h-[4px] w-[85vw] bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 my-2"></div>
-        </div>
-        <div className="relative  mx-auto pt-12 overflow-hidden">
-          <FloatingImages />
-          <div className="text-center pt-20 relative z-10 felx items-center justify-center">
-            <HeroTitle />
-            <CTASection />
-          </div>
-        </div>
+      <div className="w-4/5 max-md:w-full mx-auto">
+        <Navbar />
+        <Separator />
+        <HeroSection />
+        <Separator />
       </div>
-      <div className="h-[30vh] my-12">
-        <div className="flex flex-col items-center justify-center pb-4">
-          <div className="h-[4px] w-[85vw] bg-gradient-to-r from-gray-100 via-gray-300 to-gray-100 my-2"></div>
-        </div>
-      </div>
+
       <div className="md:flex-row flex-col space-y-8">
         <Features />
       </div>

@@ -14,7 +14,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import NProgressConfig from '@/config/nprogress';
 import socketService from '@/config/ws';
-import { Inter, Fraunces, Birthstone_Bounce } from 'next/font/google';
+import { Inter, Fraunces, Parisienne } from 'next/font/google';
 import ThemeCheck from '@/config/theme';
 import Head from 'next/head';
 
@@ -30,10 +30,10 @@ const fraunces = Fraunces({
   variable: '--fraunces-font',
 });
 
-const birthstone = Birthstone_Bounce({
-  weight: ['400', '500'],
+const parisienne = Parisienne({
+  weight: '400',
   subsets: ['latin'],
-  variable: '--birthstone-font',
+  variable: '--parisienne-font',
 });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -61,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps) {
       `}
       </Script> */}
 
-      <main className={`${inter.variable} ${fraunces.variable} ${birthstone.variable}`}>
+      <main className={`${inter.variable} ${fraunces.variable} ${parisienne.variable}`}>
         <Head>
           <title>Interact Now</title>
           <meta
