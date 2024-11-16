@@ -5,7 +5,7 @@ import { ReactSVG } from 'react-svg';
 import { TitleBlock } from './features';
 const Community = () => {
   return (
-    <div className="w-full flex flex-col gap-12">
+    <div className="w-full flex-center flex-col gap-12">
       <div className="w-full relative flex items-center justify-center scale-[1]">
         <Image
           width={500}
@@ -28,10 +28,8 @@ const Community = () => {
           center
         />
         <LandingButton label="Know More" />
-        <div className="flex items-center w-[100vw] h-[40vh] md:h-[60vh] justify-center overflow-hidden">
-          <ReactSVG src="/landing/Cards integration.svg" className="mt-24 md:scale-[0.5] scale-[0.3]" />
-        </div>
       </div>
+      {/* <ReactSVG src="/landing/Cards integration.svg" className="" /> */}
     </div>
   );
 };
