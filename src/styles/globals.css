@@ -35,6 +35,14 @@
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 60%, rgba(0, 0, 0, 0));
 }
 
+.fade-img-right {
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%,  rgba(0, 0, 0, 0.2));
+}
+
+.fade-img-left {
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%,  rgba(0, 0, 0, 0.2));
+}
+
 .hover-underline-animation {
   position: relative;
 }

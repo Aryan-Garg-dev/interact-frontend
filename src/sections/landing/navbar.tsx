@@ -1,3 +1,4 @@
+import LandingButton from '@/components/buttons/landing_btn';
 import React from 'react';
 import { ReactSVG } from 'react-svg';
 
@@ -18,7 +19,7 @@ const Navbar: React.FC = () => {
           </a>
         </div>
         <div className="flex flex-row items-center justify-center">
-          <button className="bg-[#00BDF2] text-white px-3 py-1 rounded-full text-lg max-md:text-sm">Sign up</button>
+          <LandingButton label="Sign up" />
           <span className="px-2 text-2xl text-[#00BDF2]">/</span>
           <a href="#" className="hover:underline font-bold text-[#00BDF2] max-md:text-sm">
             Sign In

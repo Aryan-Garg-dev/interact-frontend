@@ -25,11 +25,9 @@ const LandingPage = () => {
         <Separator />
         <HeroSection />
         <Separator />
-      </div>
-
-      <div className="md:flex-row flex-col space-y-8">
         <Features />
       </div>
+
       <Community />
       <div>
         <WhyChooseUs />
