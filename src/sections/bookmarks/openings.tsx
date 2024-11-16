@@ -15,8 +15,8 @@ const Openings = ({ bookmark, setClick, fetchBookmarks }: Props) => {
   const [clickedOnOpening, setClickedOnOpening] = useState(false);
   const [clickedOpening, setClickedOpening] = useState(initialOpening);
   return (
-    <div className="w-full m-auto max-lg:w-[95vw] max-md:w-[90vw] flex flex-col gap-4 font-primary dark:text-white pt-8 max-lg:pt-4">
-      <div className="flex items-center gap-2">
+    <div className="w-full m-auto max-lg:w-[95vw] max-md:w-[90vw] flex flex-col gap-4 font-primary dark:text-white">
+      <div className="flex items-center gap-2 pl-8">
         <ArrowArcLeft
           onClick={() => {
             if (fetchBookmarks) fetchBookmarks();
@@ -28,7 +28,7 @@ const Openings = ({ bookmark, setClick, fetchBookmarks }: Props) => {
         <div className="font-medium text-xl cursor-default">{bookmark.title}</div>
       </div>
       {bookmark.openingItems.length > 0 ? (
-        <div className="flex justify-evenly px-4">
+        <div className="flex justify-evenly">
           <div className={`${clickedOnOpening ? 'w-[40%]' : 'w-[720px]'} max-md:w-[720px] flex flex-col gap-4`}>
             {bookmark.openingItems.map(openingItem => {
               return (
@@ -42,10 +42,8 @@ const Openings = ({ bookmark, setClick, fetchBookmarks }: Props) => {
               );
             })}
           </div>
-          {clickedOnOpening ? (
+          {clickedOnOpening && (
             <OpeningView opening={clickedOpening} setShow={setClickedOnOpening} setOpening={setClickedOpening} />
-          ) : (
-            <></>
           )}
         </div>
       ) : (

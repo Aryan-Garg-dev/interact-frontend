@@ -13,7 +13,7 @@ const Links = ({ label, links, setLinks, maxLinks, required = false }: Props) =>
   return (
     <div className="w-full">
       {label && (
-        <div className="text-xs ml-1 font-medium uppercase text-gray-500">
+        <div className="text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300">
           {label}
           {required && '*'} ({links.length}/{maxLinks})
         </div>

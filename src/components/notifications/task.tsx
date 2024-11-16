@@ -1,4 +1,3 @@
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import { Notification } from '@/types';
 import NotificationWrapper from '@/wrappers/notification';
 import Link from 'next/link';
@@ -15,7 +14,7 @@ const Task = ({ notification }: Props) => {
   };
   return (
     <NotificationWrapper notification={notification}>
-      <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
+      <Link className="font-bold" href={`/users/${notification.sender.username}`}>
         {notification.sender.name}
       </Link>
       assigned you a{' '}

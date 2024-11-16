@@ -59,7 +59,6 @@ const OrgSidebar = ({ index }: Props) => {
               icon={<HouseLine size={24} />}
               active={active}
               setActive={setActive}
-              open={open}
             />
           )}
 
@@ -70,7 +69,6 @@ const OrgSidebar = ({ index }: Props) => {
             icon={<NoteBlank size={24} />}
             active={active}
             setActive={setActive}
-            open={open}
           />
           <SidebarItem
             index={3}
@@ -79,7 +77,6 @@ const OrgSidebar = ({ index }: Props) => {
             icon={<RocketLaunch size={24} />}
             active={active}
             setActive={setActive}
-            open={open}
           />
           <SidebarItem
             index={12}
@@ -88,7 +85,6 @@ const OrgSidebar = ({ index }: Props) => {
             icon={<Ticket size={24} />}
             active={active}
             setActive={setActive}
-            open={open}
           />
           <SidebarItem
             index={4}
@@ -97,7 +93,6 @@ const OrgSidebar = ({ index }: Props) => {
             icon={<Wrench size={24} />}
             active={active}
             setActive={setActive}
-            open={open}
           />
           {process.env.NODE_ENV == 'development' && (
             <SidebarItem
@@ -107,7 +102,6 @@ const OrgSidebar = ({ index }: Props) => {
               icon={<ChatTeardrop size={24} />}
               active={active}
               setActive={setActive}
-              open={open}
             />
           )}
           <SidebarItem
@@ -117,7 +111,6 @@ const OrgSidebar = ({ index }: Props) => {
             icon={<IdentificationCard size={24} />}
             active={active}
             setActive={setActive}
-            open={open}
           />
 
           <SidebarItem
@@ -127,7 +120,6 @@ const OrgSidebar = ({ index }: Props) => {
             icon={<Newspaper size={24} />}
             active={active}
             setActive={setActive}
-            open={open}
           />
           <SidebarItem
             index={14}
@@ -136,7 +128,6 @@ const OrgSidebar = ({ index }: Props) => {
             icon={<BookOpenText size={24} />}
             active={active}
             setActive={setActive}
-            open={open}
           />
           <SidebarItem
             index={15}
@@ -145,7 +136,6 @@ const OrgSidebar = ({ index }: Props) => {
             icon={<EnvelopeSimpleOpen size={24} />}
             active={active}
             setActive={setActive}
-            open={open}
           />
           <SidebarItem
             index={16}
@@ -154,7 +144,6 @@ const OrgSidebar = ({ index }: Props) => {
             icon={<VideoConference size={24} />}
             active={active}
             setActive={setActive}
-            open={open}
           />
           <SidebarItem
             index={7}
@@ -163,7 +152,6 @@ const OrgSidebar = ({ index }: Props) => {
             icon={<ClockCounterClockwise size={24} />}
             active={active}
             setActive={setActive}
-            open={open}
           />
         </div>
 
@@ -177,7 +165,6 @@ const OrgSidebar = ({ index }: Props) => {
                 icon={<Buildings size={24} />}
                 active={active}
                 setActive={setActive}
-                open={open}
               />
               {/* <SidebarItem
                 index={10}
@@ -186,7 +173,7 @@ const OrgSidebar = ({ index }: Props) => {
                 icon={<Bell size={24} />}
                 active={active}
                 setActive={setActive}
-                open={open}
+               
               /> */}
               <SidebarItem
                 index={11}
@@ -195,7 +182,6 @@ const OrgSidebar = ({ index }: Props) => {
                 icon={<BookmarkSimple size={24} />}
                 active={active}
                 setActive={setActive}
-                open={open}
               />
               {/* <SidebarItem
                 index={11}
@@ -204,7 +190,7 @@ const OrgSidebar = ({ index }: Props) => {
                 icon={<Gear size={24} />}
                 active={active}
                 setActive={setActive}
-                open={open}
+               
               /> */}
             </>
           ) : (
@@ -217,7 +203,6 @@ const OrgSidebar = ({ index }: Props) => {
                 icon={<Buildings size={24} />}
                 active={active}
                 setActive={setActive}
-                open={open}
               />
               <SidebarItem
                 index={11}
@@ -229,7 +214,6 @@ const OrgSidebar = ({ index }: Props) => {
                 icon={<DoorOpen size={24} />}
                 active={active}
                 setActive={setActive}
-                open={open}
               />
             </>
           )}

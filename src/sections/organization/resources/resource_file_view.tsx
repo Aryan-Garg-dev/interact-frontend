@@ -211,9 +211,7 @@ const ResourceFileView = ({
                 Uploaded by
                 <Link
                   href={`/${
-                    resourceFile.user.isOrganization
-                      ? 'organisation/profile'
-                      : `explore/user/${resourceFile.user.username}`
+                    resourceFile.user.isOrganization ? 'organisation/profile' : `users/${resourceFile.user.username}`
                   }`}
                   target="_blank"
                   className="flex-center gap-1"

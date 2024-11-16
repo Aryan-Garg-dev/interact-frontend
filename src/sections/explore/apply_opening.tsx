@@ -1,6 +1,7 @@
+import ProjectCardCarousel from '@/components/explore/project_card_carousel';
 import Links from '@/components/utils/edit_links';
 import { SERVER_ERROR } from '@/config/errors';
-import { APPLICATION_URL, PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { APPLICATION_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import socketService from '@/config/ws';
 import postHandler from '@/handlers/post_handler';
 import { setApplications, userSelector } from '@/slices/userSlice';
@@ -78,7 +79,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
 
   return (
     <>
-      <div className="w-2/3 h-[560px] max-lg:h-base_md max-lg:overflow-y-auto max-md:w-screen max-md:h-screen dark:text-white fixed backdrop-blur-lg bg-white dark:bg-[#ffe1fc22] dark:max-lg:bg-[#2a192eea] z-50 max-lg:z-[100] translate-x-1/2 -translate-y-1/4 max-md:translate-y-0 top-64 max-lg:top-1/4 max-md:top-0 right-1/2 flex flex-col font-primary p-8 gap-6 border-2 border-primary_btn dark:border-dark_primary_btn rounded-xl max-md:rounded-none animate-fade_third">
+      <div className="w-2/3 h-[560px] max-lg:h-base_md max-lg:overflow-y-auto max-md:w-screen max-md:h-screen dark:text-white fixed backdrop-blur-lg bg-white dark:bg-dark_primary_comp z-50 max-lg:z-[100] translate-x-1/2 -translate-y-1/4 max-md:translate-y-0 top-64 max-lg:top-1/4 max-md:top-0 right-1/2 flex flex-col font-primary p-8 gap-6 border-2 border-primary_btn dark:border-dark_primary_btn rounded-xl max-md:rounded-none animate-fade_third">
         <div className="w-fit text-gradient mx-auto text-3xl max-md:text-2xl text-primary_black flex justify-between items-center gap-2 font-bold">
           Your Application
         </div>
@@ -86,7 +87,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
           <X size={24} weight="bold" />
         </div>
         <div className="w-full h-full flex max-lg:flex-col gap-4 items-center">
-          <div className="w-1/3 h-full max-lg:h-fit max-lg:w-full font-primary dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg p-4 flex flex-col items-center justify-center gap-4 max-lg:gap-4 transition-ease-300 cursor-default">
+          <div className="w-1/3 h-full max-lg:h-fit max-lg:w-full font-primary dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg p-4 flex-center flex-col gap-4 max-lg:gap-4 transition-ease-300 cursor-default">
             {org ? (
               <Image
                 crossOrigin="anonymous"
@@ -101,18 +102,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                 }
               />
             ) : (
-              <Image
-                crossOrigin="anonymous"
-                width={200}
-                height={200}
-                alt={'User Pic'}
-                src={`${PROJECT_PIC_URL}/${opening.project?.coverPic}`}
-                className={
-                  'w-[240px] h-[240px] max-lg:hidden max-lg:w-[120px] max-lg:h-[120px] rounded-lg object-cover'
-                }
-                placeholder="blur"
-                blurDataURL={opening.project?.blurHash || 'no-hash'}
-              />
+              opening.project && <ProjectCardCarousel project={opening.project} />
             )}
 
             <div className="w-full flex flex-col gap-4 max-lg:gap-2 px-8">
@@ -131,7 +121,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                   setContent(el.target.value);
                 }}
                 maxLength={500}
-                className="w-full px-4 py-2 rounded-lg text-black bg-primary_comp dark:bg-dark_primary_comp min-h-[27rem] max-h-[27rem] focus:outline-none"
+                className="w-full px-4 py-2 rounded-lg text-black dark:text-white bg-primary_comp dark:bg-dark_primary_comp_hover min-h-[27rem] max-h-[27rem] focus:outline-none"
                 placeholder="Add a Message of maximum 500 characters"
               />
             </div>
@@ -147,10 +137,10 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                     value={yoe}
                     onChange={el => {
                       const val = Number(el.target.value);
-                      if (val >= 0 && val <= 10) setYoe(val);
+                      if (val >= 0 && val <= 50) setYoe(val);
                     }}
                     type="number"
-                    className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
+                    className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 dark:border-dark_primary_btn rounded-lg p-2"
                   />
                 </div>
               </div>
@@ -159,7 +149,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                 {user.resume == '' ? (
                   <div onClick={() => setAddResume(true)} className="flex gap-2 items-center">
                     <ArrowUpRight weight="bold" size={24} />{' '}
-                    <div className="font-medium cursor-pointer hover-underline-animation after:bg-black">
+                    <div className="font-medium cursor-pointer hover-underline-animation after:bg-black dark:after:bg-white">
                       Upload your resume
                     </div>
                   </div>
@@ -192,7 +182,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
                 </div>
 
                 <div
-                  className="h-10 rounded-xl max-lg:mt-6 dark:bg-dark_primary_comp bg-primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active flex-center text-lg cursor-pointer dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active transition-ease-300"
+                  className="h-10 rounded-xl max-lg:mt-6 dark:bg-dark_primary_comp_hover bg-primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active flex-center text-lg cursor-pointer dark:hover:bg-dark_primary_comp_active dark:active:bg-dark_primary_comp_active transition-ease-300"
                   onClick={handleSubmit}
                 >
                   Apply!

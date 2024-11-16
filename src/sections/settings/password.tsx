@@ -101,7 +101,11 @@ const Password = () => {
               if (canSubmit()) handleSubmit();
             }}
             className={`h-fit flex-center text-sm font-medium px-3 py-1 rounded-xl border-[1px]
-        ${canSubmit() ? 'cursor-pointer bg-white' : 'cursor-default bg-gray-100 opacity-60'}
+        ${
+          canSubmit()
+            ? 'cursor-pointer bg-white dark:bg-dark_primary_comp'
+            : 'cursor-default bg-gray-100 dark:bg-dark_primary_comp opacity-60'
+        }
         `}
           >
             Update
@@ -128,7 +132,7 @@ const Password = () => {
                 value={password}
                 onChange={el => setPassword(el.target.value)}
                 type={showPassword ? 'text' : 'password'}
-                className="w-full bg-gray-100 p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10 transition-ease-300"
+                className="w-full bg-gray-100 dark:bg-dark_primary_comp p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10 transition-ease-300"
               />
               {showPassword ? (
                 <Eye
@@ -167,7 +171,7 @@ const Password = () => {
                     value={newPassword}
                     onChange={el => setNewPassword(el.target.value)}
                     type={showNewPassword ? 'text' : 'password'}
-                    className="w-full bg-gray-100 p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10 transition-ease-300"
+                    className="w-full bg-gray-100 dark:bg-dark_primary_comp p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10 transition-ease-300"
                   />
                   {showNewPassword ? (
                     <Eye
@@ -188,7 +192,7 @@ const Password = () => {
               </div>
             )}
 
-            <div className={`${!user.isPasswordSetupComplete && 'w-full'}flex flex-col gap-1`}>
+            <div className={`${!user.isPasswordSetupComplete && 'w-full '}flex flex-col gap-1`}>
               <div className="font-medium">Confirm {user.isPasswordSetupComplete && 'New'} Password</div>
               <div className="w-full relative">
                 <input
@@ -197,7 +201,7 @@ const Password = () => {
                   value={confirmPassword}
                   onChange={el => setConfirmPassword(el.target.value)}
                   type={showConfirmPassword ? 'text' : 'password'}
-                  className="w-full bg-gray-100 p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10 transition-ease-300"
+                  className="w-full bg-gray-100 dark:bg-dark_primary_comp p-2 rounded-xl focus:outline-none focus:bg-white border-2 text-gray-400 pr-10 transition-ease-300"
                 />
                 {showConfirmPassword ? (
                   <Eye

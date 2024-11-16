@@ -8,7 +8,7 @@ import {
   PROJECT_OWNER,
 } from '@/config/constants';
 import { store } from '@/store';
-import { Organization, Project } from '@/types';
+import { Organization, PermissionConfig, Project } from '@/types';
 import { initialOrganization, initialOrganizationMembership } from '@/types/initials';
 
 const user = store.getState().user;
@@ -86,6 +86,7 @@ export const checkProjectAccess = (role: string, projectID: string, project?: Pr
   }
 };
 
+//TODO take orgID from project
 export const checkOrgProjectAccess = (
   projectRole: string,
   projectID: string,
@@ -97,5 +98,40 @@ export const checkOrgProjectAccess = (
 
   return projectAccess || orgAccess;
 };
+
+export const checkCommunityAccess = (communityID: string, action: string, config?: PermissionConfig) => {
+  const membership = user.communityMemberships?.filter(m => m.communityID == communityID)[0];
+
+  if (membership) {
+    const requiredRole = config ? config[action] : undefined;
+
+    if (!requiredRole) return false;
+
+    return compareRoleLevel(membership.role, requiredRole);
+  }
+
+  return false;
+};
+
+export const checkCommunityStaticAccess = (communityID: string, requiredRole: string) => {
+  const membership = user.communityMemberships?.filter(m => m.communityID == communityID)[0];
+
+  if (membership) return compareRoleLevel(membership.role, requiredRole);
+  return false;
+};
+
+function compareRoleLevel(userRole: string, requiredRole: string): boolean {
+  const roleHierarchy: { [key: string]: number } = {
+    member: 0,
+    moderator: 1,
+    senior: 1,
+    editor: 1,
+    admin: 2,
+    manager: 2,
+    owner: 3,
+  };
+
+  return roleHierarchy[userRole.toLowerCase()] >= roleHierarchy[requiredRole.toLowerCase()];
+}
 
 export default checkOrgAccess;

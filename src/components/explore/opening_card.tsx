@@ -1,10 +1,11 @@
 import { Opening } from '@/types';
 import React from 'react';
 import Image from 'next/image';
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import moment from 'moment';
 import { Buildings } from '@phosphor-icons/react';
 import Tags from '../common/tags';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   opening: Opening;
@@ -22,8 +23,10 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
         if (setClickedOnOpening) setClickedOnOpening(true);
       }}
       className={`w-full ${
-        opening.id == clickedOpening?.id ? 'bg-white' : 'hover:bg-gray-100'
-      } font-primary border-[1px] border-primary_btn rounded-lg flex items-center gap-3 ${
+        opening.id == clickedOpening?.id
+          ? 'bg-primary_comp_hover dark:bg-dark_primary_comp_active'
+          : 'hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover'
+      } font-primary border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg flex items-center gap-3 ${
         short ? 'p-2' : 'p-3'
       } transition-ease-300 cursor-pointer animate-fade_third`}
     >
@@ -46,12 +49,12 @@ const OpeningCard = ({ opening, clickedOpening, setClickedOnOpening, setClickedO
           width={200}
           height={200}
           alt={'Project Pic'}
-          src={`${PROJECT_PIC_URL}/${opening.project?.coverPic}`}
+          src={getProjectPicURL(opening.project)}
           className={`${
             short ? 'w-[90px] h-[90px]' : 'w-[110px] h-[110px]'
           } max-lg:w-[90px] max-lg:h-[90px] rounded-lg object-cover`}
           placeholder="blur"
-          blurDataURL={opening.project?.blurHash || 'no-hash'}
+          blurDataURL={getProjectPicHash(opening.project)}
         />
       )}
 

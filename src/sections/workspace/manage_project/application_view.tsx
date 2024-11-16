@@ -206,7 +206,7 @@ const ApplicationView = ({
       {clickedOnReject && (
         <ConfirmDelete setShow={setClickedOnReject} handleDelete={handleReject} title="Confirm Reject?" />
       )}
-      <div className="fixed w-no_side_base_open max-md:w-screen h-base top-navbar bg-white overflow-y-auto flex flex-col justify-between gap-8 p-8 max-md:px-4 font-primary z-10 max-md:z-20 animate-fade_third">
+      <div className="fixed w-no_side_base_open max-md:w-screen h-base top-navbar right-0 border-white border-t-[1px] border-l-[1px] bg-gray-300 dark:bg-dark_primary_comp overflow-y-auto flex flex-col justify-between gap-8 p-8 max-md:px-4 font-primary z-10 max-md:z-20 animate-fade_third">
         <div className="w-full flex flex-col gap-6">
           <X
             className="fixed top-20 right-4 cursor-pointer"
@@ -225,12 +225,8 @@ const ApplicationView = ({
               className="rounded-full w-36 h-36"
             />
             <div className="w-[calc(100%-144px)] max-lg:w-3/5 max-md:w-full flex flex-col max-lg:items-center max-lg:text-center gap-1">
-              <Link
-                target="_blank"
-                href={`/explore/user/${application.user.username}`}
-                className="flex items-center gap-1"
-              >
-                <div className="text-2xl font-semibold hover-underline-animation after:bg-black">
+              <Link target="_blank" href={`/users/${application.user.username}`} className="flex items-center gap-1">
+                <div className="text-2xl font-semibold hover-underline-animation after:bg-black dark:after:bg-white">
                   {application.user.name}
                 </div>
                 <ArrowUpRight size={24} />
@@ -308,13 +304,13 @@ const ApplicationView = ({
           <div className="w-full flex justify-center gap-12 max-lg:gap-4 border-t-[1px] border-primary_btn pt-4">
             <div
               onClick={() => setClickedOnAccept(true)}
-              className="w-32 py-2 font-medium border-primary_btn bg-green-100 hover:bg-green-200 active:bg-priority_low flex-center rounded-lg transition-ease-300 cursor-pointer"
+              className="w-32 py-2 font-medium dark:text-primary_black border-primary_btn bg-green-100 hover:bg-green-200 active:bg-priority_low flex-center rounded-lg transition-ease-300 cursor-pointer"
             >
               Accept
             </div>
             <div
               onClick={() => setClickedOnReject(true)}
-              className="w-32 py-2 font-medium border-primary_btn bg-red-100 hover:bg-red-200 active:bg-priority_high flex-center rounded-lg transition-ease-300 cursor-pointer"
+              className="w-32 py-2 font-medium dark:text-primary_black border-primary_btn bg-red-100 hover:bg-red-200 active:bg-priority_high flex-center rounded-lg transition-ease-300 cursor-pointer"
             >
               Reject
             </div>
@@ -322,8 +318,8 @@ const ApplicationView = ({
               onClick={handleShortlist}
               className={`w-32 py-2 flex-center ${
                 application.status == 0
-                  ? 'hover:bg-priority_mid'
-                  : 'bg-priority_mid border-[1px] border-primary_btn  dark:border-dark_primary_btn'
+                  ? 'hover:bg-priority_mid dark:hover:text-primary_black'
+                  : 'bg-priority_mid border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:text-primary_black'
               } transition-ease-300 cursor-pointer rounded-lg font-medium`}
             >
               {application.status == 0 ? 'Shortlist' : 'Shortlisted'}

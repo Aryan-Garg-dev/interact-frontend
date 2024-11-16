@@ -39,7 +39,7 @@ const ProfileCompletion = () => {
 
   return (
     <Link
-      href={'/profile'}
+      href={`/users/${user.username}`}
       onClick={el => {
         if (width > 760) {
           el.preventDefault();

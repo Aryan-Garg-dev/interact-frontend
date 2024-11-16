@@ -21,7 +21,7 @@ interface Props {
 const TasksTable = ({ tasks, fetcher, hasMore, setClickedOnTask, setClickedTaskID }: Props) => {
   return (
     <div className="w-full flex flex-col gap-2">
-      <div className="w-full h-12 bg-white rounded-xl border-gray-400 flex font-semibold text-primary_black max-md:text-sm">
+      <div className="w-full h-12 bg-white dark:bg-dark_primary_comp_hover rounded-xl border-gray-400 dark:border-dark_primary_btn flex font-semibold text-primary_black dark:text-white max-md:text-sm">
         <div className="w-[35%] flex-center">Title</div>
         <div className="w-[20%] max-md:w-[25%] flex-center">Assigned To</div>
         <div className="w-[15%] max-md:hidden flex-center">Priority</div>
@@ -42,7 +42,7 @@ const TasksTable = ({ tasks, fetcher, hasMore, setClickedOnTask, setClickedTaskI
               setClickedTaskID(index);
               setClickedOnTask(true);
             }}
-            className="w-full h-12 bg-white hover:bg-slate-100 rounded-xl border-gray-400 flex text-sm text-primary_black transition-ease-300 cursor-pointer"
+            className="w-full h-12 bg-white dark:bg-dark_primary_comp_hover hover:bg-slate-100 dark:hover:bg-dark_primary_comp_active rounded-xl border-gray-400 dark:border-dark_primary_btn flex text-sm text-primary_black dark:text-white transition-ease-300 cursor-pointer"
           >
             <div className="w-[35%] flex-center font-medium max-md:text-sm">{task.title}</div>
             <div className="w-[20%] max-md:w-[25%] flex-center">
@@ -50,7 +50,7 @@ const TasksTable = ({ tasks, fetcher, hasMore, setClickedOnTask, setClickedTaskI
             </div>
             <div className="w-[15%] max-md:hidden flex-center">
               <div
-                className="flex-center px-3 py-1 rounded-full text-xs"
+                className="flex-center px-3 py-1 rounded-full text-xs dark:text-primary_black"
                 style={{ backgroundColor: getTaskPriorityColor(task) }}
               >
                 {task.priority}
@@ -58,7 +58,7 @@ const TasksTable = ({ tasks, fetcher, hasMore, setClickedOnTask, setClickedTaskI
             </div>
             <div className="w-[15%] max-md:w-[20%] flex-center">
               <div
-                className="flex-center px-3 max-md:px-2 py-1 rounded-full text-xs max-md:text-xxs"
+                className="flex-center px-3 max-md:px-2 py-1 rounded-full text-xs max-md:text-xxs dark:text-primary_black"
                 style={{ backgroundColor: getTaskDeadlineColor(task) }}
               >
                 {moment(task.deadline).format('DD MMM YY')}
@@ -66,7 +66,7 @@ const TasksTable = ({ tasks, fetcher, hasMore, setClickedOnTask, setClickedTaskI
             </div>
             <div className="w-[15%] max-md:w-[20%] flex-center">
               <div
-                className="flex-center px-3 max-md:px-2 py-1 rounded-full text-xs max-md:text-xxs"
+                className="flex-center px-3 max-md:px-2 py-1 rounded-full text-xs max-md:text-xxs dark:text-primary_black"
                 style={{ backgroundColor: getTaskStatusColor(task) }}
               >
                 {task.isCompleted

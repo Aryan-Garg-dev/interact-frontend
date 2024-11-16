@@ -6,7 +6,7 @@ import OrgSidebar from '@/components/common/org_sidebar';
 import React from 'react';
 import { useSelector } from 'react-redux';
 import Posts from '@/screens/bookmarks/posts';
-import Projects from '@/screens/bookmarks/projects';
+import Projects from '@/screens/projects/bookmarks';
 import WidthCheck from '@/utils/wrappers/widthCheck';
 import OrgOnlyAndProtect from '@/utils/wrappers/org_only';
 import { currentOrgSelector } from '@/slices/orgSlice';

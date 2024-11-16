@@ -3,6 +3,9 @@ Disallow: /
 Allow: /login
 Allow: /signup
 Allow: /home
-Allow: /explore
+Allow: /projects
+Allow: /openings
+Allow: /users
+Allow: /events
 
 sitemap: https://interactnow.in/sitemap.xml

@@ -6,20 +6,17 @@ import Membership from '@/components/history/project/membership';
 import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL, PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
-import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { Project, ProjectHistory } from '@/types';
 import Toaster from '@/utils/toaster';
-import { X } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 interface Props {
   project: Project;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
   org?: boolean;
 }
 
-const History = ({ project, setShow, org = false }: Props) => {
+const History = ({ project, org = false }: Props) => {
   const [history, setHistory] = useState<ProjectHistory[]>([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -50,17 +47,19 @@ const History = ({ project, setShow, org = false }: Props) => {
   }, []);
 
   return (
-    <>
-      <div className="w-1/3 max-lg:w-5/6 h-[640px] overflow-y-auto fixed bg-white text-gray-800 z-30 translate-x-1/2 -translate-y-1/4 top-64 max-lg:top-1/4 max-md:top-56 right-1/2 flex flex-col p-8 max-md:px-4 max-md:py-8 gap-6 border-[1px] border-gray-600 shadow-xl dark:border-dark_primary_btn rounded-xl animate-fade_third">
-        <div className="w-full flex justify-between items-center">
-          <div className="text-5xl text-primary_black font-semibold">History</div>
-          <X onClick={() => setShow(false)} className="cursor-pointer" size={24} weight="bold" />
-        </div>
+    <Dialog>
+      <DialogTrigger>
+        <div className="text-xs hover:underline underline-offset-2 cursor-pointer">view all</div>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-md min-w-[30%]">
+        <DialogHeader>
+          <DialogTitle className="text-3xl">Project Activity</DialogTitle>
+        </DialogHeader>
         {loading && page == 1 ? (
           <Loader />
         ) : (
           <div className="w-full flex flex-col gap-2">
-            {history.map((history, index) => {
+            {history.map(history => {
               switch (history.historyType) {
                 case -1:
                 case 3:
@@ -100,12 +99,8 @@ const History = ({ project, setShow, org = false }: Props) => {
             )}
           </div>
         )}
-      </div>
-      <div
-        onClick={() => setShow(false)}
-        className=" bg-backdrop w-screen h-screen backdrop-blur-sm fixed top-0 right-0 animate-fade_third z-20"
-      ></div>
-    </>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -43,7 +43,7 @@ const Reviews = ({ orgID }: Props) => {
 
   const getReviews = () => {
     const URL = `${ORG_URL}/${orgID}/reviews?page=${page}&limit=${10}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           const addReviews = [...reviews, ...(res.data.reviews || [])];
@@ -65,7 +65,7 @@ const Reviews = ({ orgID }: Props) => {
 
   const getReviewData = () => {
     const URL = `${ORG_URL}/${orgID}/reviews/data`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           setReviewData(res.data.reviewData);

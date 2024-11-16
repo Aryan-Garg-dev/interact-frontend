@@ -35,7 +35,6 @@ const Projects = () => {
 
   const [fadeIn, setFadeIn] = useState(true);
 
-  const navbarOpen = useSelector(navbarOpenSelector);
   const user = useSelector(userSelector);
 
   const currentOrg = useSelector(currentOrgSelector);
@@ -115,11 +114,7 @@ const Projects = () => {
           {loading ? (
             <Loader />
           ) : projects.length > 0 ? (
-            <div
-              className={`w-full grid ${
-                navbarOpen ? 'grid-cols-3 gap-12' : 'grid-cols-4 gap-8'
-              } max-lg:grid-cols-3 max-md:grid-cols-1 max-lg:gap-4 max-md:gap-6 max-md:px-4 max-md:justify-items-center pb-8 transition-ease-out-500`}
-            >
+            <div className="w-full">
               {clickedOnProject && (
                 <ProjectView
                   projectSlugs={projects.map(project => project.slug)}
@@ -137,9 +132,7 @@ const Projects = () => {
                   <ProjectCard
                     key={project.id}
                     index={index}
-                    size="[24vw]"
                     project={project}
-                    setProjects={setProjects}
                     setClickedOnProject={setClickedOnProject}
                     setClickedProjectIndex={setClickedProjectIndex}
                   />
@@ -147,7 +140,7 @@ const Projects = () => {
               })}
             </div>
           ) : (
-            <NoProjects setClickedOnNewProject={setClickedOnNewProject} />
+            <NoProjects />
           )}
         </div>
       </MainWrapper>

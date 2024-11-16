@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 import getIcon from '@/utils/funcs/get_icon';
 import ToolTip from '../utils/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface Props {
   links: string[];
@@ -11,7 +12,7 @@ interface Props {
 
 const Links = ({ links, title = 'Links' }: Props) => {
   return (
-    <div>
+    <TooltipProvider>
       {links && links.length > 0 && (
         <div className="w-full flex flex-col gap-2 relative">
           <div className="text-lg font-semibold">{title}</div>
@@ -19,23 +20,21 @@ const Links = ({ links, title = 'Links' }: Props) => {
             {links.map(link => {
               return (
                 <Link key={link} href={link} target="_blank" className="relative group">
-                  <ToolTip
-                    content={getDomainName(link)}
-                    styles={{
-                      fontSize: '10px',
-                      padding: '2px 8px',
-                      left: '50%',
-                      translate: '-50% 60%',
-                    }}
-                  />
-                  <div className="hover:scale-110 transition-ease-300"> {getIcon(getDomainName(link), 40)}</div>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <div className="hover:scale-110 transition-ease-300"> {getIcon(getDomainName(link), 40)}</div>
+                    </TooltipTrigger>
+                    <TooltipContent className='className="w-fit px-4 py-2 rounded-lg bg-white dark:bg-dark_primary_comp_hover border-2 border-gray-200 dark:border-dark_primary_btn dark:text-white capitalize text-xs text-center font-semibold shadow-xl"'>
+                      {getDomainName(link)}
+                    </TooltipContent>
+                  </Tooltip>
                 </Link>
               );
             })}
           </div>
         </div>
       )}
-    </div>
+    </TooltipProvider>
   );
 };
 

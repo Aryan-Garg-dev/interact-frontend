@@ -113,8 +113,8 @@ const EditSubTask = ({ setShow, subTask, task, setTasks }: Props) => {
         )
       ) {
         const oldUserIDs = subTask.users.map(user => user.id);
-        let addUsersSuccess = true;
-        let removeUsersSuccess = true;
+        let addusersuccess = true;
+        let removeusersuccess = true;
 
         const usersToAdd = userIDs.filter(userID => !oldUserIDs.includes(userID));
         const usersToRemove = oldUserIDs.filter(userID => !userIDs.includes(userID));
@@ -122,22 +122,22 @@ const EditSubTask = ({ setShow, subTask, task, setTasks }: Props) => {
         for (const userID of usersToAdd) {
           const result = await addUser(userID, toaster);
           if (result !== 1) {
-            addUsersSuccess = false;
+            addusersuccess = false;
             break;
           }
         }
 
-        if (addUsersSuccess) {
+        if (addusersuccess) {
           for (const userID of usersToRemove) {
             const result = await removeUser(userID, toaster);
             if (result !== 1) {
-              removeUsersSuccess = false;
+              removeusersuccess = false;
               break;
             }
           }
         }
 
-        if (addUsersSuccess && removeUsersSuccess) {
+        if (addusersuccess && removeusersuccess) {
           if (setTasks)
             setTasks(prev =>
               prev.map(t => {
@@ -227,7 +227,7 @@ const EditSubTask = ({ setShow, subTask, task, setTasks }: Props) => {
 
   return (
     <>
-      <div className="fixed top-24 max-lg:top-20 w-[640px] max-lg:w-5/6 backdrop-blur-2xl bg-white dark:bg-[#ffe1fc22] flex flex-col gap-4 rounded-lg p-10 max-lg:p-5 dark:text-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50 max-lg:z-[60]">
+      <div className="fixed top-24 max-lg:top-20 w-[640px] max-lg:w-5/6 backdrop-blur-2xl bg-white dark:bg-dark_primary_comp flex flex-col gap-4 rounded-lg p-10 max-lg:p-5 dark:text-white font-primary border-[1px] border-primary_btn  dark:border-dark_primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50 max-lg:z-[60]">
         <div className="text-3xl max-lg:text-xl font-semibold">
           {status == 0 ? 'Sub Task Info' : status == 1 ? 'Select Users' : 'Review Sub Task Details'}
         </div>

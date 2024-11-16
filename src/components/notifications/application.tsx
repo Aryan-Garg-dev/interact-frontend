@@ -20,15 +20,15 @@ const Application = ({ notification }: Props) => {
   const getRedirectURL = () => {
     switch (notification.notificationType) {
       case 20:
-        return '/workspace/manage/applications/' + notification.opening.id;
+        return `/organisations?oid=${notification.opening.organizationID}&redirect_url=/openings`;
       default:
-        return '';
+        return '/workspace/manage/applications/' + notification.opening.id;
     }
   };
 
   return (
     <NotificationWrapper notification={notification}>
-      <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
+      <Link className="font-bold" href={`/users/${notification.sender.username}`}>
         {notification.sender.name}
       </Link>
       Applied for the opening of {notification.opening.title} at{' '}

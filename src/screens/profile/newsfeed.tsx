@@ -30,7 +30,7 @@ const NewsFeed = ({ orgID }: Props) => {
 
   const getNewsFeed = () => {
     const URL = `${ORG_URL}/${orgID}/newsFeed?page=${page}&limit=${10}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           const organizationData: Organization = res.data.organization || initialOrganization;

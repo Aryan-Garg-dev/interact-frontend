@@ -225,7 +225,7 @@ const Profile = () => {
           )}
 
           {loading ? (
-            <ProfileCardLoader width="400px" />
+            <ProfileCardLoader />
           ) : (
             <OrgCard user={user} setUser={setUser} tagline={tagline} coverPic={coverPic} />
           )}

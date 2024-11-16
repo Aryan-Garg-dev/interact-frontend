@@ -47,12 +47,12 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
     <>
       {clickedOnDelete && <ConfirmDelete handleDelete={handleDelete} setShow={setClickedOnDelete} />}
       <div
-        className={`w-full mx-auto bg-white flex gap-1 p-4 border-[1px] border-gray-300 rounded-xl ${
+        className={`w-full mx-auto bg-white dark:bg-dark_primary_comp flex gap-1 py-4 border-b-[1px] border-gray-300 ${
           hoverShadow ? 'hover:shadow-xl' : ''
         } transition-ease-300 z-[1] animate-fade_third`}
       >
         <Link
-          href={`/explore/organisation/${organisation.user.username}`}
+          href={`/organisations/${organisation.user.username}`}
           target="_blank"
           className="h-full flex items-center gap-2"
         >
@@ -74,7 +74,7 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
               href={
                 user.id == organisation.userID
                   ? '/organisation/profile'
-                  : `/explore/organisation/${organisation.user.username}`
+                  : `/organisations/${organisation.user.username}`
               }
               target="_blank"
               className="flex max-md:flex-col md:items-center gap-2 max-md:gap-0 font-medium"
@@ -105,7 +105,7 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
 
           <div className="w-full flex max-md:flex-col justify-between md:items-center">
             <div className="flex justify-between gap-4">
-              <div className="text-sm text-gray-400 font-medium">
+              <div className="text-sm text-gray-400 dark:text-gray-300 font-medium">
                 {poll.totalVotes} Vote{poll.totalVotes != 1 ? 's' : ''}
               </div>
 

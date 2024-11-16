@@ -7,13 +7,14 @@ interface Props {
   setVal: any;
   required?: boolean;
   styles?: React.CSSProperties;
+  caption?: string;
 }
 
-const Select = ({ label, options, val, setVal, required = false, styles }: Props) => {
+const Select = ({ label, options, val, setVal, required = false, styles, caption }: Props) => {
   return (
-    <div>
+    <div className="w-full">
       {label && (
-        <div className="text-xs ml-1 font-medium uppercase text-gray-500">
+        <div className="text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300">
           {label}
           {required && '*'}
         </div>
@@ -21,7 +22,7 @@ const Select = ({ label, options, val, setVal, required = false, styles }: Props
       <select
         onChange={el => setVal(el.target.value)}
         value={val}
-        className="w-full max-lg:w-full h-11 border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:text-white bg-primary_comp dark:bg-[#10013b30] focus:outline-nonetext-sm rounded-lg block p-2"
+        className="w-full h-11 border-[1px] border-primary_btn dark:border-dark_primary_btn dark:text-white bg-primary_comp dark:bg-dark_primary_comp focus:outline-none rounded-lg block p-2"
         style={styles}
       >
         {options.map((c, i) => {
@@ -32,6 +33,7 @@ const Select = ({ label, options, val, setVal, required = false, styles }: Props
           );
         })}
       </select>
+      {caption && <div className="text-xs text-gray-400 mt-1">{caption}</div>}
     </div>
   );
 };

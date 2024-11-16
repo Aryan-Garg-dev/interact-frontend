@@ -154,7 +154,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
   };
 
   return (
-    <div className="w-[640px] max-md:w-screen text-primary_black mx-auto flex flex-col gap-4 max-md:px-6 pb-8">
+    <div className="w-full text-primary_black dark:text-white flex flex-col gap-4">
       {!org && (
         <>
           <div className="w-full flex flex-col gap-2">
@@ -184,7 +184,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
                       </div>
                     ) : (
                       <input
-                        className="w-full text-primary_black focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 font-semibold bg-transparent"
+                        className="w-full text-primary_black dark:text-white focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 font-semibold bg-transparent"
                         type="text"
                         maxLength={50}
                         value={schoolSearch}
@@ -220,16 +220,18 @@ const About = ({ profile, setUser, org = false }: Props) => {
                   <div
                     onClick={() => setClickedOnSchool(true)}
                     className={`w-fit relative group rounded-lg p-2 pr-10 ${
-                      profile.school.trim() == '' ? 'bg-gray-100' : 'hover:bg-gray-100'
+                      profile.school.trim() == ''
+                        ? 'bg-gray-100'
+                        : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover'
                     } cursor-pointer transition-ease-300`}
                   >
                     <PencilSimple
                       className={`absolute ${
                         profile.school.trim() == '' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                      }  -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
+                      } text-primary_black -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
                     />
                     {profile.school.trim() == '' ? (
-                      <div className="text-sm font-normal">Add College Name</div>
+                      <div className="text-sm font-normal text-primary_black">Add College Name</div>
                     ) : (
                       <div>{profile.school}</div>
                     )}
@@ -252,7 +254,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
                           if (Number(val) < 2030) setYOG(Number(val));
                         }}
                         placeholder="2025"
-                        className="w-full text-primary_black focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 font-semibold bg-transparent"
+                        className="w-full text-primary_black dark:text-white focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 font-semibold bg-transparent"
                       />
                       <SaveBtn setter={setClickedOnYOG} field="yog" />
                     </div>
@@ -262,7 +264,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
                       className={`w-fit relative group rounded-lg p-2 ${
                         !profile.yearOfGraduation
                           ? 'bg-gray-100 pr-8'
-                          : 'hover:bg-gray-100 pl-8 max-md:pr-8 max-md:pl-0'
+                          : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover pl-8 max-md:pr-8 max-md:pl-0'
                       } cursor-pointer transition-ease-300`}
                     >
                       <PencilSimple
@@ -270,10 +272,10 @@ const About = ({ profile, setUser, org = false }: Props) => {
                           !profile.yearOfGraduation
                             ? 'opacity-100 right-2'
                             : 'opacity-0 group-hover:opacity-100 md:left-2 max-md:right-2'
-                        } -translate-y-1/2 top-1/2 transition-ease-300`}
+                        } text-primary_black -translate-y-1/2 top-1/2 transition-ease-300`}
                       />
                       {!profile.yearOfGraduation ? (
-                        <div className="text-sm">Add Degree Completion Year</div>
+                        <div className="text-sm text-primary_black">Add Degree Completion Year</div>
                       ) : (
                         <div>{profile.yearOfGraduation}</div>
                       )}
@@ -297,7 +299,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
                     value={degree}
                     onChange={el => setDegree(el.target.value)}
                     placeholder="Bachelors in Interacting"
-                    className="w-full text-primary_black focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 font-semibold bg-transparent"
+                    className="w-full text-primary_black dark:text-white focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 font-semibold bg-transparent"
                   />
                   <SaveBtn setter={setClickedOnDegree} field="degree" />
                 </div>
@@ -305,16 +307,18 @@ const About = ({ profile, setUser, org = false }: Props) => {
                 <div
                   onClick={() => setClickedOnDegree(true)}
                   className={`w-fit relative group rounded-lg p-2 pr-10 ${
-                    profile.degree.trim() == '' ? 'bg-gray-100' : 'hover:bg-gray-100'
+                    profile.degree.trim() == ''
+                      ? 'bg-gray-100'
+                      : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover'
                   } cursor-pointer transition-ease-300`}
                 >
                   <PencilSimple
                     className={`absolute ${
                       profile.degree.trim() == '' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                    }  -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
+                    } text-primary_black -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
                   />
                   {profile.degree.trim() == '' ? (
-                    <div className="text-sm">Add Degree Name</div>
+                    <div className="text-sm text-primary_black">Add Degree Name</div>
                   ) : (
                     <div>{profile.degree}</div>
                   )}
@@ -338,7 +342,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
                   value={email}
                   onChange={el => setEmail(el.target.value)}
                   placeholder="Email"
-                  className="w-full text-primary_black focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 text-sm font-medium bg-transparent"
+                  className="w-full text-primary_black dark:text-white focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 text-sm font-medium bg-transparent"
                 />
                 <SaveBtn setter={setClickedOnEmail} field="email" />
               </div>
@@ -346,16 +350,16 @@ const About = ({ profile, setUser, org = false }: Props) => {
               <div
                 onClick={() => setClickedOnEmail(true)}
                 className={`w-fit relative group rounded-lg p-2 pr-10 ${
-                  profile.email.trim() == '' ? 'bg-gray-100' : 'hover:bg-gray-100'
+                  profile.email.trim() == '' ? 'bg-gray-100' : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover'
                 } cursor-pointer transition-ease-300`}
               >
                 <PencilSimple
                   className={`absolute ${
                     profile.email.trim() == '' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                  }  -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
+                  } text-primary_black -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
                 />
                 {profile.email.trim() == '' ? (
-                  <div className="text-sm font-normal">Add Public Email</div>
+                  <div className="text-sm font-normal text-primary_black">Add Public Email</div>
                 ) : (
                   <div>{profile.email}</div>
                 )}
@@ -374,7 +378,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
                     const val = el.target.value;
                     if (Number(val) || val == '') setPhoneNo(el.target.value);
                   }}
-                  className="w-fit text-primary_black focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 text-sm font-medium bg-transparent"
+                  className="w-fit text-primary_black dark:text-white focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 text-sm font-medium bg-transparent"
                 />
                 <SaveBtn setter={setClickedOnPhoneNo} field="phoneNo" />
               </div>
@@ -382,17 +386,17 @@ const About = ({ profile, setUser, org = false }: Props) => {
               <div
                 onClick={() => setClickedOnPhoneNo(true)}
                 className={`w-fit relative group rounded-lg p-2 pl-10 max-md:pr-8 max-md:pl-0 ${
-                  profile.phoneNo == '' ? 'bg-gray-100' : 'hover:bg-gray-100'
+                  profile.phoneNo == '' ? 'bg-gray-100' : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover'
                 } cursor-pointer transition-ease-300`}
               >
                 <PencilSimple
                   className={`absolute ${
                     profile.phoneNo == '' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                  }  -translate-y-1/2 top-1/2 md:left-2 max-md:right-2 transition-ease-300`}
+                  } text-primary_black -translate-y-1/2 top-1/2 md:left-2 max-md:right-2 transition-ease-300`}
                   size={20}
                 />
                 {profile.phoneNo == '' ? (
-                  <div className="text-sm">Add Public Phone No</div>
+                  <div className="text-sm text-primary_black">Add Public Phone No</div>
                 ) : (
                   <div>{profile.phoneNo}</div>
                 )}
@@ -415,7 +419,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
                   maxLength={25}
                   value={location}
                   onChange={el => setLocation(el.target.value)}
-                  className="w-full text-primary_black focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 font-semibold bg-transparent"
+                  className="w-full text-primary_black dark:text-white focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 font-semibold bg-transparent"
                 />
                 <SaveBtn setter={setClickedOnLocation} field="location" />
               </div>
@@ -423,16 +427,18 @@ const About = ({ profile, setUser, org = false }: Props) => {
               <div
                 onClick={() => setClickedOnLocation(true)}
                 className={`w-fit relative group rounded-lg p-2 pr-10 ${
-                  profile.location.trim() == '' ? 'bg-gray-100' : 'hover:bg-gray-100'
+                  profile.location.trim() == ''
+                    ? 'bg-gray-100'
+                    : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover'
                 } cursor-pointer transition-ease-300`}
               >
                 <PencilSimple
                   className={`absolute ${
                     profile.location.trim() == '' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                  }  -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
+                  } text-primary_black -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
                 />
                 {profile.location.trim() == '' ? (
-                  <div className="text-sm">Add Location</div>
+                  <div className="text-sm text-primary_black">Add Location</div>
                 ) : (
                   <div>{profile.location}</div>
                 )}
@@ -453,7 +459,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
             onChange={el => setDescription(el.target.value)}
             placeholder="add a professional bio"
             maxLength={1500}
-            className="w-full min-h-[200px] max-h-[320px] focus:outline-none text-primary_black border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg p-2 text-sm bg-transparent"
+            className="w-full min-h-[200px] max-h-[320px] focus:outline-none text-primary_black dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-lg p-2 text-sm bg-transparent"
           />
           <SaveBtn setter={setClickedOnDescription} field="description" />
         </div>
@@ -461,16 +467,16 @@ const About = ({ profile, setUser, org = false }: Props) => {
         <div
           onClick={() => setClickedOnDescription(true)}
           className={`w-full relative group rounded-lg flex-center p-4 max-md:p-0 ${
-            profile.description.trim() == '' ? 'bg-gray-100' : 'hover:bg-gray-100'
+            profile.description.trim() == '' ? 'bg-gray-100' : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover'
           } cursor-pointer transition-ease-300`}
         >
           <PencilSimple
             className={`absolute opacity-0 ${
               profile.description.trim() == '' ? 'opacity-100' : 'group-hover:opacity-100'
-            } top-2 right-2 transition-ease-300`}
+            } text-primary_black top-2 right-2 transition-ease-300`}
           />
           {profile.description.trim() == '' ? (
-            <div className="">Click here to add a Descriptive Bio!</div>
+            <div className="text-primary_black">Click here to add a Descriptive Bio!</div>
           ) : (
             <div className="whitespace-pre-wrap max-md:text-sm cursor-pointer">
               {renderContentWithLinks(profile.description)}
@@ -499,7 +505,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
               className={`w-full relative group rounded-lg flex-center p-4 ${
                 !profile.areasOfCollaboration || profile.areasOfCollaboration?.length == 0
                   ? 'bg-gray-100'
-                  : 'hover:bg-gray-100'
+                  : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover'
               } cursor-pointer transition-ease-300`}
             >
               <PencilSimple
@@ -507,10 +513,10 @@ const About = ({ profile, setUser, org = false }: Props) => {
                   !profile.areasOfCollaboration || profile.areasOfCollaboration?.length == 0
                     ? 'opacity-100'
                     : 'group-hover:opacity-100'
-                } top-2 right-2 transition-ease-300`}
+                } text-primary_black top-2 right-2 transition-ease-300`}
               />
               {!profile.areasOfCollaboration || profile.areasOfCollaboration.length == 0 ? (
-                <div className="">Click here to edit!</div>
+                <div className="text-primary_black">Click here to edit!</div>
               ) : (
                 <div className="w-full flex flex-wrap gap-4">
                   {profile.areasOfCollaboration.map((el, i) => (
@@ -549,17 +555,19 @@ const About = ({ profile, setUser, org = false }: Props) => {
         <div onClick={() => setClickedOnHobbies(true)} className="w-full flex flex-col gap-2">
           <div className="w-full flex justify-between group cursor-pointer">
             <div className="text-sm font-medium uppercase">{org ? 'Message Board' : 'Hobbies and Interest'}</div>
-            <PencilSimple className={`opacity-0 group-hover:opacity-100 transition-ease-300`} />
+            <PencilSimple className="opacity-0 group-hover:opacity-100 transition-ease-300" />
           </div>
 
           {!profile.hobbies || profile.hobbies.length == 0 ? (
-            <div className="text-center py-4 bg-gray-100 rounded-lg cursor-pointer">Click here to edit!</div>
+            <div className="text-center py-4 bg-gray-100 text-primary_black rounded-lg cursor-pointer">
+              Click here to edit!
+            </div>
           ) : (
             <div className="w-full flex flex-wrap">
               {profile.hobbies.map((el, i) => (
                 <div
                   key={i}
-                  className="text-sm hover:bg-white p-3 py-2 rounded-lg cursor-pointer hover:scale-105 transition-ease-500"
+                  className="text-sm dark:hover:text-primary_black hover:bg-white p-3 py-2 rounded-lg cursor-pointer hover:scale-105 transition-ease-500"
                 >
                   {el}
                 </div>

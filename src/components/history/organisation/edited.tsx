@@ -15,7 +15,7 @@ const Edited = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
             Updated an Event:{' '}
-            <Link target="_blank" href={'/explore/event/' + history.event?.id} className="font-semibold">
+            <Link target="_blank" href={'/events/' + history.event?.id} className="font-semibold">
               {history.event?.title}
             </Link>{' '}
           </div>
@@ -40,7 +40,7 @@ const Edited = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
             Updated a Project:{' '}
-            <Link target="_blank" href={'/explore/project/' + history.project?.slug} className="font-semibold">
+            <Link target="_blank" href={'/projects/' + history.project?.slug} className="font-semibold">
               {history.project?.title}
             </Link>{' '}
           </div>
@@ -59,7 +59,7 @@ const Edited = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
             Updated Coordinators of the Event:{' '}
-            <Link target="_blank" href={'/explore/event/' + history.eventID} className="font-semibold">
+            <Link target="_blank" href={'/events/' + history.eventID} className="font-semibold">
               {history.event?.title}
             </Link>{' '}
           </div>
@@ -92,7 +92,7 @@ const Edited = ({ history }: Props) => {
         <OrganizationHistoryWrapper history={history}>
           <div className="w-fit bg-priority_mid px-1 rounded-md gap-4">
             Edited an Opening:{' '}
-            <Link target="_blank" href={'/explore?oid=' + history.openingID} className="font-semibold">
+            <Link target="_blank" href={'/openings?oid=' + history.openingID} className="font-semibold">
               {history.opening?.title}
             </Link>
           </div>

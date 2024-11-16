@@ -26,6 +26,7 @@ export const CONNECTION_URL = `/connection`;
 export const TASK_URL = `/tasks`;
 export const EVENT_URL = `/events`;
 export const ORG_URL = `/org`;
+export const COMMUNITY_URL = `/community`;
 
 export const USER_PROFILE_PIC_URL = `${GC_API}/${BUCKET}/users/profilePics`;
 export const USER_COVER_PIC_URL = `${GC_API}/${BUCKET}/users/coverPics`;
@@ -35,3 +36,5 @@ export const POST_PIC_URL = `${GC_API}/${BUCKET}/posts`;
 export const GROUP_CHAT_PIC_URL = `${GC_API}/${BUCKET}/chats`;
 export const APPLICATION_RESUME_URL = `${GC_API}/${BUCKET}/users/resumes`;
 export const RESOURCE_URL = `${GC_API}/${BUCKET}/resources`;
+export const COMMUNITY_PROFILE_PIC_URL = `${GC_API}/${BUCKET}/communities/profilePics`;
+export const COMMUNITY_COVER_PIC_URL = `${GC_API}/${BUCKET}/communities/coverPics`;

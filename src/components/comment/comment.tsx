@@ -43,12 +43,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
   return (
     <div key={comment.id} className="w-full h-full flex gap-2">
       <div className="w-fit h-full flex flex-col items-center gap-2">
-        <Link
-          href={`${
-            comment.user.username != loggedInUser.username ? `/explore/user/${comment.user.username}` : '/profile'
-          }`}
-          target="_blank"
-        >
+        <Link href={`/users/${comment.user.username}`} target="_blank">
           <Image
             crossOrigin="anonymous"
             width={50}
@@ -70,13 +65,7 @@ const CommentComponent = ({ comment, setComments, setNoComments }: Props) => {
       <div className="grow flex flex-col gap-1">
         <div className="flex justify-between items-center">
           <div className="flex gap-2">
-            <Link
-              href={`${
-                comment.user.username != loggedInUser.username ? `/explore/user/${comment.user.username}` : '/profile'
-              }`}
-              target="_blank"
-              className="flex-center gap-1"
-            >
+            <Link href={`/users/${comment.user.username}`} target="_blank" className="flex-center gap-1">
               <div className={`font-medium ${comment.isRepliedComment && 'text-sm'}`}>{comment.user.name}</div>
               <div className="text-xs font-medium text-gray-500">@{comment.user.username}</div>
             </Link>

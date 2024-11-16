@@ -3,7 +3,6 @@ import '@/styles/loader.css';
 import '@/styles/toastify.css';
 import '@/styles/extras.tailwind.css';
 import '@/styles/project_card.css';
-import '@/styles/variables.module.scss';
 import '@/styles/landing.css';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
@@ -17,6 +16,7 @@ import socketService from '@/config/ws';
 import { Inter, Fraunces } from 'next/font/google';
 import ThemeCheck from '@/config/theme';
 import Head from 'next/head';
+import ThemeProvider from '@/components/ui/theme-provider';
 
 NProgressConfig();
 
@@ -85,8 +85,10 @@ export default function App({ Component, pageProps }: AppProps) {
         </Head>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <ToastContainer />
-            <Component {...pageProps} />
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              <ToastContainer />
+              <Component {...pageProps} />
+            </ThemeProvider>
           </PersistGate>
         </Provider>
       </main>

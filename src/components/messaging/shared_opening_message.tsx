@@ -1,7 +1,7 @@
 import { Message } from '@/types';
 import React from 'react';
 import Image from 'next/image';
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import Cookies from 'js-cookie';
 import moment from 'moment';
 import OpeningCard from '../cards/opening';

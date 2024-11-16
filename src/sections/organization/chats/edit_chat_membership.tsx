@@ -127,7 +127,7 @@ const EditMembership = ({ setShow, membership, setChats }: Props) => {
         <div className="w-full flex flex-col gap-2">
           <div className="w-full flex flex-col gap-1">
             <Link
-              href={`/explore/user/${membership.user.username}`}
+              href={`/users/${membership.user.username}`}
               className="w-full py-4 text-center dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active rounded-lg transition-ease-300"
             >
               Info

@@ -1,8 +1,9 @@
 import { Application } from '@/types';
 import React from 'react';
 import Image from 'next/image';
-import { PROJECT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import moment from 'moment';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 
 interface Props {
   application: Application;
@@ -38,10 +39,10 @@ const ApplicationCard = ({ application, setClickedOnApplication, setClickedAppli
             width={50}
             height={50}
             alt={'User Pic'}
-            src={`${PROJECT_PIC_URL}/${application.opening.project?.coverPic}`}
+            src={getProjectPicURL(application.opening.project)}
             className={'w-[120px] h-[120px] max-md:w-[90px] max-md:h-[90px] rounded-lg object-cover'}
             placeholder="blur"
-            blurDataURL={application.opening.project?.blurHash || 'no-hash'}
+            blurDataURL={getProjectPicHash(application.opening.project)}
           />
         )}
 

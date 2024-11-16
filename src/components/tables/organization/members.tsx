@@ -123,7 +123,7 @@ const OrgMembersTable = ({ memberships, organization, setOrganization }: Props) 
         <div className="w-[20%] max-md:w-[30%] flex-center">Title</div>
         <div className="w-[20%] max-md:hidden flex-center">Teams</div>
         <div className="w-[10%] max-md:w-[15%] flex-center">Role</div>
-        <div className="w-[10%] max-md:hidden flex-center">Joined At</div>
+        <div className="w-[10%] max-md:hidden flex-center">Joined On</div>
         {checkOrgAccess(ORG_MANAGER) && <div className="w-[10%] max-md:w-[15%] flex-center"></div>}
       </div>
       {memberships.map(membership => (

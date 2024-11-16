@@ -73,7 +73,7 @@ const Links = ({ links, showTitle = false, setLinks, maxLinks = 5, title = 'Link
                 </div>
 
                 <Link
-                  className={`text-xs border-[1px] border-black border-dashed rounded-lg px-2 py-1 ${
+                  className={`text-xs border-[1px] border-black dark:border-dark_primary_btn border-dashed rounded-lg px-2 py-1 ${
                     showURL !== index ? 'hidden' : ''
                   }`}
                   href={link}
@@ -104,7 +104,7 @@ const Links = ({ links, showTitle = false, setLinks, maxLinks = 5, title = 'Link
               className={`w-full h-12 ${
                 blackBorder
                   ? 'border-black placeholder:text-[#202020c6] bg-[#ffffff40]'
-                  : 'bg-transparent dark:bg-[#10013b30] border-gray-400 dark:border-dark_primary_btn'
+                  : 'bg-transparent dark:bg-dark_primary_comp border-gray-400 dark:border-dark_primary_btn'
               } focus:outline-none border-[1px] rounded-lg px-4 py-2 text-sm`}
               value={newLink}
               onChange={el => setNewLink(el.target.value.toLowerCase().trim())}
