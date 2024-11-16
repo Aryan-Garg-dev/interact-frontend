@@ -30,7 +30,7 @@ const LandingPage = () => {
       </div>
       <WhyChooseUs />
       <Testimonials />
-      <div className="min-h-screen overflow-hidden">
+      <div className="w-4/5 max-md:w-full mx-auto">
         <ExploreCommunity />
       </div>
       <div className="bottom-0 mt-8">
