@@ -8,7 +8,7 @@ const Community = () => {
         <div className="md:scale-[2.5] perspective-[1000px]">
           {/* <object data="/test@2x.svg" type="image/svg+xml" className="w-full h-auto" aria-label="Dashboard interface" /> */}
           <img
-            src="explore.svg"
+            src="landing/explore.svg"
             className="w-full h-auto object-contain"
             style={{
               transform: `perspective(1000px) rotateX(18deg) rotateY(0deg)`,
@@ -35,7 +35,7 @@ const Community = () => {
           Know More
         </button>
         <div className="flex items-center w-[100vw] h-[40vh] md:h-[60vh] justify-center overflow-hidden">
-          <ReactSVG src="/Cards integration.svg" className="mt-24 md:scale-[0.5] scale-[0.3]" />
+          <ReactSVG src="/landing/Cards integration.svg" className="mt-24 md:scale-[0.5] scale-[0.3]" />
         </div>
       </div>
     </div>

@@ -370,22 +370,3 @@ html {
   left: auto !important;
   top: auto !important;
 }
-
-@font-face {
-  font-family: 'Bachelorette';
-  src: url('/public/fonts/Bachelorette_PERSONAL_USE_ONLY.otf') format('.ttf');
-  font-weight: 400;
-  font-style: normal;
-}
-
-.font-bachelorette {
-  font-family: 'Bachelorette';
-}
-@font-face {
-  font-family: 'birthstone';
-  src: url('/public/fonts/BirthstoneBounce-Medium.ttf') format('ttf');
-}
-
-.font-birthstone {
-  font-family: 'birthstone';
-}

@@ -9,7 +9,7 @@ interface QuoteProps {
 const Quote: React.FC<QuoteProps> = ({ name, position, quote }) => {
   return (
     <div className="h-[15vh]">
-      <p>"{quote}"</p>
+      <p>&quot;{quote}&quot;</p>
       <p className="font-bold">
         {name} - {position}
       </p>

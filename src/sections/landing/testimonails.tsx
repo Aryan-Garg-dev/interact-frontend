@@ -1,5 +1,5 @@
 import React from 'react';
-import TestimonialsCard from './testimonials_card';
+import TestimonialsCard from '../../components/landing/testimonials_card';
 
 const Testimonials = () => {
   // Sample testimonial data

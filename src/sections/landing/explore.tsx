@@ -11,7 +11,7 @@ const ExploreCommunity: React.FC = () => {
           <div className="flex flex-row items-center justify-center mt-12 text-4xl md:text-6xl space-x-4 font-semibold">
             <h2>Explore Community</h2>
             <div className="flex items-center mt-4">
-              <ReactSVG src="/explore_vector.svg" className="h-6 w-6 mb-8" />
+              <ReactSVG src="/landing/explore_vector.svg" className="h-6 w-6 mb-8" />
             </div>
           </div>
 
@@ -61,7 +61,7 @@ const ExploreCommunity: React.FC = () => {
           }}
         ></div>
         <div className=" w-[80w] overflow-hidden">
-          <ReactSVG src="/bg-interact.svg" className="flex justify-center overflow-hidden" />
+          <ReactSVG src="/landing/bg-interact.svg" className="flex justify-center overflow-hidden" />
         </div>
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
           <ReactSVG src="/onboarding_logo.svg" className="mb-24 scale-[2.0]" />

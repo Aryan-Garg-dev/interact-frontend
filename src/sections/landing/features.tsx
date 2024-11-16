@@ -10,7 +10,7 @@ const Features = () => {
         <div className="w-full lg:w-1/2 flex justify-center items-center">
           <div className="relative w-full max-w-md aspect-square">
             <img
-              src="/community.svg"
+              src="/landing/community.svg"
               alt="Dashboard Preview"
               className="w-full h-full object-contain scale-[1.1] md:scale-[1.8] md:-translate-x-1/2"
             />
@@ -82,7 +82,7 @@ const Features = () => {
               </div>
             </div>
             <p className="text-black max-w-xl">
-              Reach out to us today and elevate your hackathon experience. We're here to provide a seamless,
+              Reach out to us today and elevate your hackathon experience. We&apos;re here to provide a seamless,
               student-focused solution to make your event a success.
             </p>
           </div>
@@ -109,7 +109,7 @@ const Features = () => {
         <div className="w-full lg:w-1/2 flex justify-center items-center">
           <div className="relative w-full max-w-md aspect-square">
             <img
-              src="/hackathon.svg"
+              src="/landing/hackathon.svg"
               alt="Hackathon Dashboard"
               className="w-full h-full object-contain scale-[1.1] md:scale-[1.8] md:translate-x-1/2 "
             />
