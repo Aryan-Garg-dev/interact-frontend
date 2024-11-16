@@ -1,8 +1,8 @@
 import LandingButton from '@/components/buttons/landing_btn';
 import Image from 'next/image';
 import React from 'react';
-import { ReactSVG } from 'react-svg';
 import { TitleBlock } from './features';
+
 const Community = () => {
   return (
     <div className="w-full flex-center flex-col gap-12">

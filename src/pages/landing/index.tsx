@@ -15,7 +15,7 @@ const Separator = () => {
 const LandingPage = () => {
   return (
     <div
-      className="w-full flex flex-col gap-8"
+      className="w-full flex flex-col gap-24"
       style={{
         cursor: `url('/landing/cursor.svg'), auto`,
       }}
@@ -28,21 +28,8 @@ const LandingPage = () => {
         <Features />
         <Community />
       </div>
-
       <WhyChooseUs />
-
-      <div className="flex flex-col space-y-4 justify-center items-center mt-12 text-center">
-        <h1 className="text-6xl font-bold text-[#51D1F6]">Testimonials</h1>
-        <h3 className="text-2xl">Don&apos;t believe us? Look what people have to say about us!</h3>
-        <div className="relative w-[95vw]">
-          <div className="container mx-auto p-8">
-            <div className="flex flex-col gap-6 items-center">
-              <Testimonials />
-            </div>
-          </div>
-          {/* Gradient overlay */}
-        </div>
-      </div>
+      <Testimonials />
       <div className="min-h-screen overflow-hidden">
         <ExploreCommunity />
       </div>

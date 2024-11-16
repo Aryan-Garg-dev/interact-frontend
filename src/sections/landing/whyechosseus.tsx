@@ -1,42 +1,34 @@
 import React from 'react';
 
-interface WhyChooseUsProps {
-  cards?: {
-    subtitle: string;
-    title: string;
-    description: string;
-  }[];
-  motivatingStatement?: string;
-  bulletPoints?: string[];
-}
+const cards = [
+  {
+    subtitle: 'Heading',
+    title: 'Heading',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Enim aliquam neque feugiat molestie id feugiat augue. Imperdiet ullamcorper tortor amet ac diam leo. Cursus vivamus mauris eu sed elit nulla consectetur ipsum quis. Pellentesque venenatis nunc hendrerit nunc sodales.',
+  },
+  {
+    subtitle: 'Heading',
+    title: 'Heading',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. Arnaeos lectus vulputate quis sed elit in nunc amet risus. diam cras risus. Est praesent velit dui amet egestas sed nunc risus. Aliquet feugiat sit consectetur mauris ac a. Et neque mattis id lectus velit hac tortor nisi eu. Aenean tincidunt elementum velit mauris rutrum nisi.',
+  },
+  {
+    subtitle: 'Heading',
+    title: 'Heading',
+    description:
+      'Lorem ipsum dolor sit amet consectetur. At a pellentesque nisl amet sed dignissim habitant purus. In vestibulum pellentesque pellentesque mauris,in sit lacinia faucibus. Est mattis dictum id elementum ac. Et vulputate vulputate eu nascetur volutpat dui pulvinar. Lectus dolor sagittis in tristique. Facilisi pretium rutrum vel donec consequat. Velit turpis pharetra eget lacinia amet imperdiet.',
+  },
+];
+const motivatingStatement =
+  'Join the ranks of innovative organizations and university clubs already streamlining their hackathons with Interact. Let us help you bring your vision to life with ease and efficiency.';
 
-const WhyChooseUs: React.FC<WhyChooseUsProps> = ({
-  cards = [
-    {
-      subtitle: 'Heading',
-      title: 'Heading',
-      description:
-        'Lorem ipsum dolor sit amet consectetur. Enim aliquam neque feugiat molestie id feugiat augue. Imperdiet ullamcorper tortor amet ac diam leo. Cursus vivamus mauris eu sed elit nulla consectetur ipsum quis. Pellentesque venenatis nunc hendrerit nunc sodales.',
-    },
-    {
-      subtitle: 'Heading',
-      title: 'Heading',
-      description:
-        'Lorem ipsum dolor sit amet consectetur. Arnaeos lectus vulputate quis sed elit in nunc amet risus. diam cras risus. Est praesent velit dui amet egestas sed nunc risus. Aliquet feugiat sit consectetur mauris ac a. Et neque mattis id lectus velit hac tortor nisi eu. Aenean tincidunt elementum velit mauris rutrum nisi.',
-    },
-    {
-      subtitle: 'Heading',
-      title: 'Heading',
-      description:
-        'Lorem ipsum dolor sit amet consectetur. At a pellentesque nisl amet sed dignissim habitant purus. In vestibulum pellentesque pellentesque mauris,in sit lacinia faucibus. Est mattis dictum id elementum ac. Et vulputate vulputate eu nascetur volutpat dui pulvinar. Lectus dolor sagittis in tristique. Facilisi pretium rutrum vel donec consequat. Velit turpis pharetra eget lacinia amet imperdiet.',
-    },
-  ],
-  motivatingStatement = 'Join the ranks of innovative organizations and university clubs already streamlining their hackathons with Interact. Let us help you bring your vision to life with ease and efficiency.',
-  bulletPoints = [
-    'Our trusted reputation at the college, backed by latest testimonials, sets us apart as a reliable partner in hackathon management.',
-    'Registration to judging, we ensure the best experience for both organizers and participants.',
-  ],
-}) => {
+const bulletPoints = [
+  'Our trusted reputation at the college, backed by latest testimonials, sets us apart as a reliable partner in hackathon management.',
+  'Registration to judging, we ensure the best experience for both organizers and participants.',
+];
+
+const WhyChooseUs = () => {
   return (
     <div className="w-full flex flex-col gap-8 bg-gradient-to-b from-[#0A2732] via-[#000000] to-[#0A2732] text-white py-32 px-48 max-md:p-8">
       <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
@@ -56,7 +48,6 @@ const WhyChooseUs: React.FC<WhyChooseUsProps> = ({
         <div className="bg-[#1a1a1a] rounded-2xl p-8">
           <h3 className="text-xl font-bold mb-4">Motivating Statement</h3>
           <p className="text-gray-300 leading-relaxed mb-4">{motivatingStatement}</p>
-          <p className="text-gray-300 leading-relaxed">{motivatingStatement}</p>
         </div>
       </div>
 
