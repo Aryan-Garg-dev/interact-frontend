@@ -33,9 +33,7 @@ const LandingPage = () => {
       <div className="w-4/5 max-md:w-full mx-auto">
         <ExploreCommunity />
       </div>
-      <div className="bottom-0 mt-8">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 };
