@@ -26,9 +26,8 @@ const LandingPage = () => {
         <HeroSection />
         <Separator />
         <Features />
+        <Community />
       </div>
-
-      <Community />
       <div>
         <WhyChooseUs />
       </div>

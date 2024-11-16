@@ -2,30 +2,32 @@ import React from 'react';
 import LandingButton from '@/components/buttons/landing_btn';
 import Image from 'next/image';
 
-const TitleBlock = ({
+export const TitleBlock = ({
   titleUpper,
   titleMid,
   titleLower,
   titleSide,
   description,
+  center = false,
 }: {
   titleUpper: string;
   titleMid: string;
   titleLower: string;
-  titleSide: string;
+  titleSide?: string;
   description: string;
+  center?: boolean;
 }) => {
   return (
     <div className="space-y-4">
-      <div className="relative">
+      <div className={`relative ${center && 'flex-center flex-col'}`}>
         <div className="text-6xl font-bold">{titleUpper}</div>
-        <div className="w-fit font-cursive rotate-[-20deg] text-2xl absolute -left-4">{titleMid}</div>
-        <div className="inline-block pt-4">
+        <div className={`w-fit font-cursive rotate-[-20deg] text-3xl absolute ${!center && '-left-5'}`}>{titleMid}</div>
+        <div className="inline-block pt-5">
           <span className="text-8xl text-sky-400 font-bold"> {titleLower}</span>
-          <span className="text-gray-600 italic text-xl"> {titleSide}</span>
+          {titleSide && <span className="text-gray-600 italic text-xl"> {titleSide}</span>}
         </div>
       </div>
-      <p className="text-gray-600">{description}</p>
+      <p className={`text-gray-600 ${center && 'text-center'}`}>{description}</p>
     </div>
   );
 };
