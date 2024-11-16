@@ -25,10 +25,10 @@ const Openings = () => {
 
   const windowWidth = useWindowWidth();
 
-  const fetchOpenings = async (search: string | null, initialPage?: number) => {
+  const fetchOpenings = async (search: string | null, cid: string | null, initialPage?: number) => {
     let URL = `${EXPLORE_URL}/openings?page=${initialPage ? initialPage : page}&limit=${10}&order=${
       order == 'last_searched' ? 'last_viewed' : order
-    }${search ? `&search=${search}` : ''}`;
+    }${search ? `&search=${search}` : ''}${cid ? `&cid=${cid}` : ''}`;
 
     const projectSlug = new URLSearchParams(window.location.search).get('pid');
     if (projectSlug) {
@@ -106,7 +106,12 @@ const Openings = () => {
     setLoading(true);
     const oid = new URLSearchParams(window.location.search).get('oid');
     if (oid && oid != '') fetchOpening(oid);
-    else fetchOpenings(new URLSearchParams(window.location.search).get('search'), 1);
+    else
+      fetchOpenings(
+        new URLSearchParams(window.location.search).get('search'),
+        new URLSearchParams(window.location.search).get('cid'),
+        1
+      );
   }, [window.location.search, order]);
 
   const isOrg = (opening: Opening): boolean => {
@@ -123,7 +128,12 @@ const Openings = () => {
           <InfiniteScroll
             className={`${clickedOnOpening ? 'w-[480px]' : 'w-[720px]'} max-lg:w-full flex flex-col gap-4`}
             dataLength={openings.length}
-            next={() => fetchOpenings(new URLSearchParams(window.location.search).get('search'))}
+            next={() =>
+              fetchOpenings(
+                new URLSearchParams(window.location.search).get('search'),
+                new URLSearchParams(window.location.search).get('cid')
+              )
+            }
             hasMore={hasMore}
             loader={<Loader />}
           >

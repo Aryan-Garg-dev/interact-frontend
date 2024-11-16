@@ -35,6 +35,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import EditRule from '@/sections/community/edit_rule';
 import OrderMenu from '@/components/common/order_menu';
 import ViewPermissions from '@/sections/community/view_permissions';
+import Connections from '@/sections/explore/connections_view';
+import Link from 'next/link';
 
 const Community = ({ id }: { id: string }) => {
   const [community, setCommunity] = useState(initialCommunity);
@@ -53,6 +55,7 @@ const Community = ({ id }: { id: string }) => {
   const [order, setOrder] = useState('trending');
 
   const [clickedOnNewPost, setClickedOnNewPost] = useState(false);
+  const [clickedOnMembers, setClickedOnMembers] = useState(false);
 
   const fetchCommunity = async () => {
     const URL = `${COMMUNITY_URL}/${id}`;
@@ -140,6 +143,14 @@ const Community = ({ id }: { id: string }) => {
       {clickedOnNewPost && (
         <NewPost setFeed={setPosts} initialCommunityID={community.id} setShow={setClickedOnNewPost} />
       )}
+      {clickedOnMembers && (
+        <Connections
+          baseURL={`${COMMUNITY_URL}/${community.id}/members`}
+          title={`Members of ${community.title}`}
+          type="community"
+          setShow={setClickedOnMembers}
+        />
+      )}
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-full flex flex-col gap-2">
           <div className="w-full relative">
@@ -216,18 +227,18 @@ const Community = ({ id }: { id: string }) => {
               <div className="text-center">{community.description}</div>
               <Tags tags={community.tags} displayAll center />
               <div className="w-full flex items-center justify-center gap-8 my-2">
-                <div className="flex-center flex-col">
+                <div onClick={() => setClickedOnMembers(true)} className="flex-center flex-col cursor-pointer">
                   <div className="text-lg font-medium">{community.noMembers}</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Members</div>
                 </div>
-                <div className="flex-center flex-col">
+                <Link href={`/projects?cid=${community.id}`} className="flex-center flex-col">
                   <div className="text-lg font-medium">{noProjects}</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Projects</div>
-                </div>
-                <div className="flex-center flex-col">
+                </Link>
+                <Link href={`/openings?cid=${community.id}`} className="flex-center flex-col">
                   <div className="text-lg font-medium">{noOpenings}</div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">Openings</div>
-                </div>
+                </Link>
               </div>
               {connections && connections.length > 0 && (
                 <span className="w-full text-center text-sm">
