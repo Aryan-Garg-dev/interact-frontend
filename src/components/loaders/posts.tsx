@@ -2,13 +2,13 @@ import React from 'react';
 
 const PostsLoader = () => {
   return (
-    <div className="w-full flex flex-col gap-4">
+    <div className="w-full flex flex-col gap-4 mt-4">
       {Array(2)
         .fill(1)
         .map((_, index) => (
           <div
             key={index}
-            className={`w-full bg-white dark:bg-transparent font-primary flex gap-1 rounded-lg dark:rounded-none dark:text-white border-gray-300 border-[1px] dark:border-x-0 dark:border-t-0 dark:border-dark_primary_btn p-4 max-md:p-2`}
+            className="w-full bg-white dark:bg-transparent font-primary flex gap-1 dark:text-white border-gray-300 border-b-[1px] dark:border-dark_primary_btn"
           >
             <div className="h-full">
               <div className="animate-pulse w-8 h-8 bg-gray-200 dark:bg-dark_primary_comp_hover rounded-full" />

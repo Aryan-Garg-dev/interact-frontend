@@ -1,5 +1,13 @@
 import { RootState } from '@/store';
-import { EventBookmark, OpeningBookmark, OrganizationMembership, PostBookmark, ProjectBookmark, User } from '@/types';
+import {
+  CommunityMembership,
+  EventBookmark,
+  OpeningBookmark,
+  OrganizationMembership,
+  PostBookmark,
+  ProjectBookmark,
+  User,
+} from '@/types';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -39,6 +47,7 @@ export interface UserState {
   isOnboardingComplete: boolean;
   isPasswordSetupComplete: boolean;
   organizationMemberships: OrganizationMembership[];
+  communityMemberships: CommunityMembership[];
   registeredEvents: string[];
   votedOptions: string[];
   githubUsername: string;
@@ -77,6 +86,7 @@ const initialState: UserState = {
   isOnboardingComplete: false,
   isPasswordSetupComplete: true,
   organizationMemberships: [],
+  communityMemberships: [],
   votedOptions: [],
   registeredEvents: [],
   githubUsername: '',
@@ -119,6 +129,7 @@ export const userSlice = createSlice({
       state.openingBookmarks = [];
       state.eventBookmarks = [];
       state.organizationMemberships = [];
+      state.communityMemberships = [];
       state.votedOptions = [];
       state.registeredEvents = [];
       state.githubUsername = action.payload.githubUsername;
@@ -154,6 +165,7 @@ export const userSlice = createSlice({
       state.openingBookmarks = [];
       state.eventBookmarks = [];
       state.organizationMemberships = [];
+      state.communityMemberships = [];
       state.isOnboardingComplete = false;
       state.isPasswordSetupComplete = true;
       state.votedOptions = [];
@@ -248,6 +260,9 @@ export const userSlice = createSlice({
     setOrganizationMemberships: (state, action: PayloadAction<OrganizationMembership[]>) => {
       state.organizationMemberships = action.payload;
     },
+    setCommunityMemberships: (state, action: PayloadAction<CommunityMembership[]>) => {
+      state.communityMemberships = action.payload;
+    },
     setVotedOptions: (state, action: PayloadAction<string[]>) => {
       state.votedOptions = action.payload;
     },
@@ -292,6 +307,7 @@ export const {
   setOnboardingStatus,
   setPasswordSetupStatus,
   setOrganizationMemberships,
+  setCommunityMemberships,
   setVotedOptions,
   setRegisteredEvents,
   setGithubUsername,

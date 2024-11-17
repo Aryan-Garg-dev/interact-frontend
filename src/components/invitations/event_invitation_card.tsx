@@ -74,7 +74,7 @@ const EventInvitationCard = ({ invitation, setInvitations }: Props) => {
   return (
     <>
       <div className="w-[45%] font-primary bg-white border-[1px] border-primary_btn rounded-md flex-col items-center justify-start gap-6 p-4 hover:shadow-lg transition-ease-300">
-        <Link target="_blank" href={`/explore/event/${invitation.eventID}`}>
+        <Link target="_blank" href={`/events/${invitation.eventID}`}>
           <Image
             crossOrigin="anonymous"
             width={100}
@@ -88,13 +88,13 @@ const EventInvitationCard = ({ invitation, setInvitations }: Props) => {
           <Link target="_blank" href={`/events/${invitation.event?.id}`} className="text-2xl font-bold text-gradient">
             {invitation.project.title}
           </Link>
-          <Link target="_blank" href={`/explore/event/${invitation.eventID}`} className="text-2xl font-semibold">
+          <Link target="_blank" href={`/events/${invitation.eventID}`} className="text-2xl font-semibold">
             {invitation.title}
           </Link>
           <Link
             target="_blank"
-            href={`/explore/organisation/${invitation.event?.organization.user.username}`}
-            className="font-medium hover-underline-animation after:bg-black"
+            href={`/organisations/${invitation.event?.organization.user.username}`}
+            className="font-medium hover-underline-animation after:bg-black dark:after:bg-white"
           >
             Hosted by {invitation.event?.organization.title}
           </Link>

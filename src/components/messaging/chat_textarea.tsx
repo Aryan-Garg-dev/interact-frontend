@@ -63,11 +63,11 @@ const ChatTextarea = ({ chat }: Props) => {
   };
 
   return chat.isAdminOnly && !getSelfMembership(chat).isAdmin ? (
-    <div className="w-full h-[64px] backdrop-blur-md bg-primary_comp text-gray-600 dark:bg-[#c578bf10] rounded-xl p-4 dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn cursor-default">
+    <div className="w-full h-[64px] backdrop-blur-md bg-primary_comp text-gray-600 dark:bg-dark_primary_comp rounded-xl p-4 dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn cursor-default">
       Only Admins can send messages
     </div>
   ) : getSelfMembership(chat).isBlocked ? (
-    <div className="w-full h-[64px] backdrop-blur-md bg-primary_comp text-gray-600 dark:bg-[#c578bf10] rounded-xl p-4 dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn cursor-default">
+    <div className="w-full h-[64px] backdrop-blur-md bg-primary_comp text-gray-600 dark:bg-dark_primary_comp rounded-xl p-4 dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn cursor-default">
       Chat is Blocked
     </div>
   ) : (
@@ -77,7 +77,7 @@ const ChatTextarea = ({ chat }: Props) => {
       onKeyUp={handleKeyUp}
       // style={{ height: height, resize: 'none' }}
       placeholder="Message..."
-      className="w-full h-[64px] min-h-[64px] max-h-[132px] backdrop-blur-md bg-primary_comp dark:bg-[#c578bf10] rounded-xl p-4 dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn overflow-auto focus:outline-none"
+      className="w-full h-[64px] min-h-[64px] max-h-[132px] backdrop-blur-md bg-primary_comp dark:bg-dark_primary_comp rounded-xl p-4 dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn overflow-auto focus:outline-none"
     />
   );
 };

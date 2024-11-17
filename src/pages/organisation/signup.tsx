@@ -138,14 +138,19 @@ const SignUp = () => {
           content="Sign up for Interact! Interact is a groundbreaking web platform designed for college-going students, freelancers, professionals, and creatives."
         />
       </Head>
-      <div className="h-full flex">
+      <div className="h-full flex dark:bg-dark_primary_comp">
         {clickedOnStrongPassInfo && (
           <StrongPassInfo password={password} confirmPassword={confirmPassword} setShow={setClickedOnStrongPassInfo} />
         )}
         <div className="w-[55%] max-lg:hidden min-h-screen bg-onboarding bg-cover"></div>
         <div className="w-[45%] max-lg:w-full h-full min-h-screen font-primary gap-12 py-8 px-8 flex flex-col justify-between items-center">
           <div className="w-full flex justify-between items-center">
-            <ReactSVG src="/onboarding_logo.svg" />
+            <Link href="/" className="hidden dark:flex">
+              <ReactSVG src="/onboarding_logo_dark.svg" />
+            </Link>
+            <Link href="/" className="static dark:hidden">
+              <ReactSVG src="/onboarding_logo.svg" />
+            </Link>
             <Link
               href={`/signup`}
               className="w-12 hover:w-36 h-12 group overflow-clip relative rounded-full border-[1px] border-primary_black hover:shadow-xl transition-ease-300"

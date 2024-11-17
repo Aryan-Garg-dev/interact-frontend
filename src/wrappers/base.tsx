@@ -1,23 +1,26 @@
 import Navbar from '@/components/common/navbar';
+import SearchBar from '@/components/explore/searchbar';
+import { useWindowWidth } from '@react-hook/window-size';
 import Head from 'next/head';
-import React, { ReactNode } from 'react';
-import { ReactSVG } from 'react-svg';
+import React, { ReactNode, use } from 'react';
 
 interface WrapperProps {
-  title?: string;
   children: ReactNode;
+  title?: string;
+  excludeSearchBar?: boolean;
 }
 
-const BaseWrapper: React.FC<WrapperProps> = ({ children, title = '' }) => {
+const BaseWrapper: React.FC<WrapperProps> = ({ children, title = '', excludeSearchBar = false }) => {
+  const width = useWindowWidth();
+  const isMD = width < 768;
   return (
     <>
       <Head>
         <title>{title} | Interact</title>
       </Head>
-      <Navbar />
+      <Navbar includeExplore={isMD} />
+      {!excludeSearchBar && !isMD && <SearchBar />}
       <div className="w-full flex">{children}</div>
-      {/* <ReactSVG className="w-screen h-screen hidden dark:block fixed -z-50 top-0 right-0" src="/assets/base.svg" /> */}
-      {/* <div className="w-screen h-screen main_bg fixed -z-50 top-0 right-0"></div> */}
     </>
   );
 };

@@ -25,7 +25,7 @@ const Events = ({ orgID, displayOnProfile = false }: Props) => {
 
   const getEvents = () => {
     const URL = `${EXPLORE_URL}/events/org/${orgID}?page=${page}&limit=${10}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           const addEvents = [...events, ...(res.data.events || [])];

@@ -28,9 +28,9 @@ const Impressions = ({ notification, short = true }: Props) => {
       case 14:
         return '/explore/post/' + notification.postID;
       case 15:
-        return '/explore?pid=' + notification.project.slug;
+        return '/projects/' + notification.project.slug;
       case 16:
-        return '/explore/event/' + notification.eventID;
+        return '/events/' + notification.eventID;
       case 17:
         return '/explore/announcement/' + notification.announcementID;
       default:

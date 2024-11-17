@@ -80,7 +80,7 @@ const Messaging = () => {
         >
           {clickedOnNewGroup && (
             <NewGroup
-              userFetchURL={`${EXPLORE_URL}/users/trending`}
+              userFetchURL={`${EXPLORE_URL}/users?order=trending`}
               submitURL={`${MESSAGING_URL}/group`}
               setShow={setClickedOnNewGroup}
             />

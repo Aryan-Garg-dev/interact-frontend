@@ -29,7 +29,7 @@ const TextAnimation = () => {
   }, [index]);
 
   return (
-    <div className="h-32 max-md:h-16 overflow-hidden">
+    <div className="h-32 max-md:h-16 overflow-hidden text-black">
       <div
         className={`transform transition-ease-500 ${isResetting ? 'transition-none' : ''}`}
         style={{
@@ -39,7 +39,7 @@ const TextAnimation = () => {
         {texts.map((text, i) => (
           <div
             key={i}
-            className="h-32 max-md:h-16 pb-8 max-md:pb-2 flex items-center justify-center md:text-9xl text-6xl font-bold"
+            className="h-32 max-md:h-16 pb-8 max-md:pb-2 flex items-center justify-center lg:text-9xl text-5xl font-bold"
           >
             {text}
           </div>
@@ -55,8 +55,8 @@ export const HeroSection = () => {
       <FloatingImages />
       <div className="flex flex-col gap-4 max-md:gap-0">
         <div className="mx-auto relative">
-          <div className="w-fit md:text-7xl text-4xl font-semibold">Everything</div>
-          <div className="font-cursive text-4xl max-md:text-xl absolute -bottom-4 -left-24 max-md:-left-16 rotate-[-20deg]">
+          <div className="w-fit md:text-7xl text-black text-4xl font-semibold">Everything</div>
+          <div className="font-cursive text-black text-4xl max-md:text-xl absolute -bottom-4 -left-24 max-md:-left-16 rotate-[-20deg]">
             About
           </div>
         </div>
@@ -68,12 +68,14 @@ export const HeroSection = () => {
         </p>
 
         <div className="space-y-4">
-          <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg max-md:text-sm">
-            Sign up for free
-          </button>
+          <a href="/signup">
+            <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg max-md:text-sm">
+              Sign up for free
+            </button>
+          </a>
           <div className="flex justify-center items-center space-x-2 text-sm">
             <span className="text-gray-600">Are you Organizations ?</span>
-            <a href="#" className="text-[#00BDF2]">
+            <a href="/signup" className="text-[#00BDF2]">
               Sign up here
             </a>
           </div>

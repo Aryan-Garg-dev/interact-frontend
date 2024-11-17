@@ -18,16 +18,12 @@ const UserCard = ({ user, forTrending = false }: Props) => {
   const loggedInUser = useSelector(userSelector);
   return (
     <Link
-      href={`${
-        user.username != loggedInUser.username
-          ? `/explore/${user.isOrganization ? 'organisation' : 'user'}/${user.username}`
-          : '/profile'
-      }`}
+      href={`/${user.isOrganization ? 'organisations' : 'users'}/${user.username}`}
       target="_blank"
       className={`w-full font-primary border-[1px] rounded-lg flex flex-col ${
         !forTrending
           ? 'px-5 py-4 bg-gray-100 hover:bg-white border-primary_btn gap-4'
-          : 'px-2 py-3 hover:bg-primary_comp gap-2'
+          : 'px-2 py-3 hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover gap-2'
       } transition-ease-300`}
     >
       <div className="flex items-center justify-between w-full">

@@ -14,7 +14,7 @@ const Time = ({ label, val, setVal, required = false, onChange, styles, includeD
   return (
     <div>
       {label && (
-        <div className="text-xs ml-1 font-medium uppercase text-gray-500">
+        <div className="text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300">
           {label}
           {required && '*'}
         </div>
@@ -23,7 +23,7 @@ const Time = ({ label, val, setVal, required = false, onChange, styles, includeD
         value={val}
         onChange={onChange ? onChange : el => setVal(el.target.value)}
         type={includeDate ? 'datetime-local' : 'time'}
-        className="w-full bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
+        className="w-full bg-transparent focus:outline-none border-[1px] border-gray-400 dark:border-dark_primary_btn rounded-lg p-2"
         style={styles}
       />
     </div>

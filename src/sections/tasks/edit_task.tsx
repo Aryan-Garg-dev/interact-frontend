@@ -136,8 +136,8 @@ const EditTask = ({
         )
       ) {
         const oldUserIDs = task.users.map(user => user.id);
-        let addUsersSuccess = true;
-        let removeUsersSuccess = true;
+        let addusersuccess = true;
+        let removeusersuccess = true;
 
         const usersToAdd = userIDs.filter(userID => !oldUserIDs.includes(userID));
         const usersToRemove = oldUserIDs.filter(userID => !userIDs.includes(userID));
@@ -145,22 +145,22 @@ const EditTask = ({
         for (const userID of usersToAdd) {
           const result = await addUser(userID, toaster);
           if (result !== 1) {
-            addUsersSuccess = false;
+            addusersuccess = false;
             break;
           }
         }
 
-        if (addUsersSuccess) {
+        if (addusersuccess) {
           for (const userID of usersToRemove) {
             const result = await removeUser(userID, toaster);
             if (result !== 1) {
-              removeUsersSuccess = false;
+              removeusersuccess = false;
               break;
             }
           }
         }
 
-        if (addUsersSuccess && removeUsersSuccess) {
+        if (addusersuccess && removeusersuccess) {
           if (setTasks)
             setTasks(prev =>
               prev.map(t => {
@@ -250,7 +250,7 @@ const EditTask = ({
 
   return (
     <>
-      <div className="fixed top-[10%] max-h-[80%] max-md:top-20 w-[640px] overflow-y-auto max-md:w-5/6 backdrop-blur-2xl bg-white flex flex-col gap-4 rounded-lg p-10 max-md:p-5 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
+      <div className="fixed top-[10%] max-h-[80%] max-md:top-20 w-[640px] overflow-y-auto max-md:w-5/6 backdrop-blur-2xl bg-white dark:bg-dark_primary_comp flex flex-col gap-4 rounded-lg p-10 max-md:p-5 font-primary border-[1px] border-primary_btn right-1/2 translate-x-1/2 animate-fade_third z-50">
         <div className="text-3xl max-lg:text-xl font-semibold">
           {status == 0 ? 'Task Info' : status == 1 ? 'Select Users' : 'Review Details'}
         </div>

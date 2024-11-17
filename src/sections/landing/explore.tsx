@@ -35,7 +35,7 @@ const comments = [
 
 const ExploreCommunity: React.FC = () => {
   return (
-    <div className="w-full flex flex-col gap-24">
+    <div className="w-full flex flex-col gap-24 text-black">
       <div className="w-full flex-center flex-col gap-8">
         <div className="flex flex-row items-center justify-center text-4xl md:text-5xl space-x-4 font-semibold">
           <h3>Explore Community</h3>
@@ -43,9 +43,9 @@ const ExploreCommunity: React.FC = () => {
         </div>
 
         <div className="w-4/5 rounded-lg space-y-8">
-          <div className="w-full max-h-64 overflow-y-clip flex-center md:flex-row flex-col gap-8 px-12 border-2 rounded-xl">
-            <div className="w-1/2 space-y-16 py-12">
-              <div className="relative">
+          <div className="w-full md:max-h-72 overflow-y-clip flex-center md:flex-row flex-col md:gap-8 px-12 border-2 rounded-xl">
+            <div className="w-1/2 space-y-24 md:space-y-16 py-16 md:py-18">
+              <div className="relative py-4">
                 <div className="text-4xl font-semibold mb-2">Supporting the</div>
                 <div className="w-fit font-cursive rotate-[-8deg] text-sky-400 text-5xl font-medium absolute">
                   Future makers
@@ -81,7 +81,7 @@ const ExploreCommunity: React.FC = () => {
         </div>
       </div>
 
-      <div className="relative flex justify-center items-center">
+      <div className="relative flex justify-center items-center ">
         <div
           className="absolute inset-0 pointer-events-none flex justify-center items-center"
           style={{
@@ -112,7 +112,7 @@ const GridBox = ({ src, alt }: { src: string; alt: string }) => {
 
 const SocialMediaGrid: React.FC = () => {
   return (
-    <div className="w-1/2 flex-center flex-col mt-4">
+    <div className="md:w-1/2 w-[70vw] flex-center flex-col mt-4">
       <GridBox src="/landing/logos/x.svg" alt="Twitter Logo" />
       <div className="w-full flex">
         <GridBox src="/landing/logos/discord.svg" alt="Discord Logo" />

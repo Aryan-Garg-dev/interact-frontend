@@ -4,7 +4,7 @@ import { ReactSVG } from 'react-svg';
 
 const Navbar: React.FC = () => {
   return (
-    <div className="w-full p-2 h-16 bg-white flex items-center justify-between z-50">
+    <div className="md:w-[80vw] w-[90vw]  p-2 h-16 flex items-center justify-between z-50 text-black">
       <div className="flex items-center md:max-h-[10vh]">
         <ReactSVG src="/onboarding_logo.svg" className="max-h-[6vh]" />
       </div>
@@ -19,9 +19,11 @@ const Navbar: React.FC = () => {
           </a>
         </div>
         <div className="flex flex-row items-center justify-center">
-          <LandingButton label="Sign up" />
+          <a href="/signup">
+            <LandingButton label="Sign up" />
+          </a>
           <span className="px-2 text-2xl text-[#00BDF2]">/</span>
-          <a href="#" className="hover:underline font-bold text-[#00BDF2] max-md:text-sm">
+          <a href="/login" className="hover:underline font-bold text-[#00BDF2] max-md:text-sm">
             Sign In
           </a>
         </div>

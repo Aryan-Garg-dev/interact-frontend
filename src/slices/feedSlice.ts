@@ -38,8 +38,8 @@ export const feedSlice = createSlice({
   name: 'feed',
   initialState,
   reducers: {
-    setNavbarOpen: (state, action: PayloadAction<boolean>) => {
-      state.navbarOpen = action.payload;
+    toggleNavbarOpen: state => {
+      state.navbarOpen = !state.navbarOpen;
     },
     setProfileCompletionOpen: (state, action: PayloadAction<boolean>) => {
       state.profileCompletionOpen = action.payload;
@@ -87,7 +87,7 @@ export const feedSlice = createSlice({
 });
 
 export const {
-  setNavbarOpen,
+  toggleNavbarOpen,
   setProfileCompletionOpen,
   setHomeTab,
   setExploreTab,

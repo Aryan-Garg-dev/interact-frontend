@@ -28,9 +28,9 @@ const Liked = ({ notification, short = true }: Props) => {
       case 1:
         return '/explore/post/' + notification.postID;
       case 3:
-        return '/explore?pid=' + notification.project.slug;
+        return '/projects/' + notification.project.slug;
       case 12:
-        return '/explore/event/' + notification.eventID;
+        return '/events/' + notification.eventID;
       case 18:
         return '/explore/announcement/' + notification.announcementID;
       default:
@@ -63,7 +63,7 @@ const Liked = ({ notification, short = true }: Props) => {
         )
       }
     >
-      <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
+      <Link className="font-bold" href={`/users/${notification.sender.username}`}>
         {notification.sender.name}
       </Link>
       Liked your{' '}

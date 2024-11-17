@@ -1,6 +1,6 @@
 import Notifications from '@/sections/navbar/notifications';
 import { unreadChatsSelector, unreadNotificationsSelector } from '@/slices/feedSlice';
-import { Bell, ChatCircleDots, Handshake, MagnifyingGlass} from '@phosphor-icons/react';
+import { Bell, ChatCircleDots, Handshake } from '@phosphor-icons/react';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ReactSVG } from 'react-svg';
@@ -10,8 +10,10 @@ import { userSelector } from '@/slices/userSlice';
 import ProfileDropdown from '@/sections/navbar/profile_dropdown';
 import Link from 'next/link';
 import Feedback from './feedback';
+import { Button } from '../ui/button';
+import { DialogSearchBar } from '../explore/searchbar';
 
-const Navbar = () => {
+const Navbar = ({ includeExplore = false }: { includeExplore?: boolean }) => {
   const [clickedOnNotifications, setClickedOnNotifications] = useState(false);
   const [clickedOnProfile, setClickedOnProfile] = useState(false);
   const [clickedOnFeedback, setClickedOnFeedback] = useState(false);
@@ -34,20 +36,15 @@ const Navbar = () => {
         <Link href={'/home'} className="static dark:hidden px-4 max-md:px-0">
           <ReactSVG src="/onboarding_logo.svg" />
         </Link>
-        {user.isLoggedIn && (
+        {user.isLoggedIn ? (
           <div className="flex items-center gap-2 max-md:gap-0 z-0">
+            {includeExplore && <DialogSearchBar />}
             <div
               onClick={() => setClickedOnFeedback(true)}
               className="w-10 h-10 rounded-full flex-center hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover cursor-pointer transition-ease-300"
             >
               <Handshake className="max-md:w-6 max-md:h-6" size={24} weight="regular" />
             </div>
-            <Link
-              className="w-10 h-10 rounded-full flex-center hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover transition-ease-300"
-              href={`/${user.isOrganization ? 'organisation/' : ''}explore`}
-            >
-              <MagnifyingGlass className="max-md:w-6 max-md:h-6" size={24} weight="regular" />
-            </Link>
             <Link
               className="w-10 h-10 rounded-full flex-center relative hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover transition-ease-300"
               href={'/messaging'}
@@ -87,6 +84,8 @@ const Navbar = () => {
               src={`${USER_PROFILE_PIC_URL}/${user.profilePic != '' ? user.profilePic : 'default.jpg'}`}
             />
           </div>
+        ) : (
+          <Button onClick={() => window.location.assign('/login')}>Register Now!</Button>
         )}
       </div>
     </>

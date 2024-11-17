@@ -2,8 +2,8 @@ import { userSelector } from '@/slices/userSlice';
 import ModalWrapper from '@/wrappers/modal';
 import { X } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
-import OTPInput from 'react-otp-input';
 import { useSelector } from 'react-redux';
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/ui/input-otp';
 
 interface Props {
   handleSubmit: ({}: any) => void;
@@ -47,27 +47,18 @@ const ConfirmOTP = ({
             </div>
           </div>
 
-          <OTPInput
-            value={OTP}
-            onChange={(otp: string) => setOTP(otp)}
-            numInputs={6}
-            renderInput={props => <input {...props} />}
-            inputStyle={{
-              width: '52px',
-              height: '64px',
-              display: 'flex',
-              justifyContent: 'center',
-              justifyItems: 'center',
-              textAlign: 'center',
-              borderRadius: '20%',
-              borderWidth: '2px',
-              WebkitAppearance: 'none',
-              MozAppearance: 'textfield',
-            }}
-            containerStyle="flex gap-2 mx-auto"
-            inputType="number"
-            shouldAutoFocus={true}
-          />
+          <InputOTP className="w-full" maxLength={6} value={OTP} onChange={value => setOTP(value)}>
+            <InputOTPGroup className="w-full">
+              <InputOTPSlot className="w-1/6 h-12" index={0} />
+              <InputOTPSlot className="w-1/6 h-12" index={1} />
+              <InputOTPSeparator />
+              <InputOTPSlot className="w-1/6 h-12" index={2} />
+              <InputOTPSlot className="w-1/6 h-12" index={3} />
+              <InputOTPSeparator />
+              <InputOTPSlot className="w-1/6 h-12" index={4} />
+              <InputOTPSlot className="w-1/6 h-12" index={5} />
+            </InputOTPGroup>
+          </InputOTP>
 
           <div
             onClick={() => handleSubmit(OTP)}

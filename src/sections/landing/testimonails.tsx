@@ -65,9 +65,9 @@ const Testimonials = () => {
   };
 
   return (
-    <div className="flex flex-col space-y-12 justify-center items-center text-center">
+    <div className="flex flex-col space-y-12 justify-center items-center text-center ">
       <div className="w-full space-y-2">
-        <h1 className="text-8xl font-bold text-sky-400">Testimonials</h1>
+        <h1 className="md:text-8xl text-6xl font-bold text-sky-400">Testimonials</h1>
         <h3 className="text-xl">Don&apos;t believe us? Look what people have to say about us!</h3>
       </div>
 
@@ -119,7 +119,6 @@ const Testimonials = () => {
             }}
           ></div>
         </div>
-        {/* Gradient overlay */}
       </div>
     </div>
   );

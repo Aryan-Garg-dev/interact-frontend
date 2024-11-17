@@ -25,7 +25,6 @@ import {
   GooglePlayLogo,
   IconWeight,
   InstagramLogo,
-  Link,
   LinkedinLogo,
   LinuxLogo,
   MediumLogo,
@@ -57,6 +56,7 @@ import {
   WindowsLogo,
   YoutubeLogo,
 } from '@phosphor-icons/react';
+import { ExternalLink } from 'lucide-react';
 
 const getIcon = (str: string, size = 32, weight: IconWeight = 'duotone'): ReactElement => {
   switch (str.toLowerCase()) {
@@ -169,7 +169,7 @@ const getIcon = (str: string, size = 32, weight: IconWeight = 'duotone'): ReactE
     case 'youtube':
       return <YoutubeLogo size={size} weight={weight} />;
     default:
-      return <Link size={size} weight={weight} />;
+      return <ExternalLink size={size} />;
   }
 };
 

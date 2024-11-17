@@ -36,7 +36,7 @@ const Sentences = ({ sentences, setSentences, maxSentences = 5 }: Props) => {
       {sentences.map(sentence => (
         <div
           key={sentence}
-          className="flex justify-between items-center gap-2 text-sm bg-white p-3 py-2 rounded-lg cursor-default"
+          className="flex justify-between items-center gap-2 text-sm bg-white text-primary_black p-3 py-2 rounded-lg cursor-default"
         >
           {sentence}
           <svg
@@ -50,7 +50,7 @@ const Sentences = ({ sentences, setSentences, maxSentences = 5 }: Props) => {
           </svg>
         </div>
       ))}
-      {sentences.length < maxSentences ? (
+      {sentences.length < maxSentences && (
         <input
           type="text"
           className={`w-full text-sm border-[1px] bg-transparent border-transparent rounded-md px-3 py-2 outline-none`}
@@ -60,8 +60,6 @@ const Sentences = ({ sentences, setSentences, maxSentences = 5 }: Props) => {
           onChange={handleSentenceInputChange}
           onKeyDown={handleSentenceInputKeyDown}
         />
-      ) : (
-        <></>
       )}
     </div>
   );

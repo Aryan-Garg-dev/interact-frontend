@@ -11,13 +11,9 @@ import Toaster from '@/utils/toaster';
 import { GetServerSidePropsContext } from 'next/types';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
-import Openings from '@/screens/workspace/manage_project/openings';
 import Loader from '@/components/common/loader';
-import Collaborators from '@/screens/workspace/manage_project/collaborators';
 import Chats from '@/screens/workspace/manage_project/chats';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
-import { checkParticularOrgAccess } from '@/utils/funcs/access';
-import { ORG_MANAGER, ORG_SENIOR } from '@/config/constants';
 
 interface Props {
   slug: string;
@@ -50,7 +46,7 @@ const ManageProject = ({ slug }: Props) => {
 
   return (
     <BaseWrapper title={`Manage | ${project.title}`}>
-      <Sidebar index={3} />
+      <Sidebar index={2} />
       <MainWrapper>
         <div className="w-full flex flex-col items-center gap-4">
           <div className="w-[70vw] max-lg:w-[75vw] max-md:w-[95%] flex items-start gap-3 p-base_padding pl-0 pt-28 max-md:pt-16">
@@ -61,20 +57,8 @@ const ManageProject = ({ slug }: Props) => {
             <Loader />
           ) : (
             <>
-              <div className={`${active === 0 ? 'block' : 'hidden'}`}>
-                <Openings
-                  project={project}
-                  setProject={setProject}
-                  org={checkParticularOrgAccess(ORG_SENIOR, project.organization)}
-                />
-              </div>
-              <div className={`${active === 1 ? 'block' : 'hidden'}`}>
-                <Collaborators
-                  project={project}
-                  setProject={setProject}
-                  org={checkParticularOrgAccess(ORG_MANAGER, project.organization)}
-                />
-              </div>
+              <div className={`${active === 0 ? 'block' : 'hidden'}`}></div>
+              <div className={`${active === 1 ? 'block' : 'hidden'}`}></div>
               <div className={`${active === 2 ? 'block' : 'hidden'}`}>
                 <Chats project={project} />
               </div>

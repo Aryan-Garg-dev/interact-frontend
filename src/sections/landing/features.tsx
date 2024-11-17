@@ -18,12 +18,12 @@ export const TitleBlock = ({
   center?: boolean;
 }) => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 text-center">
       <div className={`relative ${center && 'flex-center flex-col'}`}>
         <div className="text-6xl font-bold">{titleUpper}</div>
         <div className={`w-fit font-cursive rotate-[-20deg] text-3xl absolute ${!center && '-left-5'}`}>{titleMid}</div>
         <div className="inline-block pt-5">
-          <span className="text-8xl text-sky-400 font-bold"> {titleLower}</span>
+          <span className="md:text-8xl text-6xl text-sky-400 font-bold"> {titleLower}</span>
           {titleSide && <span className="text-gray-600 italic text-xl"> {titleSide}</span>}
         </div>
       </div>
@@ -55,7 +55,7 @@ const Quote = ({
   const variants = ['self-start', 'self-center', 'self-end'];
   return (
     <div
-      className={`w-2/5 self-${position} hidden md:flex ${position == 'end' ? 'flex-row-reverse' : 'flex-row'} ${
+      className={`md:w-2/5 w-full self-${position} md:flex ${position == 'end' ? 'flex-row-reverse' : 'flex-row'} ${
         position == 'end' ? 'text-right' : position == 'start' ? 'text-left' : 'text-center'
       } justify-center gap-4`}
     >
@@ -72,7 +72,7 @@ const Quote = ({
 
 const Features = () => {
   return (
-    <div className="w-full">
+    <div className="w-full px-8 text-black">
       <div className="w-full flex flex-col gap-24 py-24">
         <section className="flex flex-col lg:flex-row items-center gap-12">
           <div className="relative w-full lg:w-1/2 h-full">
@@ -81,7 +81,7 @@ const Features = () => {
               height={300}
               src="/landing/community.svg"
               alt="Dashboard Preview"
-              className="w-full h-full object-contain md:scale-[1.5] md:-translate-x-[140px] fade-img-left"
+              className="w-full h-full object-contain lg:scale-[1.5] lg:-translate-x-[140px] fade-img-left"
             />
           </div>
 
@@ -114,7 +114,7 @@ const Features = () => {
         />
       </div>
 
-      <div className="w-full flex flex-col gap-24 pb-24">
+      <div className="w-full flex flex-col gap-24 py-24">
         <section className="flex flex-col lg:flex-row items-center gap-12">
           <div className="w-full lg:w-1/2 space-y-8">
             <TitleBlock
@@ -143,7 +143,7 @@ const Features = () => {
               height={300}
               src="/landing/hackathon.svg"
               alt="Hackathon Dashboard"
-              className="w-full h-full object-contain md:scale-[1.5] md:translate-x-[140px] fade-img-right"
+              className="w-full h-full object-contain lg:scale-[1.5] lg:translate-x-[140px] fade-img-right"
             />
           </div>
         </section>

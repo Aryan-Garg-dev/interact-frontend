@@ -17,12 +17,12 @@ const Index = () => {
           <Link href={'/home'} className="hover-underline-animation after:bg-gray-700 max-md:text-xs">
             Home
           </Link>
-          <Link href={'/explore'} className="hover-underline-animation after:bg-gray-700 max-md:text-xs">
-            Explore
+          <Link href={'/projects'} className="hover-underline-animation after:bg-gray-700 max-md:text-xs">
+            Projects
           </Link>
           {user.id && (
-            <Link href={'/workspace'} className="hover-underline-animation after:bg-gray-700 max-md:text-xs">
-              Workspace
+            <Link href={'/openings'} className="hover-underline-animation after:bg-gray-700 max-md:text-xs">
+              Openings
             </Link>
           )}
           {!user.id && (
@@ -41,7 +41,7 @@ const Index = () => {
         </div>
         <div className="text-2xl font-medium font-primary">your space to connect, create, and grow together.</div>
         <Link
-          href={user.id ? '/home' : '/explore'}
+          href={user.id ? '/home' : '/projects'}
           className="w-fit text-lg group relative hover:pr-1 transition-ease-300 mt-8 max-md:my-8"
         >
           <div className="hover-underline-animation after:bg-gray-700">

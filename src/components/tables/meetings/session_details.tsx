@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Loader from '../../common/loader';
 import moment from 'moment';
-import { ChatCenteredDots, FunnelSimple, Subtitles } from '@phosphor-icons/react';
+import { ChatCenteredDots, Subtitles } from '@phosphor-icons/react';
 import ToolTip from '../../utils/tooltip';
 import Link from 'next/link';
 import { getParticipationDuration } from '@/utils/funcs/session_details';

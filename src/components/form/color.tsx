@@ -12,7 +12,7 @@ const Color = ({ label, val, setVal, required = false }: Props) => {
   return (
     <div className="w-full">
       {label && (
-        <div className="text-xs ml-1 font-medium uppercase text-gray-500 mb-4">
+        <div className="text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300 mb-4">
           {label}
           {required && '*'}
         </div>

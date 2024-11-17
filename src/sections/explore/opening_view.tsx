@@ -63,9 +63,9 @@ const OpeningView = ({ opening, setShow, setOpening, org = false, showBack = fal
         ))
       )}
       <div
-        className={`sticky max-md:fixed top-[152px] bg-white dark:bg-transparent max-md:top-navbar max-md:right-0 ${
+        className={`sticky max-md:fixed top-[84px] bg-white dark:bg-transparent max-md:top-navbar max-md:right-0 ${
           fullWeight ? 'w-full' : 'w-[55%]'
-        } max-md:w-full h-[70vh] max-md:max-h-screen max-md:h-base z-20 max-lg:z-50 max-md:backdrop-blur-2xl max-md:backdrop-brightness-90 overflow-y-auto flex flex-col gap-6 justify-between max-md:gap-8 px-12 py-10 max-md:p-8 font-primary dark:text-white border-[1px] max-md:border-0 border-primary_btn  dark:border-dark_primary_btn rounded-lg max-md:rounded-none animate-fade_third`}
+        } max-md:w-full h-[80vh] max-md:max-h-screen max-md:h-base z-20 max-lg:z-50 max-md:backdrop-blur-2xl max-md:backdrop-brightness-90 overflow-y-auto flex flex-col gap-6 justify-between max-md:gap-8 px-12 py-10 max-md:p-8 font-primary dark:text-white border-[1px] max-md:border-0 border-primary_btn  dark:border-dark_primary_btn rounded-lg max-md:rounded-none animate-fade_third`}
       >
         <div className="w-full flex flex-col gap-6">
           <div className="flex flex-col gap-2 max-md:gap-6">
@@ -84,17 +84,17 @@ const OpeningView = ({ opening, setShow, setOpening, org = false, showBack = fal
             <div className="w-full flex items-center justify-between flex-wrap gap-2 text-sm">
               {org ? (
                 <Link
-                  href={`/explore/organisation/${opening.organization?.user.username}`}
+                  href={`/organisations/${opening.organization?.user.username}`}
                   target="_blank"
-                  className="flex-center gap-1 hover-underline-animation after:bg-black font-semibold text-lg"
+                  className="flex-center gap-1 hover-underline-animation after:bg-black dark:after:bg-white font-semibold text-lg"
                 >
                   {opening.organization?.title} <Buildings />
                 </Link>
               ) : (
                 <Link
-                  href={`/explore?pid=${opening.project?.slug}`}
+                  href={`/projects/${opening.project?.slug}`}
                   target="_blank"
-                  className="hover-underline-animation after:bg-black font-semibold text-lg"
+                  className="hover-underline-animation after:bg-black dark:after:bg-white font-semibold text-lg"
                 >
                   {opening.project?.title}
                 </Link>
@@ -123,7 +123,7 @@ const OpeningView = ({ opening, setShow, setOpening, org = false, showBack = fal
                 opening.tags.map(tag => {
                   return (
                     <Link
-                      href={'/explore?search=' + tag}
+                      href={'/openings?search=' + tag}
                       target="_blank"
                       key={tag}
                       className="flex-center p-2 font-primary text-xs dark:text-white border-[1px] border-primary_btn  dark:border-dark_primary_btn rounded-xl"

@@ -133,7 +133,13 @@ const Tasks = () => {
       <OrgSidebar index={4} />
       <MainWrapper>
         {clickedOnNewTask && (
-          <NewTask setShow={setClickedOnNewTask} organization={organization} setTasks={setTasks} org={true} />
+          <NewTask
+            show={clickedOnNewTask}
+            setShow={setClickedOnNewTask}
+            organization={organization}
+            setTasks={setTasks}
+            org={true}
+          />
         )}
         {clickedOnInfo && <AccessTree type="task" setShow={setClickedOnInfo} />}
         <div className="w-full flex flex-col">

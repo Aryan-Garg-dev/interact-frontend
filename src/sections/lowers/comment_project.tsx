@@ -1,30 +1,21 @@
 import CommentBox from '@/components/comment/comment_box';
 import { Project } from '@/types';
 import { X } from '@phosphor-icons/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Props {
   project: Project;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  numComments: number;
-  setNoComments: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const CommentProject = ({ project, setShow, numComments, setNoComments }: Props) => {
+const CommentProject = ({ project }: Props) => {
+  const [numComments, setNumComments] = useState(project.noComments || 0);
   return (
-    <>
-      <div className="w-1/2 h-[90%] overflow-y-auto max-lg:w-5/6 max-lg:overflow-y-auto fixed backdrop-blur-xl dark:text-white bg-white dark:bg-[#ffe1fc22] z-30 translate-x-1/2 -translate-y-1/4 top-56 max-lg:top-1/4 right-1/2 flex flex-col font-primary p-8 max-lg:p-4 gap-2 border-2 shadow-xl dark:border-dark_primary_btn rounded-xl animate-fade_third">
-        <div onClick={() => setShow(false)} className="md:hidden absolute top-2 right-2">
-          <X size={24} weight="bold" />
-        </div>
-        <div className="font-bold text-4xl text-gray-800 dark:text-white">Comments ({numComments})</div>
-        <CommentBox item={project} type="project" setNoComments={setNoComments} />
+    <div className="w-full flex flex-col gap-2">
+      <div className="font-semibold text-lg text-gray-800 dark:text-white">
+        Comments ({numComments > 0 ? numComments : 0})
       </div>
-      <div
-        onClick={() => setShow(false)}
-        className=" bg-backdrop w-screen h-screen backdrop-blur-sm fixed top-0 right-0 animate-fade_third z-20"
-      ></div>
-    </>
+      <CommentBox item={project} type="project" setNoComments={setNumComments} />
+    </div>
   );
 };
 

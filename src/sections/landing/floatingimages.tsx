@@ -3,8 +3,8 @@ import React from 'react';
 
 export const FloatingImages = () => {
   return (
-    <div className="w-[100vw] overflow-hidden">
-      <div className="absolute opacity-90 top-0 left-32 max-md:left-0">
+    <div className="w-[100vw] ">
+      <div className="absolute opacity-90 top-0 lg:left-32 left-16 max-md:left-0">
         <Image
           width={400}
           height={1000}
@@ -13,16 +13,16 @@ export const FloatingImages = () => {
           className="scale-[1.05] -translate-x-1/2"
         />
       </div>
-      <div className="absolute right-52 max-md:right-0 top-0 w-96 opacity-90">
+      <div className="absolute lg:right-52 right-48 max-md:right-0 lg:top-24 top-0 w-96 opacity-90 md:overflow-visible overflow-hidden">
         <Image
           width={300}
           height={400}
-          src="/landing/floating/image3.svg"
+          src="/landing/floating/image2.svg"
           alt="Right UI"
-          className="scale-[1.2] translate-x-full"
+          className="scale-[1] translate-x-full md:scale-[1.3]"
         />
       </div>
-      <div className="absolute bottom-12 md:left-64 w-48 opacity-90">
+      <div className="absolute bottom-12 lg:left-64 left-24 w-48 opacity-90">
         <Image
           width={1000}
           height={1000}
@@ -31,13 +31,13 @@ export const FloatingImages = () => {
           className="scale-[1.05] -translate-x-1/2"
         />
       </div>
-      <div className="absolute bottom-0 w-32 md:right-48 opacity-90 -right-8  ">
+      <div className="absolute bottom-12 w-36 lg:right-32 right-0 opacity-90 overflow-none">
         <Image
           width={1000}
           height={1000}
           src="/landing/floating/image4.svg"
           alt="Bottom Right UI"
-          className="scale-[1.6] md:scale-[2]"
+          className="md:scale-[1.5]"
         />
       </div>
     </div>

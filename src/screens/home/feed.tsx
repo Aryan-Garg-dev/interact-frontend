@@ -34,7 +34,7 @@ const Feed = () => {
 
   const getFeed = () => {
     const URL = `/feed/combined?page=${page}&limit=${5}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           const addedFeed = [...feed, ...(res.data.feed || [])];
@@ -71,16 +71,16 @@ const Feed = () => {
     <div className={`w-full flex ${open ? 'gap-2' : 'gap-12'} transition-ease-out-500`}>
       {clickedOnNewPost && <NewPost setFeed={setFeed} setShow={setClickedOnNewPost} />}
       {/* Create a New Post */}
-      <div className="w-full max-md:px-0 flex flex-col gap-2">
+      <div className="w-full flex flex-col gap-2">
         <div
           onClick={() => setClickedOnNewPost(true)}
-          className="w-full bg-white flex flex-col justify-between gap-2 px-4 max-md:px-2 py-3 rounded-lg shadow-md hover:shadow-xl border-gray-300 border-[1px] cursor-pointer transition-ease-300"
+          className="w-full bg-white dark:bg-dark_primary_comp flex flex-col justify-between gap-2 border-gray-300 border-b-[1px] pb-4 cursor-pointer"
         >
-          <div className="text-xl font-semibold text-gray-700">
+          <div className="text-xl font-semibold text-gray-700 dark:text-white">
             <span className="">{getGreetings()}</span> , {user.name.split(' ')[0]}!
           </div>
           <div className="w-full flex justify-between items-center">
-            <div className="flex gap-2 items-center text-gray-400">
+            <div className="flex gap-2 items-center text-gray-400 dark:text-white">
               <Image
                 crossOrigin="anonymous"
                 className="w-8 h-8 rounded-full"

@@ -59,7 +59,7 @@ const ReviewCard = ({ review, setReviews }: Props) => {
       {clickedOnReport && <Report setShow={setClickedOnReport} reviewID={review.id} />}
       <div
         key={review.id}
-        className="w-full flex flex-col gap-4 bg-white relative group hover:shadow-xl p-6 rounded-xl transition-ease-300 animate-fade_third"
+        className="w-full flex flex-col gap-4 bg-white dark:bg-dark_primary_comp_hover relative group hover:shadow-xl p-6 rounded-xl transition-ease-300 animate-fade_third"
       >
         {user.id == review.userID ? (
           <div
@@ -116,7 +116,7 @@ const ReviewCard = ({ review, setReviews }: Props) => {
           </div>
         </div>
 
-        <div className="text-primary_black text-sm">{review.content}</div>
+        <div className="text-primary_black dark:text-white text-sm">{review.content}</div>
       </div>
     </>
   );

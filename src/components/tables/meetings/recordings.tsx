@@ -1,5 +1,4 @@
 import Loader from '@/components/common/loader';
-import Mascot from '@/components/fillers/mascot';
 import ToolTip from '@/components/utils/tooltip';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';

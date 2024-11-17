@@ -32,7 +32,7 @@ const LowerOpening = ({ opening, org = false }: Props) => {
           itemID={opening.id}
           itemType="opening"
           setShow={setClickedOnShare}
-          clipboardURL={`explore?oid=${opening.id}&action=external`}
+          clipboardURL={`openings?oid=${opening.id}&action=external`}
           item={<OpeningCard opening={opening} />}
         />
       )}
@@ -63,6 +63,7 @@ const LowerOpening = ({ opening, org = false }: Props) => {
                 weight="light"
               />
             ))}
+        <OpeningBookmarkIcon opening={opening} />
         <Export
           onClick={() => {
             if (user.id == '') setNoUserClick(true);
@@ -72,7 +73,6 @@ const LowerOpening = ({ opening, org = false }: Props) => {
           size={32}
           weight="duotone"
         />
-        <OpeningBookmarkIcon opening={opening} />
         <WarningCircle
           onClick={() => {
             if (user.id == '') setNoUserClick(true);

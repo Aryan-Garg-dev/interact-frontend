@@ -5,7 +5,12 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 import ToolTip from '@/components/utils/tooltip';
-import { getPRStatusColor, getTaskDeadlineColor, getTaskPriorityColor, getTaskDifficultyColor } from '@/utils/funcs/task';
+import {
+  getPRStatusColor,
+  getTaskDeadlineColor,
+  getTaskPriorityColor,
+  getTaskDifficultyColor,
+} from '@/utils/funcs/task';
 import UsersList from '@/components/common/users_list';
 import PictureList from '@/components/common/picture_list';
 import Tags from '@/components/common/tags';
@@ -73,7 +78,7 @@ const TaskComponent = ({
   return (
     <>
       {clickedOnUsers && <UsersList title="Task Users" users={task.users} setShow={setClickedOnUsers} />}
-      <div className="w-no_side_base_open max-md:w-screen h-base fixed bg-gray-50 top-navbar overflow-y-auto flex flex-col gap-4 p-8 pt-4 max-md:px-4 font-primary animate-fade_third z-10 max-md:z-20">
+      <div className="w-no_side_base_open max-md:w-screen h-base fixed bg-gray-50 dark:bg-dark_primary_comp border-white border-t-[1px] border-l-[1px] top-navbar overflow-y-auto flex flex-col gap-4 p-8 pt-4 max-md:px-4 font-primary animate-fade_third z-10 max-md:z-20">
         <div className="w-full flex flex-col gap-2">
           <ArrowArcLeft
             className="cursor-pointer"
@@ -115,7 +120,7 @@ const TaskComponent = ({
             </div>
             <div className="max-md:w-full max-md:justify-between flex-center gap-2">
               {accessChecker && (
-                <div className="flex-center">
+                <div className="flex-center gap-2">
                   <Gear onClick={() => setClickedOnEditTask(true)} className="cursor-pointer" size={32} />
                   <Trash onClick={() => setClickedOnDeleteTask(true)} className="cursor-pointer" size={32} />
                 </div>
@@ -152,7 +157,7 @@ const TaskComponent = ({
             <div>Priority:</div>
             <div
               style={{ backgroundColor: getTaskPriorityColor(task) }}
-              className="uppercase px-3 py-1 rounded-lg text-sm font-medium"
+              className="uppercase px-3 py-1 rounded-lg text-sm font-medium dark:text-primary_black"
             >
               {task.priority}
             </div>
@@ -161,7 +166,7 @@ const TaskComponent = ({
             <div>Difficulty:</div>
             <div
               style={{ backgroundColor: getTaskDifficultyColor(task) }}
-              className="uppercase px-3 py-1 rounded-lg text-sm font-medium"
+              className="uppercase px-3 py-1 rounded-lg text-sm font-medium dark:text-primary_black"
             >
               {task.difficulty}
             </div>
@@ -170,7 +175,7 @@ const TaskComponent = ({
             <div>Deadline:</div>
             <div
               style={{ backgroundColor: getTaskDeadlineColor(task) }}
-              className="w-fit px-3 py-1 rounded-lg text-sm font-medium"
+              className="w-fit px-3 py-1 rounded-lg text-sm font-medium dark:text-primary_black"
             >
               <div className="font-semibold">{moment(task.deadline).format('DD-MMM-YY')}</div>
             </div>
@@ -204,7 +209,7 @@ const TaskComponent = ({
               {(isAssignedUser(user.id) || accessChecker) && (
                 <PlusCircle
                   onClick={() => setClickedOnNewSubTask(true)}
-                  className="bg-gray-50 rounded-full cursor-pointer"
+                  className="bg-gray-50 dark:bg-dark_primary_comp rounded-full cursor-pointer"
                   size={24}
                   weight="bold"
                 />
@@ -220,7 +225,7 @@ const TaskComponent = ({
           (isAssignedUser(user.id) || accessChecker) && (
             <div
               onClick={() => setClickedOnNewSubTask(true)}
-              className="w-full text-base bg-gray-100 rounded-xl p-4 cursor-pointer transition-ease-300"
+              className="w-full text-base bg-gray-100 dark:bg-dark_primary_comp_hover rounded-xl p-4 cursor-pointer transition-ease-300"
             >
               <span className="text-xl max-lg:text-lg text-gradient font-semibold">Divide and conquer! </span> Big tasks
               can be daunting! Break them down into bite-sized subtasks for smoother sailing. 📋

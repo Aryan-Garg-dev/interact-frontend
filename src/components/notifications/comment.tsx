@@ -29,9 +29,9 @@ const Comment = ({ notification, short = true }: Props) => {
       case 2:
         return '/explore/post/' + notification.postID;
       case 4:
-        return '/explore?pid=' + notification.project.slug;
+        return '/projects/' + notification.project.slug;
       case 13:
-        return '/explore/event/' + notification.eventID;
+        return '/events/' + notification.eventID;
       case 19:
         return '/explore/announcement/' + notification.announcementID;
       default:
@@ -49,7 +49,7 @@ const Comment = ({ notification, short = true }: Props) => {
         )
       }
     >
-      <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
+      <Link className="font-bold" href={`/users/${notification.sender.username}`}>
         {notification.sender.name}
       </Link>
       Commented on your

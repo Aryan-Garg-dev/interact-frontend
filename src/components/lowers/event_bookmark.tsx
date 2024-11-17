@@ -98,7 +98,7 @@ const EventBookmarkIcon = ({ event, size = 32 }: Props) => {
   return (
     <>
       {noUserClick && <SignUp setShow={setNoUserClick} />}
-      {clickedOnBookmark && <BookmarkEvent setShow={setClickedOnBookmark} event={event} setBookmark={setBookmark} />}
+      <BookmarkEvent show={clickedOnBookmark} setShow={setClickedOnBookmark} event={event} setBookmark={setBookmark} />
       <BookmarkSimple
         className="cursor-pointer"
         onClick={() => {

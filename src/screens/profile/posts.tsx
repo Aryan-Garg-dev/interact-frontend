@@ -34,7 +34,7 @@ const Posts = ({ userID, org = false }: Props) => {
       user.id == userID
         ? `${POST_URL}/me?page=${page}&limit=${10}`
         : `${EXPLORE_URL}/users/posts/${userID}?page=${page}&limit=${10}`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           const addedPosts = [...posts, ...(res.data.posts || [])];
@@ -59,9 +59,7 @@ const Posts = ({ userID, org = false }: Props) => {
   }, [userID]);
 
   return page == 1 && loading ? (
-    <div className="w-[45vw] mx-auto max-lg:w-[85%] max-md:w-full pb-base_padding">
-      <PostsLoader />
-    </div>
+    <PostsLoader />
   ) : org ? (
     posts.length > 0 ? (
       <InfiniteScroll
@@ -94,7 +92,7 @@ const Posts = ({ userID, org = false }: Props) => {
     )
   ) : (
     <InfiniteScroll
-      className="w-[45vw] mx-auto max-lg:w-[85%] max-md:w-screen flex flex-col gap-2 max-lg:px-4 pb-base_padding"
+      className="w-full flex flex-col gap-2"
       dataLength={posts.length}
       next={getPosts}
       hasMore={hasMore}

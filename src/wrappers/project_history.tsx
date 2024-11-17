@@ -11,7 +11,7 @@ interface WrapperProps {
 
 const ProjectHistoryWrapper: React.FC<WrapperProps> = ({ children, history }) => {
   return (
-    <div className="w-full flex flex-col gap-1 p-3 dark:text-white hover:bg-primary_comp dark:hover:bg-[#ae8abd39] rounded-xl font-primary transition-ease-200">
+    <div className="w-full flex flex-col gap-1 px-3 py-2 dark:text-white hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-xl font-primary transition-ease-200">
       <div className="w-full flex justify-between items-center">
         <div className="w-fit flex-center gap-1">
           <Image

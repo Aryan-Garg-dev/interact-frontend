@@ -1,16 +1,11 @@
 import ProjectCard from '@/components/explore/project_card';
 import { Project } from '@/types';
 import React, { useEffect, useState } from 'react';
-import ProjectView from '../../sections/explore/project_view';
-import { useSelector } from 'react-redux';
-import { navbarOpenSelector } from '@/slices/feedSlice';
 import NoUserItems from '@/components/fillers/user_items';
 import { EXPLORE_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import Loader from '@/components/common/loader';
 import Mascot from '@/components/fillers/mascot';
 
 interface Props {
@@ -21,31 +16,16 @@ interface Props {
 }
 
 const Projects = ({ userID, displayOnProfile = false, contributing = false, org = false }: Props) => {
-  const [clickedOnProject, setClickedOnProject] = useState(false);
-  const [clickedProjectIndex, setClickedProjectIndex] = useState(-1);
-  const [clickedOnNewProject, setClickedOnNewProject] = useState(false);
-
-  const [fadeInProject, setFadeInProject] = useState(true);
-
-  const navbarOpen = useSelector(navbarOpenSelector);
-
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
 
   const getProjects = () => {
     setLoading(true);
-    const URL = `${EXPLORE_URL}/users/projects${
-      contributing ? '/contributing' : ''
-    }/${userID}?page=${page}&limit=${10}`;
-    getHandler(URL)
+    const URL = `${EXPLORE_URL}/users/projects${contributing ? '/contributing' : ''}/${userID}`;
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
-          const addProjects = [...projects, ...(res.data.projects || [])];
-          if (addProjects.length === projects.length) setHasMore(false);
-          setProjects(addProjects);
-          setPage(prev => prev + 1);
+          setProjects(res.data.projects || []);
           setLoading(false);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -61,10 +41,10 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
 
   useEffect(() => {
     getProjects();
-  }, [userID]);
+  }, [userID, contributing]);
 
   return (
-    <div className="w-full px-2 pb-base_padding max-md:px-0 max-md:pb-2 z-50">
+    <div>
       {/* {displayOnProfile && (
         <>
           {clickedOnNewProject ? <NewProject setShow={setClickedOnNewProject} setProjects={setProjects} /> : <></>}
@@ -86,46 +66,11 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
           )}
         </>
       )} */}
-      <InfiniteScroll
-        dataLength={projects.length}
-        next={getProjects}
-        hasMore={hasMore}
-        loader={<Loader />}
-        className={`${projects?.length > 0 ? 'w-fit grid' : 'w-5/6'} ${
-          projects.length == 1
-            ? 'grid-cols-1'
-            : navbarOpen
-            ? org
-              ? 'grid-cols-3 gap-6'
-              : 'grid-cols-2 gap-6'
-            : 'grid-cols-3 gap-8'
-        } max-md:grid-cols-1 mx-auto max-md:gap-6 max-md:px-4 max-md:justify-items-center transition-ease-out-500`}
-      >
+      <div className="w-full">
         {projects?.length > 0 ? (
-          <>
-            {clickedOnProject && (
-              <ProjectView
-                projectSlugs={projects.map(project => project.slug)}
-                clickedProjectIndex={clickedProjectIndex}
-                setClickedProjectIndex={setClickedProjectIndex}
-                setClickedOnProject={setClickedOnProject}
-                fadeIn={fadeInProject}
-                setFadeIn={setFadeInProject}
-              />
-            )}
-            {projects.map((project, index) => {
-              return (
-                <ProjectCard
-                  key={project.id}
-                  index={index}
-                  project={project}
-                  size={org ? 72 : 64}
-                  setClickedOnProject={setClickedOnProject}
-                  setClickedProjectIndex={setClickedProjectIndex}
-                />
-              );
-            })}
-          </>
+          projects.map((project, index) => {
+            return <ProjectCard key={project.id} index={index} project={project} isLink />;
+          })
         ) : org ? (
           <div className="w-5/6 mx-auto">
             <Mascot message="This organization is as quiet as a library at midnight. Shh, no projects yet." />
@@ -133,7 +78,7 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
         ) : (
           <NoUserItems />
         )}
-      </InfiniteScroll>
+      </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { SERVER_ERROR } from '@/config/errors';
-import { MEMBERSHIP_URL, ORG_URL, PROJECT_PIC_URL, PROJECT_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { MEMBERSHIP_URL, ORG_URL, PROJECT_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
 import { initialProject } from '@/types/initials';
@@ -7,7 +7,6 @@ import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Buildings, CaretLeft, CaretRight, X } from '@phosphor-icons/react';
-import LowerWorkspaceProject from '@/components/lowers/lower_workspace_project';
 import ProjectViewLoader from '@/components/loaders/workspace_project_view';
 import { useRouter } from 'next/router';
 import Collaborators from '@/components/explore/collaborators';
@@ -25,19 +24,13 @@ import deleteHandler from '@/handlers/delete_handler';
 import { useSwipeable } from 'react-swipeable';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import ConfirmOTP from '@/components/common/confirm_otp';
-import Link from 'next/link';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Tags from '@/components/common/tags';
 import { checkOrgProjectAccess, checkParticularOrgAccess, checkProjectAccess } from '@/utils/funcs/access';
-import {
-  ORG_MANAGER,
-  ORG_SENIOR,
-  PROJECT_EDITOR,
-  PROJECT_MANAGER,
-  PROJECT_MEMBER,
-  PROJECT_OWNER,
-} from '@/config/constants';
+import { ORG_MANAGER, ORG_SENIOR, PROJECT_EDITOR, PROJECT_MEMBER, PROJECT_OWNER } from '@/config/constants';
 import { currentOrgSelector } from '@/slices/orgSlice';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
+import EditProjectImages from './edit_project_images';
 
 interface Props {
   projectSlugs: string[];
@@ -64,7 +57,6 @@ const ProjectView = ({
   const [loading, setLoading] = useState(true);
 
   const [clickedOnReadMore, setClickedOnReadMore] = useState(false);
-  const [clickedOnEdit, setClickedOnEdit] = useState(false);
   const [clickedOnLeave, setClickedOnLeave] = useState(false);
   const [clickedOnDelete, setClickedOnDelete] = useState(false);
 
@@ -186,36 +178,7 @@ const ProjectView = ({
   useEffect(() => {
     const abortController = new AbortController();
     fetchProject(abortController);
-
-    // router.replace({
-    //   pathname: router.pathname,
-    //   query: { ...router.query, project: projectSlugs[clickedProjectIndex] },
-    // });
-
-    // return () => {
-    //   abortController.abort();
-
-    //   const { query } = router;
-    //   if (router.pathname == '/workspace') {
-    //     delete query.project;
-
-    //     router.push({
-    //       pathname: router.pathname,
-    //       query: { ...query },
-    //     });
-    //   }
-    // };
   }, [clickedProjectIndex]);
-
-  useEffect(() => {
-    document.documentElement.style.overflowY = 'hidden';
-    document.documentElement.style.height = '100vh';
-
-    return () => {
-      document.documentElement.style.overflowY = 'auto';
-      document.documentElement.style.height = 'auto';
-    };
-  }, []);
 
   const handleClickPrev = () => {
     if (clickedProjectIndex != 0) {
@@ -265,14 +228,14 @@ const ProjectView = ({
           {...swipeHandler}
           className="w-screen h-screen dark:text-white font-primary fixed top-0 left-0 z-50 flex dark:bg-backdrop backdrop-blur-2xl"
         >
-          {clickedOnEdit && (
+          {/* {clickedOnEdit && (
             <EditProject
               projectToEdit={project}
               setShow={setClickedOnEdit}
               setProjects={setProjects}
               setProjectToEdit={setProject}
             />
-          )}
+          )} */}
           {clickedOnLeave && (
             <ConfirmDelete setShow={setClickedOnLeave} handleDelete={handleLeaveProject} title="Confirm Leave?" />
           )}
@@ -317,10 +280,10 @@ const ProjectView = ({
                     <div
                       onClick={() =>
                         router.push(
-                          `/explore/${project.user.isOrganization ? 'organisation' : 'user'}/${project.user.username}`
+                          `/${project.user.isOrganization ? 'organisations' : 'users'}/${project.user.username}`
                         )
                       }
-                      className="cursor-pointer hover-underline-animation after:bg-black"
+                      className="cursor-pointer hover-underline-animation after:bg-black dark:after:bg-white"
                     >
                       {project.user.name}
                     </div>
@@ -346,21 +309,19 @@ const ProjectView = ({
                 priority={true}
                 crossOrigin="anonymous"
                 className="w-[calc(100vh-56px)] max-lg:w-full h-full max-lg:h-96 rounded-tl-md max-lg:rounded-none object-cover"
-                src={`${PROJECT_PIC_URL}/${project.coverPic}`}
+                src={getProjectPicURL(project)}
                 alt="Project Cover"
                 width={10000}
                 height={10000}
                 placeholder="blur"
-                blurDataURL={project.blurHash || 'no-hash'}
+                blurDataURL={getProjectPicHash(project)}
               />
 
               <div className="w-[calc(100vw-128px-(100vh-56px))] lg:h-full lg:overflow-y-auto max-lg:w-full border-gray-300 border-t-[1px] border-r-[1px] dark:border-0 p-4 bg-white dark:bg-dark_primary_comp_hover flex flex-col lg:justify-between gap-6 z-10">
                 <div className="w-full h-fit flex flex-col gap-6">
                   <div className="flex flex-wrap justify-between items-center gap-2">
                     <div className="font-bold text-3xl text-gradient">{project.title}</div>
-                    <div className="lg:hidden w-fit">
-                      <LowerWorkspaceProject project={project} />
-                    </div>
+                    <div className="lg:hidden w-fit">{/* <LowerWorkspaceProject project={project} /> */}</div>
                   </div>
                   <div className="font-semibold text-lg">{project.tagline}</div>
 
@@ -393,28 +354,9 @@ const ProjectView = ({
                 </div>
 
                 <div className="w-full mx-auto flex flex-col gap-2 pb-4">
+                  {/* <EditProjectImages project={project} setProjects={setProjects} setProject={setProject} /> */}
                   {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
-                    <div
-                      onClick={() => setClickedOnEdit(true)}
-                      className="w-full text-lg font-medium border-[1px] border-gray-400 hover:bg-primary_comp_hover active:bg-primary_comp_active  dark:border-dark_primary_btn dark:active:bg-dark_primary_gradient_end py-2 flex-center hover:bg-gradient-to-r dark:hover:from-dark_secondary_gradient_start dark:hover:to-dark_secondary_gradient_end rounded-lg cursor-pointer transition-ease-300"
-                    >
-                      Edit Project
-                    </div>
-                  )}
-                  {checkOrgProjectAccess(PROJECT_MANAGER, project.id, ORG_SENIOR, project.organization) && (
-                    <Link
-                      target="_blank"
-                      href={
-                        checkParticularOrgAccess(ORG_SENIOR, project.organization)
-                          ? currentOrg.id == project.organizationID
-                            ? `/organisation/projects/manage/${projectSlugs[clickedProjectIndex]}`
-                            : `/organisations?oid=${project.organizationID}&redirect_url=/projects/manage/${projectSlugs[clickedProjectIndex]}`
-                          : `/workspace/manage/${projectSlugs[clickedProjectIndex]}`
-                      }
-                      className="w-full text-lg font-medium border-[1px] border-gray-400 hover:bg-primary_comp_hover active:bg-primary_comp_active dark:active:bg-dark_primary_gradient_end dark:border-dark_primary_btn py-2 flex-center hover:bg-gradient-to-r dark:hover:from-dark_secondary_gradient_start dark:hover:to-dark_secondary_gradient_end rounded-lg cursor-pointer transition-ease-300"
-                    >
-                      Manage Project
-                    </Link>
+                    <EditProject project={project} setProjects={setProjects} setProject={setProject} />
                   )}
                   {checkOrgProjectAccess(PROJECT_OWNER, project.id, ORG_MANAGER, project.organization) ? (
                     <div
@@ -445,9 +387,7 @@ const ProjectView = ({
               <X size={24} weight="bold" />
             </div>
 
-            <div className="max-lg:hidden">
-              <LowerWorkspaceProject project={project} />
-            </div>
+            <div className="max-lg:hidden">{/* <LowerWorkspaceProject project={project} /> */}</div>
 
             {clickedProjectIndex != projectSlugs.length - 1 ? (
               <div

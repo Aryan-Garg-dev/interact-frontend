@@ -543,7 +543,7 @@ const Prizes = ({ prizes, setPrizes, tracks }: any) => {
           <select
             onChange={el => setTrackID(el.target.value)}
             value={trackID}
-            className="w-full max-lg:w-full h-11 border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:text-white bg-primary_comp dark:bg-[#10013b30] focus:outline-nonetext-sm rounded-lg block p-2"
+            className="w-full max-lg:w-full h-11 border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:text-white bg-primary_comp dark:bg-dark_primary_comp focus:outline-nonetext-sm rounded-lg block p-2"
           >
             {tracks?.map((c: HackathonTrack, i: number) => {
               return (

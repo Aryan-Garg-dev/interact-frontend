@@ -19,14 +19,14 @@ const Invitation = ({ notification }: Props) => {
   const getRedirectURL = () => {
     switch (notification.notificationType) {
       case 10:
-        return '/explore?pid=' + notification.project.slug;
+        return '/projects/' + notification.project.slug;
       default:
         return '';
     }
   };
   return (
     <NotificationWrapper notification={notification}>
-      <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
+      <Link className="font-bold" href={`/users/${notification.sender.username}`}>
         {notification.sender.name}
       </Link>
       Accepted your Invitation to join{' '}

@@ -8,9 +8,9 @@ import { setVerificationStatus, userSelector } from '@/slices/userSlice';
 import Head from 'next/head';
 import getHandler from '@/handlers/get_handler';
 import postHandler from '@/handlers/post_handler';
-import OTPInput from 'react-otp-input';
 import { ALREADY_VERIFIED_ERROR, SERVER_ERROR } from '@/config/errors';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/ui/input-otp';
 
 const Verification = () => {
   const [sentOTP, setSentOTP] = useState(false);
@@ -113,27 +113,18 @@ const Verification = () => {
                   Enter the OTP sent to <b>{user.email}</b> for the verification of your account.
                 </div>
 
-                <OTPInput
-                  value={OTP}
-                  onChange={handleChange}
-                  numInputs={6}
-                  renderInput={props => <input {...props} />}
-                  inputStyle={{
-                    width: '52px',
-                    height: '64px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    justifyItems: 'center',
-                    textAlign: 'center',
-                    borderRadius: '20%',
-                    borderWidth: '2px',
-                    WebkitAppearance: 'none',
-                    MozAppearance: 'textfield',
-                  }}
-                  containerStyle="flex gap-2"
-                  inputType="number"
-                  shouldAutoFocus={true}
-                />
+                <InputOTP className="w-full" maxLength={6} value={OTP} onChange={handleChange}>
+                  <InputOTPGroup className="w-full">
+                    <InputOTPSlot className="w-16 h-12" index={0} />
+                    <InputOTPSlot className="w-16 h-12" index={1} />
+                    <InputOTPSeparator />
+                    <InputOTPSlot className="w-16 h-12" index={2} />
+                    <InputOTPSlot className="w-16 h-12" index={3} />
+                    <InputOTPSeparator />
+                    <InputOTPSlot className="w-16 h-12" index={4} />
+                    <InputOTPSlot className="w-16 h-12" index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
 
                 {!resentOTP ? (
                   <div onClick={sendOTP} className="text-sm">

@@ -199,8 +199,8 @@ export interface Project {
   userID: string;
   title: string;
   tagline: string;
-  coverPic: string;
-  blurHash: string;
+  images: string[] | null;
+  hashes: string[] | null;
   description: string;
   page: string;
   user: User;
@@ -216,7 +216,6 @@ export interface Project {
   invitations: Invitation[];
   openings: Opening[];
   chats: Chat[];
-  hashes: string[];
   isPrivate: boolean;
   views: number;
   totalNoViews: number;
@@ -226,6 +225,7 @@ export interface Project {
   organizationID: string;
   organization: Organization | null;
   createdAt: Date;
+  history: ProjectHistory[] | null;
 }
 
 export interface PostTag {
@@ -238,6 +238,8 @@ export interface Post {
   id: string;
   userID: string;
   rePostID: string;
+  communityID: string | null;
+  community: Community | null;
   rePost: Post | null;
   images: string[];
   content: string;
@@ -886,4 +888,61 @@ export interface HackathonHistory {
   createdAt: Date;
   coordinators: User[];
   judges: User[];
+}
+
+export type CommunityAccess = 'open' | 'restricted' | 'closed';
+
+export type CommunityRole = 'Member' | 'Moderator' | 'Admin';
+
+export interface Community {
+  id: string;
+  title: string;
+  description?: string;
+  tagline: string;
+  userID: string;
+  user: User;
+  profilePic: string;
+  profilePicBlurHash: string;
+  coverPic: string;
+  coverPicBlurHash: string;
+  tags: string[];
+  links: string[];
+  category: string;
+  access: CommunityAccess;
+  isOpen: boolean;
+  noViews: number;
+  impressions: number;
+  noLikes: number;
+  noMembers: number;
+  createdAt: Date;
+  rules?: CommunityRule[];
+}
+
+export interface CommunityMembership {
+  id: string;
+  communityID: string;
+  community?: Community;
+  userID: string;
+  user: User;
+  role: CommunityRole;
+  createdAt: Date;
+}
+
+export interface CommunityMembershipRequest {
+  id: string;
+  communityID: string;
+  userID: string;
+  user: User;
+  createdAt: Date;
+}
+
+export interface CommunityRule {
+  id: string;
+  communityID: string;
+  title: string;
+  description: string;
+}
+
+export interface PermissionConfig {
+  [action: string]: string;
 }

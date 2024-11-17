@@ -2,19 +2,20 @@ import postHandler from '@/handlers/post_handler';
 import { setEventBookmarks, userSelector } from '@/slices/userSlice';
 import { Event, EventBookmark, EventBookmarkItem, GenericBookmark } from '@/types';
 import Toaster from '@/utils/toaster';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BOOKMARK_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
 import BookmarkModal from '@/components/common/bookmark_modal';
 
 interface Props {
+  show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   event: Event;
   setBookmark: (isBookmarked: boolean, eventItemID: string, bookmarkID: string) => void;
 }
 
-const BookmarkEvent = ({ setShow, event, setBookmark }: Props) => {
+const BookmarkEvent = ({ show, setShow, event, setBookmark }: Props) => {
   const [bookmarkTitle, setBookmarkTitle] = useState('');
   const [mutex, setMutex] = useState(false);
   const dispatch = useDispatch();
@@ -76,7 +77,8 @@ const BookmarkEvent = ({ setShow, event, setBookmark }: Props) => {
       addBookmarkHandler={addBookmarkHandler}
       bookmarkTitle={bookmarkTitle}
       setBookmarkTitle={setBookmarkTitle}
-      setShow={setShow}
+      isDialogOpen={show}
+      setIsDialogOpen={setShow}
     />
   );
 };

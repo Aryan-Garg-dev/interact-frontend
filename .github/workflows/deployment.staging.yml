@@ -1,0 +1,23 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - v3
+
+jobs:
+  build-and-deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Pull Changes
+        run: git pull origin v3
+        working-directory: /home/prathammishra/interact/staging/interact-frontend
+
+      - name: Build and Deploy
+        run: |
+          sudo docker compose -f docker-compose.staging.yml up --build -d
+        working-directory: /home/prathammishra/interact/staging/interact-frontend

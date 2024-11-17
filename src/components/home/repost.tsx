@@ -20,6 +20,7 @@ import { currentOrgIDSelector } from '@/slices/orgSlice';
 import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Props {
   post: Post;
@@ -30,7 +31,6 @@ interface Props {
 
 const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => {
   const loggedInUser = useSelector(userSelector);
-  const [clickedOnOptions, setClickedOnOptions] = useState(false);
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
   const [clickedOnDelete, setClickedOnDelete] = useState(false);
   const [clickedOnReport, setClickedOnReport] = useState(false);
@@ -109,56 +109,13 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
   };
 
   return (
-    <div
-      onClick={() => setClickedOnOptions(false)}
-      className="w-full relative overflow-clip bg-white dark:bg-transparent font-primary flex gap-1 rounded-lg dark:rounded-none dark:text-white p-4 border-gray-300 border-[1px] dark:border-x-0 dark:border-t-0 dark:border-dark_primary_btn dark:border-b-[1px] max-md:p-4 animate-fade_third"
-    >
+    <div className="w-full relative overflow-clip bg-white dark:bg-transparent font-primary flex gap-1 border-b-[1px] border-gray-300 py-4 animate-fade_third">
       {noUserClick && <SignUp setShow={setNoUserClick} />}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
       {clickedOnReport && <Report postID={post.id} setShow={setClickedOnReport} />}
-      {!clickedOnEdit && clickedOnOptions && (
-        <div className="w-1/4 h-fit flex flex-col bg-gray-100 bg-opacity-75 dark:bg-transparent absolute top-2 right-12 rounded-xl glassMorphism text-sm p-2 z-10 animate-fade_third">
-          {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
-            <div
-              onClick={() => setClickedOnEdit(true)}
-              className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] transition-ease-100 rounded-lg cursor-pointer"
-            >
-              Edit
-            </div>
-          )}
-          {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
-            <div
-              onClick={el => {
-                el.stopPropagation();
-                setClickedOnDelete(true);
-              }}
-              className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg cursor-pointer"
-            >
-              Delete
-            </div>
-          )}
-
-          {post.userID != loggedInUser.id && (
-            <div
-              onClick={el => {
-                el.stopPropagation();
-                if (userID == '') setNoUserClick(true);
-                else setClickedOnReport(true);
-              }}
-              className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-[#ffffff] dark:hover:bg-[#ffffff19] hover:text-primary_danger transition-ease-100 rounded-lg cursor-pointer"
-            >
-              Report
-            </div>
-          )}
-        </div>
-      )}
       <div className="h-full">
         <Link
-          href={`${
-            post.user.username != loggedInUser.username
-              ? `/explore/user/${post.user.isOrganization ? 'organisation/' : ''}${post.user.username}`
-              : `/${post.user.isOrganization ? 'organisation/' : ''}profile`
-          }`}
+          href={`/users/${post.user.isOrganization ? 'organisations/' : ''}${post.user.username}`}
           className="rounded-full"
         >
           <Image
@@ -169,18 +126,14 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
             src={`${USER_PROFILE_PIC_URL}/${post.user.profilePic}`}
             placeholder="blur"
             blurDataURL={post.user.profilePicBlurHash || 'no-hash'}
-            className={'rounded-full w-8 h-8'}
+            className="rounded-full w-8 h-8"
           />
         </Link>
       </div>
       <div className="w-[calc(100%-32px)] flex flex-col gap-1">
         <div className="w-full h-fit flex justify-between">
           <Link
-            href={`${
-              post.user.username != loggedInUser.username
-                ? `/explore/${post.user.isOrganization ? 'organisation' : 'user'}/${post.user.username}`
-                : `/${post.user.isOrganization ? 'organisation/' : ''}profile`
-            }`}
+            href={`${post.user.isOrganization ? 'organisations' : 'users'}/${post.user.username}`}
             className="font-medium flex items-center gap-1"
           >
             {post.user.name}
@@ -190,15 +143,44 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
           <div className="flex gap-2 text-xs text-gray-400">
             <div>{moment(post.postedAt).fromNow()}</div>
             {!clickedOnEdit && showLowerPost && (
-              <div
-                onClick={el => {
-                  el.stopPropagation();
-                  setClickedOnOptions(prev => !prev);
-                }}
-                className="text-xxs cursor-pointer"
-              >
-                •••
-              </div>
+              <Popover>
+                <PopoverTrigger>
+                  <div className="text-xxs cursor-pointer">•••</div>
+                </PopoverTrigger>
+                <PopoverContent className="w-40 p-2 text-sm">
+                  {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
+                    <div
+                      onClick={() => setClickedOnEdit(true)}
+                      className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg cursor-pointer transition-ease-300"
+                    >
+                      Edit
+                    </div>
+                  )}
+                  {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
+                    <div
+                      onClick={el => {
+                        el.stopPropagation();
+                        setClickedOnDelete(true);
+                      }}
+                      className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover hover:text-primary_danger rounded-lg cursor-pointer transition-ease-100 "
+                    >
+                      Delete
+                    </div>
+                  )}
+                  {post.userID != loggedInUser.id && (
+                    <div
+                      onClick={el => {
+                        el.stopPropagation();
+                        if (userID == '') setNoUserClick(true);
+                        else setClickedOnReport(true);
+                      }}
+                      className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover hover:text-primary_danger rounded-lg cursor-pointer transition-ease-100 "
+                    >
+                      Report
+                    </div>
+                  )}
+                </PopoverContent>
+              </Popover>
             )}
           </div>
         </div>

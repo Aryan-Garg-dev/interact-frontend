@@ -33,7 +33,7 @@ export default function Openings({ orgID }: Props) {
 
   const fetchOpenings = async () => {
     const URL = `${EXPLORE_URL}/openings/org/${orgID}?page=${page}&limit=${10}`;
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
     if (res.statusCode === 200) {
       const addedOpenings = [...openings, ...(res.data.openings || [])];
       if (addedOpenings.length === openings.length) setHasMore(false);

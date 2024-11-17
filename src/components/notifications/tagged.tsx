@@ -34,7 +34,7 @@ const Tagged = ({ notification, short = true }: Props) => {
         return '/explore/announcement/' + notification.announcementID;
       case 23:
         if (notification.comment.postID) return `/explore/post/${notification.comment.postID}?action=comments`;
-        if (notification.comment.projectID) return `/explore?pid=${notification.comment.project.slug}&action=comments`;
+        if (notification.comment.projectID) return `/projects/${notification.comment.project.slug}&action=comments`;
         if (notification.comment.announcementID)
           return `/explore/announcement/${notification.comment.announcementID}?action=comments`;
         if (notification.comment.taskID) {
@@ -43,7 +43,7 @@ const Tagged = ({ notification, short = true }: Props) => {
             return `/organisations?oid=${task.organizationID}&redirect_url=/tasks?tid=${notification.comment.taskID}`;
           return `/workspace/tasks/${task?.project?.slug}?tid=${notification.comment.taskID}`;
         }
-        if (notification.comment.eventID) return `/explore/events/${notification.comment.eventID}?action=comments`;
+        if (notification.comment.eventID) return `/eventss/${notification.comment.eventID}?action=comments`;
         return '#';
       default:
         return '#';
@@ -82,7 +82,7 @@ const Tagged = ({ notification, short = true }: Props) => {
         )
       }
     >
-      <Link className="font-bold" href={`/explore/user/${notification.sender.username}`}>
+      <Link className="font-bold" href={`/users/${notification.sender.username}`}>
         {notification.sender.name}
       </Link>
       Tagged you in a{' '}
