@@ -39,6 +39,14 @@
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2)50%, rgba(0, 0, 0, 0)100%);
 }
 
+.fade-img-right {
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%,  rgba(0, 0, 0, 0.2));
+}
+
+.fade-img-left {
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%,  rgba(0, 0, 0, 0.2));
+}
+
 .hover-underline-animation {
   position: relative;
 }
@@ -375,26 +383,6 @@ html {
   top: auto !important;
 }
 
-
-@font-face {
-  font-family: 'Bachelorette';
-  src: url('/public/fonts/Bachelorette_PERSONAL_USE_ONLY.otf') format('.ttf');
-  font-weight: 400;
-  font-style: normal;
-}
-
-.font-bachelorette {
-  font-family: 'Bachelorette';
-}
-@font-face {
-  font-family: 'birthstone';
-  src: url('/public/fonts/BirthstoneBounce-Medium.ttf') format('ttf');
-}
-
-.font-birthstone {
-  font-family: 'birthstone';
-}
-=======
 .bg_onboarding {
   width: 100%;
   height: 100%;
