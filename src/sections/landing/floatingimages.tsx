@@ -3,7 +3,7 @@ import React from 'react';
 
 export const FloatingImages = () => {
   return (
-    <div className="w-[100vw] ">
+    <div className="w-[100vw] -z-10">
       <div className="absolute opacity-90 top-0 lg:left-32 left-16 max-md:left-0">
         <Image
           width={400}

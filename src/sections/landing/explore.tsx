@@ -43,8 +43,8 @@ const ExploreCommunity: React.FC = () => {
         </div>
 
         <div className="w-4/5 rounded-lg space-y-8">
-          <div className="w-full md:max-h-72 overflow-y-clip flex-center md:flex-row flex-col md:gap-8 px-12 border-2 rounded-xl">
-            <div className="w-1/2 space-y-24 md:space-y-16 py-16 md:py-18">
+          <div className="w-full md:max-h-72 overflow-y-clip flex-center md:flex-row flex-col md:gap-8 px-12 max-md:p-4 border-2 rounded-xl">
+            <div className="w-1/2 max-md:w-full space-y-12 md:space-y-16 md:py-18">
               <div className="relative py-4">
                 <div className="text-4xl font-semibold mb-2">Supporting the</div>
                 <div className="w-fit font-cursive rotate-[-8deg] text-sky-400 text-5xl font-medium absolute">

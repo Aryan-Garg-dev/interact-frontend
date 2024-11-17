@@ -62,7 +62,7 @@ export const HeroSection = () => {
         </div>
         <TextAnimation />
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4 max-md:px-12">
         <p className="text-xl max-md:text-base text-gray-700 max-w-sm mx-auto">
           We&apos;re a dynamic web platform for college students, freelancers, professionals, and creatives.
         </p>

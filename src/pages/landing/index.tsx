@@ -32,10 +32,12 @@ const LandingPage = () => {
       </div>
       <WhyChooseUs />
       <Testimonials />
-      <div className="w-4/5 max-md:w-full mx-auto">
-        <ExploreCommunity />
+      <div>
+        <div className="w-4/5 max-md:w-full mx-auto">
+          <ExploreCommunity />
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 };
