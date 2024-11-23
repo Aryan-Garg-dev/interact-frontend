@@ -302,7 +302,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
         </div>
 
         {showUsers && users.length > 0 && (
-          <div className="w-full bg-gradient-to-b from-white via-[#ffffffb2] via-[90%] flex flex-wrap justify-center gap-3 py-4">
+          <div className="w-full bg-gradient-to-b from-white via-[#ffffffb2] via-[90%] dark:from-dark_primary_comp_hover dark:via-dark_primary_comp flex flex-wrap justify-center gap-3 py-4">
             {users.map(user => (
               <div
                 key={user.id}

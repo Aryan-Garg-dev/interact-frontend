@@ -96,8 +96,8 @@ const CommentInput = ({
         <div
           className={`w-full absolute bg-gradient-to-b ${
             type == 'task'
-              ? 'from-gray-50 dark:from-black via-[#ffffffca] dark:via-gray-700'
-              : 'from-white dark:from-dark_primary_comp via-[#ffffffb2] dark:via-dark_primary_comp'
+              ? 'from-gray-50 dark:from-dark_primary_active via-[#ffffffca] dark:via-dark_primary_hover'
+              : 'from-white dark:from-dark_primary_comp_active via-[#ffffffb2] dark:via-dark_primary_comp_hover'
           } via-[90%] flex flex-wrap justify-center gap-2 py-4 z-10`}
         >
           {users.map(user => (

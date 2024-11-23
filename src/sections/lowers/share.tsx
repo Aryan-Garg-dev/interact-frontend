@@ -205,7 +205,7 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
                 </div>
                 <div className="w-full flex flex-col gap-1">
                   <textarea
-                    className="bg-primary_comp dark:bg-dark_primary_comp text-sm focus:outline-none p-2 rounded-xl min-h-[6rem] max-h-64"
+                    className="bg-primary_comp dark:bg-dark_primary_comp_hover text-sm focus:outline-none p-2 rounded-xl min-h-[6rem] max-h-64"
                     placeholder="Add a message"
                     value={message}
                     onChange={el => setMessage(el.target.value)}
