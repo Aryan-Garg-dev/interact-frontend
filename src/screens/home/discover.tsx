@@ -9,6 +9,8 @@ import { EXPLORE_URL } from '@/config/routes';
 import { SERVER_ERROR } from '@/config/errors';
 import PostsLoader from '@/components/loaders/posts';
 import OrderMenu from '@/components/common/order_menu';
+import { useSelector } from 'react-redux';
+import { userIDSelector } from '@/slices/userSlice';
 
 const Discover = () => {
   const [feed, setFeed] = useState<Post[]>([]);
@@ -51,9 +53,15 @@ const Discover = () => {
     getFeed(1);
   }, [order]);
 
+  const userID = useSelector(userIDSelector);
+
   return (
     <div className="w-full">
-      <OrderMenu orders={['recommended', 'trending', 'most_liked', 'latest']} current={order} setState={setOrder} />
+      <OrderMenu
+        orders={[...(userID ? ['recommended'] : []), 'trending', 'most_liked', 'latest']}
+        current={order}
+        setState={setOrder}
+      />
       {loading ? (
         <PostsLoader />
       ) : feed.length === 0 ? (

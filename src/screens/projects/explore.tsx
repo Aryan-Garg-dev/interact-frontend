@@ -93,11 +93,7 @@ const Projects = ({
     <div>
       {(projects.length > 0 || order == 'last_viewed') && (
         <OrderMenu
-          orders={
-            userID
-              ? ['trending', 'most_liked', 'most_viewed', 'latest', 'last_viewed']
-              : ['trending', 'most_liked', 'most_viewed', 'latest']
-          }
+          orders={['trending', 'most_liked', 'most_viewed', ...(userID ? ['latest', 'last_viewed'] : [])]}
           current={order}
           setState={setOrder}
         />

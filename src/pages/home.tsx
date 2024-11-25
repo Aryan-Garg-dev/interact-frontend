@@ -13,7 +13,7 @@ import Communities from '@/screens/home/communities';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
 
-const FOLLOWING_THRESHOLD = 1;
+const FOLLOWING_THRESHOLD = 3;
 
 const Home = () => {
   const [active, setActive] = useState(0);
@@ -28,8 +28,8 @@ const Home = () => {
             items={
               user.id
                 ? user.following?.length > FOLLOWING_THRESHOLD
-                  ? ['Explore', 'Following', 'Communities']
-                  : ['Following', 'Explore', 'Communities']
+                  ? ['Following', 'Explore', 'Communities']
+                  : ['Explore', 'Following', 'Communities']
                 : ['Explore', 'Communities']
             }
             active={active}

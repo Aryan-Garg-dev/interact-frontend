@@ -9,6 +9,8 @@ import EventCard from '@/components/organization/event_card';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import OrderMenu from '@/components/common/order_menu';
+import { userIDSelector } from '@/slices/userSlice';
+import { useSelector } from 'react-redux';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -48,9 +50,15 @@ const Events = () => {
     fetchEvents(new URLSearchParams(window.location.search).get('search'), 1);
   }, [window.location.search, order]);
 
+  const userID = useSelector(userIDSelector);
+
   return (
     <div className="w-full flex flex-col gap-6">
-      <OrderMenu orders={['trending', 'most_liked', 'most_viewed', 'latest']} current={order} setState={setOrder} />
+      <OrderMenu
+        orders={['trending', 'most_liked', 'most_viewed', ...(userID ? ['latest'] : [])]}
+        current={order}
+        setState={setOrder}
+      />
       {loading ? (
         <Loader />
       ) : events.length > 0 ? (

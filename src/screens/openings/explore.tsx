@@ -12,6 +12,8 @@ import { useWindowWidth } from '@react-hook/window-size';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import OrderMenu from '@/components/common/order_menu';
+import { useSelector } from 'react-redux';
+import { userIDSelector } from '@/slices/userSlice';
 
 const Openings = () => {
   const [openings, setOpenings] = useState<Opening[]>([]);
@@ -119,6 +121,8 @@ const Openings = () => {
     return false;
   };
 
+  const userID = useSelector(userIDSelector);
+
   return (
     <div className="w-full flex flex-col gap-6">
       {loading ? (
@@ -139,7 +143,7 @@ const Openings = () => {
           >
             {(openings.length > 0 || order == 'last_searched') && (
               <OrderMenu
-                orders={['trending', 'most_viewed', 'latest', 'last_searched']}
+                orders={['trending', 'most_viewed', 'latest', ...(userID ? ['last_searched'] : [])]}
                 current={order}
                 setState={setOrder}
               />
