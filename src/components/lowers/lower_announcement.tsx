@@ -134,7 +134,7 @@ const LowerAnnouncement = ({ announcement, setFeed }: Props) => {
             </div>
           </div>
 
-          <div className="text-sm font-medium flex-center gap-1">
+          <div className="text-sm max-md:text-xs font-medium flex-center gap-1">
             {announcement.isOpen ? (
               <>
                 <LockOpen /> <div>Open</div>

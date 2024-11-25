@@ -14,7 +14,7 @@ interface Props {
 const Events = ({ bookmark, setClick, fetchBookmarks }: Props) => {
   const open = useSelector(navbarOpenSelector);
   return (
-    <div className="w-full m-auto max-lg:w-[90vw] flex flex-col gap-4 font-primary dark:text-white pt-8 max-lg:pt-4">
+    <div className="w-full m-auto flex flex-col gap-4 font-primary dark:text-white pt-8 max-lg:pt-4">
       <div className="flex items-center gap-2">
         <ArrowArcLeft
           onClick={() => {
@@ -33,7 +33,7 @@ const Events = ({ bookmark, setClick, fetchBookmarks }: Props) => {
           } pb-12 flex flex-wrap justify-center transition-ease-out-500`}
         >
           {bookmark.eventItems.map(evenItem => {
-            return <EventCard key={evenItem.id} event={evenItem.event} size={96} />;
+            return <EventCard key={evenItem.id} event={evenItem.event} size={84} />;
           })}
         </div>
       ) : (

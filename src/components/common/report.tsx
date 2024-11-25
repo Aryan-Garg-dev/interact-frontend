@@ -118,7 +118,7 @@ const Report = ({
         </div>
         <div className="w-full max-md:h-56 md:flex-1 flex flex-col justify-between gap-4">
           <div className="w-full flex flex-col gap-8">
-            <div className="font-semibold text-6xl text-gray-800 dark:text-white capitalize">
+            <div className="font-semibold text-6xl max-md:text-5xl text-gray-800 dark:text-white capitalize">
               Report {getItemType()}
             </div>
 
@@ -163,7 +163,7 @@ const Report = ({
       </div>
       <div
         onClick={() => setShow(false)}
-        className="bg-backdrop w-screen h-screen backdrop-blur-sm fixed top-0 left-0 animate-fade_third z-30"
+        className="bg-backdrop w-screen max-w-full h-screen max-h-full backdrop-blur-sm fixed top-0 left-0 animate-fade_third z-30"
       ></div>
     </>
   );

@@ -103,7 +103,7 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
             ))}
           </div>
 
-          <div className="w-full flex max-md:flex-col justify-between md:items-center">
+          <div className="w-full flex max-md:flex-col gap-4 justify-between md:items-center">
             <div className="flex justify-between gap-4">
               <div className="text-sm text-gray-400 dark:text-gray-300 font-medium">
                 {poll.totalVotes} Vote{poll.totalVotes != 1 ? 's' : ''}
@@ -115,7 +115,7 @@ const PollCard = ({ poll, setPolls, organisation, hoverShadow = true }: Props) =
                 </div>
               )}
             </div>
-            <div className="flex justify-end max-md:justify-between items-center gap-4 text-sm text-gray-400 font-medium">
+            <div className="flex justify-end max-md:justify-between items-center gap-4 text-sm max-md:text-xs text-gray-400 font-medium">
               <div className="flex-center gap-1">
                 {poll.isOpen ? (
                   <>

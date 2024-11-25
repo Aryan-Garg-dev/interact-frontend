@@ -131,7 +131,7 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
 
   return (
     <>
-      <div className="w-1/2 max-h-[75%] max-md:h-4/5 overflow-y-auto max-lg:w-5/6 fixed backdrop-blur-lg bg-[#ffffff] dark:bg-dark_primary_comp z-50 translate-x-1/2 -translate-y-1/4 top-64 right-1/2 flex flex-col px-8 py-8 gap-2 border-2 border-primary_btn dark:border-dark_primary_btn rounded-xl animate-fade_third">
+      <div className="w-1/2 max-h-[75%] max-md:h-4/5 overflow-y-auto max-lg:w-5/6 fixed backdrop-blur-lg bg-[#ffffff] dark:bg-dark_primary_comp z-50 translate-x-1/2 -translate-y-1/4 max-md:-translate-y-1/2 top-64 max-md:top-1/2 right-1/2 flex flex-col px-8 py-8 gap-2 border-2 border-primary_btn dark:border-dark_primary_btn rounded-xl animate-fade_third">
         <div onClick={() => setShow(false)} className="md:hidden absolute top-2 right-2">
           <X size={24} weight="bold" />
         </div>
@@ -139,11 +139,11 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
           Share this {itemType}
         </div>
         <div className="w-full flex max-md:flex-col mt-4 gap-4">
-          <div className="w-1/2 flex flex-col gap-2">
+          <div className="w-1/2 max-md:w-full flex flex-col gap-2">
             {item}
             <CopyClipboardButton url={clipboardURL} />
           </div>
-          <div className="w-1/2 max-h-[400px] overflow-y-auto flex flex-col justify-between gap-2">
+          <div className="w-1/2 max-md:w-full md:max-h-[400px] overflow-y-auto flex flex-col justify-between gap-2">
             {loading ? (
               <Loader />
             ) : chats.length > 0 ? (
