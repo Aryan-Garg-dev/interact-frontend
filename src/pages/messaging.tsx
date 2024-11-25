@@ -74,7 +74,7 @@ const Messaging = () => {
       <MainWrapper>
         <div
           onClick={() => setClickedOnNew(false)}
-          className={`w-fit h-[calc(100vh-65px)] max-lg:h-fit mx-auto flex max-lg:flex-col ${
+          className={`w-fit h-base_md max-lg:h-fit mx-auto flex max-lg:flex-col ${
             open ? 'gap-2' : 'gap-16'
           } transition-ease-out-500 font-primary`}
         >
@@ -86,7 +86,7 @@ const Messaging = () => {
             />
           )}
           {/* 100-(navbar+1) */}
-          <div className="w-[37.5vw] max-lg:w-screen h-full flex flex-col pt-4 pl-4 max-lg:pl-0 gap-4 ">
+          <div className="w-[37.5vw] max-lg:w-screen h-full flex flex-col gap-4 ">
             <div className="w-full flex items-center justify-between max-lg:px-4 relative">
               <div className="text-3xl font-extrabold text-gradient">Messaging</div>
               <PencilSimpleLine
@@ -139,7 +139,7 @@ const Messaging = () => {
             </div>
           </div>
           <div
-            className={`w-[37.5vw] max-lg:w-screen h-full max-lg:h-base sticky max-lg:fixed top-navbar p-2 max-lg:p-0 ${
+            className={`w-[37.5vw] max-lg:w-screen h-full max-lg:h-screen sticky max-lg:fixed top-navbar max-lg:top-0 p-2 max-lg:p-0 ${
               currentChatID == '' ? 'hidden' : ''
             } z-40 max-lg:z-30`}
           >
