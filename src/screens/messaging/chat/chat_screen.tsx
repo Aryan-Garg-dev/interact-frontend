@@ -13,7 +13,6 @@ import ChatHeader from '@/sections/messaging/chats/personal_header';
 import GroupChatHeader from '@/sections/messaging/chats/group_header';
 import MessageGroup from '@/sections/messaging/chats/message_group';
 import ChatTextarea from '@/components/messaging/chat_textarea';
-import Cookies from 'js-cookie';
 import socketService from '@/config/ws';
 import { useWindowWidth } from '@react-hook/window-size';
 import ChatInfo from '@/sections/messaging/chat_info';
