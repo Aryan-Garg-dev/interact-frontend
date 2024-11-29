@@ -104,9 +104,7 @@ const EditCommunity = ({
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
-          Edit Community
-        </Button>
+        <Button onClick={() => setIsDialogOpen(true)}>Edit Community</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md min-w-[30%]">
         <DialogHeader>

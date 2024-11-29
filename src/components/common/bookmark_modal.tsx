@@ -47,10 +47,10 @@ const BookmarkModal = ({
             <input
               className={`w-full h-10 px-4 ${
                 bookmarkTitle == '' ? 'text-center text-xs' : ''
-              } flex-center rounded-md bg-transparent border-[1px] border-primary_btn  dark:border-dark_primary_btn focus:outline-none`}
+              } flex-center rounded-md bg-transparent focus:outline-none`}
               value={bookmarkTitle}
               onChange={el => setBookmarkTitle(el.target.value)}
-              placeholder="New Bookmark"
+              placeholder="Create New Bookmark"
             />
           </form>
         </PopoverContent>

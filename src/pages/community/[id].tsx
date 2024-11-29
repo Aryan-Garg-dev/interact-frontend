@@ -38,6 +38,16 @@ import ViewPermissions from '@/sections/community/view_permissions';
 import Connections from '@/sections/explore/connections_view';
 import Link from 'next/link';
 import CommunityLoader from '@/components/loaders/community';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import NoCommunityFeed from '@/components/fillers/community';
+import { Gear, Plus } from '@phosphor-icons/react';
 
 const Community = ({ id }: { id: string }) => {
   const [community, setCommunity] = useState(initialCommunity);
@@ -118,23 +128,34 @@ const Community = ({ id }: { id: string }) => {
 
   const CommunityOptions = () => (
     <>
-      {checkCommunityAccess(community.id, 'create_post', permissionConfig) && (
-        <Button onClick={() => setClickedOnNewPost(true)} variant="outline">
-          New Post
-        </Button>
-      )}
-      {checkCommunityAccess(community.id, 'edit_community', permissionConfig) && (
-        <EditCommunity community={community} setCommunity={setCommunity} />
-      )}
-      {checkCommunityAccess(community.id, 'edit_memberships', permissionConfig) && (
-        <EditMemberships community={community} />
-      )}
       {checkCommunityStaticAccess(community.id, COMMUNITY_MEMBER) && (
-        <ViewPermissions
-          community={community}
-          permissionConfig={permissionConfig}
-          setPermissionConfig={setPermissionConfig}
-        />
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button>
+              <Gear size={18} />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-full flex flex-col gap-2 p-2">
+            {checkCommunityAccess(community.id, 'edit_community', permissionConfig) && (
+              <EditCommunity community={community} setCommunity={setCommunity} />
+            )}
+            {checkCommunityAccess(community.id, 'edit_memberships', permissionConfig) && (
+              <EditMemberships community={community} />
+            )}
+            {checkCommunityStaticAccess(community.id, COMMUNITY_MEMBER) && (
+              <ViewPermissions
+                community={community}
+                permissionConfig={permissionConfig}
+                setPermissionConfig={setPermissionConfig}
+              />
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
+      {checkCommunityAccess(community.id, 'create_post', permissionConfig) && (
+        <Button onClick={() => setClickedOnNewPost(true)}>
+          New Post <Plus size={18} />
+        </Button>
       )}
       <CommunityJoinBtn communityID={community.id} communityAccess={community.access} smaller={false} />
     </>
@@ -199,32 +220,33 @@ const Community = ({ id }: { id: string }) => {
               <div className="w-2/3 max-md:w-full">
                 <PrimeWrapper index={0} maxIndex={0}>
                   <div className="w-full">
-                    <OrderMenu orders={['trending', 'most_liked', 'latest']} current={order} setState={setOrder} />
                     {loading ? (
                       <PostsLoader />
                     ) : posts.length === 0 ? (
-                      // <NoFeed />
-                      <></>
+                      <NoCommunityFeed />
                     ) : (
-                      <InfiniteScroll
-                        className="w-full"
-                        dataLength={posts.length}
-                        next={getPosts}
-                        hasMore={hasMore}
-                        loader={<PostsLoader />}
-                      >
-                        {!community.isOpen &&
-                          !checkCommunityStaticAccess(community.id, COMMUNITY_MEMBER) &&
-                          posts.length > 0 && (
-                            <div className="w-full text-center text-sm text-gray-500 font-medium my-4">
-                              Some posts are hidden from non members.
-                            </div>
-                          )}
-                        {posts.map(post => {
-                          if (post.rePost) return <RePostComponent key={post.id} post={post} />;
-                          else return <PostComponent key={post.id} post={post} />;
-                        })}
-                      </InfiniteScroll>
+                      <>
+                        <OrderMenu orders={['trending', 'most_liked', 'latest']} current={order} setState={setOrder} />
+                        <InfiniteScroll
+                          className="w-full"
+                          dataLength={posts.length}
+                          next={getPosts}
+                          hasMore={hasMore}
+                          loader={<PostsLoader />}
+                        >
+                          {!community.isOpen &&
+                            !checkCommunityStaticAccess(community.id, COMMUNITY_MEMBER) &&
+                            posts.length > 0 && (
+                              <div className="w-full text-center text-sm text-gray-500 font-medium my-4">
+                                Some posts are hidden from non members.
+                              </div>
+                            )}
+                          {posts.map(post => {
+                            if (post.rePost) return <RePostComponent key={post.id} post={post} />;
+                            else return <PostComponent key={post.id} post={post} />;
+                          })}
+                        </InfiniteScroll>
+                      </>
                     )}
                   </div>
                 </PrimeWrapper>

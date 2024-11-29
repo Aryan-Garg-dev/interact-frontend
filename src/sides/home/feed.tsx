@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import SideLoader from '@/components/loaders/side';
 
 const FeedSide = () => {
   const [searches, setSearches] = useState<string[]>([]);
@@ -118,7 +119,11 @@ const FeedSide = () => {
   }, []);
 
   return loading ? (
-    <></>
+    <>
+      <SideLoader boxes={3} />
+      <SideLoader boxes={1} />
+      <SideLoader boxes={5} />
+    </>
   ) : (
     <>
       {meetings && meetings.length > 0 && (

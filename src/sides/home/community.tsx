@@ -27,10 +27,13 @@ import getHandler from '@/handlers/get_handler';
 import Image from 'next/image';
 import Link from 'next/link';
 import Checkbox from '@/components/form/checkbox';
+import SideLoader from '@/components/loaders/side';
+import { Plus } from '@phosphor-icons/react';
 
 const CommunitySide = () => {
   const [communities, setCommunities] = useState<Community[]>([]);
   const [ownedCommunities, setOwnedCommunities] = useState<Community[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const fetchCommunities = async (communityType: 'joined' | 'owned') => {
     const URL = `${COMMUNITY_URL}/me?communityType=${communityType}`;
@@ -39,6 +42,7 @@ const CommunitySide = () => {
       const communityData = res.data.communities || [];
       if (communityType == 'joined') setCommunities(communityData);
       else setOwnedCommunities(communityData);
+      setLoading(false);
     } else {
       if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
       else Toaster.error(SERVER_ERROR, 'error_toaster');
@@ -55,53 +59,62 @@ const CommunitySide = () => {
       <SidePrimeWrapper>
         <CreateCommunity setCommunities={setOwnedCommunities} />
       </SidePrimeWrapper>
-      {ownedCommunities && ownedCommunities.length > 0 && (
-        <SidePrimeWrapper title="Owned Communities">
-          <div className="w-full flex flex-col gap-2">
-            {ownedCommunities.map(community => (
-              <Link
-                href={`/community/${community.id}`}
-                key={community.id}
-                className="w-fit flex items-center gap-2 group"
-              >
-                <Image
-                  width={20}
-                  height={20}
-                  src={`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`}
-                  placeholder="blur"
-                  blurDataURL={community.profilePicBlurHash || 'no-hash'}
-                  alt=""
-                  className="w-6 h-6 rounded-full cursor-pointer"
-                />
-                <div className="w-fit text-lg font-medium cursor-pointer">{community.title}</div>
-              </Link>
-            ))}
-          </div>
-        </SidePrimeWrapper>
-      )}
-      {communities && communities.length > 0 && (
-        <SidePrimeWrapper title="Joined Communities">
-          <div className="w-full flex flex-col gap-2">
-            {communities.map(community => (
-              <Link
-                href={`/community/${community.id}`}
-                key={community.id}
-                className="w-fit flex items-center gap-2 group"
-              >
-                <Image
-                  width={50}
-                  height={50}
-                  src={`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`}
-                  placeholder="blur"
-                  blurDataURL={community.profilePicBlurHash || 'no-hash'}
-                  alt=""
-                  className="w-6 h-6 rounded-full cursor-pointer"
-                />
-                <div className="w-fit text-lg font-medium cursor-pointer">{community.title}</div>
-              </Link>
-            ))}
-          </div>
-        </SidePrimeWrapper>
+      {loading ? (
+        <>
+          <SideLoader boxes={2} boxClassname="h-10" />
+          <SideLoader boxes={2} boxClassname="h-10" />
+        </>
+      ) : (
+        <>
+          {ownedCommunities && ownedCommunities.length > 0 && (
+            <SidePrimeWrapper title="Owned Communities">
+              <div className="w-full flex flex-col gap-2">
+                {ownedCommunities.map(community => (
+                  <Link
+                    href={`/community/${community.id}`}
+                    key={community.id}
+                    className="w-fit flex items-center gap-2 group"
+                  >
+                    <Image
+                      width={20}
+                      height={20}
+                      src={`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`}
+                      placeholder="blur"
+                      blurDataURL={community.profilePicBlurHash || 'no-hash'}
+                      alt=""
+                      className="w-6 h-6 rounded-full cursor-pointer"
+                    />
+                    <div className="w-fit text-lg font-medium cursor-pointer">{community.title}</div>
+                  </Link>
+                ))}
+              </div>
+            </SidePrimeWrapper>
+          )}
+          {communities && communities.length > 0 && (
+            <SidePrimeWrapper title="Joined Communities">
+              <div className="w-full flex flex-col gap-2">
+                {communities.map(community => (
+                  <Link
+                    href={`/community/${community.id}`}
+                    key={community.id}
+                    className="w-fit flex items-center gap-2 group"
+                  >
+                    <Image
+                      width={50}
+                      height={50}
+                      src={`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`}
+                      placeholder="blur"
+                      blurDataURL={community.profilePicBlurHash || 'no-hash'}
+                      alt=""
+                      className="w-6 h-6 rounded-full cursor-pointer"
+                    />
+                    <div className="w-fit text-lg font-medium cursor-pointer">{community.title}</div>
+                  </Link>
+                ))}
+              </div>
+            </SidePrimeWrapper>
+          )}
+        </>
       )}
     </>
   );
@@ -175,8 +188,11 @@ const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<Re
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
-          Create your Community
+        <Button
+          onClick={() => setIsDialogOpen(true)}
+          className="w-full dark:bg-dark_primary_comp_hover dark:hover:bg-dark_primary_comp_active"
+        >
+          Create your Community <Plus size={20} />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md min-w-[30%]">
