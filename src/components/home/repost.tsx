@@ -109,7 +109,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
   };
 
   return (
-    <div className="w-full relative overflow-clip bg-white dark:bg-transparent font-primary flex gap-1 border-b-[1px] border-gray-300 py-4 animate-fade_third">
+    <div className="w-full relative overflow-clip bg-white dark:bg-transparent font-primary flex gap-1 border-b-[1px] border-gray-300 dark:border-dark_primary_btn py-4 animate-fade_third">
       {noUserClick && <SignUp setShow={setNoUserClick} />}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
       {clickedOnReport && <Report postID={post.id} setShow={setClickedOnReport} />}

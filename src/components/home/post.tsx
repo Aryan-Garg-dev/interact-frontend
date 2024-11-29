@@ -131,7 +131,7 @@ const PostComponent = ({
     <div
       className={`w-full relative bg-white dark:bg-transparent font-primary flex gap-1 ${
         !isRepost ? 'border-b-[1px] py-4' : 'rounded-lg border-[1px] p-2 my-2'
-      } border-gray-300 animate-fade_third`}
+      } border-gray-300 dark:border-dark_primary_btn animate-fade_third`}
     >
       {noUserClick && <SignUp setShow={setNoUserClick} />}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}

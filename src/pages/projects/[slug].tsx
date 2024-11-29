@@ -33,6 +33,8 @@ import Tasks from '@/sections/workspace/tasks';
 import Collaborators from '@/sides/project/collaborators';
 import Activity from '@/sides/project/activity';
 import moment from 'moment';
+import ProjectLoader from '@/components/loaders/project';
+import SideLoader from '@/components/loaders/side';
 
 const ProjectComponent = ({ slug }: { slug: string }) => {
   const [project, setProject] = useState<Project>(initialProject);
@@ -72,112 +74,121 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-2/3 max-md:w-full">
           <PrimeWrapper>
-            <div className="w-full flex flex-col gap-8">
-              <div className="w-full relative group">
-                {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
-                  <>
-                    <EditProjectImages
-                      project={project}
-                      setProject={setProject}
-                      isDialogOpen={clickedOnEditProjectImages}
-                      setIsDialogOpen={setClickedOnEditProjectImages}
-                    />
-                    <div
-                      onClick={() => setClickedOnEditProjectImages(true)}
-                      className="w-full h-full absolute top-0 right-0 flex-center gap-2 hover:bg-[#ffffff4e] opacity-0 hover:opacity-100 rounded-lg transition-ease-300 cursor-pointer z-10"
+            {loading ? (
+              <ProjectLoader />
+            ) : (
+              <div className="w-full flex flex-col gap-8">
+                <div className="w-full relative group">
+                  {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
+                    <>
+                      <EditProjectImages
+                        project={project}
+                        setProject={setProject}
+                        isDialogOpen={clickedOnEditProjectImages}
+                        setIsDialogOpen={setClickedOnEditProjectImages}
+                      />
+                      <div
+                        onClick={() => setClickedOnEditProjectImages(true)}
+                        className="w-full h-full absolute top-0 right-0 flex-center gap-2 hover:bg-[#ffffff4e] opacity-0 hover:opacity-100 rounded-lg transition-ease-300 cursor-pointer z-10"
+                      >
+                        <PencilSimple size={20} weight="bold" /> Edit Cover
+                      </div>
+                    </>
+                  )}
+                  {project.images && project.images.length > 1 ? (
+                    <Carousel
+                      className="w-full"
+                      opts={{
+                        align: 'center',
+                      }}
                     >
-                      <PencilSimple size={20} weight="bold" /> Edit Cover
-                    </div>
-                  </>
-                )}
-                {project.images && project.images.length > 1 ? (
-                  <Carousel
-                    className="w-full"
-                    opts={{
-                      align: 'center',
-                    }}
-                  >
-                    <CarouselContent>
-                      {project.images.map((image, index) => {
-                        let imageHash = 'no-hash';
-                        if (project.hashes && index < project.hashes.length) imageHash = project.hashes[index];
-                        return (
-                          <CarouselItem key={image}>
-                            <Image
-                              crossOrigin="anonymous"
-                              width={1920}
-                              height={1080}
-                              className="w-full rounded-lg"
-                              alt={'Project Pic'}
-                              src={`${PROJECT_PIC_URL}/${image}`}
-                              placeholder="blur"
-                              blurDataURL={imageHash}
-                            />
-                          </CarouselItem>
-                        );
-                      })}
-                    </CarouselContent>
-                    <CarouselPrevious />
-                    <CarouselNext />
-                  </Carousel>
-                ) : (
-                  <Image
-                    crossOrigin="anonymous"
-                    className="w-full rounded-lg"
-                    src={getProjectPicURL(project)}
-                    alt="Project Cover"
-                    width={1920}
-                    height={1080}
-                    placeholder="blur"
-                    blurDataURL={getProjectPicHash(project)}
-                  />
-                )}
-              </div>
-              <div className="w-full flex flex-col gap-4">
-                <div className="w-full flex items-center justify-between flex-wrap gap-4">
-                  <div className="w-fit font-bold text-4xl text-gradient">{project.title}</div>
-                  <LowerProject project={project} setProject={setProject} />
-                </div>
-                <div className="font-semibold text-lg">{project.tagline}</div>
-                <Tags tags={project.tags} displayAll />
-                <div className="whitespace-pre-line">
-                  {project.description.length > 200 ? (
-                    clickedOnReadMore ? (
-                      project.description
-                    ) : (
-                      <>
-                        {project.description.substring(0, 200)}
-                        <span
-                          onClick={() => setClickedOnReadMore(true)}
-                          className="text-xs italic opacity-60 cursor-pointer"
-                        >
-                          {' '}
-                          Read More...
-                        </span>
-                      </>
-                    )
+                      <CarouselContent>
+                        {project.images.map((image, index) => {
+                          let imageHash = 'no-hash';
+                          if (project.hashes && index < project.hashes.length) imageHash = project.hashes[index];
+                          return (
+                            <CarouselItem key={image}>
+                              <Image
+                                crossOrigin="anonymous"
+                                width={1920}
+                                height={1080}
+                                className="w-full rounded-lg"
+                                alt={'Project Pic'}
+                                src={`${PROJECT_PIC_URL}/${image}`}
+                                placeholder="blur"
+                                blurDataURL={imageHash}
+                              />
+                            </CarouselItem>
+                          );
+                        })}
+                      </CarouselContent>
+                      <CarouselPrevious />
+                      <CarouselNext />
+                    </Carousel>
                   ) : (
-                    renderContentWithLinks(project.description)
+                    <Image
+                      crossOrigin="anonymous"
+                      className="w-full rounded-lg"
+                      src={getProjectPicURL(project)}
+                      alt="Project Cover"
+                      width={1920}
+                      height={1080}
+                      placeholder="blur"
+                      blurDataURL={getProjectPicHash(project)}
+                    />
                   )}
                 </div>
-                <Links links={project.links} />
+                <div className="w-full flex flex-col gap-4">
+                  <div className="w-full flex items-center justify-between flex-wrap gap-4">
+                    <div className="w-fit font-bold text-4xl text-gradient">{project.title}</div>
+                    <LowerProject project={project} setProject={setProject} />
+                  </div>
+                  <div className="font-semibold text-lg">{project.tagline}</div>
+                  <Tags tags={project.tags} displayAll />
+                  <div className="whitespace-pre-line">
+                    {project.description.length > 200 ? (
+                      clickedOnReadMore ? (
+                        project.description
+                      ) : (
+                        <>
+                          {project.description.substring(0, 200)}
+                          <span
+                            onClick={() => setClickedOnReadMore(true)}
+                            className="text-xs italic opacity-60 cursor-pointer"
+                          >
+                            {' '}
+                            Read More...
+                          </span>
+                        </>
+                      )
+                    ) : (
+                      renderContentWithLinks(project.description)
+                    )}
+                  </div>
+                  <Links links={project.links} />
+                </div>
+                {project.id && <CommentProject project={project} />}
               </div>
-              {project.id && <CommentProject project={project} />}
-            </div>
+            )}
           </PrimeWrapper>
         </div>
         <SideBarWrapper>
-          <SidePrimeWrapper>
-            <div className="w-full flex flex-col gap-2">
-              <div className="w-full flex items-center justify-between">
-                <div className="text-lg font-medium">Project By</div>
-                <div className="text-xs font-medium">{moment(project.createdAt).fromNow()}</div>
-              </div>
-              <UserSideCard user={project.user} />
-            </div>
-          </SidePrimeWrapper>
-          {project.id && (
+          {loading ? (
             <>
+              <SideLoader boxes={1} />
+              <SideLoader boxes={3} />
+            </>
+          ) : (
+            <>
+              <SidePrimeWrapper>
+                <div className="w-full flex flex-col gap-2">
+                  <div className="w-full flex items-center justify-between">
+                    <div className="text-lg font-medium">Project By</div>
+                    <div className="text-xs font-medium">{moment(project.createdAt).fromNow()}</div>
+                  </div>
+                  <UserSideCard user={project.user} />
+                </div>
+              </SidePrimeWrapper>
               <Collaborators project={project} setProject={setProject} />
               <Openings project={project} setProject={setProject} />
               {!checkProjectAccess(PROJECT_MEMBER, project.id) ? (
