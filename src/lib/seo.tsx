@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React from 'react';
 
 interface Props {
@@ -19,7 +20,7 @@ const SEO = ({
 }: Props) => {
   url = 'https://interactnow.in' + url;
   return (
-    <>
+    <Head>
       {/* Meta Tags */}
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
@@ -48,7 +49,7 @@ const SEO = ({
       {structuredData && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       )}
-    </>
+    </Head>
   );
 };
 
