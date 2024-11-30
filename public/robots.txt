@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://www.interactnow.in
+Host: http://localhost:3000
 
 # Sitemaps
-Sitemap: https://www.interactnow.in/sitemap.xml
+Sitemap: http://localhost:3000/sitemap.xml

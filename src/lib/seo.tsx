@@ -41,6 +41,9 @@ const SEO = ({
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={imageUrl} />
 
+      {/* Canonical URL */}
+      <link rel="canonical" href={url} />
+
       {/* Structured Data */}
       {structuredData && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />

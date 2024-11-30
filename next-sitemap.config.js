@@ -2,6 +2,14 @@
 module.exports = {
     siteUrl: process.env.NEXT_PUBLIC_FRONTEND_URL,
     generateRobotsTxt: true,
+    robotsTxtOptions: {
+      policies: [
+        {
+          userAgent: '*',
+          allow: '/', // Allow all pages to be crawled
+        },
+      ],
+    },
     exclude: ['*'], // Exclude auto-detected routes
     additionalPaths: async (config) => {
       const backendURL = process.env.NEXT_PUBLIC_BACKEND_URL;
