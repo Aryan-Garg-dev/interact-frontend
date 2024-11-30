@@ -102,8 +102,8 @@ const Posts = ({ userID, org = false }: Props) => {
         <NoUserItems />
       ) : (
         posts.map(post => {
-          if (post.rePost) return <RePostComponent key={post.id} post={post} />;
-          else return <PostComponent key={post.id} post={post} />;
+          if (post.rePost) return <RePostComponent key={post.id} post={post} setFeed={setPosts} />;
+          else return <PostComponent key={post.id} post={post} setFeed={setPosts} />;
         })
       )}
     </InfiniteScroll>

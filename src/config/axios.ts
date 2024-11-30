@@ -74,6 +74,8 @@ configuredAxios.interceptors.response.use(
           const newAccessToken = refreshResponse.data.token;
           Cookies.set('token', newAccessToken, {
             expires: Number(process.env.NEXT_PUBLIC_COOKIE_EXPIRATION_TIME),
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
           });
 
           onTokenRefreshed(newAccessToken);

@@ -59,6 +59,8 @@ const Password = () => {
     if (res.statusCode === 200) {
       Cookies.set('token', res.data.token, {
         expires: Number(process.env.NEXT_PUBLIC_COOKIE_EXPIRATION_TIME),
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
       });
       if (!user.isPasswordSetupComplete) dispatch(setPasswordSetupStatus(true));
       setMutex(false);

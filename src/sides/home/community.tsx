@@ -33,7 +33,7 @@ import { Plus } from '@phosphor-icons/react';
 const CommunitySide = () => {
   const [communities, setCommunities] = useState<Community[]>([]);
   const [ownedCommunities, setOwnedCommunities] = useState<Community[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const fetchCommunities = async (communityType: 'joined' | 'owned') => {
     const URL = `${COMMUNITY_URL}/me?communityType=${communityType}`;
@@ -227,7 +227,7 @@ const CreateCommunity = ({ setCommunities }: { setCommunities: React.Dispatch<Re
           <TextArea label="Community Description" val={description} setVal={setDescription} maxLength={1000} />
           <Tags label="Community Tags" tags={tags} setTags={setTags} maxTags={10} />
           <Checkbox
-            label="Is the community open?"
+            label="Is the community public?"
             val={isOpen}
             setVal={setIsOpen}
             caption={

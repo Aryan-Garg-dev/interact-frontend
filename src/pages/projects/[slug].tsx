@@ -1,9 +1,8 @@
 import Sidebar from '@/components/common/sidebar';
 import { SERVER_ERROR } from '@/config/errors';
-import { PROJECT_PIC_URL, PROJECT_URL } from '@/config/routes';
+import { BACKEND_URL, EXPLORE_URL, PROJECT_PIC_URL, PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
-import { initialProject } from '@/types/initials';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 import Toaster from '@/utils/toaster';
 import BaseWrapper from '@/wrappers/base';
@@ -35,9 +34,11 @@ import Activity from '@/sides/project/activity';
 import moment from 'moment';
 import ProjectLoader from '@/components/loaders/project';
 import SideLoader from '@/components/loaders/side';
+import axios from 'axios';
+import SEO from '@/lib/seo';
 
-const ProjectComponent = ({ slug }: { slug: string }) => {
-  const [project, setProject] = useState<Project>(initialProject);
+const ProjectComponent = ({ initialProject, err }: { initialProject: Project | null; err?: string }) => {
+  const [project, setProject] = useState<Project>(initialProject as Project);
   const [loading, setLoading] = useState(true);
 
   const [clickedOnReadMore, setClickedOnReadMore] = useState(false);
@@ -48,7 +49,7 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
   const dispatch = useDispatch();
 
   const fetchProject = async () => {
-    const URL = `${PROJECT_URL}/${slug}`;
+    const URL = `${PROJECT_URL}/${initialProject?.slug}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
       setProject(res.data.project);
@@ -66,15 +67,28 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
   };
 
   useEffect(() => {
-    fetchProject();
-  }, [slug]);
+    if (err) Toaster.error(err, 'error_toaster');
+    else if (initialProject) fetchProject();
+  }, [initialProject]);
+
   return (
-    <BaseWrapper title="Projects">
+    <BaseWrapper
+      title={project.title}
+      seoProps={
+        <SEO
+          title={project.title}
+          description={project.description}
+          imageUrl={getProjectPicURL(project)}
+          url={`/projects/${project.slug}`}
+          keywords={project?.tags.join(', ')}
+        />
+      }
+    >
       <Sidebar index={2} />
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-2/3 max-md:w-full">
           <PrimeWrapper>
-            {loading ? (
+            {err ? (
               <ProjectLoader />
             ) : (
               <div className="w-full flex flex-col gap-8">
@@ -191,6 +205,10 @@ const ProjectComponent = ({ slug }: { slug: string }) => {
               </SidePrimeWrapper>
               <Collaborators project={project} setProject={setProject} />
               <Openings project={project} setProject={setProject} />
+            </>
+          )}
+          {!err && (
+            <>
               {!checkProjectAccess(PROJECT_MEMBER, project.id) ? (
                 <SimilarProjects slug={project.slug} />
               ) : (
@@ -212,7 +230,21 @@ export default ProjectComponent;
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { slug } = context.query;
 
-  return {
-    props: { slug },
-  };
+  try {
+    const response = await axios.get(`${BACKEND_URL}${EXPLORE_URL}/quick/item?slug=${slug}`);
+
+    return {
+      props: {
+        initialProject: response.data.project,
+        err: response.data.message || null,
+      },
+    };
+  } catch (error: any) {
+    return {
+      props: {
+        initialProject: null,
+        err: error?.response.data.message || null,
+      },
+    };
+  }
 }

@@ -6,6 +6,7 @@
     "validate-env": "node src/helpers/validate-env.cjs",
     "dev": "npm run validate-env && next dev",
     "build": "next build",
+    "postbuild": "next-sitemap",
     "start": "next start",
     "stage": "next start -p 3100",
     "lint": "next lint"
@@ -47,6 +48,7 @@
     "lucide-react": "^0.453.0",
     "moment": "^2.29.4",
     "next": "13.2.1",
+    "next-sitemap": "^4.2.3",
     "next-themes": "^0.3.0",
     "nookies": "^2.5.2",
     "nprogress": "^0.2.0",

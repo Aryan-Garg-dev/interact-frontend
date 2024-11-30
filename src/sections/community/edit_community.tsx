@@ -194,7 +194,7 @@ const EditCommunity = ({
           <TextArea label="Community Description" val={description} setVal={setDescription} maxLength={1000} />
           <Tags label="Community Tags" tags={tags} setTags={setTags} maxTags={10} />
           <Checkbox
-            label="Is the community open?"
+            label="Is the community public?"
             val={isOpen}
             setVal={setIsOpen}
             caption={
