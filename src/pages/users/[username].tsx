@@ -3,7 +3,7 @@ import MainWrapper from '@/wrappers/main';
 import Sidebar from '@/components/common/sidebar';
 import React, { useEffect, useState } from 'react';
 import { initialProfile, initialUser as initialUserObj } from '@/types/initials';
-import { BACKEND_URL, EXPLORE_URL, USER_COVER_PIC_URL, USER_URL } from '@/config/routes';
+import { BACKEND_URL, EXPLORE_URL, USER_COVER_PIC_URL, USER_PROFILE_PIC_URL, USER_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import Image from 'next/image';
@@ -29,6 +29,7 @@ import { Check, ImageSquare, PencilSimple, X } from '@phosphor-icons/react';
 import SaveButton from '@/components/buttons/save_btn';
 import axios from 'axios';
 import { User } from '@/types';
+import SEO from '@/lib/seo';
 
 interface Props {
   initialUser: User | null;
@@ -148,7 +149,18 @@ const UserComponent = ({ initialUser, err }: Props) => {
   );
 
   return (
-    <BaseWrapper title={`${user.name}`}>
+    <BaseWrapper
+      title={`${user.name}`}
+      seoProps={
+        <SEO
+          title={user.username}
+          description={user.tagline}
+          imageUrl={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+          url={`/users/${user.username}`}
+          keywords={user?.tags.join(', ')}
+        />
+      }
+    >
       <Sidebar index={-1} />
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-2/3 max-md:w-full relative">
