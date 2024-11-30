@@ -7,6 +7,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import Mascot from '@/components/fillers/mascot';
+import Loader from '@/components/common/loader';
 
 interface Props {
   userID: string;
@@ -67,7 +68,9 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
         </>
       )} */}
       <div className="w-full">
-        {projects?.length > 0 ? (
+        {loading ? (
+          <Loader />
+        ) : projects?.length > 0 ? (
           projects.map((project, index) => {
             return <ProjectCard key={project.id} index={index} project={project} isLink />;
           })

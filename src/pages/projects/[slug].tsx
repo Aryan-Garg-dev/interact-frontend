@@ -36,9 +36,10 @@ import ProjectLoader from '@/components/loaders/project';
 import SideLoader from '@/components/loaders/side';
 import axios from 'axios';
 import SEO from '@/lib/seo';
+import { initialProject as initialProjectObj } from '@/types/initials';
 
-const ProjectComponent = ({ initialProject, err }: { initialProject: Project | null; err?: string }) => {
-  const [project, setProject] = useState<Project>(initialProject as Project);
+const ProjectComponent = ({ initialProject, err }: { initialProject: Project | null; err: string | null }) => {
+  const [project, setProject] = useState<Project>(initialProject || initialProjectObj);
   const [loading, setLoading] = useState(true);
 
   const [clickedOnReadMore, setClickedOnReadMore] = useState(false);
@@ -73,13 +74,13 @@ const ProjectComponent = ({ initialProject, err }: { initialProject: Project | n
 
   return (
     <BaseWrapper
-      title={project.title}
+      title={project?.title}
       seoProps={
         <SEO
-          title={project.title}
-          description={project.description}
+          title={project?.title}
+          description={project?.description}
           imageUrl={getProjectPicURL(project)}
-          url={`/projects/${project.slug}`}
+          url={`/projects/${project?.slug}`}
           keywords={project?.tags.join(', ')}
         />
       }
