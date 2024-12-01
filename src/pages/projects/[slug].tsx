@@ -59,6 +59,7 @@ const ProjectComponent = ({
   const dispatch = useDispatch();
 
   const fetchProject = async () => {
+    setLoading(true);
     const URL = `${PROJECT_URL}/${initialProject?.slug}`;
     const res = await getHandler(URL);
     if (res.statusCode == 200) {
@@ -206,7 +207,7 @@ const ProjectComponent = ({
               <Openings project={project} setProject={setProject} />
             </>
           )}
-          {!err && project.id && (
+          {!err && project.id && !loading && (
             <>
               {!checkProjectAccess(PROJECT_MEMBER, project.id) ? (
                 <SimilarProjects slug={project.slug} />

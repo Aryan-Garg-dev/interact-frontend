@@ -65,10 +65,10 @@ export function generateSEOProps(model: ModelSEOData, type: 'project' | 'user' |
         name: 'interact',
         content: 'Interact',
       },
-      {
-        name: 'theme-color',
-        content: '#478EE1',
-      },
+      // {
+      //   name: 'theme-color',
+      //   content: '#478EE1',
+      // },
     ],
     additionalLinkTags: [
       {

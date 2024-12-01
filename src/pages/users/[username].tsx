@@ -54,8 +54,8 @@ const UserComponent = ({ initialUser, err, seoProps }: Props) => {
   const [clickedOnCoverPic, setClickedOnCoverPic] = useState(false);
 
   const getUser = (user: User) => {
+    setLoading(true);
     const URL = user.username == loggedInUser.username ? `${USER_URL}/me` : `${EXPLORE_URL}/users/${user.username}`;
-
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
@@ -276,16 +276,16 @@ const UserComponent = ({ initialUser, err, seoProps }: Props) => {
             </PrimeWrapper>
           ) : active == 1 ? (
             <PrimeWrapper index={1} maxIndex={2}>
-              <Posts userID={user.id} />
+              {loading ? <Loader /> : <Posts userID={user.id} />}
             </PrimeWrapper>
           ) : active == 2 ? (
             <PrimeWrapper index={2} maxIndex={2}>
-              <Projects userID={user.id} />
+              {loading ? <Loader /> : <Projects userID={user.id} />}
             </PrimeWrapper>
           ) : (
             active == 3 && (
               <PrimeWrapper index={3} maxIndex={3}>
-                <Projects userID={user.id} contributing={true} />
+                {loading ? <Loader /> : <Projects userID={user.id} contributing={true} />}
               </PrimeWrapper>
             )
           )}
