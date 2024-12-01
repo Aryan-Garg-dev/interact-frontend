@@ -29,14 +29,16 @@ import { Check, ImageSquare, PencilSimple, X } from '@phosphor-icons/react';
 import SaveButton from '@/components/buttons/save_btn';
 import axios from 'axios';
 import { User } from '@/types';
-import SEO from '@/lib/seo';
+import { generateSEOProps } from '@/lib/seo';
+import { NextSeoProps } from 'next-seo';
 
 interface Props {
   initialUser: User | null;
   err: string | null;
+  seoProps: NextSeoProps;
 }
 
-const UserComponent = ({ initialUser, err }: Props) => {
+const UserComponent = ({ initialUser, err, seoProps }: Props) => {
   const [active, setActive] = useState(0);
   const [user, setUser] = useState(initialUser || initialUserObj);
   const [loading, setLoading] = useState(true);
@@ -51,8 +53,9 @@ const UserComponent = ({ initialUser, err }: Props) => {
   const [clickedOnTagline, setClickedOnTagline] = useState(false);
   const [clickedOnCoverPic, setClickedOnCoverPic] = useState(false);
 
-  const getUser = () => {
+  const getUser = (user: User) => {
     const URL = user.username == loggedInUser.username ? `${USER_URL}/me` : `${EXPLORE_URL}/users/${user.username}`;
+
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
@@ -79,7 +82,7 @@ const UserComponent = ({ initialUser, err }: Props) => {
 
   useEffect(() => {
     if (err) Toaster.error(err, 'error_toaster');
-    else if (initialUser) getUser();
+    else if (initialUser) getUser(initialUser);
   }, [initialUser]);
 
   useEffect(() => {
@@ -149,18 +152,7 @@ const UserComponent = ({ initialUser, err }: Props) => {
   );
 
   return (
-    <BaseWrapper
-      title={`${user.name}`}
-      seoProps={
-        <SEO
-          title={user.username}
-          description={user.tagline}
-          imageUrl={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-          url={`/users/${user.username}`}
-          keywords={user?.tags.join(', ')}
-        />
-      }
-    >
+    <BaseWrapper title={`${user.name}`} seoProps={seoProps}>
       <Sidebar index={-1} />
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-2/3 max-md:w-full relative">
@@ -320,10 +312,23 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const response = await axios.get(`${BACKEND_URL}${EXPLORE_URL}/quick/item?username=${username}`);
 
+    const user: User = response.data.user || initialUserObj;
+    const seoProps: NextSeoProps = generateSEOProps(
+      {
+        id: user.username,
+        title: user.name,
+        description: user.profile?.description || 'Interact User',
+        createdAt: new Date(user.createdAt) || new Date(),
+        imageUrl: `${USER_PROFILE_PIC_URL}/${user.profilePic}`,
+      },
+      'user'
+    );
+
     return {
       props: {
         initialUser: response.data.user,
         err: response.data.message || null,
+        seoProps,
       },
     };
   } catch (error: any) {
@@ -331,6 +336,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       props: {
         initialUser: null,
         err: error?.response.data.message || null,
+        seoProps: {},
       },
     };
   }

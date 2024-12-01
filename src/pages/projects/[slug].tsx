@@ -206,7 +206,7 @@ const ProjectComponent = ({
               <Openings project={project} setProject={setProject} />
             </>
           )}
-          {!err && (
+          {!err && project.id && (
             <>
               {!checkProjectAccess(PROJECT_MEMBER, project.id) ? (
                 <SimilarProjects slug={project.slug} />
@@ -232,18 +232,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const response = await axios.get(`${BACKEND_URL}${EXPLORE_URL}/quick/item?slug=${slug}`);
 
-    const project = response.data.project || initialProjectObj;
+    const project: Project = response.data.project || initialProjectObj;
     const seoProps: NextSeoProps = generateSEOProps(
       {
         id: project.id,
         title: project.title,
         description: project.description,
-        createdAt: project.createdAt,
+        createdAt: new Date(project.createdAt) || new Date(),
         user: project.user,
         tags: project.tags,
         imageUrl: getProjectPicURL(project),
       },
-      'article'
+      'project'
     );
 
     return {
@@ -254,10 +254,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   } catch (error: any) {
+    console.log(error);
     return {
       props: {
         initialProject: null,
-        err: error?.response.data.message || null,
+        err: error?.response?.data.message || null,
         seoProps: {},
       },
     };

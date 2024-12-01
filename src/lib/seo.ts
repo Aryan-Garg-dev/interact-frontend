@@ -1,3 +1,4 @@
+import { FRONTEND_URL } from '@/config/routes';
 import { NextSeoProps } from 'next-seo';
 
 type ModelSEOData = {
@@ -12,13 +13,13 @@ type ModelSEOData = {
   imageUrl?: string;
 };
 
-export function generateSEOProps(model: ModelSEOData, type: 'article' | 'profile' | 'event' = 'article'): NextSeoProps {
+export function generateSEOProps(model: ModelSEOData, type: 'project' | 'user' | 'event'): NextSeoProps {
   const { id, title, description, createdAt, user, tags, imageUrl } = model;
 
   return {
     title,
     description,
-    canonical: `/${type}s/${id}`,
+    canonical: `${FRONTEND_URL}/${type}s/${id}`,
     openGraph: {
       type,
       url: `/${type}s/${id}`,
@@ -34,13 +35,13 @@ export function generateSEOProps(model: ModelSEOData, type: 'article' | 'profile
       ],
       siteName: 'Interact',
       article:
-        type === 'article'
+        type === 'project'
           ? {
               publishedTime: createdAt.toISOString(),
               authors: [user?.name || 'Interact User'],
               tags,
             }
-          : undefined,
+          : {},
     },
     twitter: {
       handle: '@interact_now',

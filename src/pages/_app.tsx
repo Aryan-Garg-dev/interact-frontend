@@ -17,6 +17,8 @@ import { Inter, Fraunces } from 'next/font/google';
 import ThemeCheck from '@/config/theme';
 import Head from 'next/head';
 import ThemeProvider from '@/components/ui/theme-provider';
+import { NextSeo } from 'next-seo';
+import SEO from '@/config/seo';
 
 NProgressConfig();
 
@@ -56,8 +58,8 @@ export default function App({ Component, pageProps }: AppProps) {
       </Script> */}
 
       <main className={`${inter.variable} ${fraunces.variable}`}>
+        <NextSeo {...SEO} />
         <Head>
-          <title>Interact Now</title>
           <link rel="preconnect" href="https://storage.googleapis.com" crossOrigin="use-credentials" />
         </Head>
         <Provider store={store}>
