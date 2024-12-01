@@ -35,10 +35,19 @@ import moment from 'moment';
 import ProjectLoader from '@/components/loaders/project';
 import SideLoader from '@/components/loaders/side';
 import axios from 'axios';
-import SEO from '@/lib/seo';
 import { initialProject as initialProjectObj } from '@/types/initials';
+import { NextSeoProps } from 'next-seo';
+import { generateSEOProps } from '@/lib/seo';
 
-const ProjectComponent = ({ initialProject, err }: { initialProject: Project | null; err: string | null }) => {
+const ProjectComponent = ({
+  initialProject,
+  err,
+  seoProps,
+}: {
+  initialProject: Project | null;
+  err: string | null;
+  seoProps: NextSeoProps;
+}) => {
   const [project, setProject] = useState<Project>(initialProject || initialProjectObj);
   const [loading, setLoading] = useState(true);
 
@@ -73,18 +82,7 @@ const ProjectComponent = ({ initialProject, err }: { initialProject: Project | n
   }, [initialProject]);
 
   return (
-    <BaseWrapper
-      title={project?.title}
-      seoProps={
-        <SEO
-          title={project?.title}
-          description={project?.description}
-          imageUrl={getProjectPicURL(project)}
-          url={`/projects/${project?.slug}`}
-          keywords={project?.tags.join(', ')}
-        />
-      }
-    >
+    <BaseWrapper title={project?.title} seoProps={seoProps}>
       <Sidebar index={2} />
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-2/3 max-md:w-full">
@@ -234,10 +232,25 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   try {
     const response = await axios.get(`${BACKEND_URL}${EXPLORE_URL}/quick/item?slug=${slug}`);
 
+    const project = response.data.project || initialProjectObj;
+    const seoProps: NextSeoProps = generateSEOProps(
+      {
+        id: project.id,
+        title: project.title,
+        description: project.description,
+        createdAt: project.createdAt,
+        user: project.user,
+        tags: project.tags,
+        imageUrl: getProjectPicURL(project),
+      },
+      'article'
+    );
+
     return {
       props: {
         initialProject: response.data.project,
         err: response.data.message || null,
+        seoProps,
       },
     };
   } catch (error: any) {
@@ -245,6 +258,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       props: {
         initialProject: null,
         err: error?.response.data.message || null,
+        seoProps: {},
       },
     };
   }
