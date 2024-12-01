@@ -16,7 +16,7 @@ type ModelSEOData = {
 export function generateSEOProps(model: ModelSEOData, type: 'project' | 'user' | 'event'): NextSeoProps {
   const { id, title, description, createdAt, user, tags, imageUrl } = model;
 
-  return {
+  const rawSEOProps: NextSeoProps = {
     title,
     description,
     canonical: `${FRONTEND_URL}/${type}s/${id}`,
@@ -86,4 +86,17 @@ export function generateSEOProps(model: ModelSEOData, type: 'project' | 'user' |
       },
     ],
   };
+
+  const cleanObject = (obj: any): any =>
+    Object.entries(obj)
+      .filter(([_, value]) => value !== undefined && value !== null)
+      .reduce(
+        (acc, [key, value]) => ({
+          ...acc,
+          [key]: value instanceof Object && !Array.isArray(value) ? cleanObject(value) : value,
+        }),
+        {}
+      );
+
+  return cleanObject(rawSEOProps);
 }
