@@ -18,7 +18,7 @@ const BaseWrapper: React.FC<WrapperProps> = ({ children, title = '', excludeSear
 
   return (
     <>
-      <NextSeo {...(Object.keys(seoProps || {}).length > 0 ? seoProps : SEO)} />
+      <NextSeo {...(Object.keys(seoProps || {}).length > 0 ? seoProps : SEO(title + ' | Interact'))} />
       <Navbar includeExplore={isMD} />
       {!excludeSearchBar && !isMD && <SearchBar />}
       <div className="w-full flex">{children}</div>

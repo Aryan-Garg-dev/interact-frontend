@@ -58,7 +58,7 @@ export default function App({ Component, pageProps }: AppProps) {
       </Script> */}
 
       <main className={`${inter.variable} ${fraunces.variable}`}>
-        <NextSeo {...SEO} />
+        <NextSeo {...SEO()} />
         <Head>
           <link rel="preconnect" href="https://storage.googleapis.com" crossOrigin="use-credentials" />
         </Head>

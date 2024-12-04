@@ -254,7 +254,7 @@ const AddCollaborators = ({ project, setProject, org = false }: Props) => {
         </div>
         <div className={`w-full flex ${status == 0 ? 'justify-end' : 'justify-between'}`}>
           {status == 0 ? (
-            <PrimaryButton onClick={() => setStatus(1)} label="Next" />
+            selectedUsers.length > 0 && <PrimaryButton onClick={() => setStatus(1)} label="Next" />
           ) : (
             <>
               <PrimaryButton onClick={() => setStatus(0)} label="Prev" />

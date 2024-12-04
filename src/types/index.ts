@@ -302,6 +302,8 @@ export interface Application {
   score: number;
   createdAt: Date;
   noComments: number;
+  meetingID?: string;
+  meeting?: Meeting;
 }
 
 export interface Notification {
@@ -682,6 +684,7 @@ export interface Meeting {
   id: string;
   dyteID: string;
   eventID: string;
+  applicationID?: string;
   title: string;
   description: string;
   tags: string[];
