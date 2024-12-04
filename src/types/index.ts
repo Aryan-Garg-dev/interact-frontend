@@ -706,6 +706,7 @@ export interface Meeting {
   createdAt: Date;
   nextSessionTime: Date;
   sessions: Session[];
+  project?: Project;
 }
 
 export interface Session {

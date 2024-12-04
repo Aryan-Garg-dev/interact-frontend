@@ -6,7 +6,7 @@ import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import { ChartLineUp, Lock } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
-import { Meeting, Task, User } from '@/types';
+import { Meeting, Project, Task, User } from '@/types';
 import { userSelector } from '@/slices/userSlice';
 import UserCard from '@/components/explore/user_card';
 import { getNextSessionTime } from '@/utils/funcs/session_details';
@@ -26,6 +26,7 @@ const FeedSide = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [meetingProject, setMeetingProject] = useState<(Project | undefined)[]>([]);
   const [loading, setLoading] = useState(true);
 
   const user = useSelector(userSelector);
@@ -95,6 +96,7 @@ const FeedSide = () => {
       .then(res => {
         if (res.statusCode === 200) {
           setMeetings(res.data.meetings || []);
+          setMeetingProject(res.data.projects || []);
           setLoading(false);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -129,15 +131,17 @@ const FeedSide = () => {
       {meetings && meetings.length > 0 && (
         <SidePrimeWrapper title="Upcoming Meetings">
           <div className="w-full flex flex-col gap-1">
-            {meetings.map(meeting => (
+            {meetings.map((meeting, index) => (
               <Link
-                href={`/organisations?oid=${meeting.organizationID}&redirect_url=/meetings/${meeting.id}`}
+                href={`/meetings/redirect?id=${meeting.id}`}
                 key={meeting.id}
                 className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg px-2 py-1 transition-ease-300"
               >
                 <div className="w-[calc(100%-112px)]">
                   <div className="font-medium line-clamp-1">{meeting.title}</div>
-                  <div className="text-xs line-clamp-1">@{meeting.organization.title}</div>
+                  <div className="text-xs line-clamp-1">
+                    @{meeting.applicationID ? meetingProject[index]?.title : meeting.organization.title}
+                  </div>
                 </div>
                 <div className="w-28 text-xs text-end">{getNextSessionTime(meeting, false, 'hh:mm A DD MMM')}</div>
               </Link>

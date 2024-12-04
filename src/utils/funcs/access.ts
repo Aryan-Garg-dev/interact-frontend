@@ -61,11 +61,13 @@ export const checkParticularOrgAccess = (accessRole: string, checkOrg: Organizat
   }
 };
 
-export const checkProjectAccess = (role: string, projectID: string, project?: Project) => {
+export const checkProjectAccess = (role: string, projectID?: string, project?: Project) => {
   const ownerProjects = user.ownerProjects;
   const managerProjects = user.managerProjects;
   const editorProjects = user.editorProjects;
   const memberProjects = user.memberProjects;
+
+  if (!projectID) return false;
 
   const isOwner = ownerProjects.includes(projectID) || project?.userID == user.id;
   const isManager = managerProjects.includes(projectID);
