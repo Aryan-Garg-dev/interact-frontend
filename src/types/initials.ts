@@ -113,6 +113,7 @@ export const initialProject: Project = {
   user: initialUser,
   likedBy: [],
   comments: [],
+  noOpenings: 0,
   noLikes: 0,
   noShares: 0,
   noComments: 0,

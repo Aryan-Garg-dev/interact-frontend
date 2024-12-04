@@ -206,6 +206,7 @@ export interface Project {
   user: User;
   likedBy: User[];
   comments: Comment[];
+  noOpenings: number;
   noLikes: number;
   noShares: number;
   noComments: number;

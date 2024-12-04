@@ -38,6 +38,7 @@ import axios from 'axios';
 import { initialProject as initialProjectObj } from '@/types/initials';
 import { NextSeoProps } from 'next-seo';
 import { generateSEOProps } from '@/lib/seo';
+import UserProjects from '@/sides/project/user_projects';
 
 const ProjectComponent = ({
   initialProject,
@@ -210,7 +211,10 @@ const ProjectComponent = ({
           {!err && project.id && !loading && (
             <>
               {!checkProjectAccess(PROJECT_MEMBER, project.id) ? (
-                <SimilarProjects slug={project.slug} />
+                <>
+                  <UserProjects user={project.user} />
+                  <SimilarProjects slug={project.slug} />
+                </>
               ) : (
                 <>
                   <Activity project={project} />

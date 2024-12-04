@@ -55,15 +55,18 @@ const ProjectCard = ({ project, setClickedProject, isLink = false, smaller = fal
           )}
         </div>
         {!smaller && (
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-1 text-xs">
-              <HeartStraight size={20} />
-              <div>{project.noLikes}</div>
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-1 text-xs">
+                <HeartStraight size={20} />
+                <div>{project.noLikes}</div>
+              </div>
+              <div className="flex items-center gap-1 text-xs">
+                <Eye size={20} />
+                <div>{project.noImpressions}</div>
+              </div>
             </div>
-            <div className="flex items-center gap-1 text-xs">
-              <Eye size={20} />
-              <div>{project.noImpressions}</div>
-            </div>
+            {project.noOpenings > 0 && <div className="text-xs">{project.noOpenings} Active Openings</div>}
           </div>
         )}
       </div>
