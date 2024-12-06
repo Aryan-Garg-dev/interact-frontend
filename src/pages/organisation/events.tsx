@@ -179,13 +179,12 @@ const Events = () => {
             {clickedOnNewHackathon && <NewHackathon setEvents={setEvents} setShow={setClickedOnNewHackathon} />}
             {clickedOnNewEvent && <NewEvent setEvents={setEvents} setShow={setClickedOnNewEvent} />}
             {clickedOnViewInvitations && <ViewInvitations setShow={setClickedOnViewInvitations} />}
-            {clickedOnViewHistory && (
-            clickedEditEvent.hackathonID ? (
-            <HackathonHistories hackathonID={clickedEditEvent.hackathonID} setShow={setClickedOnViewHistory} />
-            ) : (
-            <EventHistory eventID={clickedEditEvent.id} setShow={setClickedOnViewHistory} />
-           )
-          )}
+            {clickedOnViewHistory &&
+              (clickedEditEvent.hackathonID ? (
+                <HackathonHistories hackathonID={clickedEditEvent.hackathonID} setShow={setClickedOnViewHistory} />
+              ) : (
+                <EventHistory eventID={clickedEditEvent.id} setShow={setClickedOnViewHistory} />
+              ))}
             {clickedOnEditEvent && (
               <EditEvent event={clickedEditEvent} setEvents={setEvents} setShow={setClickedOnEditEvent} />
             )}
@@ -242,7 +241,6 @@ const Events = () => {
                         setClickedDeleteEvent={setClickedDeleteEvent}
                         setClickedOnEditCoHosts={setClickedOnEditCoHosts}
                         setClickedOnEditJudges={setClickedOnEditJudges}
-                        size={open ? '[22rem]' : 96}
                       />
                     ))}
                   </InfiniteScroll>

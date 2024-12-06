@@ -27,13 +27,9 @@ const Events = ({ bookmark, setClick, fetchBookmarks }: Props) => {
         <div className="font-medium text-xl cursor-default">{bookmark.title}</div>
       </div>
       {bookmark.eventItems?.length > 0 ? (
-        <div
-          className={`w-full ${
-            open ? 'px-2 gap-4' : 'px-8 gap-8'
-          } pb-12 flex flex-wrap justify-center transition-ease-out-500`}
-        >
+        <div className={`w-full ${open ? 'px-2 gap-4' : 'px-8 gap-8'} pb-12 grid grid-cols-3  transition-ease-out-500`}>
           {bookmark.eventItems.map(evenItem => {
-            return <EventCard key={evenItem.id} event={evenItem.event} size={84} />;
+            return <EventCard key={evenItem.id} event={evenItem.event} />;
           })}
         </div>
       ) : (

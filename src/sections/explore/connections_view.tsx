@@ -106,7 +106,7 @@ const Connections = ({ type, user, setShow, orgID = '', org = false, baseURL, ti
             hasMore && (
               <div
                 onClick={fetchUsers}
-                className="w-fit mx-auto pt-4 text-xs text-gray-700 font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
+                className="w-fit mx-auto pt-4 text-xs text-gray-700 dark:text-white font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
               >
                 Load More
               </div>

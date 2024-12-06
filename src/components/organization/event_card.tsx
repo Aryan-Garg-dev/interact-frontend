@@ -10,8 +10,8 @@ import { ORG_SENIOR } from '@/config/constants';
 
 interface Props {
   event: Event;
-  size?: number | string;
   org?: boolean;
+  smaller?: boolean;
   setClickedOnViewHistory?: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedOnEditEvent?: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedOnEditCollaborators?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,8 +24,8 @@ interface Props {
 
 const EventCard = ({
   event,
-  size = 96,
   org = false,
+  smaller = false,
   setClickedOnViewHistory,
   setClickedOnEditEvent,
   setClickedOnEditCollaborators,
@@ -35,23 +35,22 @@ const EventCard = ({
   setClickedDeleteEvent,
   setClickedOnEditJudges,
 }: Props) => {
-  const variants = ['w-96', 'w-84', 'w-80', 'w-72', 'w-64', 'w-[22rem]'];
   return (
     <Link
       href={`/events/${event.id}`}
       target="_blank"
-      className={`w-${size} rounded-xl hover:shadow-xl transition-ease-out-500 animate-fade_third`}
+      className="w-full rounded-xl hover:shadow-xl transition-ease-out-500 animate-fade_third"
     >
       <div className="w-full relative group">
         <div className="flex gap-1 top-2 right-2 absolute bg-white dark:bg-dark_primary_comp_hover text-gray-500 dark:text-white text-xxs px-2 py-1 rounded-lg">
           <Eye size={12} /> <div>{event.noImpressions}</div>
         </div>
         <Image
-          width={200}
-          height={200}
+          width={300}
+          height={100}
           src={`${EVENT_PIC_URL}/${event.coverPic}`}
           alt=""
-          className={`w-full ${size == 96 ? 'h-56' : size == 64 ? 'h-[160px]' : 'h-[180px]'} object-cover rounded-t-xl`}
+          className="w-full object-cover rounded-t-xl"
           placeholder="blur"
           blurDataURL={event.blurHash || 'no-hash'}
         />
@@ -65,7 +64,7 @@ const EventCard = ({
                   if (setClickedDeleteEvent) setClickedDeleteEvent(event);
                   if (setClickedOnDeleteEvent) setClickedOnDeleteEvent(true);
                 }}
-                className=" bg-white dark:bg-dark_primary_comp_hover text-gray-500 dark:text-white text-xxs px-2 py-1 rounded-lg "
+                className=" bg-white dark:bg-dark_primary_comp_hover text-gray-500 dark:text-white text-xxs px-2 py-1 rounded-lg"
               >
                 <Trash size={18} />
               </div>
@@ -136,19 +135,19 @@ const EventCard = ({
       <div className="w-full h-20 bg-white dark:bg-dark_primary_comp_hover rounded-b-xl flex p-4">
         <div className="w-1/6 flex items-start justify-start mt-1">
           <div className="w-fit flex flex-col items-end">
-            <div className={`w-fit ${size == 96 ? 'text-xs' : 'text-xxs'} uppercase transition-ease-out-500`}>
+            <div className={`w-fit ${!smaller ? 'text-xs' : 'text-xxs'} uppercase transition-ease-out-500`}>
               {moment(event.startTime).format('MMM')}
             </div>
-            <div className={`w-fit ${size == 96 ? 'text-3xl' : 'text-2xl'} font-semibold transition-ease-out-500`}>
+            <div className={`w-fit ${!smaller ? 'text-3xl' : 'text-2xl'} font-semibold transition-ease-out-500`}>
               {moment(event.startTime).format('DD')}
             </div>
           </div>
         </div>
-        <div className={`w-5/6 ${size == 96 ? 'h-20' : 'h-16'} flex flex-col transition-ease-out-500`}>
+        <div className={`w-5/6 ${!smaller ? 'h-20' : 'h-16'} flex flex-col transition-ease-out-500`}>
           <div className="font-medium text-lg line-clamp-1">{event.title}</div>
           <div
             className={`${
-              size == 96 ? 'text-sm ' : 'text-xs'
+              !smaller ? 'text-sm ' : 'text-xs'
             } text-gray-500 dark:text-gray-300 line-clamp-2 transition-ease-out-500`}
           >
             {event.tagline}

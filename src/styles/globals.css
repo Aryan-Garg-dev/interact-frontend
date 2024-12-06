@@ -392,3 +392,7 @@ html {
     linear-gradient(-150deg, var(--_l)) #01579b; /* darker blue for third color */
   background-size: calc(0.866 * var(--s)) var(--s);
 }
+
+.infinite-scroll-component__outerdiv div {
+  overflow: hidden !important;
+}

@@ -195,7 +195,7 @@ const LowerComment = ({ comment, clickedOnReply, setClickedOnReply }: Props) => 
                 {replies.length % limit == 0 && hasMore ? (
                   <div
                     onClick={getReplies}
-                    className="w-fit mx-auto pt-4 text-xs text-gray-700 font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
+                    className="w-fit mx-auto pt-4 text-xs text-gray-700 dark:text-white font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
                   >
                     Load More
                   </div>
