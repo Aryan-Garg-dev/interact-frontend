@@ -393,6 +393,6 @@ html {
   background-size: calc(0.866 * var(--s)) var(--s);
 }
 
-.infinite-scroll-component__outerdiv div {
+.infinite-scroll-component__outerdiv > div {
   overflow: hidden !important;
 }

@@ -63,7 +63,7 @@ const Events = () => {
         <Loader />
       ) : events.length > 0 ? (
         <InfiniteScroll
-          className="w-full grid grid-cols-3 gap-4"
+          className="w-full grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-md:grid-cols-1"
           dataLength={events.length}
           next={() => fetchEvents(new URLSearchParams(window.location.search).get('search'))}
           hasMore={hasMore}

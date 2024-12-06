@@ -41,7 +41,7 @@ const Navbar = ({ includeExplore = false }: { includeExplore?: boolean }) => {
             {includeExplore && <DialogSearchBar />}
             <div
               onClick={() => setClickedOnFeedback(true)}
-              className="w-10 h-10 rounded-full flex-center hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover cursor-pointer transition-ease-300"
+              className="w-10 h-10 max-lg:hidden rounded-full flex-center hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover cursor-pointer transition-ease-300"
             >
               <Handshake className="max-md:w-6 max-md:h-6" size={24} weight="regular" />
             </div>
