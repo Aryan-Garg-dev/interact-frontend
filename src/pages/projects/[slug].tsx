@@ -41,6 +41,7 @@ import { generateSEOProps } from '@/lib/seo';
 import UserProjects from '@/sides/project/user_projects';
 import Resources from '@/sides/project/resources';
 import ProjectChats from '@/sides/project/chats';
+import nookies from 'nookies';
 
 const ProjectComponent = ({
   initialProject,
@@ -239,14 +240,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { slug } = context.query;
 
   try {
-    const response = await axios.get(
-      `${BACKEND_URL}${EXPLORE_URL}/quick/item?slug=${slug}`
-      //    {
-      //   headers: {
-      //     Authorization: `Bearer ${nookies || ''}`,
-      //   },
-      // }
-    );
+    const response = await axios.get(`${BACKEND_URL}${EXPLORE_URL}/quick/item?slug=${slug}`, {
+      headers: {
+        Authorization: `Bearer ${nookies.get(context).token || ''}`,
+      },
+    });
 
     const project: Project = response.data.project || initialProjectObj;
     const seoProps: NextSeoProps = generateSEOProps(
