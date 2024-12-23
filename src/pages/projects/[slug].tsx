@@ -1,6 +1,6 @@
 import Sidebar from '@/components/common/sidebar';
 import { SERVER_ERROR } from '@/config/errors';
-import { BACKEND_URL, EXPLORE_URL, MEMBERSHIP_URL, MESSAGING_URL, PROJECT_PIC_URL, PROJECT_URL } from '@/config/routes';
+import { BACKEND_URL, EXPLORE_URL, PROJECT_PIC_URL, PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
@@ -40,7 +40,6 @@ import { NextSeoProps } from 'next-seo';
 import { generateSEOProps } from '@/lib/seo';
 import UserProjects from '@/sides/project/user_projects';
 import Resources from '@/sides/project/resources';
-import NewGroup from '@/sections/messaging/new_group';
 import ProjectChats from '@/sides/project/chats';
 
 const ProjectComponent = ({
@@ -240,7 +239,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { slug } = context.query;
 
   try {
-    const response = await axios.get(`${BACKEND_URL}${EXPLORE_URL}/quick/item?slug=${slug}`);
+    const response = await axios.get(
+      `${BACKEND_URL}${EXPLORE_URL}/quick/item?slug=${slug}`
+      //    {
+      //   headers: {
+      //     Authorization: `Bearer ${nookies || ''}`,
+      //   },
+      // }
+    );
 
     const project: Project = response.data.project || initialProjectObj;
     const seoProps: NextSeoProps = generateSEOProps(
