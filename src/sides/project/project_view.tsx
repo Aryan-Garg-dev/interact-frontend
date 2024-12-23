@@ -51,7 +51,7 @@ const ProjectView = ({ project, setProject }: Props) => {
               {project.user.isOrganization ? (
                 <Buildings />
               ) : (
-                project.noMembers > 1 && <div className="flex-center">+ {project.noMembers} others</div>
+                project.noMembers > 1 && <div className="flex-center">+ {project.noMembers - 1} others</div>
               )}
             </div>
           </div>

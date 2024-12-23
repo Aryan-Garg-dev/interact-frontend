@@ -27,8 +27,6 @@ const Messaging = () => {
   const open = useSelector(navbarOpenSelector);
   const currentChatID = useSelector(currentChatIDSelector);
 
-  const [clickedOnNew, setClickedOnNew] = useState(false);
-  const [clickedOnNewGroup, setClickedOnNewGroup] = useState(false);
   const [unreadChatCounts, setUnreadChatCounts] = useState<number[]>([0, 0, 0, 0]);
 
   const dispatch = useDispatch();
@@ -73,46 +71,15 @@ const Messaging = () => {
       {user.isOrganization ? <OrgSidebar index={-1} /> : <Sidebar index={-1} />}
       <MainWrapper>
         <div
-          onClick={() => setClickedOnNew(false)}
           className={`w-fit h-base_md max-lg:h-fit mx-auto flex max-lg:flex-col ${
             open ? 'gap-2' : 'gap-16'
           } transition-ease-out-500 font-primary`}
         >
-          {clickedOnNewGroup && (
-            <NewGroup
-              userFetchURL={`${EXPLORE_URL}/users?order=trending`}
-              submitURL={`${MESSAGING_URL}/group`}
-              setShow={setClickedOnNewGroup}
-            />
-          )}
           {/* 100-(navbar+1) */}
           <div className="w-[37.5vw] max-lg:w-screen h-full flex flex-col gap-4 ">
             <div className="w-full flex items-center justify-between max-lg:px-4 relative">
               <div className="text-3xl font-extrabold text-gradient">Messaging</div>
-              <PencilSimpleLine
-                onClick={el => {
-                  el.stopPropagation();
-                  setClickedOnNew(prev => !prev);
-                }}
-                className="text-gray-600 dark:text-white cursor-pointer"
-                size={32}
-              />
-              {clickedOnNew && (
-                <div className="w-1/3 flex flex-col gap-2 backdrop-blur-sm border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:bg-dark_primary_comp dark:text-white font-primary p-2 absolute translate-y-full -bottom-2 right-0 rounded-md z-50">
-                  {/* <div className="p-2 rounded-md hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active transition-ease-300 cursor-pointer">
-                    New Chat
-                  </div> */}
-                  <div
-                    onClick={() => {
-                      setClickedOnNewGroup(true);
-                      setClickedOnNew(false);
-                    }}
-                    className="p-2 rounded-md hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active transition-ease-300 cursor-pointer"
-                  >
-                    New Group
-                  </div>
-                </div>
-              )}
+              <NewGroup userFetchURL={`${EXPLORE_URL}/users?order=trending`} submitURL={`${MESSAGING_URL}/group`} />
             </div>
             <SearchBar />
             <TabMenu

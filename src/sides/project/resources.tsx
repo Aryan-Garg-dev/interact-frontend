@@ -55,7 +55,7 @@ const Resources = ({ projectID }: Props) => {
         </div>
         <div>
           {buckets?.length === 0 && !loading ? (
-            <>Create Buckets to save files</>
+            <></>
           ) : (
             <>
               <div className="w-full flex-wrap flex max-md:flex-col max-md:items-center flex-row gap-4">

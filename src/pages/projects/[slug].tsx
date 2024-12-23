@@ -1,6 +1,6 @@
 import Sidebar from '@/components/common/sidebar';
 import { SERVER_ERROR } from '@/config/errors';
-import { BACKEND_URL, EXPLORE_URL, PROJECT_PIC_URL, PROJECT_URL } from '@/config/routes';
+import { BACKEND_URL, EXPLORE_URL, MEMBERSHIP_URL, MESSAGING_URL, PROJECT_PIC_URL, PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
@@ -40,6 +40,8 @@ import { NextSeoProps } from 'next-seo';
 import { generateSEOProps } from '@/lib/seo';
 import UserProjects from '@/sides/project/user_projects';
 import Resources from '@/sides/project/resources';
+import NewGroup from '@/sections/messaging/new_group';
+import ProjectChats from '@/sides/project/chats';
 
 const ProjectComponent = ({
   initialProject,
@@ -88,7 +90,7 @@ const ProjectComponent = ({
     <BaseWrapper title={project?.title} seoProps={seoProps}>
       <Sidebar index={2} />
       <MainWrapper restrictWidth sidebarLayout>
-        <div className="w-2/3 max-md:w-full">
+        <div className="w-2/3 max-md:w-full space-y-4">
           <PrimeWrapper>
             {err ? (
               <ProjectLoader />
@@ -187,6 +189,7 @@ const ProjectComponent = ({
               </div>
             )}
           </PrimeWrapper>
+          {checkProjectAccess(PROJECT_MEMBER, project.id) && <ProjectChats projectID={project.id} />}
         </div>
         <SideBarWrapper>
           {loading ? (
