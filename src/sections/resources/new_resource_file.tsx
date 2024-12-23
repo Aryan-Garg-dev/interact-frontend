@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { ORG_URL } from '@/config/routes';
-import { currentOrgIDSelector } from '@/slices/orgSlice';
-import { useSelector } from 'react-redux';
+import { ORG_URL, PROJECT_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
 import { ResourceBucket, ResourceFile } from '@/types';
 import Toaster from '@/utils/toaster';
@@ -10,6 +8,7 @@ import { X } from '@phosphor-icons/react';
 import isURL from 'validator/lib/isURL';
 import Input from '@/components/form/input';
 import TextArea from '@/components/form/textarea';
+
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   resourceBucketID: string;
@@ -17,7 +16,10 @@ interface Props {
   setResourceFiles: React.Dispatch<React.SetStateAction<ResourceFile[]>>;
   setResourceBuckets?: React.Dispatch<React.SetStateAction<ResourceBucket[]>>;
   setClickedResourceBucket?: React.Dispatch<React.SetStateAction<ResourceBucket>>;
+  resourceType?: 'org' | 'community' | 'project';
+  resourceParentID: string;
 }
+
 const NewResourceFile = ({
   setShow,
   resourceBucketID,
@@ -25,6 +27,8 @@ const NewResourceFile = ({
   setResourceFiles,
   setResourceBuckets,
   setClickedResourceBucket,
+  resourceType = 'org',
+  resourceParentID,
 }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -32,8 +36,6 @@ const NewResourceFile = ({
   const [fileLink, setFileLink] = useState('');
 
   const [mutex, setMutex] = useState(false);
-
-  const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleAddFile = async () => {
     if (title == '') {
@@ -55,7 +57,8 @@ const NewResourceFile = ({
 
     const toaster = Toaster.startLoad('Uploading File to the Bucket..');
 
-    const URL = `${ORG_URL}/${currentOrgID}/resource/${resourceBucketID}/file`;
+    const URL =
+      resourceType == 'org' ? ORG_URL : PROJECT_URL + `/${resourceParentID}/resource/${resourceBucketID}/file`;
 
     const formData = new FormData();
 
@@ -66,7 +69,7 @@ const NewResourceFile = ({
 
     const res = await postHandler(URL, formData, 'multipart/form-data');
     if (res.statusCode === 201) {
-      setResourceFiles([res.data.resourceFile, ...resourceFiles]);
+      setResourceFiles([res.data.file, ...resourceFiles]);
       if (setResourceBuckets)
         setResourceBuckets(prev =>
           prev.map(r => {
@@ -91,7 +94,7 @@ const NewResourceFile = ({
 
   return (
     <>
-      <div className="w-[60%] max-md:w-5/6 absolute bg-white border-2 border-primary_text shadow-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 p-6 rounded-xl flex flex-col gap-4 animate-fade_third">
+      <div className="w-[60%] max-md:w-5/6 absolute bg-white dark:bg-dark_primary_comp border-2 border-primary_text shadow-xl top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 p-6 rounded-xl flex flex-col gap-4 animate-fade_third">
         <h1 className="text-2xl font-bold">Upload File</h1>
         <div className="w-full h-fit flex flex-col gap-4">
           <Input label="Resource File Title" val={title} setVal={setTitle} maxLength={50} required={true} />
@@ -167,7 +170,7 @@ const NewResourceFile = ({
         </div>
       </div>
       <div
-        className="overlay w-full h-full fixed top-0 left-0 bg-backdrop rounded-xl animate-fade_third z-10"
+        className="overlay w-full h-full fixed top-0 left-0 bg-backdrop backdrop-blur-sm rounded-xl animate-fade_third z-10"
         onClick={() => setShow(false)}
       ></div>
     </>

@@ -39,6 +39,7 @@ import { initialProject as initialProjectObj } from '@/types/initials';
 import { NextSeoProps } from 'next-seo';
 import { generateSEOProps } from '@/lib/seo';
 import UserProjects from '@/sides/project/user_projects';
+import Resources from '@/sides/project/resources';
 
 const ProjectComponent = ({
   initialProject,
@@ -219,6 +220,7 @@ const ProjectComponent = ({
                 <>
                   <Activity project={project} />
                   <Tasks project={project} />
+                  <Resources projectID={project.id} />
                 </>
               )}
             </>
@@ -259,7 +261,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   } catch (error: any) {
-    console.log(error);
     return {
       props: {
         initialProject: null,

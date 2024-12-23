@@ -1,29 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ResourceBucket, ResourceFile } from '@/types';
-import {
-  ArrowUpRight,
-  Check,
-  PencilSimple,
-  Plus,
-  TrashSimple,
-  UserCircle,
-  UserCircleGear,
-  UserCirclePlus,
-  X,
-} from '@phosphor-icons/react';
-import { ORG_MANAGER, ORG_MEMBER, ORG_SENIOR } from '@/config/constants';
-import checkOrgAccess from '@/utils/funcs/access';
-import { ORG_URL, RESOURCE_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
-import { currentOrgIDSelector } from '@/slices/orgSlice';
+import { ArrowUpRight, Check, PencilSimple, TrashSimple, X } from '@phosphor-icons/react';
+import { ORG_URL, PROJECT_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import { useSelector } from 'react-redux';
 import Toaster from '@/utils/toaster';
 import { SERVER_ERROR } from '@/config/errors';
-import NewResourceFile from '@/sections/organization/resources/new_resource_file';
-import Loader from '@/components/common/loader';
 import moment from 'moment';
 import patchHandler from '@/handlers/patch_handler';
 import deleteHandler from '@/handlers/delete_handler';
-import { initialResourceBucket, initialResourceFile } from '@/types/initials';
+import { initialResourceFile } from '@/types/initials';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -37,6 +22,8 @@ interface Props {
   setClickedOnResourceFile?: React.Dispatch<React.SetStateAction<boolean>>;
   setResourceBuckets?: React.Dispatch<React.SetStateAction<ResourceBucket[]>>;
   setClickedResourceBucket?: React.Dispatch<React.SetStateAction<ResourceBucket>>;
+  resourceType: 'org' | 'community' | 'project';
+  resourceParentID: string;
 }
 
 const ResourceFileView = ({
@@ -47,6 +34,8 @@ const ResourceFileView = ({
   setClickedOnResourceFile,
   setResourceBuckets,
   setClickedResourceBucket,
+  resourceType,
+  resourceParentID,
 }: Props) => {
   const [title, setTitle] = useState(resourceFile.title);
   const [description, setDescription] = useState(resourceFile.description);
@@ -54,7 +43,6 @@ const ResourceFileView = ({
   const [clickedOnEdit, setClickedOnEdit] = useState(false);
   const [clickedOnDelete, setClickedOnDelete] = useState(false);
 
-  const currentOrgID = useSelector(currentOrgIDSelector);
   const userID = useSelector(userIDSelector);
 
   const handleEdit = async () => {
@@ -65,7 +53,10 @@ const ResourceFileView = ({
 
     const toaster = Toaster.startLoad('Editing File Details');
 
-    const URL = `${ORG_URL}/${currentOrgID}/resource/${resourceFile.resourceBucketID}/file/${resourceFile.id}`;
+    const URL =
+      resourceType == 'org'
+        ? ORG_URL
+        : PROJECT_URL + `/${resourceParentID}/resource/${resourceFile.resourceBucketID}/file/${resourceFile.id}`;
 
     const formData = new FormData();
 
@@ -74,7 +65,7 @@ const ResourceFileView = ({
 
     const res = await patchHandler(URL, formData);
     if (res.statusCode === 200) {
-      const file: ResourceFile = res.data.resourceFile;
+      const file: ResourceFile = res.data.file;
       file.user = resourceFile.user;
       if (setResourceFiles)
         setResourceFiles(prev =>
@@ -97,7 +88,10 @@ const ResourceFileView = ({
   const handleDelete = async () => {
     const toaster = Toaster.startLoad('Deleting File');
 
-    const URL = `${ORG_URL}/${currentOrgID}/resource/${resourceFile.resourceBucketID}/file/${resourceFile.id}`;
+    const URL =
+      resourceType == 'org'
+        ? ORG_URL
+        : PROJECT_URL + `/${resourceParentID}/resource/${resourceFile.resourceBucketID}/file/${resourceFile.id}`;
 
     const res = await deleteHandler(URL);
     if (res.statusCode === 204) {
@@ -130,7 +124,7 @@ const ResourceFileView = ({
         <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />
       ) : (
         <>
-          <div className="w-[40%] aspect-[500/333] font-primary bg-white rounded-xl fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[100] shadow-lg p-4 animate-fade_third">
+          <div className="w-[50%] aspect-[500/333] font-primary bg-white dark:bg-dark_primary_comp_hover rounded-xl fixed top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] z-[100] shadow-lg p-4 animate-fade_third">
             <Link
               target="_blank"
               href={resourceFile.isFileUploaded ? `/organisation/resources/${resourceFile.id}` : resourceFile.path}
@@ -138,25 +132,21 @@ const ResourceFileView = ({
             >
               <ArrowUpRight size={30} />
             </Link>
-            {resourceFile.userID == userID && !clickedOnEdit ? (
+            {resourceFile.userID == userID && !clickedOnEdit && (
               <PencilSimple
                 size={36}
-                className="flex-center rounded-full hover:bg-slate-100 p-2 absolute top-3 left-3 transition-ease-300 cursor-pointer"
+                className="flex-center rounded-full dark:hover:bg-dark_primary_comp_hover p-2 absolute top-3 left-3 transition-ease-300 cursor-pointer"
                 weight="regular"
                 onClick={() => setClickedOnEdit(true)}
               />
-            ) : (
-              <></>
             )}
-            {resourceFile.userID == userID && !clickedOnEdit ? (
+            {resourceFile.userID == userID && !clickedOnEdit && (
               <TrashSimple
                 size={36}
-                className="flex-center rounded-full hover:bg-slate-100 p-2 absolute top-3 left-12 transition-ease-300 cursor-pointer"
+                className="flex-center rounded-full dark:hover:bg-dark_primary_comp_hover p-2 absolute top-3 left-12 transition-ease-300 cursor-pointer"
                 weight="regular"
                 onClick={() => setClickedOnDelete(true)}
               />
-            ) : (
-              <></>
             )}
 
             {clickedOnEdit ? (
@@ -194,40 +184,41 @@ const ResourceFileView = ({
               <div className="w-full flex justify-end items-center gap-1">
                 <X
                   size={42}
-                  className="flex-center rounded-full hover:bg-slate-100 p-2 transition-ease-300 cursor-pointer"
+                  className="flex-center rounded-full dark:hover:bg-dark_primary_comp_hover p-2 transition-ease-300 cursor-pointer"
                   weight="regular"
                   onClick={() => setClickedOnEdit(false)}
                 />
 
                 <Check
                   size={42}
-                  className="flex-center rounded-full hover:bg-slate-100 p-2 transition-ease-300 cursor-pointer"
+                  className="flex-center rounded-full dark:hover:bg-dark_primary_comp_hover p-2 transition-ease-300 cursor-pointer"
                   weight="regular"
                   onClick={handleEdit}
                 />
               </div>
             ) : (
-              <div className="flex-center gap-1 text-gray-500 text-sm">
-                Uploaded by
-                <Link
-                  href={`/${
-                    resourceFile.user.isOrganization ? 'organisation/profile' : `users/${resourceFile.user.username}`
-                  }`}
-                  target="_blank"
-                  className="flex-center gap-1"
-                >
-                  <Image
-                    width={100}
-                    height={100}
-                    alt="User Pic"
-                    src={`${USER_PROFILE_PIC_URL}/${resourceFile.user.profilePic}`}
-                    className="w-4 h-4 rounded-full"
-                  />
-                  <div className="font-semibold hover-underline-animation after:bg-gray-500">
-                    {' '}
-                    {resourceFile.user.name}
-                  </div>
-                </Link>
+              <div className="w-full inline-flex items-center gap-2 text-gray-500 text-sm">
+                <span>Uploaded by</span>
+                <span>
+                  <Link
+                    href={`/${
+                      resourceFile.user.isOrganization ? 'organisation/profile' : `users/${resourceFile.user.username}`
+                    }`}
+                    target="_blank"
+                    className="inline-flex items-center gap-1"
+                  >
+                    <Image
+                      width={100}
+                      height={100}
+                      alt="User Pic"
+                      src={`${USER_PROFILE_PIC_URL}/${resourceFile.user.profilePic}`}
+                      className="w-4 h-4 rounded-full"
+                    />
+                    <div className="font-semibold hover-underline-animation after:bg-gray-500">
+                      {resourceFile.user.name}
+                    </div>
+                  </Link>
+                </span>
                 <span>
                   on <span className="font-semibold">{moment(resourceFile.createdAt).format('DD MMMM, YYYY')}</span>
                 </span>

@@ -31,7 +31,7 @@ const SessionTable = ({ sessions, setClickedOnSession, setClickedSessionID }: Pr
           }}
           className={`w-full h-12 bg-white dark:bg-dark_primary_comp rounded-xl border-gray-400 dark:border-dark_primary_btn flex text-sm text-primary_black dark:text-white ${
             checkOrgAccess(ORG_MEMBER)
-              ? 'hover:bg-slate-100 dark:hover:bg-dark_primary_comp_hover cursor-pointer'
+              ? 'dark:hover:bg-dark_primary_comp_hover dark:hover:bg-dark_primary_comp_hover cursor-pointer'
               : 'cursor-default'
           } transition-ease-300`}
         >

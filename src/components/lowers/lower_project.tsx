@@ -286,9 +286,7 @@ const LowerProject = ({ project, setProject }: Props) => {
           </PopoverTrigger>
           <PopoverContent className="flex flex-col gap-2 text-sm w-48 p-3">
             {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
-              <div onClick={() => setIsDialogOpen(false)}>
-                <EditProject project={project} setProject={setProject} />
-              </div>
+              <EditProject project={project} setProject={setProject} />
             )}
             <div
               onClick={() => {

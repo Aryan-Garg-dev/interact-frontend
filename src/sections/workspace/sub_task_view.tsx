@@ -141,7 +141,7 @@ const SubTaskView = ({
                 return (
                   <div
                     key={user.id}
-                    className="w-full relative group flex gap-2 cursor-pointer p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-dark_primary_comp_hover transition-ease-500"
+                    className="w-full relative group flex gap-2 cursor-pointer p-1 rounded-lg dark:hover:bg-dark_primary_comp_hover dark:hover:bg-dark_primary_comp_hover transition-ease-500"
                   >
                     <UserHoverCard user={user} scaleTransition={true} title={getUserTitle(user.id)} />
                     <Image
