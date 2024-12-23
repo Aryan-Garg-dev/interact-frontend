@@ -420,7 +420,7 @@ const Onboarding = () => {
                       )}
 
                       <div className="font-medium text-sm mt-4">
-                        One Last Step!, Tell us where are are situated to help build your recommendations.
+                        One Last Step!, Tell us where you are situated to help build your recommendations.
                       </div>
                       <div className="w-full flex items-center gap-2 bg-[#ffffff40] border-[1px] border-black rounded-lg p-2">
                         <MapPin size={24} weight="duotone" />

@@ -13,7 +13,10 @@ type ModelSEOData = {
   imageUrl?: string;
 };
 
-export function generateSEOProps(model: ModelSEOData, type: 'project' | 'user' | 'event'): NextSeoProps {
+export function generateSEOProps(
+  model: ModelSEOData,
+  type: 'project' | 'user' | 'event' | 'organisation'
+): NextSeoProps {
   const { id, title, description, createdAt, user, tags, imageUrl } = model;
 
   const rawSEOProps: NextSeoProps = {

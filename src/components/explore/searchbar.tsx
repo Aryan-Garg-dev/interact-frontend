@@ -102,7 +102,7 @@ const SearchBar = ({
       case 'events':
         return `/events?search=${search}`;
       case 'organizations':
-        return `/organizations?search=${search}`;
+        return `/organisations?search=${search}`;
       case 'communities':
         return `/home?search=${search}`;
       default:
