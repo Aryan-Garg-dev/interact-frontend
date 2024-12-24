@@ -54,9 +54,8 @@ const ResourceFileView = ({
     const toaster = Toaster.startLoad('Editing File Details');
 
     const URL =
-      resourceType == 'org'
-        ? ORG_URL
-        : PROJECT_URL + `/${resourceParentID}/resource/${resourceFile.resourceBucketID}/file/${resourceFile.id}`;
+      (resourceType == 'org' ? ORG_URL : PROJECT_URL) +
+      `/${resourceParentID}/resource/${resourceFile.resourceBucketID}/file/${resourceFile.id}`;
 
     const formData = new FormData();
 
@@ -89,9 +88,8 @@ const ResourceFileView = ({
     const toaster = Toaster.startLoad('Deleting File');
 
     const URL =
-      resourceType == 'org'
-        ? ORG_URL
-        : PROJECT_URL + `/${resourceParentID}/resource/${resourceFile.resourceBucketID}/file/${resourceFile.id}`;
+      (resourceType == 'org' ? ORG_URL : PROJECT_URL) +
+      `/${resourceParentID}/resource/${resourceFile.resourceBucketID}/file/${resourceFile.id}`;
 
     const res = await deleteHandler(URL);
     if (res.statusCode === 204) {

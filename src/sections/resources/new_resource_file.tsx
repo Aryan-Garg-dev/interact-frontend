@@ -58,7 +58,7 @@ const NewResourceFile = ({
     const toaster = Toaster.startLoad('Uploading File to the Bucket..');
 
     const URL =
-      resourceType == 'org' ? ORG_URL : PROJECT_URL + `/${resourceParentID}/resource/${resourceBucketID}/file`;
+      (resourceType == 'org' ? ORG_URL : PROJECT_URL) + `/${resourceParentID}/resource/${resourceBucketID}/file`;
 
     const formData = new FormData();
 

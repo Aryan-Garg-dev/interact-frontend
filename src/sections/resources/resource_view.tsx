@@ -25,8 +25,6 @@ import {
 import checkOrgAccess, { checkProjectAccess } from '@/utils/funcs/access';
 import getHandler from '@/handlers/get_handler';
 import { ORG_URL, PROJECT_URL } from '@/config/routes';
-import { currentOrgIDSelector } from '@/slices/orgSlice';
-import { useSelector } from 'react-redux';
 import Toaster from '@/utils/toaster';
 import { SERVER_ERROR } from '@/config/errors';
 import NewResourceFile from './new_resource_file';
@@ -78,10 +76,8 @@ const ResourceView = ({
   const [clickedOnFile, setClickedOnFile] = useState(false);
   const [clickedFile, setClickedFile] = useState(initialResourceFile);
 
-  const currentOrgID = useSelector(currentOrgIDSelector);
-
   const getResourceBucketFiles = () => {
-    const URL = resourceType == 'org' ? ORG_URL : PROJECT_URL + `/${resourceParentID}/resource/${resourceBucket.id}`;
+    const URL = (resourceType == 'org' ? ORG_URL : PROJECT_URL) + `/${resourceParentID}/resource/${resourceBucket.id}`;
     getHandler(URL)
       .then(res => {
         if (res.statusCode === 200) {
@@ -103,7 +99,7 @@ const ResourceView = ({
 
     const toaster = Toaster.startLoad('Editing Bucket Details');
 
-    const URL = resourceType == 'org' ? ORG_URL : PROJECT_URL + `/${resourceParentID}/resource/${resourceBucket.id}`;
+    const URL = (resourceType == 'org' ? ORG_URL : PROJECT_URL) + `/${resourceParentID}/resource/${resourceBucket.id}`;
 
     const formData = new FormData();
 
@@ -136,7 +132,7 @@ const ResourceView = ({
   const handleDelete = async () => {
     const toaster = Toaster.startLoad('Deleting Bucket');
 
-    const URL = resourceType == 'org' ? ORG_URL : PROJECT_URL + `/${resourceParentID}/resource/${resourceBucket.id}`;
+    const URL = (resourceType == 'org' ? ORG_URL : PROJECT_URL) + `/${resourceParentID}/resource/${resourceBucket.id}`;
 
     const res = await deleteHandler(URL);
     if (res.statusCode === 204) {

@@ -39,7 +39,7 @@ const NewResource = ({ setShowResources, setResources, resourceType, resourcePar
 
     const toaster = Toaster.startLoad('Adding a new resource bucket');
 
-    const URL = resourceType == 'org' ? ORG_URL : PROJECT_URL + `/${resourceParentID}/resource`;
+    const URL = (resourceType == 'org' ? ORG_URL : PROJECT_URL) + `/${resourceParentID}/resource`;
 
     const formData = {
       title,

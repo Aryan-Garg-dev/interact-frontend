@@ -6,7 +6,6 @@ import getHandler from '@/handlers/get_handler';
 import { SERVER_ERROR } from '@/config/errors';
 import Toaster from '@/utils/toaster';
 import TaskCard from '@/components/home/task_card';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import Loader from '@/components/common/loader';
 import Select from '@/components/filters/select';
 import { ChartLine, SortAscending, WarningCircle } from '@phosphor-icons/react';
@@ -24,12 +23,14 @@ const Tasks = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const limit = 20;
+
   const fetchTasks = (abortController?: AbortController, initialPage?: number) => {
     setLoading(true);
 
     const URL = `${USER_URL}/me/tasks?order=${order}&tags=${tags.join(',')}&priority=${priority}&is_completed=${
       status == '' ? '' : status == 'completed'
-    }&page=${initialPage ? initialPage : page}&limit=${10}`;
+    }&page=${initialPage ? initialPage : page}&limit=${limit}`;
 
     getHandler(URL, abortController?.signal, true)
       .then(res => {
@@ -84,7 +85,7 @@ const Tasks = () => {
         <DialogHeader>
           <DialogTitle>Tasks assigned to you</DialogTitle>
         </DialogHeader>
-        <div className="flex-center gap-2 max-md:hidden my-4">
+        <div className="flex-center gap-2 max-md:hidden mb-4">
           <Select
             fieldName="Status"
             options={['not_completed', 'completed']}
@@ -109,17 +110,24 @@ const Tasks = () => {
           <Tags selectedTags={tags} setSelectedTags={setTags} />
           {/* <Search /> */}
         </div>
-        <InfiniteScroll
-          dataLength={tasks.length}
-          next={fetchTasks}
-          hasMore={hasMore}
-          loader={<Loader />}
-          className="w-full flex flex-col gap-2 p-6 pt-0"
-        >
+        <div className="w-full flex flex-col gap-2 p-6 pt-0">
           {tasks.map((task, index) => (
             <TaskCard key={index} task={task} />
           ))}
-        </InfiniteScroll>
+          {loading ? (
+            <Loader />
+          ) : (
+            tasks.length % limit == 0 &&
+            hasMore && (
+              <div
+                onClick={() => fetchTasks()}
+                className="w-fit mx-auto pt-4 text-xs text-gray-700 dark:text-white font-medium hover-underline-animation after:bg-gray-700 cursor-pointer"
+              >
+                Load More
+              </div>
+            )
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );
