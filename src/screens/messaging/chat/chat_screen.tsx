@@ -141,29 +141,40 @@ const ChatScreen = ({ projectWindow = false, initialChatState = initialChat, pro
   const windowWidth = useWindowWidth();
 
   useEffect(() => {
-    let checkConnection: NodeJS.Timeout | null = null;
+    let timeoutId: NodeJS.Timeout | null = null;
 
     if (!socketService.getSocket()) {
       toast.promise(
         new Promise<{ name: string }>((resolve, reject) => {
           socketService.connect();
 
-          checkConnection = setInterval(() => {
-            const socket = socketService.getSocket();
-            if (socket && socket.readyState === WebSocket.OPEN) {
-              if (checkConnection) clearInterval(checkConnection);
+          const socket = socketService.getSocket();
+
+          if (socket) {
+            if (socket.readyState === WebSocket.OPEN) {
               resolve({ name: 'Connection' });
-            } else if (socket && socket.readyState === WebSocket.CLOSED) {
-              if (checkConnection) clearInterval(checkConnection);
-              reject({ message: "'Socket failed to connect'" });
+            } else if (socket.readyState === WebSocket.CONNECTING) {
+              // Wait for 5 seconds to check if it resolves to OPEN state
+              timeoutId = setTimeout(() => {
+                if (socket.readyState === WebSocket.OPEN) {
+                  resolve({ name: 'Connection' });
+                } else {
+                  reject({ message: 'Socket failed to connect' });
+                }
+              }, 5000);
+            } else if (socket.readyState === WebSocket.CLOSED) {
+              alert('Socket failed to connect');
+              reject({ message: 'Socket failed to connect' });
             }
-          }, 500);
+          } else {
+            reject({ message: 'Socket failed to connect' });
+          }
         }),
         {
           loading: 'Socket Connection Failed',
           description: 'Retrying, Please check your internet connection',
           success: data => `${data.name} is established successfully!`,
-          error: 'Failed to connect. Retrying...',
+          error: data => 'Please Refresh the Page to Reconnect!',
         }
       );
     }
@@ -176,12 +187,16 @@ const ChatScreen = ({ projectWindow = false, initialChatState = initialChat, pro
         document.documentElement.style.overflowY = 'auto';
         document.documentElement.style.height = 'auto';
 
-        if (checkConnection) clearInterval(checkConnection);
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
       };
     }
 
     return () => {
-      if (checkConnection) clearInterval(checkConnection);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
     };
   }, []);
 
