@@ -19,6 +19,7 @@ import Head from 'next/head';
 import ThemeProvider from '@/components/ui/theme-provider';
 import { NextSeo } from 'next-seo';
 import SEO from '@/config/seo';
+import { Toaster } from '@/components/ui/sonner';
 
 NProgressConfig();
 
@@ -65,6 +66,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              <Toaster />
               <ToastContainer />
               <Component {...pageProps} />
             </ThemeProvider>

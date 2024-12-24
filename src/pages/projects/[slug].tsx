@@ -42,6 +42,7 @@ import UserProjects from '@/sides/project/user_projects';
 import Resources from '@/sides/project/resources';
 import ProjectChats from '@/sides/project/chats';
 import nookies from 'nookies';
+import { EyeSlash } from '@phosphor-icons/react';
 
 const ProjectComponent = ({
   initialProject,
@@ -95,7 +96,7 @@ const ProjectComponent = ({
             {err ? (
               <ProjectLoader />
             ) : (
-              <div className="w-full flex flex-col gap-8">
+              <div className="w-full flex flex-col gap-6">
                 <div className="w-full relative group">
                   {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
                     <>
@@ -156,6 +157,13 @@ const ProjectComponent = ({
                     />
                   )}
                 </div>
+                {project.isPrivate && (
+                  <div className="flex-center gap-1 font-medium">
+                    <EyeSlash weight="bold" />
+                    This project is private
+                    <span className="text-xs">(only visible to project members)</span>
+                  </div>
+                )}
                 <div className="w-full flex flex-col gap-4">
                   <div className="w-full flex items-center justify-between flex-wrap gap-4">
                     <div className="w-fit font-bold text-4xl text-gradient">{project.title}</div>
@@ -196,6 +204,7 @@ const ProjectComponent = ({
             <>
               <SideLoader boxes={1} />
               <SideLoader boxes={3} />
+              <SideLoader boxes={3} />
             </>
           ) : (
             <>
@@ -216,7 +225,7 @@ const ProjectComponent = ({
             <>
               {!checkProjectAccess(PROJECT_MEMBER, project.id) ? (
                 <>
-                  <UserProjects user={project.user} />
+                  <UserProjects user={project.user} projectID={project.id} />
                   <SimilarProjects slug={project.slug} />
                 </>
               ) : (
@@ -240,7 +249,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { slug } = context.query;
 
   try {
-    const response = await axios.get(`${BACKEND_URL}${EXPLORE_URL}/quick/item?slug=${slug}`, {
+    const response = await axios.get(`${BACKEND_URL}${EXPLORE_URL}/quick/item?slug=${slug}&fallback=pass`, {
       headers: {
         Authorization: `Bearer ${nookies.get(context).token || ''}`,
       },

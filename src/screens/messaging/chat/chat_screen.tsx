@@ -26,6 +26,7 @@ import NotFound from '@/components/fillers/not_found';
 import Error from '@/components/fillers/error';
 import { checkProjectAccess } from '@/utils/funcs/access';
 import { PROJECT_EDITOR } from '@/config/constants';
+import { toast } from 'sonner';
 
 interface Props {
   projectWindow?: boolean;
@@ -140,6 +141,33 @@ const ChatScreen = ({ projectWindow = false, initialChatState = initialChat, pro
   const windowWidth = useWindowWidth();
 
   useEffect(() => {
+    let checkConnection: NodeJS.Timeout | null = null;
+
+    if (!socketService.getSocket()) {
+      toast.promise(
+        new Promise<{ name: string }>((resolve, reject) => {
+          socketService.connect();
+
+          checkConnection = setInterval(() => {
+            const socket = socketService.getSocket();
+            if (socket && socket.readyState === WebSocket.OPEN) {
+              if (checkConnection) clearInterval(checkConnection);
+              resolve({ name: 'Connection' });
+            } else if (socket && socket.readyState === WebSocket.CLOSED) {
+              if (checkConnection) clearInterval(checkConnection);
+              reject({ message: "'Socket failed to connect'" });
+            }
+          }, 500);
+        }),
+        {
+          loading: 'Socket Connection Failed',
+          description: 'Retrying, Please check your internet connection',
+          success: data => `${data.name} is established successfully!`,
+          error: 'Failed to connect. Retrying...',
+        }
+      );
+    }
+
     if (windowWidth < 640) {
       document.documentElement.style.overflowY = 'hidden';
       document.documentElement.style.height = '100vh';
@@ -147,8 +175,14 @@ const ChatScreen = ({ projectWindow = false, initialChatState = initialChat, pro
       return () => {
         document.documentElement.style.overflowY = 'auto';
         document.documentElement.style.height = 'auto';
+
+        if (checkConnection) clearInterval(checkConnection);
       };
     }
+
+    return () => {
+      if (checkConnection) clearInterval(checkConnection);
+    };
   }, []);
 
   const messagesByDate = groupBy(messages, message => new Date(message.createdAt).toLocaleDateString());

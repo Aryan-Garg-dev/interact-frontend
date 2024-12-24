@@ -9,9 +9,10 @@ import { SidePrimeWrapper } from '@/wrappers/side';
 
 interface Props {
   user: User;
+  projectID: string;
 }
 
-const UserProjects = ({ user }: Props) => {
+const UserProjects = ({ user, projectID }: Props) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,7 +21,7 @@ const UserProjects = ({ user }: Props) => {
     getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
-          setProjects(res.data.projects || []);
+          setProjects((res.data.projects || []).filter((project: Project) => project.id !== projectID));
           setLoading(false);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');

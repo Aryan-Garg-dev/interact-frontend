@@ -6,13 +6,13 @@ const SideLoader = ({ boxes = 3, boxClassname }: { boxes?: number; boxClassname?
   return (
     <SidePrimeWrapper>
       <div className="w-full flex flex-col gap-4">
-        <div className="w-3/5 h-8 rounded-lg bg-white dark:bg-dark_primary_comp_hover animate-pulse"></div>
+        <div className="w-3/5 h-8 rounded-lg bg-gray-200 dark:bg-dark_primary_comp_hover animate-pulse"></div>
 
         {Array.from({ length: boxes }).map((_, index) => (
           <div
             key={index}
             className={cn(
-              'w-full h-16 rounded-lg bg-white dark:bg-dark_primary_comp_hover animate-pulse',
+              'w-full h-16 rounded-lg bg-gray-200 dark:bg-dark_primary_comp_hover animate-pulse',
               boxClassname
             )}
           ></div>
