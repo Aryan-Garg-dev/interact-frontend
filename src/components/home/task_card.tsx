@@ -22,7 +22,7 @@ const TaskCard = ({ task }: { task: Task }) => {
       </div>
       <div
         className={`w-28 text-xs text-end ${
-          moment(task.deadline).isBefore(moment()) ? 'text-primary_danger' : 'text-green-400'
+          !task.isCompleted && (moment(task.deadline).isBefore(moment()) ? 'text-primary_danger' : 'text-green-400')
         }`}
       >
         {moment(task.deadline).format('hh:mm A DD MMM')}

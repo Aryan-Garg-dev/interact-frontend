@@ -24,7 +24,7 @@ const Links = ({ links, title = 'Links' }: Props) => {
                     <TooltipTrigger>
                       <div className="hover:scale-110 transition-ease-300"> {getIcon(getDomainName(link), 40)}</div>
                     </TooltipTrigger>
-                    <TooltipContent className='className="w-fit px-4 py-2 rounded-lg bg-white dark:bg-dark_primary_comp_hover border-2 border-gray-200 dark:border-dark_primary_btn dark:text-white capitalize text-xs text-center font-semibold shadow-xl"'>
+                    <TooltipContent className='className="w-fit px-4 py-2 rounded-lg bg-white dark:bg-dark_primary_comp_hover border-2 border-gray-200 dark:border-dark_primary_btn text-primary_black dark:text-white capitalize text-xs text-center font-semibold shadow-xl"'>
                       {getDomainName(link)}
                     </TooltipContent>
                   </Tooltip>

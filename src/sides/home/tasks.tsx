@@ -23,7 +23,7 @@ const Tasks = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const limit = 20;
+  const limit = 10;
 
   const fetchTasks = (abortController?: AbortController, initialPage?: number) => {
     setLoading(true);

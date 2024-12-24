@@ -20,9 +20,17 @@ const Collaborators = ({
         <div className="w-full flex items-center justify-between">
           <div className="text-lg font-medium">Collaborators</div>
           <div className="flex-center gap-2">
-            <AddCollaborators project={project} setProject={setProject} org={checkOrgAccess(ORG_MANAGER)} />
+            <AddCollaborators
+              project={project}
+              setProject={setProject}
+              org={!!(project.organizationID && project.organizationID !== '' && checkOrgAccess(ORG_MANAGER))}
+            />
             {(project.memberships.length > 0 || project.invitations.length > 0) && (
-              <ManageMemberships project={project} setProject={setProject} org={checkOrgAccess(ORG_MANAGER)} />
+              <ManageMemberships
+                project={project}
+                setProject={setProject}
+                org={!!(project.organizationID && project.organizationID !== '' && checkOrgAccess(ORG_MANAGER))}
+              />
             )}
           </div>
         </div>

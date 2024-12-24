@@ -17,7 +17,7 @@ const Discover = () => {
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [order, setOrder] = useState('recommended');
+  const [order, setOrder] = useState('trending');
 
   const getFeed = (initialPage?: number) => {
     const URL = `${EXPLORE_URL}/posts?order=${order}&page=${initialPage ? initialPage : page}&limit=${10}`;
@@ -58,7 +58,7 @@ const Discover = () => {
   return (
     <div className="w-full">
       <OrderMenu
-        orders={[...(userID ? ['recommended'] : []), 'trending', 'most_liked', 'latest']}
+        orders={['trending', ...(userID ? ['recommended'] : []), 'most_liked', 'latest']}
         current={order}
         setState={setOrder}
       />
