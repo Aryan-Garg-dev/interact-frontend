@@ -250,7 +250,7 @@ const ChatScreen = ({ projectWindow = false, initialChatState = initialChat, pro
                   </div>
                 )}
               </ScrollWrapper>
-              <div className="flex w-[calc(100%-16px)] max-lg:w-[99%] items-end gap-2 absolute max-lg:sticky bottom-2 right-1/2 translate-x-1/2 max-lg:translate-x-0">
+              <div className="flex w-[calc(100%-16px)] max-lg:w-full items-end gap-2 absolute max-lg:sticky bottom-2 right-1/2 translate-x-1/2 max-lg:translate-x-0">
                 {chat.isAccepted ? (
                   <ChatTextarea chat={chat} />
                 ) : user.id != chat.userID ? (

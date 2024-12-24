@@ -92,7 +92,7 @@ const NewGroup = ({ userFetchURL, submitURL, userFetchURLQuery, setStateChats }:
     if (mutex) return;
     setMutex(true);
 
-    const toaster = Toaster.startLoad('Sending Invitations');
+    const toaster = Toaster.startLoad('Creating Group');
 
     const URL = submitURL;
 

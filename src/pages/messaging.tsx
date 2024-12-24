@@ -71,13 +71,13 @@ const Messaging = () => {
       {user.isOrganization ? <OrgSidebar index={-1} /> : <Sidebar index={-1} />}
       <MainWrapper>
         <div
-          className={`w-fit h-base_md max-lg:h-fit mx-auto flex max-lg:flex-col ${
+          className={`w-full h-base_md max-lg:h-fit flex max-lg:flex-col ${
             open ? 'gap-2' : 'gap-16'
           } transition-ease-out-500 font-primary`}
         >
           {/* 100-(navbar+1) */}
-          <div className="w-[37.5vw] max-lg:w-screen h-full flex flex-col gap-4 ">
-            <div className="w-full flex items-center justify-between max-lg:px-4 relative">
+          <div className="w-[37.5vw] max-lg:w-full h-full flex flex-col gap-4 ">
+            <div className="w-full flex items-center justify-between relative">
               <div className="text-3xl font-extrabold text-gradient">Messaging</div>
               <NewGroup userFetchURL={`${EXPLORE_URL}/users?order=trending`} submitURL={`${MESSAGING_URL}/group`} />
             </div>
@@ -106,7 +106,7 @@ const Messaging = () => {
             </div>
           </div>
           <div
-            className={`w-[37.5vw] max-lg:w-screen h-full max-lg:h-screen sticky max-lg:fixed top-navbar max-lg:top-0 p-2 max-lg:p-0 ${
+            className={`w-[37.5vw] max-lg:w-screen h-full max-lg:h-screen sticky max-lg:fixed max-lg:-translate-x-4 top-navbar max-lg:top-0 p-2 max-lg:p-0 ${
               currentChatID == '' ? 'hidden' : ''
             } z-40 max-lg:z-30`}
           >

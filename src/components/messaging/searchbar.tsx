@@ -14,7 +14,7 @@ const SearchBar = () => {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-lg:w-taskbar_md h-10 px-4 py-2 flex items-center justify-between gap-8 mx-auto rounded-md shadow-md dark:shadow-outer bg-white dark:bg-dark_primary_comp"
+      className="w-full h-10 px-4 py-2 flex items-center justify-between gap-8 mx-auto rounded-md shadow-md dark:shadow-outer bg-white dark:bg-dark_primary_comp"
     >
       <input
         className="h-full grow bg-transparent focus:outline-none font-primary dark:text-white font-medium"
