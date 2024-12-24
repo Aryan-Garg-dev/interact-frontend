@@ -1,5 +1,5 @@
 import Sidebar from '@/components/common/sidebar';
-import { SERVER_ERROR } from '@/config/errors';
+import { SERVER_ERROR, TOKEN_EXPIRATION_ERROR } from '@/config/errors';
 import { BACKEND_URL, EXPLORE_URL, PROJECT_PIC_URL, PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import { Project } from '@/types';
@@ -277,10 +277,24 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   } catch (error: any) {
+    const isTokenExpired = error?.response?.data?.message === TOKEN_EXPIRATION_ERROR;
+
+    const sanitizedProject = {
+      ...initialProjectObj,
+      slug: slug,
+      createdAt: initialProjectObj.createdAt ? new Date(initialProjectObj.createdAt).toISOString() : null,
+      user: {
+        ...initialProjectObj.user,
+        passwordChangedAt: initialProjectObj.user?.passwordChangedAt
+          ? new Date(initialProjectObj.user.passwordChangedAt).toISOString()
+          : null,
+      },
+    };
+
     return {
       props: {
-        initialProject: null,
-        err: error?.response?.data.message || null,
+        initialProject: isTokenExpired ? sanitizedProject : null,
+        err: isTokenExpired ? null : error?.response?.data?.message || null,
         seoProps: {},
       },
     };
