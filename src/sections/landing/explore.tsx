@@ -2,6 +2,8 @@ import React from 'react';
 import { ReactSVG } from 'react-svg';
 import { CaretRight } from '@phosphor-icons/react';
 import Image from 'next/image';
+import SparklesText from '@/components/ui/sparkles-text';
+import FlickeringGrid from '@/components/ui/flickering-grid';
 
 const comments = [
   {
@@ -37,10 +39,10 @@ const ExploreCommunity: React.FC = () => {
   return (
     <div className="w-full flex flex-col gap-24 text-black">
       <div className="w-full flex-center flex-col gap-8">
-        <div className="flex flex-row items-center justify-center text-4xl md:text-5xl space-x-4 font-semibold">
-          <h3>Explore Community</h3>
+        {/* <div className="flex flex-row items-center justify-center text-4xl md:text-5xl space-x-4 font-semibold">
+          <SparklesText className="text-6xl font-semimbold" text="Explore Community" />
           <CaretRight weight="bold" size={24} />
-        </div>
+        </div> */}
 
         <div className="w-4/5 rounded-lg space-y-8">
           <div className="w-full md:max-h-72 overflow-y-clip flex-center md:flex-row flex-col md:gap-8 px-12 max-md:p-4 border-2 rounded-xl">
@@ -81,22 +83,18 @@ const ExploreCommunity: React.FC = () => {
         </div>
       </div>
 
-      <div className="relative flex justify-center items-center ">
-        <div
-          className="absolute inset-0 pointer-events-none flex justify-center items-center"
-          style={{
-            background: `
-            linear-gradient(to bottom, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 1) 80%),
-            linear-gradient(to right, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 1) 80%),
-            linear-gradient(to left, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 1) 80%)`,
-          }}
-        ></div>
-        <div className=" w-full overflow-hidden">
-          <ReactSVG src="/landing/bg-interact.svg" className="flex justify-center overflow-hidden" />
-        </div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-          <ReactSVG src="/onboarding_logo.svg" className="mb-24 scale-[2.0]" />
-        </div>
+      <div className="relative w-4/5 mx-auto h-[250px] flex-center bg-background overflow-hidden">
+        <ReactSVG src="/onboarding_logo.svg" className="scale-[2.0] z-10" />
+        <FlickeringGrid
+          className="z-0 absolute inset-0 size-full"
+          squareSize={4}
+          gridGap={6}
+          color="#478EE1"
+          maxOpacity={0.5}
+          flickerChance={0.1}
+          height={800}
+          width={1200}
+        />
       </div>
     </div>
   );

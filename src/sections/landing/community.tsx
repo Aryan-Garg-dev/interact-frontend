@@ -27,6 +27,7 @@ const Community = () => {
           description="Lorem ipsum dolor sit amet consectetur. Amet varius eget tempus pulvinar aliquam nulla dolor. Etiam dignissim
           nunc diam eudismod. Nec placerat purus ultricies amet facus justo."
           center
+          includeSparkles
         />
         <LandingButton label="Know More" />
       </div>

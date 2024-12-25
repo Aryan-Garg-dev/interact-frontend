@@ -1,124 +1,119 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TestimonialsCard from '../../components/landing/testimonials_card';
+import Marquee from '@/components/ui/marquee';
 
 const testimonials = [
   {
-    user: 'Pranay',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    name: 'Jack',
+    username: '@jack',
+    body: "I've never seen anything like this before. It's amazing. I love it.",
+    img: 'https://avatar.vercel.sh/jack',
   },
   {
-    user: 'Sarah',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    name: 'Jill',
+    username: '@jill',
+    body: "I don't know what to say. I'm speechless. This is amazing.",
+    img: 'https://avatar.vercel.sh/jill',
   },
   {
-    user: 'John',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    name: 'John',
+    username: '@john',
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: 'https://avatar.vercel.sh/john',
   },
   {
-    user: 'Emily',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    name: 'John',
+    username: '@john',
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: 'https://avatar.vercel.sh/john',
   },
   {
-    user: 'Michael',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    name: 'John',
+    username: '@john',
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: 'https://avatar.vercel.sh/john',
   },
   {
-    user: 'Lisa',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    name: 'John',
+    username: '@john',
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: 'https://avatar.vercel.sh/john',
+  },
+
+  {
+    name: 'John',
+    username: '@john',
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: 'https://avatar.vercel.sh/john',
   },
   {
-    user: 'Emily',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  },
-  {
-    user: 'Michael',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-  },
-  {
-    user: 'Lisa',
-    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    name: 'John',
+    username: '@john',
+    body: "I'm at a loss for words. This is amazing. I love it.",
+    img: 'https://avatar.vercel.sh/john',
   },
 ];
 
-const config = {
-  mobile: {
-    cardsToShow: 4,
-    columns: 1,
-  },
-  tablet: {
-    cardsToShow: 6,
-    columns: 2,
-  },
-  desktop: {
-    cardsToShow: 7,
-    columns: 3,
-  },
+const splitIntoRows = (reviews: any[], numRows: number) => {
+  const rows = [];
+  const rowSize = Math.ceil(reviews.length / numRows);
+
+  for (let i = 0; i < numRows; i++) {
+    rows.push(reviews.slice(i * rowSize, (i + 1) * rowSize));
+  }
+
+  return rows;
+};
+
+const rowsConfig = {
+  mobile: 1,
+  tablet: 2,
+  desktop: 3,
+};
+
+const useResponsiveRows = () => {
+  const [numRows, setNumRows] = useState(rowsConfig.desktop);
+
+  useEffect(() => {
+    const updateRows = () => {
+      if (window.innerWidth < 768) {
+        setNumRows(rowsConfig.mobile);
+      } else if (window.innerWidth < 1024) {
+        setNumRows(rowsConfig.tablet);
+      } else {
+        setNumRows(rowsConfig.desktop);
+      }
+    };
+
+    updateRows(); // Set initial value
+    window.addEventListener('resize', updateRows);
+    return () => window.removeEventListener('resize', updateRows);
+  }, []);
+
+  return numRows;
 };
 
 const Testimonials = () => {
-  const chunkArray = (arr: any[], size: number): any[][] => {
-    const chunkedArr = [];
-    for (let i = 0; i < arr.length; i += size) {
-      chunkedArr.push(arr.slice(i, i + size));
-    }
-    return chunkedArr;
-  };
+  const numRows = useResponsiveRows();
+  const rows = splitIntoRows(testimonials, numRows);
 
   return (
-    <div className="flex flex-col space-y-12 justify-center items-center text-center ">
+    <div className="bg-background flex flex-col space-y-12 justify-center items-center text-center pt-16">
       <div className="w-full space-y-2">
         <h1 className="md:text-8xl text-6xl font-bold text-sky-400">Testimonials</h1>
         <h3 className="text-xl">Don&apos;t believe us? Look what people have to say about us!</h3>
       </div>
 
-      <div className="w-full relative">
-        <div className="flex-center flex-col gap-6 container mx-auto p-8">
-          {/* Mobile layout (1 column) */}
-          <div className="md:hidden flex flex-col space-y-6">
-            {testimonials.slice(0, config.mobile.cardsToShow).map((testimonial, index) => (
-              <TestimonialsCard key={index} user={testimonial.user} text={testimonial.text} />
+      <div className="relative flex h-[750px] w-full flex-row items-center justify-center overflow-hidden">
+        {rows.map((row, index) => (
+          <Marquee key={index} reverse={index % 2 !== 0} pauseOnHover vertical className="[--duration:20s]">
+            {row.map((testimonail: any) => (
+              <TestimonialsCard key={testimonail.username} {...testimonail} />
             ))}
-          </div>
-
-          {/* Tablet layout (2 columns) */}
-          <div className="hidden md:flex lg:hidden gap-6">
-            {chunkArray(
-              testimonials.slice(0, config.tablet.cardsToShow),
-              Math.ceil(config.tablet.cardsToShow / config.tablet.columns)
-            ).map((column, colIndex) => (
-              <div key={colIndex} className="flex flex-col space-y-6 flex-1">
-                {column.map((testimonial, index) => (
-                  <TestimonialsCard key={index} user={testimonial.user} text={testimonial.text} />
-                ))}
-              </div>
-            ))}
-          </div>
-
-          {/* Desktop layout (3 columns) */}
-          <div className="hidden lg:flex gap-6">
-            {chunkArray(testimonials, Math.ceil(testimonials.length / config.desktop.columns)).map(
-              (column, colIndex) => (
-                <div key={colIndex} className={`flex flex-col space-y-6 flex-1 ${colIndex === 1 ? 'mt-12' : ''}`}>
-                  {column.map((testimonial, index) => (
-                    <TestimonialsCard key={index} user={testimonial.user} text={testimonial.text} />
-                  ))}
-                </div>
-              )
-            )}
-          </div>
-
-          <div
-            className="absolute inset-0 pointer-events-none w-[100vw] flex justify-between items-center mx-auto"
-            style={{
-              background: `
-                linear-gradient(to bottom, transparent 0%, transparent 85%, rgb(255, 255, 255) 100%),
-                linear-gradient(to right, transparent 0%, transparent 85%, rgb(255, 255, 255) 100%),
-                linear-gradient(to top, transparent 0%, transparent 85%, rgb(255, 255, 255) 100%),
-                linear-gradient(to left, transparent 0%, transparent 85%, rgb(255, 255, 255) 100%)
-              `,
-            }}
-          ></div>
-        </div>
+          </Marquee>
+        ))}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-1/3 bg-gradient-to-b from-white dark:from-background"></div>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-white dark:from-background"></div>
       </div>
     </div>
   );

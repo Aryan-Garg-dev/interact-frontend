@@ -8,8 +8,14 @@ import Footer from '@/sections/landing/footer';
 import ExploreCommunity from '@/sections/landing/explore';
 import Testimonials from '@/sections/landing/testimonails';
 
-const Separator = () => {
-  return <div className="h-[3px] md:w-[80vw] w-[90vw] bg-gradient-to-r from-white via-gray-300 to-white my-2"></div>;
+const Separator = ({ excludeMargin = false }) => {
+  return (
+    <div
+      className={`h-[2px] w-screen bg-gradient-to-r from-white via-gray-300 dark:via-dark_primary_btn to-white ${
+        !excludeMargin && 'my-2'
+      }`}
+    ></div>
+  );
 };
 
 const LandingPage = () => {
@@ -23,21 +29,17 @@ const LandingPage = () => {
       <div className="w-4/5 max-md:w-full mx-auto">
         <div className="flex flex-col items-center justify-center">
           <Navbar />
-          <Separator />
+          <Separator excludeMargin />
           <HeroSection />
-          <Separator />
+          <Separator excludeMargin />
         </div>
         <Features />
         <Community />
       </div>
-      <WhyChooseUs />
+      {/* <WhyChooseUs /> */}
       <Testimonials />
-      <div>
-        <div className="w-4/5 max-md:w-full mx-auto">
-          <ExploreCommunity />
-        </div>
-        <Footer />
-      </div>
+      <ExploreCommunity />
+      <Footer />
     </div>
   );
 };

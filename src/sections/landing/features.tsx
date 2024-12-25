@@ -1,6 +1,11 @@
 import React from 'react';
 import LandingButton from '@/components/buttons/landing_btn';
 import Image from 'next/image';
+import ShineBorder from '@/components/ui/shine-border';
+import { useTheme } from 'next-themes';
+import SparklesText from '@/components/ui/sparkles-text';
+import AnimatedGridPattern from '@/components/ui/animated-grid-pattern';
+import { cn } from '@/lib/utils';
 
 export const TitleBlock = ({
   titleUpper,
@@ -9,6 +14,7 @@ export const TitleBlock = ({
   titleSide,
   description,
   center = false,
+  includeSparkles = false,
 }: {
   titleUpper: string;
   titleMid?: string;
@@ -16,6 +22,7 @@ export const TitleBlock = ({
   titleSide?: string;
   description: string;
   center?: boolean;
+  includeSparkles?: boolean;
 }) => {
   return (
     <div className="space-y-4">
@@ -27,8 +34,13 @@ export const TitleBlock = ({
           </div>
         )}
         <div className={`inline-block ${titleMid && 'pt-5'}`}>
-          <span className="md:text-8xl text-6xl text-sky-400 font-bold"> {titleLower}</span>
-          {titleSide && <span className="text-gray-600 italic text-xl"> {titleSide}</span>}
+          {includeSparkles ? (
+            <SparklesText className="md:text-8xl text-6xl text-sky-400 font-bold" text={titleLower} />
+          ) : (
+            <span className="md:text-8xl text-6xl text-sky-400 font-bold">{titleLower}</span>
+          )}
+
+          {titleSide && <span className="text-gray-600 italic text-xl">{titleSide}</span>}
         </div>
       </div>
       <p className={`text-gray-600 ${center && 'text-center'}`}>{description}</p>
@@ -37,11 +49,21 @@ export const TitleBlock = ({
 };
 
 const FeatureCard = ({ title, description }: { title: string; description: string }) => {
+  const theme = useTheme();
   return (
-    <div className="bg-[#51D1F6] p-6 rounded-3xl shadow-sm">
-      <h3 className="font-bold text-xl mb-3">{title}</h3>
-      <p className="text-black">{description}</p>
-    </div>
+    <ShineBorder className="p-5 shadow-sm" color={theme.theme === 'dark' ? 'white' : '#51D1F6'}>
+      <h3 className="font-bold text-2xl bg-clip-text text-transparent bg-gradient-to-b from-neutral-500 to-neutral-700 mb-3">
+        {title}
+      </h3>
+      <p className="text-primary_black text-sm">{description}</p>
+      <AnimatedGridPattern
+        numSquares={10}
+        maxOpacity={0.05}
+        duration={3}
+        repeatDelay={1}
+        className={cn('[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]', 'inset-x-0 skew-y-12')}
+      />
+    </ShineBorder>
   );
 };
 
