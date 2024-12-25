@@ -30,19 +30,19 @@ const LinkDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={()=>setOpen(!open)} defaultOpen={false}>
-      <DialogContent>
+      <DialogContent className="px-5 bg-main dark:bg-dark_main border-none">
         <DialogHeader>
-          <DialogTitle>Add Link</DialogTitle>
-          <DialogDescription>Enter the link you want to embed.</DialogDescription>
+          <DialogTitle className="text-xl text-left font-bold">Add Link</DialogTitle>
+          <DialogDescription className="text-md text-left">Enter the link you want to embed.</DialogDescription> 
         </DialogHeader>
         <input 
           type="text" 
           placeholder="Enter URL" 
-          className="w-full p-2 border border-gray-300 rounded-md" 
+          className="w-full p-2 border-2 border-gray-300 dark:border-neutral-700 rounded-md ring-none outline-none" 
           onChange={(e)=>setURL(e.target.value)}
         />
         <DialogFooter>
-          <Button type="submit" onClick={onConfirm}>Confirm</Button>
+          <Button type="submit" variant={'outline'} onClick={onConfirm}>Confirm</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
