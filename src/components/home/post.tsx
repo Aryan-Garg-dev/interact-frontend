@@ -261,7 +261,8 @@ const PostComponent = ({
         )}
         {clickedOnEdit ? (
           <div className="relative">
-            <textarea
+            <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable={true}/>
+            {/* <textarea
               id="textarea_id"
               maxLength={2000}
               value={caption}
@@ -269,7 +270,7 @@ const PostComponent = ({
               onChange={el => setCaption(el.target.value)}
               onKeyDown={handleKeyDown}
               className="w-full text-sm whitespace-pre-wrap rounded-md focus:outline-none dark:bg-dark_primary_comp p-2 my-2 max-h-72"
-            />
+            /> */}
 
             <div className="dark:text-white flex items-center gap-4 max-md:gap-1 absolute -bottom-8 right-0">
               <div

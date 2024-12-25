@@ -258,7 +258,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
                     //   maxLength={2000}
                     //   placeholder="Start a conversation..."
                     // ></textarea>
-                    <Editor editable setContent={setContent} placeholder='Start a conversation...' limit={1000} className="min-h-[150px]"  />
+                    <Editor editable setContent={setContent} placeholder='Start a conversation...' limit={2000} className="min-h-[150px]"  />
                   )}
                   {communityID && (
                     <div className="w-full mt-4">
@@ -302,7 +302,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
                 //   maxLength={2000}
                 //   placeholder="Start a conversation..."
                 // ></textarea>
-                <Editor editable setContent={setContent} placeholder='Start a converstation...' limit={1000} className="min-h-[150px]"  />
+                <Editor editable setContent={setContent} placeholder='Start a converstation...' limit={2000} className="min-h-[150px]"  />
               )}
               {communityID && (
                 <div className="w-full my-4">

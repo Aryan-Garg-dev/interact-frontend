@@ -139,6 +139,7 @@ const Editor = ({
       })
       // customKeyMap
     ],
+    
     editable: editable,
     editorProps: {
       attributes: {
@@ -147,7 +148,7 @@ const Editor = ({
     },
     onUpdate({ editor }) {
       setContent(editor.getHTML());
-    }
+    },
   });
 
   const [openLinkDialog, setOpenLinkDialog] = useState(false);
@@ -165,6 +166,10 @@ const Editor = ({
       Toaster.error((e as Error).message, 'error_toaster');
     }
   }
+
+  useEffect(()=>{
+    if (editor) editor.chain().focus().run();
+  }, [editor])
 
   useEffect(()=>{
     if (!editor) return;
