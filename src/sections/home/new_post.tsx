@@ -27,6 +27,10 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import Checkbox from '@/components/form/checkbox';
 
+import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
+import PreviewBtn from '@/components/common/preview_btn';
+import Editor from '@/components/editor/editor';
+
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   setFeed?: React.Dispatch<React.SetStateAction<any[]>>;
@@ -42,6 +46,8 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
   const [users, setUsers] = useState<User[]>([]);
   const [showUsers, setShowUsers] = useState(false);
   const [cursorPosition, setCursorPosition] = useState<number | null>(null);
+
+  const [showPreview, setShowPreview] = useState(false);
 
   const user = useSelector(userSelector);
   const currentOrg = useSelector(currentOrgSelector);
@@ -81,7 +87,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
     setContent,
     fetchUsers,
     setShowUsers,
-    setTaggedUsernames
+    setTaggedUsernames,
   );
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -122,7 +128,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
       ? `${ORG_URL}/${currentOrg.id}/posts`
       : communityID
       ? `${COMMUNITY_URL}/${communityID}/posts`
-      : POST_URL;
+      : POST_URL; 
 
     const res = await postHandler(URL, formData, 'multipart/form-data');
 
@@ -233,23 +239,31 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
               </div>
               {width > 640 && (
                 <div className="w-full flex flex-col gap-8 relative">
-                  <div className="w-full flex gap-4">
+                  <div className="w-full flex gap-4 items-center">
                     <NewPostImages setSelectedFiles={setImages} />
                     {images.length == 0 && <NewPostHelper setShow={setShowTipsModal} show={showTipsModal} />}
+                    <PreviewBtn show={showPreview} setShow={setShowPreview} />
                   </div>
-                  <textarea
-                    id="textarea_id"
-                    className="w-full bg-transparent focus:outline-none min-h-[154px]"
-                    value={content}
-                    onChange={tagsUserUtils.handleContentChange}
-                    onKeyDown={handleKeyDown}
-                    maxLength={2000}
-                    placeholder="Start a conversation..."
-                  ></textarea>
+                  {showPreview ? (
+                    content 
+                    ? <Editor editable={false} content={content} />
+                    : <div className="text-neutral-500 font-medium cursor-not-allowed w-full h-full">No Preview Available</div>
+                  ) : (
+                    // <textarea
+                    //   id="textarea_id"
+                    //   className="w-full bg-transparent focus:outline-none min-h-[154px] placeholder-neutral-500"
+                    //   value={content}
+                    //   onChange={tagsUserUtils.handleContentChange}
+                    //   onKeyDown={handleKeyDown}
+                    //   maxLength={2000}
+                    //   placeholder="Start a conversation..."
+                    // ></textarea>
+                    <Editor editable setContent={setContent} placeholder='Start a conversation...' limit={1000} className="min-h-[150px]"  />
+                  )}
                   {communityID && (
                     <div className="w-full mt-4">
                       <Checkbox
-                        label="Is the post open?"
+                        label="Is the post open?" 
                         val={isOpen}
                         setVal={setIsOpen}
                         caption={
@@ -267,21 +281,29 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
           </div>
           {width <= 640 && (
             <div className="md:hidden w-full flex flex-col gap-8 relative">
-              <div className="w-full flex gap-4">
+              <div className="w-full flex gap-4 items-center">
                 <NewPostImages setSelectedFiles={setImages} />
                 {images.length == 0 && (
                   <NewPostHelper setShow={setShowTipsModal} show={showTipsModal} smallScreen={true} />
                 )}
+                <PreviewBtn show={showPreview} setShow={setShowPreview} />
               </div>
-              <textarea
-                id="textarea_id"
-                className="w-full bg-transparent focus:outline-none min-h-[154px]"
-                value={content}
-                onChange={tagsUserUtils.handleContentChange}
-                onKeyDown={handleKeyDown}
-                maxLength={2000}
-                placeholder="Start a conversation..."
-              ></textarea>
+              {showPreview ? (
+                content 
+                ? <Editor editable={false} content={content}  /> 
+                : <div className="text-neutral-500 font-medium cursor-not-allowed w-full h-full">No Preview Available</div>
+              ) : (
+                // <textarea
+                //   id="textarea_id"
+                //   className="w-full bg-transparent focus:outline-none min-h-[154px] placeholder-neutral-500"
+                //   value={content}
+                //   onChange={tagsUserUtils.handleContentChange}
+                //   onKeyDown={handleKeyDown}
+                //   maxLength={2000}
+                //   placeholder="Start a conversation..."
+                // ></textarea>
+                <Editor editable setContent={setContent} placeholder='Start a converstation...' limit={1000} className="min-h-[150px]"  />
+              )}
               {communityID && (
                 <div className="w-full my-4">
                   <Checkbox

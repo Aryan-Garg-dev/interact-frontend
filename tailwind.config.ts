@@ -230,6 +230,6 @@ const config: Config = {
       lg: '1080px',
     },
   },
-  plugins: [require('@tailwindcss/line-clamp'), require('tailwindcss-animate')],
+  plugins: [require('tailwindcss-animate')],
 };
 export default config;

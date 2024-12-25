@@ -23,6 +23,7 @@ import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
 import isArrEdited from '@/utils/funcs/check_array_edited';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import Editor from '@/components/editor/editor';
 
 interface Props {
   post: Post;
@@ -293,7 +294,8 @@ const PostComponent = ({
           </div>
         ) : (
           <div className={`w-full text-sm  whitespace-pre-wrap mb-2 ${clamp && 'line-clamp-6'}`}>
-            {renderContentWithLinks(post.content, post.taggedUsers)}
+            {/* {renderContentWithLinks(post.content, post.taggedUsers)} */}
+            <Editor content={post.content} editable={false} />
           </div>
         )}
         {showLowerPost && (
