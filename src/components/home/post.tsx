@@ -18,7 +18,7 @@ import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Report from '../common/report';
 import SignUp from '../common/signup_box';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
-import checkOrgAccess from '@/utils/funcs/access';
+import checkOrgAccess, { checkOrgAccessByOrgUserID } from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
 import isArrEdited from '@/utils/funcs/check_array_edited';
@@ -175,7 +175,7 @@ const PostComponent = ({
                     <div className="text-xxs cursor-pointer">•••</div>
                   </PopoverTrigger>
                   <PopoverContent className="w-40 p-2 text-sm">
-                    {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
+                    {(post.userID == loggedInUser.id || checkOrgAccessByOrgUserID(ORG_SENIOR, post.userID)) && (
                       <div
                         onClick={() => {
                           setClickedOnEdit(true);
@@ -186,7 +186,7 @@ const PostComponent = ({
                         Edit
                       </div>
                     )}
-                    {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
+                    {(post.userID == loggedInUser.id || checkOrgAccessByOrgUserID(ORG_SENIOR, post.userID)) && (
                       <div
                         onClick={el => {
                           el.stopPropagation();

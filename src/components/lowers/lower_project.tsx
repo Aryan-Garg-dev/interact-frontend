@@ -285,9 +285,13 @@ const LowerProject = ({ project, setProject }: Props) => {
             <DotsThreeVertical className="cursor-pointer max-lg:w-6 max-lg:h-6" size={28} weight="bold" />
           </PopoverTrigger>
           <PopoverContent className="flex flex-col gap-2 text-sm w-48 p-3">
-            {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
-              <EditProject project={project} setProject={setProject} />
-            )}
+            {checkOrgProjectAccess(
+              PROJECT_EDITOR,
+              project.id,
+              ORG_SENIOR,
+              project.organization,
+              !!(project.organizationID && project.organizationID != '')
+            ) && <EditProject project={project} setProject={setProject} />}
             <div
               onClick={() => {
                 if (userID == '') setNoUserClick(true);
@@ -322,7 +326,13 @@ const LowerProject = ({ project, setProject }: Props) => {
                 <WarningCircle className="cursor-pointer max-lg:w-6 max-lg:h-6" size={20} /> Report
               </div>
             )}
-            {checkOrgProjectAccess(PROJECT_OWNER, project.id, ORG_MANAGER, project.organization) && (
+            {checkOrgProjectAccess(
+              PROJECT_OWNER,
+              project.id,
+              ORG_MANAGER,
+              project.organization,
+              !!(project.organizationID && project.organizationID != '')
+            ) && (
               <div
                 onClick={() => {
                   setClickedOnDelete(true);

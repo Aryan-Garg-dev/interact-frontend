@@ -98,7 +98,13 @@ const ProjectComponent = ({
             ) : (
               <div className="w-full flex flex-col gap-6">
                 <div className="w-full relative group">
-                  {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
+                  {checkOrgProjectAccess(
+                    PROJECT_EDITOR,
+                    project.id,
+                    ORG_SENIOR,
+                    project.organization,
+                    !!(project.organizationID && project.organizationID != '')
+                  ) && (
                     <>
                       <EditProjectImages
                         project={project}

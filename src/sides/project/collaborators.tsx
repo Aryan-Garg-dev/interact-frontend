@@ -23,13 +23,25 @@ const Collaborators = ({
             <AddCollaborators
               project={project}
               setProject={setProject}
-              org={!!(project.organizationID && project.organizationID !== '' && checkOrgAccess(ORG_MANAGER))}
+              org={
+                !!(
+                  project.organizationID &&
+                  project.organizationID !== '' &&
+                  checkOrgAccess(ORG_MANAGER, project.organizationID)
+                )
+              }
             />
             {(project.memberships.length > 0 || project.invitations.length > 0) && (
               <ManageMemberships
                 project={project}
                 setProject={setProject}
-                org={!!(project.organizationID && project.organizationID !== '' && checkOrgAccess(ORG_MANAGER))}
+                org={
+                  !!(
+                    project.organizationID &&
+                    project.organizationID !== '' &&
+                    checkOrgAccess(ORG_MANAGER, project.organizationID)
+                  )
+                }
               />
             )}
           </div>
