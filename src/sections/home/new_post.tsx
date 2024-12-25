@@ -242,24 +242,8 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
                   <div className="w-full flex gap-4 items-center">
                     <NewPostImages setSelectedFiles={setImages} />
                     {images.length == 0 && <NewPostHelper setShow={setShowTipsModal} show={showTipsModal} />}
-                    <PreviewBtn show={showPreview} setShow={setShowPreview} />
                   </div>
-                  {showPreview ? (
-                    content 
-                    ? <Editor editable={false} content={content} />
-                    : <div className="text-neutral-500 font-medium cursor-not-allowed w-full h-full">No Preview Available</div>
-                  ) : (
-                    // <textarea
-                    //   id="textarea_id"
-                    //   className="w-full bg-transparent focus:outline-none min-h-[154px] placeholder-neutral-500"
-                    //   value={content}
-                    //   onChange={tagsUserUtils.handleContentChange}
-                    //   onKeyDown={handleKeyDown}
-                    //   maxLength={2000}
-                    //   placeholder="Start a conversation..."
-                    // ></textarea>
-                    <Editor editable setContent={setContent} placeholder='Start a conversation...' limit={2000} className="min-h-[150px]"  />
-                  )}
+                  <Editor editable setContent={setContent} placeholder='Start a conversation...' limit={2000} className="min-h-[150px]"  />
                   {communityID && (
                     <div className="w-full mt-4">
                       <Checkbox
@@ -288,22 +272,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
                 )}
                 <PreviewBtn show={showPreview} setShow={setShowPreview} />
               </div>
-              {showPreview ? (
-                content 
-                ? <Editor editable={false} content={content}  /> 
-                : <div className="text-neutral-500 font-medium cursor-not-allowed w-full h-full">No Preview Available</div>
-              ) : (
-                // <textarea
-                //   id="textarea_id"
-                //   className="w-full bg-transparent focus:outline-none min-h-[154px] placeholder-neutral-500"
-                //   value={content}
-                //   onChange={tagsUserUtils.handleContentChange}
-                //   onKeyDown={handleKeyDown}
-                //   maxLength={2000}
-                //   placeholder="Start a conversation..."
-                // ></textarea>
-                <Editor editable setContent={setContent} placeholder='Start a converstation...' limit={2000} className="min-h-[150px]"  />
-              )}
+              <Editor editable setContent={setContent} placeholder='Start a converstation...' limit={2000} className="min-h-[150px]"  />
               {communityID && (
                 <div className="w-full my-4">
                   <Checkbox

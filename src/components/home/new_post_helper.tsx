@@ -33,7 +33,7 @@ const NewPostHelper: React.FC<Props> = ({ show, setShow, smallScreen, announceme
       />
       {
         <div
-          className={`drop-down-modal bg-white dark:bg-dark_primary_comp_hover h-fit absolute  shadow-lg ${
+          className={`drop-down-modal bg-white dark:bg-dark_primary_comp_hover h-fit absolute  shadow-lg z-[100] ${
             smallScreen ? 'w-[90%] mt-2 left-4' : 'top-8 left-10 w-[40%]'
           } rounded-xl p-4 non-selectable pointer-events-none ${
             show ? 'animate-reveal' : firstMount ? 'hidden' : 'opacity-0 animate-reveal_reverse'

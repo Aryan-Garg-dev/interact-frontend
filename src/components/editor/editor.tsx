@@ -44,8 +44,6 @@ import { SmilieReplacer } from "./extensions/smilie-replacer";
 import CountWidget from "./widgets/count-widget";
 import LinkDialog from "./widgets/link-dialog";
 import Toaster from "@/utils/toaster";
-import { useSelector } from "react-redux";
-import { userSelector } from "@/slices/userSlice";
 import MentionSuggestions from "./mentions/mention-suggestions";
 
 type EditorProps = {
@@ -54,7 +52,7 @@ type EditorProps = {
   content?: string; 
   placeholder?: string;
   limit?: number | null;
-  className?: string;    
+  className?: string; 
 } | {
   editable: false;
   content: string;
@@ -73,8 +71,6 @@ const Editor = ({
     className,
   }: EditorProps
 ) => {
-
-  const user = useSelector(userSelector);
 
   const editor = useEditor({
     content: content || '',
@@ -143,12 +139,15 @@ const Editor = ({
     editable: editable,
     editorProps: {
       attributes: {
-        class: `py-0.5 ring-0 h-full outline-none ${className}` 
+        class: `py-0.5 ring-0 h-full outline-none z-0 ${className}` 
       },
     },
     onUpdate({ editor }) {
       setContent(editor.getHTML());
     },
+    onCreate({ editor }){
+      editor.chain().focus().run();
+    }
   });
 
   const [openLinkDialog, setOpenLinkDialog] = useState(false);
@@ -166,10 +165,6 @@ const Editor = ({
       Toaster.error((e as Error).message, 'error_toaster');
     }
   }
-
-  useEffect(()=>{
-    if (editor) editor.chain().focus().run();
-  }, [editor])
 
   useEffect(()=>{
     if (!editor) return;

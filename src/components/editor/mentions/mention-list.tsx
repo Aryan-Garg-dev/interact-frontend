@@ -85,7 +85,7 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
             <div className="flex gap-2.5">
               <img 
                 alt={'User Pic'}
-                src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+                src={`${USER_PROFILE_PIC_URL}/${item.image}`}
                 className="w-6 h-6 rounded-full" 
               />
               <p className="text-sm truncate">{item.name}</p>
