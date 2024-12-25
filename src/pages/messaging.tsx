@@ -17,7 +17,6 @@ import Toaster from '@/utils/toaster';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
-import { PencilSimpleLine } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -71,7 +70,7 @@ const Messaging = () => {
       {user.isOrganization ? <OrgSidebar index={-1} /> : <Sidebar index={-1} />}
       <MainWrapper>
         <div
-          className={`w-full h-base_md max-lg:h-fit flex max-lg:flex-col ${
+          className={`w-full md:w-fit mx-auto h-base_md max-lg:h-fit flex max-lg:flex-col ${
             open ? 'gap-2' : 'gap-16'
           } transition-ease-out-500 font-primary`}
         >

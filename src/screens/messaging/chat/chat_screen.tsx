@@ -153,28 +153,37 @@ const ChatScreen = ({ projectWindow = false, initialChatState = initialChat, pro
           if (socket) {
             if (socket.readyState === WebSocket.OPEN) {
               resolve({ name: 'Connection' });
-            } else if (socket.readyState === WebSocket.CONNECTING) {
+            } else {
+              socketService.reconnect();
+
               // Wait for 5 seconds to check if it resolves to OPEN state
               timeoutId = setTimeout(() => {
-                if (socket.readyState === WebSocket.OPEN) {
+                const socket = socketService.getSocket();
+
+                if (socket && socket.readyState === WebSocket.OPEN) {
                   resolve({ name: 'Connection' });
                 } else {
-                  reject({ message: 'Socket failed to connect' });
+                  reject({ message: 'Please refresh the page to reconnect!' });
                 }
               }, 5000);
-            } else if (socket.readyState === WebSocket.CLOSED) {
-              alert('Socket failed to connect');
-              reject({ message: 'Socket failed to connect' });
             }
           } else {
-            reject({ message: 'Socket failed to connect' });
+            reject({ message: 'Please refresh the page to reconnect!' });
           }
         }),
         {
-          loading: 'Socket Connection Failed',
-          description: 'Retrying, Please check your internet connection',
+          loading: 'Socket Connection Failed, Retrying...',
+          finally: () => {
+            if (timeoutId) {
+              clearTimeout(timeoutId);
+            }
+          },
+          description: data =>
+            data?.name == 'Connection'
+              ? 'You are all good to go!'
+              : data.message || 'Retrying, Please check your internet connection',
           success: data => `${data.name} is established successfully!`,
-          error: data => 'Please Refresh the Page to Reconnect!',
+          error: data => 'Could Not Establish Connection',
         }
       );
     }
