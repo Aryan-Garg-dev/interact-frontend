@@ -113,7 +113,9 @@ const EditCollaborator = ({ membership, project, setProject, org = false }: Prop
           </SelectContent>
         </Select>
         <DialogFooter>
-          <Button onClick={handleSubmit}>Save changes</Button>
+          <Button onClick={handleSubmit} variant="outline">
+            Save Changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -18,6 +18,7 @@ import Connections from '../explore/connections_view';
 import { SERVER_ERROR } from '@/config/errors';
 import CopyClipboardButton from '@/components/buttons/copy_clipboard_btn';
 import { SidePrimeWrapper } from '@/wrappers/side';
+import TooltipIcon from '@/components/common/tooltip_icon';
 
 interface Props {
   user: User;
@@ -161,7 +162,11 @@ const ProfileCard = ({ user, setUser }: Props) => {
       <SidePrimeWrapper stickTop>
         <div className="w-full flex-center flex-col gap-4 py-2">
           <div className="absolute group top-4 right-4">
-            <CopyClipboardButton url={`/users/${user.username}?external=true`} iconOnly={true} />
+            <TooltipIcon
+              label="Copy Profile Link"
+              icon={<CopyClipboardButton url={`/users/${user.username}?external=true`} iconOnly />}
+              includeBorder
+            />
           </div>
           <input
             type="file"

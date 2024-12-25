@@ -16,7 +16,7 @@ export const getMessagingMembership = (chat: Chat) => {
   const userID = Cookies.get('id');
   try {
     if (chat?.memberships[0]?.userID == userID) return chat.memberships[1];
-    return chat.memberships[0];
+    return chat.memberships[0] || initialChatMembership;
   } catch (e) {
     return initialChatMembership;
   }

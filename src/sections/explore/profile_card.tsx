@@ -19,6 +19,7 @@ import SignUp from '@/components/common/signup_box';
 import { initialOrganization } from '@/types/initials';
 import UserCard from '@/components/cards/user';
 import { SidePrimeWrapper } from '@/wrappers/side';
+import TooltipIcon from '@/components/common/tooltip_icon';
 
 interface Props {
   user: User;
@@ -193,27 +194,34 @@ const ProfileCard = ({ user, organisation = initialOrganization, org = false }: 
           </div>
           <div className="dark:text-white w-fit absolute max-lg:mt-8 max-lg:static top-4 right-4 flex gap-2">
             {userID != user.id && (
-              <div className="hover:text-white p-2 flex-center font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gradient-to-r hover:from-dark_secondary_gradient_start hover:to-dark_secondary_gradient_end rounded-full cursor-pointer">
-                <Chat onClick={handleChat} size={18} />
-              </div>
+              <TooltipIcon label="Message" onClick={handleChat} icon={<Chat size={18} />} includeBorder />
             )}
-            <div
+            <TooltipIcon
+              label="Share"
               onClick={() => setClickedOnShare(true)}
-              className="hover:text-white p-2 flex-center font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gradient-to-r hover:from-dark_secondary_gradient_start hover:to-dark_secondary_gradient_end rounded-full cursor-pointer"
-            >
-              <Share size={18} />
-            </div>
+              icon={<Share size={18} />}
+              includeBorder
+            />
             {userID != user.id && (
-              <div className="hover:text-white lg:hidden p-2 flex-center font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gradient-to-r hover:from-dark_secondary_gradient_start hover:to-dark_secondary_gradient_end rounded-full cursor-pointer">
-                <Warning onClick={() => setClickedOnReport(true)} size={18} />
-              </div>
+              <TooltipIcon
+                label="Report"
+                className="lg:hidden"
+                onClick={() => setClickedOnReport(true)}
+                icon={<Warning size={18} />}
+                includeBorder
+              />
             )}
           </div>
-          {userID != user.id && (
-            <div className="hover:text-white absolute max-lg:hidden top-4 left-4 p-2 flex-center font-medium border-[1px] border-primary_btn  dark:border-dark_primary_btn bg-gradient-to-r hover:from-dark_secondary_gradient_start hover:to-dark_secondary_gradient_end rounded-full cursor-pointer">
-              <Warning onClick={() => setClickedOnReport(true)} size={18} />
-            </div>
-          )}
+          <div className="absolute max-lg:hidden top-4 left-4">
+            {userID != user.id && (
+              <TooltipIcon
+                label="Report"
+                onClick={() => setClickedOnReport(true)}
+                icon={<Warning size={18} />}
+                includeBorder
+              />
+            )}
+          </div>
         </div>
       </SidePrimeWrapper>
     </>

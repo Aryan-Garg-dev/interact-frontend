@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { currentChatIDSelector, setCurrentChatID } from '@/slices/messagingSlice';
 import { GROUP_CHAT_PIC_URL } from '@/config/routes';
 import { userIDSelector } from '@/slices/userSlice';
-import { Circle } from '@phosphor-icons/react';
+import { Circle, Lock } from '@phosphor-icons/react';
 import { getSelfMembership, isChatUnread } from '@/utils/funcs/messaging';
 
 interface Props {
@@ -15,9 +15,10 @@ interface Props {
   setChats: React.Dispatch<React.SetStateAction<Chat[]>>;
   setUnreadChatCounts?: React.Dispatch<React.SetStateAction<number[]>>;
   setClickedOnChat?: React.Dispatch<React.SetStateAction<boolean>>;
+  wider?: boolean;
 }
 
-const GroupChatCard = ({ chat, setChat, setChats, setUnreadChatCounts, setClickedOnChat }: Props) => {
+const GroupChatCard = ({ chat, setChat, setChats, setUnreadChatCounts, setClickedOnChat, wider = false }: Props) => {
   const userID = useSelector(userIDSelector);
   const dispatch = useDispatch();
 
@@ -85,7 +86,9 @@ const GroupChatCard = ({ chat, setChat, setChats, setUnreadChatCounts, setClicke
             </div>
           </div>
           {getSelfMembership(chat).userID != userID ? (
-            <div className="w-fit flex-center gap-1 font-light text-sm">{chat.noMembers} Members</div>
+            <div className="w-fit flex-center gap-1 font-light text-sm">
+              <Lock /> You are not a member of this chat
+            </div>
           ) : chat.latestMessageID ? (
             <div className="w-full line-clamp-2 font-light">
               <span className="mr-2 font-medium">
@@ -102,8 +105,8 @@ const GroupChatCard = ({ chat, setChat, setChats, setUnreadChatCounts, setClicke
         </div>
         <div className="flex-center flex-col font text-xs">
           {chat.latestMessageID
-            ? getDisplayTime(chat.latestMessage.createdAt, false)
-            : getDisplayTime(chat.createdAt, false)}
+            ? getDisplayTime(chat.latestMessage.createdAt, wider, wider)
+            : getDisplayTime(chat.createdAt, wider, wider)}
           {chat.latestMessageID && isChatUnread(chat) && (
             <>
               <div className="text-xxs text-primary_text font-medium">Unread</div>

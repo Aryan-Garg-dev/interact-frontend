@@ -213,7 +213,7 @@ const ChatScreen = ({ projectWindow = false, initialChatState = initialChat, pro
 
   return (
     <div
-      className={`w-full h-full bg-gray-100 dark:bg-transparent ${
+      className={`w-full h-full bg-transparent ${
         projectWindow ? '' : 'border-2 max-lg:border-0 border-primary_btn dark:border-dark_primary_btn p-3'
       } rounded-lg max-lg:rounded-none relative max-lg:backdrop-blur-2xl max-lg:z-50`}
     >

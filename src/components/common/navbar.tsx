@@ -12,6 +12,7 @@ import Link from 'next/link';
 import Feedback from './feedback';
 import { Button } from '../ui/button';
 import { DialogSearchBar } from '../explore/searchbar';
+import TooltipIcon from './tooltip_icon';
 
 const Navbar = ({ includeExplore = false }: { includeExplore?: boolean }) => {
   const [clickedOnNotifications, setClickedOnNotifications] = useState(false);
@@ -39,38 +40,44 @@ const Navbar = ({ includeExplore = false }: { includeExplore?: boolean }) => {
         {user.isLoggedIn ? (
           <div className="flex items-center gap-2 max-md:gap-0 z-0">
             {includeExplore && <DialogSearchBar />}
-            <div
+            <TooltipIcon
+              label="Feedback"
               onClick={() => setClickedOnFeedback(true)}
-              className="w-10 h-10 max-lg:hidden rounded-full flex-center hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover cursor-pointer transition-ease-300"
-            >
-              <Handshake className="max-md:w-6 max-md:h-6" size={24} weight="regular" />
-            </div>
-            <Link
-              className="w-10 h-10 rounded-full flex-center relative hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover transition-ease-300"
-              href={'/messaging'}
-            >
-              {chats > 0 && (
-                <div className="w-4 h-4 animate-pulse rounded-full absolute top-0 right-0 flex items-center justify-center text-xs bg-black dark:text-white">
-                  {chats}
+              icon={<Handshake className="max-md:w-6 max-md:h-6" size={24} weight="regular" />}
+            />
+            <TooltipIcon
+              label="Chats"
+              icon={
+                <Link className="w-full h-full relative" href={'/messaging'}>
+                  {chats > 0 && (
+                    <div className="w-4 h-4 animate-pulse rounded-full absolute top-0 right-0 flex items-center justify-center text-xs bg-black dark:text-white">
+                      {chats}
+                    </div>
+                  )}
+                  <ChatCircleDots className="max-md:w-6 max-md:h-6" size={24} weight="regular" />
+                </Link>
+              }
+            />
+            <TooltipIcon
+              label="Notifications"
+              icon={
+                <div
+                  onClick={() => {
+                    setClickedOnProfile(false);
+                    setClickedOnNotifications(prev => !prev);
+                    // dispatch(setUnreadNotifications(0));
+                  }}
+                  className="w-full h-full relative"
+                >
+                  {notifications > 0 && (
+                    <div className="w-4 h-4 animate-pulse rounded-full absolute top-0 right-0 flex items-center justify-center text-xs bg-black dark:text-white">
+                      {notifications}
+                    </div>
+                  )}
+                  <Bell className="cursor-pointer max-md:w-6 max-md:h-6" size={24} weight="regular" />
                 </div>
-              )}
-              <ChatCircleDots className="max-md:w-6 max-md:h-6" size={24} weight="regular" />
-            </Link>
-            <div
-              onClick={() => {
-                setClickedOnProfile(false);
-                setClickedOnNotifications(prev => !prev);
-                // dispatch(setUnreadNotifications(0));
-              }}
-              className="w-10 h-10 rounded-full flex-center relative hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover transition-ease-300"
-            >
-              {notifications > 0 && (
-                <div className="w-4 h-4 animate-pulse rounded-full absolute top-0 right-0 flex items-center justify-center text-xs bg-black dark:text-white">
-                  {notifications}
-                </div>
-              )}
-              <Bell className="cursor-pointer max-md:w-6 max-md:h-6" size={24} weight="regular" />
-            </div>
+              }
+            />
             <Image
               crossOrigin="anonymous"
               className="w-9 h-9 max-md:w-6 max-md:h-6 max-md:ml-2 rounded-full cursor-pointer"

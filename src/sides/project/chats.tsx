@@ -58,7 +58,13 @@ const ProjectChats = ({ projectID }: { projectID: string }) => {
           <div className={`max-md:w-full flex flex-col gap-4`}>
             {chats.map(chat => {
               return (
-                <GroupChatCard key={chat.id} chat={chat} setChats={setChats} setClickedOnChat={setClickedOnChat} />
+                <GroupChatCard
+                  key={chat.id}
+                  chat={chat}
+                  setChats={setChats}
+                  setClickedOnChat={setClickedOnChat}
+                  wider
+                />
               );
             })}
           </div>

@@ -269,7 +269,7 @@ const ScheduleApplicantMeeting = ({ application, setApplicationMeeting }: Props)
             <PrimaryButton onClick={handleAddParticipants} label="Submit" animateIn={false} />
           )}
         </div>
-        {/* <Button onClick={handleSubmit}>Edit Opening</Button> */}
+        {/* <Button onClick={handleSubmit} variant="outline">Edit Opening</Button> */}
       </DialogContent>
     </Dialog>
   );

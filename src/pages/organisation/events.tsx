@@ -226,7 +226,7 @@ const Events = () => {
                     next={getEvents}
                     hasMore={hasMore}
                     loader={<Loader />}
-                    className="w-full pl-6 max-md:pl-0 pb-12 mx-auto flex flex-wrap gap-8 justify-center"
+                    className="w-full grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-md:grid-cols-1"
                   >
                     {events.map(event => (
                       <EventCard
