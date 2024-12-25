@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
 
 type LinkDialogProps = {
   open: boolean;
