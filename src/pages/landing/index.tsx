@@ -11,7 +11,7 @@ import Testimonials from '@/sections/landing/testimonails';
 const Separator = ({ excludeMargin = false }) => {
   return (
     <div
-      className={`h-[2px] w-screen bg-gradient-to-r from-white via-gray-300 dark:via-dark_primary_btn to-white ${
+      className={`h-[2px] w-screen bg-gradient-to-r from-white dark:from-dark_primary_comp via-gray-300 dark:via-dark_primary_btn to-white ${
         !excludeMargin && 'my-2'
       }`}
     ></div>
@@ -21,12 +21,12 @@ const Separator = ({ excludeMargin = false }) => {
 const LandingPage = () => {
   return (
     <div
-      className="w-full flex flex-col gap-24 bg-white overflow-hidden"
+      className="w-full flex flex-col gap-24 bg-background overflow-hidden"
       style={{
         cursor: `url('/landing/cursor.svg'), auto`,
       }}
     >
-      <div className="w-4/5 max-md:w-full mx-auto">
+      <div className="w-5/6 max-md:w-full mx-auto">
         <div className="flex flex-col items-center justify-center">
           <Navbar />
           <Separator excludeMargin />

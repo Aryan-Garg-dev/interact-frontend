@@ -3,6 +3,7 @@ import { FloatingImages } from './floatingimages';
 import { useWindowWidth } from '@react-hook/window-size';
 import Link from 'next/link';
 import { BackgroundLines } from '@/components/ui/background-lines';
+import { useTheme } from 'next-themes';
 
 const TextAnimation = () => {
   const texts = ['Organizations', 'Hackathons', 'Projects', 'Communities'];
@@ -52,10 +53,26 @@ const TextAnimation = () => {
 };
 
 export const HeroSection = () => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [inputTheme, setInputTheme] = useState(String(localStorage.getItem('theme')) == 'dark' ? 'dark' : 'light');
+
+  const { setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    if (document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+      setInputTheme('light');
+      setTheme('light');
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      setInputTheme('dark');
+      setTheme('dark');
+    }
+  };
 
   return (
-    <BackgroundLines className="w-screen h-base bg-background text-center relative flex-center flex-col gap-12 max-md:gap-4 z-10">
+    <BackgroundLines className="w-screen h-base bg-background text-center relative flex-center flex-col gap-12 max-md:gap-4 z-10 transition-ease-300">
       {/* <FloatingImages /> */}
       <div className="flex flex-col gap-4 max-md:gap-0">
         <div className="mx-auto relative">
@@ -85,21 +102,21 @@ export const HeroSection = () => {
           </div> */}
         </div>
       </div>
-      <div className="flex justify-center items-center space-x-4 wiggle pt-12 text-primary_black">
+      <div className="w-fit flex justify-center items-center space-x-4 wiggle pt-12 text-primary_black">
         <div
           className={`transition-all duration-300 ${
-            isChecked ? 'text-lg font-normal text-gray-500' : 'text-xl font-medium text-black'
+            inputTheme == 'dark' ? 'text-lg font-normal text-gray-500' : 'text-xl font-medium text-black'
           }`}
         >
           For Students
         </div>
         <label className="switch">
-          <input type="checkbox" className="input__check" onChange={e => setIsChecked(e.target.checked)} />
+          <input type="checkbox" onChange={toggleTheme} className="input__check" />
           <span className="slider"></span>
         </label>
         <div
           className={`text-lg transition-all duration-300 ${
-            isChecked ? 'text-xl font-medium text-black' : 'text-lg font-normal text-gray-500'
+            inputTheme == 'dark' ? 'text-xl font-medium text-white' : 'text-lg font-normal text-gray-500'
           }`}
         >
           For Organisations

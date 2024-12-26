@@ -32,27 +32,19 @@
 }
 
 .fade-img {
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0)100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
 }
 
 .fade-img2 {
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2)50%, rgba(0, 0, 0, 0)100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
 }
 
 .fade-img-right {
-  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%,  rgba(0, 0, 0, 0.2));
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 90%);
 }
 
 .fade-img-left {
-  mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%,  rgba(0, 0, 0, 0.2));
-}
-
-.fade-img-right {
-  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%,  rgba(0, 0, 0, 0.2));
-}
-
-.fade-img-left {
-  mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%,  rgba(0, 0, 0, 0.2));
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 90%);
 }
 
 .hover-underline-animation {
@@ -401,18 +393,34 @@ html {
   --_l: #0000 calc(25% / 3), var(--c1) 0 25%, #0000 0;
   --_g: conic-gradient(from 120deg at 50% 87.5%, var(--c1) 120deg, #0000 0);
 
-  background: var(--_g), var(--_g) 0 calc(var(--s) / 2),
-    conic-gradient(from 180deg at 75%, var(--c2) 60deg, #0000 0),
+  background: var(--_g), var(--_g) 0 calc(var(--s) / 2), conic-gradient(from 180deg at 75%, var(--c2) 60deg, #0000 0),
     conic-gradient(from 60deg at 75% 75%, var(--c1) 0 60deg, #0000 0),
     linear-gradient(150deg, var(--_l)) 0 calc(var(--s) / 2),
-    conic-gradient(
-      at 25% 25%,
-      #0000 50%,
-      var(--c2) 0 240deg,
-      var(--c1) 0 300deg,
-      var(--c2) 0
-    ),
+    conic-gradient(at 25% 25%, #0000 50%, var(--c2) 0 240deg, var(--c1) 0 300deg, var(--c2) 0),
     linear-gradient(-150deg, var(--_l)) #01579b; /* darker blue for third color */
   background-size: calc(0.866 * var(--s)) var(--s);
 }
 
+@layer base {
+  :root {
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}

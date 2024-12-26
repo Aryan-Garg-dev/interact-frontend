@@ -13,7 +13,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import NProgressConfig from '@/config/nprogress';
 import socketService from '@/config/ws';
-import { Inter, Fraunces, Parisienne } from 'next/font/google';
+import { Inter, Fraunces, Parisienne, Great_Vibes } from 'next/font/google';
 import ThemeCheck from '@/config/theme';
 import Head from 'next/head';
 import ThemeProvider from '@/components/ui/theme-provider';
@@ -34,6 +34,12 @@ const parisienne = Parisienne({
   weight: '400',
   subsets: ['latin'],
   variable: '--parisienne-font',
+});
+
+const great_vibes = Great_Vibes({
+  weight: '400',
+  subsets: ['latin'],
+  variable: '--great-vibes-font',
 });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -61,7 +67,7 @@ export default function App({ Component, pageProps }: AppProps) {
       `}
       </Script> */}
 
-      <main className={`${inter.variable} ${fraunces.variable} ${parisienne.variable}`}>
+      <main className={`${inter.variable} ${fraunces.variable} ${parisienne.variable} ${great_vibes.variable}`}>
         <Head>
           <title>Interact Now</title>
           <meta
