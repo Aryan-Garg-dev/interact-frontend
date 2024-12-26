@@ -14,7 +14,7 @@ const EventCard = ({ event }: Props) => {
   return (
     <Link href={`/events/${event.id}`} target="_blank" className="w-full rounded-xl animate-fade_third">
       <div className="w-full relative group">
-        <div className="w-fit flex-center gap-1 top-2 right-2 absolute bg-white text-gray-500 text-xxs px-2 rounded-lg">
+        <div className="w-fit flex-center gap-1 top-2 right-2 absolute bg-white dark:bg-dark_primary_comp_hover text-gray-500 dark:text-white text-xxs px-2 rounded-lg">
           <Eye size={12} /> <div>{event.noImpressions}</div>
         </div>
         <Image
@@ -26,11 +26,11 @@ const EventCard = ({ event }: Props) => {
           placeholder="blur"
           blurDataURL={event.blurHash || 'no-hash'}
         />
-        <div className="absolute bottom-2 right-2 bg-white text-gray-500 text-xxs px-2 py-1 rounded-lg">
+        <div className="absolute bottom-2 right-2 bg-white dark:bg-dark_primary_comp_hover text-gray-500 dark:text-white text-xxs px-2 py-1 rounded-lg">
           {event.organization.title}
         </div>
       </div>
-      <div className="w-full h-20 bg-white shadow-sm rounded-b-xl flex p-4">
+      <div className="w-full h-20 bg-white dark:bg-dark_primary_comp shadow-sm rounded-b-xl flex p-4">
         <div className="w-1/6 flex items-start justify-start">
           <div className="w-fit flex flex-col items-end">
             <div className="w-fit text-xxs uppercase transition-ease-out-500">

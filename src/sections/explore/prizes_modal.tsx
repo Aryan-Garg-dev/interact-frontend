@@ -13,9 +13,9 @@ const DisplayPrizes: React.FC<DisplayPrizesProps> = ({ prizes, setShow }) => {
       <h1 className="text-3xl my-4 font-bold self-start">Prizes: </h1>
       <div className="flex flex-col space-y-4 w-full">
         {prizes?.map(prize => (
-          <div key={prize.id} className="p-4 bg-white rounded-lg shadow-md w-full">
+          <div key={prize.id} className="p-4 bg-white dark:bg-dark_primary_comp_hover  rounded-lg shadow-md w-full">
             <h3 className="text-xl font-bold">{prize.title}</h3>
-            <p className="text-gray-700">{prize.description}</p>
+            <p className="text-gray-700 dark:text-white">{prize.description}</p>
           </div>
         ))}
       </div>

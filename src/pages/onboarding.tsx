@@ -27,10 +27,8 @@ import UserCard from '@/components/onboarding/user_card';
 import DummyUserCard from '@/components/onboarding/dummy_user_card';
 import NonOrgOnlyAndProtect from '@/utils/wrappers/non_org_only';
 import { useRouter } from 'next/router';
-import { collegesData } from 'src/utils/colleges';
 import { College } from '@/types';
 import postHandler from '@/handlers/post_handler';
-import fuzzysort from 'fuzzysort';
 import Input from '@/components/form/input';
 import { useTheme } from 'next-themes';
 
@@ -171,11 +169,22 @@ const Onboarding = () => {
   };
 
   useEffect(() => {
-    if (schoolSearch == '') setColleges([]);
-    else {
-      const results = fuzzysort.go(schoolSearch, collegesData, { key: 'fuzzy', limit: 10 });
-      setColleges(results.map(result => result.obj));
+    if (schoolSearch === '') {
+      setColleges([]);
+      return;
     }
+
+    const fetchColleges = async () => {
+      try {
+        const response = await fetch(`/api/colleges?query=${schoolSearch}`);
+        const data = await response.json();
+        setColleges(data);
+      } catch (error) {
+        console.error('Error fetching colleges:', error);
+      }
+    };
+
+    fetchColleges();
   }, [schoolSearch]);
 
   const { setTheme } = useTheme();
@@ -411,7 +420,7 @@ const Onboarding = () => {
                       )}
 
                       <div className="font-medium text-sm mt-4">
-                        One Last Step!, Tell us where are are situated to help build your recommendations.
+                        One Last Step!, Tell us where you are situated to help build your recommendations.
                       </div>
                       <div className="w-full flex items-center gap-2 bg-[#ffffff40] border-[1px] border-black rounded-lg p-2">
                         <MapPin size={24} weight="duotone" />

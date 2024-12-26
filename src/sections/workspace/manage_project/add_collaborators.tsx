@@ -234,13 +234,13 @@ const AddCollaborators = ({ project, setProject, org = false }: Props) => {
                                 })
                               );
                             }}
-                            className="p-2 mr-8 max-md:mr-0 flex-center border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active focus:outline-none transition-ease-300 cursor-pointer rounded-lg font-medium"
+                            className="p-2 max-md:mr-0 flex-center border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active focus:outline-none transition-ease-300 cursor-pointer rounded-lg font-medium"
                           />
                         </form>
                       ) : (
                         <div
                           onClick={() => setClickedInvitationSliceIndex(index)}
-                          className="p-2 mr-8 flex-center border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active transition-ease-300 cursor-pointer rounded-lg font-medium"
+                          className="p-2 flex-center border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active transition-ease-300 cursor-pointer rounded-lg font-medium"
                         >
                           {invitationSlices[index].title == '' ? 'Enter Title' : invitationSlices[index].title}
                         </div>
@@ -254,7 +254,7 @@ const AddCollaborators = ({ project, setProject, org = false }: Props) => {
         </div>
         <div className={`w-full flex ${status == 0 ? 'justify-end' : 'justify-between'}`}>
           {status == 0 ? (
-            <PrimaryButton onClick={() => setStatus(1)} label="Next" />
+            selectedUsers.length > 0 && <PrimaryButton onClick={() => setStatus(1)} label="Next" />
           ) : (
             <>
               <PrimaryButton onClick={() => setStatus(0)} label="Prev" />

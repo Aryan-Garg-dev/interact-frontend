@@ -24,10 +24,10 @@ const Projects = ({
   const [page, setPage] = useState(1);
   const [order, setOrder] = useState('trending');
 
-  const fetchProjects = async (search: string | null, initialPage?: number) => {
+  const fetchProjects = async (search: string | null, cid: string | null, initialPage?: number) => {
     const URL = `${EXPLORE_URL}/projects?page=${initialPage ? initialPage : page}&limit=${10}&order=${order}${
       search ? `&search=${search}` : ''
-    }`;
+    }${cid ? '&cid=' + cid : ''}`;
 
     const res = await getHandler(URL, undefined, true);
     if (res.statusCode == 200) {
@@ -76,7 +76,12 @@ const Projects = ({
     setLoading(true);
     const pid = new URLSearchParams(window.location.search).get('id');
     if (pid && pid != '') fetchProject(pid);
-    else fetchProjects(new URLSearchParams(window.location.search).get('search'), 1);
+    else
+      fetchProjects(
+        new URLSearchParams(window.location.search).get('search'),
+        new URLSearchParams(window.location.search).get('cid'),
+        1
+      );
   }, [window.location.search, order]);
 
   const userID = useSelector(userIDSelector);
@@ -88,11 +93,7 @@ const Projects = ({
     <div>
       {(projects.length > 0 || order == 'last_viewed') && (
         <OrderMenu
-          orders={
-            userID
-              ? ['trending', 'most_liked', 'most_viewed', 'latest', 'last_viewed']
-              : ['trending', 'most_liked', 'most_viewed', 'latest']
-          }
+          orders={['trending', 'most_liked', 'most_viewed', ...(userID ? ['latest', 'last_viewed'] : [])]}
           current={order}
           setState={setOrder}
         />
@@ -106,7 +107,12 @@ const Projects = ({
             <InfiniteScroll
               className="w-full"
               dataLength={projects.length}
-              next={() => fetchProjects(new URLSearchParams(window.location.search).get('search'))}
+              next={() =>
+                fetchProjects(
+                  new URLSearchParams(window.location.search).get('search'),
+                  new URLSearchParams(window.location.search).get('cid')
+                )
+              }
               hasMore={hasMore}
               loader={<Loader />}
             >

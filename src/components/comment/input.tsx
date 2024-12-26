@@ -87,8 +87,8 @@ const CommentInput = ({
         />
         <ArrowUpRight
           className={`${
-            type == 'comment' ? 'w-6 h-6' : 'w-8 h-8'
-          } self-end p-2 dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-full flex-center cursor-pointer transition-ease-300`}
+            type == 'comment' ? 'w-6 h-6 p-1' : 'w-8 h-8 p-2'
+          } self-end dark:bg-dark_primary_comp hover:bg-primary_comp_hover active:bg-primary_comp_active dark:hover:bg-dark_primary_comp_hover dark:active:bg-dark_primary_comp_active border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-full flex-center cursor-pointer transition-ease-300`}
           onClick={handleSubmit}
         />
       </div>
@@ -96,8 +96,8 @@ const CommentInput = ({
         <div
           className={`w-full absolute bg-gradient-to-b ${
             type == 'task'
-              ? 'from-gray-50 dark:from-black via-[#ffffffca] dark:via-gray-700'
-              : 'from-white dark:from-dark_primary_comp via-[#ffffffb2] dark:via-dark_primary_comp'
+              ? 'from-gray-50 dark:from-dark_primary_active via-[#ffffffca] dark:via-dark_primary_hover'
+              : 'from-white dark:from-dark_primary_comp_active via-[#ffffffb2] dark:via-dark_primary_comp_hover'
           } via-[90%] flex flex-wrap justify-center gap-2 py-4 z-10`}
         >
           {users.map(user => (

@@ -206,6 +206,7 @@ export interface Project {
   user: User;
   likedBy: User[];
   comments: Comment[];
+  noOpenings: number;
   noLikes: number;
   noShares: number;
   noComments: number;
@@ -222,6 +223,7 @@ export interface Project {
   noMembers: number;
   privateLinks: string[];
   links: string[];
+  buckets?: ResourceBucket[];
   organizationID: string;
   organization: Organization | null;
   createdAt: Date;
@@ -302,6 +304,8 @@ export interface Application {
   score: number;
   createdAt: Date;
   noComments: number;
+  meetingID?: string;
+  meeting?: Meeting;
 }
 
 export interface Notification {
@@ -682,6 +686,7 @@ export interface Meeting {
   id: string;
   dyteID: string;
   eventID: string;
+  applicationID?: string;
   title: string;
   description: string;
   tags: string[];
@@ -703,6 +708,7 @@ export interface Meeting {
   createdAt: Date;
   nextSessionTime: Date;
   sessions: Session[];
+  project?: Project;
 }
 
 export interface Session {

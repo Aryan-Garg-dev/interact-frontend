@@ -3,7 +3,6 @@ import Sidebar from '@/components/common/sidebar';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import PrimeWrapper from '@/wrappers/prime';
-import SideBarWrapper, { SidePrimeWrapper } from '@/wrappers/side';
 import React, { useState } from 'react';
 import ExploreEvents from '@/screens/events/explore';
 import BookmarkEvents from '@/screens/events/bookmarks';
@@ -19,7 +18,6 @@ const Events = () => {
     <BaseWrapper title="Events">
       <Sidebar index={3} />
       <MainWrapper restrictWidth>
-        {/* <div className="w-2/3 max-md:w-full"> */}
         {userID ? (
           <>
             <MenuBar items={['Explore', 'Registered', 'Saved']} active={active} setState={setActive} />

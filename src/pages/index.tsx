@@ -13,7 +13,7 @@ const Index = () => {
       {/* <div className="absolute inset-0 pointer-events-none noise z-50"></div> */}
       <div className="w-full backdrop-blur-sm border-b-white border-b-[1px] flex justify-between items-center p-4">
         <ReactSVG src="/onboarding_logo.svg" />
-        <div className="flex-center gap-6 max-md:gap-4">
+        <div className="flex-center gap-6 max-md:gap-4 text-primary_black">
           <Link href={'/home'} className="hover-underline-animation after:bg-gray-700 max-md:text-xs">
             Home
           </Link>
@@ -35,7 +35,7 @@ const Index = () => {
           )}
         </div>
       </div>
-      <div className="flex-center flex-col gap-4 mt-[10%] mb-[2%] max-md:my-[5%] max-md:px-4">
+      <div className="flex-center flex-col gap-4 text-primary_black mt-[10%] mb-[2%] max-md:my-[5%] max-md:px-4">
         <div className="text-6xl font-semibold font-title">
           <b>interact</b>, cause that&apos;s how you grow.
         </div>

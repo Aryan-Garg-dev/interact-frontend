@@ -42,7 +42,7 @@ export const SidePrimeWrapper: React.FC<WrapperProps> = ({ children, title, styl
       style={style}
       className={`w-full flex flex-col gap-2 bg-white dark:bg-dark_primary_comp rounded-lg p-4 ${
         stickTop && 'sticky top-20 max-h-base overflow-y-auto'
-      } transition-ease-300`}
+      } transition-ease-300 animate-fade_half`}
     >
       {title && <div className="w-fit text-2xl font-bold text-gradient">{title}</div>}
       {children}

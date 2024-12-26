@@ -18,8 +18,6 @@ import Select from '@/components/form/select';
 import Time from '@/components/form/time';
 import Tags from '@/components/form/tags';
 import { getFormattedTime, getInputFieldFormatTime } from '@/utils/funcs/time';
-// import ReactMarkdown from 'react-markdown';
-// import remarkGfm from 'remark-gfm';
 
 interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;

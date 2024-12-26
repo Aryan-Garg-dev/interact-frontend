@@ -412,7 +412,7 @@ const EventComponent = ({ id }: Props) => {
                       <div className="w-full flex-center text-sm font-semibold text-gray-500">SIMILAR EVENTS</div>
                       <div className="w-full flex gap-6 flex-wrap justify-around">
                         {similarEvents.map(e => (
-                          <EventCard key={e.id} event={e} size={80} />
+                          <EventCard key={e.id} event={e} smaller />
                         ))}
                       </div>
                     </div>

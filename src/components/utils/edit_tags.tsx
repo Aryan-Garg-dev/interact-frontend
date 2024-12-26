@@ -96,7 +96,7 @@ const Tags = ({
         }}
         className={`w-full ${
           onboardingDesign ? 'p-3 placeholder:text-[#202020c6] bg-[#ffffff40]' : 'p-2 bg-transparent'
-        } dark:text-white border-[1px] flex flex-wrap items-center gap-2 rounded-md`}
+        } dark:text-white border-[1px] border-gray-400 dark:border-dark_primary_btn flex flex-wrap items-center gap-2 rounded-md`}
       >
         {tags.map((tag, i) => (
           <div

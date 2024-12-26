@@ -179,13 +179,12 @@ const Events = () => {
             {clickedOnNewHackathon && <NewHackathon setEvents={setEvents} setShow={setClickedOnNewHackathon} />}
             {clickedOnNewEvent && <NewEvent setEvents={setEvents} setShow={setClickedOnNewEvent} />}
             {clickedOnViewInvitations && <ViewInvitations setShow={setClickedOnViewInvitations} />}
-            {clickedOnViewHistory && (
-            clickedEditEvent.hackathonID ? (
-            <HackathonHistories hackathonID={clickedEditEvent.hackathonID} setShow={setClickedOnViewHistory} />
-            ) : (
-            <EventHistory eventID={clickedEditEvent.id} setShow={setClickedOnViewHistory} />
-           )
-          )}
+            {clickedOnViewHistory &&
+              (clickedEditEvent.hackathonID ? (
+                <HackathonHistories hackathonID={clickedEditEvent.hackathonID} setShow={setClickedOnViewHistory} />
+              ) : (
+                <EventHistory eventID={clickedEditEvent.id} setShow={setClickedOnViewHistory} />
+              ))}
             {clickedOnEditEvent && (
               <EditEvent event={clickedEditEvent} setEvents={setEvents} setShow={setClickedOnEditEvent} />
             )}
@@ -227,7 +226,7 @@ const Events = () => {
                     next={getEvents}
                     hasMore={hasMore}
                     loader={<Loader />}
-                    className="w-full pl-6 max-md:pl-0 pb-12 mx-auto flex flex-wrap gap-8 justify-center"
+                    className="w-full grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-md:grid-cols-1"
                   >
                     {events.map(event => (
                       <EventCard
@@ -242,7 +241,6 @@ const Events = () => {
                         setClickedDeleteEvent={setClickedDeleteEvent}
                         setClickedOnEditCoHosts={setClickedOnEditCoHosts}
                         setClickedOnEditJudges={setClickedOnEditJudges}
-                        size={open ? '[22rem]' : 96}
                       />
                     ))}
                   </InfiniteScroll>

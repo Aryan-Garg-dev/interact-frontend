@@ -126,6 +126,7 @@ const ProjectTasks = ({ slug, org = false }: Props) => {
   useEffect(() => {
     getProject();
   }, []);
+
   return (
     <MainWrapper>
       {clickedOnNewTask && (

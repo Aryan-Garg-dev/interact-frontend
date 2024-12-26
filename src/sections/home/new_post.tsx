@@ -162,7 +162,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
             />
             <div className="grow flex flex-col gap-4">
               <div className="flex justify-between items-center">
-                <div className="w-fit flex-center gap-12">
+                <div className="w-fit max-md:w-full flex-center max-md:justify-between max-md:flex-wrap gap-12 max-md:gap-4">
                   <div className="flex flex-col">
                     <div className="text-2xl font-semibold">{org ? currentOrg.title : user.name}</div>
                     {!org && <div className="text-sm">@{user.username}</div>}
@@ -283,7 +283,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
                 placeholder="Start a conversation..."
               ></textarea>
               {communityID && (
-                <div className="w-full mt-4">
+                <div className="w-full my-4">
                   <Checkbox
                     label="Is the post open?"
                     val={isOpen}
@@ -302,7 +302,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
         </div>
 
         {showUsers && users.length > 0 && (
-          <div className="w-full bg-gradient-to-b from-white via-[#ffffffb2] via-[90%] flex flex-wrap justify-center gap-3 py-4">
+          <div className="w-full bg-gradient-to-b from-white via-[#ffffffb2] via-[90%] dark:from-dark_primary_comp_hover dark:via-dark_primary_comp flex flex-wrap justify-center gap-3 py-4">
             {users.map(user => (
               <div
                 key={user.id}

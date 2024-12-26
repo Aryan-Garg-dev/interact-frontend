@@ -355,10 +355,20 @@ const ProjectView = ({
 
                 <div className="w-full mx-auto flex flex-col gap-2 pb-4">
                   {/* <EditProjectImages project={project} setProjects={setProjects} setProject={setProject} /> */}
-                  {checkOrgProjectAccess(PROJECT_EDITOR, project.id, ORG_SENIOR, project.organization) && (
-                    <EditProject project={project} setProjects={setProjects} setProject={setProject} />
-                  )}
-                  {checkOrgProjectAccess(PROJECT_OWNER, project.id, ORG_MANAGER, project.organization) ? (
+                  {checkOrgProjectAccess(
+                    PROJECT_EDITOR,
+                    project.id,
+                    ORG_SENIOR,
+                    project.organization,
+                    !!(project.organizationID && project.organizationID != '')
+                  ) && <EditProject project={project} setProjects={setProjects} setProject={setProject} />}
+                  {checkOrgProjectAccess(
+                    PROJECT_OWNER,
+                    project.id,
+                    ORG_MANAGER,
+                    project.organization,
+                    !!(project.organizationID && project.organizationID != '')
+                  ) ? (
                     <div
                       onClick={() => setClickedOnDelete(true)}
                       className="w-full text-lg font-medium py-2 flex-center border-[1px] border-primary_danger hover:text-white hover:bg-primary_danger rounded-lg cursor-pointer transition-ease-300"

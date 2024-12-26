@@ -37,9 +37,7 @@ const ViewPermissions = ({ community, permissionConfig, setPermissionConfig }: P
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
-          View Permissions
-        </Button>
+        <Button onClick={() => setIsDialogOpen(true)}>View Permissions</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md min-w-[30%]">
         <DialogHeader>

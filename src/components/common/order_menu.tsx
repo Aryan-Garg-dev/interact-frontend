@@ -16,7 +16,7 @@ const OrderMenu = ({ orders, current, setState }: Props) => {
       type="single"
     >
       {orders.map((order, index) => (
-        <ToggleGroupItem className="capitalize" key={index} value={order} size="lg">
+        <ToggleGroupItem className="capitalize max-md" key={index} value={order} size="lg">
           {order.replaceAll('_', ' ')}
         </ToggleGroupItem>
       ))}

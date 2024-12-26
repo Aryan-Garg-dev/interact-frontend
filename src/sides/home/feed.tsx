@@ -6,7 +6,7 @@ import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import { ChartLineUp, Lock } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
-import { Meeting, Task, User } from '@/types';
+import { Meeting, Project, Task, User } from '@/types';
 import { userSelector } from '@/slices/userSlice';
 import UserCard from '@/components/explore/user_card';
 import { getNextSessionTime } from '@/utils/funcs/session_details';
@@ -19,12 +19,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import SideLoader from '@/components/loaders/side';
+import Tasks from './tasks';
+import TaskCard from '@/components/home/task_card';
+import MeetingCard from '@/components/home/meeting_card';
 
 const FeedSide = () => {
   const [searches, setSearches] = useState<string[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const [meetingProject, setMeetingProject] = useState<(Project | undefined)[]>([]);
   const [loading, setLoading] = useState(true);
 
   const user = useSelector(userSelector);
@@ -70,7 +75,7 @@ const FeedSide = () => {
   };
 
   const fetchTasks = () => {
-    const URL = `${USER_URL}/me/tasks?limit=5`;
+    const URL = `${USER_URL}/me/tasks?limit=5&is_completed=false`;
     getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
@@ -94,6 +99,7 @@ const FeedSide = () => {
       .then(res => {
         if (res.statusCode === 200) {
           setMeetings(res.data.meetings || []);
+          setMeetingProject(res.data.projects || []);
           setLoading(false);
         } else {
           if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
@@ -118,55 +124,32 @@ const FeedSide = () => {
   }, []);
 
   return loading ? (
-    <></>
+    <>
+      <SideLoader boxes={3} />
+      <SideLoader boxes={1} />
+      <SideLoader boxes={5} />
+    </>
   ) : (
     <>
       {meetings && meetings.length > 0 && (
         <SidePrimeWrapper title="Upcoming Meetings">
           <div className="w-full flex flex-col gap-1">
-            {meetings.map(meeting => (
-              <Link
-                href={`/organisations?oid=${meeting.organizationID}&redirect_url=/meetings/${meeting.id}`}
-                key={meeting.id}
-                className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg px-2 py-1 transition-ease-300"
-              >
-                <div className="w-[calc(100%-112px)]">
-                  <div className="font-medium line-clamp-1">{meeting.title}</div>
-                  <div className="text-xs line-clamp-1">@{meeting.organization.title}</div>
-                </div>
-                <div className="w-28 text-xs text-end">{getNextSessionTime(meeting, false, 'hh:mm A DD MMM')}</div>
-              </Link>
+            {meetings.map((meeting, index) => (
+              <MeetingCard key={index} meeting={meeting} meetingProject={meetingProject[index]} />
             ))}
           </div>
         </SidePrimeWrapper>
       )}
       {tasks && tasks.length > 0 && (
-        <SidePrimeWrapper title="Pending Tasks">
+        <SidePrimeWrapper>
+          <div className="w-full flex items-center justify-between">
+            <div className="w-fit text-2xl font-bold text-gradient">Pending Tasks</div>
+            <Tasks />
+          </div>
+
           <div className="w-full flex flex-col gap-1">
             {tasks.map(task => (
-              <Link
-                href={
-                  task.project?.title
-                    ? `/workspace/tasks/${task.project?.slug}?tid=${task.id}`
-                    : `/organisations?oid=${task.organizationID}&redirect_url=/tasks?tid=${task.id}`
-                }
-                key={task.id}
-                className="w-full flex justify-between items-center flex-wrap hover:scale-105 hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg px-2 py-1 transition-ease-300"
-              >
-                <div className="w-[calc(100%-112px)]">
-                  <div className="font-medium line-clamp-1">{task.title}</div>
-                  <div className="text-xs line-clamp-1">
-                    @{task.project?.title ? task.project.title : task.organization?.title}
-                  </div>
-                </div>
-                <div
-                  className={`w-28 text-xs text-end ${
-                    moment(task.deadline).isBefore(moment()) ? 'text-primary_danger' : 'text-green-400'
-                  }`}
-                >
-                  {moment(task.deadline).format('hh:mm A DD MMM')}
-                </div>
-              </Link>
+              <TaskCard key={task.id} task={task} />
             ))}
           </div>
         </SidePrimeWrapper>

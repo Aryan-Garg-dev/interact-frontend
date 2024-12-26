@@ -5,12 +5,10 @@ import { ORG_URL, USER_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { College, Profile, User } from '@/types';
-import { collegesData } from '@/utils/colleges';
 import isArrEdited from '@/utils/funcs/check_array_edited';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Toaster from '@/utils/toaster';
 import { Buildings, CalendarBlank, Certificate, Envelope, MapPin, PencilSimple, Phone, X } from '@phosphor-icons/react';
-import fuzzysort from 'fuzzysort';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import isMobilePhone from 'validator/lib/isMobilePhone';
@@ -104,11 +102,22 @@ const About = ({ profile, setUser, org = false }: Props) => {
   };
 
   useEffect(() => {
-    if (schoolSearch == '') setColleges([]);
-    else {
-      const results = fuzzysort.go(schoolSearch, collegesData, { key: 'fuzzy', limit: 10 });
-      setColleges(results.map(result => result.obj));
+    if (schoolSearch === '') {
+      setColleges([]);
+      return;
     }
+
+    const fetchColleges = async () => {
+      try {
+        const response = await fetch(`/api/colleges?query=${schoolSearch}`);
+        const data = await response.json();
+        setColleges(data);
+      } catch (error) {
+        console.error('Error fetching colleges:', error);
+      }
+    };
+
+    fetchColleges();
   }, [schoolSearch]);
 
   interface SaveBtnProps {
@@ -172,7 +181,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
                       College Name ({school.trim().length}/25)
                     </div>
                     {school != '' ? (
-                      <div className="w-full relative group rounded-lg p-2 flex justify-between items-center bg-gray-100">
+                      <div className="w-full relative group rounded-lg p-2 flex justify-between items-center bg-gray-100 dark:bg-dark_primary_comp_hover">
                         <div className="text-lg cursor-default">{school}</div>
                         <X
                           onClick={() => {

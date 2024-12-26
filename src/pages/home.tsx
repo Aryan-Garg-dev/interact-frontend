@@ -11,11 +11,13 @@ import FeedSide from '@/sides/home/feed';
 import CommunitySide from '@/sides/home/community';
 import Communities from '@/screens/home/communities';
 import { useSelector } from 'react-redux';
-import { userIDSelector } from '@/slices/userSlice';
+import { userSelector } from '@/slices/userSlice';
+
+const FOLLOWING_THRESHOLD = 3;
 
 const Home = () => {
   const [active, setActive] = useState(0);
-  const userID = useSelector(userIDSelector);
+  const user = useSelector(userSelector);
 
   return (
     <BaseWrapper title="Home">
@@ -23,17 +25,23 @@ const Home = () => {
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-2/3 max-md:w-full">
           <MenuBar
-            items={userID ? ['Explore', 'Following', 'Communities'] : ['Explore', 'Communities']}
+            items={
+              user.id
+                ? user.following?.length > FOLLOWING_THRESHOLD
+                  ? ['Following', 'Explore', 'Communities']
+                  : ['Explore', 'Following', 'Communities']
+                : ['Explore', 'Communities']
+            }
             active={active}
             setState={setActive}
           />
           {active == 0 ? (
             <PrimeWrapper index={0} maxIndex={2}>
-              <Discover />
+              {user.following?.length > FOLLOWING_THRESHOLD ? <Feed /> : <Discover />}
             </PrimeWrapper>
           ) : active == 1 ? (
             <PrimeWrapper index={1} maxIndex={2}>
-              {userID ? <Feed /> : <Communities />}
+              {user.id ? user.following?.length > FOLLOWING_THRESHOLD ? <Discover /> : <Feed /> : <Communities />}
             </PrimeWrapper>
           ) : (
             active == 2 && (

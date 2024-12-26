@@ -60,7 +60,16 @@ const Openings = ({ project, setProject }: Props) => {
                     <OpeningBookmarkIcon opening={opening} />
                   </div> */}
                   </div>
-                  <div className="w-full text-sm line-clamp-2">{opening.description}</div>
+                  {checkProjectAccess(PROJECT_MANAGER, project.id) ? (
+                    <div className="w-full flex items-center gap-1 text-sm">
+                      {opening.noApplications} Applications
+                      <Link href={`/workspace/manage/applications/${opening.id}`} className="text-xs">
+                        {opening.noApplications > 0 && <>(click to view)</>}
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="w-full text-sm line-clamp-2">{opening.description}</div>
+                  )}
                 </Link>
               );
             })}

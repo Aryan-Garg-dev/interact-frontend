@@ -15,6 +15,7 @@ import { ORG_MANAGER } from '@/config/constants';
 import StarRating from '../organization/star_rating';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import Report from '../common/report';
+import { useTheme } from 'next-themes';
 
 interface Props {
   review: Review;
@@ -52,6 +53,8 @@ const ReviewCard = ({ review, setReviews }: Props) => {
 
     setMutex(false);
   };
+
+  const isDarkMode = (useTheme().theme || '') === 'dark';
 
   return (
     <>
@@ -109,8 +112,8 @@ const ReviewCard = ({ review, setReviews }: Props) => {
             <StarRating
               fixRating={true}
               defaultRating={Math.floor(review.rating)}
-              color={'#9275b9ba'}
-              strokeColor={'#633267'}
+              color={isDarkMode ? '#478EE1' : '#9275b9ba'}
+              strokeColor={isDarkMode ? '#478eeb86' : '#633267'}
               size={25}
             />
           </div>
