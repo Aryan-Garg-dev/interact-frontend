@@ -403,6 +403,11 @@ html {
   margin-top: 0;
 }
 
+.tiptap p {
+  margin: 0.1rem 0;
+  @apply leading-5;
+}
+
 .tiptap ul {
   list-style-type: disc;
 }
@@ -489,7 +494,7 @@ html {
 .tiptap code {
   border-radius: 0.4rem;
   font-size: 0.90rem;
-  padding: 0.25em 0.3em;
+  padding: 0.1rem 0.3rem;
   @apply bg-neutral-200 text-black dark:text-white dark:bg-neutral-700;
 }
 
@@ -498,7 +503,7 @@ html {
   color: #fff;
   font-family: 'JetBrainsMono', monospace;
   margin: 0 0;
-  padding: 0.75rem 1rem;
+  padding: 0.1rem 0.3rem;
   @apply bg-neutral-700
 }
 
