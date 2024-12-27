@@ -90,7 +90,7 @@ const HoverCardWrapper = ({ children, className }: { children: React.ReactNode; 
   return (
     <div
       className={cn(
-        'min-w-[240px] dark:bg-dark_primary_comp z-50 rounded-md border bg-popover p-3 text-popover-foreground shadow-lg dark:shadow-neutral-900 outline-none',
+        'min-w-[240px] bg-zinc-100 dark:bg-zinc-800 z-50 rounded-md border dark:border-zinc-900 p-3 text-popover-foreground shadow-lg dark:shadow-neutral-900 outline-none',
         className
       )}
     >

@@ -20,7 +20,11 @@ const InteractMentions = Mention.configure({
       category: {
         default: null,
         parseHTML: element => element.getAttribute('data-mention-category'),
-        renderHTML: attributes => ({ 'data-mention-category': attributes.category }),
+        renderHTML: attributes => {
+          return {
+            'data-mention-category': attributes.category,
+          }
+        },
       },
       label: {
         default: null,
@@ -55,6 +59,7 @@ const InteractMentions = Mention.configure({
       const dom = document.createElement('span');
       dom.className = 'mention';
       dom.setAttribute('data-mention-label', node.attrs.label);
+      dom.setAttribute('data-mention-category', node.attrs.category);
       dom.textContent = `@${node.attrs.label}`;
 
       const onClick = () => {

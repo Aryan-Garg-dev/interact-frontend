@@ -557,7 +557,27 @@ html {
 }
 
 .tiptap .mention {
-  @apply hover:cursor-pointer font-medium hover:text-blue-400 p-0;
+  @apply hover:cursor-pointer hover:text-blue-500 font-medium p-0;
+}
+
+.tiptap .mention[data-mention-category="orgs"] {
+  @apply hover:text-orange-500;
+}
+
+.tiptap .mention[data-mention-category="events"] {
+  @apply hover:text-purple-500;
+}
+
+.tiptap .mention[data-mention-category="projects"] {
+  @apply hover:text-sky-500;
+}
+
+.tiptap .mention[data-mention-category="communities"] {
+  @apply hover:text-rose-500;
+}
+
+.tiptap .mention[data-mention-category="openings"] {
+  @apply hover:text-emerald-500;
 }
 
 .tiptap .color {
@@ -565,7 +585,7 @@ html {
 }
 
 .tiptap .color::before {
-  background-color: var(--color);
+  /*background-color: var(--color);*/
   border: 1px solid rgba(128, 128, 128, 0.3);
   border-radius: 2px;
   content: " ";
