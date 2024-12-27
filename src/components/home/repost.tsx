@@ -186,7 +186,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
         </div>
 
         {post.isRePost && post.rePost ? (
-          <PostComponent post={post.rePost} isRepost={true} />
+          <PostComponent post={post.rePost} isRepost={true} key={post.id} />
         ) : (
           <div className="border-[1px] rounded-lg p-2 text-sm font-medium">* This post has been deleted *</div>
         )}

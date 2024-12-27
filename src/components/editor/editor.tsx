@@ -1,6 +1,13 @@
 "use client"
-import { useEditor, EditorContent, Editor as TiptapEditor } from "@tiptap/react";
-import { useCallback, useEffect, useState } from "react";
+import {
+  useEditor,
+  EditorContent,
+  Editor as TiptapEditor,
+  mergeAttributes,
+  ReactRenderer,
+  ReactNodeViewRenderer
+} from '@tiptap/react';
+import React, { useCallback, useEffect, useState } from "react";
 
 import Text from '@tiptap/extension-text';
 import Paragraph from '@tiptap/extension-paragraph';
@@ -45,6 +52,14 @@ import CountWidget from "./widgets/count-widget";
 import LinkDialog from "./widgets/link-dialog";
 import Toaster from "@/utils/toaster";
 import MentionSuggestions from "./mentions/mention-suggestions";
+import { Plugin } from '@tiptap/pm/state'
+import { attributes } from 'js-cookie';
+import MentionHoverCard from '@/components/editor/mentions/mention-hover-card';
+import tippy, { Instance, Tippy } from 'tippy.js';
+import { Property } from 'csstype';
+import Offset = Property.Offset;
+import { tuple } from 'ts-interface-checker';
+import InteractMentions from '@/components/editor/mentions/mention-extension';
 
 type EditorProps = {
   editable: true;
@@ -72,6 +87,7 @@ const Editor = ({
   }: EditorProps
 ) => {
 
+  //TODO: Custom KeyMaps
   const editor = useEditor({
     content: content || '',
     extensions: [
@@ -127,12 +143,7 @@ const Editor = ({
           class: ''
         },
       }),
-      Mention.configure({
-        HTMLAttributes: {
-          class: 'mention',
-        },
-        suggestion: MentionSuggestions,
-      })
+      InteractMentions,
       // customKeyMap
     ],
     
@@ -142,12 +153,10 @@ const Editor = ({
         class: `py-0.5 ring-0 h-full outline-none z-0 ${className}` 
       },
     },
+    // autofocus: true,
     onUpdate({ editor }) {
       setContent(editor.getHTML());
     },
-    onCreate({ editor }){
-      editor.chain().focus().run();
-    }
   });
 
   const [openLinkDialog, setOpenLinkDialog] = useState(false);

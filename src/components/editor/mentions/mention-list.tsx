@@ -8,15 +8,19 @@ import React, {
 import { userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
+import Image from 'next/image';
+import { MentionData } from '@/components/editor/mentions/mention-suggestions';
+
+type MentionNodeData = {
+  id: string,
+  category: string,
+  label: string,
+  href: string
+}
 
 type MentionListProps = {
-  items: {
-    username: string, 
-    name: string,
-    id: string,
-    image: string
-  }[] 
-  command: (item: { id: string }) => void 
+  items: MentionData[]
+  command: (item: MentionNodeData) => void
 }
 
 export type MentionListHandle = {
@@ -32,7 +36,12 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
     const item = props.items[index]
 
     if (item) {
-      props.command({ id: item.username })
+      props.command({
+        id: item.id,
+        category: item.category,
+        label: item.usernameOrTitle,
+        href: item.href || '#'
+      })
     }
   }
 
@@ -74,27 +83,29 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
   }))
 
   return (
-    <div className="dropdown-menu w-52">
+    <div className="dropdown-menu  max-w-[300px]">
       {props.items.length && props.items[0].id != user.id ? (
-        props.items.map((item, index) => item.id != user.id && (
+        props.items.slice(0, 10).map((item, index) => item.id != user.id && (
           <button
-            className={`flex justify-between items-center ${index === selectedIndex ? 'bg-neutral-300 dark:bg-neutral-700' : ''}`}
+            className={`flex justify-between items-center overflow-x-hidden min-w-fit ${index === selectedIndex ? 'bg-neutral-300 dark:bg-neutral-700' : ''}`}
             key={index}
             onClick={() => selectItem(index)}
           >
             <div className="flex gap-2.5">
-              <img 
+              <Image
                 alt={'User Pic'}
-                src={`${USER_PROFILE_PIC_URL}/${item.image}`}
-                className="w-6 h-6 rounded-full" 
+                src={item.profilePic}
+                className="w-6 h-6 rounded-full"
+                width={32}
+                height={32}
               />
-              <p className="text-sm truncate">{item.name}</p>
+              <p className="text-sm text-ellipsis">{item.usernameOrTitle}</p>
             </div>
-            <p className="text-xs text-neutral-600 dark:text-neutral-00">{item.username}</p>
+            {item.name && <p className="text-xs text-balance text-neutral-600">{item.name}</p>}
           </button>
         ))
       ) : (
-        <div className="text-sm">No result</div>
+        <div className="text-sm truncate text-nowrap min-w-52 text-neutral-600">No result</div>
       )}
     </div>
   )
