@@ -94,7 +94,8 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
     if (!type) return;
 
     const offset = getOffset(type);
-    const item = props.items[0][type][index - offset];
+    const itemsOfType = props.items[0]?.[type] || [];
+    const item = itemsOfType[index - offset];
     if (!item) return;
 
     const getHref = (type: keyof FetchResponse, item: any): string => {
@@ -149,12 +150,16 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
       ? 0
       : list
           .slice(0, listIndex)
-          .reduce((acc, key) => acc + (props.items[0][key as keyof FetchResponse]?.length || 0), 0);
+          .reduce((acc, key) => acc + (props.items[0]?.[key as keyof FetchResponse]?.length || 0), 0);
   };
 
-  const renderSectionSafe = (title: string, items: any[], renderItem: (item: any, index: number) => JSX.Element) => {
+  const renderSectionSafe = (
+    title: string,
+    items: Community[] | User[] | Event[] | Organization[] | Opening[] | Project[] | undefined,
+    renderItem: (item: any, index: number) => JSX.Element
+  ) => {
     if (!items || items.length === 0) return null;
-    return renderSection(title, items, renderItem);
+    return renderSection(title, items as any[], renderItem);
   };
 
   const sections = [

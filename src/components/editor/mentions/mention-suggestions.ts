@@ -8,12 +8,12 @@ import tippy from 'tippy.js';
 import MentionList from './mention-list';
 
 export type FetchResponse = {
-  communities: Community[];
-  users: User[];
-  events: Event[];
-  orgs: Organization[];
-  openings: Opening[];
-  projects: Project[];
+  communities?: Community[];
+  users?: User[];
+  events?: Event[];
+  orgs?: Organization[];
+  openings?: Opening[];
+  projects?: Project[];
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
