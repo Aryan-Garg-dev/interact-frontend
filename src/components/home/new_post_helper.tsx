@@ -1,6 +1,6 @@
 import React from 'react';
 import { Info } from '@phosphor-icons/react';
-import Editor from '@/components/editor/editor';
+import Editor from '@/components/editor';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Props {

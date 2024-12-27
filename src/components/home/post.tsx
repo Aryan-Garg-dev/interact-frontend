@@ -23,7 +23,7 @@ import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
 import isArrEdited from '@/utils/funcs/check_array_edited';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import Editor from '@/components/editor/editor';
+import Editor from '@/components/editor';
 
 interface Props {
   post: Post;
@@ -178,12 +178,12 @@ const PostComponent = ({
                   <PopoverContent className="w-40 p-2 text-sm">
                     {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
                       <div
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setClickedOnEdit(true);
-                        setIsDialogOpen(false);
-                      }}
-                      className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg cursor-pointer transition-ease-300"
+                        onClick={e => {
+                          e.stopPropagation();
+                          setClickedOnEdit(true);
+                          setIsDialogOpen(false);
+                        }}
+                        className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg cursor-pointer transition-ease-300"
                       >
                         Edit
                       </div>
@@ -196,18 +196,18 @@ const PostComponent = ({
                           setIsDialogOpen(false);
                         }}
                         className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover hover:text-primary_danger rounded-lg cursor-pointer transition-ease-100 "
-                        >
+                      >
                         Delete
                       </div>
                     )}
                     {post.userID != loggedInUser.id && (
                       <div
-                      onClick={el => {
-                        el.stopPropagation();
-                        if (userID == '') setNoUserClick(true);
-                        else setClickedOnReport(true);
-                        setIsDialogOpen(false);
-                      }}
+                        onClick={el => {
+                          el.stopPropagation();
+                          if (userID == '') setNoUserClick(true);
+                          else setClickedOnReport(true);
+                          setIsDialogOpen(false);
+                        }}
                         className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover hover:text-primary_danger rounded-lg cursor-pointer transition-ease-100 "
                       >
                         Report
@@ -221,15 +221,15 @@ const PostComponent = ({
         </div>
         {post.images && post.images.length > 0 && showImage && (
           <CarouselProvider
-          naturalSlideHeight={580}
-          naturalSlideWidth={1000}
-          totalSlides={post.images.length}
-          visibleSlides={1}
-          infinite={true}
-          dragEnabled={post.images.length != 1}
-          touchEnabled={post.images.length != 1}
-          isPlaying={false}
-          className="w-full rounded-lg flex flex-col items-center justify-center relative"
+            naturalSlideHeight={580}
+            naturalSlideWidth={1000}
+            totalSlides={post.images.length}
+            visibleSlides={1}
+            infinite={true}
+            dragEnabled={post.images.length != 1}
+            touchEnabled={post.images.length != 1}
+            isPlaying={false}
+            className="w-full rounded-lg flex flex-col items-center justify-center relative"
           >
             <Slider className={`w-full rounded-lg`}>
               {post.images.map((image, index) => {
@@ -238,7 +238,7 @@ const PostComponent = ({
                     index={index}
                     key={index}
                     className={`w-full rounded-lg flex items-center justify-center gap-2`}
-                    >
+                  >
                     <Image
                       crossOrigin="anonymous"
                       width={500}
@@ -260,7 +260,9 @@ const PostComponent = ({
             </div>
           </CarouselProvider>
         )}
-        {clickedOnEdit &&<Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable/>}
+        {clickedOnEdit && (
+          <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable />
+        )}
         {clickedOnEdit ? (
           <div className="relative">
             {/* <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable/> */}
@@ -278,7 +280,7 @@ const PostComponent = ({
               <div
                 onClick={e => {
                   e.stopPropagation();
-                  setClickedOnEdit(false)
+                  setClickedOnEdit(false);
                 }}
                 className="border-[1px] border-primary_black flex-center rounded-full w-20 max-md:w-12 max-md:text-xxs p-1 cursor-pointer"
               >

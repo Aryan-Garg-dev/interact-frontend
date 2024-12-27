@@ -93,7 +93,6 @@ const Editor = ({
       Subscript, // ctrl+,
       Superscript, // ctrl+.
       Typography,
-
       ColorHighlighter,
       SmilieReplacer,
       CharacterCount.configure({
