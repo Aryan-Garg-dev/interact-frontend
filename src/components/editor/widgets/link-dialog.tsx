@@ -18,7 +18,7 @@ type LinkDialogProps = {
 const LinkDialog = ({ open, setOpen, setURL, onSubmit }: LinkDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="px-5 bg-main dark:bg-dark_main border-none">
+      <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-xl text-left font-bold">Add Link</DialogTitle>
           <DialogDescription className="text-md text-left">Enter the link you want to embed.</DialogDescription>
@@ -36,7 +36,7 @@ const LinkDialog = ({ open, setOpen, setURL, onSubmit }: LinkDialogProps) => {
             onChange={e => setURL(e.target.value)}
           />
           <DialogFooter className="mt-2">
-            <Button type="submit" variant={'outline'}>
+            <Button type="submit" variant="outline">
               Confirm
             </Button>
           </DialogFooter>

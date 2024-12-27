@@ -177,7 +177,7 @@ const Editor = ({
     <div className="flex flex-col justify-stretch">
       <EditorContent editor={editor} />
       {editor && editable && limit && <CountWidget charCount={charCount} limit={limit} className="m-1 ml-2" />}
-      {openLinkDialog && (
+      {editor && editable && (
         <LinkDialog open={openLinkDialog} setOpen={setOpenLinkDialog} setURL={setURL} onSubmit={onSubmitURL} />
       )}
     </div>
