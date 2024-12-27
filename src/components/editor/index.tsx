@@ -137,12 +137,18 @@ const Editor = ({
 
   const onSubmitURL = () => {
     if (!editor) return;
-    if (URL === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+
+    if (!URL) {
+      Toaster.error('Link cannot be empty', 'error_toaster');
+      return;
+    } else if (!URL.startsWith('http')) {
+      Toaster.error('List must start with https://', 'error_toaster');
       return;
     }
+
     try {
       editor.chain().focus().extendMarkRange('link').setLink({ href: URL }).run();
+      setOpenLinkDialog(false);
     } catch (e) {
       Toaster.error((e as Error).message, 'error_toaster');
     }
