@@ -25,9 +25,13 @@ export type MentionListHandle = {
 
 const list = ['users', 'projects', 'openings', 'communities', 'orgs', 'events'];
 
-const getSelectedType = (selectedIndex: number, items: FetchResponse): keyof FetchResponse | null => {
-  let offset = 0;
+const getSelectedType = (
+  selectedIndex: number,
+  items: FetchResponse | null | undefined
+): keyof FetchResponse | null => {
+  if (!items) return null;
 
+  let offset = 0;
   for (const key of list) {
     const array = items[key as keyof FetchResponse] || [];
     if (selectedIndex < offset + array.length) {
@@ -75,13 +79,15 @@ const renderSection = (title: string, items: any[], renderItem: (item: any, inde
 const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
-  const totalLength = Object.values(props.items[0]).reduce((acc, array) => {
-    if (Array.isArray(array)) {
-      const uniqueItems = new Set(array.map(item => JSON.stringify(item)));
-      return acc + uniqueItems.size;
-    }
-    return acc;
-  }, 0);
+  const totalLength = props.items[0]
+    ? Object.values(props.items[0]).reduce((acc, array) => {
+        if (Array.isArray(array)) {
+          const uniqueItems = new Set(array.map(item => JSON.stringify(item)));
+          return acc + uniqueItems.size;
+        }
+        return acc;
+      }, 0)
+    : 0;
 
   const selectItem = (index: number) => {
     const type = getSelectedType(index, props.items[0]);
@@ -144,6 +150,11 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
       : list
           .slice(0, listIndex)
           .reduce((acc, key) => acc + (props.items[0][key as keyof FetchResponse]?.length || 0), 0);
+  };
+
+  const renderSectionSafe = (title: string, items: any[], renderItem: (item: any, index: number) => JSX.Element) => {
+    if (!items || items.length === 0) return null;
+    return renderSection(title, items, renderItem);
   };
 
   const sections = [
@@ -290,7 +301,7 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
   return (
     <div className="max-w-[300px] max-h-[500px] overflow-y-auto flex flex-col gap-1 p-2 bg-neutral-50 dark:bg-neutral-800 shadow-md rounded-lg thin_scrollbar">
       {hasItems ? (
-        sections.map(({ title, items, renderItem }, index) => renderSection(title, items, renderItem))
+        sections.map(({ title, items, renderItem }, index) => renderSectionSafe(title, items, renderItem))
       ) : (
         <div className="text-sm text-neutral-500 text-center">No Items Found</div>
       )}
