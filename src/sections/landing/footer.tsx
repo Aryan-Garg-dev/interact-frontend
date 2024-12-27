@@ -1,50 +1,37 @@
-import { InstagramLogo, LinkedinLogo, XLogo, YoutubeLogo } from '@phosphor-icons/react';
+import TooltipIcon from '@/components/common/tooltip_icon';
+import FlickeringGrid from '@/components/ui/flickering-grid';
+import { InstagramLogoIcon, LinkedInLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
+import { MailIcon } from 'lucide-react';
 import React from 'react';
 import { ReactSVG } from 'react-svg';
 
 const Footer = () => {
   return (
-    <footer className="w-full bg-[#042e6f] py-8 md:py-12">
-      <div className="w-4/5 mx-auto">
-        <div className="flex flex-col md:flex-row justify-between">
-          <div className="space-y-6 md:max-w-xl">
-            <div className="flex items-center gap-3.5">
-              <ReactSVG src="/onboarding_logo_dark.svg" className="scale-150 ml-6 mb-2" />
-            </div>
-            <p className="text-white">
-              We&apos;re a dynamic web platform for college students, freelancers, professionals, and creatives.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="space-y-4">
-              <span className="text-white font-medium ">socials@interactnow.in</span>
-
-              <div className="flex gap-4">
-                <LinkedinLogo className="w-8 h-8 text-white" weight="fill" />
-                <XLogo className="w-8 h-8 text-white" weight="fill" />
-                <InstagramLogo className="w-8 h-8 text-white" weight="fill" />
-                <YoutubeLogo className="w-8 h-8 text-white" weight="fill" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* <div className="h-[3px] bg-gradient-to-r from-gray-400 via-white to-gray-400 my-6" />
-
-        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-white">
-          <div className="flex flex-wrap gap-6 md:gap-12">
-            <button className="text-base md:text-xl font-semibold font-['Source Sans Pro']">Term of use</button>
-            <button className="text-base md:text-xl font-semibold font-['Source Sans Pro']">Privacy Policy</button>
-            <button className="text-base md:text-xl font-semibold font-['Source Sans Pro']">Support</button>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <span className="text-base md:text-xl font-semibold font-['Source Sans Pro']">©2024 Interact, Inc.</span>
-          </div>
-        </div> */}
+    <div>
+      <div className="relative w-4/5 mx-auto h-[250px] flex-center bg-background overflow-hidden">
+        <ReactSVG src="/onboarding_logo.svg" className="scale-[2.0] z-10 dark:hidden" />
+        <ReactSVG src="/onboarding_logo_dark.svg" className="scale-[2.0] z-10 hidden dark:block" />
+        <FlickeringGrid
+          className="z-0 absolute inset-0 size-full"
+          squareSize={4}
+          gridGap={6}
+          color="#478EE1"
+          maxOpacity={0.5}
+          flickerChance={0.1}
+          height={800}
+          width={1200}
+        />
       </div>
-    </footer>
+      <div className="w-4/5 mx-auto flex justify-between gap-6 pt-4 pb-12">
+        <div className="text-gray-600 dark:text-gray-300 italic">Connect, Create & Collaborate</div>
+        <div className="flex gap-4">
+          <TooltipIcon label="@interact_now" icon={<LinkedInLogoIcon className="w-6 h-6" />} excludeHoverEffect />
+          <TooltipIcon label="@interact_now" icon={<TwitterLogoIcon className="w-6 h-6" />} excludeHoverEffect />
+          <TooltipIcon label="@interact.now" icon={<InstagramLogoIcon className="w-6 h-6" />} excludeHoverEffect />
+          <TooltipIcon label="socials@interactnow.in" icon={<MailIcon className="w-6 h-6" />} excludeHoverEffect />
+        </div>
+      </div>
+    </div>
   );
 };
 

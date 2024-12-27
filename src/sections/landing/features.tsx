@@ -45,7 +45,9 @@ export const TitleBlock = ({
         {titleMid && (
           <FadeText
             key={`${theme}-${titleMid}`}
-            className={`w-fit font-cursive rotate-[-20deg] text-3xl absolute dark:text-white ${!center && '-left-5'}`}
+            className={`w-fit font-cursive rotate-[-20deg] text-3xl absolute dark:text-white ${
+              center ? '-translate-x-1/2' : '-left-5'
+            }`}
             direction="up"
             framerProps={{
               show: { transition: { delay: 0.4 } },
@@ -182,7 +184,7 @@ const FeatureSection = ({
             height={300}
             src={image}
             alt={imageAlt}
-            className={`w-full h-full object-contain ${imageClass}`}
+            className={`w-full h-full object-contain rounded-lg ${imageClass}`}
           />
         </div>
 
@@ -221,9 +223,9 @@ const Features = () => {
       {sections.map((section, index) => (
         <FeatureSection key={index} index={index} theme={theme} {...section} />
       ))}
-      <div className="w-fit mx-auto">
+      {/* <div className="w-fit mx-auto">
         <LandingButton label="Explore All The Features" />
-      </div>
+      </div> */}
     </div>
   );
 };

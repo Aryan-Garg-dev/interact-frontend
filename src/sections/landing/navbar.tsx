@@ -7,7 +7,8 @@ const Navbar: React.FC = () => {
   return (
     <div className="w-[90vw] p-2 h-16 flex items-center justify-between z-50 text-primary_black dark:text-white">
       <div className="flex items-center md:max-h-[10vh]">
-        <ReactSVG src="/onboarding_logo.svg" className="max-h-[6vh]" />
+        <ReactSVG src="/onboarding_logo.svg" className="max-h-[6vh] dark:hidden" />
+        <ReactSVG src="/onboarding_logo_dark.svg" className="max-h-[6vh] hidden dark:block" />
       </div>
 
       <div className="items-center text-[20px] md:max-h-[10vh] flex justify-center">

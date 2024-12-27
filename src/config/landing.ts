@@ -1,7 +1,7 @@
 export const features = {
   students: [
     {
-      image: '/landing/community.svg',
+      image: '/landing/features/user1.png',
       imageAlt: 'Dashboard Preview',
       imageClass: 'lg:scale-[1.5] lg:-translate-x-[140px] fade-img-left',
       titleUpper: 'Managing',
@@ -31,11 +31,11 @@ export const features = {
       },
     },
     {
-      image: '/landing/hackathon.svg',
+      image: '/landing/features/user2.png',
       imageAlt: 'Hackathon Dashboard',
       imageClass: 'lg:scale-[1.5] lg:translate-x-[140px] fade-img-right',
       titleUpper: 'Engaging',
-      titleMid: 'Meaningful',
+      titleMid: 'Useful',
       titleLower: 'Communities',
       titleSide: 'effortlessly.',
       description:
@@ -59,7 +59,7 @@ export const features = {
       },
     },
     {
-      image: '/landing/community.svg',
+      image: '/landing/features/user3.svg',
       imageAlt: 'Dashboard Preview',
       imageClass: 'lg:scale-[1.5] lg:-translate-x-[140px] fade-img-left',
       titleUpper: 'Participating',
@@ -91,7 +91,7 @@ export const features = {
   ],
   organisations: [
     {
-      image: '/landing/project-management.svg',
+      image: '/landing/features/org1.png',
       imageAlt: 'Project Management Dashboard',
       imageClass: 'lg:scale-[1.5] lg:-translate-x-[140px] fade-img-left',
       titleUpper: 'Managing',
@@ -120,38 +120,9 @@ export const features = {
       },
     },
     {
-      image: '/landing/meeting-management.svg',
+      image: '/landing/features/org2.png',
       imageAlt: 'Meeting Management Dashboard',
       imageClass: 'lg:scale-[1.5] lg:translate-x-[140px] fade-img-right',
-      titleUpper: 'Scheduling',
-      titleMid: 'Your',
-      titleLower: 'Meetings',
-      titleSide: 'simplified.',
-      description:
-        'Interact simplifies meeting management with tools for scheduling, hosting, and tracking meetings. Keep your organization aligned and productive with everything in one place.',
-      features: [
-        {
-          title: 'Meeting Scheduler',
-          description: 'Plan and schedule meetings effortlessly, complete with automatic reminders for participants.',
-        },
-        {
-          title: 'Transcripts and Recordings',
-          description:
-            'Access meeting transcripts and recordings to ensure no detail is missed and everyone stays informed.',
-        },
-      ],
-      quote: {
-        name: 'Pranay',
-        designation: 'Co-Founder',
-        quote:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        position: 'start',
-      },
-    },
-    {
-      image: '/landing/event-hosting.svg',
-      imageAlt: 'Event Hosting Dashboard',
-      imageClass: 'lg:scale-[1.5] lg:-translate-x-[140px] fade-img-left',
       titleUpper: 'Hosting',
       titleMid: 'Impactful',
       titleLower: 'Events',
@@ -176,6 +147,35 @@ export const features = {
         quote:
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
         position: 'end',
+      },
+    },
+    {
+      image: '/landing/features/org3.svg',
+      imageAlt: 'Event Hosting Dashboard',
+      imageClass: 'lg:scale-[1.5] lg:-translate-x-[140px] fade-img-left',
+      titleUpper: 'Scheduling',
+      titleMid: 'Your',
+      titleLower: 'Meetings',
+      titleSide: 'simplified.',
+      description:
+        'Interact simplifies meeting management with tools for scheduling, hosting, and tracking meetings. Keep your organization aligned and productive with everything in one place.',
+      features: [
+        {
+          title: 'Meeting Scheduler',
+          description: 'Plan and schedule meetings effortlessly, complete with automatic reminders for participants.',
+        },
+        {
+          title: 'Transcripts and Recordings',
+          description:
+            'Access meeting transcripts and recordings to ensure no detail is missed and everyone stays informed.',
+        },
+      ],
+      quote: {
+        name: 'Pranay',
+        designation: 'Co-Founder',
+        quote:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+        position: 'start',
       },
     },
   ],

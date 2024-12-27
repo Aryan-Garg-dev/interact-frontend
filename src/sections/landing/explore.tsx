@@ -37,64 +37,48 @@ const comments = [
 
 const ExploreCommunity: React.FC = () => {
   return (
-    <div className="w-full flex flex-col gap-24 text-black">
-      <div className="w-full flex-center flex-col gap-8">
-        {/* <div className="flex flex-row items-center justify-center text-4xl md:text-5xl space-x-4 font-semibold">
+    <div className="w-full flex-center flex-col gap-8">
+      {/* <div className="flex flex-row items-center justify-center text-4xl md:text-5xl space-x-4 font-semibold">
           <SparklesText className="text-6xl font-semimbold" text="Explore Community" />
           <CaretRight weight="bold" size={24} />
         </div> */}
 
-        <div className="w-4/5 rounded-lg space-y-8">
-          <div className="w-full md:max-h-72 overflow-y-clip flex-center md:flex-row flex-col md:gap-8 px-12 max-md:p-4 border-2 rounded-xl">
-            <div className="w-1/2 max-md:w-full space-y-12 md:space-y-16 md:py-18">
-              <div className="relative py-4">
-                <div className="text-4xl font-semibold mb-2 dark:text-white">Supporting the</div>
-                <div className="w-fit font-cursive rotate-[-8deg] text-sky-400 text-5xl font-medium absolute">
-                  Future makers
-                </div>
+      <div className="w-4/5 rounded-lg space-y-8">
+        <div className="w-full md:max-h-72 overflow-y-clip flex-center md:flex-row flex-col md:gap-8 px-12 max-md:p-4 border-2 rounded-xl">
+          <div className="w-1/2 max-md:w-full space-y-12 md:space-y-16 md:py-18">
+            <div className="relative py-4">
+              <div className="text-4xl font-semibold mb-2 dark:text-white">Supporting the</div>
+              <div className="w-fit font-cursive rotate-[-8deg] text-sky-400 text-5xl font-medium absolute">
+                Future makers
               </div>
-              <p className="text-gray-600 dark:text-gray-200">
-                We are proud to give back to the Student Community to create the impact needed.
-              </p>
             </div>
-            <SocialMediaGrid />
+            <p className="text-gray-600 dark:text-gray-200">
+              We are proud to give back to the Student Community to create the impact needed.
+            </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {comments.map((comment, index) => (
-              <div key={index} className="p-4 rounded-lg space-y-4 border-2">
-                <p className="text-gray-600 dark:text-gray-200 italic text-sm">&quot;{comment.caption}&quot;</p>
-                <div className="flex justify-between items-center text-gray-500 dark:text-gray-300 text-xs">
-                  <div className="flex-center gap-1">
-                    <Image
-                      width={50}
-                      height={50}
-                      alt={'User Pic'}
-                      src={comment.user.picURL}
-                      className="w-4 h-4 rounded-full"
-                    />
-                    {comment.user.name}
-                  </div>
-                  <span>@{comment.user.username}</span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <SocialMediaGrid />
         </div>
-      </div>
 
-      <div className="relative w-4/5 mx-auto h-[250px] flex-center bg-background overflow-hidden">
-        <ReactSVG src="/onboarding_logo.svg" className="scale-[2.0] z-10" />
-        <FlickeringGrid
-          className="z-0 absolute inset-0 size-full"
-          squareSize={4}
-          gridGap={6}
-          color="#478EE1"
-          maxOpacity={0.5}
-          flickerChance={0.1}
-          height={800}
-          width={1200}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {comments.map((comment, index) => (
+            <div key={index} className="p-4 rounded-lg space-y-4 border-2">
+              <p className="text-gray-600 dark:text-gray-200 italic text-sm">&quot;{comment.caption}&quot;</p>
+              <div className="flex justify-between items-center text-gray-500 dark:text-gray-300 text-xs">
+                <div className="flex-center gap-1">
+                  <Image
+                    width={50}
+                    height={50}
+                    alt={'User Pic'}
+                    src={comment.user.picURL}
+                    className="w-4 h-4 rounded-full"
+                  />
+                  {comment.user.name}
+                </div>
+                <span>@{comment.user.username}</span>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

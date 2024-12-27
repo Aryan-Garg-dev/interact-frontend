@@ -105,7 +105,7 @@
   filter: blur(20px);
   z-index: -1;
   border-radius: 50px;
-  background-color: #d8ff99;
+  background-color: #99eeff;
   background-image: radial-gradient(at 21% 46%, hsla(183, 65%, 60%, 1) 0px, transparent 50%),
     radial-gradient(at 23% 25%, hsla(359, 74%, 70%, 1) 0px, transparent 50%),
     radial-gradient(at 20% 1%, hsla(267, 83%, 75%, 1) 0px, transparent 50%),
