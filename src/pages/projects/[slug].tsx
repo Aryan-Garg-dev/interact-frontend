@@ -166,7 +166,7 @@ const ProjectComponent = ({
                 {project.isFlagged ? (
                   <div className="flex-center gap-1 font-medium text-primary_danger">
                     <Warning weight="bold" />
-                    This project is Flagged!
+                    This Project is Flagged!
                   </div>
                 ) : (
                   project.isPrivate && (
