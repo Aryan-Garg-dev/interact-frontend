@@ -280,7 +280,7 @@ const UserComponent = ({ initialUser, err, seoProps }: Props) => {
             </PrimeWrapper>
           ) : active == 2 ? (
             <PrimeWrapper index={2} maxIndex={2}>
-              {loading ? <Loader /> : <Projects userID={user.id} />}
+              {loading ? <Loader /> : <Projects userID={user.id} displayOnProfile={user.id == loggedInUser.id} />}
             </PrimeWrapper>
           ) : (
             active == 3 && (

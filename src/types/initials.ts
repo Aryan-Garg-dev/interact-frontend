@@ -126,6 +126,7 @@ export const initialProject: Project = {
   openings: [],
   chats: [],
   isPrivate: false,
+  isFlagged: false,
   views: 0,
   totalNoViews: 0,
   privateLinks: [],

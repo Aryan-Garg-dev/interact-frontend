@@ -42,7 +42,7 @@ import UserProjects from '@/sides/project/user_projects';
 import Resources from '@/sides/project/resources';
 import ProjectChats from '@/sides/project/chats';
 import nookies from 'nookies';
-import { EyeSlash } from '@phosphor-icons/react';
+import { EyeSlash, Warning } from '@phosphor-icons/react';
 
 const ProjectComponent = ({
   initialProject,
@@ -163,12 +163,19 @@ const ProjectComponent = ({
                     />
                   )}
                 </div>
-                {project.isPrivate && (
-                  <div className="flex-center gap-1 font-medium">
-                    <EyeSlash weight="bold" />
-                    This project is private
-                    <span className="text-xs">(only visible to project members)</span>
+                {project.isFlagged ? (
+                  <div className="flex-center gap-1 font-medium text-primary_danger">
+                    <Warning weight="bold" />
+                    This project is Flagged!
                   </div>
+                ) : (
+                  project.isPrivate && (
+                    <div className="flex-center gap-1 font-medium">
+                      <EyeSlash weight="bold" />
+                      This project is private
+                      <span className="text-xs">(only visible to project members)</span>
+                    </div>
+                  )
                 )}
                 <div className="w-full flex flex-col gap-4">
                   <div className="w-full flex items-center justify-between flex-wrap gap-4">

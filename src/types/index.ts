@@ -218,6 +218,7 @@ export interface Project {
   openings: Opening[];
   chats: Chat[];
   isPrivate: boolean;
+  isFlagged: boolean;
   views: number;
   totalNoViews: number;
   noMembers: number;

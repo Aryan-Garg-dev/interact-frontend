@@ -81,6 +81,11 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
         ) : (
           <NoUserItems />
         )}
+        {displayOnProfile && (
+          <div className="w-fit mx-auto text-sm text-gray-500 dark:text-gray-200 mt-2">
+            Hidden Projects will not be shown here.
+          </div>
+        )}
       </div>
     </div>
   );
