@@ -136,7 +136,7 @@ const MentionHoverCard = ({ id, category }: HovercardProps) => {
               }
             </div>
             <div className='text-xs text-neutral-800 dark:text-neutral-500'>
-              Views: ${hoverCardData.views}
+              Views: {hoverCardData.views}
             </div>
           </div>
         </div>
