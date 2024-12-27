@@ -557,7 +557,7 @@ html {
 }
 
 .tiptap .mention {
-  @apply hover:cursor-pointer hover:text-blue-500 font-medium p-0;
+  @apply hover:cursor-pointer hover:text-blue-500 font-bold p-0;
 }
 
 .tiptap .mention[data-mention-category="orgs"] {
