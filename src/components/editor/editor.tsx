@@ -1,13 +1,13 @@
-"use client"
+'use client';
 import {
   useEditor,
   EditorContent,
   Editor as TiptapEditor,
   mergeAttributes,
   ReactRenderer,
-  ReactNodeViewRenderer
+  ReactNodeViewRenderer,
 } from '@tiptap/react';
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react';
 
 import Text from '@tiptap/extension-text';
 import Paragraph from '@tiptap/extension-paragraph';
@@ -31,28 +31,28 @@ import TaskList from '@tiptap/extension-task-list';
 import Heading from '@tiptap/extension-heading';
 import Bold from '@tiptap/extension-bold';
 import Code from '@tiptap/extension-code';
-import Highlight from "@tiptap/extension-highlight";
+import Highlight from '@tiptap/extension-highlight';
 import Italic from '@tiptap/extension-italic';
 import Strike from '@tiptap/extension-strike';
 import Underline from '@tiptap/extension-underline';
-import Typography from "@tiptap/extension-typography";
+import Typography from '@tiptap/extension-typography';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
 //================================================
 import CharacterCount from '@tiptap/extension-character-count';
 import Placeholder from '@tiptap/extension-placeholder';
 import History from '@tiptap/extension-history';
-import Link from "@tiptap/extension-link";
+import Link from '@tiptap/extension-link';
 //================================================
-import { ColorHighlighter } from "./extensions/color-highlighter";
-import { SmilieReplacer } from "./extensions/smilie-replacer";
+import { ColorHighlighter } from './extensions/color-highlighter';
+import { SmilieReplacer } from './extensions/smilie-replacer';
 //================================================
 
-import CountWidget from "./widgets/count-widget";
-import LinkDialog from "./widgets/link-dialog";
-import Toaster from "@/utils/toaster";
-import MentionSuggestions from "./mentions/mention-suggestions";
-import { Plugin } from '@tiptap/pm/state'
+import CountWidget from './widgets/count-widget';
+import LinkDialog from './widgets/link-dialog';
+import Toaster from '@/utils/toaster';
+import MentionSuggestions from './mentions/mention-suggestions';
+import { Plugin } from '@tiptap/pm/state';
 import { attributes } from 'js-cookie';
 import MentionHoverCard from '@/components/editor/mentions/mention-hover-card';
 import tippy, { Instance, Tippy } from 'tippy.js';
@@ -61,32 +61,32 @@ import Offset = Property.Offset;
 import { tuple } from 'ts-interface-checker';
 import InteractMentions from '@/components/editor/mentions/mention-extension';
 
-type EditorProps = {
-  editable: true;
-  setContent: React.Dispatch<React.SetStateAction<string>>;
-  content?: string; 
-  placeholder?: string;
-  limit?: number | null;
-  className?: string; 
-} | {
-  editable: false;
-  content: string;
-  setContent?: never;
-  placeholder?: never;
-  limit?: never;
-  className?: string;
-};
+type EditorProps =
+  | {
+      editable: true;
+      setContent: React.Dispatch<React.SetStateAction<string>>;
+      content?: string;
+      placeholder?: string;
+      limit?: number | null;
+      className?: string;
+    }
+  | {
+      editable: false;
+      content: string;
+      setContent?: never;
+      placeholder?: never;
+      limit?: never;
+      className?: string;
+    };
 
 const Editor = ({
-    content = '',
-    setContent = ()=>{},
-    editable,
-    limit = null,
-    placeholder,
-    className,
-  }: EditorProps
-) => {
-
+  content = '',
+  setContent = () => {},
+  editable,
+  limit = null,
+  placeholder,
+  className,
+}: EditorProps) => {
   //TODO: Custom KeyMaps
   const editor = useEditor({
     content: content || '',
@@ -99,8 +99,9 @@ const Editor = ({
       ListItem,
       BulletList, // +, *, +
       OrderedList, // 1.
-      Heading.configure({ // #, ##, ###
-        levels: [ 1, 2, 3 ]
+      Heading.configure({
+        // #, ##, ###
+        levels: [1, 2, 3],
       }),
       HorizontalRule, // ---
       CodeBlock, // ```
@@ -109,17 +110,18 @@ const Editor = ({
       Bold, // **Bold** __bold__ ctrl+b
       Italic, // *Italic* _italic_ ctrl+i
       Highlight, // ==Highlight==
-      Strike.configure({ // ~~Strike~~
+      Strike.configure({
+        // ~~Strike~~
         HTMLAttributes: {
-          class: 'line-through decoration-neutral-700'
-        }
+          class: 'line-through decoration-neutral-700',
+        },
       }),
       Underline, // ctrl+u
       Code, // `code`
       Subscript, // ctrl+,
       Superscript, // ctrl+.
       Typography,
-      
+
       ColorHighlighter,
       SmilieReplacer,
       CharacterCount.configure({
@@ -136,21 +138,21 @@ const Editor = ({
         protocols: ['http', 'https'],
         //TODO: Configure allowed and disallowed URIs, domains, protocols, etc.
         isAllowedUri: (url, ctx) => ctx.defaultValidate(url) && !url.startsWith('./'),
-        shouldAutoLink: (url) => url.startsWith('https://'),
+        shouldAutoLink: url => url.startsWith('https://'),
         HTMLAttributes: {
           rel: 'noopener noreferrer nofollow',
           target: '_blank',
-          class: ''
+          class: '',
         },
       }),
       InteractMentions,
       // customKeyMap
     ],
-    
+
     editable: editable,
     editorProps: {
       attributes: {
-        class: `py-0.5 ring-0 h-full outline-none z-0 ${className}` 
+        class: `py-0.5 ring-0 h-full outline-none z-0 ${className}`,
       },
     },
     // autofocus: true,
@@ -162,45 +164,47 @@ const Editor = ({
   const [openLinkDialog, setOpenLinkDialog] = useState(false);
   const [URL, setURL] = useState<string>('');
 
-  const onSubmitURL = ()=>{
+  const onSubmitURL = () => {
     if (!editor) return;
     if (URL === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run()
-      return
+      editor.chain().focus().extendMarkRange('link').unsetLink().run();
+      return;
     }
     try {
-      editor.chain().focus().extendMarkRange('link').setLink({ href: URL }).run()
+      editor.chain().focus().extendMarkRange('link').setLink({ href: URL }).run();
     } catch (e) {
       Toaster.error((e as Error).message, 'error_toaster');
     }
-  }
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (!editor) return;
-    const handleKeydown = (event: KeyboardEvent)=>{
+    const handleKeydown = (event: KeyboardEvent) => {
       if (event.ctrlKey && event.key === 'l') {
-        event.preventDefault()
+        event.preventDefault();
         setOpenLinkDialog(true);
       }
-    }
-    document.addEventListener("keydown", handleKeydown);
+    };
+    document.addEventListener('keydown', handleKeydown);
 
-    return ()=>document.removeEventListener("keydown", handleKeydown);
-  }, [editor])
+    return () => document.removeEventListener('keydown', handleKeydown);
+  }, [editor]);
 
   if (!editor) {
     return null;
   }
 
-  const charCount =  editor ? editor.storage.characterCount.characters() : 0;
+  const charCount = editor ? editor.storage.characterCount.characters() : 0;
 
   return (
     <div className="flex flex-col justify-stretch">
       <EditorContent editor={editor} />
-      {(editor && editable && limit) && <CountWidget charCount={charCount} limit={limit} className="m-1 ml-2" />}
-      {openLinkDialog && <LinkDialog open={openLinkDialog} setOpen={setOpenLinkDialog} setURL={setURL} onSubmit={onSubmitURL} />}
+      {editor && editable && limit && <CountWidget charCount={charCount} limit={limit} className="m-1 ml-2" />}
+      {openLinkDialog && (
+        <LinkDialog open={openLinkDialog} setOpen={setOpenLinkDialog} setURL={setURL} onSubmit={onSubmitURL} />
+      )}
     </div>
   );
-}
+};
 
 export default Editor;

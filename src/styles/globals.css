@@ -597,22 +597,3 @@ html {
   height: 0;
   pointer-events: none;
 }
-
-.dropdown-menu {
-  border-radius: 0.7rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
-  overflow: auto;
-  padding: 0.4rem;
-  position: relative;
-  @apply bg-neutral-50 dark:bg-neutral-800 shadow-md
-}
-.dropdown-menu button {
-  align-items: center;
-  display: flex;
-  gap: 0.25rem;
-  text-align: left;
-  width: 100%;
-  @apply hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded px-1 py-1
-}
