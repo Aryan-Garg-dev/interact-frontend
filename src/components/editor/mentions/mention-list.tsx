@@ -158,14 +158,14 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
     items: Community[] | User[] | Event[] | Organization[] | Opening[] | Project[] | undefined,
     renderItem: (item: any, index: number) => JSX.Element
   ) => {
-    if (!items || items.length === 0) return null;
+    if (!items || items.length === 0) return <></>;
     return renderSection(title, items as any[], renderItem);
   };
 
   const sections = [
     {
       title: 'Users',
-      items: props.items[0].users,
+      items: props.items[0]?.users || [],
       renderItem: (item: User, index: number) => (
         <MentionListItem key={index} isSelected={index === selectedIndex} onClick={() => selectItem(index)}>
           <div className="flex-center gap-1">
@@ -184,7 +184,7 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
     },
     {
       title: 'Projects',
-      items: props.items[0].projects,
+      items: props.items[0]?.projects || [],
       renderItem: (item: Project, index: number) => (
         <MentionListItem
           key={index}
@@ -204,7 +204,7 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
     },
     {
       title: 'Openings',
-      items: props.items[0].openings,
+      items: props.items[0]?.openings || [],
       renderItem: (item: Opening, index: number) => (
         <MentionListItem
           key={index}
@@ -227,7 +227,7 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
     },
     {
       title: 'Communities',
-      items: props.items[0].communities,
+      items: props.items[0]?.communities || [],
       renderItem: (item: Community, index: number) => (
         <MentionListItem
           key={index}
@@ -253,7 +253,7 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
     },
     {
       title: 'Organisations',
-      items: props.items[0].orgs,
+      items: props.items[0]?.orgs || [],
       renderItem: (item: Organization, index: number) => (
         <MentionListItem
           key={index}
@@ -276,7 +276,7 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
     },
     {
       title: 'Events',
-      items: props.items[0].events,
+      items: props.items[0]?.events || [],
       renderItem: (item: Event, index: number) => (
         <MentionListItem
           key={index}
