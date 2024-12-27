@@ -23,6 +23,7 @@ import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
 import isArrEdited from '@/utils/funcs/check_array_edited';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import Editor from '@/components/editor';
 
 interface Props {
   post: Post;
@@ -177,7 +178,8 @@ const PostComponent = ({
                   <PopoverContent className="w-40 p-2 text-sm">
                     {(post.userID == loggedInUser.id || checkOrgAccessByOrgUserID(ORG_SENIOR, post.userID)) && (
                       <div
-                        onClick={() => {
+                        onClick={e => {
+                          e.stopPropagation();
                           setClickedOnEdit(true);
                           setIsDialogOpen(false);
                         }}
@@ -258,9 +260,13 @@ const PostComponent = ({
             </div>
           </CarouselProvider>
         )}
+        {clickedOnEdit && (
+          <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable />
+        )}
         {clickedOnEdit ? (
           <div className="relative">
-            <textarea
+            {/* <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable/> */}
+            {/* <textarea
               id="textarea_id"
               maxLength={2000}
               value={caption}
@@ -268,11 +274,14 @@ const PostComponent = ({
               onChange={el => setCaption(el.target.value)}
               onKeyDown={handleKeyDown}
               className="w-full text-sm whitespace-pre-wrap rounded-md focus:outline-none dark:bg-dark_primary_comp p-2 my-2 max-h-72"
-            />
+            /> */}
 
             <div className="dark:text-white flex items-center gap-4 max-md:gap-1 absolute -bottom-8 right-0">
               <div
-                onClick={() => setClickedOnEdit(false)}
+                onClick={e => {
+                  e.stopPropagation();
+                  setClickedOnEdit(false);
+                }}
                 className="border-[1px] border-primary_black flex-center rounded-full w-20 max-md:w-12 max-md:text-xxs p-1 cursor-pointer"
               >
                 cancel
@@ -293,7 +302,8 @@ const PostComponent = ({
           </div>
         ) : (
           <div className={`w-full text-sm  whitespace-pre-wrap mb-2 ${clamp && 'line-clamp-6'}`}>
-            {renderContentWithLinks(post.content, post.taggedUsers)}
+            {/* {renderContentWithLinks(post.content, post.taggedUsers)} */}
+            <Editor content={post.content} editable={false} />
           </div>
         )}
         {showLowerPost && (

@@ -75,9 +75,9 @@ const Discover = () => {
           hasMore={hasMore}
           loader={<PostsLoader />}
         >
-          {feed.map(post => {
-            if (post.rePost) return <RePostComponent key={post.id} post={post} />;
-            else return <PostComponent key={post.id} post={post} />;
+          {feed.map((post, index) => {
+            if (post.rePost) return <RePostComponent key={index} post={post} />;
+            else return <PostComponent key={index} post={post} />;
           })}
         </InfiniteScroll>
       )}

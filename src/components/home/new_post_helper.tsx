@@ -1,61 +1,109 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Info } from '@phosphor-icons/react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Props {
-  show: boolean;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
   smallScreen?: boolean;
-  announcement?: boolean;
 }
 
-const NewPostHelper: React.FC<Props> = ({ show, setShow, smallScreen, announcement = false }) => {
-  const [firstMount, setFirstMount] = useState<boolean>(true);
+const NewPostHelper = ({ smallScreen }: Props) => {
   return (
-    <div className="font-primary">
-      <Info
-        className="cursor-pointer w-fit remove-def"
-        size={24}
-        onMouseEnter={() => {
-          if (!smallScreen) {
-            setShow(true);
-            setFirstMount(false);
-          }
-        }}
-        onMouseLeave={() => {
-          if (!smallScreen) {
-            setShow(false);
-          }
-        }}
-        onClick={() => {
-          setShow(prev => !prev);
-          setFirstMount(false);
-        }}
-      />
-      {
-        <div
-          className={`drop-down-modal bg-white dark:bg-dark_primary_comp_hover h-fit absolute  shadow-lg ${
-            smallScreen ? 'w-[90%] mt-2 left-4' : 'top-8 left-10 w-[40%]'
-          } rounded-xl p-4 non-selectable pointer-events-none ${
-            show ? 'animate-reveal' : firstMount ? 'hidden' : 'opacity-0 animate-reveal_reverse'
-          }`}
-        >
-          <div className={`heading font-medium tracking-wide ${smallScreen ? 'text-base' : 'text-lg'}`}>Tips:</div>
-          <div className="tips-list text-xs pl-4 mt-2">
-            <ul className={`list-disc flex flex-col gap-2 text-xs`}>
-              {announcement && <li>Announcements have a better short term reach than a posts.</li>}
-              <li>
-                Enclose your text with double asterisks <b>(**)</b>, or select text and press control+B to emphasize and
-                make it bold.
-              </li>
-              <li>
-                Use the <b>&quot;@&quot;</b> symbol followed by the username to easily mention and involve specific
-                individuals in your post
-              </li>
-            </ul>
+    <Popover>
+      <PopoverTrigger>
+        <Info size={24} />
+      </PopoverTrigger>
+      <PopoverContent className="w-[420px] max-h-[520px] overflow-y-auto thin_scrollbar shadow-lg dark:shadow-neutral-900">
+        <div className={`space-y-4 ${smallScreen ? 'text-xs' : 'text-sm'}`}>
+          <div className="text-center font-medium">Tips to make your post more interesting!</div>
+          <div className="w-full h-fit rounded-md grid grid-cols-2">
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <h2 className="font-semibold mb-2 underline underline-offset-2">Headings</h2>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">#</code> → H1
+                </p>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">##</code> → H2
+                </p>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">###</code> → H3
+                </p>
+              </div>
+              <div className="space-y-1">
+                <h2 className="font-semibold mb-2 underline underline-offset-2">Lists</h2>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">-</code> → Bullet list
+                </p>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">1.</code> → Numbered list
+                </p>
+              </div>
+              <div className="space-y-1">
+                <h2 className="font-semibold mb-2 underline underline-offset-2">Extras</h2>
+                <div className="flex items-center gap-1">
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">&gt;</code> →{' '}
+                  <div className="w-fit px-1 rounded-md border-dotted border-[1px] border-black dark:border-white">
+                    Quote
+                  </div>
+                </div>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">@search</code> → Mention
+                </p>
+                <div className="flex items-center gap-1">
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">==mark==</code> →{' '}
+                  <div className="w-fit px-1 bg-primary_text rounded-md">Highlight</div>
+                </div>
+                <div className="flex items-center gap-1">
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">[ ]</code> →{' '}
+                  <div className="flex-center gap-1">
+                    <input type="checkbox" />
+                    <div>Checkbox</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <h2 className="font-semibold mb-2 underline underline-offset-2">Formatting</h2>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">ctrl+b</code> /{' '}
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">__bold__</code> → <strong>Bold</strong>
+                </p>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">ctrl+i</code> {' / '}
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">_italic_</code> → <i>Italic</i>
+                </p>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">ctrl+u</code> → <u>Underline</u>
+                </p>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">ctrl+l</code> →{' '}
+                  <a href="#" className="text-blue-500 underline">
+                    Link
+                  </a>
+                </p>
+              </div>
+
+              <div className="space-y-1">
+                <h2 className="font-semibold mb-2 underline underline-offset-2">Other Actions</h2>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">---</code> → Divider
+                </p>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">ctrl+z</code> → Undo
+                </p>
+                <p>
+                  <code className="bg-gray-200 text-black px-1 py-0.5 rounded">ctrl+y</code> → Redo
+                </p>
+              </div>
+            </div>
           </div>
+
+          {/* <Editor editable={false} content={content} className="w-full h-fit" /> */}
         </div>
-      }
-    </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 
