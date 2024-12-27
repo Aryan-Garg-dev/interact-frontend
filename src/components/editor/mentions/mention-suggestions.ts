@@ -24,9 +24,9 @@ export default {
       const URL = `${EXPLORE_URL}/quick?search=${search}&limit=${10}`;
       const res = await getHandler(URL, undefined, true);
       if (res.statusCode == 200) {
-        const response: FetchResponse = res.data || [];
+        const response: FetchResponse = res.data;
 
-        return Array.isArray(response) ? response : [];
+        return [response];
       } else {
         if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
         else Toaster.error(SERVER_ERROR, 'error_toaster');

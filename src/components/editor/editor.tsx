@@ -1,33 +1,17 @@
 'use client';
-import {
-  useEditor,
-  EditorContent,
-  Editor as TiptapEditor,
-  mergeAttributes,
-  ReactRenderer,
-  ReactNodeViewRenderer,
-} from '@tiptap/react';
-import React, { useCallback, useEffect, useState } from 'react';
-
+import { useEditor, EditorContent } from '@tiptap/react';
+import React, { useEffect, useState } from 'react';
 import Text from '@tiptap/extension-text';
 import Paragraph from '@tiptap/extension-paragraph';
 import Document from '@tiptap/extension-document';
-//================================================
 import Blockquote from '@tiptap/extension-blockquote';
-//================================================
 import ListItem from '@tiptap/extension-list-item';
 import BulletList from '@tiptap/extension-bullet-list';
 import OrderedList from '@tiptap/extension-ordered-list';
-//================================================
 import HorizontalRule from '@tiptap/extension-horizontal-rule';
-//================================================
 import CodeBlock from '@tiptap/extension-code-block';
-//================================================
-import Mention from '@tiptap/extension-mention';
-//================================================
 import TaskItem from '@tiptap/extension-task-item';
 import TaskList from '@tiptap/extension-task-list';
-//================================================
 import Heading from '@tiptap/extension-heading';
 import Bold from '@tiptap/extension-bold';
 import Code from '@tiptap/extension-code';
@@ -38,27 +22,15 @@ import Underline from '@tiptap/extension-underline';
 import Typography from '@tiptap/extension-typography';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
-//================================================
 import CharacterCount from '@tiptap/extension-character-count';
 import Placeholder from '@tiptap/extension-placeholder';
 import History from '@tiptap/extension-history';
 import Link from '@tiptap/extension-link';
-//================================================
 import { ColorHighlighter } from './extensions/color-highlighter';
 import { SmilieReplacer } from './extensions/smilie-replacer';
-//================================================
-
 import CountWidget from './widgets/count-widget';
 import LinkDialog from './widgets/link-dialog';
 import Toaster from '@/utils/toaster';
-import MentionSuggestions from './mentions/mention-suggestions';
-import { Plugin } from '@tiptap/pm/state';
-import { attributes } from 'js-cookie';
-import MentionHoverCard from '@/components/editor/mentions/mention-hover-card';
-import tippy, { Instance, Tippy } from 'tippy.js';
-import { Property } from 'csstype';
-import Offset = Property.Offset;
-import { tuple } from 'ts-interface-checker';
 import InteractMentions from '@/components/editor/mentions/mention-extension';
 
 type EditorProps =

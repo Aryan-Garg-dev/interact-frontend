@@ -1,9 +1,8 @@
+import MentionHoverCard from '@/components/editor/mentions/mention-hover-card';
 import Mention from '@tiptap/extension-mention';
-import MentionSuggestions from './mention-suggestions';
 import { mergeAttributes, ReactRenderer } from '@tiptap/react';
 import tippy, { Instance } from 'tippy.js';
-import MentionHoverCard from '@/components/editor/mentions/mention-hover-card';
-
+import MentionSuggestions from './mention-suggestions';
 
 const InteractMentions = Mention.configure({
   HTMLAttributes: {
@@ -15,32 +14,32 @@ const InteractMentions = Mention.configure({
     return {
       id: {
         default: null,
-        parseHTML: (element) => element.getAttribute('data-mention-id'),
-        renderHTML: attributes=>({ "data-mention-id": attributes.id })
+        parseHTML: element => element.getAttribute('data-mention-id'),
+        renderHTML: attributes => ({ 'data-mention-id': attributes.id }),
       },
       category: {
         default: null,
-        parseHTML: (element) => element.getAttribute('data-mention-category'),
-        renderHTML: attributes=>({ "data-mention-category": attributes.category })
+        parseHTML: element => element.getAttribute('data-mention-category'),
+        renderHTML: attributes => ({ 'data-mention-category': attributes.category }),
       },
       label: {
         default: null,
-        parseHTML: (element) => element.getAttribute('data-mention-label'),
-        renderHTML: attributes=>({ "data-mention-label": attributes.label })
+        parseHTML: element => element.getAttribute('data-mention-label'),
+        renderHTML: attributes => ({ 'data-mention-label': attributes.label }),
       },
       href: {
         default: '#',
-        parseHTML: (element) => element.getAttribute('data-mention-href'),
-        renderHTML: (attributes) => ({ 'data-mention-href': attributes.href }),
+        parseHTML: element => element.getAttribute('data-mention-href'),
+        renderHTML: attributes => ({ 'data-mention-href': attributes.href }),
       },
-    }
+    };
   },
   parseHTML() {
     return [
       {
         tag: `span[data-type="${this.name}"]`,
       },
-    ]
+    ];
   },
   renderHTML({ node, HTMLAttributes }) {
     //TODO: custom color for different categories
@@ -48,24 +47,24 @@ const InteractMentions = Mention.configure({
       'span',
       mergeAttributes({ 'data-type': this.name }, this.options.HTMLAttributes, HTMLAttributes),
       `@${node.attrs.label}`,
-    ]
+    ];
   },
-  addNodeView(){
-    return ({node, editor})=>{
+  addNodeView() {
+    return ({ node, editor }) => {
       let tippyInstance: Instance | null = null;
-      const dom = document.createElement("span");
+      const dom = document.createElement('span');
       dom.className = 'mention';
       dom.setAttribute('data-mention-label', node.attrs.label);
       dom.textContent = `@${node.attrs.label}`;
 
-      const onClick = ()=>{
+      const onClick = () => {
         const href = node.attrs.href;
-        if (typeof window !== 'undefined'){
+        if (typeof window !== 'undefined') {
           window.location.href = href;
         }
-      }
+      };
 
-      const onMouseEnter = ()=>{
+      const onMouseEnter = () => {
         const container = document.createElement('div');
 
         const renderer = new ReactRenderer(MentionHoverCard, {
@@ -73,32 +72,35 @@ const InteractMentions = Mention.configure({
             id: node.attrs.id,
             category: node.attrs.category,
           },
-          editor: editor
+          editor: editor,
         });
 
         container.append(renderer.element);
+
         tippyInstance = tippy(dom, {
           content: container,
           interactive: true,
           placement: 'bottom-start',
           trigger: 'mouseenter',
+          inertia: true,
           // arrow: true,
           // offest: [0, 10],
           // animation: 'scale',
           // duration: [200, 200],
+          delay: 1000,
           hideOnClick: false,
-          appendTo: ()=>document.body,
-          onHidden: ()=>renderer.destroy()
-        })
+          appendTo: () => document.body,
+          onHidden: () => renderer.destroy(),
+        });
 
         tippyInstance.show();
-      }
+      };
 
-      const onMouseLeave = ()=> {
-        if (tippyInstance){
+      const onMouseLeave = () => {
+        if (tippyInstance) {
           tippyInstance.hide();
         }
-      }
+      };
 
       dom.addEventListener('click', onClick);
       dom.addEventListener('mouseenter', onMouseEnter);
@@ -106,17 +108,17 @@ const InteractMentions = Mention.configure({
 
       return {
         dom,
-        destroy(){
+        destroy() {
           dom.removeEventListener('mouseenter', onMouseEnter);
           dom.removeEventListener('mouseleave', onMouseLeave);
           dom.removeEventListener('click', onClick);
-          if (tippyInstance){
+          if (tippyInstance) {
             tippyInstance.destroy();
           }
-        }
-      }
-    }
-  }
-})
+        },
+      };
+    };
+  },
+});
 
 export default InteractMentions;

@@ -1,172 +1,279 @@
-// Hovercard.tsx
 import React, { useEffect, useState } from 'react';
 import getHandler from '@/handlers/get_handler';
-import { COMMUNITY_PROFILE_PIC_URL, EVENT_PIC_URL, EXPLORE_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
-import { Community, User, Event, Opening, Project, Organization  } from "@/types"
-import { getProjectPicURL } from '@/utils/funcs/safe_extract';
+import {
+  COMMUNITY_COVER_PIC_URL,
+  COMMUNITY_PROFILE_PIC_URL,
+  EVENT_PIC_URL,
+  EXPLORE_URL,
+  USER_PROFILE_PIC_URL,
+} from '@/config/routes';
+import { Community, Opening, Organization, Project, User, Event } from '@/types';
 import Image from 'next/image';
+import { getProjectPicURL } from '@/utils/funcs/safe_extract';
+import { cn } from '@/lib/utils';
+import Separator from '@/components/ui/separator';
+import { Eye, Heart, Users } from '@phosphor-icons/react';
+import moment from 'moment';
 
 interface HovercardProps {
-  id: string,
-  category: string,
+  id: string;
+  category: string;
 }
 
 export const idType = {
-  users: "uid",
-  communities: "cid",
-  events: "eid",
-  openings: "oid",
-  projects: "pid",
-  orgs: "orgid"
-}
-
-interface HovercardData {
-  name: string,
-  profilePic: string,
-  username?: string,
-  tagline?: string,
-  followers?: number,
-  views?: number,
-  members?: number,
-  description?: string,
-  date?: Date
-}
+  users: 'uid',
+  communities: 'cid',
+  events: 'eid',
+  openings: 'oid',
+  projects: 'pid',
+  orgs: 'orgid',
+};
 
 const fetchItem = async (id: string, category: string): Promise<any> => {
   const res = await getHandler(
     `${EXPLORE_URL}/quick/item?${idType[category as keyof typeof idType]}=${id}`,
-    undefined, true
+    undefined,
+    true
   );
   return res.data;
 };
 
 const MentionHoverCard = ({ id, category }: HovercardProps) => {
-  const [hoverCardData, setHoverCardData] = useState<HovercardData | null>(null);
+  const [hoverCardData, setHoverCardData] = useState<any | null>(null);
 
   useEffect(() => {
-    const data = fetchItem(id, category).then(data=>{
-      switch(category){
-        case "users": {
-          const user = (data.user as User);
-          setHoverCardData({
-            name: user.name,
-            profilePic: `${USER_PROFILE_PIC_URL}/${user.profilePic}`,
-            username: user.username,
-            tagline: user.tagline,
-            followers: user.noFollowers,
-          })
+    fetchItem(id, category).then(data => {
+      switch (category) {
+        case 'users':
+          setHoverCardData(data.user);
           break;
-        }
-        case "communities": {
-          const community = (data.community as Community);
-          setHoverCardData({
-            name: community.title,
-            profilePic: `${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`,
-            tagline: community.tagline,
-            members: community.noMembers,
-            views: community.noViews,
-          })
+        case 'projects':
+          setHoverCardData(data.project);
           break;
-        }
-        case "orgs": {
-          const organisation = (data.organisation as Organization);
-          setHoverCardData({
-            name: organisation.title,
-            profilePic: `${USER_PROFILE_PIC_URL}/${organisation.user.profilePic}`,
-            members: organisation.noMembers,
-            followers: organisation.user.noFollowers,
-          })
+        case 'communities':
+          setHoverCardData(data.community);
           break;
-        }
-        case "projects": {
-          const project = (data.project as Project);
-          setHoverCardData({
-            name: project.title,
-            profilePic: getProjectPicURL(data),
-            members: project.noMembers,
-            tagline: project.tagline,
-            views: project.totalNoViews
-          })
+        case 'orgs':
+          setHoverCardData(data.organization);
           break;
-        }
-        case "events": {
-          const event = (data.event as Event);
-          setHoverCardData({
-            name: event.title,
-            profilePic: `${EVENT_PIC_URL}/${event.coverPic}`,
-            tagline: event.tagline,
-            views: event.noViews,
-            date: event.startTime
-          })
+        case 'events':
+          setHoverCardData(data.event);
           break;
-        }
-        case "openings": {
-          const opening = (data.opening as Opening);
-          setHoverCardData({
-            name: opening.title,
-            profilePic: getProjectPicURL(opening.project),
-            description: opening.description
-          })
+        case 'openings':
+          setHoverCardData(data.opening);
           break;
-        }
       }
     });
-  }, []);
+  }, [id, category]);
 
   if (!hoverCardData) return <></>;
 
-  if (category === "events" || category === "projects"){
-    return (
-      <div className="flex-col gap-4 rounded-xl bg-neutral-200 dark:bg-neutral-800 shadow-md p-2">
-        <div>
-          <Image
-            src={hoverCardData.profilePic} alt={'cover-pic'} width={100} height={100}
-            className='w-full max-h-20 rounded-xl'
-          />
+  switch (category) {
+    case 'users':
+      return <UserCard user={hoverCardData} />;
+    case 'projects':
+      return <ProjectCard project={hoverCardData} />;
+    case 'communities':
+      return <CommunityCard community={hoverCardData} />;
+    case 'orgs':
+      return <OrganisationCard organisation={hoverCardData} />;
+    case 'events':
+      return <EventCard event={hoverCardData} />;
+    case 'openings':
+      return <OpeningCard opening={hoverCardData} />;
+    default:
+      return <></>;
+  }
+};
+
+const HoverCardWrapper = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  return (
+    <div
+      className={cn(
+        'min-w-[240px] dark:bg-dark_primary_comp z-50 rounded-md border bg-popover p-3 text-popover-foreground shadow-lg dark:shadow-neutral-900 outline-none',
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+};
+
+const UserCard = ({ user }: { user: User }) => {
+  return (
+    <HoverCardWrapper className="flex justify-between gap-4">
+      <Image
+        crossOrigin="anonymous"
+        width={100}
+        height={100}
+        alt={'User Pic'}
+        src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
+        className="w-10 h-10 rounded-full mt-1"
+      />
+      <div className="w-[calc(100%-40px)]">
+        <div className="w-fit flex-center gap-1">
+          <h4 className="text-lg font-semibold">{user.name}</h4>
+          <h4 className="text-xs font-medium text-gray-500">@{user.username}</h4>
         </div>
+        <p className="text-sm">{user.tagline}</p>
+        <div className="text-xs text-muted-foreground font-medium mt-2">
+          {user.noFollowers} Follower{user.noFollowers !== 1 && 's'}
+        </div>
+      </div>
+    </HoverCardWrapper>
+  );
+};
+
+const ProjectCard = ({ project }: { project: Project }) => {
+  return (
+    <HoverCardWrapper className="w-72 space-y-2">
+      <Image src={getProjectPicURL(project)} alt="Project Pic" width={100} height={80} className="w-full rounded-md" />
+      <div className="space-y-2">
         <div>
-          <div className='text-base font-semibold'>{hoverCardData.name}</div>
-          <div className='text-sm text-neutral-800 dark:text-neutral-500'>{hoverCardData.tagline}</div>
-          <div className='flex justify-between border-t mt-1 pt-1 border-neutral-700'>
-            <div className='text-xs text-neutral-800 dark:text-neutral-500'>
-              {
-                hoverCardData.members ? `Members: ${hoverCardData.members}`
-                : hoverCardData.date ? `Date: ${new Date(hoverCardData.date).toISOString()}`
-                : ''
-              }
+          <div className="text-xl font-semibold">{project.title}</div>
+          <div className="text-sm text-neutral-800 dark:text-neutral-500">{project.tagline}</div>
+          <div className="text-xs text-neutral-800 dark:text-neutral-500 mt-2">By {project.user?.name}</div>
+        </div>
+        <Separator />
+        <div className="flex justify-between">
+          <div className="flex gap-2">
+            <div className="flex-center gap-2 text-xs">
+              <Users size={18} />
+              {project.noMembers}
             </div>
-            <div className='text-xs text-neutral-800 dark:text-neutral-500'>
-              Views: {hoverCardData.views}
+            <div className="flex-center gap-2 text-xs">
+              <Eye size={18} />
+              {project.noImpressions}
             </div>
+          </div>
+          <div className="flex-center gap-2 text-xs">{project.noMembers} Members</div>
+        </div>
+      </div>
+    </HoverCardWrapper>
+  );
+};
+
+const OpeningCard = ({ opening }: { opening: Opening }) => {
+  return (
+    <HoverCardWrapper className="w-72 space-y-2">
+      <Image
+        src={getProjectPicURL(opening.project)}
+        alt="Project Pic"
+        width={100}
+        height={100}
+        className="w-full rounded-md"
+      />
+      <div className="space-y-1">
+        <div className="flex items-center gap-1 flex-wrap">
+          <div className="text-2xl font-semibold">{opening.title}</div>
+          <div className="text-xs text-neutral-800 dark:text-neutral-500">@{opening.project?.title}</div>
+        </div>
+        <div className="text-sm text-neutral-800 dark:text-neutral-300 line-clamp-3">{opening.description}</div>
+        <div className="text-xs text-neutral-800 dark:text-neutral-500 mt-2">
+          Posted {moment(opening.createdAt).fromNow()}
+        </div>
+      </div>
+    </HoverCardWrapper>
+  );
+};
+
+const CommunityCard = ({ community }: { community: Community }) => {
+  return (
+    <HoverCardWrapper className="relative">
+      <Image
+        crossOrigin="anonymous"
+        width={600}
+        height={100}
+        alt="Community Pic"
+        placeholder="blur"
+        blurDataURL={community.coverPicBlurHash || 'no-hash'}
+        src={`${COMMUNITY_COVER_PIC_URL}/${community.coverPic}`}
+        className="w-full h-full absolute rounded-lg opacity-10 top-0 right-0"
+      />
+      <div className="w-full flex gap-2 items-center z-10">
+        <Image
+          crossOrigin="anonymous"
+          width={50}
+          height={50}
+          alt="Community Pic"
+          placeholder="blur"
+          blurDataURL={community.profilePicBlurHash || 'no-hash'}
+          src={`${COMMUNITY_PROFILE_PIC_URL}/${community.profilePic}`}
+          className="w-10 h-10 rounded-full"
+        />
+        <div className="w-[calc(100%-40px)] h-10 flex flex-col">
+          <div className="w-full font-semibold line-clamp-1">{community.title}</div>
+          <div className="text-xs text-gray-500 dark:text-gray-400">{community.noMembers} Members</div>
+        </div>
+        {/* <CommunityJoinBtn communityID={community.id} communityAccess={community.access} /> */}
+      </div>
+      <div className="w-full text-xs font-medium z-10 mt-2">{community.tagline}</div>
+    </HoverCardWrapper>
+  );
+};
+
+const OrganisationCard = ({ organisation }: { organisation: Organization }) => {
+  return (
+    <HoverCardWrapper className="flex justify-between gap-4">
+      <Image
+        crossOrigin="anonymous"
+        width={100}
+        height={100}
+        alt={'User Pic'}
+        src={`${USER_PROFILE_PIC_URL}/${organisation.user?.profilePic}`}
+        className="w-10 h-10 rounded-full mt-1"
+      />
+      <div className="w-[calc(100%-40px)]">
+        <div className="w-fit flex-center gap-1">
+          <h4 className="text-lg font-semibold">{organisation.title}</h4>
+          <h4 className="text-xs font-medium text-gray-500">@{organisation.user?.username}</h4>
+        </div>
+        <p className="text-sm">{organisation.user?.tagline}</p>
+        <div className="text-xs text-muted-foreground font-medium mt-2">
+          {organisation.user?.noFollowers} Follower{organisation.user?.noFollowers !== 1 && 's'}
+        </div>
+      </div>
+    </HoverCardWrapper>
+  );
+};
+
+const EventCard = ({ event }: { event: Event }) => {
+  return (
+    <HoverCardWrapper className="w-72 space-y-2">
+      <Image
+        src={`${EVENT_PIC_URL}/${event.coverPic}`}
+        alt="Event Pic"
+        width={100}
+        height={60}
+        className="w-full rounded-md"
+        placeholder="blur"
+        blurDataURL={event.blurHash || 'no-hash'}
+      />
+      <div className="space-y-2">
+        <div>
+          <div className="text-xl font-semibold">{event.title}</div>
+          <div className="text-sm text-neutral-800 dark:text-neutral-500">{event.tagline}</div>
+          <div className="text-xs text-neutral-800 dark:text-neutral-500 mt-2">By {event.organization?.title}</div>
+        </div>
+        <Separator />
+        <div className="flex justify-between">
+          <div className="flex gap-2">
+            <div className="flex-center gap-2 text-xs">
+              <Heart size={18} />
+              {event.noLikes}
+            </div>
+            <div className="flex-center gap-2 text-xs">
+              <Eye size={18} />
+              {event.noImpressions}
+            </div>
+          </div>
+          <div className="text-xs text-neutral-800 dark:text-neutral-500 mt-2">
+            {moment(event.endTime).isBefore() ? 'Held' : moment(event.startTime).isBefore() ? 'Started' : 'Starts'}{' '}
+            {moment(event.startTime).fromNow()}
           </div>
         </div>
       </div>
-    );
-  }
-
-  return (
-    <div className="flex gap-2 rounded-xl p-2 bg-neutral-200 dark:bg-neutral-800 shadow-md">
-      <div className="flex justify-center items-center min-w-fit">
-        <Image
-          alt={'User Pic'}
-          src={hoverCardData.profilePic}
-          className="w-10 h-10 rounded-full mt-1 p-1"
-          width={40}
-          height={40}
-        />
-      </div>
-      <div className="flex flex-col justify-start">
-        <div className="text-base font-semibold">{hoverCardData.name}</div>
-        {(hoverCardData.description || hoverCardData.tagline) && (
-          <div className="text-sm text-wrap text-neutral-800 dark:text-neutral-500">{hoverCardData.tagline || hoverCardData.description}</div>
-        )}
-        {(hoverCardData.followers || hoverCardData.members || hoverCardData.views) && <div className="flex border-t mt-1 pt-1 border-neutral-700 gap-2">
-          {hoverCardData.followers != undefined && <div className="text-xs text-neutral-800 dark:text-neutral-500">Followers: {hoverCardData.followers}</div>}
-          {hoverCardData.members != undefined && <div className="text-xs text-neutral-800 dark:text-neutral-500">Members: {hoverCardData.members}</div>}
-          {hoverCardData.views != undefined && <div className="text-xs text-neutral-800 dark:text-neutral-500">Views: {hoverCardData.views}</div>}
-        </div>}
-      </div>
-    </div>
+    </HoverCardWrapper>
   );
 };
 
