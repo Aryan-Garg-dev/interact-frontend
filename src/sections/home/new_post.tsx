@@ -87,7 +87,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
     setContent,
     fetchUsers,
     setShowUsers,
-    setTaggedUsernames,
+    setTaggedUsernames
   );
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -128,7 +128,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
       ? `${ORG_URL}/${currentOrg.id}/posts`
       : communityID
       ? `${COMMUNITY_URL}/${communityID}/posts`
-      : POST_URL; 
+      : POST_URL;
 
     const res = await postHandler(URL, formData, 'multipart/form-data');
 
@@ -241,13 +241,19 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
                 <div className="w-full flex flex-col gap-8 relative">
                   <div className="w-full flex gap-4 items-center">
                     <NewPostImages setSelectedFiles={setImages} />
-                    {images.length == 0 && <NewPostHelper setShow={setShowTipsModal} show={showTipsModal} />}
+                    {images.length == 0 && <NewPostHelper />}
                   </div>
-                  <Editor editable setContent={setContent} placeholder='Start a conversation...' limit={2000} className="min-h-[150px]"  />
+                  <Editor
+                    editable
+                    setContent={setContent}
+                    placeholder="Start a conversation..."
+                    limit={2000}
+                    className="min-h-[150px]"
+                  />
                   {communityID && (
                     <div className="w-full mt-4">
                       <Checkbox
-                        label="Is the post open?" 
+                        label="Is the post open?"
                         val={isOpen}
                         setVal={setIsOpen}
                         caption={
@@ -267,12 +273,16 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
             <div className="md:hidden w-full flex flex-col gap-8 relative">
               <div className="w-full flex gap-4 items-center">
                 <NewPostImages setSelectedFiles={setImages} />
-                {images.length == 0 && (
-                  <NewPostHelper setShow={setShowTipsModal} show={showTipsModal} smallScreen={true} />
-                )}
+                {images.length == 0 && <NewPostHelper smallScreen={true} />}
                 <PreviewBtn show={showPreview} setShow={setShowPreview} />
               </div>
-              <Editor editable setContent={setContent} placeholder='Start a converstation...' limit={2000} className="min-h-[150px]"  />
+              <Editor
+                editable
+                setContent={setContent}
+                placeholder="Start a converstation..."
+                limit={2000}
+                className="min-h-[150px]"
+              />
               {communityID && (
                 <div className="w-full my-4">
                   <Checkbox

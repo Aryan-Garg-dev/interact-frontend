@@ -148,7 +148,7 @@ const NewAnnouncement = ({ organisation, setShow, setAnnouncements }: Props) => 
 
             <div className="w-full flex flex-col gap-4 relative">
               <div className="w-full flex gap-4">
-                <NewPostHelper setShow={setShowTipsModal} show={showTipsModal} announcement={true} />
+                <NewPostHelper />
               </div>
               <input
                 type="text"
