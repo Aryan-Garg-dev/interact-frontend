@@ -516,7 +516,7 @@ html {
 
 .tiptap mark {
   border-radius: 0.4rem;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   box-decoration-break: clone;
   padding: 0.1rem 0.3rem;
   @apply bg-blue-500 text-white;
