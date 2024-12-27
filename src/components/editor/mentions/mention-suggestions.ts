@@ -21,7 +21,7 @@ export default {
   //TODO: pass query in props and make request in the comp
   items: ({ query }: { query: string }) => {
     const fetchUsers = async (search: string) => {
-      const URL = `${EXPLORE_URL}/quick?search=${search}&limit=${10}`;
+      const URL = `${EXPLORE_URL}/quick?search=${search}&limit=${5}`;
       const res = await getHandler(URL, undefined, true);
       if (res.statusCode == 200) {
         const response: FetchResponse = res.data;

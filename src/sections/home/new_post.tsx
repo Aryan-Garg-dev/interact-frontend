@@ -184,7 +184,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
                     setContent={setContent}
                     placeholder="Start a conversation..."
                     limit={2000}
-                    className="min-h-[150px]"
+                    className="min-h-[350px]"
                   />
                   {communityID && (
                     <div className="w-full mt-4">
@@ -216,7 +216,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
                 setContent={setContent}
                 placeholder="Start a conversation..."
                 limit={2000}
-                className="min-h-[150px]"
+                className="min-h-[350px]"
               />
               {communityID && (
                 <div className="w-full my-4">

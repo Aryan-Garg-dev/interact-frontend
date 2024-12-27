@@ -115,7 +115,7 @@ const NewAnnouncement = ({ organisation, setShow, setAnnouncements }: Props) => 
                 setContent={setContent}
                 placeholder="What the announcement?"
                 limit={2000}
-                className="min-h-[150px]"
+                className="min-h-[350px]"
               />
               <div className="w-fit flex-center gap-4">
                 <label className="w-fit flex cursor-pointer select-none items-center text-sm gap-2">
