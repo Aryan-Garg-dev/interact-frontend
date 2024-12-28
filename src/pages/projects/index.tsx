@@ -61,6 +61,7 @@ const Projects = () => {
             <ProjectView
               project={clickedProject}
               setProject={setClickedProject as React.Dispatch<React.SetStateAction<Project>>}
+              openInNewTab={active == 1}
             />
           )}
         </SideBarWrapper>

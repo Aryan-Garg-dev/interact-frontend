@@ -27,7 +27,7 @@ const Openings = ({ project, setProject }: Props) => {
               )}
             </div>
           ) : (
-            <Link href={`/openings?pid=${project.slug}`} target="_blank" className="text-xs">
+            <Link href={`/openings?pid=${project.slug}`} className="text-xs">
               view all
             </Link>
           )}
@@ -43,7 +43,6 @@ const Openings = ({ project, setProject }: Props) => {
                 <Link
                   key={opening.id}
                   href={`/openings?pid=${project.slug}`}
-                  target="_blank"
                   className="w-full relative border-[1px] border-gray-500 dark:border-dark_primary_btn p-3 flex flex-col gap-2 rounded-md dark:hover:bg-dark_primary_comp_hover transition-ease-300"
                 >
                   <div className="w-full flex items-center justify-between">
@@ -76,7 +75,6 @@ const Openings = ({ project, setProject }: Props) => {
             {project.openings.length > 5 && (
               <Link
                 href={`/openings?pid=${project.slug}`}
-                target="_blank"
                 className="w-full relative border-[1px] text-primary_black border-gray-500 p-4 flex-center flex-col gap-2 rounded-md hover:shadow-2xl transition-ease-300"
               >
                 <div className="border-2 border-dashed border-gray-500 text-lg rounded-full w-12 h-12 flex-center font-semibold">

@@ -9,7 +9,7 @@ import {
 } from '@/config/routes';
 import { Community, Opening, Organization, Project, User, Event } from '@/types';
 import Image from 'next/image';
-import { getProjectPicURL } from '@/utils/funcs/safe_extract';
+import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 import { cn } from '@/lib/utils';
 import Separator from '@/components/ui/separator';
 import { Eye, Heart, Users } from '@phosphor-icons/react';
@@ -109,6 +109,8 @@ const UserCard = ({ user }: { user: User }) => {
         alt={'User Pic'}
         src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
         className="w-10 h-10 rounded-full mt-1"
+        placeholder="blur"
+        blurDataURL={user.profilePicBlurHash || 'no-hash'}
       />
       <div className="w-[calc(100%-40px)]">
         <div className="w-fit flex-center gap-1">
@@ -127,7 +129,15 @@ const UserCard = ({ user }: { user: User }) => {
 const ProjectCard = ({ project }: { project: Project }) => {
   return (
     <HoverCardWrapper className="w-72 space-y-2">
-      <Image src={getProjectPicURL(project)} alt="Project Pic" width={100} height={80} className="w-full rounded-md" />
+      <Image
+        src={getProjectPicURL(project)}
+        alt="Project Pic"
+        width={100}
+        height={80}
+        className="w-full rounded-md"
+        placeholder="blur"
+        blurDataURL={getProjectPicHash(project)}
+      />
       <div className="space-y-2">
         <div>
           <div className="text-xl font-semibold">{project.title}</div>
@@ -160,8 +170,10 @@ const OpeningCard = ({ opening }: { opening: Opening }) => {
         src={getProjectPicURL(opening.project)}
         alt="Project Pic"
         width={100}
-        height={100}
+        height={80}
         className="w-full rounded-md"
+        placeholder="blur"
+        blurDataURL={getProjectPicHash(opening.project)}
       />
       <div className="space-y-1">
         <div className="flex items-center gap-1 flex-wrap">
@@ -222,6 +234,7 @@ const OrganisationCard = ({ organisation }: { organisation: Organization }) => {
         alt={'User Pic'}
         src={`${USER_PROFILE_PIC_URL}/${organisation.user?.profilePic}`}
         className="w-10 h-10 rounded-full mt-1"
+        blurDataURL={organisation.user?.profilePicBlurHash || 'no-hash'}
       />
       <div className="w-[calc(100%-40px)]">
         <div className="w-fit flex-center gap-1">
@@ -244,7 +257,7 @@ const EventCard = ({ event }: { event: Event }) => {
         src={`${EVENT_PIC_URL}/${event.coverPic}`}
         alt="Event Pic"
         width={100}
-        height={60}
+        height={80}
         className="w-full rounded-md"
         placeholder="blur"
         blurDataURL={event.blurHash || 'no-hash'}

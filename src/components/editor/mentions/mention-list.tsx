@@ -100,12 +100,12 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>((props, ref)
 
     const getHref = (type: keyof FetchResponse, item: any): string => {
       const hrefMap: Record<keyof FetchResponse, string> = {
-        projects: `projects/${item.slug || ''}`,
-        users: `users/${item.username || ''}`,
-        orgs: `orgs/${item.user?.username || ''}`,
-        events: `events/${item.id}`,
-        openings: `openings?oid=${item.id || ''}`,
-        communities: `communities/${item.id}`,
+        projects: `/projects/${item.slug || ''}`,
+        users: `/users/${item.username || ''}`,
+        orgs: `/organisations/${item.user?.username || ''}`,
+        events: `/events/${item.id}`,
+        openings: `/openings?oid=${item.id || ''}`,
+        communities: `/communities/${item.id}`,
       };
 
       return hrefMap[type] || '';

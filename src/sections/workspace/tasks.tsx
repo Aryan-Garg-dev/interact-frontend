@@ -66,7 +66,7 @@ const Tasks = ({ project, org = false }: Props) => {
         <div className="grow flex justify-between items-center text-lg font-medium">
           Tasks
           {tasks.length > 0 && (
-            <Link href={`/${org ? 'organisation/projects' : 'workspace'}/tasks/${project.slug}`} target="_blank">
+            <Link href={`/${org ? 'organisation/projects' : 'workspace'}/tasks/${project.slug}`}>
               <div className="text-xs hover:underline underline-offset-2 cursor-pointer">view all</div>
             </Link>
           )}

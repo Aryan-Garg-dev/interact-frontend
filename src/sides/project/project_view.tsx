@@ -13,9 +13,10 @@ import ProjectCardCarousel from '@/components/explore/project_card_carousel';
 interface Props {
   project: Project;
   setProject?: React.Dispatch<React.SetStateAction<Project>>;
+  openInNewTab?: boolean;
 }
 
-const ProjectView = ({ project, setProject }: Props) => {
+const ProjectView = ({ project, setProject, openInNewTab }: Props) => {
   const [clickedOnReadMore, setClickedOnReadMore] = useState(false);
 
   return (
@@ -65,7 +66,7 @@ const ProjectView = ({ project, setProject }: Props) => {
           <div className="font-semibold text-lg">{project.tagline}</div>
           <Link
             href={`/projects/${project.slug}`}
-            target="_blank"
+            target={openInNewTab ? '_blank' : '_self'}
             className="w-full flex-center py-2 bg-primary_comp dark:bg-dark_primary_comp_hover hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_active rounded-lg transition-ease-300"
           >
             Open Project <ArrowUpRight size={20} weight="bold" />

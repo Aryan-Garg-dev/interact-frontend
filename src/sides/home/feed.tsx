@@ -186,7 +186,16 @@ const FeedSide = () => {
         </SidePrimeWrapper>
       )}
       {users && users.length > 0 && (
-        <SidePrimeWrapper title="Profiles to Follow" stickTop>
+        <SidePrimeWrapper stickTop>
+          <div className="w-full flex items-center justify-between">
+            <div className="w-fit text-2xl font-bold text-gradient">Profiles to Follow</div>
+            <Link
+              href="/users"
+              className="w-fit text-xs font-medium hover-underline-animation after:bg-gray-700 dark:after:bg-white"
+            >
+              view all
+            </Link>
+          </div>
           {user.id == '' && (
             <div className="w-full h-[calc(100%-48px)] flex-center flex-col gap-1 absolute top-12 right-0 backdrop-blur-sm rounded-lg z-10">
               <div className="bg-white dark:bg-dark_primary_comp flex-center gap-1 border-primary_black border-[1px] rounded-lg px-2 py-1">
@@ -206,13 +215,6 @@ const FeedSide = () => {
               <UserCard key={user.id} user={user} forTrending />
             ))}
           </div>
-
-          <Link
-            href={'/users'}
-            className="w-fit mx-auto text-sm font-medium mt-2 hover-underline-animation after:bg-gray-700 dark:after:bg-white"
-          >
-            view all
-          </Link>
         </SidePrimeWrapper>
       )}
     </>
