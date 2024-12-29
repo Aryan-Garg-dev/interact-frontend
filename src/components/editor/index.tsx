@@ -134,7 +134,7 @@ const Editor = ({
       InteractMentions,
       // customKeyMap
     ],
-
+    autofocus: editable,
     editable: editable,
     editorProps: {
       attributes: {
@@ -240,7 +240,7 @@ const Editor = ({
     <div className="flex flex-col justify-stretch">
       {editor && editable && (
         <BubbleMenu
-          className="w-fit h-fit flex-center gap-1 editor-bubble-menu bg-gray-300 dark:bg-neutral-800 rounded-sm shadow-md p-1"
+          className="w-fit h-fit flex-center gap-1 editor-bubble-menu bg-gray-200 dark:bg-neutral-800 rounded-sm shadow-md p-1"
           editor={editor}
           tippyOptions={{ duration: 200 }}
         >

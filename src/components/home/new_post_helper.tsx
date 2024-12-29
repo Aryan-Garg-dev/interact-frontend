@@ -14,7 +14,7 @@ const NewPostHelper = ({ smallScreen }: Props) => {
       </PopoverTrigger>
       <PopoverContent className="w-[320px] max-h-[520px] overflow-y-auto thin_scrollbar shadow-lg dark:shadow-neutral-900">
         <div className={`space-y-4 ${smallScreen ? 'text-xs' : 'text-sm'}`}>
-          <div className="text-center font-medium">Tips to Make Your Post More Engaging</div>
+          <div className="text-center font-semibold">Tips to Make Your Post More Engaging</div>
           <ul className="list-disc flex flex-col gap-2 text-xs pl-4 mt-2">
             <li>Select text to reveal a popup with formatting options!</li>
             <li>
