@@ -4,6 +4,8 @@ import { useWindowWidth } from '@react-hook/window-size';
 import Link from 'next/link';
 import { BackgroundLines } from '@/components/ui/background-lines';
 import { useTheme } from 'next-themes';
+import { useSelector } from 'react-redux';
+import { userSelector } from '@/slices/userSlice';
 
 const TextAnimation = () => {
   const texts = ['Organizations', 'Hackathons', 'Projects', 'Communities'];
@@ -68,12 +70,20 @@ export const HeroSection = () => {
   };
 
   useEffect(() => {
+    const initialTheme = theme;
+
     if (document.documentElement.classList.contains('dark')) {
       document.documentElement.classList.remove('dark');
     }
     localStorage.setItem('theme', 'light');
     setTheme('light');
+
+    return () => {
+      if (initialTheme) setTheme(initialTheme);
+    };
   }, []);
+
+  const user = useSelector(userSelector);
 
   return (
     <BackgroundLines className="w-screen h-base bg-background text-center relative flex-center flex-col gap-12 max-md:gap-4 z-10 transition-ease-300">
@@ -94,9 +104,16 @@ export const HeroSection = () => {
         </p>
 
         <div className="space-y-4">
-          <Link href="/signup">
-            <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg">Sign up for free</button>
-          </Link>
+          {user.id ? (
+            <Link href="/home">
+              <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg">Back to Feed</button>
+            </Link>
+          ) : (
+            <Link href="/signup">
+              <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg">Sign up for Free</button>
+            </Link>
+          )}
+
           {/* <div className="flex justify-center items-center space-x-2 text-sm">
             <span className="text-gray-600">Are you Organizations ?</span>
             <Link href="/signup" className="text-[#00BDF2]">

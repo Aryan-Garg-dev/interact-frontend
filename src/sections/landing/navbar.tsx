@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ReactSVG } from 'react-svg';
 import LandingButton from '@/components/buttons/landing_btn';
+import { useSelector } from 'react-redux';
+import { userSelector } from '@/slices/userSlice';
 
 const Navbar: React.FC = () => {
   const [isSticky, setIsSticky] = useState(false);
@@ -39,6 +41,7 @@ const Navbar: React.FC = () => {
   };
 
   const NavbarMenu = () => {
+    const user = useSelector(userSelector);
     return (
       <div className="flex-center gap-8 max-md:gap-4">
         <Link href={'/projects'} className="hover-underline-animation after:bg-gray-700 max-md:text-xs">
@@ -58,9 +61,11 @@ const Navbar: React.FC = () => {
         >
           Contact
         </Link>
-        <Link href="/signup">
-          <LandingButton label="Sign up" />
-        </Link>
+        {!user.id && (
+          <Link href="/signup">
+            <LandingButton label="Sign up" />
+          </Link>
+        )}
       </div>
     );
   };
