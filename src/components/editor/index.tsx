@@ -1,6 +1,6 @@
 'use client';
 import { useEditor, EditorContent } from '@tiptap/react';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import Text from '@tiptap/extension-text';
 import Paragraph from '@tiptap/extension-paragraph';
 import Document from '@tiptap/extension-document';
@@ -26,12 +26,27 @@ import CharacterCount from '@tiptap/extension-character-count';
 import Placeholder from '@tiptap/extension-placeholder';
 import History from '@tiptap/extension-history';
 import Link from '@tiptap/extension-link';
-import { ColorHighlighter } from './extensions/color-highlighter';
 import { SmilieReplacer } from './extensions/smilie-replacer';
 import CountWidget from './widgets/count-widget';
 import LinkDialog from './widgets/link-dialog';
 import Toaster from '@/utils/toaster';
 import InteractMentions from '@/components/editor/mentions/mention-extension';
+import { BubbleMenu } from '@tiptap/react';
+import {
+  CodeSimple,
+  HighlighterCircle,
+  ListChecks,
+  Quotes,
+  TextB,
+  TextHOne,
+  TextHThree,
+  TextHTwo,
+  TextItalic,
+  TextStrikethrough,
+  TextSubscript,
+  TextSuperscript,
+  TextUnderline,
+} from '@phosphor-icons/react';
 
 type EditorProps =
   | {
@@ -126,7 +141,6 @@ const Editor = ({
         class: `py-0.5 ring-0 h-full outline-none z-0 ${className}`,
       },
     },
-    // autofocus: true,
     onUpdate({ editor }) {
       setContent(editor.getHTML());
     },
@@ -173,8 +187,77 @@ const Editor = ({
 
   const charCount = editor ? editor.storage.characterCount.characters() : 0;
 
+  type BubbleMenuButtonConfig = {
+    action?: () => void;
+    activeCheck?: string;
+    icon?: React.ReactNode;
+    separator?: boolean;
+  };
+
+  const bubbleMenuButtons: BubbleMenuButtonConfig[] = [
+    { action: () => editor.chain().focus().toggleBold().run(), activeCheck: 'bold', icon: <TextB /> },
+    { action: () => editor.chain().focus().toggleItalic().run(), activeCheck: 'italic', icon: <TextItalic /> },
+    { action: () => editor.chain().focus().toggleUnderline().run(), activeCheck: 'underline', icon: <TextUnderline /> },
+    { action: () => editor.chain().focus().toggleStrike().run(), activeCheck: 'strike', icon: <TextStrikethrough /> },
+    { action: () => editor.chain().focus().toggleSubscript().run(), activeCheck: 'subscript', icon: <TextSubscript /> },
+    {
+      action: () => editor.chain().focus().toggleSuperscript().run(),
+      activeCheck: 'superscript',
+      icon: <TextSuperscript />,
+    },
+    { separator: true },
+    {
+      action: () => editor.chain().focus().toggleHeading({ level: 1 }).run(),
+      activeCheck: 'heading1',
+      icon: <TextHOne />,
+    },
+    {
+      action: () => editor.chain().focus().toggleHeading({ level: 2 }).run(),
+      activeCheck: 'heading2',
+      icon: <TextHTwo />,
+    },
+    {
+      action: () => editor.chain().focus().toggleHeading({ level: 3 }).run(),
+      activeCheck: 'heading3',
+      icon: <TextHThree />,
+    },
+    { separator: true },
+    { action: () => editor.chain().focus().toggleBlockquote().run(), activeCheck: 'blockquote', icon: <Quotes /> },
+    { action: () => editor.chain().focus().toggleCode().run(), activeCheck: 'code', icon: <CodeSimple /> },
+    {
+      action: () => editor.chain().focus().toggleHighlight().run(),
+      activeCheck: 'highlight',
+      icon: <HighlighterCircle />,
+    },
+    { action: () => editor.chain().focus().toggleTaskList().run(), activeCheck: 'taskList', icon: <ListChecks /> },
+  ];
+
+  const Separator = () => (
+    <div className="w-[1px] h-[18px] border-r-[1px] rounded-lg border-primary_black dark:border-gray-500" />
+  );
+
   return (
     <div className="flex flex-col justify-stretch">
+      {editor && editable && (
+        <BubbleMenu
+          className="w-fit h-fit flex-center gap-1 editor-bubble-menu bg-gray-300 dark:bg-neutral-800 rounded-sm shadow-md p-1"
+          editor={editor}
+          tippyOptions={{ duration: 200 }}
+        >
+          {bubbleMenuButtons.map((button, index) =>
+            button.separator ? (
+              <Separator key={`separator-${index}`} />
+            ) : (
+              <BubbleMenuIcon
+                key={`button-${index}`}
+                onClick={button.action}
+                isActive={!!(button.activeCheck && editor.isActive(button.activeCheck))}
+                icon={button.icon}
+              />
+            )
+          )}
+        </BubbleMenu>
+      )}
       <EditorContent editor={editor} />
       {editor && editable && limit && <CountWidget charCount={charCount} limit={limit} className="m-1 ml-2" />}
       {editor && editable && (
@@ -183,5 +266,13 @@ const Editor = ({
     </div>
   );
 };
+
+const BubbleMenuIcon = ({ icon, isActive, onClick }: { icon: ReactNode; isActive: boolean; onClick?: () => void }) => (
+  <button onClick={onClick} className={isActive ? 'is-active' : ''}>
+    {React.cloneElement(icon as React.ReactElement, {
+      weight: isActive ? 'bold' : 'regular',
+    })}
+  </button>
+);
 
 export default Editor;
