@@ -302,7 +302,6 @@ const PostComponent = ({
           </div>
         ) : (
           <div className={`w-full text-sm  whitespace-pre-wrap mb-2 ${clamp && 'line-clamp-6'}`}>
-            {/* {renderContentWithLinks(post.content, post.taggedUsers)} */}
             <Editor content={post.content} editable={false} />
           </div>
         )}

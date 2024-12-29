@@ -99,8 +99,6 @@ const NewPostHelper = ({ smallScreen }: Props) => {
               </div>
             </div>
           </div>
-
-          {/* <Editor editable={false} content={content} className="w-full h-fit" /> */}
         </div>
       </PopoverContent>
     </Popover>

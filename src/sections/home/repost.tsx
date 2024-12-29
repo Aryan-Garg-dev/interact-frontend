@@ -1,18 +1,16 @@
 import { SERVER_ERROR } from '@/config/errors';
-import { EXPLORE_URL, ORG_URL, POST_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
+import { ORG_URL, POST_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import postHandler from '@/handlers/post_handler';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { userSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
-import { Announcement, Poll, Post, User } from '@/types';
-import getHandler from '@/handlers/get_handler';
+import { Announcement, Poll, Post } from '@/types';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import moment from 'moment';
-import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
-import TagUserUtils from '@/utils/funcs/tag_users';
 import ModalWrapper from '@/wrappers/modal';
+import Editor from '@/components/editor';
 
 interface Props {
   post: Post;
@@ -23,11 +21,6 @@ interface Props {
 
 const RePost = ({ post, setShow, setFeed, org = false }: Props) => {
   const [content, setContent] = useState<string>('');
-
-  const [taggedUsernames, setTaggedUsernames] = useState<string[]>([]);
-  const [users, setUsers] = useState<User[]>([]);
-  const [showUsers, setShowUsers] = useState(false);
-  const [cursorPosition, setCursorPosition] = useState<number | null>(null);
 
   const user = useSelector(userSelector);
 
@@ -58,7 +51,6 @@ const RePost = ({ post, setShow, setFeed, org = false }: Props) => {
 
     formData.append('content', content.replace(/\n{3,}/g, '\n\n'));
     formData.append('rePostID', post.id);
-    taggedUsernames.forEach(username => formData.append('taggedUsernames', username));
 
     const URL = org ? `${ORG_URL}/${currentOrgID}/posts` : POST_URL;
 
@@ -78,30 +70,6 @@ const RePost = ({ post, setShow, setFeed, org = false }: Props) => {
       }
     }
   };
-
-  const fetchUsers = async (search: string) => {
-    const URL = `${EXPLORE_URL}/users?search=${search}&order=trending&limit=${10}`;
-    const res = await getHandler(URL, undefined, true);
-    if (res.statusCode == 200) {
-      const userData: User[] = res.data.users || [];
-      setUsers(userData.filter(u => u.id != user.id));
-    } else {
-      if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
-      else Toaster.error(SERVER_ERROR, 'error_toaster');
-    }
-  };
-
-  const tagsUserUtils = new TagUserUtils(
-    cursorPosition,
-    content,
-    showUsers,
-    taggedUsernames,
-    setCursorPosition,
-    setContent,
-    fetchUsers,
-    setShowUsers,
-    setTaggedUsernames
-  );
 
   return (
     <ModalWrapper setShow={setShow} top="1/2" width="2/3" height="2/3" blur={true} border={false}>
@@ -157,46 +125,22 @@ const RePost = ({ post, setShow, setFeed, org = false }: Props) => {
                 <div className="font-medium">{post.user.username}</div>
                 <div className="flex gap-2 font-light text-xxs">{moment(post.postedAt).fromNow()}</div>
               </div>
-              <div className="w-full text-xs  whitespace-pre-wrap mb-2 line-clamp-8">
-                {renderContentWithLinks(post.content, post.taggedUsers)}
-              </div>
+              <Editor
+                className="w-full text-xs whitespace-pre-wrap mb-2 line-clamp-8"
+                content={post.content}
+                editable={false}
+              />
             </div>
           </div>
-
-          <textarea
-            className="w-full mt-4 bg-transparent focus:outline-none min-h-[154px] max-h-[320px]"
-            value={content}
-            onChange={tagsUserUtils.handleContentChange}
-            maxLength={2000}
+          <Editor
+            editable
+            setContent={setContent}
             placeholder="Add to conversation..."
-          ></textarea>
+            limit={2000}
+            className="min-h-[350px]"
+          />
         </div>
       </div>
-
-      {showUsers && users.length > 0 && (
-        <div className="w-full flex flex-wrap justify-center gap-4">
-          {users.map(user => (
-            <div
-              key={user.id}
-              onClick={() => tagsUserUtils.handleTagUser(user.username)}
-              className="w-1/4 hover:scale-105 flex items-center gap-2 rounded-md border-[1px] border-primary_btn p-2 hover:bg-primary_comp cursor-pointer transition-ease-300"
-            >
-              <Image
-                crossOrigin="anonymous"
-                width={50}
-                height={50}
-                alt={'User Pic'}
-                src={`${USER_PROFILE_PIC_URL}/${user.profilePic}`}
-                className="rounded-full w-12 h-12"
-              />
-              <div className="">
-                <div className="text-sm font-semibold line-clamp-1">{user.name}</div>
-                <div className="text-xs text-gray-500">@{user.username}</div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
 
       <div
         onClick={handleSubmit}

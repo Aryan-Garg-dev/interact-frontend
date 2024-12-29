@@ -107,7 +107,7 @@ const Messaging = () => {
           <div
             className={`w-[37.5vw] max-lg:w-screen h-full max-lg:h-screen sticky max-lg:fixed max-lg:-translate-x-4 top-navbar max-lg:top-0 p-2 max-lg:p-0 ${
               currentChatID == '' ? 'hidden' : ''
-            } z-40 max-lg:z-30`}
+            } max-lg:z-50`}
           >
             {currentChatID != '' && <ChatScreen />}
           </div>
