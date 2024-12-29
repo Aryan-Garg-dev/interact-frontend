@@ -41,6 +41,14 @@
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
 }
 
+.fade-img-right {
+  mask-image: linear-gradient(to right, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 90%);
+}
+
+.fade-img-left {
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 90%);
+}
+
 .hover-underline-animation {
   position: relative;
 }
@@ -399,6 +407,14 @@ html {
   overflow: hidden !important;
 }
 
+.rotate-x-landing {
+  transform: perspective(800px) rotateX(15deg);
+}
+
+.rotate-x-landing {
+  transform: perspective(800px) rotateX(15deg);
+}
+
 .tiptap > :first-child {
   margin-top: 0;
 }
@@ -624,17 +640,17 @@ html {
 }
 
 .editor-bubble-menu button {
-  @apply p-1 rounded-sm
+  @apply p-1 rounded-sm;
 }
 
 .editor-bubble-menu button:hover {
-  @apply hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover
+  @apply hover:bg-primary_comp_hover dark:hover:bg-dark_primary_comp_hover;
 }
 
 .editor-bubble-menu button.is-active {
-  @apply bg-primary_comp_active dark:bg-dark_primary_comp_active
+  @apply bg-primary_comp_active dark:bg-dark_primary_comp_active;
 }
 
 .editor-bubble-menu button.is-active:hover {
-  @apply hover:bg-primary_comp_active hover:dark:bg-dark_primary_comp_active
+  @apply hover:bg-primary_comp_active hover:dark:bg-dark_primary_comp_active;
 }

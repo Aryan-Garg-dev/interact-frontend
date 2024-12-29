@@ -40,8 +40,8 @@ const config: Config = {
         inner: '0px 0px 10px 1px #262626a1 inset;',
       },
       backgroundImage: {
-        onboarding: "url('/assets/onboarding.webp')",
-        new_post: "url('/assets/new_post.webp')",
+        onboarding: 'url("/assets/onboarding.webp")',
+        new_post: 'url("/assets/new_post.webp")',
       },
       colors: {
         primary_text: '#478EE1',
@@ -116,6 +116,7 @@ const config: Config = {
       fontFamily: {
         primary: ['var(--inter-font)'],
         title: ['var(--fraunces-font)'],
+        cursive: ['var(--great-vibes-font)'],
       },
       fontSize: {
         xxs: '0.5rem',
@@ -134,6 +135,9 @@ const config: Config = {
         onboarding_dummy_user_card_backwards: 'onboarding_dummy_user_card_backwards 3s ease-in-out 0.4s infinite',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        marquee: 'marquee var(--duration) infinite linear',
+        'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
+        shine: 'shine var(--duration) infinite linear',
       },
       keyframes: {
         'caret-blink': {
@@ -210,6 +214,33 @@ const config: Config = {
           },
           to: {
             height: '0',
+          },
+        },
+        marquee: {
+          from: {
+            transform: 'translateX(0)',
+          },
+          to: {
+            transform: 'translateX(calc(-100% - var(--gap)))',
+          },
+        },
+        'marquee-vertical': {
+          from: {
+            transform: 'translateY(0)',
+          },
+          to: {
+            transform: 'translateY(calc(-100% - var(--gap)))',
+          },
+        },
+        shine: {
+          '0%': {
+            'background-position': '0% 0%',
+          },
+          '50%': {
+            'background-position': '100% 100%',
+          },
+          to: {
+            'background-position': '0% 0%',
           },
         },
       },
