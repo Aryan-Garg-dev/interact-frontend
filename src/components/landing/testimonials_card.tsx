@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
-import { InstagramLogo } from '@phosphor-icons/react/dist/ssr';
+import { FacebookLogo } from '@phosphor-icons/react';
+import { InstagramLogoIcon, LinkedInLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
 import Image from 'next/image';
 
 const TestimonialCard = ({
@@ -7,11 +8,13 @@ const TestimonialCard = ({
   name,
   username,
   body,
+  social = 'instagram',
 }: {
   img: string;
   name: string;
   username: string;
   body: string;
+  social?: 'instagram' | 'twitter' | 'facebook' | 'linkedin';
 }) => {
   return (
     <figure
@@ -28,13 +31,23 @@ const TestimonialCard = ({
           <Image className="rounded-full" width="32" height="32" alt="" src={img} />
           <div className="flex flex-col">
             <figcaption className="text-sm font-medium dark:text-white">{name}</figcaption>
-            <p className="text-xs font-medium dark:text-white/40">{username}</p>
+            <p className="text-xs font-medium text-left dark:text-white/40">{username}</p>
           </div>
         </div>
-        <InstagramLogo className="opacity-60" />
+        {social == 'instagram' ? (
+          <InstagramLogoIcon className="opacity-60" />
+        ) : social == 'twitter' ? (
+          <TwitterLogoIcon className="opacity-60" />
+        ) : social == 'facebook' ? (
+          <FacebookLogo className="opacity-60" />
+        ) : social == 'linkedin' ? (
+          <LinkedInLogoIcon className="opacity-60" />
+        ) : (
+          <></>
+        )}
       </div>
 
-      <blockquote className="mt-2 text-sm">{body}</blockquote>
+      <blockquote className="mt-2 text-sm text-left">{body}</blockquote>
     </figure>
   );
 };

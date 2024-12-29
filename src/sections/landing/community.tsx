@@ -1,34 +1,37 @@
 import LandingButton from '@/components/buttons/landing_btn';
-import Image from 'next/image';
 import React from 'react';
 import { TitleBlock } from './features';
 import { ReactSVG } from 'react-svg';
+import { LANDING_RESOURCE_URL } from '@/config/routes';
 
 const Community = () => {
   return (
-    <div className="w-full flex-center flex-col gap-12 px-8 text-black dark:my-12">
+    <div className="w-full flex-center flex-col gap-6 px-8 text-black dark:my-12 max-md:mt-16">
       <div className="w-1/2 mx-auto max-md:w-full flex-center flex-col gap-4 dark:hidden">
         <TitleBlock
           titleUpper="Explore"
           titleMid="The"
           titleLower="Community"
-          description="Lorem ipsum dolor sit amet consectetur. Amet varius eget tempus pulvinar aliquam nulla dolor. Etiam dignissim
-          nunc diam eudismod. Nec placerat purus ultricies amet facus justo."
+          description="Check out the latest projects, and apply to their openings to level up your skills for
+                        your next job. Join events and communities to expand your knowledge and help
+                        others!"
           center
           includeSparkles
         />
       </div>
       <div className="w-full relative flex items-center justify-center scale-[1] dark:hidden">
-        <Image
-          width={500}
-          height={400}
-          src="landing/explore.svg"
-          alt="Community Image"
-          className="w-4/5 max-md:w-full h-auto object-contain shadow-xl rounded-3xl max-md:rounded-lg"
-          style={{
-            transform: `perspective(1000px) rotateX(12deg) rotateY(0deg)`,
-          }}
-        />
+        <video
+          className="w-4/5 rotate-x-landing max-md:w-full h-auto object-contain shadow-xl rounded-xl max-md:rounded-lg"
+          width="600"
+          autoPlay
+          loop
+          muted
+          playsInline
+          placeholder="Community Video"
+        >
+          <source src={`${LANDING_RESOURCE_URL}/community.mp4`} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
       <div className="w-1/2 mx-auto max-md:w-full flex-center flex-col gap-16">
         <TitleBlock
@@ -43,7 +46,7 @@ const Community = () => {
           className="dark:flex items-center justify-center hidden bottom-0 h-[5vh] md:h-[20vh] lg:scale-[0.75] md:scale-[0.6] scale-[0.26] sm:mt-24 mt-12"
         />
       </div>
-      <LandingButton label="Know More" />
+      {/* <LandingButton className="mt-8" label="Know More" /> */}
     </div>
   );
 };

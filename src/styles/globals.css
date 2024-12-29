@@ -36,7 +36,7 @@
 }
 
 .fade-img2 {
-  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2)  50%, rgba(0, 0, 0, 0)  100%);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%);
 }
 
 .fade-img-right {
@@ -403,4 +403,8 @@ html {
 
 .infinite-scroll-component__outerdiv > div {
   overflow: hidden !important;
+}
+
+.rotate-x-landing {
+  transform: perspective(800px) rotateX(15deg);
 }

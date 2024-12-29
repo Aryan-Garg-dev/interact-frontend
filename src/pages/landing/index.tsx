@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Navbar from '@/sections/landing/navbar';
 import HeroSection from '@/sections/landing/heroSection';
 import Features from '@/sections/landing/features';
@@ -21,7 +21,7 @@ const Separator = ({ excludeMargin = false }) => {
 const LandingPage = () => {
   return (
     <div
-      className="w-full flex flex-col gap-24 bg-background overflow-hidden"
+      className="w-full flex flex-col gap-24 max-md:gap-16 bg-background overflow-hidden"
       style={{
         cursor: `url('/landing/cursor.svg'), auto`,
       }}
@@ -38,7 +38,7 @@ const LandingPage = () => {
       </div>
       {/* <WhyChooseUs /> */}
       <Testimonials />
-      <ExploreCommunity />
+      {/* <ExploreCommunity /> */}
       <Footer />
     </div>
   );

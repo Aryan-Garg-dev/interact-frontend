@@ -7,10 +7,10 @@ import { ReactSVG } from 'react-svg';
 
 const Footer = () => {
   return (
-    <div>
-      <div className="relative w-4/5 mx-auto h-[250px] flex-center bg-background overflow-hidden">
-        <ReactSVG src="/onboarding_logo.svg" className="scale-[2.0] z-10 dark:hidden" />
-        <ReactSVG src="/onboarding_logo_dark.svg" className="scale-[2.0] z-10 hidden dark:block" />
+    <div id="footer">
+      <div className="relative w-4/5 mx-auto h-[250px] max-md:h-[125px] flex-center bg-background overflow-hidden">
+        <ReactSVG src="/onboarding_logo.svg" className="md:scale-[2.0] z-10 dark:hidden" />
+        <ReactSVG src="/onboarding_logo_dark.svg" className="md:scale-[2.0] z-10 hidden dark:block" />
         <FlickeringGrid
           className="z-0 absolute inset-0 size-full"
           squareSize={4}

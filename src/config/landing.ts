@@ -1,7 +1,9 @@
+import { LANDING_RESOURCE_URL } from './routes';
+
 export const features = {
   students: [
     {
-      image: '/landing/features/user1.png',
+      image: `${LANDING_RESOURCE_URL}/user1.png`,
       imageAlt: 'Dashboard Preview',
       imageClass: 'lg:scale-[1.5] lg:-translate-x-[140px] fade-img-left',
       titleUpper: 'Managing',
@@ -23,43 +25,44 @@ export const features = {
         },
       ],
       quote: {
-        name: 'Pranay',
-        designation: 'Co-Founder',
+        name: 'Pratham',
+        designation: 'Founder',
         quote:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          'A project is more than just tasks and deadlines; it’s a vision coming to life. With Interact, we ensure you have everything you need to manage, collaborate, and turn ideas into reality.',
         position: 'end',
       },
     },
     {
-      image: '/landing/features/user2.png',
+      image: `${LANDING_RESOURCE_URL}/user2.png`,
       imageAlt: 'Hackathon Dashboard',
       imageClass: 'lg:scale-[1.5] lg:translate-x-[140px] fade-img-right',
-      titleUpper: 'Engaging',
-      titleMid: 'Useful',
-      titleLower: 'Communities',
-      titleSide: 'effortlessly.',
+      titleUpper: 'Discover',
+      titleMid: 'Exciting',
+      titleLower: 'Openings',
+      titleSide: 'seamlessly.',
       description:
-        "Join or create topic-specific communities to collaborate and share knowledge. Whether it's discussing ideas or sharing resources, Interact helps you connect with like-minded peers in a meaningful way.",
+        'Interact opens doors to new opportunities by helping students find projects that match their skills and interests. Explore project openings, apply directly, and collaborate on projects that excite you.',
       features: [
         {
-          title: 'Interactive Discussions',
-          description: 'Share posts, comments, and updates to foster engaging discussions and solve problems together.',
+          title: 'Find Your Niche Projects',
+          description: 'Browse through a wide range of project openings tailored to your skills and interests.',
         },
         {
-          title: 'Collaborative Resources',
-          description: 'Share and access resources specific to your community for streamlined collaboration.',
+          title: 'Effortless Applications',
+          description:
+            'Apply to projects on the platform, filter through opportunities, and even schedule meetings with project owners—all in one place.',
         },
       ],
       quote: {
-        name: 'Pranay',
+        name: 'Soha',
         designation: 'Co-Founder',
         quote:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          'Finding the right project to work on shouldn’t feel like searching for a needle in a haystack. Interact connects you with opportunities that match your passion and skills, helping you take that first step toward greatness.',
         position: 'start',
       },
     },
     {
-      image: '/landing/features/user3.svg',
+      image: `${LANDING_RESOURCE_URL}/user3.svg`,
       imageAlt: 'Dashboard Preview',
       imageClass: 'lg:scale-[1.5] lg:-translate-x-[140px] fade-img-left',
       titleUpper: 'Participating',
@@ -67,7 +70,7 @@ export const features = {
       titleLower: 'Events',
       titleSide: 'redefined.',
       description:
-        'Interact revolutionizes event participation, offering hackathons and workshops where you can learn, compete, and turn ideas into actionable projects—all in one place.',
+        'Interact revolutionizes your event participation. Participate in hackathons, events and workshops where you compete, learn and earn rewards. We sync your participation on your profile so you don’t have to. PS- participate often to earn enough points to unlock our premium features.',
       features: [
         {
           title: 'Workshops',
@@ -81,46 +84,47 @@ export const features = {
         },
       ],
       quote: {
-        name: 'Pranay',
-        designation: 'Co-Founder',
+        name: 'Pratham',
+        designation: 'Founder',
         quote:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          'Every event is a chance to learn, compete, and grow. Whether it’s a workshop or a hackathon, Interact makes sure your journey is smooth, productive, and full of possibilities.',
         position: 'end',
       },
     },
   ],
   organisations: [
     {
-      image: '/landing/features/org1.png',
+      image: `${LANDING_RESOURCE_URL}/org1.png`,
       imageAlt: 'Project Management Dashboard',
       imageClass: 'lg:scale-[1.5] lg:-translate-x-[140px] fade-img-left',
-      titleUpper: 'Managing',
+      titleUpper: 'Streamlining',
       titleMid: 'Your',
-      titleLower: 'Projects',
-      titleSide: 'made effortless.',
+      titleLower: 'Organization',
+      titleSide: 'with ease.',
       description:
-        'Centralize your organization’s project workflows with tools to manage tasks, communicate effectively, and track progress—all in one place.',
+        'Unlike fragmented management tools, Interact provides a unified platform for organizations to centralize their workflows. From seamless communication to efficient task and project handling, everything you need is in one place.',
       features: [
         {
-          title: 'All-in-One Project Management',
+          title: 'Centralized Management',
           description:
-            'Manage tasks, track progress, and organize resources with ease using GitHub and Figma integrations.',
+            'Manage tasks, assign responsibilities, and track progress with integrated tools like GitHub and Figma, all within one hub.',
         },
         {
-          title: 'Team Collaboration',
-          description: 'Foster seamless communication through project chats and shared resource buckets.',
+          title: 'Unified Communication',
+          description:
+            'Foster seamless collaboration with organization-wide chats, keeping your team connected and informed at all times.',
         },
       ],
       quote: {
-        name: 'Pranay',
-        designation: 'Co-Founder',
+        name: 'Pratham',
+        designation: 'Founder',
         quote:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        position: 'end',
+          'Running an organization is more than just managing tasks; it’s about empowering people and fostering growth. Interact simplifies the complexity so you can focus on what truly matters—making an impact.',
+        position: 'start',
       },
     },
     {
-      image: '/landing/features/org2.png',
+      image: `${LANDING_RESOURCE_URL}/org2.png`,
       imageAlt: 'Meeting Management Dashboard',
       imageClass: 'lg:scale-[1.5] lg:translate-x-[140px] fade-img-right',
       titleUpper: 'Hosting',
@@ -142,15 +146,15 @@ export const features = {
         },
       ],
       quote: {
-        name: 'Pranay',
+        name: 'Soha',
         designation: 'Co-Founder',
         quote:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          'An event isn’t just a gathering; it’s an experience that inspires and connects. With Interact, you get the tools to host events that leave a lasting impression on every participant.',
         position: 'end',
       },
     },
     {
-      image: '/landing/features/org3.svg',
+      image: `${LANDING_RESOURCE_URL}/org3.svg`,
       imageAlt: 'Event Hosting Dashboard',
       imageClass: 'lg:scale-[1.5] lg:-translate-x-[140px] fade-img-left',
       titleUpper: 'Scheduling',
@@ -171,12 +175,120 @@ export const features = {
         },
       ],
       quote: {
-        name: 'Pranay',
-        designation: 'Co-Founder',
+        name: 'Pratham',
+        designation: 'Founder',
         quote:
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+          'Meetings aren’t just about discussion—they’re about alignment and action. Interact ensures that every meeting is well-organized, productive, and moves your team closer to its goals.',
         position: 'start',
       },
     },
   ],
 };
+
+export const testimonials = [
+  {
+    name: 'Jack',
+    username: '@jack',
+    body: "I've never seen anything like this before. It's amazing. I love it.",
+    img: 'https://avatar.vercel.sh/jack',
+    social: 'twitter',
+  },
+  {
+    name: 'Jill',
+    username: '@jill',
+    body: "I don't know what to say. I'm speechless. This is amazing.",
+    img: 'https://avatar.vercel.sh/jill',
+    social: 'instagram',
+  },
+  {
+    name: 'Soha Jagtap',
+    username: '@sohaj',
+    body: 'The platform is so intuitive and easy to use. It has truly transformed the way I collaborate on projects.',
+    img: 'https://avatar.vercel.sh/sohaj',
+    social: 'linkedin',
+  },
+  {
+    name: 'Pratham Batta',
+    username: '@pranayb',
+    body: 'Interact has everything I need in one place. Managing my team and events has never been easier.',
+    img: 'https://avatar.vercel.sh/pranayb',
+    social: 'facebook',
+  },
+  {
+    name: 'Tejas Ghatte',
+    username: '@tejasg',
+    body: "It's incredible how much time and effort this platform saves me every day. Highly recommended!",
+    img: 'https://avatar.vercel.sh/tejasg',
+    social: 'twitter',
+  },
+  {
+    name: 'Ishita Agarwal',
+    username: '@ishita',
+    body: 'The resource-sharing feature is my favorite. It keeps my team organized and efficient.',
+    img: 'https://avatar.vercel.sh/ishita',
+    social: 'instagram',
+  },
+  {
+    name: 'Aryan Khanna',
+    username: '@aryank',
+    body: 'This is the perfect tool for students and organizations alike. I’ve already recommended it to my peers.',
+    img: 'https://avatar.vercel.sh/aryank',
+    social: 'facebook',
+  },
+  {
+    name: 'Meera Nair',
+    username: '@meeran',
+    body: 'The GitHub integration is a game-changer. I can’t imagine managing projects without it now.',
+    img: 'https://avatar.vercel.sh/meeran',
+    social: 'linkedin',
+  },
+  {
+    name: 'Rohan Mehta',
+    username: '@rohanm',
+    body: 'Interact makes collaborating on hackathons so smooth and productive. Love the analytics features!',
+    img: 'https://avatar.vercel.sh/rohanm',
+    social: 'twitter',
+  },
+  {
+    name: 'Sanya Kapoor',
+    username: '@sanyak',
+    body: 'The event-hosting tools are just brilliant. The transcripts and recordings make life so much easier.',
+    img: 'https://avatar.vercel.sh/sanyak',
+    social: 'instagram',
+  },
+  {
+    name: 'Devansh Arora',
+    username: '@devansha',
+    body: 'I’ve used many platforms, but Interact stands out for its user-friendliness and unique features.',
+    img: 'https://avatar.vercel.sh/devansha',
+    social: 'linkedin',
+  },
+  {
+    name: 'Nisha Rao',
+    username: '@nishar',
+    body: 'As a club leader, I love how easy it is to manage tasks and communicate with my team on Interact.',
+    img: 'https://avatar.vercel.sh/nishar',
+    social: 'facebook',
+  },
+  {
+    name: 'Karan Patel',
+    username: '@karanp',
+    body: 'The centralized management hub is fantastic. It’s helped us stay focused and on track.',
+    img: 'https://avatar.vercel.sh/karanp',
+    social: 'twitter',
+  },
+  {
+    name: 'Ananya Sharma',
+    username: '@ananyas',
+    body: 'This platform is a lifesaver for students who juggle multiple projects and responsibilities.',
+    img: 'https://avatar.vercel.sh/ananyas',
+    social: 'instagram',
+  },
+  {
+    name: 'Aakash Gupta',
+    username: '@aakashg',
+    body: 'I’ve never seen such a complete suite of tools for project management. Interact is amazing!',
+    img: 'https://avatar.vercel.sh/aakashg',
+    social: 'linkedin',
+  },
+];

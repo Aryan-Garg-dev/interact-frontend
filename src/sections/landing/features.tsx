@@ -8,6 +8,7 @@ import AnimatedGridPattern from '@/components/ui/animated-grid-pattern';
 import { cn } from '@/lib/utils';
 import { FadeText } from '@/components/ui/fade-text';
 import { features } from '@/config/landing';
+import { useWindowWidth } from '@react-hook/window-size';
 
 export const TitleBlock = ({
   titleUpper,
@@ -30,12 +31,15 @@ export const TitleBlock = ({
   theme?: string;
   className?: string;
 }) => {
+  const width = useWindowWidth();
+  const isMD = width < 760;
+
   return (
     <div className={cn('space-y-4', className)}>
-      <div className={`relative ${center && 'flex-center flex-col'}`}>
+      <div className={`relative ${(center || isMD) && 'flex-center flex-col gap-2'}`}>
         <FadeText
           key={`${theme}-${titleUpper}`}
-          className="text-6xl font-bold dark:text-white"
+          className="text-6xl max-md:text-5xl font-bold dark:text-white"
           direction="up"
           framerProps={{
             show: { transition: { delay: 0.2 } },
@@ -46,7 +50,7 @@ export const TitleBlock = ({
           <FadeText
             key={`${theme}-${titleMid}`}
             className={`w-fit font-cursive rotate-[-20deg] text-3xl absolute dark:text-white ${
-              center ? '-translate-x-1/2' : '-left-5'
+              center || isMD ? '-translate-x-1/2' : '-left-5'
             }`}
             direction="up"
             framerProps={{
@@ -55,7 +59,7 @@ export const TitleBlock = ({
             text={titleMid}
           />
         )}
-        <div className={`inline-block ${titleMid && 'pt-5'}`}>
+        <div className={`md:inline-block ${titleMid && 'pt-5'}`}>
           {includeSparkles ? (
             <SparklesText className="md:text-8xl text-6xl text-sky-400 font-bold" text={titleLower} />
           ) : (
@@ -70,10 +74,10 @@ export const TitleBlock = ({
             />
           )}
 
-          {titleSide && (
+          {titleSide && !isMD && (
             <FadeText
               key={`${theme}-${titleSide}`}
-              className="text-gray-600 dark:text-gray-200 italic text-xl"
+              className="w-full text-gray-600 dark:text-gray-200 italic text-xl max-md:text-center"
               direction="left"
               framerProps={{
                 show: { transition: { delay: 0.9 } },
@@ -85,7 +89,7 @@ export const TitleBlock = ({
       </div>
       <FadeText
         key={`${theme}-${description.substring(0, 10)}`}
-        className={`text-gray-600 dark:text-gray-200 ${center && 'text-center'}`}
+        className={`text-gray-600 dark:text-gray-200 ${(center || isMD) && 'text-center'}`}
         direction="down"
         framerProps={{
           show: { transition: { delay: 1 } },
@@ -111,7 +115,7 @@ const FeatureCard = ({ title, description }: { title: string; description: strin
         repeatDelay={1}
         className={cn(
           '[mask-image:radial-gradient(500px_circle_at_center,white,transparent)]',
-          'inset-x-0 skew-y-12 z-50'
+          'inset-x-0 skew-y-12 z-20'
         )}
       />
     </ShineBorder>
@@ -175,17 +179,32 @@ const FeatureSection = ({
 }: FeatureSectionProps) => {
   const isEven = index % 2 === 0;
 
+  const width = useWindowWidth();
+  const isMD = width < 768;
+
   return (
-    <div className="w-full flex flex-col gap-24">
-      <section className={`flex flex-col lg:flex-row items-center gap-16 ${isEven ? '' : 'lg:flex-row-reverse'}`}>
+    <div className="w-full flex flex-col gap-14">
+      <section
+        className={`flex flex-col lg:flex-row items-center gap-16 max-md:gap-4 ${isEven ? '' : 'lg:flex-row-reverse'}`}
+      >
         <div className="relative w-full lg:w-1/2 h-full">
-          <Image
-            width={500}
-            height={300}
-            src={image}
-            alt={imageAlt}
-            className={`w-full h-full object-contain rounded-lg ${imageClass}`}
-          />
+          {isMD ? (
+            <Image
+              width={500}
+              height={300}
+              src={image}
+              alt={imageAlt}
+              className="w-full h-full object-contain rounded-lg"
+            />
+          ) : (
+            <Image
+              width={500}
+              height={300}
+              src={image}
+              alt={imageAlt}
+              className={`w-full h-full object-contain rounded-lg ${imageClass}`}
+            />
+          )}
         </div>
 
         <div className="w-full lg:w-1/2 space-y-8">
@@ -202,7 +221,7 @@ const FeatureSection = ({
               <FeatureCard key={featureIndex} title={feature.title} description={feature.description} />
             ))}
           </div>
-          <LandingButton label="Know More" />
+          {/* <LandingButton label="Know More" /> */}
         </div>
       </section>
       <Quote {...quote} />
@@ -219,7 +238,10 @@ const Features = () => {
   }, [theme]);
 
   return (
-    <div className="w-full space-y-12 px-8 py-24 text-primary_black">
+    <div
+      id="features"
+      className="w-full space-y-12 max-md:space-y-24 px-8 py-24 max-md:py-0 max-md:pt-16 text-primary_black"
+    >
       {sections.map((section, index) => (
         <FeatureSection key={index} index={index} theme={theme} {...section} />
       ))}

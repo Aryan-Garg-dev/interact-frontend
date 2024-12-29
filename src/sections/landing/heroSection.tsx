@@ -53,46 +53,49 @@ const TextAnimation = () => {
 };
 
 export const HeroSection = () => {
-  const [inputTheme, setInputTheme] = useState(String(localStorage.getItem('theme')) == 'dark' ? 'dark' : 'light');
-
-  const { setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
     if (document.documentElement.classList.contains('dark')) {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'light');
-      setInputTheme('light');
       setTheme('light');
     } else {
       document.documentElement.classList.add('dark');
       localStorage.setItem('theme', 'dark');
-      setInputTheme('dark');
       setTheme('dark');
     }
   };
+
+  useEffect(() => {
+    if (document.documentElement.classList.contains('dark')) {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', 'light');
+    setTheme('light');
+  }, []);
 
   return (
     <BackgroundLines className="w-screen h-base bg-background text-center relative flex-center flex-col gap-12 max-md:gap-4 z-10 transition-ease-300">
       {/* <FloatingImages /> */}
       <div className="flex flex-col gap-4 max-md:gap-0">
         <div className="mx-auto relative">
-          <div className="w-fit md:text-7xl text-primary_black dark:text-white text-4xl font-semibold">Everything</div>
-          <div className="font-cursive text-primary_black dark:text-white text-4xl max-md:text-xl absolute -bottom-4 -left-24 max-md:-left-16 rotate-[-20deg]">
+          <div className="w-fit md:text-7xl text-primary_black dark:text-white text-5xl font-semibold">Everything</div>
+          <div className="font-cursive text-primary_black dark:text-white text-4xl max-md:text-xl absolute -bottom-4 -left-24 max-md:-left-10 rotate-[-20deg]">
             About
           </div>
         </div>
         <TextAnimation />
       </div>
-      <div className="space-y-4 max-md:px-12">
+      <div className="space-y-4 max-md:space-y-12 max-md:px-12">
         <p className="text-xl max-md:text-base text-gray-700 dark:text-gray-300 max-w-sm mx-auto">
-          We&apos;re a dynamic web platform for college students, freelancers, professionals, and creatives.
+          We&apos;re a dynamic web platform for college students to develop their portfolios through projects, events
+          and communities.{' '}
         </p>
 
         <div className="space-y-4">
           <Link href="/signup">
-            <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg max-md:text-sm">
-              Sign up for free
-            </button>
+            <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg">Sign up for free</button>
           </Link>
           {/* <div className="flex justify-center items-center space-x-2 text-sm">
             <span className="text-gray-600">Are you Organizations ?</span>
@@ -102,10 +105,10 @@ export const HeroSection = () => {
           </div> */}
         </div>
       </div>
-      <div className="w-fit flex justify-center items-center space-x-4 wiggle pt-12 text-primary_black">
+      <div className="w-fit flex justify-center max-md:flex-col items-center gap-4 wiggle pt-12 text-primary_black">
         <div
           className={`transition-all duration-300 ${
-            inputTheme == 'dark' ? 'text-lg font-normal text-gray-500' : 'text-xl font-medium text-black'
+            theme == 'dark' ? 'text-lg font-normal text-gray-500' : 'text-xl font-medium text-black'
           }`}
         >
           For Students
@@ -116,7 +119,7 @@ export const HeroSection = () => {
         </label>
         <div
           className={`text-lg transition-all duration-300 ${
-            inputTheme == 'dark' ? 'text-xl font-medium text-white' : 'text-lg font-normal text-gray-500'
+            theme == 'dark' ? 'text-xl font-medium text-white' : 'text-lg font-normal text-gray-500'
           }`}
         >
           For Organisations
