@@ -74,7 +74,7 @@ const Navbar: React.FC = () => {
     <div>
       {/* Static Navbar */}
       <div
-        className={`w-[90vw] max-md:w-screen p-4 h-16 flex items-center justify-between z-40 text-primary_black dark:text-white transition-all duration-500 ${
+        className={`w-[90vw] mx-auto max-md:w-screen p-4 h-16 flex items-center justify-between z-40 text-primary_black dark:text-white transition-all duration-500 ${
           isSticky ? 'opacity-0 invisible' : 'opacity-100 visible'
         }`}
       >

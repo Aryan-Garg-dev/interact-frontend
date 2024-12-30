@@ -238,10 +238,7 @@ const Features = () => {
   }, [theme]);
 
   return (
-    <div
-      id="features"
-      className="w-full space-y-12 max-md:space-y-24 px-8 py-24 max-md:py-0 max-md:pt-16 text-primary_black"
-    >
+    <div id="features" className="w-full space-y-24 text-primary_black">
       {sections.map((section, index) => (
         <FeatureSection key={index} index={index} theme={theme} {...section} />
       ))}

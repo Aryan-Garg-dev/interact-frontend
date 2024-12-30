@@ -7,8 +7,8 @@ import { ReactSVG } from 'react-svg';
 
 const Footer = () => {
   return (
-    <div id="footer">
-      <div className="relative w-4/5  max-md:w-full max-md:px-8 mx-auto h-[250px] max-md:h-[125px] flex-center bg-background overflow-hidden">
+    <div id="footer" className="w-full">
+      <div className="w-full relative h-[250px] max-md:h-[125px] flex-center bg-background overflow-hidden">
         <ReactSVG src="/onboarding_logo.svg" className="md:scale-[2.0] z-10 dark:hidden" />
         <ReactSVG src="/onboarding_logo_dark.svg" className="md:scale-[2.0] z-10 hidden dark:block" />
         <FlickeringGrid
@@ -19,10 +19,10 @@ const Footer = () => {
           maxOpacity={0.5}
           flickerChance={0.1}
           height={800}
-          width={1200}
+          width={1400}
         />
       </div>
-      <div className="w-4/5 max-md:w-full max-md:px-8 mx-auto flex justify-between gap-6 pt-4 pb-12 max-md:pb-8">
+      <div className="w-full flex justify-between gap-6 pt-4 pb-12 max-md:pb-8">
         <div className="text-gray-600 dark:text-gray-300 italic">Connect, Create & Collaborate</div>
         <div className="flex gap-4">
           <TooltipIcon label="@interact_now" icon={<LinkedInLogoIcon className="w-6 h-6" />} excludeHoverEffect />

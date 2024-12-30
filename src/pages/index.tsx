@@ -26,20 +26,20 @@ const Index = () => {
         cursor: `url('/landing/cursor.svg'), auto`,
       }}
     >
-      <div className="w-5/6 max-md:w-full mx-auto">
-        <div className="flex flex-col items-center justify-center">
-          <Navbar />
-          <Separator excludeMargin />
-          <HeroSection />
-          <Separator excludeMargin />
-        </div>
+      <div>
+        <Navbar />
+        <Separator excludeMargin />
+        <HeroSection />
+        <Separator excludeMargin />
+      </div>
+      <div className="w-5/6 mx-auto flex flex-col gap-32 max-md:gap-16">
         <Features />
         <Community />
+        {/* <WhyChooseUs /> */}
+        <Testimonials />
+        {/* <ExploreCommunity /> */}
+        <Footer />
       </div>
-      {/* <WhyChooseUs /> */}
-      <Testimonials />
-      {/* <ExploreCommunity /> */}
-      <Footer />
     </div>
   );
 };

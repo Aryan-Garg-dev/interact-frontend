@@ -208,7 +208,7 @@ export const testimonials = [
     social: 'linkedin',
   },
   {
-    name: 'Pratham Batta',
+    name: 'Pranay Batta',
     username: '@pranayb',
     body: 'Interact has everything I need in one place. Managing my team and events has never been easier.',
     img: 'https://avatar.vercel.sh/pranayb',

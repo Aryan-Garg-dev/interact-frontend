@@ -6,6 +6,7 @@ import { BackgroundLines } from '@/components/ui/background-lines';
 import { useTheme } from 'next-themes';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
+import { ArrowRight } from 'lucide-react';
 
 const TextAnimation = () => {
   const texts = ['Organizations', 'Hackathons', 'Projects', 'Communities'];
@@ -97,29 +98,31 @@ export const HeroSection = () => {
         </div>
         <TextAnimation />
       </div>
-      <div className="space-y-4 max-md:space-y-12 max-md:px-12">
+      <div className="space-y-4 max-md:space-y-12 max-md:px-12 z-50">
         <p className="text-xl max-md:text-base text-gray-700 dark:text-gray-300 max-w-sm mx-auto">
           We&apos;re a dynamic web platform for college students to develop their portfolios through projects, events
           and communities.{' '}
         </p>
 
         <div className="space-y-4">
-          {user.id ? (
-            <Link href="/home">
-              <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg z-50">Back to Feed</button>
-            </Link>
-          ) : (
-            <Link href="/signup">
-              <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg z-50">Sign up for Free</button>
-            </Link>
+          <Link href={user.id ? '/home' : '/signup'}>
+            <button className="w-fit bg-sky-400 hover:bg-sky-600 group relative text-white px-6 py-2 rounded-full text-lg transition-ease-300">
+              <div className="w-fit flex-center gap-1 relative">
+                <div className="group-hover:pr-4 transition-ease-300">
+                  {user.id ? 'Back to Feed' : 'Sign up for Free'}
+                </div>
+                <ArrowRight className="absolute -right-0 opacity-0 group-hover:-right-2 group-hover:opacity-100 transition-ease-300" />
+              </div>
+            </button>
+          </Link>
+          {!user.id && (
+            <div className="flex justify-center items-center space-x-1 text-sm">
+              <span className="text-gray-600">Want to look around?</span>
+              <Link href="/projects" className="text-sky-400 font-medium hover-underline-animation after:bg-sky-400">
+                Check It Out!
+              </Link>
+            </div>
           )}
-
-          {/* <div className="flex justify-center items-center space-x-2 text-sm">
-            <span className="text-gray-600">Are you Organizations ?</span>
-            <Link href="/signup" className="text-[#00BDF2]">
-              Sign up here
-            </Link>
-          </div> */}
         </div>
       </div>
       <div className="w-fit flex justify-center max-md:flex-col items-center gap-4 wiggle pt-12 text-primary_black">

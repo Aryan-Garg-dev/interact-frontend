@@ -19,7 +19,7 @@ const TestimonialCard = ({
   return (
     <figure
       className={cn(
-        'relative h-fit w-96 cursor-pointer overflow-hidden rounded-xl border p-4',
+        'relative h-fit w-96 max-md:w-full cursor-pointer overflow-hidden rounded-xl border p-4',
         // light styles
         'border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]',
         // dark styles

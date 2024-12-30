@@ -6,7 +6,7 @@ import { LANDING_RESOURCE_URL } from '@/config/routes';
 
 const Community = () => {
   return (
-    <div className="w-full flex-center flex-col gap-6 px-8 text-black dark:my-12 max-md:mt-16">
+    <div className="w-full flex-center flex-col gap-6 text-black">
       <div className="w-1/2 mx-auto max-md:w-full flex-center flex-col gap-4 dark:hidden">
         <TitleBlock
           titleUpper="Explore"
@@ -33,7 +33,7 @@ const Community = () => {
           Your browser does not support the video tag.
         </video>
       </div>
-      <div className="w-1/2 mx-auto max-md:w-full flex-center flex-col gap-16">
+      <div className="w-1/2 mx-auto max-md:w-full flex-center flex-col gap-16 mb-12">
         <TitleBlock
           titleUpper="Github & Figma "
           titleLower="Integration"
