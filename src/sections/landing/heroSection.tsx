@@ -106,11 +106,11 @@ export const HeroSection = () => {
         <div className="space-y-4">
           {user.id ? (
             <Link href="/home">
-              <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg">Back to Feed</button>
+              <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg z-50">Back to Feed</button>
             </Link>
           ) : (
             <Link href="/signup">
-              <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg">Sign up for Free</button>
+              <button className="bg-[#00BDF2] text-white px-6 py-2 rounded-full text-lg z-50">Sign up for Free</button>
             </Link>
           )}
 
