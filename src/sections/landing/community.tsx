@@ -1,4 +1,3 @@
-import LandingButton from '@/components/buttons/landing_btn';
 import React from 'react';
 import { TitleBlock } from './features';
 import { ReactSVG } from 'react-svg';
@@ -21,7 +20,7 @@ const Community = () => {
       </div>
       <div className="w-full relative flex items-center justify-center scale-[1] dark:hidden">
         <video
-          className="w-4/5 rotate-x-landing max-md:w-full h-auto object-contain shadow-xl rounded-xl max-md:rounded-lg"
+          className="w-4/5 max-md:w-full h-auto rotate-x-landing object-contain shadow-xl rounded-xl max-md:rounded-lg"
           width="600"
           autoPlay
           loop

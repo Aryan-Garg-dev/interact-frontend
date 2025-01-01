@@ -1,4 +1,14 @@
+import {
+  BellRinging,
+  ChatsCircle,
+  CheckSquareOffset,
+  MegaphoneSimple,
+  ProjectorScreenChart,
+  ReadCvLogo,
+  UsersThree,
+} from '@phosphor-icons/react';
 import { LANDING_RESOURCE_URL } from './routes';
+import { Files, Presentation } from 'lucide-react';
 
 export const features = {
   students: [
@@ -181,6 +191,82 @@ export const features = {
           'Meetings aren’t just about discussion—they’re about alignment and action. Interact ensures that every meeting is well-organized, productive, and moves your team closer to its goals.',
         position: 'start',
       },
+    },
+  ],
+};
+
+export const extraFeatures = {
+  students: [
+    {
+      title: 'Resource Buckets',
+      description:
+        'Organize, share, and access all project-related resources in one place, ensuring your team stays on the same page.',
+      icon: <Files size={32} />,
+    },
+    {
+      title: 'Project Chats',
+      description:
+        'Communicate seamlessly with your team using integrated chat tools designed to keep discussions project-focused.',
+      icon: <ChatsCircle size={32} />,
+    },
+    {
+      title: 'Application Management',
+      description:
+        'Post openings for your projects, filter applications, and schedule interviews—all directly on the platform.',
+      icon: <ReadCvLogo size={32} />,
+    },
+    {
+      title: 'Skill Development Workshops',
+      description: 'Participate in live workshops hosted on Interact to learn new skills and upgrade your expertise.',
+      icon: <Presentation size={32} />,
+    },
+    {
+      title: 'Communities',
+      description:
+        'Join or create communities to share knowledge, engage in discussions, and collaborate on shared interests.',
+      icon: <UsersThree size={32} />,
+    },
+    {
+      title: 'Task Reminders',
+      description: 'Stay on track with automated task reminder emails to ensure you never miss a deadline.',
+      icon: <BellRinging size={32} />,
+    },
+  ],
+  organisations: [
+    {
+      title: 'Organization-Wide Chats',
+      description:
+        'Facilitate seamless communication across the organization with a dedicated chat platform for all members.',
+      icon: <ChatsCircle size={32} />,
+    },
+    {
+      title: 'Task Assignment',
+      description:
+        'Assign and manage tasks within the organization to ensure every member knows their responsibilities.',
+      icon: <CheckSquareOffset size={32} />,
+    },
+    {
+      title: 'Resource Management',
+      description:
+        'Centralize all organizational documents, presentations, and other resources for easy access and sharing.',
+      icon: <Files size={32} />,
+    },
+    {
+      title: 'Polls and Announcements',
+      description: 'Engage your community with interactive polls and share important updates through announcements.',
+      icon: <MegaphoneSimple size={32} />,
+    },
+    {
+      title: 'Hackathon Analytics',
+      description:
+        'Use AI-driven insights to analyze team contributions, review code, and generate detailed reports for hackathon performance.',
+      icon: <ProjectorScreenChart size={32} />,
+    },
+    {
+      title: 'Workshop Hosting',
+      description:
+        'Conduct interactive workshops with participant tracking, transcripts, and recordings for a professional experience.',
+      icon: <Presentation size={32} />,
     },
   ],
 };

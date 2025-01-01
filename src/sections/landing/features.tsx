@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import LandingButton from '@/components/buttons/landing_btn';
 import Image from 'next/image';
 import ShineBorder from '@/components/ui/shine-border';
 import { useTheme } from 'next-themes';
@@ -7,8 +6,9 @@ import SparklesText from '@/components/ui/sparkles-text';
 import AnimatedGridPattern from '@/components/ui/animated-grid-pattern';
 import { cn } from '@/lib/utils';
 import { FadeText } from '@/components/ui/fade-text';
-import { features } from '@/config/landing';
+import { features, extraFeatures } from '@/config/landing';
 import { useWindowWidth } from '@react-hook/window-size';
+import { MagicCard } from '@/components/ui/magic-card';
 
 export const TitleBlock = ({
   titleUpper,
@@ -229,12 +229,29 @@ const FeatureSection = ({
   );
 };
 
+const ExtraFeature = ({ title, description, icon }: { title: string; description: string; icon: React.ReactNode }) => {
+  return (
+    <MagicCard gradientColor="#ffffff1a" className="lg:border py-8 relative group/feature dark:border-neutral-800">
+      <div className="mb-4 relative px-6 text-neutral-600 dark:text-neutral-400">{icon}</div>
+      <div className="text-lg font-bold mb-2 relative px-6">
+        <div className="absolute left-0 inset-y-0 h-6 group-hover/feature:h-16 w-1 rounded-tr-full rounded-br-full bg-neutral-300 dark:bg-neutral-700 group-hover/feature:bg-sky-400 transition-ease-300 origin-center" />
+        <span className="group-hover/feature:translate-x-2 text-xl transition-ease-300 inline-block text-neutral-800 dark:text-neutral-100">
+          {title}
+        </span>
+      </div>
+      <p className="text-sm text-neutral-600 dark:text-neutral-300 max-w-xs relative px-6">{description}</p>
+    </MagicCard>
+  );
+};
+
 const Features = () => {
   const { theme } = useTheme();
   const [sections, setSections] = useState(features[theme == 'dark' ? 'students' : 'organisations']);
+  const [extraFeat, setExtraFeat] = useState(extraFeatures[theme == 'dark' ? 'students' : 'organisations']);
 
   useEffect(() => {
     setSections(features[theme == 'light' ? 'students' : 'organisations']);
+    setExtraFeat(extraFeatures[theme == 'light' ? 'students' : 'organisations']);
   }, [theme]);
 
   return (
@@ -242,6 +259,11 @@ const Features = () => {
       {sections.map((section, index) => (
         <FeatureSection key={index} index={index} theme={theme} {...section} />
       ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 relative z-10 max-w-7xl mx-auto">
+        {extraFeat.map(feature => (
+          <ExtraFeature key={feature.title} {...feature} />
+        ))}
+      </div>
       {/* <div className="w-fit mx-auto">
         <LandingButton label="Explore All The Features" />
       </div> */}
