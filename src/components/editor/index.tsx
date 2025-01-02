@@ -47,6 +47,7 @@ import {
   TextSuperscript,
   TextUnderline,
 } from '@phosphor-icons/react';
+import { useLocalDraft } from '@/hooks/use-local-draft';
 
 type EditorProps =
   | {
@@ -75,8 +76,11 @@ const Editor = ({
   className,
 }: EditorProps) => {
   //TODO: Custom KeyMaps
+
+  const { draft, setDraft } = useLocalDraft("post-draft");
+
   const editor = useEditor({
-    content: content || '',
+    content: content || draft,
     extensions: [
       // StarterKit.configure({}),
       Document,
@@ -143,6 +147,7 @@ const Editor = ({
     },
     onUpdate({ editor }) {
       setContent(editor.getHTML());
+      setDraft(editor.getHTML())
     },
   });
 
@@ -259,6 +264,7 @@ const Editor = ({
         </BubbleMenu>
       )}
       <EditorContent editor={editor} />
+      <div>{content}</div>
       {editor && editable && limit && <CountWidget charCount={charCount} limit={limit} className="m-1 ml-2" />}
       {editor && editable && (
         <LinkDialog open={openLinkDialog} setOpen={setOpenLinkDialog} setURL={setURL} onSubmit={onSubmitURL} />
