@@ -26,6 +26,8 @@ import CharacterCount from '@tiptap/extension-character-count';
 import Placeholder from '@tiptap/extension-placeholder';
 import History from '@tiptap/extension-history';
 import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image'
+import Dropcursor from '@tiptap/extension-dropcursor'
 import { SmilieReplacer } from './extensions/smilie-replacer';
 import CountWidget from './widgets/count-widget';
 import LinkDialog from './widgets/link-dialog';
@@ -47,34 +49,35 @@ import {
   TextSuperscript,
   TextUnderline,
 } from '@phosphor-icons/react';
+import { FileHandler } from '@/components/editor/extensions/file-handler';
 import { useLocalDraft } from '@/hooks/use-local-draft';
 
 type EditorProps =
   | {
-      editable: true;
-      setContent: React.Dispatch<React.SetStateAction<string>>;
-      content?: string;
-      placeholder?: string;
-      limit?: number | null;
-      className?: string;
-    }
+  editable: true;
+  setContent: React.Dispatch<React.SetStateAction<string>>;
+  content?: string;
+  placeholder?: string;
+  limit?: number | null;
+  className?: string;
+}
   | {
-      editable: false;
-      content: string;
-      setContent?: never;
-      placeholder?: never;
-      limit?: never;
-      className?: string;
-    };
+  editable: false;
+  content: string;
+  setContent?: never;
+  placeholder?: never;
+  limit?: never;
+  className?: string;
+};
 
 const Editor = ({
-  content = '',
-  setContent = () => {},
-  editable,
-  limit = null,
-  placeholder,
-  className,
-}: EditorProps) => {
+                  content = '',
+                  setContent = () => {},
+                  editable,
+                  limit = null,
+                  placeholder,
+                  className,
+                }: EditorProps) => {
   //TODO: Custom KeyMaps
 
   const { draft, setDraft } = useLocalDraft("post-draft");
@@ -136,6 +139,11 @@ const Editor = ({
         },
       }),
       InteractMentions,
+      //////////////////////
+      Image,
+      Dropcursor,
+      FileHandler,
+      //////////////////////
       // customKeyMap
     ],
     autofocus: editable,
