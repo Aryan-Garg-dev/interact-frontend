@@ -228,7 +228,7 @@ const FixedSearchBar = () => {
   return (
     <div
       ref={menuRef}
-      className="w-[640px] max-lg:w-[480px] max-md:hidden fixed top-2 right-1/2 translate-x-1/2 max-md:w-taskbar_md mx-auto z-20"
+      className="w-[640px] max-lg:w-[480px] max-md:hidden fixed top-2 right-1/2 translate-x-1/2 mx-auto z-20"
     >
       <SearchBar isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
     </div>

@@ -23,8 +23,6 @@ const Tasks = ({ project, org = false }: Props) => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const [clickedOnNewTask, setClickedOnNewTask] = useState(false);
-
   const getTasks = () => {
     const URL = org
       ? `${ORG_URL}/${project.organizationID}/projects/tasks/${project.slug}?limit=5`
@@ -52,15 +50,6 @@ const Tasks = ({ project, org = false }: Props) => {
 
   return (
     <SidePrimeWrapper>
-      {clickedOnNewTask && (
-        <NewTask
-          org={false}
-          show={clickedOnNewTask}
-          setShow={setClickedOnNewTask}
-          project={project}
-          setTasks={setTasks}
-        />
-      )}
       <div className="flex gap-2 items-center">
         <Gavel className="max-md:hidden" size={24} weight="duotone" />
         <div className="grow flex justify-between items-center text-lg font-medium">
@@ -81,12 +70,16 @@ const Tasks = ({ project, org = false }: Props) => {
               <span className="text-xl text-gradient font-semibold">Empty Here! </span>The to-do list 📝 is your canvas,
               time to paint it with tasks and turn this project into a masterpiece!
             </div>
-            <div
-              onClick={() => setClickedOnNewTask(true)}
-              className="mx-auto text-xl text-gradient font-medium hover-underline-animation after:bg-dark_primary_btn cursor-pointer"
-            >
-              Add a Task
-            </div>
+            <NewTask
+              org={false}
+              project={project}
+              setTasks={setTasks}
+              trigger={
+                <div className="mx-auto text-xl text-gradient font-medium hover-underline-animation after:bg-dark_primary_btn cursor-pointer">
+                  Add a Task
+                </div>
+              }
+            />
           </>
         ) : (
           <div className="text-lg max-md:text-base">

@@ -5,6 +5,7 @@ import {
   MegaphoneSimple,
   ProjectorScreenChart,
   ReadCvLogo,
+  RocketLaunch,
   UsersThree,
 } from '@phosphor-icons/react';
 import { LANDING_RESOURCE_URL } from './routes';
@@ -234,10 +235,10 @@ export const extraFeatures = {
   ],
   organisations: [
     {
-      title: 'Organization-Wide Chats',
+      title: 'Project Management',
       description:
-        'Facilitate seamless communication across the organization with a dedicated chat platform for all members.',
-      icon: <ChatsCircle size={32} />,
+        'Unify your organization’s projects with a centralized platform for task tracking, GitHub and Figma integrations, resource sharing, and team-wide communication. Gain full visibility and streamline workflows for efficient collaboration',
+      icon: <RocketLaunch size={32} />,
     },
     {
       title: 'Task Assignment',

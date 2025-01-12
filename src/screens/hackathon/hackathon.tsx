@@ -306,7 +306,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                 <h3 className="text-xl font-semibold">{hackathon.tagline}</h3>
                 {hackathon.description && (
                   <div className="w-full flex flex-col gap-2">
-                    <div className="text-sm font-medium text-gray-500 dark:text-white">ABOUT THE EVENT</div>
+                    {/* <div className="text-sm font-medium text-gray-500 dark:text-white">ABOUT THE EVENT</div> */}
                     <div className="text-lg">{hackathon.description}</div>
                   </div>
                 )}

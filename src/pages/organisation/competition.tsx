@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import BaseWrapper from '@/wrappers/base';
+import MainWrapper from '@/wrappers/main';
+import OrgSidebar from '@/components/common/org_sidebar';
 import {
   Event,
   HackathonTrack,
@@ -8,9 +11,7 @@ import {
   HackathonFAQ,
   HackathonRoundScoreMetric,
 } from '@/types';
-import ModalWrapper from '@/wrappers/modal';
-import PrimaryButton from '@/components/buttons/primary_btn';
-import BuildButton from '@/components/buttons/build_btn';
+
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import Toaster from '@/utils/toaster';
@@ -23,19 +24,16 @@ import { PencilSimple, TrashSimple } from '@phosphor-icons/react';
 import Input from '@/components/form/input';
 import Tags from '@/components/form/tags';
 import Links from '@/components/form/links';
-import ProgressBar from '@/components/onboarding/progress_bar';
 import SecondaryButton from '@/components/buttons/secondary_btn';
 import Select from '@/components/form/select';
 import { ORG_URL } from '@/config/routes';
 import { getFormattedTime, getInputFieldFormatTime } from '@/utils/funcs/time';
 import CoverPic from '@/components/utils/new_cover';
+import { Timeline } from '@/components/ui/timeline';
+import GlowButton from '@/components/buttons/glow_btn';
+import { Button } from '@/components/ui/button';
 
-interface Props {
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
-}
-
-const NewHackathon = ({ setShow, setEvents }: Props) => {
+const NewHackathon = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tagline, setTagline] = useState('');
@@ -106,18 +104,8 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
     return true;
   };
 
-  useEffect(() => {
-    document.documentElement.style.overflowY = 'hidden';
-    document.documentElement.style.height = '100vh';
-
-    return () => {
-      document.documentElement.style.overflowY = 'auto';
-      document.documentElement.style.height = 'auto';
-    };
-  }, []);
-
   const handleSubmit = async () => {
-    if (!eventDetailsValidator()) return;
+    if (!eventDetailsValidator() || !validateRounds() || !validateTeamFormationTimes()) return;
 
     const formData = {
       title,
@@ -155,10 +143,8 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
 
     if (res.statusCode === 201) {
       const event: Event = res.data.event;
-      setEvents(prev => [event, ...prev]);
       localStorage.removeItem(`hackathon-draft-${currentOrg.id}`);
       Toaster.stopLoad(toaster, 'Competition Created!', 1);
-      setShow(false);
     } else if (res.statusCode == 413) {
       Toaster.stopLoad(toaster, 'Image too large', 0);
     } else {
@@ -290,97 +276,83 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
     return true;
   };
 
-  return (
-    <ModalWrapper setShow={setShow} width={'4/5'} height={'4/5'} blur={true} top={'1/2'}>
-      <div className="w-full h-full flex flex-col gap-2 p-6 justify-between">
-        <div>
-          <div className="w-full flex items-center justify-between">
-            <div className="text-4xl font-semibold">Build your Competition!</div>
-            <div onClick={handleSaveDraft} className="cursor-pointer">
-              Save Draft
-            </div>
-          </div>
-          <div className="w-full mb-16 mt-10">
-            <ProgressBar
-              step={step + 1}
-              setStep={setStep}
-              steps={['Basics', 'Tracks', 'Prizes', 'Teams', 'Rounds', 'Sponsors', 'FAQs']}
-            />
-          </div>
-          <div>
-            {step === 0 ? (
-              <Basics
-                title={title}
-                setTitle={setTitle}
-                tagline={tagline}
-                setTagline={setTagline}
-                location={location}
-                setLocation={setLocation}
-                startTime={startTime}
-                setStartTime={setStartTime}
-                endTime={endTime}
-                setEndTime={setEndTime}
-                description={description}
-                setDescription={setDescription}
-                tags={tags}
-                setTags={setTags}
-                links={links}
-                setLinks={setLinks}
-                setImage={setImage}
-              />
-            ) : step === 1 ? (
-              <Tracks tracks={tracks} setTracks={setTracks} />
-            ) : step === 2 ? (
-              <Prizes prizes={prizes} setPrizes={setPrizes} tracks={tracks} />
-            ) : step === 3 ? (
-              <Teams
-                minTeamSize={minTeamSize}
-                setMinTeamSize={setMinTeamSize}
-                maxTeamSize={maxTeamSize}
-                setMaxTeamSize={setMaxTeamSize}
-                teamFormationStartTime={teamFormationStartTime}
-                setTeamFormationStartTime={setTeamFormationStartTime}
-                teamFormationEndTime={teamFormationEndTime}
-                setTeamFormationEndTime={setTeamFormationEndTime}
-              />
-            ) : step === 4 ? (
-              <Rounds rounds={rounds} setRounds={setRounds} teamFormationEndTime={teamFormationEndTime} />
-            ) : step === 5 ? (
-              <Sponsors sponsors={sponsors} setSponsors={setSponsors} />
-            ) : step === 6 ? (
-              <FAQs faqs={faqs} setFaqs={setFaqs} />
-            ) : null}
-          </div>
-        </div>
+  const screens = [
+    {
+      title: 'Basics',
+      content: (
+        <Basics
+          title={title}
+          setTitle={setTitle}
+          tagline={tagline}
+          setTagline={setTagline}
+          location={location}
+          setLocation={setLocation}
+          startTime={startTime}
+          setStartTime={setStartTime}
+          endTime={endTime}
+          setEndTime={setEndTime}
+          description={description}
+          setDescription={setDescription}
+          tags={tags}
+          setTags={setTags}
+          links={links}
+          setLinks={setLinks}
+          setImage={setImage}
+        />
+      ),
+    },
+    {
+      title: 'Tracks',
+      content: <Tracks tracks={tracks} setTracks={setTracks} />,
+    },
+    {
+      title: 'Prizes',
+      content: <Prizes prizes={prizes} setPrizes={setPrizes} tracks={tracks} />,
+    },
+    {
+      title: 'Teams',
+      content: (
+        <Teams
+          minTeamSize={minTeamSize}
+          setMinTeamSize={setMinTeamSize}
+          maxTeamSize={maxTeamSize}
+          setMaxTeamSize={setMaxTeamSize}
+          teamFormationStartTime={teamFormationStartTime}
+          setTeamFormationStartTime={setTeamFormationStartTime}
+          teamFormationEndTime={teamFormationEndTime}
+          setTeamFormationEndTime={setTeamFormationEndTime}
+        />
+      ),
+    },
+    {
+      title: 'Rounds',
+      content: <Rounds rounds={rounds} setRounds={setRounds} teamFormationEndTime={teamFormationEndTime} />,
+    },
+    {
+      title: 'Sponsors',
+      content: <Sponsors sponsors={sponsors} setSponsors={setSponsors} />,
+    },
+    {
+      title: 'FAQs',
+      content: <FAQs faqs={faqs} setFaqs={setFaqs} />,
+    },
+  ];
 
-        <div className={`w-full flex items-end justify-between ${step == 0 && 'py-12'}`}>
-          {step !== 0 ? <PrimaryButton label="Back" onClick={() => setStep(prev => prev - 1)} /> : <div></div>}
-          {step !== 6 ? (
-            <PrimaryButton
-              label="Next"
-              onClick={() => {
-                if (step === 0) {
-                  if (eventDetailsValidator()) setStep(prev => prev + 1);
-                } else {
-                  if (step == 3) {
-                    if (validateTeamFormationTimes()) setStep(prev => prev + 1);
-                  } else if (step === 4) {
-                    if (validateRounds()) setStep(prev => prev + 1);
-                  } else setStep(prev => prev + 1);
-                }
-              }}
-            />
-          ) : (
-            <BuildButton
-              label="Build Hackathon"
-              loadingLabel="Building your Hackathon!"
-              loading={mutex}
-              onClick={handleSubmit}
-            />
-          )}
+  return (
+    <BaseWrapper title={`Events | ${currentOrg.title}`}>
+      <OrgSidebar index={12} />
+      <MainWrapper>
+        <div className="w-full bg-gray-50 dark:bg-neutral-900 h-full flex flex-col gap-2 px-6 pb-10 justify-between">
+          <Timeline data={screens} />
+          <div className="w-full flex items-center justify-between">
+            <Button onClick={handleSaveDraft} className="w-fit">
+              Save this Draft
+            </Button>
+            <GlowButton label="Submit Your Competition" onClick={handleSubmit} />
+          </div>
         </div>
-      </div>
-    </ModalWrapper>
+      </MainWrapper>
+    </BaseWrapper>
   );
 };
 
@@ -466,7 +438,7 @@ const Tracks = ({ tracks, setTracks }: any) => {
         <TextArea label="Track Description" val={trackDescription} setVal={setTrackDescription} maxLength={250} />
         <SecondaryButton label={isEditing !== null ? 'Save' : 'Add'} onClick={addTrack} />
       </div>
-      {tracks?.length > 0 && (
+      {tracks?.length > 0 ? (
         <div className="w-full flex flex-wrap gap-4">
           {tracks.map((track: HackathonTrack, idx: number) => (
             <div key={idx} className="bg-gray-200 rounded-lg px-4 py-4 flex flex-col w-full">
@@ -483,6 +455,8 @@ const Tracks = ({ tracks, setTracks }: any) => {
             </div>
           ))}
         </div>
+      ) : (
+        <div>Minimum 1 Track is required.</div>
       )}
     </div>
   );

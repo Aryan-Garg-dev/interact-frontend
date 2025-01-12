@@ -33,7 +33,6 @@ const Tasks = () => {
   const [clickedOnTask, setClickedOnTask] = useState(false);
   const [clickedTaskID, setClickedTaskID] = useState(-1);
 
-  const [clickedOnNewTask, setClickedOnNewTask] = useState(false);
   const [clickedOnInfo, setClickedOnInfo] = useState(false);
 
   const [order, setOrder] = useState('deadline');
@@ -132,15 +131,6 @@ const Tasks = () => {
     <BaseWrapper title={`Tasks | ${currentOrg.title}`}>
       <OrgSidebar index={4} />
       <MainWrapper>
-        {clickedOnNewTask && (
-          <NewTask
-            show={clickedOnNewTask}
-            setShow={setClickedOnNewTask}
-            organization={organization}
-            setTasks={setTasks}
-            org={true}
-          />
-        )}
         {clickedOnInfo && <AccessTree type="task" setShow={setClickedOnInfo} />}
         <div className="w-full flex flex-col">
           <div className="w-full flex justify-between items-center p-base_padding">
@@ -179,12 +169,7 @@ const Tasks = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Plus
-                onClick={() => setClickedOnNewTask(true)}
-                size={42}
-                className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
-                weight="regular"
-              />
+              <NewTask organization={organization} setTasks={setTasks} org={true} />
               <Info
                 onClick={() => setClickedOnInfo(true)}
                 size={42}

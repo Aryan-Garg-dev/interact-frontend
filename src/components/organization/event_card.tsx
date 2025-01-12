@@ -47,9 +47,9 @@ const EventCard = ({
         </div>
         <Image
           width={300}
-          height={100}
+          height={200}
           src={`${EVENT_PIC_URL}/${event.coverPic}`}
-          alt=""
+          alt="Event Cover"
           className="w-full object-cover rounded-t-xl"
           placeholder="blur"
           blurDataURL={event.blurHash || 'no-hash'}

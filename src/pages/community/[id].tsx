@@ -38,14 +38,7 @@ import ViewPermissions from '@/sections/community/view_permissions';
 import Connections from '@/sections/explore/connections_view';
 import Link from 'next/link';
 import CommunityLoader from '@/components/loaders/community';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import NoCommunityFeed from '@/components/fillers/community';
 import { Gear, Plus } from '@phosphor-icons/react';
 
