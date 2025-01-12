@@ -9,24 +9,54 @@ import { useRouter } from 'next/router';
 import { FloppyDisk, Link, Medal, PencilSimple, Plus, Trash, X } from '@phosphor-icons/react';
 import Image from 'next/image';
 import Input from '@/components/form/input';
-import { EditableBox, EditableFAQBox, EditableSponsorBox, EditableTrackBox } from '@/components/form/EditableFields';
+import {
+  EditableBox,
+  EditableFAQBox,
+  EditableSponsorBox,
+  EditableTrackBox,
+  AddTrackBox,
+} from '@/components/form/EditableFields';
 import { EVENT_PIC_URL, EXPLORE_URL, ORG_URL, USER_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import { SERVER_ERROR } from '@/config/errors';
 import postHandler from '@/handlers/post_handler';
-import { Hackathon } from '@/types';
+import { Hackathon, HackathonRound } from '@/types';
 import { initialHackathon } from '@/types/initials';
+import { AddRoundForm } from '@/components/form/AddRoundForm';
 
 const boxWrapperClass = 'w-full px-4 py-2 bg-[#E6E7EB70] relative rounded-md';
+
+interface ScoreMetricSchema {
+  name: string;
+  weightage: number;
+}
+
+interface RoundSchema {
+  startTime: string;
+  endTime: string;
+  judgingStartTime: string;
+  judgingEndTime: string;
+  metrics: ScoreMetricSchema[];
+}
 
 function EditEvent() {
   const router = useRouter();
   const { id } = router.query;
   const [mutex, setMutex] = useState(false);
   const [hackathon, setHackathon] = useState<Hackathon>(initialHackathon);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const currentOrg = useSelector(currentOrgSelector);
+
+  const [round, setRound] = useState<RoundSchema>({
+    startTime: 'aa',
+    endTime: 'aa',
+    judgingStartTime: 'aa',
+    judgingEndTime: 'aa',
+    metrics: [],
+  });
+  const [newMetric, setNewMetric] = useState<ScoreMetricSchema>({ name: '', weightage: 0 });
 
   const getEvent = () => {
     const URL = `${EXPLORE_URL}/events/${id}`;
@@ -90,6 +120,81 @@ function EditEvent() {
     setMutex(false);
   };
 
+  const handleAddTrack = async (data: { title: string; description: string }) => {
+    if (mutex) return;
+    setMutex(true);
+    const toaster = Toaster.startLoad('Adding Track...');
+    const res = await postHandler(`${ORG_URL}/${currentOrg.id}/hackathons/${hackathon.id}/track`, data);
+    if (res.statusCode === 201) {
+      Toaster.stopLoad(toaster, 'Track Added!', 1);
+      const track = res.data.track;
+      setHackathon({
+        ...hackathon,
+        tracks: [...hackathon.tracks, track],
+      });
+    } else {
+      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
+      else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    }
+    setMutex(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setRound({ ...round, [name]: value });
+
+    if (name === 'startTime') {
+      const currentDate = new Date();
+      const selectedDate = new Date(value);
+      if (selectedDate < currentDate) {
+        setErrorMessage('Start time cannot be in the past');
+      } else {
+        setErrorMessage('');
+      }
+    }
+  };
+
+  const handleMetricChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewMetric({ ...newMetric, [e.target.name]: e.target.value });
+  };
+
+  const addMetric = () => {
+    setRound({ ...round, metrics: [...round.metrics, newMetric] });
+    setNewMetric({ name: '', weightage: 0 });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (mutex || errorMessage) return;
+    setMutex(true);
+
+    const toaster = Toaster.startLoad('Adding new round...');
+
+    try {
+      const res = await postHandler(`${ORG_URL}/${currentOrg.id}/hackathons/${hackathon.id}/round`, round);
+      if (res.statusCode === 201) {
+        Toaster.stopLoad(toaster, 'Round added successfully!', 1);
+        setHackathon({
+          ...hackathon,
+          rounds: [...(hackathon.rounds || []), res.data.round],
+        });
+        setRound({
+          startTime: '',
+          endTime: '',
+          judgingStartTime: '',
+          judgingEndTime: '',
+          metrics: [],
+        });
+      } else {
+        Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
+      }
+    } catch (error) {
+      Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    }
+
+    setMutex(false);
+  };
+
   if (!id) {
     return <div>Loading...</div>;
   }
@@ -97,7 +202,7 @@ function EditEvent() {
     <BaseWrapper title={`Events | ${currentOrg.title}`}>
       <OrgSidebar index={12} />
       <MainWrapper>
-        <div className="w-full flex flex-col items- pl-4 gap-4 max-md:px-2 p-base_padding  pb-12 bg-white">
+        <div className="w-full flex flex-col items- pl-4 gap-4 max-md:px-2 p-base_padding  pb-12 ">
           <div
             className="w-full  h-40 bg-white border-[2px] border-[#dedede] rounded-xl "
             style={{
@@ -107,7 +212,7 @@ function EditEvent() {
           >
             {!hackathon.coverPic && (
               <section className="h-full w-full flex items-center justify-center gap-4">
-                <span className="bg-white text-black h-8 w-8 flex items-center justify-center rounded-lg">
+                <span className="bg-white/10 text-black h-8 w-8 flex items-center justify-center rounded-lg">
                   <Plus size={24} />
                 </span>
                 <p className="text-lg font-semibold text-white">Change Cover Image</p>
@@ -159,7 +264,7 @@ function EditEvent() {
                     val={hackathon}
                     setVal={setHackathon}
                     field="title"
-                    placeholder="Enter Hackathon Title"
+                    placeholder={hackathon.title}
                     maxLength={100}
                     className="text-4xl font-semibold"
                   />
@@ -167,7 +272,7 @@ function EditEvent() {
                     val={hackathon}
                     setVal={setHackathon}
                     field="tagline"
-                    placeholder="Enter a tagline for hackathon"
+                    placeholder={hackathon.tagline || ''}
                     className="text-2xl font-semibold"
                   />
                   <EditableBox
@@ -203,7 +308,7 @@ function EditEvent() {
                       />
                     ))}
                     <button
-                      className=" bg-[#dedede] p-2 rounded-lg w-full flex flex-col items-center justify-center "
+                      className=" bg-white/20 p-2 rounded-lg w-full flex flex-col items-center justify-center "
                       onClick={() => {
                         handleAddSponsor({
                           name: 'Sponsor Name',
@@ -271,44 +376,120 @@ function EditEvent() {
               <div className="flex flex-col gap-2 mt-2 max-h-[80vh] overflow-y-auto">
                 {hackathon.tracks.map((track, index) => (
                   <EditableTrackBox val={hackathon} track={track} index={index} key={index} setVal={setHackathon} />
-                ))}{' '}
-                <button
-                  className=" bg-[#dedede] p-2 rounded-lg w-full flex gap-2 items-center justify-center "
-                  onClick={() => {
-                    setHackathon({
-                      ...hackathon,
-                      tracks: [
-                        // {
-                        //   title: 'Track Title',
-                        //   description: 'This is a description of the track',
-                        //   prizes: [
-                        //     {
-                        //       title: 'First Prize',
-                        //       description: 'This is a description of the prize',
-                        //       amount: 100,
-                        //     },
-                        //     {
-                        //       title: 'Second  Prize',
-                        //       description: 'This is a description of the prize',
-                        //       amount: 100,
-                        //     },
-                        //     {
-                        //       title: 'Third Prize',
-                        //       description: 'This is a description of the prize',
-                        //       amount: 100,
-                        //     },
-                        //   ],
-                        // },
-                        ...hackathon.tracks,
-                      ],
-                    });
-                  }}
-                >
-                  <Plus size={24} weight="bold" />
-                  <p className="text-base font-semibold">Add Track</p>
-                </button>
+                ))}
+                <AddTrackBox val={hackathon} setVal={setHackathon} />
               </div>
             </aside>
+          </div>
+          <div className={boxWrapperClass}>
+            <h1 className="text-xl font-semibold mb-2">Add Round</h1>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="startTime" className="block text-sm font-medium text-gray-700">
+                  Start Time
+                </label>
+                <input
+                  id="startTime"
+                  name="startTime"
+                  type="datetime-local"
+                  value={round.startTime}
+                  onChange={handleInputChange}
+                  required
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                {errorMessage && <p className="text-red-500 text-sm mt-1">{errorMessage}</p>}
+              </div>
+              <div>
+                <label htmlFor="endTime" className="block text-sm font-medium text-gray-700">
+                  End Time
+                </label>
+                <input
+                  id="endTime"
+                  name="endTime"
+                  type="datetime-local"
+                  value={round.endTime}
+                  onChange={handleInputChange}
+                  required
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+              </div>
+              <div>
+                <label htmlFor="judgingStartTime" className="block text-sm font-medium text-gray-700">
+                  Judging Start Time
+                </label>
+                <input
+                  id="judgingStartTime"
+                  name="judgingStartTime"
+                  type="datetime-local"
+                  value={round.judgingStartTime}
+                  onChange={handleInputChange}
+                  required
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+              </div>
+              <div>
+                <label htmlFor="judgingEndTime" className="block text-sm font-medium text-gray-700">
+                  Judging End Time
+                </label>
+                <input
+                  id="judgingEndTime"
+                  name="judgingEndTime"
+                  type="datetime-local"
+                  value={round.judgingEndTime}
+                  onChange={handleInputChange}
+                  required
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Metrics</label>
+                {round.metrics.map((metric, index) => (
+                  <div key={index} className="flex items-center space-x-2 mt-2">
+                    <input
+                      value={metric.name}
+                      disabled
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-gray-100"
+                    />
+                    <input
+                      value={metric.weightage}
+                      disabled
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 bg-gray-100"
+                    />
+                  </div>
+                ))}
+                <div className="flex items-center space-x-2 mt-2">
+                  <input
+                    name="name"
+                    placeholder="Metric name"
+                    value={newMetric.name}
+                    onChange={handleMetricChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  />
+                  <input
+                    name="weightage"
+                    type="number"
+                    placeholder="Weightage"
+                    value={newMetric.weightage}
+                    onChange={handleMetricChange}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  />
+                  <button
+                    type="button"
+                    onClick={addMetric}
+                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  >
+                    Add Metric
+                  </button>
+                </div>
+              </div>
+              <button
+                type="submit"
+                disabled={mutex}
+                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Add Round
+              </button>
+            </form>
           </div>
         </div>
       </MainWrapper>

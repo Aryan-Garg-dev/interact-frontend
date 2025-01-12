@@ -32,7 +32,7 @@ const Input = ({
         <div className={cn('text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300', labelClassName)}>
           {label}
           {required && '*'}{' '}
-          {type == 'text' && (
+          {type === 'text' && val && (
             <>
               {val.trim().length}/{maxLength}
             </>
