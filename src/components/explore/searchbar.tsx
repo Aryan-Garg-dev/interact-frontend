@@ -35,6 +35,7 @@ const SearchBar = ({
 
   const [project, setProject] = useState<Project | null>(null);
   const [opening, setOpening] = useState<Opening | null>(null);
+  const [community, setCommunity] = useState<Community | null>(null);
 
   const fetchItem = async (query: string, setter: (res: any) => void) => {
     const res = await getHandler(`${EXPLORE_URL}/quick/item?${query}`, undefined, true);
@@ -82,6 +83,10 @@ const SearchBar = ({
     const openingID = new URLSearchParams(window.location.search).get('oid');
     if (openingID) fetchItem(`oid=${openingID}`, res => setOpening(res.data.opening));
     else setOpening(null);
+
+    const communityID = new URLSearchParams(window.location.search).get('cid');
+    if (communityID) fetchItem(`cid=${communityID}`, res => setCommunity(res.data.community));
+    else setOpening(null);
   }, [window.location.search]);
 
   const noResults = useMemo(() => Object.values(results).every(group => group.length === 0), [results]);
@@ -97,7 +102,7 @@ const SearchBar = ({
       case 'events':
         return `/events?search=${search}`;
       case 'organizations':
-        return `/organizations?search=${search}`;
+        return `/organisations?search=${search}`;
       case 'communities':
         return `/home?search=${search}`;
       default:
@@ -111,6 +116,7 @@ const SearchBar = ({
     url.searchParams.delete('pid');
     url.searchParams.delete('id');
     url.searchParams.delete('oid');
+    url.searchParams.delete('cid');
 
     window.location.href = url.toString();
   };
@@ -123,6 +129,13 @@ const SearchBar = ({
     window.location.href = url.toString();
   };
 
+  const SearchBarItem = ({ title, onRemove }: { title: string; onRemove: () => void }) => (
+    <div className="w-fit h-8 flex-center gap-3 max-w-[240px] mx-1 text-xs rounded-md text-primary_text border-primary_text border-[1px] py-1 px-2">
+      <div className="line-clamp-1">{title}</div>
+      <X className="cursor-pointer" onClick={onRemove} size={18} />
+    </div>
+  );
+
   return (
     <Command
       className={`bg-gray-50 dark:bg-dark_primary_comp border-[1px] border-gray-200 dark:border-gray-800 ${
@@ -130,18 +143,9 @@ const SearchBar = ({
       } transition-shadow ease-in duration-300`}
     >
       <div className="w-full flex items-center justify-between">
-        {project && (
-          <div className="w-fit h-8 flex-center gap-3 max-w-[240px] mx-1 text-xs rounded-md text-primary_text border-primary_text border-[1px] py-1 px-2">
-            <div className="line-clamp-1">{project.title}</div>
-            <X className="cursor-pointer" onClick={handleRemoveItem} />
-          </div>
-        )}
-        {opening && (
-          <div className="w-fit h-8 flex-center gap-3 max-w-[240px] mx-1 text-xs rounded-md text-primary_text border-primary_text border-[1px] py-1 px-2">
-            <div className="line-clamp-1">{opening.title}</div>
-            <X className="cursor-pointer" onClick={handleRemoveItem} />
-          </div>
-        )}
+        {project && <SearchBarItem title={project.title} onRemove={handleRemoveItem} />}
+        {opening && <SearchBarItem title={opening.title} onRemove={handleRemoveItem} />}
+        {community && <SearchBarItem title={community.title} onRemove={handleRemoveItem} />}
         <CommandInput
           className="w-[560px]"
           placeholder="Search for users, projects, openings, communities, events, etc."
@@ -224,7 +228,7 @@ const FixedSearchBar = () => {
   return (
     <div
       ref={menuRef}
-      className="w-[640px]  max-md:hidden fixed top-2 right-1/2 translate-x-1/2 max-md:w-taskbar_md mx-auto z-20"
+      className="w-[640px] max-lg:w-[480px] max-md:hidden fixed top-2 right-1/2 translate-x-1/2 mx-auto z-20"
     >
       <SearchBar isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
     </div>

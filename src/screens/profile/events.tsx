@@ -76,10 +76,10 @@ const Events = ({ orgID, displayOnProfile = false }: Props) => {
           next={getEvents}
           hasMore={hasMore}
           loader={<Loader />}
-          className="w-full flex flex-wrap justify-center px-4 max-md:px-2 gap-6"
+          className="w-full grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-md:grid-cols-1"
         >
           {events.length > 0 ? (
-            events.map(event => <EventCard key={event.id} event={event} size={80} />)
+            events.map(event => <EventCard key={event.id} event={event} smaller />)
           ) : (
             <>{!displayOnProfile ? <NoUserItems /> : <></>}</>
           )}

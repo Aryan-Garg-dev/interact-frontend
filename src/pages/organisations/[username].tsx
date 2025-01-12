@@ -37,6 +37,7 @@ import SignUp from '@/components/common/signup_box';
 import ToolTip from '@/components/utils/tooltip';
 import UserCard from '@/components/cards/user';
 import PrimeWrapper from '@/wrappers/prime';
+import TooltipIcon from '@/components/common/tooltip_icon';
 
 interface Props {
   username: string;
@@ -176,24 +177,9 @@ const User = ({ username }: Props) => {
                     {user.tagline}
                   </div>
                   <div className="w-fit max-md:hidden flex items-center gap-1">
-                    <div
-                      onClick={handleChat}
-                      className="p-2 flex-center rounded-full cursor-pointer hover:bg-gray-100 transition-ease-300"
-                    >
-                      <Chat size={18} />
-                    </div>
-                    <div
-                      onClick={() => setClickedOnShare(true)}
-                      className="p-2 flex-center rounded-full cursor-pointer hover:bg-gray-100 transition-ease-300"
-                    >
-                      <Share size={18} />
-                    </div>
-                    <div
-                      onClick={() => setClickedOnReport(true)}
-                      className="p-2 flex-center rounded-full cursor-pointer hover:bg-gray-100 transition-ease-300"
-                    >
-                      <Warning size={18} />
-                    </div>
+                    <TooltipIcon label="Message" onClick={handleChat} icon={<Chat size={18} />} />
+                    <TooltipIcon label="Share" onClick={() => setClickedOnShare(true)} icon={<Share size={18} />} />
+                    <TooltipIcon label="Report" onClick={() => setClickedOnReport(true)} icon={<Warning size={18} />} />
                   </div>
                 </div>
                 <div className="flex items-center gap-3">

@@ -11,7 +11,7 @@ const ProjectCard = ({ project }: Props) => (
   <Link
     href={`/projects/${project.slug}&action=external`}
     target="_blank"
-    className="relative w-full rounded-lg flex flex-col gap-2 transition-ease-out-500 animate-fade_third"
+    className="relative w-full bg-white dark:bg-dark_primary_comp_hover p-2 rounded-lg flex flex-col gap-2 transition-ease-out-500 animate-fade_third"
   >
     <div className="w-full flex items-center gap-1 text-sm font-medium">
       <div>By </div>
@@ -26,7 +26,7 @@ const ProjectCard = ({ project }: Props) => (
       {project.user.isOrganization ? (
         <Buildings />
       ) : (
-        project.noMembers > 1 && <div className="flex-center">+ {project.noMembers} others</div>
+        project.noMembers > 1 && <div className="flex-center">+ {project.noMembers - 1} others</div>
       )}
     </div>
     <ProjectCardCarousel project={project} />

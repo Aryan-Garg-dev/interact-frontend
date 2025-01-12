@@ -1,23 +1,55 @@
-import React from 'react';
-import { ReactSVG } from 'react-svg';
+import { cn } from '@/lib/utils';
+import { FacebookLogo } from '@phosphor-icons/react';
+import { InstagramLogoIcon, LinkedInLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
+import Image from 'next/image';
 
-export const TestimonialsCard = ({ user, text }: { user: String; text: String }) => {
+const TestimonialCard = ({
+  img,
+  name,
+  username,
+  body,
+  social = 'instagram',
+}: {
+  img: string;
+  name: string;
+  username: string;
+  body: string;
+  social?: 'instagram' | 'twitter' | 'facebook' | 'linkedin';
+}) => {
   return (
-    <div
-      className="flex flex-col space-y-4 
-                    w-[90vw] sm:w-[70vw] md:w-[28vw] lg:w-[25vw] xl:w-[20vw]
-                    min-h-[200px] md:min-h-[220px]
-                    bg-[#ADE9FB] 
-                    rounded-[15px] 
-                    px-4 py-4 "
+    <figure
+      className={cn(
+        'relative h-fit w-96 max-md:w-full cursor-pointer overflow-hidden rounded-xl border p-4 transition-ease-300',
+        // light styles
+        'border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]',
+        // dark styles
+        'dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]'
+      )}
     >
-      <div className="flex justify-between items-center w-full px-4 text-center">
-        <div className="text-left font-medium">{user}</div>
-        <ReactSVG src="/insta_logo.svg" />
+      <div className="w-full flex items-center justify-between">
+        <div className="flex flex-row items-center gap-2">
+          <Image className="rounded-full" width="32" height="32" alt="" src={img} />
+          <div className="flex flex-col">
+            <figcaption className="text-sm font-medium dark:text-white">{name}</figcaption>
+            <p className="text-xs font-medium text-left dark:text-white/40">{username}</p>
+          </div>
+        </div>
+        {social == 'instagram' ? (
+          <InstagramLogoIcon className="opacity-60" />
+        ) : social == 'twitter' ? (
+          <TwitterLogoIcon className="opacity-60" />
+        ) : social == 'facebook' ? (
+          <FacebookLogo className="opacity-60" />
+        ) : social == 'linkedin' ? (
+          <LinkedInLogoIcon className="opacity-60" />
+        ) : (
+          <></>
+        )}
       </div>
-      <div className="w-full text-wrap text-center text-sm sm:text-base">"{text}"</div>
-    </div>
+
+      <blockquote className="mt-2 text-sm text-left">{body}</blockquote>
+    </figure>
   );
 };
 
-export default TestimonialsCard;
+export default TestimonialCard;

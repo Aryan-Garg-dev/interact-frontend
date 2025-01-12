@@ -21,6 +21,7 @@ import SecondaryButton from '@/components/buttons/secondary_btn';
 import LowerEvent from '@/components/lowers/lower_event';
 import DisplayTracks from '@/sections/explore/tracks_modal';
 import DisplayPrizes from '@/sections/explore/prizes_modal';
+import Tags from '@/components/common/tags';
 
 interface HackathonProps {
   event: Event;
@@ -130,15 +131,19 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
   );
 
   const AboutHosts = () => (
-    <div className="w-full bg-white rounded-xl max-md:w-full shadow-lg">
+    <div className="w-full bg-white dark:bg-dark_primary_comp_hover rounded-xl max-md:w-full shadow-lg">
       <div className="w-full flex flex-col gap-6 p-4">
         <div className="w-full flex flex-col gap-4">
-          <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">HOSTED BY</div>
+          <div className="text-sm font-medium text-gray-500 dark:text-white border-b-2 border-gray-300 pb-2">
+            HOSTED BY
+          </div>
           <AboutUser user={event.organization.user} host={true} />
         </div>
         {hackathon?.coordinators && hackathon.coordinators.length > 0 && (
           <div className="w-full flex flex-col gap-4">
-            <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">COORDINATORS</div>
+            <div className="text-sm font-medium text-gray-500 dark:text-white border-b-2 border-gray-300 pb-2">
+              COORDINATORS
+            </div>
             <div className="flex flex-col gap-2">
               {hackathon.coordinators.map(user => (
                 <AboutUser key={user.id} user={user} />
@@ -148,7 +153,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
         )}
         {event.links && event.links.length > 0 && (
           <div className="w-full flex flex-col gap-4">
-            <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">
+            <div className="text-sm font-medium text-gray-500 dark:text-white border-b-2 border-gray-300 pb-2">
               MORE ABOUT THE EVENT
             </div>
             <div className="w-full flex flex-wrap gap-4">
@@ -163,7 +168,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
         <div className="w-full flex flex-col gap-1 text-sm">
           <div
             onClick={handleChat}
-            className="w-fit font-medium text-primary_black hover:text-gray-600 transition-ease-300 cursor-pointer"
+            className="w-fit font-medium text-primary_black hover:text-gray-600 dark:text-white transition-ease-300 cursor-pointer"
           >
             Message the Host
           </div>
@@ -207,20 +212,20 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
 
     return (
       <div className="w-full flex flex-col gap-2">
-        <div className="text-xs font-semibold text-gray-500">This event is happening on Interact!</div>
+        <div className="text-xs font-semibold text-gray-500 dark:text-white">This event is happening on Interact!</div>
         {user.organizationMemberships.map(membership => membership.organizationID).includes(event.organizationID) ? (
           <SecondaryButton label="Go to Dashboard" onClick={handleRedirect} />
         ) : isRegistered ? (
           isLive || now.isBetween(startTime, endTime) ? (
             <SecondaryButton label="Go to Dashboard" onClick={handleRedirect} />
           ) : isBeforeStart ? (
-            <div className="w-full relative p-2 text-center bg-yellow-200 text-gray-700 rounded-lg font-medium cursor-default">
+            <div className="w-full relative p-2 text-center bg-yellow-200 text-gray-700 dark:text-white rounded-lg font-medium cursor-default">
               Event starts in {timeUntilStart}!
             </div>
           ) : (
             <button
               type="submit"
-              className="w-full relative p-2 bg-priority_high text-gray-700 rounded-lg cursor-default"
+              className="w-full relative p-2 bg-priority_high text-gray-700 dark:text-white rounded-lg cursor-default"
             >
               Event has Ended
             </button>
@@ -228,7 +233,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
         ) : now.isBefore(teamFormationEndTime) ? (
           <SecondaryButton label="Register Now!" onClick={handleRegister} />
         ) : (
-          <div className="w-full relative p-2 text-center bg-priority_high text-gray-700 rounded-lg font-medium cursor-default">
+          <div className="w-full relative p-2 text-center bg-priority_high text-gray-700 dark:text-white rounded-lg font-medium cursor-default">
             Registrations Closed
           </div>
         )}
@@ -268,11 +273,11 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
             />
             <div className="w-full absolute top-0 flex flex-col gap-4 max-md:gap-2 md:items-end p-4">
               <div className="flex flex-col space-y-4">
-                <div className="flex-1 bg-white bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium">
+                <div className="flex-1 bg-white dark:bg-dark_primary_comp_hover bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium">
                   <span className="block font-semibold">Starts:</span>
                   <span>{moment(hackathon.startTime).format('dddd, MMMM Do YYYY, h:mm A')}</span>
                 </div>
-                <div className="flex-1 bg-white bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium">
+                <div className="flex-1 bg-white dark:bg-dark_primary_comp_hover bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium">
                   <span className="block font-semibold">Ends:</span>
                   <span>{moment(hackathon.endTime).format('dddd, MMMM Do YYYY, h:mm A')}</span>
                 </div>
@@ -280,13 +285,13 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
             </div>
             <div className="w-full absolute max-md:static bottom-0 flex gap-8 max-md:gap-2 justify-end p-4 max-md:px-0">
               <div
-                className="max-md:w-1/3 max-md:text-center bg-white bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium cursor-pointer"
+                className="max-md:w-1/3 max-md:text-center bg-white dark:bg-dark_primary_comp_hover bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium cursor-pointer"
                 onClick={handleTracksClick}
               >
                 View Tracks
               </div>
               <div
-                className="max-md:w-1/3 max-md:text-center bg-white bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium cursor-pointer"
+                className="max-md:w-1/3 max-md:text-center bg-white dark:bg-dark_primary_comp_hover bg-opacity-25 backdrop-blur-sm px-6 max-md:px-4 py-2 rounded-lg max-md:text-sm font-medium cursor-pointer"
                 onClick={handlePrizeClick}
               >
                 View Prizes
@@ -301,38 +306,22 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                 <h3 className="text-xl font-semibold">{hackathon.tagline}</h3>
                 {hackathon.description && (
                   <div className="w-full flex flex-col gap-2">
-                    <div className="text-sm font-medium text-gray-500">ABOUT THE EVENT</div>
+                    {/* <div className="text-sm font-medium text-gray-500 dark:text-white">ABOUT THE EVENT</div> */}
                     <div className="text-lg">{hackathon.description}</div>
                   </div>
                 )}
-                {hackathon.tags && hackathon.tags.length > 0 && (
-                  <div className="w-full flex flex-col gap-2">
-                    <div className="text-sm font-medium text-gray-500">TAGS</div>
-                    <div className="flex flex-wrap gap-2">
-                      {hackathon.tags.map(tag => (
-                        <Link
-                          key={tag}
-                          href={'/events?search=' + tag}
-                          target="_blank"
-                          className="flex-center bg-gray-100 px-2 py-1 border-[1px] border-dashed border-gray-400 text-xs rounded-lg"
-                        >
-                          {tag}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                <Tags tags={hackathon?.tags || []} displayAll />
               </div>
               <div className="mt-6 flex flex-col lg:flex-row justify-center items-center space-y-8 lg:space-y-0 lg:space-x-12 w-full">
                 <div className="w-full lg:w-1/2">
                   {hackathon.sponsors.map((sponsor, index) => (
                     <div
                       key={index}
-                      className="flex items-start p-4 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 mb-6"
+                      className="flex items-start p-4 bg-white dark:bg-dark_primary_comp_hover rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 mb-6"
                     >
                       <div className="flex justify-center items-start flex-col">
                         <h3 className="text-3xl font-bold font-primary">{sponsor.name}</h3>
-                        <p className="text-lg text-gray-700">{sponsor.description}</p>
+                        <p className="text-lg text-gray-700 dark:text-white">{sponsor.description}</p>
                       </div>
                     </div>
                   ))}
@@ -349,23 +338,23 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                           <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-px h-16 bg-gray-300"></div>
                         )}
                       </div>
-                      <div className="flex flex-col items-center w-48 p-4 bg-white border rounded-lg shadow-lg">
+                      <div className="flex flex-col items-center w-48 p-4 bg-white dark:bg-dark_primary_comp_hover border rounded-lg shadow-lg">
                         <div className="flex flex-col items-center">
                           <p className="font-primary text-lg font-semibold mt-4">
                             {formatHackathonDate(round.startTime)}
                           </p>
-                          <p className="font-primary text-sm text-gray-600">
+                          <p className="font-primary text-sm text-gray-600 dark:text-white">
                             {new Date(round.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </p>
                         </div>
                         <div className="my-4">
-                          <span className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-600">
+                          <span className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-600 dark:text-white">
                             to
                           </span>
                         </div>
                         <div className="flex flex-col items-center">
                           <p className="font-primary text-lg font-semibold">{formatHackathonDate(round.endTime)}</p>
-                          <p className="font-primary text-sm text-gray-600">
+                          <p className="font-primary text-sm text-gray-600 dark:text-white">
                             {new Date(round.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </p>
                         </div>

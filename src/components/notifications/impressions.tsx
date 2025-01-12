@@ -60,7 +60,9 @@ const Impressions = ({ notification, short = true }: Props) => {
       extended={
         !short &&
         getContent() != '' && (
-          <div className="w-fit max-w-[50%] text-xs rounded-md px-2 pt-1 bg-white line-clamp-2">{getContent()}</div>
+          <div className="w-fit max-w-[50%] text-xs rounded-md px-2 pt-1 bg-white dark:bg-dark_primary_comp_hover line-clamp-2">
+            {getContent()}
+          </div>
         )
       }
     >

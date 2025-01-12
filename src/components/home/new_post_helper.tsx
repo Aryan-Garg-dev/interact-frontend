@@ -1,61 +1,40 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Info } from '@phosphor-icons/react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
 interface Props {
-  show: boolean;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
   smallScreen?: boolean;
-  announcement?: boolean;
 }
 
-const NewPostHelper: React.FC<Props> = ({ show, setShow, smallScreen, announcement = false }) => {
-  const [firstMount, setFirstMount] = useState<boolean>(true);
+const NewPostHelper = ({ smallScreen }: Props) => {
   return (
-    <div className="font-primary">
-      <Info
-        className="cursor-pointer w-fit remove-def"
-        size={24}
-        onMouseEnter={() => {
-          if (!smallScreen) {
-            setShow(true);
-            setFirstMount(false);
-          }
-        }}
-        onMouseLeave={() => {
-          if (!smallScreen) {
-            setShow(false);
-          }
-        }}
-        onClick={() => {
-          setShow(prev => !prev);
-          setFirstMount(false);
-        }}
-      />
-      {
-        <div
-          className={`drop-down-modal bg-white dark:bg-dark_primary_comp_hover h-fit absolute  shadow-lg ${
-            smallScreen ? 'w-[90%] mt-2 left-4' : 'top-8 left-10 w-[40%]'
-          } rounded-xl p-4 non-selectable pointer-events-none ${
-            show ? 'animate-reveal' : firstMount ? 'hidden' : 'opacity-0 animate-reveal_reverse'
-          }`}
-        >
-          <div className={`heading font-medium tracking-wide ${smallScreen ? 'text-base' : 'text-lg'}`}>Tips:</div>
-          <div className="tips-list text-xs pl-4 mt-2">
-            <ul className={`list-disc flex flex-col gap-2 text-xs`}>
-              {announcement && <li>Announcements have a better short term reach than a posts.</li>}
-              <li>
-                Enclose your text with double asterisks <b>(**)</b>, or select text and press control+B to emphasize and
-                make it bold.
-              </li>
-              <li>
-                Use the <b>&quot;@&quot;</b> symbol followed by the username to easily mention and involve specific
-                individuals in your post
-              </li>
-            </ul>
-          </div>
+    <Popover>
+      <PopoverTrigger>
+        <Info size={24} />
+      </PopoverTrigger>
+      <PopoverContent className="w-[320px] max-h-[520px] overflow-y-auto thin_scrollbar shadow-lg dark:shadow-neutral-900">
+        <div className={`space-y-4 ${smallScreen ? 'text-xs' : 'text-sm'}`}>
+          <div className="text-center font-semibold">Tips to Make Your Post More Engaging</div>
+          <ul className="list-disc flex flex-col gap-2 text-xs pl-4 mt-2">
+            <li>Select text to reveal a popup with formatting options!</li>
+            <li>
+              Mention users, projects, openings, organizations, or events by typing <b>&quot;@&quot;</b> followed by a
+              search term.
+            </li>
+            <li>
+              To add a link, select your text and press <b>Ctrl + L</b>.
+            </li>
+            <li>
+              Insert a divider by typing <b>&quot;---&quot;</b>.
+            </li>
+            <li>
+              Create a list by typing <b>&quot;-&quot;</b> for a bullet list or <b>&quot;1.&quot;</b> for a numbered
+              list.
+            </li>
+          </ul>
         </div>
-      }
-    </div>
+      </PopoverContent>
+    </Popover>
   );
 };
 

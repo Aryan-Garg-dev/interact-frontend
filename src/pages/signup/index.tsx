@@ -116,6 +116,8 @@ const SignUp = () => {
           user.createdAt = res.data.createdAt || new Date();
           Cookies.set('token', res.data.token, {
             expires: Number(process.env.NEXT_PUBLIC_COOKIE_EXPIRATION_TIME),
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
           });
           Cookies.set('id', user.id, {
             expires: Number(process.env.NEXT_PUBLIC_COOKIE_EXPIRATION_TIME),

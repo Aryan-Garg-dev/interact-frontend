@@ -127,7 +127,11 @@ const Feed = () => {
                 );
               } else return <AnnouncementCard key={item.id} announcement={item} />;
             })}
-            {!hasMore && <div className="w-full text-lg text-gray-700 text-center mb-2">You are all caught up :)</div>}
+            {!hasMore && (
+              <div className="w-full text-lg text-gray-700 dark:text-white text-center mb-2 mt-8">
+                You are all caught up :)
+              </div>
+            )}
           </InfiniteScroll>
         )}
         {(!hasMore || feed.length === 0) && !user.isOrganization && <Openings />}

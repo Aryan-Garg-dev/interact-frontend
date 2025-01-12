@@ -1,6 +1,6 @@
 import { ORG_SENIOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
-import { USER_PROFILE_PIC_URL } from '@/config/routes';
+import { APPLICATION_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import { Meeting } from '@/types';
@@ -18,14 +18,24 @@ interface Props {
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   setClickedOnAddParticipants: React.Dispatch<React.SetStateAction<boolean>>;
   setMeeting: React.Dispatch<React.SetStateAction<Meeting>>;
+  applicationID?: string;
 }
 
-const ParticipantsList = ({ meeting, title, setShow, setClickedOnAddParticipants, setMeeting }: Props) => {
+const ParticipantsList = ({
+  meeting,
+  title,
+  setShow,
+  setClickedOnAddParticipants,
+  setMeeting,
+  applicationID,
+}: Props) => {
   const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleRemove = async (userID: string) => {
     const toaster = Toaster.startLoad('Removing Participant...');
-    const URL = `/org/${currentOrgID}/meetings/participants/${meeting.id}`;
+    const URL = applicationID
+      ? `${APPLICATION_URL}/meeting/participants/${applicationID}`
+      : `/org/${currentOrgID}/meetings/participants/${meeting.id}`;
 
     const res = await deleteHandler(URL, { userID });
     if (res.statusCode === 200) {
@@ -74,7 +84,9 @@ const ParticipantsList = ({ meeting, title, setShow, setClickedOnAddParticipants
                 <div className="text-xs">@{user.username}</div>
               </div>
             </div>
-            {checkOrgAccess(ORG_SENIOR) && <XCircle onClick={() => handleRemove(user.id)} className="cursor-pointer" />}
+            {(applicationID || checkOrgAccess(ORG_SENIOR)) && (
+              <XCircle onClick={() => handleRemove(user.id)} className="cursor-pointer" />
+            )}
           </div>
         ))}
       </div>

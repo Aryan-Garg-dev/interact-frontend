@@ -96,8 +96,7 @@ const Chats = () => {
                         <ChatCard
                           key={chat.id}
                           chat={chat}
-                          setClickedOnEditChat={setClickedOnEditChat}
-                          clickedEditChat={clickedEditChat}
+                          clickedChat={clickedEditChat}
                           setClickedEditChat={setClickedEditChat}
                         />
                       );

@@ -14,15 +14,15 @@ import Toaster from '@/utils/toaster';
 import patchHandler from '@/handlers/patch_handler';
 import { SERVER_ERROR } from '@/config/errors';
 import ConfirmDelete from '../common/confirm_delete';
-import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Report from '../common/report';
 import SignUp from '../common/signup_box';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
-import checkOrgAccess from '@/utils/funcs/access';
+import { checkOrgAccessByOrgUserID } from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
 import isArrEdited from '@/utils/funcs/check_array_edited';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import Editor from '@/components/editor';
 
 interface Props {
   post: Post;
@@ -74,24 +74,6 @@ const PostComponent = ({
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === 'b' && (event.ctrlKey || event.metaKey)) {
-      event.preventDefault();
-      wrapSelectedText('**', '**');
-    }
-  };
-
-  const wrapSelectedText = (prefix: string, suffix: string) => {
-    const textarea = document.getElementById('textarea_id') as HTMLTextAreaElement;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = caption.substring(start, end);
-    const newText = caption.substring(0, start) + prefix + selectedText + suffix + caption.substring(end);
-    setCaption(newText);
-    textarea.focus();
-    textarea.setSelectionRange(start + prefix.length, end + prefix.length);
-  };
-
   const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleEdit = async () => {
@@ -131,7 +113,7 @@ const PostComponent = ({
     <div
       className={`w-full relative bg-white dark:bg-transparent font-primary flex gap-1 ${
         !isRepost ? 'border-b-[1px] py-4' : 'rounded-lg border-[1px] p-2 my-2'
-      } border-gray-300 animate-fade_third`}
+      } border-gray-300 dark:border-dark_primary_btn animate-fade_third`}
     >
       {noUserClick && <SignUp setShow={setNoUserClick} />}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
@@ -175,9 +157,10 @@ const PostComponent = ({
                     <div className="text-xxs cursor-pointer">•••</div>
                   </PopoverTrigger>
                   <PopoverContent className="w-40 p-2 text-sm">
-                    {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
+                    {(post.userID == loggedInUser.id || checkOrgAccessByOrgUserID(ORG_SENIOR, post.userID)) && (
                       <div
-                        onClick={() => {
+                        onClick={e => {
+                          e.stopPropagation();
                           setClickedOnEdit(true);
                           setIsDialogOpen(false);
                         }}
@@ -186,7 +169,7 @@ const PostComponent = ({
                         Edit
                       </div>
                     )}
-                    {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
+                    {(post.userID == loggedInUser.id || checkOrgAccessByOrgUserID(ORG_SENIOR, post.userID)) && (
                       <div
                         onClick={el => {
                           el.stopPropagation();
@@ -258,9 +241,13 @@ const PostComponent = ({
             </div>
           </CarouselProvider>
         )}
+        {clickedOnEdit && (
+          <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable />
+        )}
         {clickedOnEdit ? (
           <div className="relative">
-            <textarea
+            {/* <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable/> */}
+            {/* <textarea
               id="textarea_id"
               maxLength={2000}
               value={caption}
@@ -268,11 +255,14 @@ const PostComponent = ({
               onChange={el => setCaption(el.target.value)}
               onKeyDown={handleKeyDown}
               className="w-full text-sm whitespace-pre-wrap rounded-md focus:outline-none dark:bg-dark_primary_comp p-2 my-2 max-h-72"
-            />
+            /> */}
 
             <div className="dark:text-white flex items-center gap-4 max-md:gap-1 absolute -bottom-8 right-0">
               <div
-                onClick={() => setClickedOnEdit(false)}
+                onClick={e => {
+                  e.stopPropagation();
+                  setClickedOnEdit(false);
+                }}
                 className="border-[1px] border-primary_black flex-center rounded-full w-20 max-md:w-12 max-md:text-xxs p-1 cursor-pointer"
               >
                 cancel
@@ -293,7 +283,7 @@ const PostComponent = ({
           </div>
         ) : (
           <div className={`w-full text-sm  whitespace-pre-wrap mb-2 ${clamp && 'line-clamp-6'}`}>
-            {renderContentWithLinks(post.content, post.taggedUsers)}
+            <Editor content={post.content} editable={false} />
           </div>
         )}
         {showLowerPost && (

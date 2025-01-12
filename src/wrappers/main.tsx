@@ -32,7 +32,7 @@ const MainWrapper: React.FC<WrapperProps> = ({ children, restrictWidth = false, 
       <div className="bg-main dark:bg-dark_main h-base w-full fixed top-16 backdrop-blur-md -z-10 transition-ease-500"></div>
       <div
         className={`${
-          restrictWidth ? 'w-[calc(100vw-280px)] mx-auto max-md:w-full' : 'w-full'
+          restrictWidth ? 'w-[calc(100vw-280px)] mx-auto max-lg:w-full' : 'w-full'
         } px-8 pb-base_padding pt-8 max-md:p-4`}
       >
         {children}

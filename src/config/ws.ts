@@ -78,6 +78,13 @@ class SocketService {
     }
   }
 
+  public reconnect(): void {
+    if (this.socket) {
+      this.disconnect();
+      this.connect();
+    }
+  }
+
   public setupChats(chats?: string[]): void {
     if (this.socket) {
       if (!chats) {

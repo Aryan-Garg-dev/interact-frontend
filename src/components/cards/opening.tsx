@@ -16,7 +16,7 @@ const OpeningCard = ({ opening }: Props) => {
     <Link
       href={`openings?oid=${opening.id}&action=external`}
       target="_blank"
-      className="w-full bg-white font-primary border-[1px] border-primary_btn rounded-lg flex items-center gap-3 p-2 transition-ease-300 animate-fade_third"
+      className="w-full bg-white dark:bg-dark_primary_comp_hover font-primary border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg flex items-center gap-3 p-2 transition-ease-300 animate-fade_third"
     >
       {opening.organizationID && opening.organization ? (
         <Image

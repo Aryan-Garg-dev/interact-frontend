@@ -1,9 +1,10 @@
 import React, { ReactNode } from 'react';
 import { Project } from '@/types';
-import { Eye, HeartStraight } from '@phosphor-icons/react';
+import { Eye, EyeSlash, HeartStraight, Warning } from '@phosphor-icons/react';
 import Link from 'next/link';
 import UserHoverCard from './user_hover_card';
 import ProjectCardCarousel from './project_card_carousel';
+import TooltipIcon from '../common/tooltip_icon';
 
 interface Props {
   index?: number;
@@ -54,18 +55,31 @@ const ProjectCard = ({ project, setClickedProject, isLink = false, smaller = fal
             </div>
           )}
         </div>
-        {!smaller && (
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-1 text-xs">
-              <HeartStraight size={20} />
-              <div>{project.noLikes}</div>
+        {!smaller &&
+          (project.isFlagged ? (
+            <TooltipIcon
+              label="This Project is Flagged!."
+              icon={<Warning size={20} />}
+              excludeHoverEffect
+              className="text-primary_danger"
+            />
+          ) : project.isPrivate ? (
+            <TooltipIcon label="This project is private." icon={<EyeSlash size={20} />} excludeHoverEffect />
+          ) : (
+            <div className="flex flex-col items-center gap-2">
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-1 text-xs">
+                  <TooltipIcon label="Likes" icon={<HeartStraight size={20} />} excludeHoverEffect />
+                  <div>{project.noLikes}</div>
+                </div>
+                <div className="flex items-center gap-1 text-xs">
+                  <TooltipIcon label="Impressions" icon={<Eye size={20} />} excludeHoverEffect />
+                  <div>{project.noImpressions}</div>
+                </div>
+              </div>
+              {project.noOpenings > 0 && <div className="text-xs">{project.noOpenings} Active Openings</div>}
             </div>
-            <div className="flex items-center gap-1 text-xs">
-              <Eye size={20} />
-              <div>{project.noImpressions}</div>
-            </div>
-          </div>
-        )}
+          ))}
       </div>
     </Wrapper>
   );

@@ -1,10 +1,10 @@
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
 import { Post } from '@/types';
-import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import moment from 'moment';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import Editor from '../editor';
 
 interface Props {
   post: Post;
@@ -34,9 +34,11 @@ const PostCard = ({ post }: Props) => {
           <div className="text-sm font-medium">@{post.user.username}</div>
           <div className="flex gap-2 font-light text-xxs">{moment(post.postedAt).fromNow()}</div>
         </div>
-        <div className="w-full text-xs  whitespace-pre-wrap mb-2 line-clamp-8">
-          {renderContentWithLinks(post.content, post.taggedUsers)}
-        </div>
+        <Editor
+          className="w-full text-xs whitespace-pre-wrap mb-2 line-clamp-8"
+          content={post.content}
+          editable={false}
+        />
       </div>
     </Link>
   );

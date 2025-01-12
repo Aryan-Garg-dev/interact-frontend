@@ -43,7 +43,9 @@ const About = ({ profile, org = false, organizations }: Props) => {
                         height={24}
                         className="rounded-full"
                       />
-                      <div className="font-medium hover-underline-animation after:bg-gray-700">{org.title}</div>
+                      <div className="font-medium hover-underline-animation after:bg-gray-700 dark:after:bg-white">
+                        {org.title}
+                      </div>
                       {i < organizations.length - 1 && <span>,</span>}
                     </Link>
                   ))}

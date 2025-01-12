@@ -240,8 +240,8 @@ const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = 
             </div>
           </div>
           {post.communityID && post.community && post.community.title && (
-            <div className="text-xs">
-              Posted in{' '}
+            <div className="text-xs max-md:text-xxs">
+              <span className="max-md:hidden">Posted in </span>
               <Link
                 href={`/community/${post.community.id}`}
                 className="font-semibold hover:text-primary_text transition-ease-200"

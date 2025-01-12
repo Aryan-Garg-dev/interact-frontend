@@ -13,7 +13,6 @@ import Toaster from '@/utils/toaster';
 import patchHandler from '@/handlers/patch_handler';
 import { SERVER_ERROR } from '@/config/errors';
 import ConfirmDelete from '../common/confirm_delete';
-import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Report from '../common/report';
 import SignUp from '../common/signup_box';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
@@ -21,6 +20,7 @@ import checkOrgAccess from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import Editor from '../editor';
 
 interface Props {
   post: Post;
@@ -58,24 +58,6 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === 'b' && (event.ctrlKey || event.metaKey)) {
-      event.preventDefault();
-      wrapSelectedText('**', '**');
-    }
-  };
-
-  const wrapSelectedText = (prefix: string, suffix: string) => {
-    const textarea = document.getElementById('textarea_id') as HTMLTextAreaElement;
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = caption.substring(start, end);
-    const newText = caption.substring(0, start) + prefix + selectedText + suffix + caption.substring(end);
-    setCaption(newText);
-    textarea.focus();
-    textarea.setSelectionRange(start + prefix.length, end + prefix.length);
-  };
-
   const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleEdit = async () => {
@@ -109,7 +91,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
   };
 
   return (
-    <div className="w-full relative overflow-clip bg-white dark:bg-transparent font-primary flex gap-1 border-b-[1px] border-gray-300 py-4 animate-fade_third">
+    <div className="w-full relative overflow-clip bg-white dark:bg-transparent font-primary flex gap-1 border-b-[1px] border-gray-300 dark:border-dark_primary_btn py-4 animate-fade_third">
       {noUserClick && <SignUp setShow={setNoUserClick} />}
       {clickedOnDelete && <ConfirmDelete setShow={setClickedOnDelete} handleDelete={handleDelete} />}
       {clickedOnReport && <Report postID={post.id} setShow={setClickedOnReport} />}
@@ -186,23 +168,14 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
         </div>
 
         {post.isRePost && post.rePost ? (
-          <PostComponent post={post.rePost} isRepost={true} />
+          <PostComponent post={post.rePost} isRepost={true} key={post.id} />
         ) : (
           <div className="border-[1px] rounded-lg p-2 text-sm font-medium">* This post has been deleted *</div>
         )}
 
         {clickedOnEdit ? (
           <div className="relative">
-            <textarea
-              id="textarea_id"
-              maxLength={2000}
-              value={caption}
-              autoFocus={true}
-              onChange={el => setCaption(el.target.value)}
-              onKeyDown={handleKeyDown}
-              className="w-full text-sm whitespace-pre-wrap rounded-md focus:outline-none dark:bg-dark_primary_comp p-2 my-2 max-h-72"
-            />
-
+            <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable />
             <div className="dark:text-white flex items-center gap-4 absolute -bottom-8 right-0">
               <div
                 onClick={() => setClickedOnEdit(false)}
@@ -220,7 +193,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
           </div>
         ) : (
           <div className="w-full text-sm whitespace-pre-wrap mb-2">
-            {renderContentWithLinks(post.content, post.taggedUsers)}
+            <Editor content={post.content} editable={false} />
           </div>
         )}
         {showLowerPost && <LowerPost post={post} />}
