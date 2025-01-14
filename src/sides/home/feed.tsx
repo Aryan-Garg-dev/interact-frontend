@@ -9,8 +9,6 @@ import { SERVER_ERROR } from '@/config/errors';
 import { Meeting, Project, Task, User } from '@/types';
 import { userSelector } from '@/slices/userSlice';
 import UserCard from '@/components/explore/user_card';
-import { getNextSessionTime } from '@/utils/funcs/session_details';
-import moment from 'moment';
 import { SidePrimeWrapper } from '@/wrappers/side';
 import {
   DropdownMenu,

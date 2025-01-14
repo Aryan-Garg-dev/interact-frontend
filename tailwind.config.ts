@@ -138,6 +138,7 @@ const config: Config = {
         marquee: 'marquee var(--duration) infinite linear',
         'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
         shine: 'shine var(--duration) infinite linear',
+        shimmer: 'shimmer 2s linear infinite',
       },
       keyframes: {
         'caret-blink': {
@@ -241,6 +242,14 @@ const config: Config = {
           },
           to: {
             'background-position': '0% 0%',
+          },
+        },
+        shimmer: {
+          from: {
+            backgroundPosition: '0 0',
+          },
+          to: {
+            backgroundPosition: '-200% 0',
           },
         },
       },

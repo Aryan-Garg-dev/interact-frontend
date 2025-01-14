@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import BaseWrapper from '@/wrappers/base';
+import MainWrapper from '@/wrappers/main';
+import OrgSidebar from '@/components/common/org_sidebar';
 import {
   Event,
   HackathonTrack,
@@ -8,9 +11,7 @@ import {
   HackathonFAQ,
   HackathonRoundScoreMetric,
 } from '@/types';
-import ModalWrapper from '@/wrappers/modal';
-import PrimaryButton from '@/components/buttons/primary_btn';
-import BuildButton from '@/components/buttons/build_btn';
+
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import Toaster from '@/utils/toaster';
@@ -23,19 +24,16 @@ import { PencilSimple, TrashSimple } from '@phosphor-icons/react';
 import Input from '@/components/form/input';
 import Tags from '@/components/form/tags';
 import Links from '@/components/form/links';
-import ProgressBar from '@/components/onboarding/progress_bar';
 import SecondaryButton from '@/components/buttons/secondary_btn';
 import Select from '@/components/form/select';
 import { ORG_URL } from '@/config/routes';
 import { getFormattedTime, getInputFieldFormatTime } from '@/utils/funcs/time';
 import CoverPic from '@/components/utils/new_cover';
+import { Timeline } from '@/components/ui/timeline';
+import GlowButton from '@/components/buttons/glow_btn';
+import { Button } from '@/components/ui/button';
 
-interface Props {
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
-  setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
-}
-
-const NewHackathon = ({ setShow, setEvents }: Props) => {
+const NewHackathon = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tagline, setTagline] = useState('');
@@ -56,7 +54,6 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
   const [sponsors, setSponsors] = useState<HackathonSponsor[]>([]);
   const [faqs, setFaqs] = useState<HackathonFAQ[]>([]);
 
-  const [step, setStep] = useState(0);
   const [mutex, setMutex] = useState(false);
 
   const currentOrg = useSelector(currentOrgSelector);
@@ -106,18 +103,8 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
     return true;
   };
 
-  useEffect(() => {
-    document.documentElement.style.overflowY = 'hidden';
-    document.documentElement.style.height = '100vh';
-
-    return () => {
-      document.documentElement.style.overflowY = 'auto';
-      document.documentElement.style.height = 'auto';
-    };
-  }, []);
-
   const handleSubmit = async () => {
-    if (!eventDetailsValidator()) return;
+    if (!eventDetailsValidator() || !validateRounds() || !validateTeamFormationTimes()) return;
 
     const formData = {
       title,
@@ -140,7 +127,6 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
           startTime: getFormattedTime(round.startTime),
           endTime: getFormattedTime(round.endTime),
           judgingStartTime: getFormattedTime(round.judgingStartTime),
-          judgingEndTime: getFormattedTime(round.judgingEndTime),
         };
       }),
       sponsors,
@@ -155,10 +141,8 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
 
     if (res.statusCode === 201) {
       const event: Event = res.data.event;
-      setEvents(prev => [event, ...prev]);
       localStorage.removeItem(`hackathon-draft-${currentOrg.id}`);
       Toaster.stopLoad(toaster, 'Competition Created!', 1);
-      setShow(false);
     } else if (res.statusCode == 413) {
       Toaster.stopLoad(toaster, 'Image too large', 0);
     } else {
@@ -229,7 +213,6 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
       const roundStart = moment(round.startTime);
       const roundEnd = moment(round.endTime);
       const judgingStart = moment(round.judgingStartTime);
-      const judgingEnd = moment(round.judgingEndTime);
 
       // 1. Check if the round is within hackathon start and end times
       if (roundStart.isBefore(hackathonStart) || roundEnd.isAfter(hackathonEnd)) {
@@ -244,7 +227,7 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
       }
 
       // 3. Check if judging time is within the round time
-      if (judgingStart.isBefore(roundStart) || judgingEnd.isAfter(roundEnd)) {
+      if (judgingStart.isBefore(roundStart) || judgingStart.isAfter(roundEnd)) {
         Toaster.error(`Judging time for round ${round.index + 1} is not within the round's start and end times.`);
         return false;
       }
@@ -290,97 +273,83 @@ const NewHackathon = ({ setShow, setEvents }: Props) => {
     return true;
   };
 
-  return (
-    <ModalWrapper setShow={setShow} width={'4/5'} height={'4/5'} blur={true} top={'1/2'}>
-      <div className="w-full h-full flex flex-col gap-2 p-6 justify-between">
-        <div>
-          <div className="w-full flex items-center justify-between">
-            <div className="text-4xl font-semibold">Build your Competition!</div>
-            <div onClick={handleSaveDraft} className="cursor-pointer">
-              Save Draft
-            </div>
-          </div>
-          <div className="w-full mb-16 mt-10">
-            <ProgressBar
-              step={step + 1}
-              setStep={setStep}
-              steps={['Basics', 'Tracks', 'Prizes', 'Teams', 'Rounds', 'Sponsors', 'FAQs']}
-            />
-          </div>
-          <div>
-            {step === 0 ? (
-              <Basics
-                title={title}
-                setTitle={setTitle}
-                tagline={tagline}
-                setTagline={setTagline}
-                location={location}
-                setLocation={setLocation}
-                startTime={startTime}
-                setStartTime={setStartTime}
-                endTime={endTime}
-                setEndTime={setEndTime}
-                description={description}
-                setDescription={setDescription}
-                tags={tags}
-                setTags={setTags}
-                links={links}
-                setLinks={setLinks}
-                setImage={setImage}
-              />
-            ) : step === 1 ? (
-              <Tracks tracks={tracks} setTracks={setTracks} />
-            ) : step === 2 ? (
-              <Prizes prizes={prizes} setPrizes={setPrizes} tracks={tracks} />
-            ) : step === 3 ? (
-              <Teams
-                minTeamSize={minTeamSize}
-                setMinTeamSize={setMinTeamSize}
-                maxTeamSize={maxTeamSize}
-                setMaxTeamSize={setMaxTeamSize}
-                teamFormationStartTime={teamFormationStartTime}
-                setTeamFormationStartTime={setTeamFormationStartTime}
-                teamFormationEndTime={teamFormationEndTime}
-                setTeamFormationEndTime={setTeamFormationEndTime}
-              />
-            ) : step === 4 ? (
-              <Rounds rounds={rounds} setRounds={setRounds} teamFormationEndTime={teamFormationEndTime} />
-            ) : step === 5 ? (
-              <Sponsors sponsors={sponsors} setSponsors={setSponsors} />
-            ) : step === 6 ? (
-              <FAQs faqs={faqs} setFaqs={setFaqs} />
-            ) : null}
-          </div>
-        </div>
+  const screens = [
+    {
+      title: 'Basics',
+      content: (
+        <Basics
+          title={title}
+          setTitle={setTitle}
+          tagline={tagline}
+          setTagline={setTagline}
+          location={location}
+          setLocation={setLocation}
+          startTime={startTime}
+          setStartTime={setStartTime}
+          endTime={endTime}
+          setEndTime={setEndTime}
+          description={description}
+          setDescription={setDescription}
+          tags={tags}
+          setTags={setTags}
+          links={links}
+          setLinks={setLinks}
+          setImage={setImage}
+        />
+      ),
+    },
+    {
+      title: 'Tracks',
+      content: <Tracks tracks={tracks} setTracks={setTracks} />,
+    },
+    {
+      title: 'Prizes',
+      content: <Prizes prizes={prizes} setPrizes={setPrizes} tracks={tracks} />,
+    },
+    {
+      title: 'Teams',
+      content: (
+        <Teams
+          minTeamSize={minTeamSize}
+          setMinTeamSize={setMinTeamSize}
+          maxTeamSize={maxTeamSize}
+          setMaxTeamSize={setMaxTeamSize}
+          teamFormationStartTime={teamFormationStartTime}
+          setTeamFormationStartTime={setTeamFormationStartTime}
+          teamFormationEndTime={teamFormationEndTime}
+          setTeamFormationEndTime={setTeamFormationEndTime}
+        />
+      ),
+    },
+    {
+      title: 'Rounds',
+      content: <Rounds rounds={rounds} setRounds={setRounds} teamFormationEndTime={teamFormationEndTime} />,
+    },
+    {
+      title: 'Sponsors',
+      content: <Sponsors sponsors={sponsors} setSponsors={setSponsors} />,
+    },
+    {
+      title: 'FAQs',
+      content: <FAQs faqs={faqs} setFaqs={setFaqs} />,
+    },
+  ];
 
-        <div className={`w-full flex items-end justify-between ${step == 0 && 'py-12'}`}>
-          {step !== 0 ? <PrimaryButton label="Back" onClick={() => setStep(prev => prev - 1)} /> : <div></div>}
-          {step !== 6 ? (
-            <PrimaryButton
-              label="Next"
-              onClick={() => {
-                if (step === 0) {
-                  if (eventDetailsValidator()) setStep(prev => prev + 1);
-                } else {
-                  if (step == 3) {
-                    if (validateTeamFormationTimes()) setStep(prev => prev + 1);
-                  } else if (step === 4) {
-                    if (validateRounds()) setStep(prev => prev + 1);
-                  } else setStep(prev => prev + 1);
-                }
-              }}
-            />
-          ) : (
-            <BuildButton
-              label="Build Hackathon"
-              loadingLabel="Building your Hackathon!"
-              loading={mutex}
-              onClick={handleSubmit}
-            />
-          )}
+  return (
+    <BaseWrapper title={`Events | ${currentOrg.title}`}>
+      <OrgSidebar index={12} />
+      <MainWrapper>
+        <div className="w-full bg-gray-50 dark:bg-neutral-900 h-full flex flex-col gap-2 px-6 pb-10 justify-between">
+          <Timeline data={screens} />
+          <div className="w-full flex items-center justify-between">
+            <Button onClick={handleSaveDraft} className="w-fit">
+              Save this Draft
+            </Button>
+            <GlowButton label="Submit Your Competition" onClick={handleSubmit} />
+          </div>
         </div>
-      </div>
-    </ModalWrapper>
+      </MainWrapper>
+    </BaseWrapper>
   );
 };
 
@@ -466,7 +435,7 @@ const Tracks = ({ tracks, setTracks }: any) => {
         <TextArea label="Track Description" val={trackDescription} setVal={setTrackDescription} maxLength={250} />
         <SecondaryButton label={isEditing !== null ? 'Save' : 'Add'} onClick={addTrack} />
       </div>
-      {tracks?.length > 0 && (
+      {tracks?.length > 0 ? (
         <div className="w-full flex flex-wrap gap-4">
           {tracks.map((track: HackathonTrack, idx: number) => (
             <div key={idx} className="bg-gray-200 rounded-lg px-4 py-4 flex flex-col w-full">
@@ -483,6 +452,8 @@ const Tracks = ({ tracks, setTracks }: any) => {
             </div>
           ))}
         </div>
+      ) : (
+        <div>Minimum 1 Track is required.</div>
       )}
     </div>
   );
@@ -585,20 +556,15 @@ const Prizes = ({ prizes, setPrizes, tracks }: any) => {
   );
 };
 
-const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
-  const [startTime, setStartTime] = useState(rounds?.length == 0 ? getInputFieldFormatTime(teamFormationEndTime) : '');
+const Rounds = ({ rounds, setRounds }: any) => {
+  const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [judgingStartTime, setJudgingStartTime] = useState('');
-  const [judgingEndTime, setJudgingEndTime] = useState('');
   const [metrics, setMetrics] = useState<HackathonRoundScoreMetric[]>([]);
   const [isEditing, setIsEditing] = useState<number | null>(null);
 
   const addRound = () => {
-    // Check if there are existing rounds and set the start time for the new round
-    const lastRoundEndTime = rounds.length > 0 ? rounds[rounds.length - 1].endTime : null;
-    const newRoundStartTime = lastRoundEndTime ? new Date(lastRoundEndTime) : new Date(startTime);
-
-    if (startTime == '' || endTime == '' || judgingStartTime == '' || judgingEndTime == '') {
+    if (startTime == '' || endTime == '' || judgingStartTime == '') {
       Toaster.error('Invalid Round Timings');
       return;
     }
@@ -612,10 +578,9 @@ const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
       id: '',
       hackathonID: '',
       index: rounds.length,
-      startTime: newRoundStartTime,
+      startTime: new Date(startTime),
       endTime: new Date(endTime),
       judgingStartTime: new Date(judgingStartTime),
-      judgingEndTime: new Date(judgingEndTime),
       metrics,
     };
 
@@ -633,7 +598,6 @@ const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
     setStartTime(newStartTime ? newStartTime : '');
     setEndTime('');
     setJudgingStartTime('');
-    setJudgingEndTime('');
     setMetrics([]);
   };
 
@@ -642,7 +606,6 @@ const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
     setStartTime(round.startTime.toISOString().split('T')[0]);
     setEndTime(round.endTime.toISOString().split('T')[0]);
     setJudgingStartTime(round.judgingStartTime.toISOString().split('T')[0]);
-    setJudgingEndTime(round.judgingEndTime.toISOString().split('T')[0]);
     setMetrics(round.metrics);
     setIsEditing(index);
   };
@@ -671,17 +634,14 @@ const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
   return (
     <div className="w-full flex flex-col gap-6">
       <div className="flex flex-col gap-4">
-        <div>
-          <div className="text-xs ml-1 font-medium uppercase text-gray-500">
-            Start Time (same as team formation end time)
-          </div>
-          <div className="w-full bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2">
-            {startTime.replace('T', ' ')}
-          </div>
-        </div>
+        <Time label="Start Time" val={startTime} setVal={setStartTime} includeDate={true} />
         <Time label="End Time" val={endTime} setVal={setEndTime} includeDate={true} />
-        <Time label="Judging Start Time" val={judgingStartTime} setVal={setJudgingStartTime} includeDate={true} />
-        <Time label="Judging End Time" val={judgingEndTime} setVal={setJudgingEndTime} includeDate={true} />
+        <Time
+          label="Judging Start Time (within hackathon times)"
+          val={judgingStartTime}
+          setVal={setJudgingStartTime}
+          includeDate={true}
+        />
 
         <div className="w-full flex flex-col gap-4">
           <h4 className="font-bold">Metrics</h4>
@@ -738,7 +698,7 @@ const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
                   <p className="text-sm text-gray-500">End: {moment(round.endTime).format('YYYY-MM-DD HH:mm')}</p>
                   <p className="text-sm text-gray-500">
                     Judging: {moment(round.judgingStartTime).format('YYYY-MM-DD HH:mm')} -{' '}
-                    {moment(round.judgingEndTime).format('YYYY-MM-DD HH:mm')}
+                    {moment(round.endTime).format('YYYY-MM-DD HH:mm')}
                   </p>
                 </div>
                 <div className="flex gap-2">

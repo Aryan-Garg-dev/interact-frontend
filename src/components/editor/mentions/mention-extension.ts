@@ -23,7 +23,7 @@ const InteractMentions = Mention.configure({
         renderHTML: attributes => {
           return {
             'data-mention-category': attributes.category,
-          }
+          };
         },
       },
       label: {
@@ -72,6 +72,7 @@ const InteractMentions = Mention.configure({
       const onMouseEnter = () => {
         const container = document.createElement('div');
 
+        //TODO check if this renders on mouseenter or just appears on mouseenter, to optimize unnecessary api calls for items
         const renderer = new ReactRenderer(MentionHoverCard, {
           props: {
             id: node.attrs.id,

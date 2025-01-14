@@ -21,7 +21,6 @@ import EditEvent from '@/sections/organization/events/edit_event';
 import ConfirmDelete from '@/components/common/confirm_delete';
 import deleteHandler from '@/handlers/delete_handler';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { navbarOpenSelector } from '@/slices/feedSlice';
 import EditCoordinators from '@/sections/organization/events/edit_coordinators';
 import AccessTree from '@/components/organization/access_tree';
 import ViewInvitations from '@/sections/organization/events/view_invitations';
@@ -29,14 +28,12 @@ import EditCoHosts from '@/sections/organization/events/edit_cohosts';
 import EventHistory from '@/sections/organization/events/history';
 import HackathonHistories from '@/sections/organization/hackathons/history';
 import NoEvents from '@/components/fillers/events';
-import NewHackathon from '@/sections/organization/hackathons/new_hackathon';
 import EditHackathonCoordinators from '@/sections/organization/hackathons/edit_hackathon_coordinators';
 import EditHackathonJudges from '@/sections/organization/hackathons/edit_hackathon_judges';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [clickedOnNewEvent, setClickedOnNewEvent] = useState(false);
-  const [clickedOnNewHackathon, setClickedOnNewHackathon] = useState(false);
   const [clickedOnViewInvitations, setClickedOnViewInvitations] = useState(false);
   const [clickedOnViewHistory, setClickedOnViewHistory] = useState(false);
   const [clickedOnEditEvent, setClickedOnEditEvent] = useState(false);
@@ -126,8 +123,6 @@ const Events = () => {
     if (checkOrgAccess(ORG_SENIOR)) fetchUnreadInvitations();
   }, []);
 
-  const open = useSelector(navbarOpenSelector);
-
   return (
     <BaseWrapper title={`Events | ${currentOrg.title}`}>
       <OrgSidebar index={12} />
@@ -139,7 +134,7 @@ const Events = () => {
               {checkOrgAccess(ORG_SENIOR) && (
                 <>
                   <Code
-                    onClick={() => setClickedOnNewHackathon(true)}
+                    onClick={() => window.location.assign('/organisation/competition')}
                     size={42}
                     className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
                     weight="regular"
@@ -176,7 +171,6 @@ const Events = () => {
 
           <div className="w-full max-md:w-full mx-auto flex flex-col items-center gap-4">
             {clickedOnInfo && <AccessTree type="event" setShow={setClickedOnInfo} />}
-            {clickedOnNewHackathon && <NewHackathon setEvents={setEvents} setShow={setClickedOnNewHackathon} />}
             {clickedOnNewEvent && <NewEvent setEvents={setEvents} setShow={setClickedOnNewEvent} />}
             {clickedOnViewInvitations && <ViewInvitations setShow={setClickedOnViewInvitations} />}
             {clickedOnViewHistory &&
