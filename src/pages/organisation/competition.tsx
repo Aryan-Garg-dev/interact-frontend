@@ -54,7 +54,6 @@ const NewHackathon = () => {
   const [sponsors, setSponsors] = useState<HackathonSponsor[]>([]);
   const [faqs, setFaqs] = useState<HackathonFAQ[]>([]);
 
-  const [step, setStep] = useState(0);
   const [mutex, setMutex] = useState(false);
 
   const currentOrg = useSelector(currentOrgSelector);
@@ -128,7 +127,6 @@ const NewHackathon = () => {
           startTime: getFormattedTime(round.startTime),
           endTime: getFormattedTime(round.endTime),
           judgingStartTime: getFormattedTime(round.judgingStartTime),
-          judgingEndTime: getFormattedTime(round.judgingEndTime),
         };
       }),
       sponsors,
@@ -215,7 +213,6 @@ const NewHackathon = () => {
       const roundStart = moment(round.startTime);
       const roundEnd = moment(round.endTime);
       const judgingStart = moment(round.judgingStartTime);
-      const judgingEnd = moment(round.judgingEndTime);
 
       // 1. Check if the round is within hackathon start and end times
       if (roundStart.isBefore(hackathonStart) || roundEnd.isAfter(hackathonEnd)) {
@@ -230,7 +227,7 @@ const NewHackathon = () => {
       }
 
       // 3. Check if judging time is within the round time
-      if (judgingStart.isBefore(roundStart) || judgingEnd.isAfter(roundEnd)) {
+      if (judgingStart.isBefore(roundStart) || judgingStart.isAfter(roundEnd)) {
         Toaster.error(`Judging time for round ${round.index + 1} is not within the round's start and end times.`);
         return false;
       }
@@ -559,20 +556,15 @@ const Prizes = ({ prizes, setPrizes, tracks }: any) => {
   );
 };
 
-const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
-  const [startTime, setStartTime] = useState(rounds?.length == 0 ? getInputFieldFormatTime(teamFormationEndTime) : '');
+const Rounds = ({ rounds, setRounds }: any) => {
+  const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
   const [judgingStartTime, setJudgingStartTime] = useState('');
-  const [judgingEndTime, setJudgingEndTime] = useState('');
   const [metrics, setMetrics] = useState<HackathonRoundScoreMetric[]>([]);
   const [isEditing, setIsEditing] = useState<number | null>(null);
 
   const addRound = () => {
-    // Check if there are existing rounds and set the start time for the new round
-    const lastRoundEndTime = rounds.length > 0 ? rounds[rounds.length - 1].endTime : null;
-    const newRoundStartTime = lastRoundEndTime ? new Date(lastRoundEndTime) : new Date(startTime);
-
-    if (startTime == '' || endTime == '' || judgingStartTime == '' || judgingEndTime == '') {
+    if (startTime == '' || endTime == '' || judgingStartTime == '') {
       Toaster.error('Invalid Round Timings');
       return;
     }
@@ -586,10 +578,9 @@ const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
       id: '',
       hackathonID: '',
       index: rounds.length,
-      startTime: newRoundStartTime,
+      startTime: new Date(startTime),
       endTime: new Date(endTime),
       judgingStartTime: new Date(judgingStartTime),
-      judgingEndTime: new Date(judgingEndTime),
       metrics,
     };
 
@@ -607,7 +598,6 @@ const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
     setStartTime(newStartTime ? newStartTime : '');
     setEndTime('');
     setJudgingStartTime('');
-    setJudgingEndTime('');
     setMetrics([]);
   };
 
@@ -616,7 +606,6 @@ const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
     setStartTime(round.startTime.toISOString().split('T')[0]);
     setEndTime(round.endTime.toISOString().split('T')[0]);
     setJudgingStartTime(round.judgingStartTime.toISOString().split('T')[0]);
-    setJudgingEndTime(round.judgingEndTime.toISOString().split('T')[0]);
     setMetrics(round.metrics);
     setIsEditing(index);
   };
@@ -645,17 +634,14 @@ const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
   return (
     <div className="w-full flex flex-col gap-6">
       <div className="flex flex-col gap-4">
-        <div>
-          <div className="text-xs ml-1 font-medium uppercase text-gray-500">
-            Start Time (same as team formation end time)
-          </div>
-          <div className="w-full bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2">
-            {startTime.replace('T', ' ')}
-          </div>
-        </div>
+        <Time label="Start Time" val={startTime} setVal={setStartTime} includeDate={true} />
         <Time label="End Time" val={endTime} setVal={setEndTime} includeDate={true} />
-        <Time label="Judging Start Time" val={judgingStartTime} setVal={setJudgingStartTime} includeDate={true} />
-        <Time label="Judging End Time" val={judgingEndTime} setVal={setJudgingEndTime} includeDate={true} />
+        <Time
+          label="Judging Start Time (within hackathon times)"
+          val={judgingStartTime}
+          setVal={setJudgingStartTime}
+          includeDate={true}
+        />
 
         <div className="w-full flex flex-col gap-4">
           <h4 className="font-bold">Metrics</h4>
@@ -712,7 +698,7 @@ const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
                   <p className="text-sm text-gray-500">End: {moment(round.endTime).format('YYYY-MM-DD HH:mm')}</p>
                   <p className="text-sm text-gray-500">
                     Judging: {moment(round.judgingStartTime).format('YYYY-MM-DD HH:mm')} -{' '}
-                    {moment(round.judgingEndTime).format('YYYY-MM-DD HH:mm')}
+                    {moment(round.endTime).format('YYYY-MM-DD HH:mm')}
                   </p>
                 </div>
                 <div className="flex gap-2">
