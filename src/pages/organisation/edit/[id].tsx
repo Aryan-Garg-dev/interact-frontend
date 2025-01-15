@@ -23,7 +23,7 @@ import { SERVER_ERROR } from '@/config/errors';
 import postHandler from '@/handlers/post_handler';
 import { Hackathon, HackathonRound } from '@/types';
 import { initialHackathon } from '@/types/initials';
-import { AddRoundForm } from '@/components/form/AddRoundForm';
+import { AddRoundForm } from '@/sections/organization/hackathons/AddRoundForm';
 
 const boxWrapperClass = 'w-full px-4 py-2 bg-[#E6E7EB70] relative rounded-md';
 

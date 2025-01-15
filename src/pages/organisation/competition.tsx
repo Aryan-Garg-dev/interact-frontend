@@ -2,15 +2,7 @@ import React, { useEffect, useState } from 'react';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import OrgSidebar from '@/components/common/org_sidebar';
-import {
-  Event,
-  HackathonTrack,
-  HackathonPrize,
-  HackathonRound,
-  HackathonSponsor,
-  HackathonFAQ,
-  HackathonRoundScoreMetric,
-} from '@/types';
+import { Event, HackathonTrack, HackathonPrize, HackathonRound, HackathonSponsor, HackathonFAQ } from '@/types';
 
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
@@ -20,20 +12,29 @@ import postHandler from '@/handlers/post_handler';
 import moment from 'moment';
 import TextArea from '@/components/form/textarea';
 import Time from '@/components/form/time';
-import { PencilSimple, TrashSimple } from '@phosphor-icons/react';
 import Input from '@/components/form/input';
 import Tags from '@/components/form/tags';
 import Links from '@/components/form/links';
-import SecondaryButton from '@/components/buttons/secondary_btn';
-import Select from '@/components/form/select';
 import { ORG_URL } from '@/config/routes';
-import { getFormattedTime, getInputFieldFormatTime } from '@/utils/funcs/time';
-import CoverPic from '@/components/utils/new_cover';
+import { getFormattedTime } from '@/utils/funcs/time';
 import { Timeline } from '@/components/ui/timeline';
 import GlowButton from '@/components/buttons/glow_btn';
 import { Button } from '@/components/ui/button';
+import Tracks from '@/sections/organization/hackathons/Track';
+import Prizes from '@/sections/organization/hackathons/Prize';
+import Rounds from '@/sections/organization/hackathons/Round';
+import FAQs from '@/sections/organization/hackathons/FAQ';
+import Sponsors from '@/sections/organization/hackathons/Sponsor';
+import Teams from '@/sections/organization/hackathons/Teams';
+import Basics from '@/sections/organization/hackathons/Basics';
+interface Prize {
+  title: string;
+  amount: number;
+  description: string;
+  trackID?: string;
+}
 
-const NewHackathon = () => {
+const NewHackathon: React.FC = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [tagline, setTagline] = useState('');
@@ -44,7 +45,7 @@ const NewHackathon = () => {
   const [endTime, setEndTime] = useState('');
   const [teamFormationStartTime, setTeamFormationStartTime] = useState('');
   const [teamFormationEndTime, setTeamFormationEndTime] = useState('');
-  const [image, setImage] = useState<File>();
+  const [image, setImage] = useState<File | null>(null);
   const [minTeamSize, setMinTeamSize] = useState(2);
   const [maxTeamSize, setMaxTeamSize] = useState(5);
 
@@ -54,21 +55,84 @@ const NewHackathon = () => {
   const [sponsors, setSponsors] = useState<HackathonSponsor[]>([]);
   const [faqs, setFaqs] = useState<HackathonFAQ[]>([]);
 
-  const [step, setStep] = useState(0);
-  const [mutex, setMutex] = useState(false);
-
   const currentOrg = useSelector(currentOrgSelector);
 
+  const addFAQ = (faq: HackathonFAQ) => {
+    setFaqs(prev => [...prev, faq]);
+  };
+
+  const editFAQ = (index: number, updatedFAQ: HackathonFAQ) => {
+    setFaqs(prev => prev.map((faq, idx) => (idx === index ? updatedFAQ : faq)));
+  };
+
+  const deleteFAQ = (index: number) => {
+    setFaqs(prev => prev.filter((_, idx) => idx !== index));
+  };
+
+  const addRound = (round: HackathonRound) => {
+    setRounds(prev => [...prev, { ...round, id: Date.now().toString(), hackathonID: 'your-hackathon-id' }]);
+  };
+
+  const addSponsor = (sponsor: HackathonSponsor) => {
+    setSponsors(prev => [...prev, sponsor]);
+  };
+
+  const editSponsor = (index: number, updatedSponsor: HackathonSponsor) => {
+    setSponsors(prev => prev.map((sponsor, idx) => (idx === index ? updatedSponsor : sponsor)));
+  };
+
+  const deleteSponsor = (index: number) => {
+    setSponsors(prev => prev.filter((_, idx) => idx !== index));
+  };
+
+  const editRound = (index: number, updatedRound: HackathonRound) => {
+    setRounds(prev =>
+      prev.map((round, idx) =>
+        idx === index ? { ...updatedRound, id: round.id, hackathonID: round.hackathonID } : round
+      )
+    );
+  };
+
+  const deleteRound = (index: number) => {
+    setRounds(prev => prev.filter((_, idx) => idx !== index));
+  };
+
+  const addTrack = (title: string, description: string = '') => {
+    setTracks(prev => [...prev, { title, description: description }]);
+  };
+
+  const editTrack = (index: number, title: string, description: string = '') => {
+    setTracks(prev =>
+      prev.map((track, idx) => (idx === index ? { ...track, title, description: description || '' } : track))
+    );
+  };
+
+  const deleteTrack = (index: number) => {
+    setTracks(prev => prev.filter((_, idx) => idx !== index));
+  };
+
+  const addPrize = (prize: Prize) => {
+    setPrizes(prev => [...prev, prize]);
+  };
+
+  const editPrize = (index: number, updatedPrize: Prize) => {
+    setPrizes(prev => prev.map((prize, idx) => (idx === index ? updatedPrize : prize)));
+  };
+
+  const deletePrize = (index: number) => {
+    setPrizes(prev => prev.filter((_, idx) => idx !== index));
+  };
+
   const eventDetailsValidator = () => {
-    if (title.trim() == '') {
+    if (title.trim() === '') {
       Toaster.error('Enter Title');
       return false;
     }
-    if (tagline.trim() == '') {
+    if (tagline.trim() === '') {
       Toaster.error('Enter Tagline');
       return false;
     }
-    if (description.trim() == '') {
+    if (description.trim() === '') {
       Toaster.error('Enter Description');
       return false;
     }
@@ -76,18 +140,14 @@ const NewHackathon = () => {
       Toaster.error('Add at least 3 tags');
       return false;
     }
-    if (startTime == '') {
+    if (startTime === '') {
       Toaster.error('Enter Start Time');
       return false;
     }
-    if (endTime == '') {
+    if (endTime === '') {
       Toaster.error('Enter End Time');
       return false;
     }
-    // if (!image) {
-    //   Toaster.error('Add a Cover Picture');
-    //   return false;
-    // }
 
     const start = moment(startTime);
     const end = moment(endTime);
@@ -122,15 +182,13 @@ const NewHackathon = () => {
       maxTeamSize: Number(maxTeamSize),
       tracks,
       prizes,
-      rounds: rounds.map(round => {
-        return {
-          ...round,
-          startTime: getFormattedTime(round.startTime),
-          endTime: getFormattedTime(round.endTime),
-          judgingStartTime: getFormattedTime(round.judgingStartTime),
-          judgingEndTime: getFormattedTime(round.judgingEndTime),
-        };
-      }),
+      rounds: rounds.map(round => ({
+        ...round,
+        startTime: getFormattedTime(round.startTime),
+        endTime: getFormattedTime(round.endTime),
+        judgingStartTime: getFormattedTime(round.judgingStartTime),
+        judgingEndTime: getFormattedTime(round.judgingEndTime),
+      })),
       sponsors,
       faqs,
     };
@@ -145,7 +203,7 @@ const NewHackathon = () => {
       const event: Event = res.data.event;
       localStorage.removeItem(`hackathon-draft-${currentOrg.id}`);
       Toaster.stopLoad(toaster, 'Competition Created!', 1);
-    } else if (res.statusCode == 413) {
+    } else if (res.statusCode === 413) {
       Toaster.stopLoad(toaster, 'Image too large', 0);
     } else {
       if (res.data.message) {
@@ -203,7 +261,7 @@ const NewHackathon = () => {
       setSponsors(formData.sponsors || []);
       setFaqs(formData.faqs || []);
     }
-  }, []);
+  }, [currentOrg.id]);
 
   const validateRounds = () => {
     const hackathonStart = moment(startTime);
@@ -217,38 +275,33 @@ const NewHackathon = () => {
       const judgingStart = moment(round.judgingStartTime);
       const judgingEnd = moment(round.judgingEndTime);
 
-      // 1. Check if the round is within hackathon start and end times
       if (roundStart.isBefore(hackathonStart) || roundEnd.isAfter(hackathonEnd)) {
-        Toaster.error(`Round ${round.index + 1} is outside the hackathon start or end time.`);
+        Toaster.error(`Round ${i + 1} is outside the hackathon start or end time.`);
         return false;
       }
 
-      // 2. Check if the round is after the team formation end time
       if (roundStart.isBefore(teamFormationEnd)) {
-        Toaster.error(`Round ${round.index + 1} starts before team formation ends.`);
+        Toaster.error(`Round ${i + 1} starts before team formation ends.`);
         return false;
       }
 
-      // 3. Check if judging time is within the round time
       if (judgingStart.isBefore(roundStart) || judgingEnd.isAfter(roundEnd)) {
-        Toaster.error(`Judging time for round ${round.index + 1} is not within the round's start and end times.`);
+        Toaster.error(`Judging time for round ${i + 1} is not within the round's start and end times.`);
         return false;
       }
 
-      // 4. Check for overlapping rounds
       if (i > 0) {
         const previousRoundEnd = moment(rounds[i - 1].endTime);
         if (roundStart.isBefore(previousRoundEnd)) {
-          Toaster.error(`Round ${round.index + 1} overlaps with the previous round.`);
+          Toaster.error(`Round ${i + 1} overlaps with the previous round.`);
           return false;
         }
       }
 
-      // 5. Check if round end time matches the next round's start time (for all except last round)
       if (i < rounds.length - 1) {
         const nextRoundStart = moment(rounds[i + 1].startTime);
         if (!roundEnd.isSame(nextRoundStart)) {
-          Toaster.error(`The end time of round ${round.index + 1} should match the start time of the next round.`);
+          Toaster.error(`The end time of round ${i + 1} should match the start time of the next round.`);
           return false;
         }
       }
@@ -260,7 +313,7 @@ const NewHackathon = () => {
   const validateTeamFormationTimes = () => {
     const hackathonStart = moment(startTime);
     const hackathonEnd = moment(endTime);
-    const teamFormationStart = moment(teamFormationEndTime);
+    const teamFormationStart = moment(teamFormationStartTime);
     const teamFormationEnd = moment(teamFormationEndTime);
 
     if (!teamFormationStart.isBetween(hackathonStart, hackathonEnd)) {
@@ -280,61 +333,96 @@ const NewHackathon = () => {
     {
       title: 'Basics',
       content: (
-        <Basics
-          title={title}
-          setTitle={setTitle}
-          tagline={tagline}
-          setTagline={setTagline}
-          location={location}
-          setLocation={setLocation}
-          startTime={startTime}
-          setStartTime={setStartTime}
-          endTime={endTime}
-          setEndTime={setEndTime}
-          description={description}
-          setDescription={setDescription}
-          tags={tags}
-          setTags={setTags}
-          links={links}
-          setLinks={setLinks}
-          setImage={setImage}
-        />
+        <div className="container mx-auto px-4 ">
+          <Basics
+            title={title}
+            setTitle={setTitle}
+            tagline={tagline}
+            setTagline={setTagline}
+            location={location}
+            setLocation={setLocation}
+            startTime={startTime}
+            setStartTime={setStartTime}
+            endTime={endTime}
+            setEndTime={setEndTime}
+            description={description}
+            setDescription={setDescription}
+            tags={tags}
+            setTags={setTags}
+            links={links}
+            setLinks={setLinks}
+            setImage={setImage}
+          />
+        </div>
       ),
     },
     {
       title: 'Tracks',
-      content: <Tracks tracks={tracks} setTracks={setTracks} />,
+      content: (
+        <div className="container mx-auto px-4 ">
+          <Tracks tracks={tracks} addTrack={addTrack} editTrack={editTrack} deleteTrack={deleteTrack} />
+        </div>
+      ),
     },
     {
       title: 'Prizes',
-      content: <Prizes prizes={prizes} setPrizes={setPrizes} tracks={tracks} />,
+      content: (
+        <div className="container mx-auto px-4">
+          <Prizes prizes={prizes} addPrize={addPrize} editPrize={editPrize} deletePrize={deletePrize} tracks={tracks} />
+        </div>
+      ),
     },
     {
       title: 'Teams',
       content: (
-        <Teams
-          minTeamSize={minTeamSize}
-          setMinTeamSize={setMinTeamSize}
-          maxTeamSize={maxTeamSize}
-          setMaxTeamSize={setMaxTeamSize}
-          teamFormationStartTime={teamFormationStartTime}
-          setTeamFormationStartTime={setTeamFormationStartTime}
-          teamFormationEndTime={teamFormationEndTime}
-          setTeamFormationEndTime={setTeamFormationEndTime}
-        />
+        <div className="container mx-auto px-4 ">
+          <Teams
+            minTeamSize={minTeamSize}
+            setMinTeamSize={setMinTeamSize}
+            maxTeamSize={maxTeamSize}
+            setMaxTeamSize={setMaxTeamSize}
+            teamFormationStartTime={teamFormationStartTime}
+            setTeamFormationStartTime={setTeamFormationStartTime}
+            teamFormationEndTime={teamFormationEndTime}
+            setTeamFormationEndTime={setTeamFormationEndTime}
+          />
+        </div>
       ),
     },
     {
       title: 'Rounds',
-      content: <Rounds rounds={rounds} setRounds={setRounds} teamFormationEndTime={teamFormationEndTime} />,
+      content: (
+        <div className="container mx-auto px-4">
+          <Rounds
+            rounds={rounds}
+            addRound={addRound}
+            editRound={editRound}
+            deleteRound={deleteRound}
+            teamFormationEndTime={teamFormationEndTime}
+          />
+        </div>
+      ),
     },
     {
       title: 'Sponsors',
-      content: <Sponsors sponsors={sponsors} setSponsors={setSponsors} />,
+      content: (
+        <div className="container mx-auto px-4">
+          <Sponsors
+            sponsors={sponsors}
+            addSponsor={addSponsor}
+            editSponsor={editSponsor}
+            deleteSponsor={deleteSponsor}
+          />
+        </div>
+      ),
     },
     {
       title: 'FAQs',
-      content: <FAQs faqs={faqs} setFaqs={setFaqs} />,
+      content: (
+        <div className="container mx-auto px-4">
+          <FAQs faqs={faqs} addFAQ={addFAQ} editFAQ={editFAQ} deleteFAQ={deleteFAQ} />
+        </div>
+      ),
     },
   ];
 
@@ -357,547 +445,3 @@ const NewHackathon = () => {
 };
 
 export default NewHackathon;
-
-const Basics = ({
-  title,
-  setTitle,
-  tagline,
-  setTagline,
-  location,
-  setLocation,
-  startTime,
-  setStartTime,
-  endTime,
-  setEndTime,
-  description,
-  setDescription,
-  tags,
-  setTags,
-  links,
-  setLinks,
-  setImage,
-}: any) => {
-  return (
-    <div className="w-full flex flex-col gap-8 max-lg:gap-4">
-      {/* <div className="w-full">
-        <CoverPic setSelectedFile={setImage} picType="Hackathon" />
-      </div> */}
-      <Input label="Title" val={title} setVal={setTitle} maxLength={25} required={true} />
-      <Input label="Tagline" val={tagline} setVal={setTagline} maxLength={50} required={true} />
-      <Input label="Location" val={location} setVal={setLocation} maxLength={25} placeholder="Online" />
-      <div className="w-full flex justify-between gap-4">
-        <div className="w-1/2">
-          <Time label="Start Time" val={startTime} setVal={setStartTime} required={true} />
-        </div>
-        <div className="w-1/2">
-          <Time label="End Time" val={endTime} setVal={setEndTime} required={true} />
-        </div>
-      </div>
-      <TextArea label="Description" val={description} setVal={setDescription} maxLength={2500} />
-      <Tags label="Tags" tags={tags} setTags={setTags} maxTags={10} required={true} />
-      <Links label="Links" links={links} setLinks={setLinks} maxLinks={5} />
-    </div>
-  );
-};
-
-const Tracks = ({ tracks, setTracks }: any) => {
-  const [trackName, setTrackName] = useState('');
-  const [trackDescription, setTrackDescription] = useState('');
-  const [isEditing, setIsEditing] = useState<number | null>(null);
-
-  const addTrack = () => {
-    if (!trackName.trim() || !trackDescription.trim()) return;
-    if (isEditing !== null) {
-      setTracks((prev: HackathonTrack[]) =>
-        prev.map((track, idx) =>
-          idx === isEditing ? { ...track, title: trackName, description: trackDescription } : track
-        )
-      );
-      setIsEditing(null);
-    } else {
-      setTracks((prev: HackathonTrack[]) => [...prev, { title: trackName, description: trackDescription }]);
-    }
-    setTrackName('');
-    setTrackDescription('');
-  };
-
-  const editTrack = (index: number) => {
-    setTrackName(tracks[index].title);
-    setTrackDescription(tracks[index].description);
-    setIsEditing(index);
-  };
-
-  const deleteTrack = (index: number) => {
-    setTracks((prev: HackathonTrack[]) => prev.filter((_, i) => i !== index));
-  };
-
-  return (
-    <div className="w-full flex flex-col gap-6">
-      <div className="flex flex-col gap-4">
-        <Input label="Track Title" val={trackName} setVal={setTrackName} maxLength={50} />
-        <TextArea label="Track Description" val={trackDescription} setVal={setTrackDescription} maxLength={250} />
-        <SecondaryButton label={isEditing !== null ? 'Save' : 'Add'} onClick={addTrack} />
-      </div>
-      {tracks?.length > 0 ? (
-        <div className="w-full flex flex-wrap gap-4">
-          {tracks.map((track: HackathonTrack, idx: number) => (
-            <div key={idx} className="bg-gray-200 rounded-lg px-4 py-4 flex flex-col w-full">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className="font-bold">{track.title}</h3>
-                  <p className="text-gray-600">{track.description}</p>
-                </div>
-                <div className="flex gap-2">
-                  <PencilSimple className="cursor-pointer text-blue-500" size={24} onClick={() => editTrack(idx)} />
-                  <TrashSimple className="cursor-pointer text-red-500" size={24} onClick={() => deleteTrack(idx)} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div>Minimum 1 Track is required.</div>
-      )}
-    </div>
-  );
-};
-
-const Prizes = ({ prizes, setPrizes, tracks }: any) => {
-  const [prizeName, setPrizeName] = useState('');
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
-  const [trackID, setTrackID] = useState<string>('');
-  const [isEditing, setIsEditing] = useState<number | null>(null);
-
-  const addPrize = () => {
-    if (!prizeName.trim() || !amount.trim()) return;
-
-    if (isEditing !== null) {
-      setPrizes((prev: HackathonPrize[]) =>
-        prev.map((prize, idx) =>
-          idx === isEditing ? { ...prize, title: prizeName, amount: Number(amount), description, trackID } : prize
-        )
-      );
-      setIsEditing(null);
-    } else {
-      setPrizes((prev: HackathonPrize[]) => [
-        ...prev,
-        { title: prizeName, amount: Number(amount), description, trackID },
-      ]);
-    }
-
-    setPrizeName('');
-    setAmount('');
-    setDescription('');
-    setTrackID('');
-  };
-
-  const editPrize = (index: number) => {
-    const prize = prizes[index];
-    setPrizeName(prize.title);
-    setAmount(prize.amount);
-    setDescription(prize.description);
-    setTrackID(prize.trackID || null);
-    setIsEditing(index);
-  };
-
-  const deletePrize = (index: number) => {
-    setPrizes((prev: HackathonPrize[]) => prev.filter((_, i) => i !== index));
-  };
-
-  return (
-    <div className="w-full flex flex-col gap-6">
-      <div className="flex flex-col gap-4">
-        <Input label="Prize Title" val={prizeName} setVal={setPrizeName} maxLength={50} />
-        <TextArea label="Description" val={description} setVal={setDescription} maxLength={250} />
-        <Input label="Amount" val={amount} setVal={setAmount} type="number" maxLength={-1} />
-        {/* <div>
-          <div className="text-xs ml-1 font-medium uppercase text-gray-500">Select Track (Optional)</div>
-
-          <select
-            onChange={el => setTrackID(el.target.value)}
-            value={trackID}
-            className="w-full max-lg:w-full h-11 border-[1px] border-primary_btn  dark:border-dark_primary_btn dark:text-white bg-primary_comp dark:bg-dark_primary_comp focus:outline-nonetext-sm rounded-lg block p-2"
-          >
-            {tracks?.map((c: HackathonTrack, i: number) => {
-              return (
-                <option className="bg-primary_comp_hover" key={i} value={c.id}>
-                  {c.title}
-                </option>
-              );
-            })}
-          </select>
-        </div> */}
-        <SecondaryButton label={isEditing !== null ? 'Save' : 'Add'} onClick={addPrize} />
-      </div>
-
-      {prizes.length > 0 && (
-        <div className="w-full flex flex-wrap gap-4">
-          {prizes.map((prize: HackathonPrize, idx: number) => (
-            <div key={idx} className="bg-gray-200 rounded-lg px-4 py-4 flex flex-col w-full">
-              <div className="flex justify-between items-center">
-                <div>
-                  <h3 className="font-bold">{prize.title}</h3>
-                  <p className="text-gray-600">{prize.description}</p>
-                  <p className="text-gray-600">${prize.amount}</p>
-                  {prize.trackID && (
-                    <p className="text-sm text-gray-500">
-                      Track: {tracks.find((track: HackathonTrack) => track.id === prize.trackID)?.title}
-                    </p>
-                  )}
-                </div>
-                <div className="flex gap-2">
-                  <PencilSimple className="cursor-pointer text-blue-500" size={24} onClick={() => editPrize(idx)} />
-                  <TrashSimple className="cursor-pointer text-red-500" size={24} onClick={() => deletePrize(idx)} />
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-const Rounds = ({ rounds, setRounds, teamFormationEndTime }: any) => {
-  const [startTime, setStartTime] = useState(rounds?.length == 0 ? getInputFieldFormatTime(teamFormationEndTime) : '');
-  const [endTime, setEndTime] = useState('');
-  const [judgingStartTime, setJudgingStartTime] = useState('');
-  const [judgingEndTime, setJudgingEndTime] = useState('');
-  const [metrics, setMetrics] = useState<HackathonRoundScoreMetric[]>([]);
-  const [isEditing, setIsEditing] = useState<number | null>(null);
-
-  const addRound = () => {
-    // Check if there are existing rounds and set the start time for the new round
-    const lastRoundEndTime = rounds.length > 0 ? rounds[rounds.length - 1].endTime : null;
-    const newRoundStartTime = lastRoundEndTime ? new Date(lastRoundEndTime) : new Date(startTime);
-
-    if (startTime == '' || endTime == '' || judgingStartTime == '' || judgingEndTime == '') {
-      Toaster.error('Invalid Round Timings');
-      return;
-    }
-
-    if (metrics.some(m => m.title == '')) {
-      Toaster.error('Metric title cannot be empty');
-      return;
-    }
-
-    const newRound: HackathonRound = {
-      id: '',
-      hackathonID: '',
-      index: rounds.length,
-      startTime: newRoundStartTime,
-      endTime: new Date(endTime),
-      judgingStartTime: new Date(judgingStartTime),
-      judgingEndTime: new Date(judgingEndTime),
-      metrics,
-    };
-
-    if (isEditing !== null) {
-      setRounds((prev: HackathonRound[]) => prev.map((round, idx) => (idx === isEditing ? newRound : round)));
-      setIsEditing(null);
-    } else {
-      setRounds((prev: HackathonRound[]) => [...prev, newRound]);
-    }
-
-    resetForm(getInputFieldFormatTime(new Date(endTime)));
-  };
-
-  const resetForm = (newStartTime?: string) => {
-    setStartTime(newStartTime ? newStartTime : '');
-    setEndTime('');
-    setJudgingStartTime('');
-    setJudgingEndTime('');
-    setMetrics([]);
-  };
-
-  const editRound = (index: number) => {
-    const round = rounds[index];
-    setStartTime(round.startTime.toISOString().split('T')[0]);
-    setEndTime(round.endTime.toISOString().split('T')[0]);
-    setJudgingStartTime(round.judgingStartTime.toISOString().split('T')[0]);
-    setJudgingEndTime(round.judgingEndTime.toISOString().split('T')[0]);
-    setMetrics(round.metrics);
-    setIsEditing(index);
-  };
-
-  const deleteRound = (index: number) => {
-    setRounds((prev: HackathonRound[]) => prev.filter((_, i) => i !== index));
-  };
-
-  const addMetric = () => {
-    setMetrics((prev: HackathonRoundScoreMetric[]) => [
-      ...prev,
-      { hackathonRoundID: '', title: '', type: '', options: [] },
-    ]);
-  };
-
-  const updateMetric = (index: number, key: string, value: any) => {
-    setMetrics((prev: HackathonRoundScoreMetric[]) =>
-      prev.map((metric, idx) => (idx === index ? { ...metric, [key]: value } : metric))
-    );
-  };
-
-  const deleteMetric = (index: number) => {
-    setMetrics((prev: HackathonRoundScoreMetric[]) => prev.filter((_, i) => i !== index));
-  };
-
-  return (
-    <div className="w-full flex flex-col gap-6">
-      <div className="flex flex-col gap-4">
-        <div>
-          <div className="text-xs ml-1 font-medium uppercase text-gray-500">
-            Start Time (same as team formation end time)
-          </div>
-          <div className="w-full bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2">
-            {startTime.replace('T', ' ')}
-          </div>
-        </div>
-        <Time label="End Time" val={endTime} setVal={setEndTime} includeDate={true} />
-        <Time label="Judging Start Time" val={judgingStartTime} setVal={setJudgingStartTime} includeDate={true} />
-        <Time label="Judging End Time" val={judgingEndTime} setVal={setJudgingEndTime} includeDate={true} />
-
-        <div className="w-full flex flex-col gap-4">
-          <h4 className="font-bold">Metrics</h4>
-          {metrics.map((metric, idx) => (
-            <div key={idx} className="flex flex-col gap-2">
-              <Input
-                label="Metric Title"
-                val={metric.title}
-                setVal={val => updateMetric(idx, 'title', val)}
-                maxLength={50}
-              />
-              <TextArea
-                label="Metric Description"
-                val={metric.description || ''}
-                setVal={val => updateMetric(idx, 'description', val)}
-                maxLength={250}
-              />
-              <Select
-                label="Metric Type"
-                options={['text', 'number', 'select', 'boolean']}
-                val={metric.type}
-                setVal={(val: any) => updateMetric(idx, 'type', val)}
-              />
-              {metric.type === 'select' && (
-                <TextArea
-                  label="Options (comma separated)"
-                  val={metric.options?.join(', ') || ''}
-                  setVal={val =>
-                    updateMetric(
-                      idx,
-                      'options',
-                      (val as string).split(',').map(opt => opt.trim())
-                    )
-                  }
-                  maxLength={250}
-                />
-              )}
-              <TrashSimple className="cursor-pointer text-red-500" size={24} onClick={() => deleteMetric(idx)} />
-            </div>
-          ))}
-          <SecondaryButton label="Add Metric" onClick={addMetric} />
-        </div>
-
-        <SecondaryButton label={isEditing !== null ? 'Save' : 'Add'} onClick={addRound} />
-      </div>
-
-      {rounds.length > 0 && (
-        <div className="w-full flex flex-wrap gap-4">
-          {rounds.map((round: HackathonRound, idx: number) => (
-            <div key={idx} className="bg-gray-200 rounded-lg px-4 py-4 flex flex-col w-full">
-              <div className="flex justify-between items-center">
-                <div>
-                  <p className="text-sm text-gray-500">Start: {moment(round.startTime).format('YYYY-MM-DD HH:mm')}</p>
-                  <p className="text-sm text-gray-500">End: {moment(round.endTime).format('YYYY-MM-DD HH:mm')}</p>
-                  <p className="text-sm text-gray-500">
-                    Judging: {moment(round.judgingStartTime).format('YYYY-MM-DD HH:mm')} -{' '}
-                    {moment(round.judgingEndTime).format('YYYY-MM-DD HH:mm')}
-                  </p>
-                </div>
-                <div className="flex gap-2">
-                  {/* <PencilSimple className="cursor-pointer text-blue-500" size={24} onClick={() => editRound(idx)} /> */}
-                  <TrashSimple className="cursor-pointer text-red-500" size={24} onClick={() => deleteRound(idx)} />
-                </div>
-              </div>
-              <div className="mt-4">
-                <h4 className="font-bold">Metrics:</h4>
-                {round.metrics.map((metric: HackathonRoundScoreMetric, idx: number) => (
-                  <div key={idx} className="text-sm">
-                    <p className="font-bold">{metric.title}</p>
-                    <p>{metric.description}</p>
-                    <p className="text-gray-500">Type: {metric.type}</p>
-                    {metric.type === 'select' && <p className="text-gray-500">Options: {metric.options?.join(', ')}</p>}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-const Teams = ({
-  minTeamSize,
-  setMinTeamSize,
-  maxTeamSize,
-  setMaxTeamSize,
-  teamFormationStartTime,
-  setTeamFormationStartTime,
-  teamFormationEndTime,
-  setTeamFormationEndTime,
-}: any) => {
-  return (
-    <div className="w-full flex flex-col gap-2">
-      <div className="w-full">
-        <div className="text-xs ml-1 font-medium uppercase text-gray-500">Min Team Size*</div>
-        <input
-          value={minTeamSize}
-          onChange={el => setMinTeamSize(Number(el.target.value))}
-          type="number"
-          className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
-        />
-      </div>
-      <div className="w-full">
-        <div className="text-xs ml-1 font-medium uppercase text-gray-500">Min Team Size*</div>
-        <input
-          value={maxTeamSize}
-          onChange={el => setMaxTeamSize(Number(el.target.value))}
-          type="number"
-          className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
-        />
-      </div>
-      <Time
-        label="Team Formation Start Time"
-        val={teamFormationStartTime}
-        setVal={setTeamFormationStartTime}
-        includeDate={true}
-      />
-      <Time
-        label="Team Formation End Time"
-        val={teamFormationEndTime}
-        setVal={setTeamFormationEndTime}
-        includeDate={true}
-      />
-    </div>
-  );
-};
-
-const Sponsors = ({ sponsors, setSponsors }: any) => {
-  const [sponsorName, setSponsorName] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [link, setLink] = useState('');
-  const [isEditing, setIsEditing] = useState<number | null>(null);
-
-  const addSponsor = () => {
-    if (!sponsorName.trim() || !title.trim() || !description.trim() || !link.trim()) return;
-
-    const newSponsor = {
-      name: sponsorName,
-      title,
-      description,
-      link,
-    };
-
-    if (isEditing !== null) {
-      setSponsors((prev: HackathonSponsor[]) => prev.map((sponsor, idx) => (idx === isEditing ? newSponsor : sponsor)));
-      setIsEditing(null);
-    } else {
-      setSponsors((prev: HackathonSponsor[]) => [...prev, newSponsor]);
-    }
-
-    resetFields();
-  };
-
-  const editSponsor = (index: number) => {
-    const sponsor = sponsors[index];
-    setSponsorName(sponsor.name);
-    setTitle(sponsor.title);
-    setDescription(sponsor.description);
-    setLink(sponsor.link);
-    setIsEditing(index);
-  };
-
-  const resetFields = () => {
-    setSponsorName('');
-    setTitle('');
-    setDescription('');
-    setLink('');
-  };
-
-  return (
-    <div className="w-full flex flex-col gap-6">
-      <div className="flex flex-col items-center gap-4">
-        <Input label="Sponsor Name" val={sponsorName} setVal={setSponsorName} maxLength={50} />
-        <Input label="Title" val={title} setVal={setTitle} maxLength={50} />
-        <TextArea label="Description" val={description} setVal={setDescription} maxLength={250} />
-        <Input label="Link" val={link} setVal={setLink} maxLength={100} />
-        <SecondaryButton label={isEditing !== null ? 'Update' : 'Add'} onClick={addSponsor} />
-      </div>
-      {sponsors.length > 0 && (
-        <div className="w-full flex flex-wrap gap-4">
-          {sponsors.map((sponsor: HackathonSponsor, idx: number) => (
-            <div key={idx} className="bg-gray-200 rounded-lg px-4 py-2 flex items-center justify-between">
-              <div className="flex flex-col">
-                <span className="font-bold">{sponsor.name}</span>
-                <span>{sponsor.title}</span>
-                <span>{sponsor.description}</span>
-                <a href={sponsor.link} target="_blank" rel="noopener noreferrer" className="text-blue-500">
-                  {sponsor.link}
-                </a>
-              </div>
-              <div className="flex gap-2">
-                <PencilSimple className="cursor-pointer text-yellow-500" size={24} onClick={() => editSponsor(idx)} />
-                <TrashSimple
-                  className="cursor-pointer text-red-500"
-                  size={24}
-                  onClick={() => setSponsors((prev: HackathonSponsor[]) => prev.filter((_, i) => i !== idx))}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-const FAQs = ({ faqs, setFaqs }: any) => {
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
-
-  const addFAQ = () => {
-    if (!question.trim() || !answer.trim()) return;
-    setFaqs((prev: HackathonFAQ[]) => [...prev, { question, answer }]);
-    setQuestion('');
-    setAnswer('');
-  };
-
-  return (
-    <div className="w-full flex flex-col gap-6">
-      <div className="flex flex-col items-center gap-4">
-        <Input label="Question" val={question} setVal={setQuestion} maxLength={50} />
-        <TextArea label="Answer" val={answer} setVal={setAnswer} maxLength={250} />
-        <SecondaryButton label="Add" onClick={addFAQ} />
-      </div>
-      {faqs.length > 0 && (
-        <div className="w-full flex flex-wrap gap-4">
-          {faqs.map((faq: HackathonFAQ, idx: number) => (
-            <div key={idx} className="bg-gray-200 rounded-lg px-4 py-2 flex items-center justify-between">
-              <span>{faq.question}</span>
-              <span>{faq.answer}</span>
-              <TrashSimple
-                className="cursor-pointer text-red-500"
-                size={24}
-                onClick={() => setFaqs((prev: HackathonFAQ[]) => prev.filter((_, i) => i !== idx))}
-              />
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
