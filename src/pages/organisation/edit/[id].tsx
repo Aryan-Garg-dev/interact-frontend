@@ -964,14 +964,14 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
   };
 
   const handleStartTimeChange = async (startTime: Date) => {
-    // Convert startTime to ISO 8601 format (i.e., '0001-01-01T00:00:00Z')
-    const isoStartTime = startTime.toISOString(); // No need for new Date if it's already a Date object
+    const date = new Date(startTime);
+    const isoStartTime = date.toISOString();
     await editHackathonField('startTime', isoStartTime);
   };
 
-  const handleEndTimeChange = async (endTime: Date) => {
-    // Convert endTime to ISO 8601 format (i.e., '0001-01-01T00:00:00Z')
-    const isoEndTime = endTime.toISOString(); // Same here, we expect endTime to be a Date object
+  const handleEndTimeChange = async (endTime: any) => {
+    const date = new Date(endTime);
+    const isoEndTime = date.toISOString();
     await editHackathonField('endTime', isoEndTime);
   };
 
