@@ -47,7 +47,7 @@ const Projects = () => {
             </>
           ) : (
             <PrimeWrapper>
-              <ExploreProjects />
+              <ExploreProjects setClickedProject={setClickedProject} />
             </PrimeWrapper>
           )}
         </div>
