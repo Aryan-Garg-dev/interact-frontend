@@ -2,22 +2,23 @@ import React, { useState } from 'react';
 import { Plus, Pencil, Trash } from 'lucide-react';
 
 interface FAQ {
+  id: string;
   question: string;
   answer: string;
 }
 
 interface FAQManagerProps {
   faqs: FAQ[];
-  addFAQ: (faq: FAQ) => void;
-  editFAQ: (index: number, faq: FAQ) => void;
-  deleteFAQ: (index: number) => void;
+  addFAQ: (faq: Omit<FAQ, 'id'>) => void;
+  editFAQ: (id: string, faq: Omit<FAQ, 'id'>) => void;
+  deleteFAQ: (id: string) => void;
 }
 
 const FAQs: React.FC<FAQManagerProps> = ({ faqs, addFAQ, editFAQ, deleteFAQ }) => {
   const [showModal, setShowModal] = useState(false);
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
-  const [isEditing, setIsEditing] = useState<number | null>(null);
+  const [isEditing, setIsEditing] = useState<string | null>(null);
 
   const resetForm = () => {
     setQuestion('');
@@ -27,24 +28,26 @@ const FAQs: React.FC<FAQManagerProps> = ({ faqs, addFAQ, editFAQ, deleteFAQ }) =
   const handleAddOrEditFAQ = () => {
     if (!question.trim() || !answer.trim()) return;
 
-    const faq: FAQ = { question, answer };
+    const faqData = { question, answer };
 
     if (isEditing !== null) {
-      editFAQ(isEditing, faq);
+      editFAQ(isEditing, faqData);
       setIsEditing(null);
     } else {
-      addFAQ(faq);
+      addFAQ(faqData);
     }
 
     resetForm();
     setShowModal(false);
   };
 
-  const handleEditFAQ = (index: number) => {
-    const faq = faqs[index];
+  const handleEditFAQ = (id: string) => {
+    const faq = faqs.find(f => f.id === id);
+    if (!faq) return;
+
     setQuestion(faq.question);
     setAnswer(faq.answer);
-    setIsEditing(index);
+    setIsEditing(id);
     setShowModal(true);
   };
 
@@ -118,18 +121,18 @@ const FAQs: React.FC<FAQManagerProps> = ({ faqs, addFAQ, editFAQ, deleteFAQ }) =
 
       {faqs.length > 0 ? (
         <div className="w-full flex flex-col gap-4">
-          {faqs.map((faq, idx) => (
-            <div key={idx} className="bg-gray-900 border border-gray-800 rounded-xl px-6 py-4 w-full">
+          {faqs.map(faq => (
+            <div key={faq.id} className="bg-gray-900 border border-gray-800 rounded-xl px-6 py-4 w-full">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <h3 className="font-bold text-white text-lg">{faq.question}</h3>
                   <p className="text-gray-400 mt-2 whitespace-pre-wrap">{faq.answer}</p>
                 </div>
                 <div className="flex gap-3 ml-4">
-                  <button onClick={() => handleEditFAQ(idx)}>
+                  <button onClick={() => handleEditFAQ(faq.id)}>
                     <Pencil className="text-blue-400 hover:text-blue-300 transition-colors" size={20} />
                   </button>
-                  <button onClick={() => deleteFAQ(idx)}>
+                  <button onClick={() => deleteFAQ(faq.id)}>
                     <Trash className="text-red-400 hover:text-red-300 transition-colors" size={20} />
                   </button>
                 </div>

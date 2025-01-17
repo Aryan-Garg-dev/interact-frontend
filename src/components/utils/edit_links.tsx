@@ -62,39 +62,41 @@ const Links = ({ links, showTitle = false, setLinks, maxLinks = 5, title = 'Link
       <div className="w-full flex flex-col gap-2">
         {links.length > 0 && (
           <div className="flex flex-col gap-4">
-            {links.map((link: string, index: number) => (
-              <div key={index} className="w-full h-8 flex justify-between gap-2 items-center font-Inconsolata">
-                <div
-                  className={`flex items-center gap-2 ${showURL === index ? 'hidden' : ''}`}
-                  onMouseEnter={() => setShowURL(index)}
-                >
-                  {getIcon(getDomainName(link))}
-                  <div className="capitalize">{getDomainName(link)}</div>
-                </div>
+            {Array.isArray(links) &&
+              links.length > 0 &&
+              links.map((link: string, index: number) => (
+                <div key={index} className="w-full h-8 flex justify-between gap-2 items-center font-Inconsolata">
+                  <div
+                    className={`flex items-center gap-2 ${showURL === index ? 'hidden' : ''}`}
+                    onMouseEnter={() => setShowURL(index)}
+                  >
+                    {getIcon(getDomainName(link))}
+                    <div className="capitalize">{getDomainName(link)}</div>
+                  </div>
 
-                <Link
-                  className={`text-xs border-[1px] border-black dark:border-dark_primary_btn border-dashed rounded-lg px-2 py-1 ${
-                    showURL !== index ? 'hidden' : ''
-                  }`}
-                  href={link}
-                  target="_blank"
-                  onMouseLeave={() => setShowURL(-1)}
-                >
-                  {link.length < 40 ? link : link.substring(0, 40) + '...'}
-                </Link>
+                  <Link
+                    className={`text-xs border-[1px] border-black dark:border-dark_primary_btn border-dashed rounded-lg px-2 py-1 ${
+                      showURL !== index ? 'hidden' : ''
+                    }`}
+                    href={link}
+                    target="_blank"
+                    onMouseLeave={() => setShowURL(-1)}
+                  >
+                    {link.length < 40 ? link : link.substring(0, 40) + '...'}
+                  </Link>
 
-                <div
-                  className="mr-5 cursor-pointer"
-                  onClick={() => {
-                    const newLinks = [...links];
-                    newLinks.splice(index, 1);
-                    setLinks(newLinks);
-                  }}
-                >
-                  X
+                  <div
+                    className="mr-5 cursor-pointer"
+                    onClick={() => {
+                      const newLinks = [...links];
+                      newLinks.splice(index, 1);
+                      setLinks(newLinks);
+                    }}
+                  >
+                    X
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         )}
 

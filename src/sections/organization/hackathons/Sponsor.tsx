@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Plus, Pencil, Trash, Link } from 'lucide-react';
 
-interface Sponsor {
+interface HackathonSponsor {
+  id: string;
   name: string;
   title: string;
   description: string;
@@ -9,10 +10,10 @@ interface Sponsor {
 }
 
 interface SponsorManagerProps {
-  sponsors: Sponsor[];
-  addSponsor: (sponsor: Sponsor) => void;
-  editSponsor: (index: number, sponsor: Sponsor) => void;
-  deleteSponsor: (index: number) => void;
+  sponsors: HackathonSponsor[];
+  addSponsor: (data: Omit<HackathonSponsor, 'id'>) => void;
+  editSponsor: (sponsorId: string, data: Omit<HackathonSponsor, 'id'>) => void;
+  deleteSponsor: (sponsorId: string) => void;
 }
 
 const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSponsor, deleteSponsor }) => {
@@ -20,9 +21,11 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [link, setLink] = useState('');
-  const [isEditing, setIsEditing] = useState<number | null>(null);
+  const [isEditing, setIsEditing] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [linkError, setLinkError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingSponsors, setDeletingSponsors] = useState<string[]>([]);
 
   const validateLink = (url: string) => {
     try {
@@ -33,21 +36,30 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
     }
   };
 
-  const resetFields = () => {
+  const getDisplayUrl = useCallback((urlString: string) => {
+    try {
+      return new URL(urlString).hostname;
+    } catch (error) {
+      return urlString;
+    }
+  }, []);
+
+  const resetFields = useCallback(() => {
     setSponsorName('');
     setTitle('');
     setDescription('');
     setLink('');
     setLinkError('');
     setIsEditing(null);
-  };
+    setIsSubmitting(false);
+  }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setShowModal(false);
     resetFields();
-  };
+  }, [resetFields]);
 
-  const handleAddOrEditSponsor = () => {
+  const handleAddOrEditSponsor = async () => {
     if (!sponsorName.trim() || !title.trim() || !description.trim() || !link.trim()) return;
 
     if (!validateLink(link)) {
@@ -55,31 +67,57 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
       return;
     }
 
-    const newSponsor: Sponsor = {
-      name: sponsorName,
-      title,
-      description,
-      link,
-    };
+    setIsSubmitting(true);
 
-    if (isEditing !== null) {
-      editSponsor(isEditing, newSponsor);
-    } else {
-      addSponsor(newSponsor);
+    try {
+      const sponsorData = {
+        name: sponsorName.trim(),
+        title: title.trim(),
+        description: description.trim(),
+        link: link.trim(),
+      };
+
+      if (isEditing !== null) {
+        await editSponsor(isEditing, sponsorData);
+      } else {
+        await addSponsor(sponsorData);
+      }
+
+      handleClose();
+    } catch (error) {
+      console.error('Error saving sponsor:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    handleClose();
   };
 
-  const handleEditSponsor = (index: number) => {
-    const sponsor = sponsors[index];
+  const handleEditClick = useCallback((sponsor: HackathonSponsor) => {
     setSponsorName(sponsor.name);
     setTitle(sponsor.title);
     setDescription(sponsor.description);
     setLink(sponsor.link);
-    setIsEditing(index);
+    setIsEditing(sponsor.id);
     setShowModal(true);
+  }, []);
+
+  const handleDelete = async (sponsorId: string) => {
+    if (window.confirm('Are you sure you want to delete this sponsor?')) {
+      try {
+        // Add the sponsor ID to the deleting list immediately
+        setDeletingSponsors(prev => [...prev, sponsorId]);
+
+        // Perform the delete operation
+        await deleteSponsor(sponsorId);
+      } catch (error) {
+        console.error('Error deleting sponsor:', error);
+        // Remove the sponsor ID from deleting list if the operation failed
+        setDeletingSponsors(prev => prev.filter(id => id !== sponsorId));
+      }
+    }
   };
+
+  // Filter out sponsors that are being deleted
+  const visibleSponsors = sponsors.filter(sponsor => !deletingSponsors.includes(sponsor.id));
 
   return (
     <div className="w-full flex flex-col gap-6 relative">
@@ -93,10 +131,14 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
 
       {showModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50">
-          <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow-2xl w-full max-w-md mx-4 transform transition-all duration-200">
+          <div className="bg-gray-900 border border-gray-800 p-6 rounded-xl shadow-2xl w-full max-w-md mx-4">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-xl font-bold text-white">{isEditing !== null ? 'Edit Sponsor' : 'Add Sponsor'}</h2>
-              <button onClick={handleClose} className="text-gray-400 hover:text-white transition-colors">
+              <button
+                onClick={handleClose}
+                className="text-gray-400 hover:text-white transition-colors"
+                disabled={isSubmitting}
+              >
                 &#x2715;
               </button>
             </div>
@@ -108,6 +150,7 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
                   value={sponsorName}
                   onChange={e => setSponsorName(e.target.value)}
                   maxLength={50}
+                  disabled={isSubmitting}
                   className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   placeholder="Enter sponsor name"
                 />
@@ -119,6 +162,7 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
                   value={title}
                   onChange={e => setTitle(e.target.value)}
                   maxLength={50}
+                  disabled={isSubmitting}
                   className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                   placeholder="Enter sponsor title"
                 />
@@ -131,6 +175,7 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
                   onChange={e => setDescription(e.target.value)}
                   maxLength={250}
                   rows={4}
+                  disabled={isSubmitting}
                   className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none"
                   placeholder="Enter sponsor description"
                 />
@@ -145,6 +190,7 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
                     setLinkError('');
                   }}
                   maxLength={100}
+                  disabled={isSubmitting}
                   className={`w-full px-4 py-2 rounded-lg bg-gray-800 border ${
                     linkError ? 'border-red-500' : 'border-gray-700'
                   } text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200`}
@@ -156,19 +202,22 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
               <button
                 className="w-full mt-2 bg-blue-500 text-white py-2.5 px-4 rounded-lg hover:bg-blue-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleAddOrEditSponsor}
-                disabled={!sponsorName.trim() || !title.trim() || !description.trim() || !link.trim()}
+                disabled={isSubmitting || !sponsorName.trim() || !title.trim() || !description.trim() || !link.trim()}
               >
-                {isEditing !== null ? 'Save Changes' : 'Add Sponsor'}
+                {isSubmitting ? 'Saving...' : isEditing !== null ? 'Save Changes' : 'Add Sponsor'}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {sponsors.length > 0 && (
+      {visibleSponsors?.length > 0 && (
         <div className="w-full flex flex-wrap gap-4">
-          {sponsors.map((sponsor, idx) => (
-            <div key={idx} className="bg-gray-900 border border-gray-800 rounded-xl px-6 py-4 flex flex-col w-full">
+          {visibleSponsors?.map(sponsor => (
+            <div
+              key={sponsor.id}
+              className="bg-gray-900 border border-gray-800 rounded-xl px-6 py-4 flex flex-col w-full"
+            >
               <div className="flex justify-between items-start">
                 <div className="space-y-2">
                   <h3 className="font-bold text-white text-lg">{sponsor.name}</h3>
@@ -178,17 +227,17 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
                     href={sponsor.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-2"
+                    className="flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors"
                   >
                     <Link size={16} />
-                    {new URL(sponsor.link).hostname}
+                    {getDisplayUrl(sponsor.link)}
                   </a>
                 </div>
                 <div className="flex gap-3 ml-4">
-                  <button onClick={() => handleEditSponsor(idx)}>
+                  <button onClick={() => handleEditClick(sponsor)}>
                     <Pencil className="text-blue-400 hover:text-blue-300 transition-colors" size={20} />
                   </button>
-                  <button onClick={() => deleteSponsor(idx)}>
+                  <button onClick={() => handleDelete(sponsor.id)}>
                     <Trash className="text-red-400 hover:text-red-300 transition-colors" size={20} />
                   </button>
                 </div>

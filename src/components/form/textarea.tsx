@@ -1,31 +1,40 @@
 import React from 'react';
 
-interface Props {
+interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
-  val: string;
-  setVal: React.Dispatch<React.SetStateAction<string>>;
-  maxLength: number;
-  placeholder?: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   required?: boolean;
-  styles?: React.CSSProperties;
+  maxLength?: number;
+  showCount?: boolean;
 }
 
-const TextArea = ({ label, val, setVal, maxLength, placeholder, required = false, styles }: Props) => {
+export const TextArea: React.FC<TextAreaProps> = ({
+  label,
+  value = '',
+  onChange,
+  required = false,
+  maxLength,
+  showCount = true,
+  className = '',
+  ...props
+}) => {
   return (
-    <div className="w-full">
+    <div className="space-y-1">
       {label && (
         <div className="text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300">
           {label}
-          {required && '*'} ({val.trim().length}/{maxLength})
+          {required && ' *'}
+          {showCount && maxLength && ` (${value.length}/${maxLength})`}
         </div>
       )}
       <textarea
-        value={val}
-        onChange={el => setVal(el.target.value)}
+        value={value}
+        onChange={onChange}
+        required={required}
         maxLength={maxLength}
-        className="w-full min-h-[80px] max-h-80 dark:text-white bg-transparent focus:outline-none border-[1px] border-gray-400 dark:border-dark_primary_btn rounded-lg p-2"
-        placeholder={placeholder}
-        style={styles}
+        className={`w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${className}`}
+        {...props}
       />
     </div>
   );

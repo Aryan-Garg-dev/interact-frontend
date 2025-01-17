@@ -2,41 +2,48 @@ import React, { useState } from 'react';
 import { Plus, Pencil, Trash } from 'lucide-react';
 
 interface HackathonTrack {
+  id: string;
   title: string;
   description: string;
 }
 
 interface TrackManagerProps {
   tracks: HackathonTrack[];
-  addTrack: (title: string, description: string) => void;
-  editTrack: (index: number, title: string, description: string) => void;
-  deleteTrack: (index: number) => void;
+  addTrack: (data: { title: string; description: string }) => void;
+  editTrack: (trackId: string, data: { title: string; description: string }) => void;
+  deleteTrack: (trackId: string) => void;
 }
 
 const Tracks: React.FC<TrackManagerProps> = ({ tracks, addTrack, editTrack, deleteTrack }) => {
   const [trackName, setTrackName] = useState('');
   const [trackDescription, setTrackDescription] = useState('');
-  const [isEditing, setIsEditing] = useState<number | null>(null);
+  const [isEditing, setIsEditing] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
 
   const handleAddOrEditTrack = () => {
     if (!trackName.trim() || !trackDescription.trim()) return;
+
+    const trackData = {
+      title: trackName,
+      description: trackDescription,
+    };
+
     if (isEditing !== null) {
-      editTrack(isEditing, trackName, trackDescription);
+      editTrack(isEditing, trackData);
       setIsEditing(null);
     } else {
-      addTrack(trackName, trackDescription);
+      addTrack(trackData);
     }
+
     setTrackName('');
     setTrackDescription('');
     setShowModal(false);
   };
 
-  const handleEditTrack = (index: number) => {
-    const track = tracks[index];
+  const handleEditTrack = (track: HackathonTrack) => {
     setTrackName(track.title);
     setTrackDescription(track.description);
-    setIsEditing(index);
+    setIsEditing(track.id);
     setShowModal(true);
   };
 
@@ -98,18 +105,21 @@ const Tracks: React.FC<TrackManagerProps> = ({ tracks, addTrack, editTrack, dele
 
       {tracks.length > 0 ? (
         <div className="w-full flex flex-wrap gap-4">
-          {tracks.map((track: HackathonTrack, idx: number) => (
-            <div key={idx} className="bg-gray-900 border border-gray-800 rounded-xl px-6 py-4 flex flex-col w-full">
+          {tracks.map((track: HackathonTrack) => (
+            <div
+              key={track.id}
+              className="bg-gray-900 border border-gray-800 rounded-xl px-6 py-4 flex flex-col w-full"
+            >
               <div className="flex justify-between items-start">
                 <div>
                   <h3 className="font-bold text-white text-lg">{track.title}</h3>
                   <p className="text-gray-400 mt-1">{track.description}</p>
                 </div>
                 <div className="flex gap-3 ml-4">
-                  <button onClick={() => handleEditTrack(idx)}>
+                  <button onClick={() => handleEditTrack(track)}>
                     <Pencil className="text-blue-400 hover:text-blue-300 transition-colors" size={20} />
                   </button>
-                  <button onClick={() => deleteTrack(idx)}>
+                  <button onClick={() => deleteTrack(track.id)}>
                     <Trash className="text-red-400 hover:text-red-300 transition-colors" size={20} />
                   </button>
                 </div>
