@@ -1,25 +1,13 @@
 import React, { useState } from 'react';
 import { Plus, Pencil, Trash } from 'lucide-react';
-
-interface Prize {
-  id: string;
-  title: string;
-  amount: number;
-  description: string;
-  trackID?: string;
-}
-
-interface Track {
-  id: string;
-  title: string;
-}
+import { HackathonPrize, HackathonTrack } from '@/types';
 
 interface PrizeManagerProps {
-  prizes: Prize[];
-  addPrize: (prize: Omit<Prize, 'id'>) => void;
-  editPrize: (id: string, prize: Omit<Prize, 'id'>) => void;
+  prizes: HackathonPrize[];
+  addPrize: (prize: HackathonPrize) => void;
+  editPrize: (prize: HackathonPrize) => void;
   deletePrize: (id: string) => void;
-  tracks: Track[];
+  tracks: HackathonTrack[];
 }
 
 const Prizes: React.FC<PrizeManagerProps> = ({ prizes, addPrize, editPrize, deletePrize, tracks }) => {
@@ -40,7 +28,9 @@ const Prizes: React.FC<PrizeManagerProps> = ({ prizes, addPrize, editPrize, dele
   const handleAddOrEditPrize = () => {
     if (!title.trim() || !amount.trim()) return;
 
-    const prizeData = {
+    const prizeData: HackathonPrize = {
+      id: '',
+      hackathonID: '',
       title,
       description,
       amount: Number(amount),
@@ -48,7 +38,9 @@ const Prizes: React.FC<PrizeManagerProps> = ({ prizes, addPrize, editPrize, dele
     };
 
     if (isEditing) {
-      editPrize(isEditing, prizeData);
+      prizeData.id = isEditing;
+
+      editPrize(prizeData);
       setIsEditing(null);
     } else {
       addPrize(prizeData);
@@ -63,7 +55,7 @@ const Prizes: React.FC<PrizeManagerProps> = ({ prizes, addPrize, editPrize, dele
     if (!prize) return;
 
     setTitle(prize.title);
-    setDescription(prize.description);
+    setDescription(prize.description || '');
     setAmount(prize.amount.toString());
     setTrackID(prize.trackID || '');
     setIsEditing(id);

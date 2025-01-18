@@ -1,9 +1,8 @@
-import { ChangeEvent, KeyboardEvent, useState, useRef } from 'react';
-import TagSuggestions from './tag_suggestions';
+import { ChangeEvent, KeyboardEvent, useState } from 'react';
 
 interface Props {
   tags: string[];
-  setTags: React.Dispatch<React.SetStateAction<string[]>> | ((val: string[]) => void);
+  setTags: React.Dispatch<React.SetStateAction<string[]>> | ((tags: string[]) => void);
   maxTags?: number;
   maxLength?: number;
   suggestions?: boolean;
@@ -20,11 +19,9 @@ const Tags = ({
   maxTags = 5,
   maxLength = 20,
   onboardingDesign = false,
-  suggestions = false,
   borderStyle = 'solid',
   borderColor,
   lowerOnly = true,
-  draggable = true,
 }: Props) => {
   const [tagInput, setTagInput] = useState('');
 
@@ -58,32 +55,6 @@ const Tags = ({
     }
   };
 
-  const dragItem = useRef<number | null>(null);
-  const dragOverItem = useRef<number | null>(null);
-
-  const dragStart = (e: any, position: number) => {
-    if (e.currentTarget.classList) {
-      e.currentTarget.classList.add('dragged-tag');
-    }
-    dragItem.current = position;
-  };
-
-  const dragEnter = (e: any, position: number) => {
-    dragOverItem.current = position;
-  };
-  const drop = (e: any) => {
-    if (e.currentTarget.classList) {
-      e.currentTarget.classList.remove('dragged-tag');
-    }
-    const copyListItems = [...tags];
-    const dragItemContent = copyListItems[dragItem.current as number];
-    copyListItems.splice(dragItem.current as number, 1);
-    copyListItems.splice(dragOverItem.current as number, 0, dragItemContent);
-    dragItem.current = null;
-    dragOverItem.current = null;
-    setTags(copyListItems);
-  };
-
   const handleTagRemove = (tagToRemove: string) => {
     setTags(tags.filter(tag => tag !== tagToRemove));
   };
@@ -106,10 +77,6 @@ const Tags = ({
             }}
             key={tag}
             className="flex-center text-xs px-2 py-1 border-[1px] rounded-full cursor-default active:border-2 active:border-black"
-            onDragStart={e => dragStart(e, i)}
-            onDragEnter={e => dragEnter(e, i)}
-            onDragEnd={drop}
-            draggable={draggable}
           >
             {tag}
             <svg
@@ -124,48 +91,6 @@ const Tags = ({
           </div>
         ))}
 
-        {/* <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {provided => (
-              <div
-                className="w-full flex flex-wrap items-center gap-2 "
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {tags.map((item, index) => (
-                  <Draggable key={index} draggableId={index.toString()} index={index}>
-                    {(provided, snapshot) => (
-                      <div
-                        className="w-fit flex-center px-2 py-1 border-[1px] text-sm rounded-full cursor-default active:border-2 active:border-black"
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={{
-                          backgroundColor: snapshot.isDragging ? 'gray' : 'white',
-                          ...provided.draggableProps.style,
-                        }}
-                      >
-                        {item}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {tags.length < maxTags && (
-                  <input
-                    type="text"
-                    className="grow text-sm border-[1px] bg-transparent border-transparent rounded-md px-3 py-2 outline-none"
-                    maxLength={20}
-                    value={tagInput}
-                    onChange={handleTagInputChange}
-                    onKeyDown={handleTagInputKeyDown}
-                  />
-                )}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext> */}
-
         {tags.length < maxTags && (
           <input
             type="text"
@@ -177,9 +102,6 @@ const Tags = ({
           />
         )}
       </div>
-      {suggestions && (
-        <TagSuggestions match={tagInput} setMatch={setTagInput} tags={tags} setTags={setTags} maxTags={maxTags} />
-      )}
     </>
   );
 };

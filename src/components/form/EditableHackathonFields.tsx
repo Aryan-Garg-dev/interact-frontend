@@ -5,55 +5,45 @@ import { ORG_URL } from '@/config/routes';
 import deleteHandler from '@/handlers/delete_handler';
 import patchHandler from '@/handlers/patch_handler';
 import postHandler from '@/handlers/post_handler';
-import { Hackathon, HackathonPrize, HackathonSponsor, HackathonTrack, HackathonFAQ } from '@/types';
+import { Hackathon, HackathonSponsor, HackathonTrack, HackathonFAQ } from '@/types';
 import Toaster from '@/utils/toaster';
 import { FloppyDisk, Link, PencilSimple, Trash, Plus } from '@phosphor-icons/react';
 import { currentOrgSelector } from '@/slices/orgSlice';
-import { initialHackathon } from '@/types/initials';
+import { initialHackathonSponsor, initialHackathonTrack } from '@/types/initials';
 const boxWrapperClass = 'w-full px-4 py-2 bg-[#E6E7EB70] relative rounded-md';
 
 export function EditableTrackBox({
-  val,
   setVal,
   track,
-  index,
 }: {
-  val: Hackathon;
   track: HackathonTrack;
-  index: number;
   setVal: Dispatch<SetStateAction<Hackathon>>;
 }) {
   const [isEditable, setIsEditable] = useState(false);
   const [trackData, setTrackData] = useState(track);
   const [mutex, setMutex] = useState(false);
   const currentOrg = useSelector(currentOrgSelector);
-  const [hackathon, setHackathon] = useState<Hackathon>(initialHackathon);
+
   const handleEditTrack = async () => {
     if (mutex) return;
     setMutex(true);
     const toaster = Toaster.startLoad('Updating track...');
-    try {
-      const res = await patchHandler(`${ORG_URL}/${currentOrg.id}/hackathons/track/${track.id}`, trackData);
-      if (res.statusCode === 200) {
-        setVal(prev => ({
-          ...prev,
-          tracks: prev.tracks.map(t => (t.id === track.id ? res.data.track : t)),
-        }));
-        Toaster.stopLoad(toaster, 'Track updated!', 1);
-      } else {
-        Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
-      }
-    } catch (error) {
-      Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+
+    const res = await patchHandler(`${ORG_URL}/${currentOrg.id}/hackathons/track/${track.id}`, trackData);
+    if (res.statusCode === 200) {
+      setVal(prev => ({
+        ...prev,
+        tracks: prev.tracks.map(t => (t.id === track.id ? res.data.track : t)),
+      }));
+      Toaster.stopLoad(toaster, 'Track updated!', 1);
+    } else {
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
+
     setMutex(false);
     setIsEditable(false);
   };
-  function SelectAllInput() {
-    const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-      event.target.select();
-    };
-  }
+
   const handleDeleteTrack = async () => {
     if (mutex) return;
     setMutex(true);
@@ -151,16 +141,13 @@ export function EditableBox({
     setMutex(true);
     const toaster = Toaster.startLoad('Updating Details...');
 
-    try {
-      const res = await patchHandler(`${ORG_URL}/${currentOrg.id}/hackathons/`, { [field]: val[field] });
-      if (res.statusCode === 200) {
-        Toaster.stopLoad(toaster, 'Details Updated!', 1);
-      } else {
-        Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
-      }
-    } catch (error) {
-      Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    const res = await patchHandler(`${ORG_URL}/${currentOrg.id}/hackathons/`, { [field]: val[field] });
+    if (res.statusCode === 200) {
+      Toaster.stopLoad(toaster, 'Details Updated!', 1);
+    } else {
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
+
     setMutex(false);
     setIsEditable(false);
   };
@@ -199,14 +186,10 @@ export function EditableBox({
 }
 
 export function EditableSponsorBox({
-  val,
   setVal,
   sponsor,
-  index,
 }: {
-  val: Hackathon;
   sponsor: HackathonSponsor;
-  index: number;
   setVal: Dispatch<SetStateAction<Hackathon>>;
 }) {
   const [isEditable, setIsEditable] = useState(false);
@@ -219,20 +202,17 @@ export function EditableSponsorBox({
     setMutex(true);
     const toaster = Toaster.startLoad('Updating the Sponsor...');
 
-    try {
-      const res = await patchHandler(`${ORG_URL}/${currentOrg.id}/hackathons/sponsor/${sponsor.id}`, sponsorData);
-      if (res.statusCode === 200) {
-        setVal(prev => ({
-          ...prev,
-          sponsors: prev.sponsors.map(s => (s.id === sponsor.id ? res.data.sponsor : s)),
-        }));
-        Toaster.stopLoad(toaster, 'Sponsor Updated!', 1);
-      } else {
-        Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
-      }
-    } catch (error) {
-      Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    const res = await patchHandler(`${ORG_URL}/${currentOrg.id}/hackathons/sponsor/${sponsor.id}`, sponsorData);
+    if (res.statusCode === 200) {
+      setVal(prev => ({
+        ...prev,
+        sponsors: prev.sponsors.map(s => (s.id === sponsor.id ? res.data.sponsor : s)),
+      }));
+      Toaster.stopLoad(toaster, 'Sponsor Updated!', 1);
+    } else {
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
+
     setMutex(false);
     setIsEditable(false);
   };
@@ -330,17 +310,7 @@ export function EditableSponsorBox({
   );
 }
 
-export function EditableFAQBox({
-  val,
-  setVal,
-  faq,
-  index,
-}: {
-  val: Hackathon;
-  faq: HackathonFAQ;
-  index: number;
-  setVal: Dispatch<SetStateAction<Hackathon>>;
-}) {
+export function EditableFAQBox({ setVal, faq }: { faq: HackathonFAQ; setVal: Dispatch<SetStateAction<Hackathon>> }) {
   const [isEditable, setIsEditable] = useState(false);
   const [faqData, setFaqData] = useState(faq);
   const [mutex, setMutex] = useState(false);
@@ -351,20 +321,17 @@ export function EditableFAQBox({
     setMutex(true);
     const toaster = Toaster.startLoad('Updating the FAQ...');
 
-    try {
-      const res = await patchHandler(`${ORG_URL}/${currentOrg.id}/hackathons/faq/${faq.id}`, faqData);
-      if (res.statusCode === 200) {
-        setVal(prev => ({
-          ...prev,
-          faqs: prev.faqs.map(f => (f.id === faq.id ? res.data.faq : f)),
-        }));
-        Toaster.stopLoad(toaster, 'FAQ Updated!', 1);
-      } else {
-        Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
-      }
-    } catch (error) {
-      Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    const res = await patchHandler(`${ORG_URL}/${currentOrg.id}/hackathons/faq/${faq.id}`, faqData);
+    if (res.statusCode === 200) {
+      setVal(prev => ({
+        ...prev,
+        faqs: prev.faqs.map(f => (f.id === faq.id ? res.data.faq : f)),
+      }));
+      Toaster.stopLoad(toaster, 'FAQ Updated!', 1);
+    } else {
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
+
     setMutex(false);
     setIsEditable(false);
   };
@@ -445,7 +412,7 @@ export function EditableFAQBox({
     </div>
   );
 }
-//
+
 export function AddTrackBox({
   val,
   setVal,
@@ -453,7 +420,7 @@ export function AddTrackBox({
   val: Hackathon;
   setVal: React.Dispatch<React.SetStateAction<Hackathon>>;
 }) {
-  const [newTrack, setNewTrack] = useState<HackathonTrack>({ id: '', hackathonID: '', title: '', description: '' });
+  const [newTrack, setNewTrack] = useState<HackathonTrack>(initialHackathonTrack);
   const [mutex, setMutex] = useState(false);
   const currentOrg = useSelector(currentOrgSelector);
 
@@ -462,21 +429,18 @@ export function AddTrackBox({
     setMutex(true);
     const toaster = Toaster.startLoad('Adding new track...');
 
-    try {
-      const res = await postHandler(`${ORG_URL}/${currentOrg.id}/hackathons/${val.id}/track`, newTrack);
-      if (res.statusCode === 201) {
-        setVal(prev => ({
-          ...prev,
-          tracks: [...prev.tracks, res.data.track],
-        }));
-        setNewTrack({ id: '', hackathonID: '', title: '', description: '' });
-        Toaster.stopLoad(toaster, 'New track added!', 1);
-      } else {
-        Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
-      }
-    } catch (error) {
-      Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    const res = await postHandler(`${ORG_URL}/${currentOrg.id}/hackathons/${val.id}/track`, newTrack);
+    if (res.statusCode === 201) {
+      setVal(prev => ({
+        ...prev,
+        tracks: [...prev.tracks, res.data.track],
+      }));
+      setNewTrack(initialHackathonTrack);
+      Toaster.stopLoad(toaster, 'New track added!', 1);
+    } else {
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
+
     setMutex(false);
   };
 
@@ -509,59 +473,30 @@ export function AddTrackBox({
     </div>
   );
 }
-//
+
 export function AddSponsorBox({ val, setVal }: { val: Hackathon; setVal: Dispatch<SetStateAction<Hackathon>> }) {
-  const [newSponsor, setNewSponsor] = useState<HackathonSponsor>({
-    id: '',
-    hackathonID: '',
-    coverPic: '',
-    blurHash: '',
-    name: '',
-    link: '',
-    title: '',
-    description: '',
-  });
+  const [newSponsor, setNewSponsor] = useState<HackathonSponsor>(initialHackathonSponsor);
   const [mutex, setMutex] = useState(false);
   const currentOrg = useSelector(currentOrgSelector);
-  const toaster = Toaster.startLoad('Adding new sponsor...');
+
   const handleAddSponsor = async () => {
     if (mutex) return;
     setMutex(true);
-    setNewSponsor({
-      id: '',
-      hackathonID: '',
-      coverPic: '',
-      blurHash: '',
-      name: '',
-      link: '',
-      title: '',
-      description: '',
-    });
+    const toaster = Toaster.startLoad('Adding new sponsor...');
 
-    try {
-      const res = await postHandler(`${ORG_URL}/${currentOrg.id}/hackathons/sponsor`, newSponsor);
-      if (res.statusCode === 201) {
-        setVal(prev => ({
-          ...prev,
-          sponsors: [...prev.sponsors, res.data.sponsor],
-        }));
-        setNewSponsor({
-          id: '',
-          hackathonID: '',
-          coverPic: '',
-          blurHash: '',
-          name: '',
-          link: '',
-          title: '',
-          description: '',
-        });
-        Toaster.stopLoad(toaster, 'New sponsor added!', 1);
-      } else {
-        Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
-      }
-    } catch (error) {
-      Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    const res = await postHandler(`${ORG_URL}/${currentOrg.id}/hackathons/sponsor`, newSponsor);
+    if (res.statusCode === 201) {
+      setVal(prev => ({
+        ...prev,
+        sponsors: [...prev.sponsors, res.data.sponsor],
+      }));
+      setNewSponsor(initialHackathonSponsor);
+
+      Toaster.stopLoad(toaster, 'New sponsor added!', 1);
+    } else {
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
+
     setMutex(false);
   };
 
@@ -611,26 +546,25 @@ export function AddFAQBox({ val, setVal }: { val: Hackathon; setVal: Dispatch<Se
   const [newFAQ, setNewFAQ] = useState<HackathonFAQ>({ id: '', hackathonID: '', question: '', answer: '' });
   const [mutex, setMutex] = useState(false);
   const currentOrg = useSelector(currentOrgSelector);
+
   const handleAddFAQ = async () => {
     if (mutex) return;
     setMutex(true);
+
     const toaster = Toaster.startLoad('Adding new FAQ...');
 
-    try {
-      const res = await postHandler(`${ORG_URL}/${currentOrg.id}/hackathons/faq`, newFAQ);
-      if (res.statusCode === 201) {
-        setVal(prev => ({
-          ...prev,
-          faqs: [...prev.faqs, res.data.faq],
-        }));
-        setNewFAQ({ id: '', hackathonID: '', question: '', answer: '' });
-        Toaster.stopLoad(toaster, 'New FAQ added!', 1);
-      } else {
-        Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
-      }
-    } catch (error) {
-      Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    const res = await postHandler(`${ORG_URL}/${currentOrg.id}/hackathons/faq`, newFAQ);
+    if (res.statusCode === 201) {
+      setVal(prev => ({
+        ...prev,
+        faqs: [...prev.faqs, res.data.faq],
+      }));
+      setNewFAQ({ id: '', hackathonID: '', question: '', answer: '' });
+      Toaster.stopLoad(toaster, 'New FAQ added!', 1);
+    } else {
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
+
     setMutex(false);
   };
 

@@ -3,18 +3,12 @@ import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import OrgSidebar from '@/components/common/org_sidebar';
 import { Event, HackathonTrack, HackathonPrize, HackathonRound, HackathonSponsor, HackathonFAQ } from '@/types';
-
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import Toaster from '@/utils/toaster';
 import { SERVER_ERROR } from '@/config/errors';
 import postHandler from '@/handlers/post_handler';
 import moment from 'moment';
-import TextArea from '@/components/form/textarea';
-import Time from '@/components/form/time';
-import Input from '@/components/form/input';
-import Tags from '@/components/form/tags';
-import Links from '@/components/form/links';
 import { ORG_URL } from '@/config/routes';
 import { getFormattedTime } from '@/utils/funcs/time';
 import { Timeline } from '@/components/ui/timeline';
@@ -27,12 +21,7 @@ import FAQs from '@/sections/organization/hackathons/FAQ';
 import Sponsors from '@/sections/organization/hackathons/Sponsor';
 import Teams from '@/sections/organization/hackathons/Teams';
 import Basics from '@/sections/organization/hackathons/Basics';
-interface Prize {
-  title: string;
-  amount: number;
-  description: string;
-  trackID?: string;
-}
+import { uniqueId } from 'lodash';
 
 const NewHackathon: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -58,15 +47,16 @@ const NewHackathon: React.FC = () => {
   const currentOrg = useSelector(currentOrgSelector);
 
   const addFAQ = (faq: HackathonFAQ) => {
-    setFaqs(prev => [...prev, faq]);
+    const newFAQ: HackathonFAQ = { ...faq, id: uniqueId() };
+    setFaqs(prev => [...prev, newFAQ]);
   };
 
-  const editFAQ = (index: number, updatedFAQ: HackathonFAQ) => {
-    setFaqs(prev => prev.map((faq, idx) => (idx === index ? updatedFAQ : faq)));
+  const editFAQ = (faq: HackathonFAQ) => {
+    setFaqs(prev => prev.map(f => (f.id === faq.id ? faq : f)));
   };
 
-  const deleteFAQ = (index: number) => {
-    setFaqs(prev => prev.filter((_, idx) => idx !== index));
+  const deleteFAQ = (id: string) => {
+    setFaqs(prev => prev.filter(faq => faq.id !== id));
   };
 
   const addRound = (round: HackathonRound) => {
@@ -77,50 +67,44 @@ const NewHackathon: React.FC = () => {
     setSponsors(prev => [...prev, sponsor]);
   };
 
-  const editSponsor = (index: number, updatedSponsor: HackathonSponsor) => {
-    setSponsors(prev => prev.map((sponsor, idx) => (idx === index ? updatedSponsor : sponsor)));
+  const editSponsor = (sponsor: HackathonSponsor) => {
+    setSponsors(prev => prev.map(s => (s.id === sponsor.id ? sponsor : s)));
   };
 
-  const deleteSponsor = (index: number) => {
-    setSponsors(prev => prev.filter((_, idx) => idx !== index));
+  const deleteSponsor = (sponsorId: string) => {
+    setSponsors(prev => prev.filter(sponsor => sponsor.id !== sponsorId));
   };
 
-  const editRound = (index: number, updatedRound: HackathonRound) => {
-    setRounds(prev =>
-      prev.map((round, idx) =>
-        idx === index ? { ...updatedRound, id: round.id, hackathonID: round.hackathonID } : round
-      )
-    );
+  const editRound = (round: HackathonRound) => {
+    setRounds(prev => prev.map(r => (r.id === round.id ? round : r)));
   };
 
-  const deleteRound = (index: number) => {
-    setRounds(prev => prev.filter((_, idx) => idx !== index));
+  const deleteRound = (roundId: string) => {
+    setRounds(prev => prev.filter(round => round.id !== roundId));
   };
 
-  const addTrack = (title: string, description: string = '') => {
-    setTracks(prev => [...prev, { title, description: description }]);
+  const addTrack = (data: HackathonTrack) => {
+    setTracks(prev => [...prev, { id: uniqueId(), hackathonID: '', title: data.title, description: data.description }]);
   };
 
-  const editTrack = (index: number, title: string, description: string = '') => {
-    setTracks(prev =>
-      prev.map((track, idx) => (idx === index ? { ...track, title, description: description || '' } : track))
-    );
+  const editTrack = (track: HackathonTrack) => {
+    setTracks(prev => prev.map(t => (t.id === track.id ? track : t)));
   };
 
-  const deleteTrack = (index: number) => {
-    setTracks(prev => prev.filter((_, idx) => idx !== index));
+  const deleteTrack = (trackId: string) => {
+    setTracks(prev => prev.filter(track => track.id !== trackId));
   };
 
-  const addPrize = (prize: Prize) => {
+  const addPrize = (prize: HackathonPrize) => {
     setPrizes(prev => [...prev, prize]);
   };
 
-  const editPrize = (index: number, updatedPrize: Prize) => {
-    setPrizes(prev => prev.map((prize, idx) => (idx === index ? updatedPrize : prize)));
+  const editPrize = (prize: HackathonPrize) => {
+    setPrizes(prev => prev.map(p => (p.id === prize.id ? prize : p)));
   };
 
-  const deletePrize = (index: number) => {
-    setPrizes(prev => prev.filter((_, idx) => idx !== index));
+  const deletePrize = (id: string) => {
+    setPrizes(prev => prev.filter(prize => prize.id !== id));
   };
 
   const eventDetailsValidator = () => {
@@ -187,7 +171,6 @@ const NewHackathon: React.FC = () => {
         startTime: getFormattedTime(round.startTime),
         endTime: getFormattedTime(round.endTime),
         judgingStartTime: getFormattedTime(round.judgingStartTime),
-        judgingEndTime: getFormattedTime(round.judgingEndTime),
       })),
       sponsors,
       faqs,
@@ -200,17 +183,12 @@ const NewHackathon: React.FC = () => {
     const res = await postHandler(URL, formData);
 
     if (res.statusCode === 201) {
-      const event: Event = res.data.event;
       localStorage.removeItem(`hackathon-draft-${currentOrg.id}`);
       Toaster.stopLoad(toaster, 'Competition Created!', 1);
     } else if (res.statusCode === 413) {
       Toaster.stopLoad(toaster, 'Image too large', 0);
     } else {
-      if (res.data.message) {
-        Toaster.stopLoad(toaster, res.data.message, 0);
-      } else {
-        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-      }
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
   };
 
@@ -273,7 +251,6 @@ const NewHackathon: React.FC = () => {
       const roundStart = moment(round.startTime);
       const roundEnd = moment(round.endTime);
       const judgingStart = moment(round.judgingStartTime);
-      const judgingEnd = moment(round.judgingEndTime);
 
       if (roundStart.isBefore(hackathonStart) || roundEnd.isAfter(hackathonEnd)) {
         Toaster.error(`Round ${i + 1} is outside the hackathon start or end time.`);
@@ -285,7 +262,7 @@ const NewHackathon: React.FC = () => {
         return false;
       }
 
-      if (judgingStart.isBefore(roundStart) || judgingEnd.isAfter(roundEnd)) {
+      if (judgingStart.isBefore(roundStart) || judgingStart.isAfter(roundEnd)) {
         Toaster.error(`Judging time for round ${i + 1} is not within the round's start and end times.`);
         return false;
       }
@@ -393,13 +370,7 @@ const NewHackathon: React.FC = () => {
       title: 'Rounds',
       content: (
         <div className="container mx-auto px-4">
-          <Rounds
-            rounds={rounds}
-            addRound={addRound}
-            editRound={editRound}
-            deleteRound={deleteRound}
-            teamFormationEndTime={teamFormationEndTime}
-          />
+          <Rounds rounds={rounds} addRound={addRound} editRound={editRound} deleteRound={deleteRound} />
         </div>
       ),
     },

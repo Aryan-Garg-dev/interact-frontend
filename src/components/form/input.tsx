@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 interface Props {
   label?: string;
   val: string;
-  setVal: React.Dispatch<React.SetStateAction<string>>;
+  setVal: React.Dispatch<React.SetStateAction<string>> | ((val: string) => void);
   maxLength: number;
   placeholder?: string;
   required?: boolean;

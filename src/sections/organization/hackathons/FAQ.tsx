@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
 import { Plus, Pencil, Trash } from 'lucide-react';
-
-interface FAQ {
-  id: string;
-  question: string;
-  answer: string;
-}
+import { HackathonFAQ } from '@/types';
 
 interface FAQManagerProps {
-  faqs: FAQ[];
-  addFAQ: (faq: Omit<FAQ, 'id'>) => void;
-  editFAQ: (id: string, faq: Omit<FAQ, 'id'>) => void;
+  faqs: HackathonFAQ[];
+  addFAQ: (faq: HackathonFAQ) => void;
+  editFAQ: (faq: HackathonFAQ) => void;
   deleteFAQ: (id: string) => void;
 }
 
@@ -28,10 +23,12 @@ const FAQs: React.FC<FAQManagerProps> = ({ faqs, addFAQ, editFAQ, deleteFAQ }) =
   const handleAddOrEditFAQ = () => {
     if (!question.trim() || !answer.trim()) return;
 
-    const faqData = { question, answer };
+    const faqData = { id: '', hackathonID: '', question, answer };
 
     if (isEditing !== null) {
-      editFAQ(isEditing, faqData);
+      faqData.id = isEditing;
+
+      editFAQ(faqData);
       setIsEditing(null);
     } else {
       addFAQ(faqData);

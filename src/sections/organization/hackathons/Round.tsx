@@ -1,41 +1,21 @@
 import React, { useState } from 'react';
 import { Plus, Pencil, Trash } from 'lucide-react';
 import moment from 'moment';
-
-interface HackathonRoundScoreMetric {
-  id: string;
-  title: string;
-  description?: string;
-  type: string;
-  options?: string[];
-}
-
-interface HackathonRound {
-  id: string;
-  startTime: Date;
-  endTime: Date;
-  judgingStartTime: Date;
-  judgingEndTime: Date;
-  metrics: HackathonRoundScoreMetric[];
-}
+import { HackathonRound } from '@/types';
+import { initialHackathonRound } from '@/types/initials';
+import { getInputFieldFormatTime } from '@/utils/funcs/time';
 
 interface RoundManagerProps {
   rounds: HackathonRound[];
-  addRound: (data: Omit<HackathonRound, 'id'>) => void;
-  editRound: (roundId: string, data: Omit<HackathonRound, 'id'>) => void;
+  addRound: (data: HackathonRound) => void;
+  editRound: (data: HackathonRound) => void;
   deleteRound: (roundId: string) => void;
 }
 
 const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, deleteRound }) => {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState<string | null>(null);
-  const [formState, setFormState] = useState<Omit<HackathonRound, 'id'>>({
-    startTime: new Date(),
-    endTime: new Date(),
-    judgingStartTime: new Date(),
-    judgingEndTime: new Date(),
-    metrics: [],
-  });
+  const [formState, setFormState] = useState(initialHackathonRound);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,7 +28,10 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
   const handleAddMetric = () => {
     setFormState(prev => ({
       ...prev,
-      metrics: [...prev.metrics, { id: Date.now().toString(), title: '', type: 'text', options: [] }],
+      metrics: [
+        ...(prev.metrics || []),
+        { id: Date.now().toString(), hackathonRoundID: prev.id, title: '', type: 'text', options: [] },
+      ],
     }));
   };
 
@@ -68,7 +51,9 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
 
   const handleAddOrEditRound = () => {
     if (isEditing) {
-      editRound(isEditing, formState);
+      formState.id = isEditing;
+
+      editRound(formState);
     } else {
       addRound(formState);
     }
@@ -78,28 +63,14 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
   };
 
   const handleEditRound = (round: HackathonRound) => {
-    setFormState({
-      startTime: round.startTime,
-      endTime: round.endTime,
-      judgingStartTime: round.judgingStartTime,
-      judgingEndTime: round.judgingEndTime,
-      metrics: round.metrics,
-    });
+    setFormState(round);
     setIsEditing(round.id);
     setShowModal(true);
   };
 
   const resetForm = () => {
-    setFormState({
-      startTime: new Date(),
-      endTime: new Date(),
-      judgingStartTime: new Date(),
-      judgingEndTime: new Date(),
-      metrics: [],
-    });
+    setFormState(initialHackathonRound);
   };
-
-  const formatDate = (date: Date) => moment(date).format('YYYY-MM-DDTHH:mm');
 
   return (
     <div className="w-full flex flex-col gap-6 relative">
@@ -137,7 +108,7 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
                   id="startTime"
                   type="datetime-local"
                   name="startTime"
-                  value={formatDate(formState.startTime)}
+                  value={getInputFieldFormatTime(formState.startTime)}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white"
                 />
@@ -151,7 +122,7 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
                   id="endTime"
                   type="datetime-local"
                   name="endTime"
-                  value={formatDate(formState.endTime)}
+                  value={getInputFieldFormatTime(formState.endTime)}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white"
                 />
@@ -165,21 +136,7 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
                   id="judgingStartTime"
                   type="datetime-local"
                   name="judgingStartTime"
-                  value={formatDate(formState.judgingStartTime)}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white"
-                />
-              </div>
-
-              <div className="flex flex-col gap-2">
-                <label htmlFor="judgingEndTime" className="text-sm font-medium text-gray-300">
-                  Judging End Time
-                </label>
-                <input
-                  id="judgingEndTime"
-                  type="datetime-local"
-                  name="judgingEndTime"
-                  value={formatDate(formState.judgingEndTime)}
+                  value={getInputFieldFormatTime(formState.judgingStartTime)}
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white"
                 />
@@ -197,35 +154,32 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
                   </button>
                 </div>
 
-                {formState.metrics.map((metric, idx) => (
-                  <div
-                    key={metric.id}
-                    className="flex flex-col gap-3 bg-gray-800 p-4 rounded-lg border border-gray-700"
-                  >
+                {formState.metrics?.map((metric, index) => (
+                  <div key={index} className="flex flex-col gap-3 bg-gray-800 p-4 rounded-lg border border-gray-700">
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
                         <input
                           value={metric.title}
-                          onChange={e => handleMetricChange(idx, 'title', e.target.value)}
+                          onChange={e => handleMetricChange(index, 'title', e.target.value)}
                           placeholder="Metric Title"
                           className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white"
                         />
                       </div>
-                      <button onClick={() => handleDeleteMetric(idx)} className="ml-2 mt-2">
+                      <button onClick={() => handleDeleteMetric(index)} className="ml-2 mt-2">
                         <Trash className="text-red-400 hover:text-red-300 transition-colors" size={20} />
                       </button>
                     </div>
 
                     <textarea
                       value={metric.description || ''}
-                      onChange={e => handleMetricChange(idx, 'description', e.target.value)}
+                      onChange={e => handleMetricChange(index, 'description', e.target.value)}
                       placeholder="Metric Description"
                       className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white resize-none"
                     />
 
                     <select
                       value={metric.type}
-                      onChange={e => handleMetricChange(idx, 'type', e.target.value)}
+                      onChange={e => handleMetricChange(index, 'type', e.target.value)}
                       className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white"
                     >
                       <option value="text">Text</option>
@@ -237,7 +191,7 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
                     {metric.type === 'select' && (
                       <textarea
                         value={metric.options?.join(', ') || ''}
-                        onChange={e => handleMetricChange(idx, 'options', e.target.value)}
+                        onChange={e => handleMetricChange(index, 'options', e.target.value)}
                         placeholder="Options (comma separated)"
                         className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white resize-none"
                       />
@@ -249,7 +203,7 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
               <button
                 className="w-full mt-2 bg-blue-500 text-white py-2.5 px-4 rounded-lg hover:bg-blue-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 onClick={handleAddOrEditRound}
-                disabled={formState.metrics.length === 0}
+                disabled={formState.metrics?.length === 0}
               >
                 {isEditing ? 'Save Changes' : 'Add Round'}
               </button>
@@ -272,7 +226,7 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
                   <p className="text-gray-400">End: {moment(round.endTime).format('YYYY-MM-DD HH:mm')}</p>
                   <p className="text-gray-400">
                     Judging: {moment(round.judgingStartTime).format('YYYY-MM-DD HH:mm')} -{' '}
-                    {moment(round.judgingEndTime).format('YYYY-MM-DD HH:mm')}
+                    {moment(round.endTime).format('YYYY-MM-DD HH:mm')}
                   </p>
                 </div>
                 <div className="flex gap-3 ml-4">
@@ -288,8 +242,8 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
               <div className="mt-4">
                 <h4 className="font-bold text-white">Metrics:</h4>
                 <div className="mt-2 space-y-2">
-                  {round.metrics.map(metric => (
-                    <div key={metric.id} className="text-sm bg-gray-800 p-3 rounded-lg">
+                  {round.metrics?.map((metric, index) => (
+                    <div key={index} className="text-sm bg-gray-800 p-3 rounded-lg">
                       <p className="font-bold text-white">{metric.title}</p>
                       <p className="text-gray-400">{metric.description}</p>
                       <p className="text-gray-500">Type: {metric.type}</p>

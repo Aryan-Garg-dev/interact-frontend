@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import moment from 'moment';
 import Time from '@/components/form/time';
+import { getInputFieldFormatTime } from '@/utils/funcs/time';
+import Toaster from '@/utils/toaster';
 
 interface TeamsProps {
   minTeamSize: number;
   setMinTeamSize: (value: number) => void;
   maxTeamSize: number;
   setMaxTeamSize: (value: number) => void;
-  teamFormationStartTime: Date;
+  teamFormationStartTime: string;
   setTeamFormationStartTime: (value: string) => void;
-  teamFormationEndTime: Date;
+  teamFormationEndTime: string;
   setTeamFormationEndTime: (value: string) => void;
 }
 
@@ -26,11 +27,6 @@ const Teams: React.FC<TeamsProps> = ({
   const [minTeamSizeInput, setMinTeamSizeInput] = useState<number>(minTeamSize);
   const [maxTeamSizeInput, setMaxTeamSizeInput] = useState<number>(maxTeamSize);
 
-  // Format function for date and time using moment.js
-  const formatDateTime = (value: string) => {
-    return moment(value).format('YYYY-MM-DDTHH:mm'); // Format to a readable format
-  };
-
   const handleMinTeamSizeChange = (value: number) => {
     setMinTeamSizeInput(value);
   };
@@ -42,7 +38,7 @@ const Teams: React.FC<TeamsProps> = ({
   const handleMinTeamSizeKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       if (minTeamSizeInput < 1) {
-        alert('Min Team Size must be at least 1');
+        Toaster.error('Min Team Size must be at least 1');
         return;
       }
       setMinTeamSize(minTeamSizeInput);
@@ -52,7 +48,7 @@ const Teams: React.FC<TeamsProps> = ({
   const handleMaxTeamSizeKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       if (maxTeamSizeInput < 1) {
-        alert('Max Team Size must be at least 1');
+        Toaster.error('Max Team Size must be at least 1');
         return;
       }
       setMaxTeamSize(maxTeamSizeInput);
@@ -60,23 +56,21 @@ const Teams: React.FC<TeamsProps> = ({
   };
 
   const handleTeamFormationStartTimeChange = (value: string) => {
-    const formattedValue = moment(value).toISOString();
-    setTeamFormationStartTime(formattedValue);
-    setTeamFormationStartTimeInput(formattedValue);
+    setTeamFormationStartTime(value);
+    setTeamFormationStartTimeInput(value);
   };
 
   const handleTeamFormationEndTimeChange = (value: string) => {
-    const formattedValue = moment(value).toISOString(); // Converts to ISO 8601 format with UTC time
-    setTeamFormationEndTime(formattedValue);
-    setTeamFormationEndTimeInput(formattedValue);
+    setTeamFormationEndTime(value);
+    setTeamFormationEndTimeInput(value);
   };
 
   const [teamFormationStartTimeInput, setTeamFormationStartTimeInput] = useState<string>(
-    teamFormationStartTime ? formatDateTime(teamFormationStartTime.toString()) : ''
+    teamFormationStartTime ? getInputFieldFormatTime(teamFormationStartTime.toString()) : ''
   );
 
   const [teamFormationEndTimeInput, setTeamFormationEndTimeInput] = useState<string>(
-    teamFormationEndTime ? formatDateTime(teamFormationEndTime.toString()) : ''
+    teamFormationEndTime ? getInputFieldFormatTime(teamFormationEndTime.toString()) : ''
   );
 
   return (

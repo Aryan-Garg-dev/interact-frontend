@@ -1,18 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { Plus, Pencil, Trash, Link } from 'lucide-react';
-
-interface HackathonSponsor {
-  id: string;
-  name: string;
-  title: string;
-  description: string;
-  link: string;
-}
+import { HackathonSponsor } from '@/types';
 
 interface SponsorManagerProps {
   sponsors: HackathonSponsor[];
-  addSponsor: (data: Omit<HackathonSponsor, 'id'>) => void;
-  editSponsor: (sponsorId: string, data: Omit<HackathonSponsor, 'id'>) => void;
+  addSponsor: (data: HackathonSponsor) => void;
+  editSponsor: (data: HackathonSponsor) => void;
   deleteSponsor: (sponsorId: string) => void;
 }
 
@@ -69,33 +62,31 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
 
     setIsSubmitting(true);
 
-    try {
-      const sponsorData = {
-        name: sponsorName.trim(),
-        title: title.trim(),
-        description: description.trim(),
-        link: link.trim(),
-      };
+    const sponsorData: HackathonSponsor = {
+      id: '',
+      hackathonID: '',
+      name: sponsorName.trim(),
+      title: title.trim(),
+      description: description.trim(),
+      link: link.trim(),
+      blurHash: 'no-hash',
+      coverPic: 'default.jpg',
+    };
 
-      if (isEditing !== null) {
-        await editSponsor(isEditing, sponsorData);
-      } else {
-        await addSponsor(sponsorData);
-      }
+    if (isEditing !== null) {
+      sponsorData.id = isEditing;
+      editSponsor(sponsorData);
+    } else addSponsor(sponsorData);
 
-      handleClose();
-    } catch (error) {
-      console.error('Error saving sponsor:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    handleClose();
+    setIsSubmitting(false);
   };
 
   const handleEditClick = useCallback((sponsor: HackathonSponsor) => {
     setSponsorName(sponsor.name);
-    setTitle(sponsor.title);
-    setDescription(sponsor.description);
-    setLink(sponsor.link);
+    setTitle(sponsor.title || '');
+    setDescription(sponsor.description || '');
+    setLink(sponsor.link || '');
     setIsEditing(sponsor.id);
     setShowModal(true);
   }, []);
@@ -223,15 +214,16 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
                   <h3 className="font-bold text-white text-lg">{sponsor.name}</h3>
                   <p className="text-gray-300 font-medium">{sponsor.title}</p>
                   <p className="text-gray-400">{sponsor.description}</p>
-                  <a
-                    href={sponsor.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors"
-                  >
-                    <Link size={16} />
-                    {getDisplayUrl(sponsor.link)}
-                  </a>
+                  {sponsor.link && (
+                    <Link
+                      href={sponsor.link}
+                      target="_blank"
+                      className="flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors"
+                    >
+                      <Link size={16} />
+                      {getDisplayUrl(sponsor.link)}
+                    </Link>
+                  )}
                 </div>
                 <div className="flex gap-3 ml-4">
                   <button onClick={() => handleEditClick(sponsor)}>

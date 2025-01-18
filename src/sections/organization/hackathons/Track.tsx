@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
 import { Plus, Pencil, Trash } from 'lucide-react';
-
-interface HackathonTrack {
-  id: string;
-  title: string;
-  description: string;
-}
+import { HackathonTrack } from '@/types';
 
 interface TrackManagerProps {
   tracks: HackathonTrack[];
-  addTrack: (data: { title: string; description: string }) => void;
-  editTrack: (trackId: string, data: { title: string; description: string }) => void;
+  addTrack: (data: HackathonTrack) => void;
+  editTrack: (data: HackathonTrack) => void;
   deleteTrack: (trackId: string) => void;
 }
 
@@ -23,13 +18,16 @@ const Tracks: React.FC<TrackManagerProps> = ({ tracks, addTrack, editTrack, dele
   const handleAddOrEditTrack = () => {
     if (!trackName.trim() || !trackDescription.trim()) return;
 
-    const trackData = {
+    const trackData: HackathonTrack = {
+      id: '',
+      hackathonID: '',
       title: trackName,
       description: trackDescription,
     };
 
     if (isEditing !== null) {
-      editTrack(isEditing, trackData);
+      trackData.id = isEditing;
+      editTrack(trackData);
       setIsEditing(null);
     } else {
       addTrack(trackData);
@@ -42,7 +40,7 @@ const Tracks: React.FC<TrackManagerProps> = ({ tracks, addTrack, editTrack, dele
 
   const handleEditTrack = (track: HackathonTrack) => {
     setTrackName(track.title);
-    setTrackDescription(track.description);
+    setTrackDescription(track.description || '');
     setIsEditing(track.id);
     setShowModal(true);
   };
