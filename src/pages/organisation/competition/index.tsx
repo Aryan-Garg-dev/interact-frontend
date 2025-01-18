@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import OrgSidebar from '@/components/common/org_sidebar';
-import { Event, HackathonTrack, HackathonPrize, HackathonRound, HackathonSponsor, HackathonFAQ } from '@/types';
+import { HackathonTrack, HackathonPrize, HackathonRound, HackathonSponsor, HackathonFAQ } from '@/types';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { useSelector } from 'react-redux';
 import Toaster from '@/utils/toaster';
@@ -47,8 +47,7 @@ const NewHackathon: React.FC = () => {
   const currentOrg = useSelector(currentOrgSelector);
 
   const addFAQ = (faq: HackathonFAQ) => {
-    const newFAQ: HackathonFAQ = { ...faq, id: uniqueId() };
-    setFaqs(prev => [...prev, newFAQ]);
+    setFaqs(prev => [...prev, { ...faq, id: uniqueId() }]);
   };
 
   const editFAQ = (faq: HackathonFAQ) => {
@@ -60,11 +59,11 @@ const NewHackathon: React.FC = () => {
   };
 
   const addRound = (round: HackathonRound) => {
-    setRounds(prev => [...prev, { ...round, id: Date.now().toString(), hackathonID: 'your-hackathon-id' }]);
+    setRounds(prev => [...prev, { ...round, id: uniqueId(), hackathonID: 'your-hackathon-id' }]);
   };
 
   const addSponsor = (sponsor: HackathonSponsor) => {
-    setSponsors(prev => [...prev, sponsor]);
+    setSponsors(prev => [...prev, { ...sponsor, id: uniqueId() }]);
   };
 
   const editSponsor = (sponsor: HackathonSponsor) => {
@@ -96,7 +95,7 @@ const NewHackathon: React.FC = () => {
   };
 
   const addPrize = (prize: HackathonPrize) => {
-    setPrizes(prev => [...prev, prize]);
+    setPrizes(prev => [...prev, { ...prize, id: uniqueId() }]);
   };
 
   const editPrize = (prize: HackathonPrize) => {
