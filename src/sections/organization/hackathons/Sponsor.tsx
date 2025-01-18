@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
-import { Plus, Pencil, Trash, Link } from 'lucide-react';
+import { Plus, Pencil, Trash, Link as LinkIcon } from 'lucide-react';
 import { HackathonSponsor } from '@/types';
+import Link from 'next/link';
 
 interface SponsorManagerProps {
   sponsors: HackathonSponsor[];
@@ -220,7 +221,7 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
                       target="_blank"
                       className="flex items-center gap-2 text-gray-400 hover:text-gray-300 transition-colors"
                     >
-                      <Link size={16} />
+                      <LinkIcon size={16} />
                       {getDisplayUrl(sponsor.link)}
                     </Link>
                   )}

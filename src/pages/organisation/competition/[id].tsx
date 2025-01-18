@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import OrgSidebar from '@/components/common/org_sidebar';
@@ -33,6 +33,7 @@ import getHandler from '@/handlers/get_handler';
 import { EXPLORE_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
 import deleteHandler from '@/handlers/delete_handler';
+import Loader from '@/components/common/loader';
 
 interface Props {
   id: string;
@@ -41,6 +42,7 @@ interface Props {
 const EditHackathon: React.FC<Props> = ({ id }) => {
   const [mutex, setMutex] = useState(false);
   const [hackathon, setHackathon] = useState<Hackathon>(initialHackathon);
+  const [loading, setLoading] = useState(true);
   const [image, setImage] = useState<File | null>(null);
 
   const currentOrg = useSelector(currentOrgSelector);
@@ -49,6 +51,7 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
     const res = await getHandler(URL);
     if (res.statusCode === 200) {
       setHackathon(res.data.event.hackathon);
+      setLoading(false);
     } else {
       Toaster.error(res.data.message || SERVER_ERROR, 'error_toaster');
     }
@@ -298,10 +301,9 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
     const res = await postHandler(`${ORG_URL}/${currentOrg.id}/hackathons/${hackathon.id}/prize`, data);
     if (res.statusCode === 201) {
       Toaster.stopLoad(toaster, 'Track Added!', 1);
-      const track = res.data.track;
       setHackathon({
         ...hackathon,
-        tracks: [...hackathon.tracks, track],
+        prizes: [...hackathon.prizes, res.data.prize || initialHackathonPrize],
       });
     } else {
       Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
@@ -354,7 +356,7 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
     let data = { ...hackathon };
 
     if (field === 'tags') {
-      data.tags = [...(hackathon.tags || []), ...value];
+      data.tags = [...(value || [])];
     } else {
       (data as any)[field] = value;
     }
@@ -574,7 +576,7 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
     {
       title: 'Teams',
       content: (
-        <div className="container mx-auto px-4 ">
+        <div className="container mx-auto px-4">
           <Teams
             minTeamSize={hackathon.minTeamSize}
             setMinTeamSize={handleMinTeamSizeChange}
@@ -628,9 +630,13 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
     <BaseWrapper title={`Events | ${currentOrg.title}`}>
       <OrgSidebar index={12} />
       <MainWrapper>
-        <div className="w-full bg-gray-50 dark:bg-neutral-900 h-full flex flex-col gap-2 px-6 pb-10 justify-between">
-          <Timeline data={screens} />
-        </div>
+        {loading ? (
+          <Loader />
+        ) : (
+          <div className="w-full bg-gray-50 dark:bg-neutral-900 h-full flex flex-col gap-2 px-6 pb-10 justify-between">
+            <Timeline data={screens} />
+          </div>
+        )}
       </MainWrapper>
     </BaseWrapper>
   );
