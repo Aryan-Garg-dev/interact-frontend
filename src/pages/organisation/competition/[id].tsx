@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import OrgSidebar from '@/components/common/org_sidebar';
@@ -357,10 +357,8 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
     let updatedData: Partial<Hackathon>;
 
     if (typeof field === 'string') {
-      // Single field update
       updatedData = { [field]: value };
     } else {
-      // Bulk update
       updatedData = field;
     }
 
@@ -390,22 +388,6 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
 
   const handleSave = (data: Partial<Hackathon>) => {
     editHackathonField(data);
-  };
-
-  const handleMinTeamSizeChange = (minTeamSize: number) => {
-    editHackathonField('minTeamSize', minTeamSize);
-  };
-
-  const handleMaxTeamSizeChange = (maxTeamSize: number) => {
-    editHackathonField('maxTeamSize', maxTeamSize);
-  };
-
-  const handleTeamFormationStartTimeChange = (startTime: string) => {
-    editHackathonField('teamFormationStartTime', startTime);
-  };
-
-  const handleTeamFormationEndTimeChange = (endTime: string) => {
-    editHackathonField('teamFormationEndTime', endTime);
   };
 
   const eventDetailsValidator = (data: Hackathon) => {

@@ -13,7 +13,7 @@ interface TeamsProps {
   setTeamFormationStartTime: (value: string) => void;
   teamFormationEndTime: Date;
   setTeamFormationEndTime: (value: string) => void;
-  onSave: (data: Partial<Hackathon>) => void;
+  onSave?: (data: Partial<Hackathon>) => void;
 }
 
 const Teams: React.FC<TeamsProps> = ({
@@ -60,21 +60,22 @@ const Teams: React.FC<TeamsProps> = ({
 
   const handleTeamFormationStartTimeChange = (value: string) => {
     setTeamFormationStartTime(value);
-    setTeamFormationStartTimeInput(value);
   };
 
   const handleTeamFormationEndTimeChange = (value: string) => {
     setTeamFormationEndTime(value);
-    setTeamFormationEndTimeInput(value);
   };
 
-  const [teamFormationStartTimeInput, setTeamFormationStartTimeInput] = useState<string>(
-    teamFormationStartTime ? getInputFieldFormatTime(teamFormationStartTime.toString()) : ''
-  );
+  const handleSave = () => {
+    const updatedData: Partial<Hackathon> = {
+      teamFormationStartTime,
+      teamFormationEndTime,
+      minTeamSize,
+      maxTeamSize,
+    };
 
-  const [teamFormationEndTimeInput, setTeamFormationEndTimeInput] = useState<string>(
-    teamFormationEndTime ? getInputFieldFormatTime(teamFormationEndTime.toString()) : ''
-  );
+    if (onSave) onSave(updatedData);
+  };
 
   return (
     <div className="w-full flex flex-col gap-2">
@@ -100,16 +101,24 @@ const Teams: React.FC<TeamsProps> = ({
       </div>
       <Time
         label="Team Formation Start Time"
-        val={teamFormationStartTimeInput}
+        val={getInputFieldFormatTime(teamFormationStartTime)}
         setVal={handleTeamFormationStartTimeChange}
         includeDate={true}
       />
       <Time
         label="Team Formation End Time"
-        val={teamFormationEndTimeInput}
+        val={getInputFieldFormatTime(teamFormationEndTime)}
         setVal={handleTeamFormationEndTimeChange}
         includeDate={true}
       />
+      {onSave && (
+        <button
+          onClick={handleSave}
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-200 flex items-center gap-2 w-fit"
+        >
+          Save Changes
+        </button>
+      )}
     </div>
   );
 };

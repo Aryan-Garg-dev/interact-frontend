@@ -380,9 +380,9 @@ const NewHackathon: React.FC = () => {
             setMinTeamSize={setMinTeamSize}
             maxTeamSize={maxTeamSize}
             setMaxTeamSize={setMaxTeamSize}
-            teamFormationStartTime={teamFormationStartTime}
+            teamFormationStartTime={new Date(teamFormationStartTime)}
             setTeamFormationStartTime={setTeamFormationStartTime}
-            teamFormationEndTime={teamFormationEndTime}
+            teamFormationEndTime={new Date(teamFormationEndTime)}
             setTeamFormationEndTime={setTeamFormationEndTime}
           />
         </div>
