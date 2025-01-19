@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 import Time from '@/components/form/time';
 import { getInputFieldFormatTime } from '@/utils/funcs/time';
 import Toaster from '@/utils/toaster';
+import { Hackathon } from '@/types';
 
 interface TeamsProps {
   minTeamSize: number;
   setMinTeamSize: (value: number) => void;
   maxTeamSize: number;
   setMaxTeamSize: (value: number) => void;
-  teamFormationStartTime: string;
+  teamFormationStartTime: Date;
   setTeamFormationStartTime: (value: string) => void;
-  teamFormationEndTime: string;
+  teamFormationEndTime: Date;
   setTeamFormationEndTime: (value: string) => void;
+  onSave: (data: Partial<Hackathon>) => void;
 }
 
 const Teams: React.FC<TeamsProps> = ({
@@ -23,6 +25,7 @@ const Teams: React.FC<TeamsProps> = ({
   setTeamFormationStartTime,
   teamFormationEndTime,
   setTeamFormationEndTime,
+  onSave,
 }) => {
   const [minTeamSizeInput, setMinTeamSizeInput] = useState<number>(minTeamSize);
   const [maxTeamSizeInput, setMaxTeamSizeInput] = useState<number>(maxTeamSize);

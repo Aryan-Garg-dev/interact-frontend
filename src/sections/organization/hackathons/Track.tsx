@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Plus, Pencil, Trash } from 'lucide-react';
 import { HackathonTrack } from '@/types';
+import { set } from 'nprogress';
 
 interface TrackManagerProps {
   tracks: HackathonTrack[];
@@ -14,7 +15,7 @@ const Tracks: React.FC<TrackManagerProps> = ({ tracks, addTrack, editTrack, dele
   const [trackDescription, setTrackDescription] = useState('');
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
-
+  const [deletingTracks, setDeletingTracks] = useState<string[]>([]);
   const handleAddOrEditTrack = () => {
     if (!trackName.trim() || !trackDescription.trim()) return;
 
@@ -44,7 +45,21 @@ const Tracks: React.FC<TrackManagerProps> = ({ tracks, addTrack, editTrack, dele
     setIsEditing(track.id);
     setShowModal(true);
   };
+  const handleDeleteTrack = async (sponsorId: string) => {
+    if (window.confirm('Are you sure you want to delete this track?')) {
+      try {
+        // Add the sponsor ID to the deleting list immediately
+        setDeletingTracks(prev => [...prev, sponsorId]);
 
+        // Perform the delete operation
+        await deleteTrack(sponsorId);
+      } catch (error) {
+        console.error('Error deleting sponsor:', error);
+        // Remove the sponsor ID from deleting list if the operation failed
+        setDeletingTracks(prev => prev.filter(id => id !== sponsorId));
+      }
+    }
+  };
   return (
     <div className="w-full flex flex-col gap-6 relative">
       <button
@@ -117,7 +132,7 @@ const Tracks: React.FC<TrackManagerProps> = ({ tracks, addTrack, editTrack, dele
                   <button onClick={() => handleEditTrack(track)}>
                     <Pencil className="text-blue-400 hover:text-blue-300 transition-colors" size={20} />
                   </button>
-                  <button onClick={() => deleteTrack(track.id)}>
+                  <button onClick={() => handleDeleteTrack(track.id)}>
                     <Trash className="text-red-400 hover:text-red-300 transition-colors" size={20} />
                   </button>
                 </div>

@@ -17,7 +17,7 @@ const Prizes: React.FC<PrizeManagerProps> = ({ prizes, addPrize, editPrize, dele
   const [amount, setAmount] = useState('');
   const [trackID, setTrackID] = useState('');
   const [isEditing, setIsEditing] = useState<string | null>(null);
-
+  const [deletingPrize, setDeletingPrize] = useState<string[]>([]);
   const resetForm = () => {
     setTitle('');
     setDescription('');
@@ -67,7 +67,21 @@ const Prizes: React.FC<PrizeManagerProps> = ({ prizes, addPrize, editPrize, dele
     setIsEditing(null);
     resetForm();
   };
+  const handleDeletePrize = async (sponsorId: string) => {
+    if (window.confirm('Are you sure you want to delete this prize?')) {
+      try {
+        // Add the sponsor ID to the deleting list immediately
+        setDeletingPrize(prev => [...prev, sponsorId]);
 
+        // Perform the delete operation
+        await deletePrize(sponsorId);
+      } catch (error) {
+        console.error('Error deleting sponsor:', error);
+        // Remove the sponsor ID from deleting list if the operation failed
+        setDeletingPrize(prev => prev.filter(id => id !== sponsorId));
+      }
+    }
+  };
   return (
     <div className="w-full flex flex-col gap-6 relative">
       <button
@@ -183,7 +197,7 @@ const Prizes: React.FC<PrizeManagerProps> = ({ prizes, addPrize, editPrize, dele
                   <button onClick={() => handleEditPrize(prize.id)}>
                     <Pencil className="text-blue-400 hover:text-blue-300 transition-colors" size={20} />
                   </button>
-                  <button onClick={() => deletePrize(prize.id)}>
+                  <button onClick={() => handleDeletePrize(prize.id)}>
                     <Trash className="text-red-400 hover:text-red-300 transition-colors" size={20} />
                   </button>
                 </div>

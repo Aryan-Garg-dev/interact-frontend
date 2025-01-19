@@ -349,6 +349,8 @@ const NewHackathon: React.FC = () => {
             links={links}
             setLinks={setLinks}
             setImage={setImage}
+            isEditMode={false}
+            onSave={() => {}}
           />
         </div>
       ),

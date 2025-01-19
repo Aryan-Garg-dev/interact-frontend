@@ -17,6 +17,7 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [formState, setFormState] = useState(initialHackathonRound);
   const [optionsMetric, setOptionsMetric] = useState('');
+  const [deletingRound, setDeletingRound] = useState<string[]>([]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -72,7 +73,21 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
     setIsEditing(round.id);
     setShowModal(true);
   };
+  const handleDeleteRound = async (sponsorId: string) => {
+    if (window.confirm('Are you sure you want to delete this round?')) {
+      try {
+        // Add the sponsor ID to the deleting list immediately
+        setDeletingRound(prev => [...prev, sponsorId]);
 
+        // Perform the delete operation
+        await deleteRound(sponsorId);
+      } catch (error) {
+        console.error('Error deleting sponsor:', error);
+        // Remove the sponsor ID from deleting list if the operation failed
+        setDeletingRound(prev => prev.filter(id => id !== sponsorId));
+      }
+    }
+  };
   const resetForm = () => {
     setFormState(initialHackathonRound);
     setOptionsMetric('');
@@ -239,7 +254,7 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
                   <button onClick={() => handleEditRound(round)} aria-label="Edit round">
                     <Pencil className="text-blue-400 hover:text-blue-300 transition-colors" size={20} />
                   </button>
-                  <button onClick={() => deleteRound(round.id)} aria-label="Delete round">
+                  <button onClick={() => handleDeleteRound(round.id)} aria-label="Delete round">
                     <Trash className="text-red-400 hover:text-red-300 transition-colors" size={20} />
                   </button>
                 </div>
@@ -273,3 +288,6 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
 };
 
 export default Rounds;
+function setDeletingRound(arg0: (prev: any) => any[]) {
+  throw new Error('Function not implemented.');
+}

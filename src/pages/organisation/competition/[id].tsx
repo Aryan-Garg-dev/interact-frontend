@@ -350,29 +350,37 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
     setMutex(false);
   };
 
-  const editHackathonField = async (field: string, value: any) => {
+  const editHackathonField = async (field: keyof Hackathon | Partial<Hackathon>, value?: any) => {
     if (mutex) return;
     setMutex(true);
 
-    let data = { ...hackathon };
+    let updatedData: Partial<Hackathon>;
 
-    if (field === 'tags') {
-      data.tags = [...(value || [])];
+    if (typeof field === 'string') {
+      // Single field update
+      updatedData = { [field]: value };
     } else {
-      (data as any)[field] = value;
+      // Bulk update
+      updatedData = field;
     }
 
-    if (!eventDetailsValidator(data) || !validateTeamFormationTimes(data)) return;
+    const updatedHackathon = { ...hackathon, ...updatedData };
 
-    const toaster = Toaster.startLoad(`Editing ${field}...`, uniqueId());
+    if (!eventDetailsValidator(updatedHackathon) || !validateTeamFormationTimes(updatedHackathon)) {
+      setMutex(false);
+      return;
+    }
+
+    const toaster = Toaster.startLoad('Updating hackathon...', uniqueId());
     const res = await patchHandler(
       `${ORG_URL}/${currentOrg.id}/hackathons/${hackathon.id}`,
-      data,
+      updatedHackathon,
       'multipart/form-data'
     );
+
     if (res.statusCode === 200) {
-      setHackathon(data);
-      Toaster.stopLoad(toaster, `${field.charAt(0).toUpperCase() + field.slice(1)} Edited!`, 1);
+      setHackathon(updatedHackathon);
+      Toaster.stopLoad(toaster, 'Hackathon updated successfully!', 1);
     } else {
       Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
@@ -380,51 +388,24 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
     setMutex(false);
   };
 
-  const handleTitleChange = (title: string) => {
-    editHackathonField('title', title);
+  const handleSave = (data: Partial<Hackathon>) => {
+    editHackathonField(data);
   };
 
-  const handleMinTeamSizeChange = async (minTeamSize: number) => {
-    await editHackathonField('minTeamSize', minTeamSize);
+  const handleMinTeamSizeChange = (minTeamSize: number) => {
+    editHackathonField('minTeamSize', minTeamSize);
   };
 
-  const handleMaxTeamSizeChange = async (maxTeamSize: number) => {
-    await editHackathonField('maxTeamSize', maxTeamSize);
+  const handleMaxTeamSizeChange = (maxTeamSize: number) => {
+    editHackathonField('maxTeamSize', maxTeamSize);
   };
 
-  const handleTeamFormationStartTimeChange = async (startTime: string) => {
-    await editHackathonField('teamFormationStartTime', startTime);
+  const handleTeamFormationStartTimeChange = (startTime: string) => {
+    editHackathonField('teamFormationStartTime', startTime);
   };
 
-  const handleTeamFormationEndTimeChange = async (endTime: string) => {
-    await editHackathonField('teamFormationEndTime', endTime);
-  };
-  const handleTaglineChange = async (tagline: string) => {
-    await editHackathonField('tagline', tagline);
-  };
-
-  const handleLocationChange = async (location: string) => {
-    await editHackathonField('location', location);
-  };
-
-  const handleStartTimeChange = async (startTime: string) => {
-    await editHackathonField('startTime', getFormattedTime(startTime));
-  };
-
-  const handleEndTimeChange = async (endTime: string) => {
-    await editHackathonField('endTime', getFormattedTime(endTime));
-  };
-
-  const handleDescriptionChange = async (description: string) => {
-    await editHackathonField('description', description);
-  };
-
-  const handleTagsChange = async (updatedTags: string[]) => {
-    await editHackathonField('tags', updatedTags);
-  };
-
-  const handleLinksChange = async (links: string[]) => {
-    await editHackathonField('links', links);
+  const handleTeamFormationEndTimeChange = (endTime: string) => {
+    editHackathonField('teamFormationEndTime', endTime);
   };
 
   const eventDetailsValidator = (data: Hackathon) => {
@@ -528,22 +509,28 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
         <div className="container mx-auto px-4 ">
           <Basics
             title={hackathon.title}
-            setTitle={handleTitleChange}
+            setTitle={val => setHackathon({ ...hackathon, title: val })}
             tagline={hackathon.tagline || ''}
-            setTagline={handleTaglineChange}
+            setTagline={val => setHackathon({ ...hackathon, tagline: val })}
             location={hackathon.location}
-            setLocation={handleLocationChange}
+            setLocation={val => setHackathon({ ...hackathon, location: val })}
             startTime={getInputFieldFormatTime(hackathon.startTime)}
-            setStartTime={handleStartTimeChange}
+            setStartTime={val => setHackathon({ ...hackathon, startTime: new Date(getFormattedTime(val)) })}
             endTime={getInputFieldFormatTime(hackathon.endTime)}
-            setEndTime={handleEndTimeChange}
+            setEndTime={val => setHackathon({ ...hackathon, endTime: new Date(getFormattedTime(val)) })}
             description={hackathon.description}
-            setDescription={handleDescriptionChange}
+            setDescription={val => setHackathon({ ...hackathon, description: val })}
             tags={hackathon.tags || []}
-            setTags={handleTagsChange}
+            setTags={val => setHackathon({ ...hackathon, tags: val })}
             links={hackathon.links || []}
-            setLinks={handleLinksChange}
-            setImage={setImage}
+            setLinks={val => setHackathon({ ...hackathon, links: val })}
+            onSave={handleSave}
+            setImage={file => {
+              if (file) {
+                // Handle image upload logic here
+              }
+            }}
+            isEditMode={true}
           />
         </div>
       ),
@@ -581,13 +568,14 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
         <div className="container mx-auto px-4">
           <Teams
             minTeamSize={hackathon.minTeamSize}
-            setMinTeamSize={handleMinTeamSizeChange}
+            setMinTeamSize={val => editHackathonField('minTeamSize', val)}
             maxTeamSize={hackathon.maxTeamSize}
-            setMaxTeamSize={handleMaxTeamSizeChange}
-            teamFormationStartTime={getInputFieldFormatTime(hackathon.teamFormationStartTime)}
-            setTeamFormationStartTime={handleTeamFormationStartTimeChange}
-            teamFormationEndTime={getInputFieldFormatTime(hackathon.teamFormationEndTime)}
-            setTeamFormationEndTime={handleTeamFormationEndTimeChange}
+            setMaxTeamSize={val => editHackathonField('maxTeamSize', val)}
+            teamFormationStartTime={hackathon.teamFormationStartTime}
+            setTeamFormationStartTime={val => editHackathonField('teamFormationStartTime', val)}
+            teamFormationEndTime={hackathon.teamFormationEndTime}
+            setTeamFormationEndTime={val => editHackathonField('teamFormationEndTime', val)}
+            onSave={handleSave}
           />
         </div>
       ),
