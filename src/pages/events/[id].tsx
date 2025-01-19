@@ -112,7 +112,7 @@ const EventComponent = ({ id }: Props) => {
 
   const handleRegister = async () => {
     const toaster = Toaster.startLoad('Registering for the Event');
-    await getHandler(event.hackathonID ? `/hackathons/register/${event.hackathonID}` : `/events/register/${id}`)
+    getHandler(event.hackathonID ? `/hackathons/register/${event.hackathonID}` : `/events/register/${id}`)
       .then(res => {
         if (res.statusCode === 200) {
           Toaster.stopLoad(toaster, 'Successfully registered for the Event!', 1);

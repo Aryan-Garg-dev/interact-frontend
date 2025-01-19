@@ -245,41 +245,28 @@ const PostComponent = ({
           <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable />
         )}
         {clickedOnEdit ? (
-          <div className="relative">
-            {/* <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable/> */}
-            {/* <textarea
-              id="textarea_id"
-              maxLength={2000}
-              value={caption}
-              autoFocus={true}
-              onChange={el => setCaption(el.target.value)}
-              onKeyDown={handleKeyDown}
-              className="w-full text-sm whitespace-pre-wrap rounded-md focus:outline-none dark:bg-dark_primary_comp p-2 my-2 max-h-72"
-            /> */}
-
-            <div className="dark:text-white flex items-center gap-4 max-md:gap-1 absolute -bottom-8 right-0">
-              <div
-                onClick={e => {
-                  e.stopPropagation();
-                  setClickedOnEdit(false);
-                }}
-                className="border-[1px] border-primary_black flex-center rounded-full w-20 max-md:w-12 max-md:text-xxs p-1 cursor-pointer"
-              >
-                cancel
-              </div>
-              {caption == post.content ? (
-                <div className="bg-primary_black bg-opacity-50 text-white flex-center rounded-full w-16 max-md:w-12 max-md:text-xxs p-1 cursor-default">
-                  save
-                </div>
-              ) : (
-                <div
-                  onClick={handleEdit}
-                  className="bg-primary_black text-white flex-center rounded-full w-16 max-md:w-12 max-md:text-xxs p-1 cursor-pointer"
-                >
-                  save
-                </div>
-              )}
+          <div className="dark:text-white flex items-center gap-4 max-md:gap-1 absolute -bottom-8 right-0">
+            <div
+              onClick={e => {
+                e.stopPropagation();
+                setClickedOnEdit(false);
+              }}
+              className="border-[1px] border-primary_black flex-center rounded-full w-20 max-md:w-12 max-md:text-xxs p-1 cursor-pointer"
+            >
+              cancel
             </div>
+            {caption == post.content ? (
+              <div className="bg-primary_black bg-opacity-50 text-white flex-center rounded-full w-16 max-md:w-12 max-md:text-xxs p-1 cursor-default">
+                save
+              </div>
+            ) : (
+              <div
+                onClick={handleEdit}
+                className="bg-primary_black text-white flex-center rounded-full w-16 max-md:w-12 max-md:text-xxs p-1 cursor-pointer"
+              >
+                save
+              </div>
+            )}
           </div>
         ) : (
           <div className={`w-full text-sm  whitespace-pre-wrap mb-2 ${clamp && 'line-clamp-6'}`}>

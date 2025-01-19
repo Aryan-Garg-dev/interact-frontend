@@ -5,7 +5,7 @@ import { configSelector, setUpdatingLikes } from '@/slices/configSlice';
 import { setLikes, userSelector } from '@/slices/userSlice';
 import { Event } from '@/types';
 import Semaphore from '@/utils/semaphore';
-import { Eye, HeartStraight, ChatCircleText, Export } from '@phosphor-icons/react';
+import { Eye, HeartStraight, ChatCircleText, Export, Users } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SignUp from '../common/signup_box';
@@ -87,9 +87,15 @@ const LowerEvent = ({ event, numLikes, setNumLikes }: Props) => {
         />
       )}
       <div className="w-full flex items-center justify-between flex-wrap">
-        <div className="flex items-center gap-2 cursor-default">
-          <Eye size={24} />
-          <div className="text-sm">{event.noImpressions}</div>
+        <div className="flex-center gap-4 cursor-default">
+          <div className="flex-center gap-2">
+            <Eye size={24} />
+            <div className="text-sm">{event.noImpressions}</div>
+          </div>
+          <div className="flex-center gap-2">
+            <Users size={24} />
+            <div className="text-sm">{event.hackathon?.noParticipants}</div>
+          </div>
           {user.organizationMemberships.map(membership => membership.organizationID).includes(event.organizationID) && (
             <Gear
               size={24}
