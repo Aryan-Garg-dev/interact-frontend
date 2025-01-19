@@ -75,17 +75,11 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
   };
   const handleDeleteRound = async (sponsorId: string) => {
     if (window.confirm('Are you sure you want to delete this round?')) {
-      try {
-        // Add the sponsor ID to the deleting list immediately
-        setDeletingRound(prev => [...prev, sponsorId]);
+      // Add the sponsor ID to the deleting list immediately
+      setDeletingRound(prev => [...prev, sponsorId]);
 
-        // Perform the delete operation
-        await deleteRound(sponsorId);
-      } catch (error) {
-        console.error('Error deleting sponsor:', error);
-        // Remove the sponsor ID from deleting list if the operation failed
-        setDeletingRound(prev => prev.filter(id => id !== sponsorId));
-      }
+      // Perform the delete operation
+      await deleteRound(sponsorId);
     }
   };
   const resetForm = () => {

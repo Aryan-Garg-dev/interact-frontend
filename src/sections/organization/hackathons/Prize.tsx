@@ -69,17 +69,11 @@ const Prizes: React.FC<PrizeManagerProps> = ({ prizes, addPrize, editPrize, dele
   };
   const handleDeletePrize = async (sponsorId: string) => {
     if (window.confirm('Are you sure you want to delete this prize?')) {
-      try {
-        // Add the sponsor ID to the deleting list immediately
-        setDeletingPrize(prev => [...prev, sponsorId]);
+      // Add the sponsor ID to the deleting list immediately
+      setDeletingPrize(prev => [...prev, sponsorId]);
 
-        // Perform the delete operation
-        await deletePrize(sponsorId);
-      } catch (error) {
-        console.error('Error deleting sponsor:', error);
-        // Remove the sponsor ID from deleting list if the operation failed
-        setDeletingPrize(prev => prev.filter(id => id !== sponsorId));
-      }
+      // Perform the delete operation
+      await deletePrize(sponsorId);
     }
   };
   return (

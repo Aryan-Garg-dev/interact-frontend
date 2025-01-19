@@ -47,17 +47,11 @@ const Tracks: React.FC<TrackManagerProps> = ({ tracks, addTrack, editTrack, dele
   };
   const handleDeleteTrack = async (sponsorId: string) => {
     if (window.confirm('Are you sure you want to delete this track?')) {
-      try {
-        // Add the sponsor ID to the deleting list immediately
-        setDeletingTracks(prev => [...prev, sponsorId]);
+      // Add the sponsor ID to the deleting list immediately
+      setDeletingTracks(prev => [...prev, sponsorId]);
 
-        // Perform the delete operation
-        await deleteTrack(sponsorId);
-      } catch (error) {
-        console.error('Error deleting sponsor:', error);
-        // Remove the sponsor ID from deleting list if the operation failed
-        setDeletingTracks(prev => prev.filter(id => id !== sponsorId));
-      }
+      // Perform the delete operation
+      await deleteTrack(sponsorId);
     }
   };
   return (

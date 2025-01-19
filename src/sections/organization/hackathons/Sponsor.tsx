@@ -94,17 +94,11 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
 
   const handleDelete = async (sponsorId: string) => {
     if (window.confirm('Are you sure you want to delete this sponsor?')) {
-      try {
-        // Add the sponsor ID to the deleting list immediately
-        setDeletingSponsors(prev => [...prev, sponsorId]);
+      // Add the sponsor ID to the deleting list immediately
+      setDeletingSponsors(prev => [...prev, sponsorId]);
 
-        // Perform the delete operation
-        await deleteSponsor(sponsorId);
-      } catch (error) {
-        console.error('Error deleting sponsor:', error);
-        // Remove the sponsor ID from deleting list if the operation failed
-        setDeletingSponsors(prev => prev.filter(id => id !== sponsorId));
-      }
+      // Perform the delete operation
+      await deleteSponsor(sponsorId);
     }
   };
 
