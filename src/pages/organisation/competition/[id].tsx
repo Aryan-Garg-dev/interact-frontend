@@ -491,21 +491,15 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
         <div className="container mx-auto px-4 ">
           <Basics
             title={hackathon.title}
-            setTitle={val => setHackathon({ ...hackathon, title: val })}
             tagline={hackathon.tagline || ''}
-            setTagline={val => setHackathon({ ...hackathon, tagline: val })}
             location={hackathon.location}
-            setLocation={val => setHackathon({ ...hackathon, location: val })}
             startTime={getInputFieldFormatTime(hackathon.startTime)}
             setStartTime={val => setHackathon({ ...hackathon, startTime: new Date(getFormattedTime(val)) })}
             endTime={getInputFieldFormatTime(hackathon.endTime)}
             setEndTime={val => setHackathon({ ...hackathon, endTime: new Date(getFormattedTime(val)) })}
             description={hackathon.description}
-            setDescription={val => setHackathon({ ...hackathon, description: val })}
             tags={hackathon.tags || []}
-            setTags={val => setHackathon({ ...hackathon, tags: val })}
             links={hackathon.links || []}
-            setLinks={val => setHackathon({ ...hackathon, links: val })}
             onSave={handleSave}
             setImage={file => {
               if (file) {
@@ -550,13 +544,13 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
         <div className="container mx-auto px-4">
           <Teams
             minTeamSize={hackathon.minTeamSize}
-            setMinTeamSize={val => editHackathonField('minTeamSize', val)}
+            setMinTeamSize={val => setHackathon({ ...hackathon, minTeamSize: val })}
             maxTeamSize={hackathon.maxTeamSize}
-            setMaxTeamSize={val => editHackathonField('maxTeamSize', val)}
+            setMaxTeamSize={val => setHackathon({ ...hackathon, maxTeamSize: val })}
             teamFormationStartTime={hackathon.teamFormationStartTime}
-            setTeamFormationStartTime={val => editHackathonField('teamFormationStartTime', val)}
+            setTeamFormationStartTime={val => setHackathon({ ...hackathon, teamFormationStartTime: new Date(val) })}
             teamFormationEndTime={hackathon.teamFormationEndTime}
-            setTeamFormationEndTime={val => editHackathonField('teamFormationEndTime', val)}
+            setTeamFormationEndTime={val => setHackathon({ ...hackathon, teamFormationEndTime: new Date(val) })}
             onSave={handleSave}
           />
         </div>

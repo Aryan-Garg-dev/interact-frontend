@@ -3,26 +3,19 @@ import Input from '@/components/form/input';
 import Tags from '@/components/form/tags';
 import Links from '@/components/form/links';
 import Time from '@/components/form/time';
-import { Button } from '@/components/ui/button';
 import { Hackathon } from '@/types';
 
 interface BasicsProps {
   title: string;
-  setTitle: (val: string) => void;
   tagline: string;
-  setTagline: (val: string) => void;
   location: string;
-  setLocation: (val: string) => void;
   startTime: string;
   setStartTime: (val: string) => void;
   endTime: string;
   setEndTime: (val: string) => void;
   description: string;
-  setDescription: (val: string) => void;
   tags: string[];
-  setTags: (val: string[]) => void;
   links: string[];
-  setLinks: (val: string[]) => void;
   setImage: (file: File | null) => void;
   isEditMode: boolean;
   onSave: (updatedData: Partial<Hackathon>) => void;
@@ -30,21 +23,15 @@ interface BasicsProps {
 
 const Basics: React.FC<BasicsProps> = ({
   title,
-  setTitle,
   tagline,
-  setTagline,
   location,
-  setLocation,
   startTime,
   setStartTime,
   endTime,
   setEndTime,
   description,
-  setDescription,
   tags,
-  setTags,
   links,
-  setLinks,
   setImage,
   isEditMode,
   onSave,

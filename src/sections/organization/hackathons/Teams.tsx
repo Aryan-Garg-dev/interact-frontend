@@ -27,35 +27,12 @@ const Teams: React.FC<TeamsProps> = ({
   setTeamFormationEndTime,
   onSave,
 }) => {
-  const [minTeamSizeInput, setMinTeamSizeInput] = useState<number>(minTeamSize);
-  const [maxTeamSizeInput, setMaxTeamSizeInput] = useState<number>(maxTeamSize);
-
   const handleMinTeamSizeChange = (value: number) => {
-    setMinTeamSizeInput(value);
+    setMinTeamSize(value);
   };
 
   const handleMaxTeamSizeChange = (value: number) => {
-    setMaxTeamSizeInput(value);
-  };
-
-  const handleMinTeamSizeKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      if (minTeamSizeInput < 1) {
-        Toaster.error('Min Team Size must be at least 1');
-        return;
-      }
-      setMinTeamSize(minTeamSizeInput);
-    }
-  };
-
-  const handleMaxTeamSizeKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      if (maxTeamSizeInput < 1) {
-        Toaster.error('Max Team Size must be at least 1');
-        return;
-      }
-      setMaxTeamSize(maxTeamSizeInput);
-    }
+    setMaxTeamSize(value);
   };
 
   const handleTeamFormationStartTimeChange = (value: string) => {
@@ -82,9 +59,8 @@ const Teams: React.FC<TeamsProps> = ({
       <div className="w-full">
         <div className="text-xs ml-1 font-medium uppercase text-gray-500">Min Team Size*</div>
         <input
-          value={minTeamSizeInput}
+          value={minTeamSize}
           onChange={el => handleMinTeamSizeChange(Number(el.target.value))}
-          onKeyDown={handleMinTeamSizeKeyDown}
           type="number"
           className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
         />
@@ -92,9 +68,8 @@ const Teams: React.FC<TeamsProps> = ({
       <div className="w-full">
         <div className="text-xs ml-1 font-medium uppercase text-gray-500">Max Team Size*</div>
         <input
-          value={maxTeamSizeInput}
+          value={maxTeamSize}
           onChange={el => handleMaxTeamSizeChange(Number(el.target.value))}
-          onKeyDown={handleMaxTeamSizeKeyDown}
           type="number"
           className="w-full font-medium bg-transparent focus:outline-none border-[1px] border-gray-400 rounded-lg p-2"
         />
