@@ -203,7 +203,7 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
         </div>
       )}
 
-      {visibleSponsors?.length > 0 && (
+      {visibleSponsors?.length > 0 ? (
         <div className="w-full flex flex-wrap gap-4">
           {visibleSponsors?.map(sponsor => (
             <div
@@ -237,6 +237,10 @@ const Sponsors: React.FC<SponsorManagerProps> = ({ sponsors, addSponsor, editSpo
               </div>
             </div>
           ))}
+        </div>
+      ) : (
+        <div className="text-gray-400 bg-gray-900 border border-gray-800 rounded-xl p-6 text-center">
+          No sponsors added yet.
         </div>
       )}
     </div>

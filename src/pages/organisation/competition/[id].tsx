@@ -34,6 +34,7 @@ import { EXPLORE_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
 import deleteHandler from '@/handlers/delete_handler';
 import Loader from '@/components/common/loader';
+import { uniqueId } from 'lodash';
 
 interface Props {
   id: string;
@@ -363,7 +364,7 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
 
     if (!eventDetailsValidator(data) || !validateTeamFormationTimes(data)) return;
 
-    const toaster = Toaster.startLoad(`Editing ${field}...`);
+    const toaster = Toaster.startLoad(`Editing ${field}...`, uniqueId());
     const res = await patchHandler(
       `${ORG_URL}/${currentOrg.id}/hackathons/${hackathon.id}`,
       data,
@@ -382,6 +383,7 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
   const handleTitleChange = (title: string) => {
     editHackathonField('title', title);
   };
+
   const handleMinTeamSizeChange = async (minTeamSize: number) => {
     await editHackathonField('minTeamSize', minTeamSize);
   };

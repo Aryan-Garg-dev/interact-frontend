@@ -16,6 +16,7 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [formState, setFormState] = useState(initialHackathonRound);
+  const [optionsMetric, setOptionsMetric] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,7 +36,11 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
     }));
   };
 
-  const handleMetricChange = (index: number, field: string, value: string) => {
+  const handleMetricChange = (index: number, field: string, value: string | string[]) => {
+    if (field === 'options') {
+      setOptionsMetric(value as string);
+      value = (value as string).split(',').map(opt => opt.trim());
+    }
     setFormState(prev => ({
       ...prev,
       metrics: prev.metrics.map((metric, i) => (i === index ? { ...metric, [field]: value } : metric)),
@@ -70,6 +75,7 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
 
   const resetForm = () => {
     setFormState(initialHackathonRound);
+    setOptionsMetric('');
   };
 
   return (
@@ -190,7 +196,7 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
 
                     {metric.type === 'select' && (
                       <textarea
-                        value={metric.options?.join(', ') || ''}
+                        value={optionsMetric}
                         onChange={e => handleMetricChange(index, 'options', e.target.value)}
                         placeholder="Options (comma separated)"
                         className="w-full px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-white resize-none"

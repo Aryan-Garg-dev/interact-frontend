@@ -216,6 +216,27 @@ const NewHackathon: React.FC = () => {
     Toaster.success('Draft saved!');
   };
 
+  const handleResetForm = () => {
+    setTitle('');
+    setDescription('');
+    setTagline('');
+    setTags([]);
+    setLinks([]);
+    setLocation('');
+    setStartTime('');
+    setEndTime('');
+    setTeamFormationStartTime('');
+    setTeamFormationEndTime('');
+    setImage(null);
+    setMinTeamSize(2);
+    setMaxTeamSize(5);
+    setTracks([]);
+    setPrizes([]);
+    setRounds([]);
+    setSponsors([]);
+    setFaqs([]);
+  };
+
   useEffect(() => {
     const savedData = localStorage.getItem(`hackathon-draft-${currentOrg.id}`);
     if (savedData) {
@@ -403,9 +424,14 @@ const NewHackathon: React.FC = () => {
         <div className="w-full bg-gray-50 dark:bg-neutral-900 h-full flex flex-col gap-2 px-6 pb-10 justify-between">
           <Timeline data={screens} />
           <div className="w-full flex items-center justify-between">
-            <Button onClick={handleSaveDraft} className="w-fit">
-              Save this Draft
-            </Button>
+            <div className="w-fit flex-center gap-2">
+              <Button onClick={handleResetForm} className="w-fit" variant="outline">
+                Reset Form
+              </Button>
+              <Button onClick={handleSaveDraft} className="w-fit">
+                Save this Draft
+              </Button>
+            </div>
             <GlowButton label="Submit Your Competition" onClick={handleSubmit} />
           </div>
         </div>

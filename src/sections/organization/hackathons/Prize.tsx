@@ -34,7 +34,7 @@ const Prizes: React.FC<PrizeManagerProps> = ({ prizes, addPrize, editPrize, dele
       title,
       description,
       amount: Number(amount),
-      trackID: trackID || undefined,
+      hackathonTrackID: trackID || undefined,
     };
 
     if (isEditing) {
@@ -57,7 +57,7 @@ const Prizes: React.FC<PrizeManagerProps> = ({ prizes, addPrize, editPrize, dele
     setTitle(prize.title);
     setDescription(prize.description || '');
     setAmount(prize.amount.toString());
-    setTrackID(prize.trackID || '');
+    setTrackID(prize.hackathonTrackID || '');
     setIsEditing(id);
     setShowModal(true);
   };
@@ -173,9 +173,9 @@ const Prizes: React.FC<PrizeManagerProps> = ({ prizes, addPrize, editPrize, dele
                   <h3 className="font-bold text-white text-lg">{prize.title}</h3>
                   <p className="text-gray-400">{prize.description}</p>
                   <p className="text-green-400 font-medium">{Number(prize.amount).toLocaleString()}</p>
-                  {prize.trackID && (
+                  {prize.hackathonTrackID && (
                     <p className="text-sm text-gray-500">
-                      Track: {tracks.find(track => track.id === prize.trackID)?.title}
+                      Track: {tracks.find(track => track.id === prize.hackathonTrackID)?.title}
                     </p>
                   )}
                 </div>
