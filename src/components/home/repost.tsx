@@ -173,39 +173,39 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
           <div className="border-[1px] rounded-lg p-2 text-sm font-medium">* This post has been deleted *</div>
         )}
 
-        {clickedOnEdit && (
-          <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable />
-        )}
         {clickedOnEdit ? (
-          <div className="dark:text-white flex items-center gap-4 max-md:gap-1 absolute -bottom-8 right-0">
-            <div
-              onClick={e => {
-                e.stopPropagation();
-                setClickedOnEdit(false);
-              }}
-              className="border-[1px] border-primary_black flex-center rounded-full w-20 max-md:w-12 max-md:text-xxs p-1 cursor-pointer"
-            >
-              cancel
-            </div>
-            {caption == post.content ? (
-              <div className="bg-primary_black bg-opacity-50 text-white flex-center rounded-full w-16 max-md:w-12 max-md:text-xxs p-1 cursor-default">
-                save
-              </div>
-            ) : (
+          <>
+            <Editor
+              className="w-full min-h-[150px] text-sm mb-2"
+              content={caption}
+              setContent={setCaption}
+              limit={2000}
+              editable
+            />
+            <div className="w-full dark:text-white flex items-center justify-end gap-2 max-md:gap-1">
               <div
-                onClick={handleEdit}
-                className="bg-primary_black text-white flex-center rounded-full w-16 max-md:w-12 max-md:text-xxs p-1 cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation();
+                  setClickedOnEdit(false);
+                }}
+                className="border-[1px] border-primary_black flex-center rounded-full w-16 max-md:w-12 text-xs max-md:text-xxs p-1 cursor-pointer"
+              >
+                cancel
+              </div>
+              <div
+                onClick={caption !== post.content ? handleEdit : undefined}
+                className={`bg-primary_black ${
+                  caption === post.content ? 'bg-opacity-50 cursor-default' : 'cursor-pointer'
+                } text-white flex-center rounded-full w-16 max-md:w-12 text-xs max-md:text-xxs p-1`}
               >
                 save
               </div>
-            )}
-          </div>
+            </div>
+          </>
         ) : (
-          <div className="w-full text-sm whitespace-pre-wrap mb-2">
-            <Editor content={post.content} editable={false} />
-          </div>
+          post.content && <Editor className="w-full text-sm mb-2" content={post.content} editable={false} />
         )}
-        {showLowerPost && <LowerPost post={post} />}
+        {showLowerPost && post.content != '' && <LowerPost post={post} />}
       </div>
     </div>
   );

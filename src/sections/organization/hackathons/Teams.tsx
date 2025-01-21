@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Time from '@/components/form/time';
 import { getInputFieldFormatTime } from '@/utils/funcs/time';
-import Toaster from '@/utils/toaster';
 import { Hackathon } from '@/types';
 
 interface TeamsProps {

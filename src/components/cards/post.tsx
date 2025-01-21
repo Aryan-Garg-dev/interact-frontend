@@ -31,14 +31,14 @@ const PostCard = ({ post }: Props) => {
       </div>
       <div className="w-[calc(100%-32px)] flex flex-col gap-1">
         <div className="w-full h-fit flex justify-between items-center">
-          <div className="text-sm font-medium">@{post.user.username}</div>
+          <div className="flex-center gap-1">
+            <div className="font-semibold">{post.user.name}</div>
+            <div className="text-xs font-normal text-gray-500">@{post.user.username}</div>
+          </div>
+
           <div className="flex gap-2 font-light text-xxs">{moment(post.postedAt).fromNow()}</div>
         </div>
-        <Editor
-          className="w-full text-xs whitespace-pre-wrap mb-2 line-clamp-8"
-          content={post.content}
-          editable={false}
-        />
+        <Editor className="w-full text-xs whitespace-pre-wrap line-clamp-8" content={post.content} editable={false} />
       </div>
     </Link>
   );

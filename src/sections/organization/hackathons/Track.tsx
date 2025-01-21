@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Pencil, Trash } from 'lucide-react';
 import { HackathonTrack } from '@/types';
-import { set } from 'nprogress';
 
 interface TrackManagerProps {
   tracks: HackathonTrack[];
@@ -15,7 +14,6 @@ const Tracks: React.FC<TrackManagerProps> = ({ tracks, addTrack, editTrack, dele
   const [trackDescription, setTrackDescription] = useState('');
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
-  const [deletingTracks, setDeletingTracks] = useState<string[]>([]);
   const handleAddOrEditTrack = () => {
     if (!trackName.trim() || !trackDescription.trim()) return;
 
@@ -45,13 +43,10 @@ const Tracks: React.FC<TrackManagerProps> = ({ tracks, addTrack, editTrack, dele
     setIsEditing(track.id);
     setShowModal(true);
   };
+
   const handleDeleteTrack = async (sponsorId: string) => {
     if (window.confirm('Are you sure you want to delete this track?')) {
-      // Add the sponsor ID to the deleting list immediately
-      setDeletingTracks(prev => [...prev, sponsorId]);
-
-      // Perform the delete operation
-      await deleteTrack(sponsorId);
+      deleteTrack(sponsorId);
     }
   };
   return (
