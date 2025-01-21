@@ -45,7 +45,7 @@ const Projects = ({ userID, displayOnProfile = false, contributing = false, org 
   }, [userID, contributing]);
 
   return (
-    <div className="w-5/6 max-md:w-full mx-auto">
+    <div className={`${org ? 'w-5/6 max-md:w-full mx-auto' : 'w-full'}`}>
       {loading ? (
         <Loader />
       ) : projects?.length > 0 ? (
