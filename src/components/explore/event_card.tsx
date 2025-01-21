@@ -16,7 +16,7 @@ const getDurationInHours = (startTime: Date, endTime: Date) => {
   return `${durationHours} hours`;
 };
 
-const EventCardNew = ({ event }: Props) => {
+const EventCard = ({ event }: Props) => {
   const startDate = event.hackathon?.startTime ? new Date(event.hackathon.startTime) : null;
   const formattedMonth = startDate ? new Intl.DateTimeFormat('en-US', { month: 'short' }).format(startDate) : 'N/A';
   const formattedDay = startDate ? startDate.getDate() : 'N/A';
@@ -127,4 +127,4 @@ const EventCardNew = ({ event }: Props) => {
   );
 };
 
-export default EventCardNew;
+export default EventCard;
