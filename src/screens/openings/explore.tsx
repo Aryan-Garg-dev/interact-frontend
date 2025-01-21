@@ -85,7 +85,7 @@ const Openings = () => {
     setLoading(true);
     const URL = `${OPENING_URL}/${id}`;
 
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
     if (res.statusCode == 200) {
       setOpenings([res.data.opening]);
 

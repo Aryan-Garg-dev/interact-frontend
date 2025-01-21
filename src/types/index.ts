@@ -229,6 +229,8 @@ export interface Project {
   organization: Organization | null;
   createdAt: Date;
   history: ProjectHistory[] | null;
+  hackathonID?: string;
+  hackathon?: Hackathon;
 }
 
 export interface PostTag {

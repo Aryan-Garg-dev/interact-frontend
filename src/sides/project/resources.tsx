@@ -24,7 +24,7 @@ const Resources = ({ projectID }: Props) => {
 
   const fetchBuckets = () => {
     const URL = `${PROJECT_URL}/${projectID}/resource`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           setBuckets(res.data.buckets || []);

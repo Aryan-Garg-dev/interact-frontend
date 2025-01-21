@@ -137,7 +137,7 @@ const EventCard = ({
           </div>
         )}
       </div>
-      <div className="w-full h-20 bg-white dark:bg-dark_primary_comp_hover rounded-b-xl flex p-4">
+      <div className="w-full h-20 bg-gray-50 dark:bg-dark_primary_comp_hover rounded-b-xl flex p-4">
         <div className="w-1/6 flex items-start justify-start mt-1">
           <div className="w-fit flex flex-col items-end">
             <div className={`w-fit ${!smaller ? 'text-xs' : 'text-xxs'} uppercase transition-ease-out-500`}>

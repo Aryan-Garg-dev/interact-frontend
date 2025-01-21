@@ -1,7 +1,6 @@
 import Loader from '@/components/common/loader';
 import OrgSidebar from '@/components/common/org_sidebar';
 import AccessTree from '@/components/organization/access_tree';
-import { ORG_SENIOR } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
@@ -9,7 +8,6 @@ import TaskView from '@/sections/organization/tasks/task_view';
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { Task, User } from '@/types';
 import { initialOrganization } from '@/types/initials';
-import checkOrgAccess from '@/utils/funcs/access';
 import Toaster from '@/utils/toaster';
 import OrgMembersOnlyAndProtect from '@/utils/wrappers/org_members_only';
 import BaseWrapper from '@/wrappers/base';
@@ -52,10 +50,7 @@ const Tasks = () => {
       .then(res => {
         if (res.statusCode == 200) setOrganization(res.data.organization);
         else {
-          if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
-          else {
-            Toaster.error(SERVER_ERROR, 'error_toaster');
-          }
+          Toaster.error(res.data.message || SERVER_ERROR, 'error_toaster');
         }
       })
       .catch(err => {
@@ -71,7 +66,7 @@ const Tasks = () => {
       .map(u => u.id)
       .join(',')}&page=${initialPage ? initialPage : page}&limit=${20}`;
 
-    getHandler(URL, abortController?.signal)
+    getHandler(URL, abortController?.signal, true)
       .then(res => {
         if (res.statusCode === 200) {
           const taskData = res.data.tasks || [];

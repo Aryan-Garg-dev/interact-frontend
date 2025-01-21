@@ -68,11 +68,11 @@ export default function Openings({ orgID }: Props) {
       {clickedOnNewOpening && checkOrgAccess(ORG_MANAGER) && (
         <NewOpening setShow={setClickedOnNewOpening} openings={openings} setOpenings={setOpenings} />
       )}
-      <div className="w-full flex justify-evenly gap-4 px-4 pb-base_padding">
+      <div className="w-full flex justify-between">
         {openings.length > 0 ? (
           <>
             <InfiniteScroll
-              className={`${clickedOnOpening ? 'w-full' : 'w-[720px]'} max-lg:w-full flex flex-col gap-4`}
+              className={`${clickedOnOpening ? 'w-[480px]' : 'w-[720px]'} max-lg:w-full flex flex-col gap-4`}
               dataLength={openings.length}
               next={fetchOpenings}
               hasMore={hasMore}

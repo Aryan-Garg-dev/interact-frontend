@@ -75,7 +75,7 @@ const Tasks = ({ project, org = false }: Props) => {
               project={project}
               setTasks={setTasks}
               trigger={
-                <div className="mx-auto text-xl text-gradient font-medium hover-underline-animation after:bg-dark_primary_btn cursor-pointer">
+                <div className="w-fit mx-auto text-xl text-gradient font-medium hover-underline-animation after:bg-dark_primary_btn cursor-pointer">
                   Add a Task
                 </div>
               }
