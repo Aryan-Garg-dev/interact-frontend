@@ -14,14 +14,14 @@ import { getFormattedTime } from '@/utils/funcs/time';
 import { Timeline } from '@/components/ui/timeline';
 import GlowButton from '@/components/buttons/glow_btn';
 import { Button } from '@/components/ui/button';
-import Tracks from '@/sections/organization/hackathons/track';
-import Prizes from '@/sections/organization/hackathons/prize';
-import Rounds from '@/sections/organization/hackathons/ound';
-import FAQs from '@/sections/organization/hackathons/faq';
-import Sponsors from '@/sections/organization/hackathons/sponsor';
-import Teams from '@/sections/organization/hackathons/teams';
+import Tracks from '@/sections/organization/hackathons/tracks';
+import Prizes from '@/sections/organization/hackathons/prizes';
+import Rounds from '@/sections/organization/hackathons/rounds';
+import FAQs from '@/sections/organization/hackathons/faqs';
+import Sponsors from '@/sections/organization/hackathons/sponsors';
 import Basics from '@/sections/organization/hackathons/basics';
 import { uniqueId } from 'lodash';
+import Teams from '@/sections/organization/hackathons/teams';
 
 const NewHackathon: React.FC = () => {
   const [title, setTitle] = useState('');

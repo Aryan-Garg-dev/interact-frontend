@@ -20,12 +20,11 @@ import moment from 'moment';
 import { ORG_URL } from '@/config/routes';
 import { getFormattedTime, getInputFieldFormatTime } from '@/utils/funcs/time';
 import { Timeline } from '@/components/ui/timeline';
-import Tracks from '@/sections/organization/hackathons/track';
-import Prizes from '@/sections/organization/hackathons/prize';
-import Rounds from '@/sections/organization/hackathons/ound';
-import FAQs from '@/sections/organization/hackathons/faq';
-import Sponsors from '@/sections/organization/hackathons/sponsor';
-import Teams from '@/sections/organization/hackathons/teams';
+import Tracks from '@/sections/organization/hackathons/tracks';
+import Prizes from '@/sections/organization/hackathons/prizes';
+import Rounds from '@/sections/organization/hackathons/rounds';
+import FAQs from '@/sections/organization/hackathons/faqs';
+import Sponsors from '@/sections/organization/hackathons/sponsors';
 import Basics from '@/sections/organization/hackathons/basics';
 import { Hackathon } from '@/types';
 import { GetServerSidePropsContext } from 'next/types';
@@ -35,6 +34,7 @@ import patchHandler from '@/handlers/patch_handler';
 import deleteHandler from '@/handlers/delete_handler';
 import Loader from '@/components/common/loader';
 import { uniqueId } from 'lodash';
+import Teams from '@/sections/organization/hackathons/teams';
 
 interface Props {
   id: string;
