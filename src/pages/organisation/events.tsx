@@ -30,6 +30,7 @@ import HackathonHistories from '@/sections/organization/hackathons/history';
 import NoEvents from '@/components/fillers/events';
 import EditHackathonCoordinators from '@/sections/organization/hackathons/edit_hackathon_coordinators';
 import EditHackathonJudges from '@/sections/organization/hackathons/edit_hackathon_judges';
+import EventCardNew from '@/components/explore/event_card_new';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -223,7 +224,7 @@ const Events = () => {
                     className="w-full grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-md:grid-cols-1"
                   >
                     {events.map(event => (
-                      <EventCard
+                      <EventCardNew
                         key={event.id}
                         event={event}
                         org={true}

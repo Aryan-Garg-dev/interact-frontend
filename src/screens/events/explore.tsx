@@ -11,6 +11,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import OrderMenu from '@/components/common/order_menu';
 import { userIDSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
+import EventCardNew from '@/components/explore/event_card_new';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -70,7 +71,7 @@ const Events = () => {
           loader={<Loader />}
         >
           {events.map(event => {
-            return <EventCard key={event.id} event={event} />;
+            return <EventCardNew key={event.id} event={event} />;
           })}
         </InfiniteScroll>
       ) : (
