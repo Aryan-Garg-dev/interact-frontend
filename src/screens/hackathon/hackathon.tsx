@@ -21,6 +21,7 @@ import SecondaryButton from '@/components/buttons/secondary_btn';
 import LowerEvent from '@/components/lowers/lower_event';
 import Tags from '@/components/common/tags';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import Editor from '@/components/editor';
 
 interface HackathonProps {
   event: Event;
@@ -163,13 +164,13 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
         <div className="w-full flex flex-col gap-1 text-sm">
           <div
             onClick={handleChat}
-            className="w-fit font-medium text-primary_black hover:text-gray-600 dark:text-white transition-ease-300 cursor-pointer"
+            className="w-fit font-medium hover:text-gray-600 transition-ease-300 cursor-pointer"
           >
             Message the Host
           </div>
           <div
             onClick={() => setClickedOnReport(true)}
-            className="w-fit font-medium text-primary_black hover:text-primary_danger transition-ease-300 cursor-pointer"
+            className="w-fit font-medium hover:text-primary_danger transition-ease-300 cursor-pointer"
           >
             Report Event
           </div>
@@ -275,7 +276,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                   <h3 className="text-xl font-semibold">{hackathon.tagline}</h3>
                 </div>
                 <Tags tags={hackathon?.tags || []} displayAll />
-                {hackathon.description && <div className="text-lg">{hackathon.description}</div>}
+                {hackathon.description && <Editor content={hackathon.description} editable={false} />}
               </div>
             </div>
 

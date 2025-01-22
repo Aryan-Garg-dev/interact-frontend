@@ -11,7 +11,7 @@ import Loader from '@/components/common/loader';
 import { SERVER_ERROR } from '@/config/errors';
 import Image from 'next/image';
 import { MapPin } from '@phosphor-icons/react';
-import EventCard from '@/components/organization/event_card';
+import EventCard from '@/components/explore/event_card';
 import { Event, User } from '@/types';
 import Link from 'next/link';
 import moment from 'moment';
@@ -424,7 +424,7 @@ export const SimilarEvents = ({ id }: { id: string }) => {
       <div className="w-full flex-center text-sm font-semibold text-gray-500 dark:text-gray-200">SIMILAR EVENTS</div>
       <div className="w-full grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-md:grid-cols-1">
         {similarEvents.map(e => (
-          <EventCard key={e.id} event={e} smaller />
+          <EventCard key={e.id} event={e} />
         ))}
       </div>
     </div>

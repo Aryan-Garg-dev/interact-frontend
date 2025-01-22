@@ -101,7 +101,9 @@ const LowerEvent = ({ event, numLikes, setNumLikes }: Props) => {
               size={24}
               onClick={() => {
                 window.location.assign(
-                  `/organisations?oid=${event.organizationID}&redirect_url=/events?eid=${event.id}`
+                  `/organisations?oid=${event.organizationID}&redirect_url=${
+                    event.hackathonID ? `/competition/${event.id}` : `/events?eid=${event.id}`
+                  }`
                 );
               }}
               className="cursor-pointer"
