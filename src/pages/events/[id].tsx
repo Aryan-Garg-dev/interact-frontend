@@ -38,7 +38,6 @@ interface Props {
 
 const EventComponent = ({ id }: Props) => {
   const [event, setEvent] = useState(initialEvent);
-  const [similarEvents, setSimilarEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [eventLikes, setEventLikes] = useState(0);
@@ -58,28 +57,7 @@ const EventComponent = ({ id }: Props) => {
           setEventLikes(res.data.event?.noLikes);
           setLoading(false);
         } else {
-          if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
-          else {
-            Toaster.error(SERVER_ERROR, 'error_toaster');
-          }
-        }
-      })
-      .catch(err => {
-        Toaster.error(SERVER_ERROR, 'error_toaster');
-      });
-  };
-
-  const getSimilarEvents = () => {
-    const URL = `${EXPLORE_URL}/events/similar/${id}?limit=10`;
-    getHandler(URL, undefined, true)
-      .then(res => {
-        if (res.statusCode === 200) {
-          setSimilarEvents(res.data.events || []);
-        } else {
-          if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
-          else {
-            Toaster.error(SERVER_ERROR, 'error_toaster');
-          }
+          Toaster.error(res.data.message || SERVER_ERROR, 'error_toaster');
         }
       })
       .catch(err => {
@@ -89,7 +67,6 @@ const EventComponent = ({ id }: Props) => {
 
   useEffect(() => {
     getEvent();
-    getSimilarEvents();
   }, [id]);
 
   const chatSlices = user.personalChatSlices;
@@ -407,27 +384,54 @@ const EventComponent = ({ id }: Props) => {
                     <AboutHosts />
                     <AboutEvent />
                   </div>
-                  {similarEvents && similarEvents.length > 0 && (
-                    <div className="w-full flex flex-col gap-4">
-                      <div className="w-full flex-center text-sm font-semibold text-gray-500">SIMILAR EVENTS</div>
-                      <div className="w-full flex gap-6 flex-wrap justify-around">
-                        {similarEvents.map(e => (
-                          <EventCard key={e.id} event={e} smaller />
-                        ))}
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
             </PrimeWrapper>
           </>
         )}
+        <SimilarEvents id={id} />
       </MainWrapper>
     </BaseWrapper>
   );
 };
 
 export default EventComponent;
+
+export const SimilarEvents = ({ id }: { id: string }) => {
+  const [similarEvents, setSimilarEvents] = useState<Event[]>([]);
+
+  const getSimilarEvents = () => {
+    const URL = `${EXPLORE_URL}/events/similar/${id}?limit=10`;
+    getHandler(URL, undefined, true)
+      .then(res => {
+        if (res.statusCode === 200) {
+          setSimilarEvents(res.data.events || []);
+        } else {
+          Toaster.error(res.data.message || SERVER_ERROR, 'error_toaster');
+        }
+      })
+      .catch(err => {
+        Toaster.error(SERVER_ERROR, 'error_toaster');
+      });
+  };
+
+  useEffect(() => {
+    getSimilarEvents();
+  }, [id]);
+
+  return similarEvents && similarEvents.length > 0 ? (
+    <div className="w-full flex flex-col gap-4 mt-8">
+      <div className="w-full flex-center text-sm font-semibold text-gray-500 dark:text-gray-200">SIMILAR EVENTS</div>
+      <div className="w-full grid grid-cols-3 gap-4 max-lg:grid-cols-2 max-md:grid-cols-1">
+        {similarEvents.map(e => (
+          <EventCard key={e.id} event={e} smaller />
+        ))}
+      </div>
+    </div>
+  ) : (
+    <></>
+  );
+};
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { id } = context.query;

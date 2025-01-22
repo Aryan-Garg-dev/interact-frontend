@@ -15,12 +15,10 @@ import { setCurrentChatID } from '@/slices/messagingSlice';
 import SendMessage from '@/sections/explore/send_message';
 import Report from '@/components/common/report';
 import SignUp from '@/components/common/signup_box';
-import { formatHackathonDate, getHackathonStatus } from '@/utils/funcs/hackathon';
+import { getHackathonStatus } from '@/utils/funcs/hackathon';
 import moment from 'moment';
 import SecondaryButton from '@/components/buttons/secondary_btn';
 import LowerEvent from '@/components/lowers/lower_event';
-import DisplayTracks from '@/sections/explore/tracks_modal';
-import DisplayPrizes from '@/sections/explore/prizes_modal';
 import Tags from '@/components/common/tags';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
@@ -95,14 +93,6 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
     } else setClickedOnChat(true);
   };
 
-  const handleTracksClick = () => {
-    setShowTracks(!showTracks);
-  };
-
-  const handlePrizeClick = () => {
-    setShowPrizes(!showPrizes);
-  };
-
   interface UserProps {
     user: User;
     host?: boolean;
@@ -131,8 +121,12 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
     </div>
   );
 
-  const AboutHosts = () => (
-    <div className="w-full bg-white dark:bg-dark_primary_comp_hover rounded-xl max-md:w-full shadow-lg">
+  const AboutHosts = ({ sticky }: { sticky: boolean }) => (
+    <div
+      className={`w-full bg-white dark:bg-dark_primary_comp_hover rounded-xl max-md:w-full ${
+        sticky && 'shadow-lg sticky top-24'
+      }`}
+    >
       <div className="w-full flex flex-col gap-6 p-4">
         <div className="w-full flex flex-col gap-4">
           <div className="text-sm font-medium text-gray-500 dark:text-white border-b-2 border-gray-300 pb-2">
@@ -246,8 +240,6 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
     <Loader />
   ) : (
     <>
-      {showTracks && hackathon && <DisplayTracks setShow={setShowTracks} tracks={hackathon.tracks} />}
-      {showPrizes && hackathon && <DisplayPrizes setShow={setShowPrizes} prizes={hackathon.prizes} />}
       {clickedOnChat &&
         (user.id !== '' ? (
           <SendMessage user={event.organization.user} setShow={setClickedOnChat} />
@@ -263,7 +255,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
       {hackathon && (
         <div className="flex gap-8">
           <div className="w-2/3 space-y-6">
-            <div className="bg-white rounded-xl p-4 max-md:w-full space-y-4">
+            <div className="bg-white dark:bg-dark_primary_comp_hover rounded-xl p-4 max-md:w-full space-y-4">
               <div className="space-y-2">
                 <Image
                   width={500}
@@ -287,66 +279,74 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
               </div>
             </div>
 
-            <Section title="Prizes">
-              <div className="w-full flex-center flex-col gap-1">
-                <div className="text-4xl font-semibold">
-                  {hackathon.prizes.reduce((acc, prize) => {
-                    acc = acc + prize.amount;
-                    return acc;
-                  }, 0)}{' '}
-                  INR
-                </div>
-                <div>Total Prize Pool</div>
-              </div>
-              <div className="w-full grid grid-cols-3 gap-4">
-                {hackathon.prizes.map((prize, index) => (
-                  <div
-                    key={index}
-                    className="w-full p-4 bg-white dark:bg-dark_primary_comp_hover rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
-                  >
-                    <div className="text-2xl font-semibold">{prize.title}</div>
-                    <div className="text-lg">{prize.amount} INR</div>
+            {hackathon.prizes && hackathon.prizes.length > 0 && (
+              <Section title="Prizes">
+                <div className="w-full bg-white dark:bg-dark_primary_comp_hover border-[1px] border-gray-200 dark:border-dark_primary_btn rounded-xl py-12 flex-center flex-col gap-1 shadow-sm">
+                  <div className="text-5xl font-semibold">
+                    ₹
+                    {hackathon.prizes.reduce((acc, prize) => {
+                      acc = acc + prize.amount;
+                      return acc;
+                    }, 0)}{' '}
                   </div>
-                ))}
-              </div>
-            </Section>
+                  <div>Total Prize Pool</div>
+                </div>
+                <div className="w-full grid grid-cols-3 gap-4">
+                  {hackathon.prizes.map((prize, index) => (
+                    <div
+                      key={index}
+                      className="w-full p-3 bg-white dark:bg-dark_primary_comp_hover border-[1px] border-gray-200 dark:border-dark_primary_btn rounded-xl shadow-sm"
+                    >
+                      <div className="text-xl font-medium line-clamp-1">{prize.title}</div>
+                      <div className="">₹{prize.amount}</div>
+                    </div>
+                  ))}
+                </div>
+              </Section>
+            )}
 
             <Section title="Timeline">
               <></>
             </Section>
 
-            <Section title="Sponsors">
-              {hackathon.sponsors.map((sponsor, index) => (
-                <div
-                  key={index}
-                  className="flex items-start p-4 bg-white dark:bg-dark_primary_comp_hover rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 mb-6"
-                >
-                  <div className="flex justify-center items-start flex-col">
-                    <h3 className="text-3xl font-bold font-primary">{sponsor.name}</h3>
-                    <p className="text-lg text-gray-700 dark:text-white">{sponsor.description}</p>
-                  </div>
+            {hackathon.sponsors && hackathon.sponsors.length > 0 && (
+              <Section title="Sponsors">
+                <div className="w-full grid grid-cols-3 gap-4">
+                  {hackathon.sponsors.map((sponsor, index) => (
+                    <Link
+                      href={sponsor.link || '/'}
+                      key={index}
+                      className="w-full p-3 bg-white dark:bg-dark_primary_comp_hover border-[1px] border-gray-200 dark:border-dark_primary_btn rounded-xl shadow-sm hover:shadow-lg transition-ease-300"
+                    >
+                      <div className="text-xl font-medium line-clamp-1">{sponsor.title}</div>
+                      <div className="">{sponsor.description}</div>
+                    </Link>
+                  ))}
                 </div>
-              ))}
-            </Section>
-
-            <Section title="FAQs">
-              <Accordion type="single" collapsible>
-                {hackathon.faqs.map((faq, index) => (
-                  <AccordionItem key={index} value={faq.id}>
-                    <AccordionTrigger>{faq.question}</AccordionTrigger>
-                    <AccordionContent>{faq.answer}</AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </Section>
+              </Section>
+            )}
           </div>
-          <div className="w-1/3 max-lg:w-full flex flex-col gap-2">
+
+          <div className="w-1/3 max-lg:w-full flex flex-col gap-2 relative">
             <div className="w-full space-y-4 mb-2">
               <RegisterButton />
               <h1 className="text-2xl font-semibold">{getHackathonStatus(hackathon)}</h1>
               <ProgressBar hackathon={hackathon} />
             </div>
-            <AboutHosts />
+            <AboutHosts sticky={!hackathon.faqs || hackathon.faqs.length == 0} />
+            {hackathon.faqs && hackathon.faqs.length > 0 && (
+              <div className="w-full bg-white dark:bg-dark_primary_comp_hover p-4 rounded-xl space-y-2 sticky top-24 mt-2">
+                <h1 className="text-3xl font-primary font-semibold text-primary_black dark:text-white">FAQs</h1>
+                <Accordion type="single" collapsible>
+                  {hackathon.faqs.map((faq, index) => (
+                    <AccordionItem key={index} value={faq.id}>
+                      <AccordionTrigger>{faq.question}</AccordionTrigger>
+                      <AccordionContent>{faq.answer}</AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -355,8 +355,8 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
 };
 
 const Section = ({ children, title }: { children: React.ReactNode; title: string }) => (
-  <div className="w-full bg-white p-4 rounded-xl space-y-4">
-    <h1 className="text-4xl font-primary font-semibold text-primary_black">{title}</h1>
+  <div className="w-full bg-white dark:bg-dark_primary_comp_hover p-4 rounded-xl space-y-4">
+    <h1 className="text-4xl font-primary font-semibold text-primary_black dark:text-white">{title}</h1>
     {children}
   </div>
 );

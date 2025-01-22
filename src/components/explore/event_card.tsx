@@ -3,6 +3,7 @@ import type { Event } from '@/types';
 import Image from 'next/image';
 import { EVENT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import UserHoverCard from './user_hover_card';
+import Link from 'next/link';
 
 interface Props {
   event: Event;
@@ -36,7 +37,10 @@ const EventCard = ({ event }: Props) => {
   };
 
   return (
-    <div className="relative w-full max-w-md bg-white dark:bg-dark_primary_comp_hover rounded-3xl p-4 hover:shadow-xl transition-ease-300 m-2">
+    <Link
+      href={`/events/${event.id}`}
+      className="relative w-full max-w-md bg-gray-100 dark:bg-dark_primary_comp_hover rounded-3xl p-4 hover:shadow-xl transition-ease-300 m-2"
+    >
       <div className="relative">
         <Image
           width={400}
@@ -48,7 +52,7 @@ const EventCard = ({ event }: Props) => {
         <div className="absolute bottom-[-10px] -left-4">
           <UserHoverCard
             trigger={
-              <div className="bg-white dark:bg-dark_primary_comp_hover  rounded-full p-3">
+              <div className="bg-gray-100 dark:bg-dark_primary_comp_hover  rounded-full p-3">
                 <div className={`relative w-12 h-12 rounded-full flex flex-col items-center justify-center`}>
                   <Image
                     crossOrigin="anonymous"
@@ -83,7 +87,7 @@ const EventCard = ({ event }: Props) => {
           <LowerCardItem title="Date" content={`${formattedDay} ${formattedMonth}`} />
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
