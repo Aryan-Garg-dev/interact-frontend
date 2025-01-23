@@ -4,6 +4,11 @@ import Tags from '@/components/form/tags';
 import Links from '@/components/form/links';
 import Time from '@/components/form/time';
 import { Hackathon } from '@/types';
+import { ImageSquare, PencilSimple, X } from '@phosphor-icons/react';
+import { EVENT_PIC_URL } from '@/config/routes';
+import { resizeImage } from '@/utils/resize_image';
+import Toaster from '@/utils/toaster';
+import Image from 'next/image';
 
 interface BasicsProps {
   title: string;
@@ -16,7 +21,8 @@ interface BasicsProps {
   description: string;
   tags: string[];
   links: string[];
-  setImage: (file: File | null) => void;
+  coverPic?: string;
+  setCoverPic: (file: File | null) => void;
   isEditMode: boolean;
   onSave: (updatedData: Partial<Hackathon>) => void;
 }
@@ -32,7 +38,8 @@ const Basics: React.FC<BasicsProps> = ({
   description,
   tags,
   links,
-  setImage,
+  coverPic,
+  setCoverPic,
   isEditMode,
   onSave,
 }) => {
@@ -42,7 +49,7 @@ const Basics: React.FC<BasicsProps> = ({
   const [localDescription, setLocalDescription] = useState(description);
   const [localTags, setLocalTags] = useState(tags);
   const [localLinks, setLocalLinks] = useState(links);
-  const [localImage, setLocalImage] = useState<File | null>(null);
+  const [coverPicView, setCoverPicView] = useState(`${EVENT_PIC_URL}/${coverPic || 'default.jpg'}`);
 
   const handleSave = () => {
     const updatedData: Partial<Hackathon> = {
@@ -54,15 +61,45 @@ const Basics: React.FC<BasicsProps> = ({
       links: localLinks,
     };
 
-    if (localImage) {
-      setImage(localImage);
-    }
-
     onSave(updatedData);
   };
 
   return (
     <div className="w-full flex flex-col gap-8 max-lg:gap-4">
+      <div className="w-full relative group">
+        <input
+          type="file"
+          className="hidden"
+          id="coverPic"
+          multiple={false}
+          onChange={async ({ target }) => {
+            if (target.files && target.files[0]) {
+              const file = target.files[0];
+              if (file.type.split('/')[0] == 'image') {
+                const resizedPic = await resizeImage(file, 1920, 720);
+                setCoverPicView(URL.createObjectURL(resizedPic));
+                setCoverPic(resizedPic);
+              } else Toaster.error('Only Image Files can be selected');
+            }
+          }}
+        />
+        <div className="w-full h-full relative group">
+          <label
+            htmlFor="coverPic"
+            className="w-full h-full absolute top-0 right-0 rounded-lg z-10 flex-center bg-white transition-ease-200 cursor-pointer bg-[#ffffff00] hover:bg-[#ffffff30]"
+          >
+            <PencilSimple className="opacity-0 group-hover:opacity-100 transition-ease-200" size={32} />
+          </label>
+          <Image
+            crossOrigin="anonymous"
+            className="w-full rounded-lg"
+            src={coverPicView}
+            alt="Event Cover"
+            width={1920}
+            height={720}
+          />
+        </div>
+      </div>
       <Input label="Title" val={localTitle} setVal={setLocalTitle} maxLength={25} required={true} />
       <Input label="Tagline" val={localTagline} setVal={setLocalTagline} maxLength={50} required={true} />
       <Input label="Location" val={localLocation} setVal={setLocalLocation} maxLength={25} placeholder="Online" />
@@ -77,18 +114,6 @@ const Basics: React.FC<BasicsProps> = ({
       <Input label="Description" val={localDescription} setVal={setLocalDescription} maxLength={2500} />
       <Tags label="Tags" tags={localTags} setTags={setLocalTags} maxTags={10} required={true} />
       <Links label="Links" links={localLinks} setLinks={setLocalLinks} maxLinks={5} />
-
-      {/* Image upload (if needed) */}
-      <div className="mt-4">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={e => {
-            const file = e.target.files ? e.target.files[0] : null;
-            setLocalImage(file);
-          }}
-        />
-      </div>
 
       {isEditMode && (
         <button

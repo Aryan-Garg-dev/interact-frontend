@@ -22,6 +22,9 @@ import Sponsors from '@/sections/organization/hackathons/sponsors';
 import Basics from '@/sections/organization/hackathons/basics';
 import { uniqueId } from 'lodash';
 import Teams from '@/sections/organization/hackathons/teams';
+import { useRouter } from 'next/router';
+import { Id } from 'react-toastify';
+import patchHandler from '@/handlers/patch_handler';
 
 const NewHackathon: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -37,7 +40,6 @@ const NewHackathon: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const [minTeamSize, setMinTeamSize] = useState(2);
   const [maxTeamSize, setMaxTeamSize] = useState(5);
-
   const [tracks, setTracks] = useState<HackathonTrack[]>([]);
   const [prizes, setPrizes] = useState<HackathonPrize[]>([]);
   const [rounds, setRounds] = useState<HackathonRound[]>([]);
@@ -45,6 +47,8 @@ const NewHackathon: React.FC = () => {
   const [faqs, setFaqs] = useState<HackathonFAQ[]>([]);
 
   const currentOrg = useSelector(currentOrgSelector);
+
+  const router = useRouter();
 
   const addFAQ = (faq: HackathonFAQ) => {
     setFaqs(prev => [...prev, { ...faq, id: uniqueId() }]);
@@ -180,8 +184,28 @@ const NewHackathon: React.FC = () => {
     const URL = `${ORG_URL}/${currentOrg.id}/hackathons`;
 
     const res = await postHandler(URL, formData);
-
     if (res.statusCode === 201) {
+      localStorage.removeItem(`hackathon-draft-${currentOrg.id}`);
+      if (image) handleSubmitImage(res.data.event.hackathonID, toaster);
+      else {
+        Toaster.stopLoad(toaster, 'Competition Created!', 1);
+        router.push(`/organisation/events`);
+      }
+    } else {
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
+    }
+  };
+
+  const handleSubmitImage = async (hackathonID: string, toaster: Id) => {
+    if (!image) return;
+
+    const formData = new FormData();
+    formData.append('coverPic', image);
+
+    const URL = `${ORG_URL}/${currentOrg.id}/hackathons/${hackathonID}/cover`;
+
+    const res = await patchHandler(URL, formData, 'multipart/form-data');
+    if (res.statusCode === 200) {
       localStorage.removeItem(`hackathon-draft-${currentOrg.id}`);
       Toaster.stopLoad(toaster, 'Competition Created!', 1);
     } else if (res.statusCode === 413) {
@@ -189,6 +213,8 @@ const NewHackathon: React.FC = () => {
     } else {
       Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
+
+    router.push(`/organisation/events`);
   };
 
   const handleSaveDraft = () => {
@@ -334,7 +360,7 @@ const NewHackathon: React.FC = () => {
             description={description}
             tags={tags}
             links={links}
-            setImage={setImage}
+            setCoverPic={setImage}
             isEditMode={false}
             onSave={() => {}}
           />

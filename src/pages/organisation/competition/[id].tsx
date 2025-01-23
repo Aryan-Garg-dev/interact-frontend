@@ -35,6 +35,7 @@ import deleteHandler from '@/handlers/delete_handler';
 import Loader from '@/components/common/loader';
 import { uniqueId } from 'lodash';
 import Teams from '@/sections/organization/hackathons/teams';
+import { Id } from 'react-toastify';
 
 interface Props {
   id: string;
@@ -370,20 +371,36 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
     }
 
     const toaster = Toaster.startLoad('Updating hackathon...', uniqueId());
-    const res = await patchHandler(
-      `${ORG_URL}/${currentOrg.id}/hackathons/${hackathon.id}`,
-      updatedHackathon,
-      'multipart/form-data'
-    );
+    const res = await patchHandler(`${ORG_URL}/${currentOrg.id}/hackathons/${hackathon.id}`, updatedHackathon);
 
     if (res.statusCode === 200) {
       setHackathon(updatedHackathon);
-      Toaster.stopLoad(toaster, 'Hackathon updated successfully!', 1);
+      if (image) handleSubmitImage(hackathon.id, toaster);
+      else Toaster.stopLoad(toaster, 'Hackathon updated successfully!', 1);
     } else {
       Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
 
     setMutex(false);
+  };
+
+  const handleSubmitImage = async (hackathonID: string, toaster: Id) => {
+    if (!image) return;
+
+    const formData = new FormData();
+    formData.append('coverPic', image);
+
+    const URL = `${ORG_URL}/${currentOrg.id}/hackathons/${hackathonID}/cover`;
+
+    const res = await patchHandler(URL, formData, 'multipart/form-data');
+    if (res.statusCode === 200) {
+      localStorage.removeItem(`hackathon-draft-${currentOrg.id}`);
+      Toaster.stopLoad(toaster, 'Competition Created!', 1);
+    } else if (res.statusCode === 413) {
+      Toaster.stopLoad(toaster, 'Image too large', 0);
+    } else {
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
+    }
   };
 
   const handleSave = (data: Partial<Hackathon>) => {
@@ -493,11 +510,8 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
             tags={hackathon.tags || []}
             links={hackathon.links || []}
             onSave={handleSave}
-            setImage={file => {
-              if (file) {
-                // Handle image upload logic here
-              }
-            }}
+            coverPic={hackathon.coverPic}
+            setCoverPic={setImage}
             isEditMode={true}
           />
         </div>
