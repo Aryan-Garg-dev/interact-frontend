@@ -22,6 +22,8 @@ import LowerEvent from '@/components/lowers/lower_event';
 import Tags from '@/components/common/tags';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import Editor from '@/components/editor';
+import Links from '@/components/explore/show_links';
+import { formatPrice } from '@/utils/funcs/misc';
 
 interface HackathonProps {
   event: Event;
@@ -63,12 +65,9 @@ const ProgressBar: React.FC<{ hackathon: Hackathon }> = ({ hackathon }) => {
 };
 
 const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
-  const [loading, setLoading] = useState(false);
   const [clickedOnChat, setClickedOnChat] = useState(false);
   const [clickedOnReport, setClickedOnReport] = useState(false);
   const [eventLikes, setEventLikes] = useState(0);
-  const [showTracks, setShowTracks] = useState(false);
-  const [showPrizes, setShowPrizes] = useState(false);
 
   const hackathon = useMemo(() => event.hackathon, [event]);
 
@@ -152,13 +151,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
             <div className="text-sm font-medium text-gray-500 dark:text-white border-b-2 border-gray-300 pb-2">
               MORE ABOUT THE EVENT
             </div>
-            <div className="w-full flex flex-wrap gap-4">
-              {event.links?.map(link => (
-                <Link key={link} href={link} target="_blank">
-                  {getIcon(getDomainName(link), 22, 'regular')}
-                </Link>
-              ))}
-            </div>{' '}
+            <Links links={event.links} excludeTitle />
           </div>
         )}
         <div className="w-full flex flex-col gap-1 text-sm">
@@ -237,9 +230,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
     );
   };
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <>
       {clickedOnChat &&
         (user.id !== '' ? (
@@ -285,10 +276,12 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                 <div className="w-full bg-white dark:bg-dark_primary_comp_hover border-[1px] border-gray-200 dark:border-dark_primary_btn rounded-xl py-12 flex-center flex-col gap-1 shadow-sm">
                   <div className="text-5xl font-semibold">
                     ₹
-                    {hackathon.prizes.reduce((acc, prize) => {
-                      acc = acc + prize.amount;
-                      return acc;
-                    }, 0)}{' '}
+                    {formatPrice(
+                      hackathon.prizes.reduce((acc, prize) => {
+                        acc = acc + prize.amount;
+                        return acc;
+                      }, 0)
+                    )}{' '}
                   </div>
                   <div>Total Prize Pool</div>
                 </div>
@@ -299,7 +292,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                       className="w-full p-3 bg-white dark:bg-dark_primary_comp_hover border-[1px] border-gray-200 dark:border-dark_primary_btn rounded-xl shadow-sm"
                     >
                       <div className="text-xl font-medium line-clamp-1">{prize.title}</div>
-                      <div className="">₹{prize.amount}</div>
+                      <div className="">₹{formatPrice(prize.amount)}</div>
                     </div>
                   ))}
                 </div>

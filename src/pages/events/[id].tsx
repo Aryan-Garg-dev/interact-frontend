@@ -15,8 +15,6 @@ import EventCard from '@/components/explore/event_card';
 import { Event, User } from '@/types';
 import Link from 'next/link';
 import moment from 'moment';
-import getIcon from '@/utils/funcs/get_icon';
-import getDomainName from '@/utils/funcs/get_domain_name';
 import { setRegisteredEvents, userSelector } from '@/slices/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import OrgSidebar from '@/components/common/org_sidebar';
@@ -31,6 +29,7 @@ import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import SecondaryButton from '@/components/buttons/secondary_btn';
 import Hackathon from '@/screens/hackathon/hackathon';
 import PrimeWrapper from '@/wrappers/prime';
+import Links from '@/components/explore/show_links';
 
 interface Props {
   id: string;
@@ -258,13 +257,7 @@ const EventComponent = ({ id }: Props) => {
             <div className="text-sm font-medium text-gray-500 border-b-2 border-gray-300 pb-2">
               MORE ABOUT THE EVENT
             </div>
-            <div className="w-full flex flex-wrap gap-4">
-              {event.links?.map(link => (
-                <Link key={link} href={link} target="_blank">
-                  {getIcon(getDomainName(link), 22, 'regular')}
-                </Link>
-              ))}
-            </div>{' '}
+            <Links links={event.links} excludeTitle />
           </div>
         )}
         <div className="w-full flex flex-col gap-1 text-sm">

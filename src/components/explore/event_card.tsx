@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { EVENT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import UserHoverCard from './user_hover_card';
 import Link from 'next/link';
+import { formatPrice } from '@/utils/funcs/misc';
 
 interface Props {
   event: Event;
@@ -24,7 +25,15 @@ const EventCard = ({ event }: Props) => {
 
   const getPrizeAmount = () => {
     if (event.hackathon && event.hackathon.prizes) {
-      return String(event.hackathon.prizes[0].amount);
+      return (
+        '₹' +
+        formatPrice(
+          event.hackathon.prizes.reduce((acc, prize) => {
+            acc = acc + prize.amount;
+            return acc;
+          }, 0)
+        )
+      );
     }
     return 'N/A';
   };

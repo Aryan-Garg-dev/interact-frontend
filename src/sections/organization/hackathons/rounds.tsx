@@ -17,7 +17,6 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
   const [isEditing, setIsEditing] = useState<string | null>(null);
   const [formState, setFormState] = useState(initialHackathonRound);
   const [optionsMetric, setOptionsMetric] = useState('');
-  const [deletingRound, setDeletingRound] = useState<string[]>([]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,15 +72,14 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
     setIsEditing(round.id);
     setShowModal(true);
   };
+
   const handleDeleteRound = async (sponsorId: string) => {
     if (window.confirm('Are you sure you want to delete this round?')) {
-      // Add the sponsor ID to the deleting list immediately
-      setDeletingRound(prev => [...prev, sponsorId]);
-
       // Perform the delete operation
       await deleteRound(sponsorId);
     }
   };
+
   const resetForm = () => {
     setFormState(initialHackathonRound);
     setOptionsMetric('');
@@ -282,6 +280,3 @@ const Rounds: React.FC<RoundManagerProps> = ({ rounds, addRound, editRound, dele
 };
 
 export default Rounds;
-function setDeletingRound(arg0: (prev: any) => any[]) {
-  throw new Error('Function not implemented.');
-}

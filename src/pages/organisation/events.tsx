@@ -29,7 +29,7 @@ import HackathonHistories from '@/sections/organization/hackathons/history';
 import NoEvents from '@/components/fillers/events';
 import EditHackathonCoordinators from '@/sections/organization/hackathons/edit_hackathon_coordinators';
 import EditHackathonJudges from '@/sections/organization/hackathons/edit_hackathon_judges';
-import EventCard from '@/components/explore/event_card';
+import EventCard from '@/components/organization/event_card';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);

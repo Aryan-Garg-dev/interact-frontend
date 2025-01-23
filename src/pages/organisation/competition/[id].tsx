@@ -452,14 +452,6 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
           return false;
         }
       }
-
-      if (i < rounds.length - 1) {
-        const nextRoundStart = moment(rounds[i + 1].startTime);
-        if (!roundEnd.isSame(nextRoundStart)) {
-          Toaster.error(`The end time of round ${i + 1} should match the start time of the next round.`);
-          return false;
-        }
-      }
     }
 
     return true;

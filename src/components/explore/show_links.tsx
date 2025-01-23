@@ -7,14 +7,15 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 interface Props {
   links: string[];
   title?: string;
+  excludeTitle?: boolean;
 }
 
-const Links = ({ links, title = 'Links' }: Props) => {
+const Links = ({ links, title = 'Links', excludeTitle = false }: Props) => {
   return (
     <TooltipProvider>
       {links && links.length > 0 && (
         <div className="w-full flex flex-col gap-2 relative">
-          <div className="text-lg font-semibold">{title}</div>
+          {!excludeTitle && <div className="text-lg font-semibold">{title}</div>}
           <div className="w-full flex gap-4 justify-start flex-wrap">
             {links.map(link => {
               return (
