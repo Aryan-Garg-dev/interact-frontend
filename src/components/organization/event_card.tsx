@@ -6,7 +6,7 @@ import { EVENT_PIC_URL } from '@/config/routes';
 import { Buildings, ClockCounterClockwise, Eye, Gavel, PencilSimple, Trash, Users } from '@phosphor-icons/react';
 import moment from 'moment';
 import checkOrgAccess, { checkParticularOrgAccess } from '@/utils/funcs/access';
-import { ORG_SENIOR } from '@/config/constants';
+import { EVENT_PIC_HASH_DEFAULT, ORG_SENIOR } from '@/config/constants';
 
 interface Props {
   event: Event;
@@ -52,7 +52,7 @@ const EventCard = ({
           alt="Event Cover"
           className="w-full object-cover rounded-t-xl"
           placeholder="blur"
-          blurDataURL={event.blurHash || 'no-hash'}
+          blurDataURL={event.blurHash || EVENT_PIC_HASH_DEFAULT}
         />
         {org && checkOrgAccess(ORG_SENIOR) && (
           <div className="w-full flex gap-2 absolute opacity-0 group-hover:opacity-100 top-2 left-2 transition-ease-300">

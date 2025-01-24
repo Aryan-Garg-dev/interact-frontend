@@ -24,6 +24,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import Editor from '@/components/editor';
 import Links from '@/components/explore/show_links';
 import { formatPrice } from '@/utils/funcs/misc';
+import { EVENT_PIC_HASH_DEFAULT } from '@/config/constants';
 
 interface HackathonProps {
   event: Event;
@@ -256,7 +257,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                   alt="Event Picture"
                   className="w-full h-full max-md:h-52 rounded-xl"
                   placeholder="blur"
-                  blurDataURL={hackathon.blurHash || 'no-hash'}
+                  blurDataURL={hackathon.blurHash || EVENT_PIC_HASH_DEFAULT}
                 />
                 <LowerEvent event={event} numLikes={eventLikes} setNumLikes={setEventLikes} />
               </div>

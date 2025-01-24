@@ -5,6 +5,7 @@ import { EVENT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import UserHoverCard from './user_hover_card';
 import Link from 'next/link';
 import { formatPrice } from '@/utils/funcs/misc';
+import { EVENT_PIC_HASH_DEFAULT } from '@/config/constants';
 
 interface Props {
   event: Event;
@@ -56,7 +57,9 @@ const EventCard = ({ event }: Props) => {
           height={200}
           src={`${EVENT_PIC_URL}/${event?.coverPic}`}
           alt="Event Pic"
-          className="w-full h-48 rounded-2xl overflow-hidden mb-4"
+          className="w-full rounded-2xl overflow-hidden mb-4"
+          placeholder="blur"
+          blurDataURL={event.blurHash || EVENT_PIC_HASH_DEFAULT}
         />
         <div className="absolute bottom-[-10px] -left-4">
           <UserHoverCard

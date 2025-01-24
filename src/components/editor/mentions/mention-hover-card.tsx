@@ -14,6 +14,7 @@ import { cn } from '@/lib/utils';
 import Separator from '@/components/ui/separator';
 import { Eye, Heart, Users } from '@phosphor-icons/react';
 import moment from 'moment';
+import { EVENT_PIC_HASH_DEFAULT } from '@/config/constants';
 
 interface HovercardProps {
   id: string;
@@ -260,7 +261,7 @@ const EventCard = ({ event }: { event: Event }) => {
         height={80}
         className="w-full rounded-md"
         placeholder="blur"
-        blurDataURL={event.blurHash || 'no-hash'}
+        blurDataURL={event.blurHash || EVENT_PIC_HASH_DEFAULT}
       />
       <div className="space-y-2">
         <div>
