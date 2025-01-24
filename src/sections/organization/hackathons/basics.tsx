@@ -4,7 +4,7 @@ import Tags from '@/components/form/tags';
 import Links from '@/components/form/links';
 import Time from '@/components/form/time';
 import { Hackathon } from '@/types';
-import { ImageSquare, PencilSimple, X } from '@phosphor-icons/react';
+import { PencilSimple } from '@phosphor-icons/react';
 import { EVENT_PIC_URL } from '@/config/routes';
 import { resizeImage } from '@/utils/resize_image';
 import Toaster from '@/utils/toaster';
@@ -12,32 +12,44 @@ import Image from 'next/image';
 
 interface BasicsProps {
   title: string;
+  setTitle?: (title: string) => void;
   tagline: string;
+  setTagline?: (tagline: string) => void;
   location: string;
+  setLocation?: (location: string) => void;
   startTime: string;
-  setStartTime: (val: string) => void;
+  setStartTime: (time: string) => void;
   endTime: string;
-  setEndTime: (val: string) => void;
+  setEndTime: (time: string) => void;
   description: string;
+  setDescription?: (description: string) => void;
   tags: string[];
+  setTags?: (tags: string[]) => void;
   links: string[];
+  setLinks?: (links: string[]) => void;
   coverPic?: string;
   setCoverPic: (file: File | null) => void;
   isEditMode: boolean;
-  onSave: (updatedData: Partial<Hackathon>) => void;
+  onSave?: (updatedData: Partial<Hackathon>) => void;
 }
 
 const Basics: React.FC<BasicsProps> = ({
   title,
+  setTitle,
   tagline,
+  setTagline,
   location,
+  setLocation,
   startTime,
   setStartTime,
   endTime,
   setEndTime,
   description,
+  setDescription,
   tags,
+  setTags,
   links,
+  setLinks,
   coverPic,
   setCoverPic,
   isEditMode,
@@ -61,7 +73,7 @@ const Basics: React.FC<BasicsProps> = ({
       links: localLinks,
     };
 
-    onSave(updatedData);
+    if (onSave) onSave(updatedData);
   };
 
   return (
@@ -86,7 +98,7 @@ const Basics: React.FC<BasicsProps> = ({
         <div className="w-full h-full relative group">
           <label
             htmlFor="coverPic"
-            className="w-full h-full absolute top-0 right-0 rounded-lg z-10 flex-center bg-white transition-ease-200 cursor-pointer bg-[#ffffff00] hover:bg-[#ffffff30]"
+            className="w-full h-full absolute top-0 right-0 rounded-lg z-10 flex-center transition-ease-200 cursor-pointer bg-[#ffffff00] hover:bg-[#ffffff30]"
           >
             <PencilSimple className="opacity-0 group-hover:opacity-100 transition-ease-200" size={32} />
           </label>
@@ -100,9 +112,27 @@ const Basics: React.FC<BasicsProps> = ({
           />
         </div>
       </div>
-      <Input label="Title" val={localTitle} setVal={setLocalTitle} maxLength={25} required={true} />
-      <Input label="Tagline" val={localTagline} setVal={setLocalTagline} maxLength={50} required={true} />
-      <Input label="Location" val={localLocation} setVal={setLocalLocation} maxLength={25} placeholder="Online" />
+      <Input
+        label="Title"
+        val={isEditMode ? localTitle : title}
+        setVal={isEditMode ? setLocalTitle : setTitle ? setTitle : () => {}}
+        maxLength={25}
+        required={true}
+      />
+      <Input
+        label="Tagline"
+        val={isEditMode ? localTagline : tagline}
+        setVal={isEditMode ? setLocalTagline : setTagline ? setTagline : () => {}}
+        maxLength={50}
+        required={true}
+      />
+      <Input
+        label="Location"
+        val={isEditMode ? localLocation : location}
+        setVal={isEditMode ? setLocalLocation : setLocation ? setLocation : () => {}}
+        maxLength={25}
+        placeholder="Online"
+      />
       <div className="w-full flex justify-between gap-4">
         <div className="w-1/2">
           <Time label="Start Time" val={startTime} setVal={setStartTime} required={true} includeDate={true} />
@@ -111,9 +141,25 @@ const Basics: React.FC<BasicsProps> = ({
           <Time label="End Time" val={endTime} setVal={setEndTime} required={true} includeDate={true} />
         </div>
       </div>
-      <Input label="Description" val={localDescription} setVal={setLocalDescription} maxLength={2500} />
-      <Tags label="Tags" tags={localTags} setTags={setLocalTags} maxTags={10} required={true} />
-      <Links label="Links" links={localLinks} setLinks={setLocalLinks} maxLinks={5} />
+      <Input
+        label="Description"
+        val={isEditMode ? localDescription : description}
+        setVal={isEditMode ? setLocalDescription : setDescription ? setDescription : () => {}}
+        maxLength={2500}
+      />
+      <Tags
+        label="Tags"
+        tags={isEditMode ? localTags : tags}
+        setTags={isEditMode ? setLocalTags : setTags ? setTags : () => {}}
+        maxTags={10}
+        required={true}
+      />
+      <Links
+        label="Links"
+        links={isEditMode ? localLinks : links}
+        setLinks={isEditMode ? setLocalLinks : setLinks ? setLinks : () => {}}
+        maxLinks={5}
+      />
 
       {isEditMode && (
         <button

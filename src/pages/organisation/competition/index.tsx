@@ -350,18 +350,23 @@ const NewHackathon: React.FC = () => {
         <div className="container mx-auto px-4 ">
           <Basics
             title={title}
+            setTitle={setTitle}
             tagline={tagline}
+            setTagline={setTagline}
             location={location}
+            setLocation={setLocation}
             startTime={startTime}
             setStartTime={setStartTime}
             endTime={endTime}
             setEndTime={setEndTime}
             description={description}
+            setDescription={setDescription}
             tags={tags}
+            setTags={setTags}
             links={links}
+            setLinks={setLinks}
             setCoverPic={setImage}
             isEditMode={false}
-            onSave={() => {}}
           />
         </div>
       ),
