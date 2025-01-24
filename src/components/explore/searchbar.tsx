@@ -347,7 +347,13 @@ const EventItem = ({ event }: { event: Event }) => (
       alt={'User Pic'}
       src={`${EVENT_PIC_URL}/${event.coverPic}`}
       placeholder="blur"
-      blurDataURL={event.blurHash || EVENT_PIC_HASH_DEFAULT}
+      blurDataURL={
+        event.blurHash
+          ? event.blurHash == 'no-hash'
+            ? EVENT_PIC_HASH_DEFAULT
+            : event.blurHash
+          : EVENT_PIC_HASH_DEFAULT
+      }
       className="h-6 rounded-md mr-1"
     />
     <div className="text-sm">{event.title}</div>

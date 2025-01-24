@@ -52,7 +52,13 @@ const EventCard = ({
           alt="Event Cover"
           className="w-full object-cover rounded-t-xl"
           placeholder="blur"
-          blurDataURL={event.blurHash || EVENT_PIC_HASH_DEFAULT}
+          blurDataURL={
+            event.blurHash
+              ? event.blurHash == 'no-hash'
+                ? EVENT_PIC_HASH_DEFAULT
+                : event.blurHash
+              : EVENT_PIC_HASH_DEFAULT
+          }
         />
         {org && checkOrgAccess(ORG_SENIOR) && (
           <div className="w-full flex gap-2 absolute opacity-0 group-hover:opacity-100 top-2 left-2 transition-ease-300">

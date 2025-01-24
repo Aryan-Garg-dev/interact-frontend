@@ -25,7 +25,13 @@ const EventCard = ({ event }: Props) => {
           alt=""
           className="w-full object-cover rounded-t-xl"
           placeholder="blur"
-          blurDataURL={event.blurHash || EVENT_PIC_HASH_DEFAULT}
+          blurDataURL={
+            event.blurHash
+              ? event.blurHash == 'no-hash'
+                ? EVENT_PIC_HASH_DEFAULT
+                : event.blurHash
+              : EVENT_PIC_HASH_DEFAULT
+          }
         />
         <div className="absolute bottom-2 right-2 bg-white dark:bg-dark_primary_comp_hover text-gray-500 dark:text-white text-xxs px-2 py-1 rounded-lg">
           {event.organization.title}

@@ -59,7 +59,13 @@ const EventCard = ({ event }: Props) => {
           alt="Event Pic"
           className="w-full rounded-2xl overflow-hidden mb-4"
           placeholder="blur"
-          blurDataURL={event.blurHash || EVENT_PIC_HASH_DEFAULT}
+          blurDataURL={
+            event.blurHash
+              ? event.blurHash == 'no-hash'
+                ? EVENT_PIC_HASH_DEFAULT
+                : event.blurHash
+              : EVENT_PIC_HASH_DEFAULT
+          }
         />
         <div className="absolute bottom-[-10px] -left-4">
           <UserHoverCard

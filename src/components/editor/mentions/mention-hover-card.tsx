@@ -261,7 +261,13 @@ const EventCard = ({ event }: { event: Event }) => {
         height={80}
         className="w-full rounded-md"
         placeholder="blur"
-        blurDataURL={event.blurHash || EVENT_PIC_HASH_DEFAULT}
+        blurDataURL={
+          event.blurHash
+            ? event.blurHash == 'no-hash'
+              ? EVENT_PIC_HASH_DEFAULT
+              : event.blurHash
+            : EVENT_PIC_HASH_DEFAULT
+        }
       />
       <div className="space-y-2">
         <div>

@@ -218,7 +218,13 @@ const EventComponent = ({ id }: Props) => {
         alt="Event Picture"
         className="w-full object-cover rounded-t-xl"
         placeholder="blur"
-        blurDataURL={event.blurHash || EVENT_PIC_HASH_DEFAULT}
+        blurDataURL={
+          event.blurHash
+            ? event.blurHash == 'no-hash'
+              ? EVENT_PIC_HASH_DEFAULT
+              : event.blurHash
+            : EVENT_PIC_HASH_DEFAULT
+        }
       />
       <div className="w-full flex flex-col gap-6 p-4 pt-2">
         <LowerEvent event={event} numLikes={eventLikes} setNumLikes={setEventLikes} />

@@ -257,7 +257,13 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                   alt="Event Picture"
                   className="w-full h-full max-md:h-52 rounded-xl"
                   placeholder="blur"
-                  blurDataURL={hackathon.blurHash || EVENT_PIC_HASH_DEFAULT}
+                  blurDataURL={
+                    hackathon.blurHash
+                      ? hackathon.blurHash == 'no-hash'
+                        ? EVENT_PIC_HASH_DEFAULT
+                        : hackathon.blurHash
+                      : EVENT_PIC_HASH_DEFAULT
+                  }
                 />
                 <LowerEvent event={event} numLikes={eventLikes} setNumLikes={setEventLikes} />
               </div>
