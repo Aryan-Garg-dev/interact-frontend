@@ -394,8 +394,7 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
 
     const res = await patchHandler(URL, formData, 'multipart/form-data');
     if (res.statusCode === 200) {
-      localStorage.removeItem(`hackathon-draft-${currentOrg.id}`);
-      Toaster.stopLoad(toaster, 'Competition Created!', 1);
+      Toaster.stopLoad(toaster, 'Hackathon updated successfully!', 1);
     } else if (res.statusCode === 413) {
       Toaster.stopLoad(toaster, 'Image too large', 0);
     } else {
