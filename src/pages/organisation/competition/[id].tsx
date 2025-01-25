@@ -36,6 +36,7 @@ import Loader from '@/components/common/loader';
 import { uniqueId } from 'lodash';
 import Teams from '@/sections/organization/hackathons/teams';
 import { Id } from 'react-toastify';
+import socketService from '@/config/ws';
 
 interface Props {
   id: string;
@@ -375,6 +376,7 @@ const EditHackathon: React.FC<Props> = ({ id }) => {
 
     if (res.statusCode === 200) {
       setHackathon(updatedHackathon);
+      socketService.sendUpdateHackathon(updatedHackathon);
       if (image) handleSubmitImage(hackathon.id, toaster);
       else Toaster.stopLoad(toaster, 'Hackathon updated successfully!', 1);
     } else {

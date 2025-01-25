@@ -252,7 +252,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
               <div className="space-y-2">
                 <Image
                   width={500}
-                  height={280}
+                  height={200}
                   src={`${EVENT_PIC_URL}/${hackathon.coverPic}`}
                   alt="Event Picture"
                   className="w-full h-full max-md:h-52 rounded-xl"
