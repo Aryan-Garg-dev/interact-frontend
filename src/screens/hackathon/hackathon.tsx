@@ -1,11 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import type React from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { EVENT_PIC_URL, USER_PROFILE_PIC_URL } from '@/config/routes';
 import type { Event, Hackathon, User } from '@/types';
-import Loader from '@/components/common/loader';
 import Link from 'next/link';
-import getIcon from '@/utils/funcs/get_icon';
-import getDomainName from '@/utils/funcs/get_domain_name';
 import UserHoverCard from '@/components/common/user_hover_card';
 import FollowBtn from '@/components/common/follow_btn';
 import { useSelector } from 'react-redux';
@@ -201,7 +199,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
     };
 
     return (
-      <div className="w-full flex flex-col gap-2">
+      <div className="w-full flex flex-col gap-2 items-center justify-center">
         <div className="text-xs font-semibold text-gray-500 dark:text-white">This event is happening on Interact!</div>
         {user.organizationMemberships.map(membership => membership.organizationID).includes(event.organizationID) ? (
           <SecondaryButton label="Go to Dashboard" onClick={handleRedirect} />
@@ -246,35 +244,42 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
           <SignUp setShow={setClickedOnReport} />
         ))}
       {hackathon && (
-        <div className="flex gap-8">
-          <div className="w-2/3 space-y-6">
-            <div className="bg-white dark:bg-dark_primary_comp_hover rounded-xl p-4 max-md:w-full space-y-4">
+        <div className="flex flex-col md:flex-row gap-8">
+          <div className="w-full md:w-2/3 space-y-6">
+            <div className="bg-white dark:bg-dark_primary_comp_hover rounded-xl p-4 space-y-4 w-full">
               <div className="space-y-2">
-                <Image
-                  width={500}
-                  height={200}
-                  src={`${EVENT_PIC_URL}/${hackathon.coverPic}`}
-                  alt="Event Picture"
-                  className="w-full h-full max-md:h-52 rounded-xl"
-                  placeholder="blur"
-                  blurDataURL={
-                    hackathon.blurHash
-                      ? hackathon.blurHash == 'no-hash'
-                        ? EVENT_PIC_HASH_DEFAULT
-                        : hackathon.blurHash
-                      : EVENT_PIC_HASH_DEFAULT
-                  }
-                />
+                <div className="relative h-52 md:h-[200px]">
+                  <Image
+                    src={`${EVENT_PIC_URL}/${hackathon.coverPic}`}
+                    alt="Event Picture"
+                    className="w-full h-full rounded-xl object-cover"
+                    placeholder="blur"
+                    blurDataURL={
+                      hackathon.blurHash
+                        ? hackathon.blurHash === 'no-hash'
+                          ? EVENT_PIC_HASH_DEFAULT
+                          : hackathon.blurHash
+                        : EVENT_PIC_HASH_DEFAULT
+                    }
+                    layout="fill"
+                  />
+                </div>
                 <LowerEvent event={event} numLikes={eventLikes} setNumLikes={setEventLikes} />
               </div>
-
-              <div className="w-full space-y-6">
+              <div className="md:hidden">
+                <RegisterButton />
+              </div>
+              <div className="space-y-6">
                 <div className="space-y-2">
-                  <h1 className="text-5xl font-primary font-bold">{hackathon.title}</h1>
-                  <h3 className="text-xl font-semibold">{hackathon.tagline}</h3>
+                  <h1 className="text-5xl font-primary font-bold break-words">{hackathon.title}</h1>
+                  <h3 className="text-xl font-semibold break-words">{hackathon.tagline}</h3>
                 </div>
                 <Tags tags={hackathon?.tags || []} displayAll />
-                {hackathon.description && <Editor content={hackathon.description} editable={false} />}
+                {hackathon.description && (
+                  <div className="line-clamp-6">
+                    <Editor content={hackathon.description} editable={false} />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -292,14 +297,14 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                   </div>
                   <div>Total Prize Pool</div>
                 </div>
-                <div className="w-full grid grid-cols-3 gap-4">
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {hackathon.prizes.map((prize, index) => (
                     <div
                       key={index}
                       className="w-full p-3 bg-white dark:bg-dark_primary_comp_hover border-[1px] border-gray-200 dark:border-dark_primary_btn rounded-xl shadow-sm"
                     >
-                      <div className="text-xl font-medium line-clamp-1">{prize.title}</div>
-                      <div className="">₹{formatPrice(prize.amount)}</div>
+                      <div className="text-xl font-medium break-words">{prize.title}</div>
+                      <div className="break-words">₹{formatPrice(prize.amount)}</div>
                     </div>
                   ))}
                 </div>
@@ -312,15 +317,15 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
 
             {hackathon.sponsors && hackathon.sponsors.length > 0 && (
               <Section title="Sponsors">
-                <div className="w-full grid grid-cols-3 gap-4">
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {hackathon.sponsors.map((sponsor, index) => (
                     <Link
                       href={sponsor.link || '/'}
                       key={index}
                       className="w-full p-3 bg-white dark:bg-dark_primary_comp_hover border-[1px] border-gray-200 dark:border-dark_primary_btn rounded-xl shadow-sm hover:shadow-lg transition-ease-300"
                     >
-                      <div className="text-xl font-medium line-clamp-1">{sponsor.title}</div>
-                      <div className="">{sponsor.description}</div>
+                      <div className="text-xl font-medium break-words">{sponsor.title}</div>
+                      <div className="break-words">{sponsor.description}</div>
                     </Link>
                   ))}
                 </div>
@@ -328,9 +333,11 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
             )}
           </div>
 
-          <div className="w-1/3 max-lg:w-full flex flex-col gap-2 relative">
+          <div className="w-full md:w-1/3 flex flex-col gap-2">
             <div className="w-full space-y-4 mb-2">
-              <RegisterButton />
+              <div className="max-md:hidden">
+                <RegisterButton />
+              </div>
               <h1 className="text-2xl font-semibold">{getHackathonStatus(hackathon)}</h1>
               <ProgressBar hackathon={hackathon} />
             </div>

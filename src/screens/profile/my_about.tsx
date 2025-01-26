@@ -416,11 +416,10 @@ const About = ({ profile, setUser, org = false }: Props) => {
           </div>
         </div>
         {!org && (
-          <div className="w-full flex gap-2 items-center text-lg">
-            <MapPin weight="regular" size={24} />
-
+          <div className="w-full flex gap-2 items-start text-lg">
+            <MapPin weight="regular" size={24} className="mt-2" />
             {clickedOnLocation ? (
-              <div className="w-3/4 z-10">
+              <div className="w-full z-10">
                 <div className="text-xs ml-1 font-medium uppercase text-gray-500">
                   Location ({location.trim().length}/25)
                 </div>
@@ -435,7 +434,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
             ) : (
               <div
                 onClick={() => setClickedOnLocation(true)}
-                className={`w-fit relative group rounded-lg p-2 pr-10 ${
+                className={`w-full relative group rounded-lg p-2 pr-10 ${
                   profile.location.trim() == ''
                     ? 'bg-gray-100'
                     : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover'
@@ -444,12 +443,12 @@ const About = ({ profile, setUser, org = false }: Props) => {
                 <PencilSimple
                   className={`absolute ${
                     profile.location.trim() == '' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                  } text-primary_black -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
+                  } text-primary_black dark:text-white -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
                 />
                 {profile.location.trim() == '' ? (
                   <div className="text-sm text-primary_black">Add Location</div>
                 ) : (
-                  <div>{profile.location}</div>
+                  <div className="break-words">{profile.location}</div>
                 )}
               </div>
             )}
@@ -482,12 +481,12 @@ const About = ({ profile, setUser, org = false }: Props) => {
           <PencilSimple
             className={`absolute opacity-0 ${
               profile.description.trim() == '' ? 'opacity-100' : 'group-hover:opacity-100'
-            } text-primary_black top-2 right-2 transition-ease-300`}
+            } text-primary_black dark:text-white top-2 right-2 transition-ease-300`}
           />
           {profile.description.trim() == '' ? (
             <div className="text-primary_black">Click here to add a Descriptive Bio!</div>
           ) : (
-            <div className="whitespace-pre-wrap max-md:text-sm cursor-pointer">
+            <div className="w-full whitespace-pre-wrap max-md:text-sm cursor-pointer break-words">
               {renderContentWithLinks(profile.description)}
             </div>
           )}

@@ -146,7 +146,9 @@ const About = ({ profile, organisation }: Props) => {
           {profile.description || organisation.user?.tags || profile.email || profile.phoneNo ? (
             <div className="w-full flex flex-col gap-4">
               {profile.description && (
-                <div className="whitespace-pre-wrap text-sm"> {renderContentWithLinks(profile.description)}</div>
+                <div className="w-full whitespace-pre-wrap text-sm break-words">
+                  {renderContentWithLinks(profile.description)}
+                </div>
               )}
               <div className="flex flex-wrap gap-2">
                 {organisation.user?.tags?.map(tag => (

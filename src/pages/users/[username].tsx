@@ -212,7 +212,7 @@ const UserComponent = ({ initialUser, err, seoProps }: Props) => {
             <CoverPhoto src={`${USER_COVER_PIC_URL}/${user.coverPic}`} blurDataURL={user.coverPicBlurHash} />
           )}
 
-          <div className="w-full h-24 my-12 font-bold text-5xl max-lg:text-3xl flex-center text-center dark:text-white">
+          <div className="w-full h-24 md:my-12 font-bold text-5xl max-lg:text-3xl flex-center text-center dark:text-white">
             {user.username == loggedInUser.username ? (
               clickedOnTagline ? (
                 <div className="w-[90%] mx-auto z-50">

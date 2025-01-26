@@ -49,15 +49,15 @@ const EventCard = ({ event }: Props) => {
   return (
     <Link
       href={`/events/${event.id}`}
-      className="relative w-full max-w-md bg-gray-100 dark:bg-dark_primary_comp_hover rounded-3xl p-4 hover:shadow-xl transition-ease-300 m-2"
+      className="relative w-full max-w-md bg-gray-100 dark:bg-dark_primary_comp_hover rounded-3xl p-4 hover:shadow-xl transition-ease-300 flex flex-col"
     >
-      <div className="relative">
+      <div className="relative mb-4">
         <Image
           width={400}
           height={200}
           src={`${EVENT_PIC_URL}/${event?.coverPic}`}
           alt="Event Pic"
-          className="w-full rounded-2xl overflow-hidden mb-4"
+          className="w-full rounded-2xl overflow-hidden"
           placeholder="blur"
           blurDataURL={
             event.blurHash
@@ -70,8 +70,8 @@ const EventCard = ({ event }: Props) => {
         <div className="absolute bottom-[-10px] -left-4">
           <UserHoverCard
             trigger={
-              <div className="bg-gray-100 dark:bg-dark_primary_comp_hover  rounded-full p-3">
-                <div className={`relative w-12 h-12 rounded-full flex flex-col items-center justify-center`}>
+              <div className="bg-gray-100 dark:bg-dark_primary_comp_hover rounded-full p-3">
+                <div className="relative w-12 h-12 rounded-full flex flex-col items-center justify-center">
                   <Image
                     crossOrigin="anonymous"
                     width={100}
@@ -87,13 +87,13 @@ const EventCard = ({ event }: Props) => {
           />
         </div>
       </div>
-      <div className="space-y-6">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-semibold line-clamp-1">{event.title}</h2>
-          <p className="text-gray-600 dark:text-gray-400">{event.tagline}</p>
+      <div className="flex flex-col flex-grow">
+        <div className="space-y-2 mb-4 flex-grow">
+          <h2 className="text-2xl font-semibold break-words">{event.title}</h2>
+          <p className="text-gray-600 dark:text-gray-400 break-words">{event.tagline}</p>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-4 mt-auto">
           <LowerCardItem
             title={event.hackathonID ? 'Prize' : 'Duration'}
             content={event.hackathonID ? getPrizeAmount() : getDurationInHours(event.startTime, event.endTime)}
@@ -112,8 +112,8 @@ const EventCard = ({ event }: Props) => {
 const LowerCardItem = ({ title, content }: { title: string; content: string }) => {
   return (
     <div className="flex flex-col items-center gap-1">
-      <p className="text-gray-500 font-medium dark:text-gray-300">{title}</p>
-      <p className="text-center">{content}</p>
+      <p className="text-gray-500 font-medium dark:text-gray-300 text-center break-words">{title}</p>
+      <p className="text-center break-words">{content}</p>
     </div>
   );
 };
