@@ -139,7 +139,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
       return true;
     };
     return (
-      <div className="w-full flex text-sm justify-end gap-2 mt-2">
+      <div className="w-full flex text-sm justify-end gap-2 md:mt-2">
         <div
           onClick={() => setter(false)}
           className="border-[1px] border-primary_black flex-center rounded-full w-20 p-1 cursor-pointer"
@@ -394,7 +394,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
             ) : (
               <div
                 onClick={() => setClickedOnPhoneNo(true)}
-                className={`w-fit relative group rounded-lg p-2 pl-10 max-md:pr-8 max-md:pl-0 ${
+                className={`w-fit relative group rounded-lg p-2 pl-10 max-md:pr-8 max-md:pl-2 ${
                   profile.phoneNo == '' ? 'bg-gray-100' : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover'
                 } cursor-pointer transition-ease-300`}
               >

@@ -23,6 +23,7 @@ import Editor from '@/components/editor';
 import Links from '@/components/explore/show_links';
 import { formatPrice } from '@/utils/funcs/misc';
 import { EVENT_PIC_HASH_DEFAULT } from '@/config/constants';
+import HackathonTimeline from '@/components/explore/hackathon_timeline';
 
 interface HackathonProps {
   event: Event;
@@ -66,9 +67,52 @@ const ProgressBar: React.FC<{ hackathon: Hackathon }> = ({ hackathon }) => {
 const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
   const [clickedOnChat, setClickedOnChat] = useState(false);
   const [clickedOnReport, setClickedOnReport] = useState(false);
-  const [eventLikes, setEventLikes] = useState(0);
+  const [eventLikes, setEventLikes] = useState(event.noLikes);
 
   const hackathon = useMemo(() => event.hackathon, [event]);
+
+  const timeline = useMemo(() => {
+    if (!hackathon) return [];
+
+    return [
+      {
+        title: 'Participant Registration Starts',
+        timestamp: moment(hackathon.startTime),
+      },
+      {
+        title: 'Participant Registration Ends',
+        timestamp: moment(hackathon.teamFormationStartTime),
+      },
+      {
+        title: 'Team Registration Starts',
+        timestamp: moment(hackathon.teamFormationStartTime),
+      },
+      {
+        title: 'Team Registration Ends',
+        timestamp: moment(hackathon.teamFormationEndTime),
+      },
+      ...hackathon.rounds
+        ?.map(round => [
+          {
+            title: `Round ${round.index + 1} Starts`,
+            timestamp: moment(round.startTime),
+          },
+          {
+            title: `Judging Round ${round.index + 1} Starts`,
+            timestamp: moment(round.judgingStartTime),
+          },
+          {
+            title: `Round ${round.index + 1} Ends`,
+            timestamp: moment(round.endTime),
+          },
+        ])
+        .flat(),
+      {
+        title: 'Hackathon Ends',
+        timestamp: moment(hackathon.endTime),
+      },
+    ];
+  }, [hackathon]);
 
   const user = useSelector(userSelector);
 
@@ -251,6 +295,8 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                 <div className="relative h-52 md:h-[200px]">
                   <Image
                     src={`${EVENT_PIC_URL}/${hackathon.coverPic}`}
+                    width={400}
+                    height={100}
                     alt="Event Picture"
                     className="w-full h-full rounded-xl object-cover"
                     placeholder="blur"
@@ -261,7 +307,6 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                           : hackathon.blurHash
                         : EVENT_PIC_HASH_DEFAULT
                     }
-                    layout="fill"
                   />
                 </div>
                 <LowerEvent event={event} numLikes={eventLikes} setNumLikes={setEventLikes} />
@@ -312,7 +357,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
             )}
 
             <Section title="Timeline">
-              <></>
+              <HackathonTimeline timeline={timeline} />
             </Section>
 
             {hackathon.sponsors && hackathon.sponsors.length > 0 && (

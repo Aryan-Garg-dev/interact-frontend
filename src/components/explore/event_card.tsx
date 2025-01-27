@@ -54,7 +54,7 @@ const EventCard = ({ event }: Props) => {
       <div className="relative mb-4">
         <Image
           width={400}
-          height={200}
+          height={100}
           src={`${EVENT_PIC_URL}/${event?.coverPic}`}
           alt="Event Pic"
           className="w-full rounded-2xl overflow-hidden"
@@ -71,16 +71,14 @@ const EventCard = ({ event }: Props) => {
           <UserHoverCard
             trigger={
               <div className="bg-gray-100 dark:bg-dark_primary_comp_hover rounded-full p-3">
-                <div className="relative w-12 h-12 rounded-full flex flex-col items-center justify-center">
-                  <Image
-                    crossOrigin="anonymous"
-                    width={100}
-                    height={100}
-                    alt={'User Pic'}
-                    src={`${USER_PROFILE_PIC_URL}/${event.organization.user.profilePic}`}
-                    className="w-10 h-10 rounded-full mt-1"
-                  />
-                </div>
+                <Image
+                  crossOrigin="anonymous"
+                  width={100}
+                  height={100}
+                  alt={'User Pic'}
+                  src={`${USER_PROFILE_PIC_URL}/${event.organization.user.profilePic}`}
+                  className="w-10 h-10 rounded-full"
+                />
               </div>
             }
             user={event.organization.user}
