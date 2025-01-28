@@ -320,11 +320,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                   <h3 className="text-xl font-semibold break-words">{hackathon.tagline}</h3>
                 </div>
                 <Tags tags={hackathon?.tags || []} displayAll />
-                {hackathon.description && (
-                  <div className="line-clamp-6">
-                    <Editor content={hackathon.description} editable={false} />
-                  </div>
-                )}
+                {hackathon.description && <Editor content={hackathon.description} editable={false} />}
               </div>
             </div>
 

@@ -343,7 +343,7 @@ const EventItem = ({ event }: { event: Event }) => (
     <Image
       crossOrigin="anonymous"
       width={50}
-      height={10}
+      height={15}
       alt={'User Pic'}
       src={`${EVENT_PIC_URL}/${event.coverPic}`}
       placeholder="blur"

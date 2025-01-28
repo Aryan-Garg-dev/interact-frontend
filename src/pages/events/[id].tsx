@@ -213,7 +213,7 @@ const EventComponent = ({ id }: Props) => {
     <div className="w-2/5 bg-white dark:bg-dark_primary_comp_hover rounded-xl max-md:w-full shadow-lg">
       <Image
         width={500}
-        height={125}
+        height={175}
         src={`${EVENT_PIC_URL}/${event.coverPic}`}
         alt="Event Picture"
         className="w-full object-cover rounded-t-xl"

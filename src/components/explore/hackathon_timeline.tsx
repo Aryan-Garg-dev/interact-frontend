@@ -46,7 +46,9 @@ const HackathonTimeline = ({ timeline }: { timeline: Timeline[] }) => {
       {/* Dynamic progress bar */}
       <div
         className="w-1 bg-primary_comp_active absolute -top-4 left-3.5 transition-all duration-500"
-        style={{ height: `${progressHeight}%` }}
+        style={{
+          height: progressHeight === 100 ? `calc(100% - 16px)` : `${progressHeight}%`,
+        }}
       ></div>
     </div>
   );
