@@ -1,32 +1,18 @@
 import Sentences from '@/components/utils/edit_sentences';
 import Tags from '@/components/utils/edit_tags';
 import { ORG_URL, USER_URL } from '@/config/routes';
-import getHandler from '@/handlers/get_handler';
 import patchHandler from '@/handlers/patch_handler';
-import postHandler from '@/handlers/post_handler';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
 import type { College, Profile, User } from '@/types';
 import isArrEdited from '@/utils/funcs/check_array_edited';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Toaster from '@/utils/toaster';
-import {
-  Buildings,
-  CalendarBlank,
-  Certificate,
-  Envelope,
-  MapPin,
-  PencilSimple,
-  Phone,
-  Placeholder,
-  Plus,
-  X,
-} from '@phosphor-icons/react';
+import { Buildings, CalendarBlank, Certificate, Envelope, MapPin, PencilSimple, Phone, X } from '@phosphor-icons/react';
+import { SERVER_ERROR } from '@/config/errors';
 import type React from 'react';
 import { useEffect, useState } from 'react';
 import isMobilePhone from 'validator/lib/isMobilePhone';
-import { useDispatch, useSelector } from 'react-redux';
-import { setVerificationStatus, userSelector } from '@/slices/userSlice';
-import { ALREADY_VERIFIED_ERROR, SERVER_ERROR } from '@/config/errors';
+import { useSelector } from 'react-redux';
 
 interface Props {
   profile: Profile;
@@ -46,10 +32,6 @@ const About = ({ profile, setUser, org = false }: Props) => {
   const [email, setEmail] = useState(profile.email || '');
   const [phoneNo, setPhoneNo] = useState(profile.phoneNo || '');
   const [location, setLocation] = useState(profile.location || '');
-  const [placeholder, setPlaceholder] = useState('Secondary Email');
-  const dispatch = useDispatch();
-
-  const user = useSelector(userSelector);
 
   const [mutex, setMutex] = useState(false);
 
@@ -62,17 +44,10 @@ const About = ({ profile, setUser, org = false }: Props) => {
   const [clickedOnEmail, setClickedOnEmail] = useState(false);
   const [clickedOnPhoneNo, setClickedOnPhoneNo] = useState(false);
   const [clickedOnLocation, setClickedOnLocation] = useState(false);
-  const [isEmailStage, setIsEmailStage] = useState(true);
   const [schoolSearch, setSchoolSearch] = useState('');
-  const [secondaryEmail, setSecondaryEmail] = useState('');
-  const [otp, setOTP] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [colleges, setColleges] = useState<College[]>([]);
-  const [showSecondaryEmailInput, setShowSecondaryEmailInput] = useState(false);
   const currentOrgID = useSelector(currentOrgIDSelector);
 
-  const [sentOTP, setSentOTP] = useState(false);
-  const [resentOTP, setResentOTP] = useState(false);
   // const sendOTP = async () => {
   //   const toaster = Toaster.startLoad('Sending OTP...');
   //   const res = await getHandler(`/verification/otp`);
@@ -192,53 +167,6 @@ const About = ({ profile, setUser, org = false }: Props) => {
         )}
       </div>
     );
-  };
-  const handleEmailSubmit = async (email: string) => {
-    const toaster = Toaster.startLoad('Sending OTP');
-    const URL = `/verification/secondary_email`;
-    const res = await postHandler(URL, { email });
-    if (res.statusCode === 200) {
-      Toaster.stopLoad(toaster, 'OTP sent to your email', 1);
-      setIsEmailStage(false);
-      setSentOTP(true);
-    } else {
-      if (res.data.message === ALREADY_VERIFIED_ERROR) {
-        Toaster.stopLoad(toaster, 'Email already verified', 0);
-        return;
-      }
-      Toaster.stopLoad(toaster, 'Failed to send OTP', 0);
-    }
-    setPlaceholder('Enter OTP');
-  };
-
-  const handleOTPSubmit = async () => {
-    if (otp.length !== 6) {
-      Toaster.error('Please enter a valid 6-digit OTP');
-      return;
-    }
-
-    setIsLoading(true);
-    const toaster = Toaster.startLoad('Verifying OTP...');
-    const res = await patchHandler('/verification/secondary_email', {
-      email: secondaryEmail,
-      otp: otp,
-    });
-    if (res.statusCode === 200) {
-      Toaster.stopLoad(toaster, 'Email verified', 1);
-      setIsEmailStage(true);
-      setSentOTP(false);
-      setShowSecondaryEmailInput(false);
-      setOTP('');
-      setSecondaryEmail(secondaryEmail);
-      setClickedOnEmail(false);
-    } else {
-      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-      else {
-        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-      }
-    }
-
-    setIsLoading(false);
   };
 
   return (
@@ -494,80 +422,6 @@ const About = ({ profile, setUser, org = false }: Props) => {
             <Phone weight="regular" size={20} />
           </div>
         </div>
-        {showSecondaryEmailInput ? (
-          <div className="w-full flex flex-col gap-2">
-            {isEmailStage ? (
-              <>
-                <input
-                  value={secondaryEmail}
-                  onChange={e => setSecondaryEmail(e.target.value)}
-                  placeholder={placeholder}
-                  type="email"
-                  className="w-full text-primary_black dark:text-white focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 text-sm font-medium bg-transparent"
-                />
-                <button
-                  onClick={() => handleEmailSubmit(secondaryEmail)}
-                  disabled={isLoading || !secondaryEmail}
-                  className={`bg-primary_black text-white rounded-lg p-2 ${
-                    isLoading || !secondaryEmail ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                  }`}
-                >
-                  Send OTP
-                </button>
-              </>
-            ) : (
-              <>
-                <div className="text-sm text-gray-500 mb-2">
-                  OTP sent to {secondaryEmail}
-                  <span
-                    onClick={() => setIsEmailStage(true)}
-                    className="text-primary_btn dark:text-dark_primary_btn ml-2 cursor-pointer"
-                  >
-                    Change
-                  </span>
-                </div>
-                <input
-                  value={otp}
-                  onChange={e => {
-                    const val = e.target.value;
-                    if (val === '' || (/^\d+$/.test(val) && val.length <= 6)) {
-                      setOTP(val);
-                    }
-                  }}
-                  placeholder="Enter 6-digit OTP"
-                  type="text"
-                  maxLength={6}
-                  className="w-full text-primary_black dark:text-white focus:outline-none border-[1px] border-primary_btn dark:border-dark_primary_btn rounded-lg p-2 text-sm font-medium bg-transparent"
-                />
-                <div className="flex gap-2">
-                  <button
-                    onClick={handleOTPSubmit}
-                    disabled={isLoading || otp.length !== 6}
-                    className={`flex-1 bg-primary_black text-white rounded-lg p-2 ${
-                      isLoading || otp.length !== 6 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                    }`}
-                  >
-                    Verify OTP
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        ) : (
-          <div
-            className="flex flex-row items-center cursor-pointer text-primary_btn dark:text-dark_primary_btn"
-            onClick={() => setShowSecondaryEmailInput(true)}
-          >
-            {secondaryEmail ? (
-              <div>{secondaryEmail}</div>
-            ) : (
-              <>
-                <Plus size={20} />
-                <span className="ml-2">Add Secondary Email</span>
-              </>
-            )}
-          </div>
-        )}
 
         {!org && (
           <div className="w-full flex gap-2 items-center text-lg">
