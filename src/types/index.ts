@@ -165,7 +165,7 @@ export interface User {
   isOrganization: boolean;
   organization: Organization | null;
   createdAt: string;
-  secondaryEmail: string;
+  secondaryEmail?: string;
 }
 
 export interface OrganizationMembership {

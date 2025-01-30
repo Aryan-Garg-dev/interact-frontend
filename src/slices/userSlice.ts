@@ -136,7 +136,7 @@ export const userSlice = createSlice({
       state.registeredEvents = [];
       state.githubUsername = action.payload.githubUsername;
       state.createdAt = action.payload.createdAt;
-      state.secondaryEmail = action.payload.secondaryEmail;
+      state.secondaryEmail = action.payload.secondaryEmail || '';
     },
     resetUser: state => {
       state.id = '';
@@ -278,7 +278,7 @@ export const userSlice = createSlice({
     },
     setSecondaryEmail: (state, action: PayloadAction<string>) => {
       state.secondaryEmail = action.payload;
-    }
+    },
   },
 });
 
@@ -318,7 +318,7 @@ export const {
   setVotedOptions,
   setRegisteredEvents,
   setGithubUsername,
-  setSecondaryEmail
+  setSecondaryEmail,
 } = userSlice.actions;
 
 export default userSlice.reducer;
