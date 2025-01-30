@@ -51,6 +51,8 @@ const NewHackathon: React.FC = () => {
   const [enableFigmaIntegration, setEnableFigmaIntegration] = useState(false);
   const [enableAutoCodeReviews, setEnableAutoCodeReviews] = useState(false);
   const [makeProjectsPublic, setMakeProjectsPublic] = useState(true);
+  const [isRestricted, setIsRestricted] = useState(false);
+  const [entryPassword, setEntryPassword] = useState('');
 
   const currentOrg = useSelector(currentOrgSelector);
 
@@ -198,6 +200,8 @@ const NewHackathon: React.FC = () => {
       enableFigmaIntegration,
       enableAutoCodeReviews,
       makeProjectsPublic,
+      isRestricted,
+      entryPassword,
     };
 
     const toaster = Toaster.startLoad('Adding the event...');
@@ -261,6 +265,8 @@ const NewHackathon: React.FC = () => {
       enableFigmaIntegration,
       enableAutoCodeReviews,
       makeProjectsPublic,
+      isRestricted,
+      entryPassword,
     };
 
     localStorage.setItem(`hackathon-draft-${currentOrg.id}`, JSON.stringify(formData));
@@ -291,6 +297,8 @@ const NewHackathon: React.FC = () => {
     setEnableFigmaIntegration(false);
     setEnableAutoCodeReviews(false);
     setMakeProjectsPublic(true);
+    setIsRestricted(false);
+    setEntryPassword('');
   };
 
   useEffect(() => {
@@ -319,6 +327,8 @@ const NewHackathon: React.FC = () => {
       setEnableFigmaIntegration(formData.enableFigmaIntegration || false);
       setEnableAutoCodeReviews(formData.enableAutoCodeReviews || false);
       setMakeProjectsPublic(formData.makeProjectsPublic || true);
+      setIsRestricted(formData.isRestricted || false);
+      setEntryPassword(formData.entryPassword || '');
     }
   }, [currentOrg.id]);
 
@@ -402,6 +412,10 @@ const NewHackathon: React.FC = () => {
             links={links}
             setLinks={setLinks}
             setCoverPic={setImage}
+            isRestricted={isRestricted}
+            setIsRestricted={setIsRestricted}
+            entryPassword={entryPassword}
+            setEntryPassword={setEntryPassword}
             isEditMode={false}
           />
         </div>
