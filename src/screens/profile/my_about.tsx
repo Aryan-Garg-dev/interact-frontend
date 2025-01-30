@@ -1,6 +1,5 @@
 import Sentences from '@/components/utils/edit_sentences';
 import Tags from '@/components/utils/edit_tags';
-import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL, USER_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
@@ -9,9 +8,11 @@ import isArrEdited from '@/utils/funcs/check_array_edited';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Toaster from '@/utils/toaster';
 import { Buildings, CalendarBlank, Certificate, Envelope, MapPin, PencilSimple, Phone, X } from '@phosphor-icons/react';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { SERVER_ERROR } from '@/config/errors';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import isMobilePhone from 'validator/lib/isMobilePhone';
+import { useSelector } from 'react-redux';
 
 interface Props {
   profile: Profile;
@@ -43,11 +44,8 @@ const About = ({ profile, setUser, org = false }: Props) => {
   const [clickedOnEmail, setClickedOnEmail] = useState(false);
   const [clickedOnPhoneNo, setClickedOnPhoneNo] = useState(false);
   const [clickedOnLocation, setClickedOnLocation] = useState(false);
-
   const [schoolSearch, setSchoolSearch] = useState('');
-
   const [colleges, setColleges] = useState<College[]>([]);
-
   const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleSubmit = async (field: string) => {
@@ -139,7 +137,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
       return true;
     };
     return (
-      <div className="w-full flex text-sm justify-end gap-2 md:mt-2">
+      <div className="w-full flex text-sm justify-end gap-2 mt-2">
         <div
           onClick={() => setter(false)}
           className="border-[1px] border-primary_black flex-center rounded-full w-20 p-1 cursor-pointer"
@@ -394,7 +392,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
             ) : (
               <div
                 onClick={() => setClickedOnPhoneNo(true)}
-                className={`w-fit relative group rounded-lg p-2 pl-10 max-md:pr-8 max-md:pl-2 ${
+                className={`w-fit relative group rounded-lg p-2 pl-10 max-md:pr-8 max-md:pl-0 ${
                   profile.phoneNo == '' ? 'bg-gray-100' : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover'
                 } cursor-pointer transition-ease-300`}
               >
@@ -415,11 +413,13 @@ const About = ({ profile, setUser, org = false }: Props) => {
             <Phone weight="regular" size={20} />
           </div>
         </div>
+
         {!org && (
-          <div className="w-full flex gap-2 items-start text-lg">
-            <MapPin weight="regular" size={24} className="mt-2" />
+          <div className="w-full flex gap-2 items-center text-lg">
+            <MapPin weight="regular" size={24} />
+
             {clickedOnLocation ? (
-              <div className="w-full z-10">
+              <div className="w-3/4 z-10">
                 <div className="text-xs ml-1 font-medium uppercase text-gray-500">
                   Location ({location.trim().length}/25)
                 </div>
@@ -434,7 +434,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
             ) : (
               <div
                 onClick={() => setClickedOnLocation(true)}
-                className={`w-full relative group rounded-lg p-2 pr-10 ${
+                className={`w-fit relative group rounded-lg p-2 pr-10 ${
                   profile.location.trim() == ''
                     ? 'bg-gray-100'
                     : 'hover:bg-gray-100 dark:hover:bg-dark_primary_comp_hover'
@@ -443,12 +443,12 @@ const About = ({ profile, setUser, org = false }: Props) => {
                 <PencilSimple
                   className={`absolute ${
                     profile.location.trim() == '' ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-                  } text-primary_black dark:text-white -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
+                  } text-primary_black -translate-y-1/2 top-1/2 right-2 transition-ease-300`}
                 />
                 {profile.location.trim() == '' ? (
                   <div className="text-sm text-primary_black">Add Location</div>
                 ) : (
-                  <div className="break-words">{profile.location}</div>
+                  <div>{profile.location}</div>
                 )}
               </div>
             )}
@@ -481,7 +481,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
           <PencilSimple
             className={`absolute opacity-0 ${
               profile.description.trim() == '' ? 'opacity-100' : 'group-hover:opacity-100'
-            } text-primary_black dark:text-white top-2 right-2 transition-ease-300`}
+            } text-primary_black top-2 right-2 transition-ease-300`}
           />
           {profile.description.trim() == '' ? (
             <div className="text-primary_black">Click here to add a Descriptive Bio!</div>
