@@ -59,6 +59,18 @@ const AdditionalDetails: React.FC<IntegrationProps> = ({
             : 'Github Integration is not included in your Hackathon.'
         }
       />
+      {github && (
+        <Checkbox
+          label="Do you want to include Automatic Code Reviews?"
+          val={autoCodeReview}
+          setVal={setAutoCodeReview}
+          caption={
+            autoCodeReview
+              ? 'Automatic code reviews for connected Github repositories will be generated 15-30 minutes before each judging round which will be visible to the judges.'
+              : 'Auto Code Review is not included in your Hackathon.'
+          }
+        />
+      )}
       <Checkbox
         label="Will your Hackathon need Figma integration?"
         val={figma}
@@ -67,16 +79,6 @@ const AdditionalDetails: React.FC<IntegrationProps> = ({
           figma
             ? 'Figma Integration is included in your Hackathon. It will track figma file changes made by the participants for analytics.'
             : 'Figma Integration is not included in your Hackathon.'
-        }
-      />
-      <Checkbox
-        label="Do you want to include Automatic Code Reviews?"
-        val={autoCodeReview}
-        setVal={setAutoCodeReview}
-        caption={
-          autoCodeReview
-            ? 'Automatic code reviews for connected Github repositories will be generated 15-30 minutes before each judging round which will be visible to the judges.'
-            : 'Auto Code Review is not included in your Hackathon.'
         }
       />
     </div>

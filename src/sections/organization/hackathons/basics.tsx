@@ -9,6 +9,7 @@ import { EVENT_PIC_URL } from '@/config/routes';
 import { resizeImage } from '@/utils/resize_image';
 import Toaster from '@/utils/toaster';
 import Image from 'next/image';
+import Checkbox from '@/components/form/checkbox';
 
 interface BasicsProps {
   title: string;
@@ -27,6 +28,10 @@ interface BasicsProps {
   setTags?: (tags: string[]) => void;
   links: string[];
   setLinks?: (links: string[]) => void;
+  isRestricted: boolean;
+  setIsRestricted?: (isRestricted: boolean) => void;
+  entryPassword: string;
+  setEntryPassword?: (entryPassword: string) => void;
   coverPic?: string;
   setCoverPic: (file: File | null) => void;
   isEditMode: boolean;
@@ -50,6 +55,10 @@ const Basics: React.FC<BasicsProps> = ({
   setTags,
   links,
   setLinks,
+  isRestricted,
+  setIsRestricted,
+  entryPassword,
+  setEntryPassword,
   coverPic,
   setCoverPic,
   isEditMode,
@@ -61,6 +70,8 @@ const Basics: React.FC<BasicsProps> = ({
   const [localDescription, setLocalDescription] = useState(description);
   const [localTags, setLocalTags] = useState(tags);
   const [localLinks, setLocalLinks] = useState(links);
+  const [localIsRestricted, setLocalIsRestricted] = useState(isRestricted);
+  const [localEntryPassword, setLocalEntryPassword] = useState(entryPassword);
   const [coverPicView, setCoverPicView] = useState(`${EVENT_PIC_URL}/${coverPic || 'default.jpg'}`);
 
   const handleSave = () => {
@@ -71,6 +82,8 @@ const Basics: React.FC<BasicsProps> = ({
       description: localDescription,
       tags: localTags,
       links: localLinks,
+      isRestricted: localIsRestricted,
+      entryPassword: localEntryPassword,
     };
 
     if (onSave) onSave(updatedData);
@@ -160,6 +173,25 @@ const Basics: React.FC<BasicsProps> = ({
         setLinks={isEditMode ? setLocalLinks : setLinks ? setLinks : () => {}}
         maxLinks={5}
       />
+      <Checkbox
+        label="Do you want to restrict this hackathon participation?"
+        val={isEditMode ? localIsRestricted : isRestricted}
+        setVal={isEditMode ? setLocalIsRestricted : setIsRestricted ? setIsRestricted : () => {}}
+        caption={
+          (isEditMode ? localIsRestricted : isRestricted)
+            ? 'Only users with the password will be able to participate in this hackathon.'
+            : 'The Hackathon is open to all users.'
+        }
+      />
+      {(isEditMode ? localIsRestricted : isRestricted) && (
+        <Input
+          label="Entry Password"
+          val={isEditMode ? localEntryPassword : entryPassword}
+          setVal={isEditMode ? setLocalEntryPassword : setEntryPassword ? setEntryPassword : () => {}}
+          maxLength={25}
+          required={true}
+        />
+      )}
 
       {isEditMode && (
         <button

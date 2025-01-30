@@ -777,6 +777,8 @@ export interface Hackathon {
   coordinators: User[];
   judges: User[];
   isEnded?: boolean;
+  isRestricted: boolean;
+  entryPassword?: string;
   eventID: string;
   history: HackathonHistory[];
   tracks: HackathonTrack[];
