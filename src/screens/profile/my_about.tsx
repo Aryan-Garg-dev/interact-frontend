@@ -3,7 +3,7 @@ import Tags from '@/components/utils/edit_tags';
 import { ORG_URL, USER_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
-import type { College, Profile, User } from '@/types';
+import { College, Profile, User } from '@/types';
 import isArrEdited from '@/utils/funcs/check_array_edited';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Toaster from '@/utils/toaster';
@@ -48,15 +48,6 @@ const About = ({ profile, setUser, org = false }: Props) => {
   const [colleges, setColleges] = useState<College[]>([]);
   const currentOrgID = useSelector(currentOrgIDSelector);
 
-  // const sendOTP = async () => {
-  //   const toaster = Toaster.startLoad('Sending OTP...');
-  //   const res = await getHandler(`/verification/otp`);
-  //   if (res.status === 200) {
-  //     Toaster.stopLoad(toaster, 'OTP sent to your email', 1);
-  //   } else {
-  //     Toaster.stopLoad(toaster, 'Failed to send OTP', 0);
-  //   }
-  // };
   const handleSubmit = async (field: string) => {
     if (field == 'phoneNo' && !isMobilePhone(phoneNo)) {
       Toaster.error('Enter a valid phone number');
@@ -495,7 +486,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
           {profile.description.trim() == '' ? (
             <div className="text-primary_black">Click here to add a Descriptive Bio!</div>
           ) : (
-            <div className="whitespace-pre-wrap max-md:text-sm cursor-pointer">
+            <div className="w-full whitespace-pre-wrap max-md:text-sm cursor-pointer break-words">
               {renderContentWithLinks(profile.description)}
             </div>
           )}
