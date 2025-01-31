@@ -88,7 +88,7 @@ const EventCard = ({ event }: Props) => {
       <div className="flex flex-col flex-grow">
         <div className="space-y-2 mb-4 flex-grow">
           <h2 className="text-2xl font-semibold break-words">{event.title}</h2>
-          <p className="text-gray-600 dark:text-gray-400 break-words">{event.tagline}</p>
+          <p className="text-gray-600 dark:text-gray-400 break-words line-clamp-1">{event.tagline}</p>
         </div>
 
         <div className="grid grid-cols-3 gap-4 mt-auto">

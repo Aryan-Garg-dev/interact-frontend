@@ -7,9 +7,10 @@ interface Props {
   setTags: React.Dispatch<React.SetStateAction<string[]>> | ((val: string[]) => void);
   maxTags: number;
   required?: boolean;
+  suggestions?: boolean;
 }
 
-const Tags = ({ label, tags, setTags, maxTags, required = false }: Props) => {
+const Tags = ({ label, tags, setTags, maxTags, required = false, suggestions = false }: Props) => {
   return (
     <div className="w-full">
       {label && (
@@ -18,7 +19,7 @@ const Tags = ({ label, tags, setTags, maxTags, required = false }: Props) => {
           {required && '*'} ({tags.length}/{maxTags})
         </div>
       )}
-      <TagsField tags={tags} setTags={setTags} maxTags={maxTags} />
+      <TagsField tags={tags} setTags={setTags} maxTags={maxTags} suggestions={suggestions} />
     </div>
   );
 };

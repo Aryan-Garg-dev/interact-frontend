@@ -24,10 +24,20 @@ import Links from '@/components/explore/show_links';
 import { formatPrice } from '@/utils/funcs/misc';
 import { EVENT_PIC_HASH_DEFAULT } from '@/config/constants';
 import HackathonTimeline from '@/components/explore/hackathon_timeline';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import Input from '@/components/form/input';
+import { Button } from '@/components/ui/button';
 
 interface HackathonProps {
   event: Event;
-  handleRegister: () => void;
+  handleRegister: (pass?: string) => void;
 }
 
 const ProgressBar: React.FC<{ hackathon: Hackathon }> = ({ hackathon }) => {
@@ -216,6 +226,9 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
   );
 
   const RegisterButton = () => {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [password, setPassword] = useState('');
+
     const isRegistered = user.registeredEvents?.includes(event.id);
     const isLive = !hackathon?.isEnded;
     const startTime = moment(hackathon?.startTime).utcOffset('+05:30');
@@ -242,8 +255,35 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
       window.location.assign(`${process.env.NEXT_PUBLIC_HACKATHONS_URL}?action=sync`);
     };
 
+    const handlePreRegister = () => {
+      if (!hackathon?.isRestricted) handleRegister();
+      else setIsDialogOpen(true);
+    };
+
     return (
       <div className="w-full flex flex-col gap-2 items-center justify-center">
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>This event is Restricted.</DialogTitle>
+              <DialogDescription>
+                To register for this event, you need a password. Please enter the password below.
+              </DialogDescription>
+            </DialogHeader>
+            <Input val={password} setVal={setPassword} placeholder="Enter Password" maxLength={25} />
+            <Button
+              onClick={() => {
+                handleRegister(password);
+                setIsDialogOpen(false);
+              }}
+              className="w-full mt-4"
+              variant="outline"
+            >
+              Submit
+            </Button>
+          </DialogContent>
+        </Dialog>
+
         <div className="text-xs font-semibold text-gray-500 dark:text-white">This event is happening on Interact!</div>
         {user.organizationMemberships.map(membership => membership.organizationID).includes(event.organizationID) ? (
           <SecondaryButton label="Go to Dashboard" onClick={handleRedirect} />
@@ -263,7 +303,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
             </button>
           )
         ) : now.isBefore(teamFormationEndTime) ? (
-          <SecondaryButton label="Register Now!" onClick={handleRegister} />
+          <SecondaryButton label="Register Now!" onClick={handlePreRegister} />
         ) : (
           <div className="w-full relative p-2 text-center bg-priority_high text-gray-700 dark:text-white rounded-lg font-medium cursor-default">
             Registrations Closed
@@ -320,11 +360,7 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
                   <h3 className="text-xl font-semibold break-words">{hackathon.tagline}</h3>
                 </div>
                 <Tags tags={hackathon?.tags || []} displayAll />
-                {hackathon.description && (
-                  <div className="line-clamp-6">
-                    <Editor content={hackathon.description} editable={false} />
-                  </div>
-                )}
+                {hackathon.description && <Editor content={hackathon.description} editable={false} />}
               </div>
             </div>
 

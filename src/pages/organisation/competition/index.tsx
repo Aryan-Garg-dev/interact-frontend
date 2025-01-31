@@ -25,6 +25,7 @@ import Teams from '@/sections/organization/hackathons/teams';
 import { useRouter } from 'next/router';
 import { Id } from 'react-toastify';
 import patchHandler from '@/handlers/patch_handler';
+import AdditionalDetails from '@/sections/organization/hackathons/additional';
 
 const NewHackathon: React.FC = () => {
   const [title, setTitle] = useState('');
@@ -45,6 +46,13 @@ const NewHackathon: React.FC = () => {
   const [rounds, setRounds] = useState<HackathonRound[]>([]);
   const [sponsors, setSponsors] = useState<HackathonSponsor[]>([]);
   const [faqs, setFaqs] = useState<HackathonFAQ[]>([]);
+  const [allowEditDuringJudging, setAllowEditDuringJudging] = useState(false);
+  const [enableGithubIntegration, setEnableGithubIntegration] = useState(false);
+  const [enableFigmaIntegration, setEnableFigmaIntegration] = useState(false);
+  const [enableAutoCodeReviews, setEnableAutoCodeReviews] = useState(false);
+  const [makeProjectsPublic, setMakeProjectsPublic] = useState(true);
+  const [isRestricted, setIsRestricted] = useState(false);
+  const [entryPassword, setEntryPassword] = useState('');
 
   const currentOrg = useSelector(currentOrgSelector);
 
@@ -148,6 +156,16 @@ const NewHackathon: React.FC = () => {
       return false;
     }
 
+    if (rounds.length === 0) {
+      Toaster.error('Add at least one round');
+      return false;
+    }
+
+    if (tracks.length === 0) {
+      Toaster.error('Add at least one track');
+      return false;
+    }
+
     return true;
   };
 
@@ -177,6 +195,13 @@ const NewHackathon: React.FC = () => {
       })),
       sponsors,
       faqs,
+      allowEditDuringJudging,
+      enableGithubIntegration,
+      enableFigmaIntegration,
+      enableAutoCodeReviews,
+      makeProjectsPublic,
+      isRestricted,
+      entryPassword,
     };
 
     const toaster = Toaster.startLoad('Adding the event...');
@@ -235,6 +260,13 @@ const NewHackathon: React.FC = () => {
       rounds,
       sponsors,
       faqs,
+      allowEditDuringJudging,
+      enableGithubIntegration,
+      enableFigmaIntegration,
+      enableAutoCodeReviews,
+      makeProjectsPublic,
+      isRestricted,
+      entryPassword,
     };
 
     localStorage.setItem(`hackathon-draft-${currentOrg.id}`, JSON.stringify(formData));
@@ -260,6 +292,13 @@ const NewHackathon: React.FC = () => {
     setRounds([]);
     setSponsors([]);
     setFaqs([]);
+    setAllowEditDuringJudging(false);
+    setEnableGithubIntegration(false);
+    setEnableFigmaIntegration(false);
+    setEnableAutoCodeReviews(false);
+    setMakeProjectsPublic(true);
+    setIsRestricted(false);
+    setEntryPassword('');
   };
 
   useEffect(() => {
@@ -283,6 +322,13 @@ const NewHackathon: React.FC = () => {
       setRounds(formData.rounds || []);
       setSponsors(formData.sponsors || []);
       setFaqs(formData.faqs || []);
+      setAllowEditDuringJudging(formData.allowEditDuringJudging || false);
+      setEnableGithubIntegration(formData.enableGithubIntegration || false);
+      setEnableFigmaIntegration(formData.enableFigmaIntegration || false);
+      setEnableAutoCodeReviews(formData.enableAutoCodeReviews || false);
+      setMakeProjectsPublic(formData.makeProjectsPublic || true);
+      setIsRestricted(formData.isRestricted || false);
+      setEntryPassword(formData.entryPassword || '');
     }
   }, [currentOrg.id]);
 
@@ -366,6 +412,10 @@ const NewHackathon: React.FC = () => {
             links={links}
             setLinks={setLinks}
             setCoverPic={setImage}
+            isRestricted={isRestricted}
+            setIsRestricted={setIsRestricted}
+            entryPassword={entryPassword}
+            setEntryPassword={setEntryPassword}
             isEditMode={false}
           />
         </div>
@@ -430,6 +480,25 @@ const NewHackathon: React.FC = () => {
       content: (
         <div className="container mx-auto px-4">
           <FAQs faqs={faqs} addFAQ={addFAQ} editFAQ={editFAQ} deleteFAQ={deleteFAQ} />
+        </div>
+      ),
+    },
+    {
+      title: 'Additional Details',
+      content: (
+        <div className="container mx-auto px-4">
+          <AdditionalDetails
+            github={enableGithubIntegration}
+            setGithub={setEnableGithubIntegration}
+            figma={enableFigmaIntegration}
+            setFigma={setEnableFigmaIntegration}
+            autoCodeReview={enableAutoCodeReviews}
+            setAutoCodeReview={setEnableAutoCodeReviews}
+            projectEditing={allowEditDuringJudging}
+            setProjectEditing={setAllowEditDuringJudging}
+            projectPublic={makeProjectsPublic}
+            setProjectPublic={setMakeProjectsPublic}
+          />
         </div>
       ),
     },

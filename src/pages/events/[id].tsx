@@ -87,18 +87,19 @@ const EventComponent = ({ id }: Props) => {
     } else setClickedOnChat(true);
   };
 
-  const handleRegister = async () => {
+  const handleRegister = async (pass?: string) => {
     const toaster = Toaster.startLoad('Registering for the Event');
-    getHandler(event.hackathonID ? `/hackathons/register/${event.hackathonID}` : `/events/register/${id}`)
+    getHandler(
+      event.hackathonID
+        ? `/hackathons/register/${event.hackathonID}${event.hackathon?.isRestricted ? `?code=${pass}` : ''}`
+        : `/events/register/${id}`
+    )
       .then(res => {
         if (res.statusCode === 200) {
           Toaster.stopLoad(toaster, 'Successfully registered for the Event!', 1);
           dispatch(setRegisteredEvents([...(user.registeredEvents || []), event.id]));
         } else {
-          if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-          else {
-            Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-          }
+          Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
         }
       })
       .catch(err => {
@@ -213,7 +214,7 @@ const EventComponent = ({ id }: Props) => {
     <div className="w-2/5 bg-white dark:bg-dark_primary_comp_hover rounded-xl max-md:w-full shadow-lg">
       <Image
         width={500}
-        height={125}
+        height={175}
         src={`${EVENT_PIC_URL}/${event.coverPic}`}
         alt="Event Picture"
         className="w-full object-cover rounded-t-xl"

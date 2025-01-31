@@ -165,6 +165,7 @@ export interface User {
   isOrganization: boolean;
   organization: Organization | null;
   createdAt: string;
+  secondaryEmail?: string;
 }
 
 export interface OrganizationMembership {
@@ -777,6 +778,8 @@ export interface Hackathon {
   coordinators: User[];
   judges: User[];
   isEnded?: boolean;
+  isRestricted: boolean;
+  entryPassword?: string;
   eventID: string;
   history: HackathonHistory[];
   tracks: HackathonTrack[];

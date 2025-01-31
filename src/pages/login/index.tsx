@@ -50,6 +50,7 @@ const Login = () => {
           Toaster.stopLoad(toaster, 'Logged In!', 1);
           const user: User = res.data.user;
           user.email = res.data.email;
+          user.secondaryEmail = res.data.secondaryEmail;
           user.phoneNo = res.data.phoneNo || '';
           user.resume = res.data.resume || '';
           user.createdAt = res.data.createdAt || new Date();

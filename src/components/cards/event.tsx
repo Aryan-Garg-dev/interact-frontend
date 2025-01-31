@@ -20,7 +20,7 @@ const EventCard = ({ event }: Props) => {
         </div>
         <Image
           width={200}
-          height={50}
+          height={75}
           src={`${EVENT_PIC_URL}/${event.coverPic}`}
           alt=""
           className="w-full object-cover rounded-t-xl"

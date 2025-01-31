@@ -47,7 +47,7 @@ const EventCard = ({
         </div>
         <Image
           width={300}
-          height={75}
+          height={100}
           src={`${EVENT_PIC_URL}/${event.coverPic}`}
           alt="Event Cover"
           className="w-full object-cover rounded-t-xl"

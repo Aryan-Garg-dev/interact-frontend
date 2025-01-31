@@ -258,7 +258,7 @@ const EventCard = ({ event }: { event: Event }) => {
         src={`${EVENT_PIC_URL}/${event.coverPic}`}
         alt="Event Pic"
         width={100}
-        height={25}
+        height={30}
         className="w-full rounded-md"
         placeholder="blur"
         blurDataURL={
