@@ -50,7 +50,6 @@ import {
   TextUnderline,
 } from '@phosphor-icons/react';
 import { FileHandler } from '@/components/editor/extensions/file-handler';
-import { useLocalDraft } from '@/hooks/use-local-draft';
 
 type EditorProps =
   | {
@@ -60,6 +59,7 @@ type EditorProps =
   placeholder?: string;
   limit?: number | null;
   className?: string;
+  enableMentions?: boolean
 }
   | {
   editable: false;
@@ -68,6 +68,7 @@ type EditorProps =
   placeholder?: never;
   limit?: never;
   className?: string;
+  enableMentions?: never
 };
 
 const Editor = ({
@@ -77,75 +78,77 @@ const Editor = ({
                   limit = null,
                   placeholder,
                   className,
+                  enableMentions = true
                 }: EditorProps) => {
   //TODO: Custom KeyMaps
 
-  const { draft, setDraft } = useLocalDraft("post-draft");
+  let extensions = [
+    // StarterKit.configure({}),
+    Document,
+    Paragraph,
+    Text,
+    Blockquote, // >
+    ListItem,
+    BulletList, // +, *, +
+    OrderedList, // 1.
+    Heading.configure({
+      // #, ##, ###
+      levels: [1, 2, 3],
+    }),
+    HorizontalRule, // ---
+    CodeBlock, // ```
+    TaskItem, // - [ ]
+    TaskList,
+    Bold, // **Bold** __bold__ ctrl+b
+    Italic, // *Italic* _italic_ ctrl+i
+    Highlight, // ==Highlight==
+    Strike.configure({
+      // ~~Strike~~
+      HTMLAttributes: {
+        class: 'line-through decoration-neutral-700',
+      },
+    }),
+    Underline, // ctrl+u
+    Code, // `code`
+    Subscript, // ctrl+,
+    Superscript, // ctrl+.
+    Typography,
+    // ColorHighlighter,
+    SmilieReplacer,
+    CharacterCount.configure({
+      limit,
+    }),
+    Placeholder.configure({
+      placeholder: placeholder || 'Type something...',
+    }),
+    History, // ctrl+z, ctrl+y
+    Link.configure({
+      openOnClick: true,
+      linkOnPaste: true,
+      defaultProtocol: 'https',
+      protocols: ['http', 'https'],
+      //TODO: Configure allowed and disallowed URIs, domains, protocols, etc.
+      isAllowedUri: (url, ctx) => ctx.defaultValidate(url) && !url.startsWith('./'),
+      shouldAutoLink: url => url.startsWith('https://'),
+      HTMLAttributes: {
+        rel: 'noopener noreferrer nofollow',
+        target: '_blank',
+        class: '',
+      },
+    }),
+    //////////////////////
+    Image,
+    Dropcursor,
+    FileHandler,
+    //////////////////////
+    // customKeyMap
+  ];
+
+  if (enableMentions) extensions = [...extensions, InteractMentions];
 
   const editor = useEditor({
-    content: content || draft,
-    extensions: [
-      // StarterKit.configure({}),
-      Document,
-      Paragraph,
-      Text,
-      Blockquote, // >
-      ListItem,
-      BulletList, // +, *, +
-      OrderedList, // 1.
-      Heading.configure({
-        // #, ##, ###
-        levels: [1, 2, 3],
-      }),
-      HorizontalRule, // ---
-      CodeBlock, // ```
-      TaskItem, // - [ ]
-      TaskList,
-      Bold, // **Bold** __bold__ ctrl+b
-      Italic, // *Italic* _italic_ ctrl+i
-      Highlight, // ==Highlight==
-      Strike.configure({
-        // ~~Strike~~
-        HTMLAttributes: {
-          class: 'line-through decoration-neutral-700',
-        },
-      }),
-      Underline, // ctrl+u
-      Code, // `code`
-      Subscript, // ctrl+,
-      Superscript, // ctrl+.
-      Typography,
-      // ColorHighlighter,
-      SmilieReplacer,
-      CharacterCount.configure({
-        limit,
-      }),
-      Placeholder.configure({
-        placeholder: placeholder || 'Type something...',
-      }),
-      History, // ctrl+z, ctrl+y
-      Link.configure({
-        openOnClick: true,
-        linkOnPaste: true,
-        defaultProtocol: 'https',
-        protocols: ['http', 'https'],
-        //TODO: Configure allowed and disallowed URIs, domains, protocols, etc.
-        isAllowedUri: (url, ctx) => ctx.defaultValidate(url) && !url.startsWith('./'),
-        shouldAutoLink: url => url.startsWith('https://'),
-        HTMLAttributes: {
-          rel: 'noopener noreferrer nofollow',
-          target: '_blank',
-          class: '',
-        },
-      }),
-      InteractMentions,
-      //////////////////////
-      Image,
-      Dropcursor,
-      FileHandler,
-      //////////////////////
-      // customKeyMap
-    ],
+    content: content,
+    extensions: extensions,
     autofocus: editable,
     editable: editable,
     editorProps: {
@@ -155,7 +158,6 @@ const Editor = ({
     },
     onUpdate({ editor }) {
       setContent(editor.getHTML());
-      setDraft(editor.getHTML())
     },
   });
 
@@ -272,7 +274,6 @@ const Editor = ({
         </BubbleMenu>
       )}
       <EditorContent editor={editor} />
-      <div>{content}</div>
       {editor && editable && limit && <CountWidget charCount={charCount} limit={limit} className="m-1 ml-2" />}
       {editor && editable && (
         <LinkDialog open={openLinkDialog} setOpen={setOpenLinkDialog} setURL={setURL} onSubmit={onSubmitURL} />
@@ -283,7 +284,7 @@ const Editor = ({
 
 const BubbleMenuIcon = ({ icon, isActive, onClick }: { icon: ReactNode; isActive: boolean; onClick?: () => void }) => (
   <button onClick={onClick} className={isActive ? 'is-active' : ''}>
-    {React.cloneElement(icon as React.ReactElement, {
+  {React.cloneElement(icon as React.ReactElement, {
       weight: isActive ? 'bold' : 'regular',
     })}
   </button>

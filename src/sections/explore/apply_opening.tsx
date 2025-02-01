@@ -23,8 +23,8 @@ interface Props {
 }
 
 const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false }: Props) => {
-  const { draft, setDraft } = useLocalDraft(`application-draft-${opening.id}`);
-  // const [content, setContent] = useState(draft);
+  const [content, setContent] = useState('');
+  const applicationDraft = useLocalDraft(`application-draft-${opening.id}`, content);
   const [links, setLinks] = useState<string[]>([]);
   const [includeEmail, setIncludeEmail] = useState(false);
   const [includeResume, setIncludeResume] = useState(false);
@@ -54,13 +54,13 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
   }, []);
 
   const handleSubmit = async () => {
-    if (draft.trim() == '') {
+    if (applicationDraft.trim() == '') {
       Toaster.error('Message cannot be Empty', 'validation_error');
       return;
     }
     const toaster = Toaster.startLoad('Applying to Opening...');
 
-    const formData = { content: draft, links, includeEmail, includeResume, yoe };
+    const formData = { content: applicationDraft, links, includeEmail, includeResume, yoe };
 
     const URL = org ? `/org/${opening.organizationID}/applications/${opening.id}` : `${APPLICATION_URL}/${opening.id}`;
 
@@ -118,9 +118,9 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
           <div className="w-2/3 h-full max-lg:w-full flex max-lg:flex-col gap-4">
             <div className="w-1/2 max-lg:w-full h-full flex flex-col gap-2 relative">
               <textarea
-                value={draft}
+                value={applicationDraft}
                 onChange={el => {
-                  setDraft(el.target.value);
+                  setContent(el.target.value)
                 }}
                 maxLength={500}
                 className="w-full px-4 py-2 rounded-lg text-black dark:text-white bg-primary_comp dark:bg-dark_primary_comp_hover min-h-[27rem] max-h-[27rem] focus:outline-none"

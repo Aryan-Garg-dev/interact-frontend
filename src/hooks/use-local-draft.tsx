@@ -8,10 +8,10 @@ const debounce = (func: (text: string)=>void, delay: number) => {
   };
 }
 
-export const useLocalDraft = (key: string, initialValue: string = '', delay = 500)=>{
-  const [draft, setDraft] = useState(()=>{
+export const useLocalDraft = (key: string, content: string, delay = 500)=>{
+  const [draft, ] = useState(()=>{
     const savedDraft = localStorage.getItem(key);
-    return savedDraft || initialValue;
+    return savedDraft || content;
   })
 
   const saveDraft = useCallback(
@@ -21,9 +21,8 @@ export const useLocalDraft = (key: string, initialValue: string = '', delay = 50
   );
 
   useEffect(() => {
-    saveDraft(draft);
-  }, [draft, saveDraft]);
+    saveDraft(content);
+  }, [content, saveDraft]);
 
-
-  return {draft, setDraft};
+  return draft;
 }

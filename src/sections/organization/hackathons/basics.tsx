@@ -10,6 +10,7 @@ import { resizeImage } from '@/utils/resize_image';
 import Toaster from '@/utils/toaster';
 import Image from 'next/image';
 import Checkbox from '@/components/form/checkbox';
+import EditorInput from '@/components/form/editor-input';
 
 interface BasicsProps {
   title: string;
@@ -23,7 +24,7 @@ interface BasicsProps {
   endTime: string;
   setEndTime: (time: string) => void;
   description: string;
-  setDescription?: (description: string) => void;
+  setDescription?: React.Dispatch<React.SetStateAction<string>>;
   tags: string[];
   setTags?: (tags: string[]) => void;
   links: string[];
@@ -154,12 +155,25 @@ const Basics: React.FC<BasicsProps> = ({
           <Time label="End Time" val={endTime} setVal={setEndTime} required={true} includeDate={true} />
         </div>
       </div>
-      <Input
-        label="Description"
-        val={isEditMode ? localDescription : description}
-        setVal={isEditMode ? setLocalDescription : setDescription ? setDescription : () => {}}
-        maxLength={2500}
-      />
+      {isEditMode ?
+        <EditorInput
+          label={"Description"}
+          val={localDescription}
+          setVal={setLocalDescription}
+          maxLength={2500}
+        /> :
+        setDescription ? 
+          <EditorInput
+            label={"Description"}
+            val={description} 
+            setVal={setDescription} 
+            maxLength={2500} 
+          /> :
+          <EditorInput
+            editable={false}
+            val={description}
+          />
+      }
       <Tags
         label="Tags"
         tags={isEditMode ? localTags : tags}
