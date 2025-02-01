@@ -284,7 +284,7 @@ const LowerProject = ({ project, setProject }: Props) => {
           <PopoverTrigger>
             <DotsThreeVertical className="cursor-pointer max-lg:w-6 max-lg:h-6" size={28} weight="bold" />
           </PopoverTrigger>
-          <PopoverContent className="flex flex-col gap-2 text-sm w-48 p-3">
+          <PopoverContent className="flex flex-col gap-2 text-sm w-48 p-3" align="end">
             {checkOrgProjectAccess(
               PROJECT_EDITOR,
               project.id,

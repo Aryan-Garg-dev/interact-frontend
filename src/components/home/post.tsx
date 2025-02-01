@@ -152,11 +152,11 @@ const PostComponent = ({
               <></>
             ) : (
               showLowerPost && (
-                <Popover open={isDialogOpen} onOpenChange={val => setIsDialogOpen(val)}>
+                <Popover open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <PopoverTrigger>
                     <div className="text-xxs cursor-pointer">•••</div>
                   </PopoverTrigger>
-                  <PopoverContent className="w-40 p-2 text-sm">
+                  <PopoverContent className="w-40 p-2 text-sm" align="end">
                     {(post.userID == loggedInUser.id || checkOrgAccessByOrgUserID(ORG_SENIOR, post.userID)) && (
                       <div
                         onClick={e => {
