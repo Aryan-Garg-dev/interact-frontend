@@ -50,34 +50,33 @@ import {
 
 type EditorProps =
   | {
-  editable: true;
-  setContent: React.Dispatch<React.SetStateAction<string>>;
-  content?: string;
-  placeholder?: string;
-  limit?: number | null;
-  className?: string;
-  enableMentions?: boolean
-}
+      editable: true;
+      setContent: React.Dispatch<React.SetStateAction<string>>;
+      content?: string;
+      placeholder?: string;
+      limit?: number | null;
+      className?: string;
+      enableMentions?: boolean;
+    }
   | {
-  editable: false;
-  content: string;
-  setContent?: never;
-  placeholder?: never;
-  limit?: never;
-  className?: string;
-  enableMentions?: never
-};
+      editable: false;
+      content: string;
+      setContent?: never;
+      placeholder?: never;
+      limit?: never;
+      className?: string;
+      enableMentions?: never;
+    };
 
 const Editor = ({
-                  content = '',
-                  setContent = () => {},
-                  editable,
-                  limit = null,
-                  placeholder,
-                  className,
-                  enableMentions = true
-                }: EditorProps) => {
-
+  content = '',
+  setContent = () => {},
+  editable,
+  limit = null,
+  placeholder,
+  className,
+  enableMentions = true,
+}: EditorProps) => {
   let extensions = [
     // StarterKit.configure({}),
     Document,
@@ -274,7 +273,7 @@ const Editor = ({
 
 const BubbleMenuIcon = ({ icon, isActive, onClick }: { icon: ReactNode; isActive: boolean; onClick?: () => void }) => (
   <button onClick={onClick} className={isActive ? 'is-active' : ''}>
-  {React.cloneElement(icon as React.ReactElement, {
+    {React.cloneElement(icon as React.ReactElement, {
       weight: isActive ? 'bold' : 'regular',
     })}
   </button>
