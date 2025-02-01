@@ -264,7 +264,6 @@ const Editor = ({
         </BubbleMenu>
       )}
       <EditorContent editor={editor} />
-      <div>{content}</div>
       {editor && editable && limit && <CountWidget charCount={charCount} limit={limit} className="m-1 ml-2" />}
       {editor && editable && (
         <LinkDialog open={openLinkDialog} setOpen={setOpenLinkDialog} setURL={setURL} onSubmit={onSubmitURL} />
