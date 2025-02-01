@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import getHandler from '@/handlers/get_handler';
 import Toaster from '@/utils/toaster';
 import Loader from '@/components/common/loader';
+import { SERVER_ERROR } from '@/config/errors';
 
 interface Props {
   hackathonID: string;
@@ -31,15 +32,11 @@ const HackathonHistories: React.FC<Props> = ({ hackathonID, setShow }) => {
         if (res.statusCode === 200) {
           setHistories(res.data.history || []);
         } else {
-          if (res.data.message) {
-            Toaster.error(res.data.message, 'error_toaster');
-          } else {
-            Toaster.error('Failed to fetch hackathon history', 'error_toaster');
-          }
+          Toaster.error(res.data.message || SERVER_ERROR, 'error_toaster');
         }
       })
       .catch(err => {
-        Toaster.error('Error fetching hackathon history', 'error_toaster');
+        Toaster.error(SERVER_ERROR, 'error_toaster');
       })
       .finally(() => {
         setIsLoading(false);

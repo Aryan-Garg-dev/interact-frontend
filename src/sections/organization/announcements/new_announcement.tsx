@@ -64,11 +64,7 @@ const NewAnnouncement = ({ organisation, setShow, setAnnouncements }: Props) => 
       Toaster.stopLoad(toaster, 'Announcement Added!', 1);
       setShow(false);
     } else {
-      if (res.data.message) {
-        Toaster.stopLoad(toaster, res.data.message, 0);
-      } else {
-        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-      }
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
   };
 

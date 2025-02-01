@@ -210,7 +210,7 @@ const Onboarding = () => {
           <div className="w-screen h-screen fixed bg_onboarding transition-ease-500 animate-fade_1" />
         )}
         {!clickedOnBuild ? (
-          <div className="glassMorphism animate-fade_2 page w-fit max-md:w-[90%] h-56 max-md:h-72 px-8 py-10 font-primary flex flex-col justify-between rounded-lg shadow-xl hover:shadow-2xl transition-ease-300 absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2">
+          <div className="glassMorphism animate-fade_2 page w-fit max-md:w-[90%] h-56 max-md:h-fit px-8 py-10 font-primary flex flex-col gap-8 justify-between rounded-lg shadow-xl hover:shadow-2xl transition-ease-300 absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2">
             <div className="flex flex-col gap-2">
               <div className="text-5xl font-bold max-md:leading-tight">
                 Welcome to{' '}
@@ -240,7 +240,7 @@ const Onboarding = () => {
             </div>
           </div>
         ) : (
-          <div className="w-full h-full text-primary_black dark:text-white flex justify-between items-center max-md:px-4 font-primary">
+          <div className="w-full h-fit text-primary_black dark:text-white flex justify-between items-center max-md:px-4 font-primary">
             <div className="w-3/5 max-lg:w-full h-full p-8 max-md:px-2 font-primary flex flex-col gap-8 items-center">
               <div className="w-full flex justify-start items-center">
                 <div className="hidden dark:flex">

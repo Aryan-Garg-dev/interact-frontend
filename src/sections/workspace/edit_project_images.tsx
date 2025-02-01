@@ -75,8 +75,7 @@ const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen,
 
       Toaster.stopLoad(toaster, 'New Project Image Added', 1);
     } else if (res.statusCode == 413) Toaster.stopLoad(toaster, 'Image too large', 0);
-    else if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-    else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    else Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
 
     setMutex(false);
   };
@@ -118,8 +117,7 @@ const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen,
 
       Toaster.stopLoad(toaster, 'Project Image Delete', 1);
     } else if (res.statusCode == 413) Toaster.stopLoad(toaster, 'Image too large', 0);
-    else if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-    else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    else Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
 
     setMutex(false);
   };
@@ -160,8 +158,7 @@ const EditProjectImages = ({ project, setProject, isDialogOpen, setIsDialogOpen,
       setStage(0);
       Toaster.stopLoad(toaster, 'Project Edited', 1);
     } else if (res.statusCode == 413) Toaster.stopLoad(toaster, 'Image too large', 0);
-    else if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-    else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    else Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
 
     setMutex(false);
   };

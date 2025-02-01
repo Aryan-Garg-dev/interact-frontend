@@ -212,7 +212,7 @@ const UserComponent = ({ initialUser, err, seoProps }: Props) => {
             <CoverPhoto src={`${USER_COVER_PIC_URL}/${user.coverPic}`} blurDataURL={user.coverPicBlurHash} />
           )}
 
-          <div className="w-full h-24 my-12 font-bold text-5xl max-lg:text-3xl flex-center text-center dark:text-white">
+          <div className="w-full h-24 md:my-12 font-bold text-5xl max-lg:text-3xl flex-center text-center dark:text-white">
             {user.username == loggedInUser.username ? (
               clickedOnTagline ? (
                 <div className="w-[90%] mx-auto z-50">
@@ -310,7 +310,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { username } = context.query;
 
   try {
-    const response = await axios.get(`${BACKEND_URL}${EXPLORE_URL}/quick/item?username=${username}`);
+    const response = await axios.get(`${BACKEND_URL}${EXPLORE_URL}/quick/item?username=${username}`, {
+      headers: {
+        'X-API-KEY': process.env.API_TOKEN,
+      },
+    });
 
     const user: User = response.data.user || initialUserObj;
     const seoProps: NextSeoProps = generateSEOProps(
@@ -332,6 +336,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   } catch (error: any) {
+    //TODO token expired error
     return {
       props: {
         initialUser: null,

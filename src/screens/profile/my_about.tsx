@@ -1,6 +1,5 @@
 import Sentences from '@/components/utils/edit_sentences';
 import Tags from '@/components/utils/edit_tags';
-import { SERVER_ERROR } from '@/config/errors';
 import { ORG_URL, USER_URL } from '@/config/routes';
 import patchHandler from '@/handlers/patch_handler';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
@@ -9,9 +8,11 @@ import isArrEdited from '@/utils/funcs/check_array_edited';
 import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import Toaster from '@/utils/toaster';
 import { Buildings, CalendarBlank, Certificate, Envelope, MapPin, PencilSimple, Phone, X } from '@phosphor-icons/react';
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { SERVER_ERROR } from '@/config/errors';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import isMobilePhone from 'validator/lib/isMobilePhone';
+import { useSelector } from 'react-redux';
 
 interface Props {
   profile: Profile;
@@ -43,11 +44,8 @@ const About = ({ profile, setUser, org = false }: Props) => {
   const [clickedOnEmail, setClickedOnEmail] = useState(false);
   const [clickedOnPhoneNo, setClickedOnPhoneNo] = useState(false);
   const [clickedOnLocation, setClickedOnLocation] = useState(false);
-
   const [schoolSearch, setSchoolSearch] = useState('');
-
   const [colleges, setColleges] = useState<College[]>([]);
-
   const currentOrgID = useSelector(currentOrgIDSelector);
 
   const handleSubmit = async (field: string) => {
@@ -415,6 +413,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
             <Phone weight="regular" size={20} />
           </div>
         </div>
+
         {!org && (
           <div className="w-full flex gap-2 items-center text-lg">
             <MapPin weight="regular" size={24} />
@@ -487,7 +486,7 @@ const About = ({ profile, setUser, org = false }: Props) => {
           {profile.description.trim() == '' ? (
             <div className="text-primary_black">Click here to add a Descriptive Bio!</div>
           ) : (
-            <div className="whitespace-pre-wrap max-md:text-sm cursor-pointer">
+            <div className="w-full whitespace-pre-wrap max-md:text-sm cursor-pointer break-words">
               {renderContentWithLinks(profile.description)}
             </div>
           )}

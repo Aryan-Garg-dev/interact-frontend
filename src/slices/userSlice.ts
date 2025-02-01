@@ -52,6 +52,7 @@ export interface UserState {
   votedOptions: string[];
   githubUsername: string;
   createdAt: string;
+  secondaryEmail: string;
 }
 
 const initialState: UserState = {
@@ -91,6 +92,7 @@ const initialState: UserState = {
   registeredEvents: [],
   githubUsername: '',
   createdAt: '',
+  secondaryEmail: '',
 };
 
 export const userSlice = createSlice({
@@ -134,6 +136,7 @@ export const userSlice = createSlice({
       state.registeredEvents = [];
       state.githubUsername = action.payload.githubUsername;
       state.createdAt = action.payload.createdAt;
+      state.secondaryEmail = action.payload.secondaryEmail || '';
     },
     resetUser: state => {
       state.id = '';
@@ -172,6 +175,7 @@ export const userSlice = createSlice({
       state.registeredEvents = [];
       state.githubUsername = '';
       state.createdAt = '';
+      state.secondaryEmail = '';
     },
     setReduxName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
@@ -272,6 +276,9 @@ export const userSlice = createSlice({
     setGithubUsername: (state, action: PayloadAction<string>) => {
       state.githubUsername = action.payload;
     },
+    setSecondaryEmail: (state, action: PayloadAction<string>) => {
+      state.secondaryEmail = action.payload;
+    },
   },
 });
 
@@ -311,6 +318,7 @@ export const {
   setVotedOptions,
   setRegisteredEvents,
   setGithubUsername,
+  setSecondaryEmail,
 } = userSlice.actions;
 
 export default userSlice.reducer;

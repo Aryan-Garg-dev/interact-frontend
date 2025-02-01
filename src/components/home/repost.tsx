@@ -16,7 +16,7 @@ import ConfirmDelete from '../common/confirm_delete';
 import Report from '../common/report';
 import SignUp from '../common/signup_box';
 import { currentOrgIDSelector } from '@/slices/orgSlice';
-import checkOrgAccess from '@/utils/funcs/access';
+import { checkOrgAccessByOrgUserID } from '@/utils/funcs/access';
 import { ORG_SENIOR } from '@/config/constants';
 import { Buildings } from '@phosphor-icons/react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -130,7 +130,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
                   <div className="text-xxs cursor-pointer">•••</div>
                 </PopoverTrigger>
                 <PopoverContent className="w-40 p-2 text-sm">
-                  {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
+                  {(post.userID == loggedInUser.id || checkOrgAccessByOrgUserID(ORG_SENIOR, post.userID)) && (
                     <div
                       onClick={() => setClickedOnEdit(true)}
                       className="w-full px-4 py-2 max-md:p-1 max-md:text-center hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover rounded-lg cursor-pointer transition-ease-300"
@@ -138,7 +138,7 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
                       Edit
                     </div>
                   )}
-                  {(post.userID == loggedInUser.id || checkOrgAccess(ORG_SENIOR)) && (
+                  {(post.userID == loggedInUser.id || checkOrgAccessByOrgUserID(ORG_SENIOR, post.userID)) && (
                     <div
                       onClick={el => {
                         el.stopPropagation();
@@ -174,29 +174,38 @@ const RePost = ({ post, showLowerPost = true, setFeed, org = false }: Props) => 
         )}
 
         {clickedOnEdit ? (
-          <div className="relative">
-            <Editor content={caption} setContent={setCaption} limit={2000} className="min-h-[150px]" editable />
-            <div className="dark:text-white flex items-center gap-4 absolute -bottom-8 right-0">
+          <>
+            <Editor
+              className="w-full min-h-[150px] text-sm mb-2"
+              content={caption}
+              setContent={setCaption}
+              limit={2000}
+              editable
+            />
+            <div className="w-full dark:text-white flex items-center justify-end gap-2 max-md:gap-1">
               <div
-                onClick={() => setClickedOnEdit(false)}
-                className="text-sm hover-underline-animation after:bg-black dark:after:bg-white cursor-pointer"
+                onClick={e => {
+                  e.stopPropagation();
+                  setClickedOnEdit(false);
+                }}
+                className="border-[1px] border-primary_black flex-center rounded-full w-16 max-md:w-12 text-xs max-md:text-xxs p-1 cursor-pointer"
               >
                 cancel
               </div>
               <div
-                onClick={handleEdit}
-                className="text-sm hover:text-primary_text dark:hover:text-dark_primary_btn cursor-pointer transition-ease-200"
+                onClick={caption !== post.content ? handleEdit : undefined}
+                className={`bg-primary_black ${
+                  caption === post.content ? 'bg-opacity-50 cursor-default' : 'cursor-pointer'
+                } text-white flex-center rounded-full w-16 max-md:w-12 text-xs max-md:text-xxs p-1`}
               >
                 save
               </div>
             </div>
-          </div>
+          </>
         ) : (
-          <div className="w-full text-sm whitespace-pre-wrap mb-2">
-            <Editor content={post.content} editable={false} />
-          </div>
+          post.content && <Editor className="w-full text-sm mb-2" content={post.content} editable={false} />
         )}
-        {showLowerPost && <LowerPost post={post} />}
+        {showLowerPost && post.content != '' && <LowerPost post={post} />}
       </div>
     </div>
   );

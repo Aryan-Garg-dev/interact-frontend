@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 import postHandler from '@/handlers/post_handler';
 import { MagnifyingGlass, X } from '@phosphor-icons/react';
+import { EVENT_PIC_HASH_DEFAULT } from '@/config/constants';
 
 const SearchBar = ({
   isDialogOpen,
@@ -228,7 +229,7 @@ const FixedSearchBar = () => {
   return (
     <div
       ref={menuRef}
-      className="w-[640px] max-lg:w-[480px] max-md:hidden fixed top-2 right-1/2 translate-x-1/2 max-md:w-taskbar_md mx-auto z-20"
+      className="w-[640px] max-lg:w-[480px] max-md:hidden fixed top-2 right-1/2 translate-x-1/2 mx-auto z-20"
     >
       <SearchBar isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
     </div>
@@ -342,11 +343,17 @@ const EventItem = ({ event }: { event: Event }) => (
     <Image
       crossOrigin="anonymous"
       width={50}
-      height={50}
+      height={15}
       alt={'User Pic'}
       src={`${EVENT_PIC_URL}/${event.coverPic}`}
       placeholder="blur"
-      blurDataURL={event.blurHash || 'no-hash'}
+      blurDataURL={
+        event.blurHash
+          ? event.blurHash == 'no-hash'
+            ? EVENT_PIC_HASH_DEFAULT
+            : event.blurHash
+          : EVENT_PIC_HASH_DEFAULT
+      }
       className="h-6 rounded-md mr-1"
     />
     <div className="text-sm">{event.title}</div>

@@ -4,7 +4,7 @@ import { Organization, OrganizationMembership, PRIORITY, Project, Task, Team, Us
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { MagnifyingGlass } from '@phosphor-icons/react';
+import { MagnifyingGlass, Plus } from '@phosphor-icons/react';
 import { SERVER_ERROR } from '@/config/errors';
 import moment from 'moment';
 import { currentOrgSelector } from '@/slices/orgSlice';
@@ -18,35 +18,26 @@ import Select from '@/components/form/select';
 import Time from '@/components/form/time';
 import getHandler from '@/handlers/get_handler';
 import { getInputFieldFormatTime } from '@/utils/funcs/time';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 
 interface Props {
-  show: boolean;
-  setShow: React.Dispatch<React.SetStateAction<boolean>>;
   organization?: Organization;
   project?: Project;
   org?: boolean;
   setShowTasks?: React.Dispatch<React.SetStateAction<boolean>>;
   setTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
   setFilteredTasks?: React.Dispatch<React.SetStateAction<Task[]>>;
+  trigger?: React.ReactNode;
 }
 
 const NewTask = ({
-  show,
-  setShow,
   org = false,
   organization = initialOrganization,
   project = initialProject,
   setShowTasks,
   setTasks,
   setFilteredTasks,
+  trigger,
 }: Props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -57,6 +48,7 @@ const NewTask = ({
   const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState('');
   const [teams, setTeams] = useState<Team[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [status, setStatus] = useState(0);
   const [mutex, setMutex] = useState(false);
@@ -183,7 +175,7 @@ const NewTask = ({
       if (setTasks) setTasks(prev => [task, ...prev]);
       if (setFilteredTasks) setFilteredTasks(prev => [task, ...prev]);
 
-      setShow(false);
+      setIsDialogOpen(false);
       if (setShowTasks) setShowTasks(true);
       Toaster.stopLoad(toaster, 'New Task Added!', 1);
     } else {
@@ -195,18 +187,19 @@ const NewTask = ({
     }
   };
 
-  useEffect(() => {
-    document.documentElement.style.overflowY = 'hidden';
-    document.documentElement.style.height = '100vh';
-
-    return () => {
-      document.documentElement.style.overflowY = 'auto';
-      document.documentElement.style.height = 'auto';
-    };
-  }, []);
-
   return (
-    <Dialog open={show} onOpenChange={val => setShow(val)}>
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <DialogTrigger>
+        {trigger ? (
+          trigger
+        ) : (
+          <Plus
+            size={42}
+            className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
+            weight="regular"
+          />
+        )}
+      </DialogTrigger>
       <DialogContent className="min-w-[40%]">
         <div className="w-full flex flex-col gap-4">
           <div className="text-3xl max-md:text-xl font-semibold">

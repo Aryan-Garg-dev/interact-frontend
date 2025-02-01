@@ -29,7 +29,7 @@ const SignUp = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  // const [earlyAccessToken, setEarlyAccessToken] = useState('');
+  const [referrerID, setReferrerID] = useState('');
   const [mutex, setMutex] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -103,7 +103,7 @@ const SignUp = () => {
     const toaster = Toaster.startLoad('Creating your Account...');
 
     await configuredAxios
-      .post(`${BACKEND_URL}/signup`, formData, {
+      .post(`${BACKEND_URL}/signup?referrerID=${referrerID}`, formData, {
         withCredentials: true,
       })
       .then(res => {
@@ -111,6 +111,7 @@ const SignUp = () => {
           Toaster.stopLoad(toaster, 'Account created!', 1);
           const user: User = res.data.user;
           user.email = res.data.email;
+          user.secondaryEmail = res.data.secondaryEmail;
           user.phoneNo = res.data.phoneNo || '';
           user.resume = res.data.resume || '';
           user.createdAt = res.data.createdAt || new Date();
@@ -123,7 +124,6 @@ const SignUp = () => {
             expires: Number(process.env.NEXT_PUBLIC_COOKIE_EXPIRATION_TIME),
           });
           dispatch(setUser({ ...user, isVerified: false }));
-          //Early Access - dispatch(setUser({ ...user, isVerified: true }));
           dispatch(setConfig());
           dispatch(setUnreadNotifications(1)); //welcome notification
           dispatch(setOnboarding(true));
@@ -132,9 +132,6 @@ const SignUp = () => {
 
           sessionStorage.setItem('verification-redirect', 'signup-callback');
           window.location.assign('/verification');
-
-          //Early Access -  sessionStorage.setItem('onboarding-redirect', 'signup');
-          //Early Access -  router.replace('/onboarding');
         }
         setMutex(false);
       })
@@ -151,12 +148,12 @@ const SignUp = () => {
     const token = new URLSearchParams(window.location.search).get('token');
     const email = new URLSearchParams(window.location.search).get('email');
 
-    // if (token && token != '') setEarlyAccessToken(token);
+    if (token && token != '') setReferrerID(token);
     if (email && email != '') setEmail(email);
   }, [window.location.search]);
 
   const handleGoogleLogin = () => {
-    window.location.assign(`${BACKEND_URL}/auth/google`);
+    window.location.assign(`${BACKEND_URL}/auth/google?referrerID=${referrerID}`);
   };
   return (
     <>

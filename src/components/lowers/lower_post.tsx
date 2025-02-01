@@ -43,7 +43,6 @@ const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = 
   const [clickedOnComment, setClickedOnComment] = useState(initialCommentShowState);
   const [clickedOnShare, setClickedOnShare] = useState(false);
   const [clickedOnBookmark, setClickedOnBookmark] = useState(false);
-  const [clickedOnRePost, setClickedOnRePost] = useState(false);
   const [mutex, setMutex] = useState(false);
 
   const [noUserClick, setNoUserClick] = useState(false);
@@ -165,7 +164,6 @@ const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = 
           item={<PostCard post={post} />}
         />
       )}
-      {clickedOnRePost && <RePost setFeed={setFeed} setShow={setClickedOnRePost} post={post} />}
       <div className={`w-full flex flex-col gap-1 ${isRepost ? 'justify-start' : ''}`}>
         <div className={`flex gap-3 max-md:gap-3 ${isRepost ? 'w-fit scale-100' : ''}`}>
           <HeartStraight
@@ -188,17 +186,18 @@ const LowerPost = ({ post, setFeed, isRepost = false, initialCommentShowState = 
             size={24}
             weight="regular"
           />
-          {post.userID != user.id && !post.rePost && (
-            <Repeat
-              onClick={() => {
-                if (userID == '') setNoUserClick(true);
-                else setClickedOnRePost(true);
-              }}
-              className="cursor-pointer max-md:w-6 max-md:h-6 opacity-60"
-              size={24}
-              weight="regular"
-            />
-          )}
+          {post.userID != user.id &&
+            !post.rePost &&
+            (user.id ? (
+              <RePost post={post} setFeed={setFeed} />
+            ) : (
+              <Repeat
+                onClick={() => setNoUserClick(true)}
+                className="cursor-pointer max-md:w-6 max-md:h-6 opacity-60"
+                size={24}
+                weight="regular"
+              />
+            ))}
           <Export
             onClick={() => {
               if (userID == '') setNoUserClick(true);

@@ -47,9 +47,8 @@ const SessionDetailsTable = ({ sessionID, meetingHostID, session, setShow, appli
     setLoading(true);
     const URL =
       (applicationID
-        ? `/org/${currentOrg.id}/meetings/details/`
-        : `${APPLICATION_URL}/meeting/details/${applicationID}/`) +
-      `${sessionID}?page=${page}&limit=${limit}&type=participants`;
+        ? `${APPLICATION_URL}/meeting/details/${applicationID}/`
+        : `/org/${currentOrg.id}/meetings/details/`) + `${sessionID}?page=${page}&limit=${limit}&type=participants`;
     const res = await getHandler(URL);
     if (res.statusCode === 200) {
       const addedUsers = [...(res.data.participants || []), ...participants];

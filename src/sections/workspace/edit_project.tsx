@@ -33,7 +33,6 @@ const EditProject = ({ project, setProject, setProjects, org = false }: Props) =
   const [tags, setTags] = useState<string[]>(project.tags || []);
   const [links, setLinks] = useState<string[]>(project.links || []);
   const [privateLinks, setPrivateLinks] = useState<string[]>(project.privateLinks || []);
-  const [image, setImage] = useState<File>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [mutex, setMutex] = useState(false);
@@ -77,7 +76,6 @@ const EditProject = ({ project, setProject, setProjects, org = false }: Props) =
     privateLinks?.forEach(link => formData.append('privateLinks', link));
     if (category != project.category) formData.append('category', category);
     formData.append('isPrivate', String(isPrivate));
-    if (image) formData.append('coverPic', image);
 
     const URL = org ? `${ORG_URL}/${currentOrgID}/projects/${project.slug}` : `${PROJECT_URL}/${project.slug}`;
 
@@ -113,11 +111,8 @@ const EditProject = ({ project, setProject, setProjects, org = false }: Props) =
       setDescription('');
       setTags([]);
       setLinks([]);
-      setImage(undefined);
       setIsDialogOpen(false);
-    } else if (res.statusCode == 413) Toaster.stopLoad(toaster, 'Image too large', 0);
-    else if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-    else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+    } else Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
 
     setMutex(false);
   };
@@ -138,7 +133,7 @@ const EditProject = ({ project, setProject, setProjects, org = false }: Props) =
           <Select label="Project Category" val={category} setVal={setCategory} options={categories} required={true} />
           <Input label="Project Tagline" val={tagline} setVal={setTagline} maxLength={50} required={true} />
           <TextArea label="Project Description" val={description} setVal={setDescription} maxLength={1000} />
-          <Tags label="Project Tags" tags={tags} setTags={setTags} maxTags={10} required={true} />
+          <Tags label="Project Tags" tags={tags} setTags={setTags} maxTags={10} suggestions required />
           <Links label="Project Links" links={links} setLinks={setLinks} maxLinks={5} />
           <Checkbox label="Keep this Project Private" val={isPrivate} setVal={setIsPrivate} />
         </div>

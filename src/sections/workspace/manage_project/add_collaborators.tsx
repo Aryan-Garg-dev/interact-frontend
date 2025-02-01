@@ -60,8 +60,7 @@ const AddCollaborators = ({ project, setProject, org = false }: Props) => {
       setUsers(userData.filter(u => u.id != loggedInUserID));
       setLoading(false);
     } else {
-      if (res.data.message) Toaster.error(res.data.message, 'error_toaster');
-      else Toaster.error(SERVER_ERROR, 'error_toaster');
+      Toaster.error(res.data.message || SERVER_ERROR, 'error_toaster');
     }
   };
 
@@ -129,10 +128,7 @@ const AddCollaborators = ({ project, setProject, org = false }: Props) => {
           Toaster.stopLoad(toaster, 'Invitations sent!', 1);
         }
       } else {
-        if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-        else {
-          Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-        }
+        Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
       }
       if (attemptedCount == invitationSlices.length) setMutex(false);
     });

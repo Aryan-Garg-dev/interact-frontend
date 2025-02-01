@@ -46,7 +46,7 @@ const Meetings = () => {
     }&limit=${10}&order=${order}&frequency=${frequency == 'one_time' ? 'none' : frequency}&tags=${tags.join(
       ','
     )}&is_open_for_members=${status == '' ? status : status == 'open'}`;
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
     if (res.statusCode === 200) {
       if (initialPage == 1) {
         setMeetings(res.data.meetings || []);

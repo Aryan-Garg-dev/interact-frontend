@@ -60,8 +60,7 @@ const ManageMemberships = ({
       });
       Toaster.stopLoad(toaster, 'Collaborator Removed', 1);
     } else {
-      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-      else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
   };
 
@@ -83,8 +82,7 @@ const ManageMemberships = ({
       // setClickedOnWithdraw(false);
       Toaster.stopLoad(toaster, 'Invitation Withdrawn', 1);
     } else {
-      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-      else Toaster.stopLoad(toaster, SERVER_ERROR, 0);
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
   };
 

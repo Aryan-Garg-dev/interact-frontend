@@ -5,12 +5,12 @@ import { Event } from '@/types';
 import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import Loader from '@/components/common/loader';
-import EventCard from '@/components/organization/event_card';
 import NoSearch from '@/components/fillers/search';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import OrderMenu from '@/components/common/order_menu';
 import { userIDSelector } from '@/slices/userSlice';
 import { useSelector } from 'react-redux';
+import EventCard from '@/components/explore/event_card';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);

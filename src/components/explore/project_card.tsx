@@ -41,12 +41,12 @@ const ProjectCard = ({ project, setClickedProject, isLink = false, smaller = fal
   return (
     <Wrapper>
       <ProjectCardCarousel project={project} width="1/5" />
-      <div className="w-4/5 flex items-center justify-between dark:text-white">
+      <div className="w-4/5 flex items-center justify-between gap-4 dark:text-white">
         <div className="grow">
-          <div className={`${!smaller && 'text-lg'} font-medium line-clamp-1`}>{project.title}</div>
-          <div className="text-sm line-clamp-1">{project.tagline}</div>
+          <div className={`${!smaller && 'text-lg'} max-md:text-base font-medium line-clamp-1`}>{project.title}</div>
+          <div className="text-sm max-md:text-xs line-clamp-1">{project.tagline}</div>
           {!smaller && (
-            <div className="w-full flex gap-1 mt-2 text-xs line-clamp-1">
+            <div className="w-full flex gap-1 mt-2 max-md:mt-1 text-xs line-clamp-1">
               By{' '}
               <UserHoverCard
                 trigger={<div className="hover:underline underline-offset-2">{project.user.name}</div>}
@@ -68,7 +68,7 @@ const ProjectCard = ({ project, setClickedProject, isLink = false, smaller = fal
           ) : (
             <div className="flex flex-col items-center gap-2">
               <div className="flex items-center gap-6">
-                <div className="flex items-center gap-1 text-xs">
+                <div className="flex items-center gap-1 text-xs max-md:hidden">
                   <TooltipIcon label="Likes" icon={<HeartStraight size={20} />} excludeHoverEffect />
                   <div>{project.noLikes}</div>
                 </div>

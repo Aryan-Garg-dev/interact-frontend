@@ -6,7 +6,7 @@ import Users from '@/components/filters/users';
 import TasksTable from '@/components/tables/tasks';
 import { PROJECT_MANAGER } from '@/config/constants';
 import { SERVER_ERROR } from '@/config/errors';
-import { EXPLORE_URL, ORG_URL, PROJECT_URL } from '@/config/routes';
+import { ORG_URL, PROJECT_URL } from '@/config/routes';
 import getHandler from '@/handlers/get_handler';
 import NewTask from '@/sections/tasks/new_task';
 import TaskView from '@/sections/workspace/task_view';
@@ -17,7 +17,7 @@ import { checkProjectAccess } from '@/utils/funcs/access';
 import { getUserFromState } from '@/utils/funcs/redux';
 import Toaster from '@/utils/toaster';
 import MainWrapper from '@/wrappers/main';
-import { ChartLine, WarningCircle, SortAscending, Plus } from '@phosphor-icons/react';
+import { ChartLine, WarningCircle, SortAscending } from '@phosphor-icons/react';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -33,8 +33,6 @@ const ProjectTasks = ({ slug, org = false }: Props) => {
 
   const [clickedOnTask, setClickedOnTask] = useState(false);
   const [clickedTaskID, setClickedTaskID] = useState(-1);
-
-  const [clickedOnNewTask, setClickedOnNewTask] = useState(false);
 
   const [order, setOrder] = useState('deadline');
   const [priority, setPriority] = useState('');
@@ -129,15 +127,6 @@ const ProjectTasks = ({ slug, org = false }: Props) => {
 
   return (
     <MainWrapper>
-      {clickedOnNewTask && (
-        <NewTask
-          org={false}
-          show={clickedOnNewTask}
-          setShow={setClickedOnNewTask}
-          project={project}
-          setTasks={setTasks}
-        />
-      )}
       <div className="w-full flex flex-col">
         <div className="w-full flex justify-between items-center p-base_padding pt-0">
           <div className="flex-center gap-4">
@@ -175,14 +164,7 @@ const ProjectTasks = ({ slug, org = false }: Props) => {
             </div>
           </div>
 
-          {checkProjectAccess(PROJECT_MANAGER, project.id) && (
-            <Plus
-              onClick={() => setClickedOnNewTask(true)}
-              size={42}
-              className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
-              weight="regular"
-            />
-          )}
+          {checkProjectAccess(PROJECT_MANAGER, project.id) && <NewTask project={project} setTasks={setTasks} />}
         </div>
 
         <div className="w-full flex flex-col gap-6 px-2 py-2">

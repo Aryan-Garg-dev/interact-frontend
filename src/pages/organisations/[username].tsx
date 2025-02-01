@@ -109,7 +109,7 @@ const User = ({ username }: Props) => {
 
   return (
     <BaseWrapper title={`${user.name}`}>
-      {loggedInUser.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={2} />}
+      {loggedInUser.isOrganization ? <OrgSidebar index={1} /> : <Sidebar index={4} />}
       <MainWrapper restrictWidth>
         {clickedOnShare &&
           (loggedInUser.id != '' ? (
@@ -149,9 +149,9 @@ const User = ({ username }: Props) => {
               placeholder="blur"
               blurDataURL={user.coverPicBlurHash || 'no-hash'}
               // className="w-5/6 h-72 mx-auto object-cover rounded-b-md"
-              className="w-full rounded-md"
+              className="w-full h-64 rounded-md"
             />
-            <div className="w-full flex items-end max-md:items-center gap-4 absolute -translate-y-1/3 max-md:translate-y-0 px-36 max-md:px-4 max-md:pt-4">
+            <div className="w-full flex items-end max-md:items-center gap-4 absolute -translate-y-1/3 max-md:translate-y-0 px-4 max-md:pt-4">
               <Image
                 crossOrigin="anonymous"
                 className="w-40 h-40 max-md:w-24 max-md:h-24 rounded-full border-4 max-md:border-2 border-gray-200 shadow-lg"

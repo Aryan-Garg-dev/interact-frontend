@@ -5,7 +5,7 @@ import AddCollaborators from '@/sections/workspace/manage_project/add_collaborat
 import { Project } from '@/types';
 import checkOrgAccess, { checkProjectAccess } from '@/utils/funcs/access';
 import { SidePrimeWrapper } from '@/wrappers/side';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 const Collaborators = ({
   project,
@@ -14,25 +14,24 @@ const Collaborators = ({
   project: Project;
   setProject: React.Dispatch<React.SetStateAction<Project>>;
 }) => {
-  return (project.memberships && project.memberships.length > 0) || checkProjectAccess(PROJECT_MANAGER, project.id) ? (
+  const isAllowed = useMemo(() => {
+    const projectAccess = checkProjectAccess(PROJECT_MANAGER, project.id);
+    const orgAccess = !!(
+      project.organizationID &&
+      project.organizationID !== '' &&
+      checkOrgAccess(ORG_MANAGER, project.organizationID)
+    );
+
+    return projectAccess || orgAccess;
+  }, [project]);
+  return (project.memberships && project.memberships.length > 0) || isAllowed ? (
     <SidePrimeWrapper>
       <div className="w-full flex flex-col gap-2">
         <div className="w-full flex items-center justify-between">
           <div className="text-lg font-medium">Collaborators</div>
-          <div className="flex-center gap-2">
-            <AddCollaborators
-              project={project}
-              setProject={setProject}
-              org={
-                !!(
-                  project.organizationID &&
-                  project.organizationID !== '' &&
-                  checkOrgAccess(ORG_MANAGER, project.organizationID)
-                )
-              }
-            />
-            {(project.memberships.length > 0 || project.invitations.length > 0) && (
-              <ManageMemberships
+          {isAllowed && (
+            <div className="flex-center gap-2">
+              <AddCollaborators
                 project={project}
                 setProject={setProject}
                 org={
@@ -43,8 +42,21 @@ const Collaborators = ({
                   )
                 }
               />
-            )}
-          </div>
+              {(project.memberships.length > 0 || project.invitations.length > 0) && (
+                <ManageMemberships
+                  project={project}
+                  setProject={setProject}
+                  org={
+                    !!(
+                      project.organizationID &&
+                      project.organizationID !== '' &&
+                      checkOrgAccess(ORG_MANAGER, project.organizationID)
+                    )
+                  }
+                />
+              )}
+            </div>
+          )}
         </div>
         {project.memberships.map(membership => (
           <UserSideCard key={membership.id} user={membership.user} />
