@@ -20,9 +20,13 @@ export const useLocalDraft = (key: string, content: string, delay = 500)=>{
     }, delay), [key, delay]
   );
 
+  const clearDraft = ()=>{
+    localStorage.removeItem(key);
+  }
+
   useEffect(() => {
     saveDraft(content);
   }, [content, saveDraft]);
 
-  return draft;
+  return { draft, clearDraft };
 }

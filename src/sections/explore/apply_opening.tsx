@@ -24,7 +24,7 @@ interface Props {
 
 const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false }: Props) => {
   const [content, setContent] = useState('');
-  const applicationDraft = useLocalDraft(`application-draft-${opening.id}`, content);
+  const {draft: applicationDraft, clearDraft} = useLocalDraft(`application-draft-${opening.id}`, content);
   const [links, setLinks] = useState<string[]>([]);
   const [includeEmail, setIncludeEmail] = useState(false);
   const [includeResume, setIncludeResume] = useState(false);
@@ -73,6 +73,7 @@ const ApplyOpening = ({ opening, setShow, setOpening, setAddResume, org = false 
       socketService.sendNotification(opening.userID, `${user.name} applied at an opening!`);
       Toaster.stopLoad(toaster, 'Applied to the Opening!', 1);
       setShow(false);
+      clearDraft();
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
       else Toaster.stopLoad(toaster, SERVER_ERROR, 0);

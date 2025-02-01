@@ -26,8 +26,6 @@ import CharacterCount from '@tiptap/extension-character-count';
 import Placeholder from '@tiptap/extension-placeholder';
 import History from '@tiptap/extension-history';
 import Link from '@tiptap/extension-link';
-import Image from '@tiptap/extension-image'
-import Dropcursor from '@tiptap/extension-dropcursor'
 import { SmilieReplacer } from './extensions/smilie-replacer';
 import CountWidget from './widgets/count-widget';
 import LinkDialog from './widgets/link-dialog';
@@ -79,7 +77,6 @@ const Editor = ({
                   className,
                   enableMentions = true
                 }: EditorProps) => {
-  //TODO: Custom KeyMaps
 
   let extensions = [
     // StarterKit.configure({}),
@@ -135,11 +132,6 @@ const Editor = ({
         class: '',
       },
     }),
-    //////////////////////
-    Image,
-    Dropcursor,
-    //////////////////////
-    // customKeyMap
   ];
 
   if (enableMentions) extensions = [...extensions, InteractMentions];
@@ -272,6 +264,7 @@ const Editor = ({
         </BubbleMenu>
       )}
       <EditorContent editor={editor} />
+      <div>{content}</div>
       {editor && editable && limit && <CountWidget charCount={charCount} limit={limit} className="m-1 ml-2" />}
       {editor && editable && (
         <LinkDialog open={openLinkDialog} setOpen={setOpenLinkDialog} setURL={setURL} onSubmit={onSubmitURL} />

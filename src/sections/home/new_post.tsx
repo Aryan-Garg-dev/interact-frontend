@@ -30,7 +30,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
   const [content, setContent] = useState<string>('');
   const [images, setImages] = useState<File[]>([]);
 
-  const postDraft = useLocalDraft("post-draft", content);
+  const { draft: postDraft, clearDraft} = useLocalDraft("post-draft", content);
 
   const user = useSelector(userSelector);
   const currentOrg = useSelector(currentOrgSelector);
@@ -76,6 +76,7 @@ const NewPost = ({ setShow, setFeed, org = false, initialCommunityID = '' }: Pro
       setContent('');
       setImages([]);
       setShow(false);
+      clearDraft();
       if (setFeed) setFeed(prev => [res.data.post, ...prev]);
       Toaster.stopLoad(toaster, 'Posted!', 1);
       setShow(false);
