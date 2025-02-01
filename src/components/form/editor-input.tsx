@@ -1,6 +1,8 @@
 import { cn } from '@/lib/utils';
 import React from 'react';
 import Editor from '@/components/editor';
+import NewPostImages from '@/components/home/new_post_images';
+import NewPostHelper from '@/components/home/new_post_helper';
 
 interface Props {
   label?: string;
@@ -17,9 +19,12 @@ const EditorInput = ({ label, editable = true, val, setVal, maxLength, placehold
   return (
     <div className="w-full">
       {label && (
-        <div className="text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300">
-          {label}
-          {required && '*'} ({val.trim().length}/{maxLength})
+        <div className={"flex gap-1"}>
+          <div className="text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300">
+            {label}
+            {required && '*'}
+          </div>
+          <NewPostHelper iconClassName={'size-5 text-gray-600 dark:text-gray-200'} />
         </div>
       )}
       {editable && setVal ?
