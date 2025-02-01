@@ -90,10 +90,6 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
         timestamp: moment(hackathon.startTime),
       },
       {
-        title: 'Participant Registration Ends',
-        timestamp: moment(hackathon.teamFormationStartTime),
-      },
-      {
         title: 'Team Registration Starts',
         timestamp: moment(hackathon.teamFormationStartTime),
       },
