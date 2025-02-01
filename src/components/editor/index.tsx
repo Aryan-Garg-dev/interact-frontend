@@ -49,7 +49,6 @@ import {
   TextSuperscript,
   TextUnderline,
 } from '@phosphor-icons/react';
-import { FileHandler } from '@/components/editor/extensions/file-handler';
 
 type EditorProps =
   | {
@@ -139,7 +138,6 @@ const Editor = ({
     //////////////////////
     Image,
     Dropcursor,
-    FileHandler,
     //////////////////////
     // customKeyMap
   ];
