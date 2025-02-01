@@ -81,7 +81,7 @@ const About = ({ profile, organisation }: Props) => {
   );
 
   return (
-    <div className="w-5/6 max-md:w-full mx-auto flex max-md:flex-col gap-4 pb-base_padding max-md:px-2 animate-fade_third">
+    <div className="w-5/6 max-md:w-full mx-auto flex max-md:flex-col gap-4 max-md:px-2 animate-fade_third">
       {clickedOnViewAllMembers && (
         <Connections
           type="members"
@@ -146,7 +146,9 @@ const About = ({ profile, organisation }: Props) => {
           {profile.description || organisation.user?.tags || profile.email || profile.phoneNo ? (
             <div className="w-full flex flex-col gap-4">
               {profile.description && (
-                <div className="whitespace-pre-wrap text-sm"> {renderContentWithLinks(profile.description)}</div>
+                <div className="w-full whitespace-pre-wrap text-sm break-words">
+                  {renderContentWithLinks(profile.description)}
+                </div>
               )}
               <div className="flex flex-wrap gap-2">
                 {organisation.user?.tags?.map(tag => (

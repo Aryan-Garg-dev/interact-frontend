@@ -12,6 +12,11 @@ import {
   Event,
   EventBookmark,
   Hackathon,
+  HackathonFAQ,
+  HackathonPrize,
+  HackathonRound,
+  HackathonSponsor,
+  HackathonTrack,
   Invitation,
   Meeting,
   Membership,
@@ -566,6 +571,7 @@ export const initialHackathon: Hackathon = {
   sponsors: [],
   rounds: [],
   faqs: [],
+  isRestricted: false,
 };
 
 export const initialCommunity: Community = {
@@ -606,4 +612,47 @@ export const initialCommunityMembershipRequest: CommunityMembershipRequest = {
   userID: '',
   user: initialUser,
   createdAt: new Date(),
+};
+
+export const initialHackathonTrack: HackathonTrack = {
+  id: '',
+  hackathonID: '',
+  title: '',
+  description: '',
+};
+
+export const initialHackathonSponsor: HackathonSponsor = {
+  id: '',
+  hackathonID: '',
+  coverPic: '',
+  blurHash: '',
+  name: '',
+  link: '',
+  title: '',
+  description: '',
+};
+
+export const initialHackathonRound: HackathonRound = {
+  id: '',
+  hackathonID: '',
+  index: 0,
+  startTime: new Date(),
+  endTime: new Date(),
+  judgingStartTime: new Date(),
+  metrics: [],
+};
+
+export const initialHackathonPrize: HackathonPrize = {
+  id: '',
+  hackathonID: '',
+  title: '',
+  description: '',
+  amount: 0,
+};
+
+export const initialHackathonFAQ: HackathonFAQ = {
+  id: '',
+  hackathonID: '',
+  question: '',
+  answer: '',
 };

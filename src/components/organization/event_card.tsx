@@ -6,7 +6,7 @@ import { EVENT_PIC_URL } from '@/config/routes';
 import { Buildings, ClockCounterClockwise, Eye, Gavel, PencilSimple, Trash, Users } from '@phosphor-icons/react';
 import moment from 'moment';
 import checkOrgAccess, { checkParticularOrgAccess } from '@/utils/funcs/access';
-import { ORG_SENIOR } from '@/config/constants';
+import { EVENT_PIC_HASH_DEFAULT, ORG_SENIOR } from '@/config/constants';
 
 interface Props {
   event: Event;
@@ -47,12 +47,18 @@ const EventCard = ({
         </div>
         <Image
           width={300}
-          height={200}
+          height={100}
           src={`${EVENT_PIC_URL}/${event.coverPic}`}
           alt="Event Cover"
           className="w-full object-cover rounded-t-xl"
           placeholder="blur"
-          blurDataURL={event.blurHash || 'no-hash'}
+          blurDataURL={
+            event.blurHash
+              ? event.blurHash == 'no-hash'
+                ? EVENT_PIC_HASH_DEFAULT
+                : event.blurHash
+              : EVENT_PIC_HASH_DEFAULT
+          }
         />
         {org && checkOrgAccess(ORG_SENIOR) && (
           <div className="w-full flex gap-2 absolute opacity-0 group-hover:opacity-100 top-2 left-2 transition-ease-300">
@@ -69,19 +75,24 @@ const EventCard = ({
                 <Trash size={18} />
               </div>
             )}
-            {!event.hackathonID && (
-              <div
-                onClick={el => {
-                  el.stopPropagation();
-                  el.preventDefault();
-                  if (setClickedEditEvent) setClickedEditEvent(event);
-                  if (setClickedOnEditEvent) setClickedOnEditEvent(true);
-                }}
-                className="bg-white dark:bg-dark_primary_comp_hover text-gray-500 dark:text-white text-xxs px-2 py-1 rounded-lg"
-              >
-                <PencilSimple size={18} />
-              </div>
-            )}
+            <div
+              onClick={el => {
+                el.stopPropagation();
+                el.preventDefault();
+                {
+                  if (event.hackathonID) {
+                    window.location.assign('/organisation/competition/' + event.id);
+                  } else {
+                    if (setClickedEditEvent) setClickedEditEvent(event);
+                    if (setClickedOnEditJudges) setClickedOnEditJudges(true);
+                  }
+                }
+              }}
+              className="bg-white dark:bg-dark_primary_comp_hover text-gray-500 dark:text-white text-xxs px-2 py-1 rounded-lg"
+            >
+              <PencilSimple size={18} />
+            </div>
+
             <div
               onClick={el => {
                 el.stopPropagation();
@@ -132,7 +143,7 @@ const EventCard = ({
           </div>
         )}
       </div>
-      <div className="w-full h-20 bg-white dark:bg-dark_primary_comp_hover rounded-b-xl flex p-4">
+      <div className="w-full h-20 bg-gray-50 dark:bg-dark_primary_comp_hover rounded-b-xl flex p-4">
         <div className="w-1/6 flex items-start justify-start mt-1">
           <div className="w-fit flex flex-col items-end">
             <div className={`w-fit ${!smaller ? 'text-xs' : 'text-xxs'} uppercase transition-ease-out-500`}>

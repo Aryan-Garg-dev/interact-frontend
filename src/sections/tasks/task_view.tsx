@@ -21,6 +21,7 @@ import CopyClipboardButton from '@/components/buttons/copy_clipboard_btn';
 import TaskHistories from './history';
 import Link from 'next/link';
 import { ArrowUpRight } from '@phosphor-icons/react/dist/ssr';
+import { navbarOpenSelector } from '@/slices/feedSlice';
 
 interface Props {
   task: Task;
@@ -75,10 +76,16 @@ const TaskComponent = ({
     };
   }, []);
 
+  const isOpen = useSelector(navbarOpenSelector);
+
   return (
     <>
       {clickedOnUsers && <UsersList title="Task Users" users={task.users} setShow={setClickedOnUsers} />}
-      <div className="w-no_side_base_open max-md:w-screen h-base fixed bg-gray-50 dark:bg-dark_primary_comp border-white border-t-[1px] border-l-[1px] top-navbar overflow-y-auto flex flex-col gap-4 p-8 pt-4 max-md:px-4 font-primary animate-fade_third z-10 max-md:z-20">
+      <div
+        className={`${
+          isOpen ? 'w-no_side_base_open' : 'w-no_side_base_close'
+        } max-md:w-screen h-base fixed bg-gray-50 dark:bg-dark_primary_comp border-white border-t-[1px] border-l-[1px] top-navbar overflow-y-auto flex flex-col gap-4 p-8 pt-4 max-md:px-4 font-primary animate-fade_third z-10 max-md:z-20`}
+      >
         <div className="w-full flex flex-col gap-2">
           <ArrowArcLeft
             className="cursor-pointer"
@@ -192,7 +199,7 @@ const TaskComponent = ({
           accessChecker && (
             <div
               onClick={() => setClickedOnEditTask(true)}
-              className="w-full text-base bg-gray-100 rounded-xl p-4 cursor-pointer transition-ease-300"
+              className="w-full text-base bg-gray-100 dark:bg-dark_primary_comp_hover rounded-xl p-4 cursor-pointer transition-ease-300"
             >
               <span className="text-xl max-lg:text-lg text-gradient font-semibold">Your task is lonely! </span> and
               looking for a buddy. Don&apos;t leave it hanging, assign it to a team member and let the magic begin! 🚀

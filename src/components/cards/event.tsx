@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { EVENT_PIC_URL } from '@/config/routes';
 import { Eye } from '@phosphor-icons/react';
 import moment from 'moment';
+import { EVENT_PIC_HASH_DEFAULT } from '@/config/constants';
 
 interface Props {
   event: Event;
@@ -19,12 +20,18 @@ const EventCard = ({ event }: Props) => {
         </div>
         <Image
           width={200}
-          height={200}
+          height={75}
           src={`${EVENT_PIC_URL}/${event.coverPic}`}
           alt=""
           className="w-full object-cover rounded-t-xl"
           placeholder="blur"
-          blurDataURL={event.blurHash || 'no-hash'}
+          blurDataURL={
+            event.blurHash
+              ? event.blurHash == 'no-hash'
+                ? EVENT_PIC_HASH_DEFAULT
+                : event.blurHash
+              : EVENT_PIC_HASH_DEFAULT
+          }
         />
         <div className="absolute bottom-2 right-2 bg-white dark:bg-dark_primary_comp_hover text-gray-500 dark:text-white text-xxs px-2 py-1 rounded-lg">
           {event.organization.title}

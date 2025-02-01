@@ -265,6 +265,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const response = await axios.get(`${BACKEND_URL}${EXPLORE_URL}/quick/item?slug=${slug}&fallback=pass`, {
       headers: {
         Authorization: `Bearer ${nookies.get(context).token || ''}`,
+        'X-API-KEY': process.env.API_TOKEN,
       },
     });
 

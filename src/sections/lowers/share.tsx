@@ -34,7 +34,7 @@ const Share = ({ item, itemType, itemID, clipboardURL, setShow }: Props) => {
     }
 
     const URL = `${MESSAGING_URL}/me`;
-    getHandler(URL)
+    getHandler(URL, undefined, true)
       .then(res => {
         if (res.statusCode === 200) {
           const chatsData: Chat[] = res.data.chats;

@@ -105,7 +105,7 @@ const Feed = () => {
           <NoFeed />
         ) : (
           <InfiniteScroll
-            className="w-full flex flex-col gap-4 dark:gap-0"
+            className="w-full"
             dataLength={feed.length}
             next={getFeed}
             hasMore={hasMore}

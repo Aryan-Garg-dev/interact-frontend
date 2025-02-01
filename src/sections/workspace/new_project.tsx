@@ -102,11 +102,7 @@ const NewProject = ({ setProjects, setTriggerReload, setActiveTab }: Props) => {
     } else if (res.statusCode == 413) {
       Toaster.stopLoad(toaster, 'Image too large', 0);
     } else {
-      if (res.data.message) {
-        Toaster.stopLoad(toaster, res.data.message, 0);
-      } else {
-        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-      }
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
     setMutex(false);
   };
@@ -132,7 +128,7 @@ const NewProject = ({ setProjects, setTriggerReload, setActiveTab }: Props) => {
           <Select label="Project Category" val={category} setVal={setCategory} options={categories} required={true} />
           <Input label="Project Tagline" val={tagline} setVal={setTagline} maxLength={50} required={true} />
           <TextArea label="Project Description" val={description} setVal={setDescription} maxLength={1000} />
-          <Tags label="Project Tags" tags={tags} setTags={setTags} maxTags={10} required={true} />
+          <Tags label="Project Tags" tags={tags} setTags={setTags} maxTags={10} suggestions required />
           <Links label="Project Links" links={links} setLinks={setLinks} maxLinks={5} />
           <Checkbox label="Keep this Project Private" val={isPrivate} setVal={setIsPrivate} />
         </div>

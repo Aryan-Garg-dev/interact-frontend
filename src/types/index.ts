@@ -165,6 +165,7 @@ export interface User {
   isOrganization: boolean;
   organization: Organization | null;
   createdAt: string;
+  secondaryEmail?: string;
 }
 
 export interface OrganizationMembership {
@@ -229,6 +230,8 @@ export interface Project {
   organization: Organization | null;
   createdAt: Date;
   history: ProjectHistory[] | null;
+  hackathonID?: string;
+  hackathon?: Hackathon;
 }
 
 export interface PostTag {
@@ -775,6 +778,8 @@ export interface Hackathon {
   coordinators: User[];
   judges: User[];
   isEnded?: boolean;
+  isRestricted: boolean;
+  entryPassword?: string;
   eventID: string;
   history: HackathonHistory[];
   tracks: HackathonTrack[];
@@ -795,7 +800,7 @@ export interface HackathonPrize {
   id: string;
   hackathonID: string;
   title: string;
-  trackID?: string;
+  hackathonTrackID?: string;
   track?: HackathonTrack;
   description?: string;
   amount: number;

@@ -107,7 +107,7 @@ const About = ({ profile, org = false, organizations }: Props) => {
       )}
       {hasDescription && (
         <>
-          <div className="whitespace-pre-wrap">{renderContentWithLinks(profile.description)}</div>
+          <div className="w-full whitespace-pre-wrap break-words">{renderContentWithLinks(profile.description)}</div>
           <div className="w-full h-[1px] border-t-[1px] border-gray-400 border-dashed"></div>
         </>
       )}

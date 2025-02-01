@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 interface Props {
   label?: string;
   val: string;
-  setVal: React.Dispatch<React.SetStateAction<string>>;
+  setVal: React.Dispatch<React.SetStateAction<string>> | ((val: string) => void);
   maxLength: number;
   placeholder?: string;
   required?: boolean;
@@ -32,7 +32,7 @@ const Input = ({
         <div className={cn('text-xs ml-1 font-medium uppercase text-gray-500 dark:text-gray-300', labelClassName)}>
           {label}
           {required && '*'}{' '}
-          {type == 'text' && (
+          {type === 'text' && val && (
             <>
               {val.trim().length}/{maxLength}
             </>

@@ -3,7 +3,7 @@ import TagSuggestions from './tag_suggestions';
 
 interface Props {
   tags: string[];
-  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  setTags: React.Dispatch<React.SetStateAction<string[]>> | ((val: string[]) => void);
   maxTags?: number;
   maxLength?: number;
   suggestions?: boolean;
@@ -67,6 +67,7 @@ const Tags = ({
     }
     dragItem.current = position;
   };
+
   const dragEnter = (e: any, position: number) => {
     dragOverItem.current = position;
   };

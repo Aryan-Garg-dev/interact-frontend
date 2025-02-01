@@ -15,7 +15,6 @@ import { ORG_SENIOR } from '@/config/constants';
 import Loader from '@/components/common/loader';
 import { Event } from '@/types';
 import NewEvent from '@/sections/organization/events/new_event';
-import EventCard from '@/components/organization/event_card';
 import { initialEvent } from '@/types/initials';
 import EditEvent from '@/sections/organization/events/edit_event';
 import ConfirmDelete from '@/components/common/confirm_delete';
@@ -30,6 +29,7 @@ import HackathonHistories from '@/sections/organization/hackathons/history';
 import NoEvents from '@/components/fillers/events';
 import EditHackathonCoordinators from '@/sections/organization/hackathons/edit_hackathon_coordinators';
 import EditHackathonJudges from '@/sections/organization/hackathons/edit_hackathon_judges';
+import EventCard from '@/components/organization/event_card';
 
 const Events = () => {
   const [events, setEvents] = useState<Event[]>([]);

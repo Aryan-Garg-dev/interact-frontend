@@ -7,7 +7,7 @@ import Toaster from '@/utils/toaster';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import Image from 'next/image';
-import { MagnifyingGlass, X } from '@phosphor-icons/react';
+import { MagnifyingGlass, Plus, X } from '@phosphor-icons/react';
 import patchHandler from '@/handlers/patch_handler';
 
 interface Props {
@@ -19,6 +19,7 @@ interface Props {
 const EditHackathonCoordinators = ({ event, setShow, setEvents }: Props) => {
   const [memberships, setMemberships] = useState<OrganizationMembership[]>([]);
   const [coordinatorIDs, setCoordinatorIDs] = useState(event.hackathon?.coordinators?.map(u => u.id));
+  const [mutex, setMutex] = useState(false);
 
   const [search, setSearch] = useState('');
   const [users, setUsers] = useState<User[]>([]);
@@ -27,7 +28,7 @@ const EditHackathonCoordinators = ({ event, setShow, setEvents }: Props) => {
 
   const getMemberships = async () => {
     const URL = `${ORG_URL}/${currentOrg.id}/membership`;
-    const res = await getHandler(URL);
+    const res = await getHandler(URL, undefined, true);
 
     if (res.statusCode === 200) {
       const membershipData: OrganizationMembership[] = res.data.organization?.memberships || [];
@@ -42,6 +43,9 @@ const EditHackathonCoordinators = ({ event, setShow, setEvents }: Props) => {
   };
 
   const handleToggleCoordinator = async (user: User) => {
+    if (mutex) return;
+    setMutex(true);
+
     const URL = `${ORG_URL}/${currentOrg.id}/hackathons/coordinator`;
     const formData = { userID: user.id, hackathonID: event.hackathonID };
 
@@ -61,6 +65,8 @@ const EditHackathonCoordinators = ({ event, setShow, setEvents }: Props) => {
       if (res.data?.message) Toaster.error(res.data.message, 'error_toaster');
       else Toaster.error(SERVER_ERROR, 'error_toaster');
     }
+
+    setMutex(false);
   };
 
   const fetchUsers = async (key: string) => {
@@ -134,7 +140,7 @@ const EditHackathonCoordinators = ({ event, setShow, setEvents }: Props) => {
                           {user.tagline && user.tagline != '' && <div className="text-sm mt-2">{user.tagline}</div>}
                         </div>
                         <div onClick={() => handleToggleCoordinator(user)} className="px-4 py-2 text-sm cursor-pointer">
-                          {coordinatorIDs?.includes(user.id) ? 'Remove' : 'Add'}
+                          {coordinatorIDs?.includes(user.id) ? <X className="text-primary_danger" /> : <Plus />}
                         </div>
                       </div>
                     </div>
