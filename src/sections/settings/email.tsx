@@ -105,96 +105,97 @@ const Email = () => {
           <div>{user.email}</div>
         )}
       </div>
-
-      <div>
-        {showSecondaryEmailInput ? (
-          <div className="w-full flex flex-row gap-2">
-            {showEmailInput ? (
-              <>
-                <input
-                  value={secondaryEmail}
-                  onChange={e => setSecondaryEmail(e.target.value)}
-                  placeholder="Secondary Email"
-                  type="email"
-                  className="w-full text-lg bg-white dark:bg-dark_primary_comp focus:outline-none rounded-lg p-2"
-                />
-                <button
-                  onClick={() => handleEmailSubmit(secondaryEmail)}
-                  disabled={isLoading || !secondaryEmail}
-                  className={`bg-primary_black text-white text-md w-36 rounded-lg p-2 ${
-                    isLoading || !secondaryEmail ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                  }`}
-                >
-                  Send OTP
-                </button>
-              </>
-            ) : (
-              <>
-                <div className="flex flex-col space-y-4 w-full">
-                  <div className="text-gray-500 mb-2">
-                    OTP sent to {secondaryEmail}
-                    <span
-                      onClick={() => setShowEmailInput(true)}
-                      className="text-primary_btn dark:text-dark_primary_btn ml-2 cursor-pointer"
-                    >
-                      Change
-                    </span>
-                  </div>
-                  <div className="flex flex-row justify-between w-full gap-2">
-                    <input
-                      value={otp}
-                      onChange={e => {
-                        const val = e.target.value;
-                        if (val === '' || (/^\d+$/.test(val) && val.length <= 6)) {
-                          setOTP(val);
-                        }
-                      }}
-                      placeholder="Enter 6-digit OTP"
-                      type="text"
-                      maxLength={6}
-                      className="w-full text-lg bg-white dark:bg-dark_primary_comp focus:outline-none rounded-lg p-2"
-                    />
-                    <div className="flex gap-2 justify-end">
-                      <button
-                        onClick={handleOTPSubmit}
-                        disabled={isLoading || otp.length !== 6}
-                        className={`bg-primary_black text-white text-md w-36 rounded-lg p-2 ${
-                          isLoading || otp.length !== 6 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                        }`}
+      {!user.isOrganization && (
+        <div>
+          {showSecondaryEmailInput ? (
+            <div className="w-full flex flex-row gap-2">
+              {showEmailInput ? (
+                <>
+                  <input
+                    value={secondaryEmail}
+                    onChange={e => setSecondaryEmail(e.target.value)}
+                    placeholder="Secondary Email"
+                    type="email"
+                    className="w-full text-lg bg-white dark:bg-dark_primary_comp focus:outline-none rounded-lg p-2"
+                  />
+                  <button
+                    onClick={() => handleEmailSubmit(secondaryEmail)}
+                    disabled={isLoading || !secondaryEmail}
+                    className={`bg-primary_black text-white text-md w-36 rounded-lg p-2 ${
+                      isLoading || !secondaryEmail ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                    }`}
+                  >
+                    Send OTP
+                  </button>
+                </>
+              ) : (
+                <>
+                  <div className="flex flex-col space-y-4 w-full">
+                    <div className="text-gray-500 mb-2">
+                      OTP sent to {secondaryEmail}
+                      <span
+                        onClick={() => setShowEmailInput(true)}
+                        className="text-primary_btn dark:text-dark_primary_btn ml-2 cursor-pointer"
                       >
-                        Verify OTP
-                      </button>
+                        Change
+                      </span>
+                    </div>
+                    <div className="flex flex-row justify-between w-full gap-2">
+                      <input
+                        value={otp}
+                        onChange={e => {
+                          const val = e.target.value;
+                          if (val === '' || (/^\d+$/.test(val) && val.length <= 6)) {
+                            setOTP(val);
+                          }
+                        }}
+                        placeholder="Enter 6-digit OTP"
+                        type="text"
+                        maxLength={6}
+                        className="w-full text-lg bg-white dark:bg-dark_primary_comp focus:outline-none rounded-lg p-2"
+                      />
+                      <div className="flex gap-2 justify-end">
+                        <button
+                          onClick={handleOTPSubmit}
+                          disabled={isLoading || otp.length !== 6}
+                          className={`bg-primary_black text-white text-md w-36 rounded-lg p-2 ${
+                            isLoading || otp.length !== 6 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                          }`}
+                        >
+                          Verify OTP
+                        </button>
+                      </div>
                     </div>
                   </div>
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-row items-center text-primary_btn dark:text-dark_primary_btn">
+              {user.secondaryEmail ? (
+                <div className="text-white w-full text-xl flex flex-row justify-between items-center">
+                  <div className="flex flex-col">
+                    <div>Secondary Email</div> <div> {user.secondaryEmail}</div>
+                  </div>
+                  <div
+                    onClick={() => setShowSecondaryEmailInput(true)}
+                    className="bg-white flex dark:bg-dark_primary_comp h-fit flex-center text-sm font-medium px-3 py-1 rounded-xl border-[1px] cursor-pointer"
+                  >
+                    Edit
+                  </div>
                 </div>
-              </>
-            )}
-          </div>
-        ) : (
-          <div className="flex flex-row items-center text-primary_btn dark:text-dark_primary_btn">
-            {user.secondaryEmail ? (
-              <div className="text-white w-full text-xl flex flex-row justify-between items-center">
-                <div className="flex flex-col">
-                  <div>Secondary Email</div> <div> {user.secondaryEmail}</div>
-                </div>
-                <div
-                  onClick={() => setShowSecondaryEmailInput(true)}
-                  className="bg-white flex dark:bg-dark_primary_comp h-fit flex-center text-sm font-medium px-3 py-1 rounded-xl border-[1px] cursor-pointer"
-                >
-                  Edit
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="cursor-pointer" onClick={() => setShowSecondaryEmailInput(true)}>
-                  <Plus size={20} />
-                </div>
-                <span className="text-white ml-2">Add Secondary Email</span>
-              </>
-            )}
-          </div>
-        )}
-      </div>
+              ) : (
+                <>
+                  <div className="cursor-pointer" onClick={() => setShowSecondaryEmailInput(true)}>
+                    <Plus size={20} />
+                  </div>
+                  <span className="text-white ml-2">Add Secondary Email</span>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
