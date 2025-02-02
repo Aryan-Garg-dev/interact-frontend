@@ -571,6 +571,7 @@ export const initialHackathon: Hackathon = {
   sponsors: [],
   rounds: [],
   faqs: [],
+  isRestricted: false,
 };
 
 export const initialCommunity: Community = {

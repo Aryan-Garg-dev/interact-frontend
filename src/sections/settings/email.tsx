@@ -1,72 +1,77 @@
 import type React from 'react';
 import { useState } from 'react';
-import { userSelector } from '@/slices/userSlice';
+import { setSecondaryEmail, userSelector } from '@/slices/userSlice';
 import patchHandler from '@/handlers/patch_handler';
 import postHandler from '@/handlers/post_handler';
 import { Plus } from '@phosphor-icons/react';
 import Toaster from '@/utils/toaster';
 import { useDispatch, useSelector } from 'react-redux';
 import { ALREADY_VERIFIED_ERROR, SERVER_ERROR } from '@/config/errors';
+import { Button } from '@/components/ui/button';
+import isEmail from 'validator/lib/isEmail';
+import ConfirmOTP from '@/components/common/confirm_otp';
 
 const Email = () => {
-  const [clickedOnChange, setClickedOnChange] = useState(false);
   const user = useSelector(userSelector);
-  const dispatch = useDispatch();
-  const [secondaryEmail, setSecondaryEmail] = useState(user.secondaryEmail);
-  const [otp, setOTP] = useState('');
+
+  const [clickedOnChange, setClickedOnChange] = useState(false);
+  const [secondaryEmail, setLocalSecondaryEmail] = useState(user.secondaryEmail);
   const [isLoading, setIsLoading] = useState(false);
   const [showSecondaryEmailInput, setShowSecondaryEmailInput] = useState(false);
   const [showEmailInput, setShowEmailInput] = useState(true);
+  const [clickedOnVerifySecondaryEmail, setClickedOnVerifySecondaryEmail] = useState(false);
   const [newEmail, setNewEmail] = useState(user.email);
 
-  const handleEmailSubmit = async (email: string) => {
+  const dispatch = useDispatch();
+
+  const handleSecondaryEmailSubmit = async () => {
     const toaster = Toaster.startLoad('Sending OTP');
     const URL = `/verification/secondary_email`;
-    const res = await postHandler(URL, { email });
+    const res = await postHandler(URL, { email: secondaryEmail });
+
     if (res.statusCode === 200) {
       Toaster.stopLoad(toaster, 'OTP sent to your email', 1);
       setShowEmailInput(false);
+      setClickedOnVerifySecondaryEmail(true);
     } else {
       if (res.data.message === ALREADY_VERIFIED_ERROR) {
         Toaster.stopLoad(toaster, 'Email already verified', 0);
-        return;
-      }
-      Toaster.stopLoad(toaster, 'Failed to send OTP', 0);
+      } else Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
   };
 
-  const handleOTPSubmit = async () => {
-    if (otp.length !== 6) {
-      Toaster.error('Please enter a valid 6-digit OTP');
-      return;
-    }
-
+  const handleSecondaryEmailOTPSubmit = async (OTP: string) => {
     setIsLoading(true);
     const toaster = Toaster.startLoad('Verifying OTP...');
+
     const res = await patchHandler('/verification/secondary_email', {
       email: secondaryEmail,
-      otp: otp,
+      otp: OTP,
     });
+
     if (res.statusCode === 200) {
       Toaster.stopLoad(toaster, 'Email verified', 1);
       setShowEmailInput(true);
       setShowSecondaryEmailInput(false);
-      setOTP('');
-      setSecondaryEmail(secondaryEmail);
-      user.secondaryEmail = secondaryEmail;
+      setClickedOnVerifySecondaryEmail(false);
+      dispatch(setSecondaryEmail(secondaryEmail));
+      setLocalSecondaryEmail(secondaryEmail);
     } else {
-      if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
-      else {
-        Toaster.stopLoad(toaster, SERVER_ERROR, 0);
-      }
+      Toaster.stopLoad(toaster, res.data.message || SERVER_ERROR, 0);
     }
+
     setIsLoading(false);
   };
 
-  const handleSubmit = () => {};
-
   return (
     <div className="w-full flex justify-between flex-col space-y-4">
+      {clickedOnVerifySecondaryEmail && (
+        <ConfirmOTP
+          setShow={setClickedOnVerifySecondaryEmail}
+          handleSubmit={handleSecondaryEmailOTPSubmit}
+          email={secondaryEmail}
+        />
+      )}
       <div className="w-full">
         <div className="text-lg font-semibold">Your email address</div>
         {clickedOnChange ? (
@@ -93,7 +98,7 @@ const Email = () => {
                 </div>
               ) : (
                 <div
-                  onClick={handleSubmit}
+                  onClick={() => {}}
                   className="h-fit bg-primary_black text-white flex-center rounded-full w-16 p-1 cursor-pointer"
                 >
                   Save
@@ -108,89 +113,54 @@ const Email = () => {
       {!user.isOrganization && (
         <div>
           {showSecondaryEmailInput ? (
-            <div className="w-full flex flex-row gap-2">
-              {showEmailInput ? (
+            <div className="w-full h-full flex flex-row gap-2">
+              {showEmailInput && (
                 <>
                   <input
                     value={secondaryEmail}
-                    onChange={e => setSecondaryEmail(e.target.value)}
-                    placeholder="Secondary Email"
+                    onChange={e => setLocalSecondaryEmail(e.target.value)}
+                    placeholder="Enter your secondary email"
                     type="email"
-                    className="w-full text-lg bg-white dark:bg-dark_primary_comp focus:outline-none rounded-lg p-2"
+                    className="w-full bg-white dark:bg-dark_primary_comp focus:outline-none rounded-lg p-2"
                   />
-                  <button
-                    onClick={() => handleEmailSubmit(secondaryEmail)}
-                    disabled={isLoading || !secondaryEmail}
-                    className={`bg-primary_black text-white text-md w-36 rounded-lg p-2 ${
+                  <Button
+                    onClick={handleSecondaryEmailSubmit}
+                    disabled={isLoading || !isEmail(secondaryEmail || '')}
+                    className={`bg-primary_black text-white w-32 h-full rounded-lg p-2 ${
                       isLoading || !secondaryEmail ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                    }`}
+                    } transition-ease-300`}
                   >
-                    Send OTP
-                  </button>
-                </>
-              ) : (
-                <>
-                  <div className="flex flex-col space-y-4 w-full">
-                    <div className="text-gray-500 mb-2">
-                      OTP sent to {secondaryEmail}
-                      <span
-                        onClick={() => setShowEmailInput(true)}
-                        className="text-primary_btn dark:text-dark_primary_btn ml-2 cursor-pointer"
-                      >
-                        Change
-                      </span>
-                    </div>
-                    <div className="flex flex-row justify-between w-full gap-2">
-                      <input
-                        value={otp}
-                        onChange={e => {
-                          const val = e.target.value;
-                          if (val === '' || (/^\d+$/.test(val) && val.length <= 6)) {
-                            setOTP(val);
-                          }
-                        }}
-                        placeholder="Enter 6-digit OTP"
-                        type="text"
-                        maxLength={6}
-                        className="w-full text-lg bg-white dark:bg-dark_primary_comp focus:outline-none rounded-lg p-2"
-                      />
-                      <div className="flex gap-2 justify-end">
-                        <button
-                          onClick={handleOTPSubmit}
-                          disabled={isLoading || otp.length !== 6}
-                          className={`bg-primary_black text-white text-md w-36 rounded-lg p-2 ${
-                            isLoading || otp.length !== 6 ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                          }`}
-                        >
-                          Verify OTP
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                    Verify
+                  </Button>
+                  <Button onClick={() => setShowSecondaryEmailInput(false)} className="h-full" variant="destructive">
+                    Cancel
+                  </Button>
                 </>
               )}
             </div>
           ) : (
-            <div className="flex flex-row items-center text-primary_btn dark:text-dark_primary_btn">
+            <div className="flex items-center">
               {user.secondaryEmail ? (
-                <div className="text-white w-full text-xl flex flex-row justify-between items-center">
+                <div className="w-full text-xl flex flex-row justify-between items-center">
                   <div className="flex flex-col">
-                    <div>Secondary Email</div> <div> {user.secondaryEmail}</div>
+                    <div className="text-lg font-semibold">Your secondary email address</div>
+                    <div className="text-base">{user.secondaryEmail}</div>
                   </div>
                   <div
                     onClick={() => setShowSecondaryEmailInput(true)}
-                    className="bg-white flex dark:bg-dark_primary_comp h-fit flex-center text-sm font-medium px-3 py-1 rounded-xl border-[1px] cursor-pointer"
+                    className="bg-white flex dark:bg-dark_primary_comp h-fit flex-center text-primary_black dark:text-white text-sm font-medium px-3 py-1 rounded-xl border-[1px] cursor-pointer"
                   >
                     Edit
                   </div>
                 </div>
               ) : (
-                <>
-                  <div className="cursor-pointer" onClick={() => setShowSecondaryEmailInput(true)}>
-                    <Plus size={20} />
-                  </div>
-                  <span className="text-white ml-2">Add Secondary Email</span>
-                </>
+                <Button
+                  onClick={() => setShowSecondaryEmailInput(true)}
+                  className="w-full flex items-center cursor-pointer transition-ease-300"
+                >
+                  <Plus size={20} weight="bold" />
+                  <span className="ml-2">Add a Secondary Email</span>
+                </Button>
               )}
             </div>
           )}
