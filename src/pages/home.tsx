@@ -12,6 +12,8 @@ import CommunitySide from '@/sides/home/community';
 import Communities from '@/screens/home/communities';
 import { useSelector } from 'react-redux';
 import { userSelector } from '@/slices/userSlice';
+import Image from "next/image"
+import Link from 'next/link';
 
 const FOLLOWING_THRESHOLD = 3;
 
@@ -24,6 +26,17 @@ const Home = () => {
       <Sidebar index={1} />
       <MainWrapper restrictWidth sidebarLayout>
         <div className="w-2/3 max-md:w-full">
+          <Link
+            href={'/events'}
+          >
+            <Image
+              src={'/home/banner.png'}
+              height={460}
+              width={1880}
+              className={"rounded-lg w-full mb-5 shadow-sm min-h-[8rem]"}
+              alt={"live-on-interact"}
+            />
+          </Link>
           <MenuBar
             items={
               user.id
