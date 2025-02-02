@@ -31,6 +31,7 @@ import { ORG_MANAGER, ORG_SENIOR, PROJECT_EDITOR, PROJECT_MEMBER, PROJECT_OWNER 
 import { currentOrgSelector } from '@/slices/orgSlice';
 import { getProjectPicHash, getProjectPicURL } from '@/utils/funcs/safe_extract';
 import EditProjectImages from './edit_project_images';
+import Editor from '@/components/editor';
 
 interface Props {
   projectSlugs: string[];
@@ -326,26 +327,28 @@ const ProjectView = ({
                   <div className="font-semibold text-lg">{project.tagline}</div>
 
                   <div className="text-sm whitespace-pre-wrap">
-                    {project.description.length > 200 ? (
-                      <>
-                        {clickedOnReadMore ? (
-                          project.description
-                        ) : (
-                          <>
-                            {project.description.substring(0, 200)}
-                            <span
-                              onClick={() => setClickedOnReadMore(true)}
-                              className="text-xs italic opacity-60 cursor-pointer"
-                            >
-                              {' '}
-                              Read More...
-                            </span>
-                          </>
-                        )}
-                      </>
-                    ) : (
-                      renderContentWithLinks(project.description)
-                    )}
+                    <Editor editable={false} content={project.description} />
+                    {/* TODO: read more functionality in editor */}
+                    {/*{project.description.length > 200 ? (*/}
+                    {/*  <>*/}
+                    {/*    {clickedOnReadMore ? (*/}
+                    {/*      project.description*/}
+                    {/*    ) : (*/}
+                    {/*      <>*/}
+                    {/*        {project.description.substring(0, 200)}*/}
+                    {/*        <span*/}
+                    {/*          onClick={() => setClickedOnReadMore(true)}*/}
+                    {/*          className="text-xs italic opacity-60 cursor-pointer"*/}
+                    {/*        >*/}
+                    {/*          {' '}*/}
+                    {/*          Read More...*/}
+                    {/*        </span>*/}
+                    {/*      </>*/}
+                    {/*    )}*/}
+                    {/*  </>*/}
+                    {/*) : (*/}
+                    {/*  renderContentWithLinks(project.description)*/}
+                    {/*)}*/}
                   </div>
                   {project.tags && <Tags tags={project.tags} displayAll={true} />}
                   <Collaborators memberships={project.memberships} workspace={true} />
