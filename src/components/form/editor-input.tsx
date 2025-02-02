@@ -1,7 +1,6 @@
 import { cn } from '@/lib/utils';
 import React from 'react';
 import Editor from '@/components/editor';
-import NewPostImages from '@/components/home/new_post_images';
 import NewPostHelper from '@/components/home/new_post_helper';
 
 interface Props {
