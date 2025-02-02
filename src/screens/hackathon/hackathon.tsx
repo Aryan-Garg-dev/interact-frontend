@@ -281,7 +281,8 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
         </Dialog>
 
         <div className="text-xs font-semibold text-gray-500 dark:text-white">This event is happening on Interact!</div>
-        {user.organizationMemberships.map(membership => membership.organizationID).includes(event.organizationID) ? (
+        {user.organizationMemberships.map(membership => membership.organizationID).includes(event.organizationID) ||
+        hackathon?.judges.map(u => u.id).includes(user.id) ? (
           <SecondaryButton label="Go to Dashboard" onClick={handleRedirect} />
         ) : isRegistered ? (
           isLive || now.isBetween(startTime, endTime) ? (
