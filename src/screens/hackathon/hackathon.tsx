@@ -329,23 +329,21 @@ const Hackathon: React.FC<HackathonProps> = ({ event, handleRegister }) => {
           <div className="w-full md:w-2/3 space-y-6">
             <div className="bg-white dark:bg-dark_primary_comp_hover rounded-xl p-4 space-y-4 w-full">
               <div className="space-y-2">
-                <div className="relative h-52 md:h-[200px]">
-                  <Image
-                    src={`${EVENT_PIC_URL}/${hackathon.coverPic}`}
-                    width={400}
-                    height={100}
-                    alt="Event Picture"
-                    className="w-full h-full rounded-xl object-cover"
-                    placeholder="blur"
-                    blurDataURL={
-                      hackathon.blurHash
-                        ? hackathon.blurHash === 'no-hash'
-                          ? EVENT_PIC_HASH_DEFAULT
-                          : hackathon.blurHash
-                        : EVENT_PIC_HASH_DEFAULT
-                    }
-                  />
-                </div>
+                <Image
+                  src={`${EVENT_PIC_URL}/${hackathon.coverPic}`}
+                  width={400}
+                  height={100}
+                  alt="Event Picture"
+                  className="w-full h-full rounded-xl object-cover"
+                  placeholder="blur"
+                  blurDataURL={
+                    hackathon.blurHash
+                      ? hackathon.blurHash === 'no-hash'
+                        ? EVENT_PIC_HASH_DEFAULT
+                        : hackathon.blurHash
+                      : EVENT_PIC_HASH_DEFAULT
+                  }
+                />
                 <LowerEvent event={event} numLikes={eventLikes} setNumLikes={setEventLikes} />
               </div>
               <div className="md:hidden">
