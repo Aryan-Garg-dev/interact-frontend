@@ -139,12 +139,12 @@ const Events = () => {
                     className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
                     weight="regular"
                   />
-                  <Plus
+                  {/* <Plus
                     onClick={() => setClickedOnNewEvent(true)}
                     size={42}
                     className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
                     weight="regular"
-                  />
+                  /> */}
                   <div className="w-fit h-fit relative">
                     {unreadInvitations > 0 && (
                       <div className="absolute top-1 right-1 translate-x-1/4 -translate-y-1/4 w-4 h-4 flex-center text-xxs border-[1px] border-gray-500 rounded-full">
