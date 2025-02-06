@@ -61,7 +61,10 @@ const Events = () => {
     getHandler(URL + `?page=${page}&limit=${10}`)
       .then(res => {
         if (res.statusCode === 200) {
-          const addEvents = [...events, ...(res.data.events || [])];
+          let newEvents: Event[] = res.data.events || [];
+          newEvents = newEvents.filter(event => event.hackathonID != null);
+
+          const addEvents = [...events, ...newEvents];
           if (addEvents.length === events.length) setHasMore(false);
           setEvents(addEvents);
           if (page == 1) {
