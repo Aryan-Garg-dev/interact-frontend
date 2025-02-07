@@ -72,7 +72,6 @@ const Basics: React.FC<BasicsProps> = ({
   const [localTags, setLocalTags] = useState(tags);
   const [localLinks, setLocalLinks] = useState(links);
   const [localIsRestricted, setLocalIsRestricted] = useState(isRestricted);
-  const [localEntryPassword, setLocalEntryPassword] = useState(entryPassword);
   const [coverPicView, setCoverPicView] = useState(`${EVENT_PIC_URL}/${coverPic || 'default.jpg'}`);
 
   const handleSave = () => {
@@ -84,7 +83,6 @@ const Basics: React.FC<BasicsProps> = ({
       tags: localTags,
       links: localLinks,
       isRestricted: localIsRestricted,
-      entryPassword: localEntryPassword,
     };
 
     if (onSave) onSave(updatedData);
