@@ -178,7 +178,11 @@ const Events = () => {
             {clickedOnViewInvitations && <ViewInvitations setShow={setClickedOnViewInvitations} />}
             {clickedOnViewHistory &&
               (clickedEditEvent.hackathonID ? (
-                <HackathonHistories hackathonID={clickedEditEvent.hackathonID} setShow={setClickedOnViewHistory} />
+                <HackathonHistories
+                  hackathonID={clickedEditEvent.hackathonID}
+                  show={clickedOnViewHistory}
+                  setShow={setClickedOnViewHistory}
+                />
               ) : (
                 <EventHistory eventID={clickedEditEvent.id} setShow={setClickedOnViewHistory} />
               ))}

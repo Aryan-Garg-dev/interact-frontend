@@ -84,6 +84,15 @@ const Edited = ({ history }: Props) => {
           </div>
         </HackathonHistoryWrapper>
       );
+    case 25:
+      return (
+        <HackathonHistoryWrapper history={history}>
+          <div className="w-fit bg-priority_mid px-1 rounded-md inline-flex items-center gap-1">
+            <span>{history.user.name}</span> <span>scored a Team (Metric):</span>{' '}
+            <span>{history.hackathonTeam.title}</span>
+          </div>
+        </HackathonHistoryWrapper>
+      );
     default:
       return <></>;
   }
