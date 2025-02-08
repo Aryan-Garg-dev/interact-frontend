@@ -55,7 +55,7 @@ const HackathonHistories: React.FC<Props> = ({ hackathonID, show, setShow }) => 
     <Dialog open={show} onOpenChange={setShow}>
       <DialogContent className="sm:max-w-md min-w-[30%]">
         <DialogHeader>
-          <DialogTitle className="text-3xl">Project Activity</DialogTitle>
+          <DialogTitle className="text-3xl">Hackathon Activity</DialogTitle>
         </DialogHeader>
         {loading && page == 1 ? (
           <Loader />
