@@ -183,7 +183,7 @@ const Basics: React.FC<BasicsProps> = ({
             : 'The Hackathon is open to all users.'
         }
       />
-      {!isEditMode && entryPassword && setEntryPassword && (
+      {isRestricted && !isEditMode && entryPassword != undefined && setEntryPassword && (
         <Input label="Entry Password" val={entryPassword} setVal={setEntryPassword} maxLength={25} required={true} />
       )}
 
