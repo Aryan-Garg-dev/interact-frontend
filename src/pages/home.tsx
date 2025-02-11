@@ -4,7 +4,7 @@ import BaseWrapper from '@/wrappers/base';
 import MainWrapper from '@/wrappers/main';
 import PrimeWrapper from '@/wrappers/prime';
 import SideBarWrapper from '@/wrappers/side';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Discover from '@/screens/home/discover';
 import Feed from '@/screens/home/feed';
 import FeedSide from '@/sides/home/feed';
@@ -20,6 +20,10 @@ const FOLLOWING_THRESHOLD = 3;
 const Home = () => {
   const [active, setActive] = useState(0);
   const user = useSelector(userSelector);
+
+  useEffect(() => {
+    if (user.isOrganization) window.location.assign('/organisation/home');
+  }, [user]);
 
   return (
     <BaseWrapper title="Home">
