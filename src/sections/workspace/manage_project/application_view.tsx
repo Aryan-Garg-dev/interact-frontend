@@ -544,6 +544,7 @@ const MeetingCard = ({
           sessions={sessions}
           setClickedOnSession={setClickedOnSession}
           setClickedSessionID={setClickedSessionID}
+          org={false}
         />
       )}
     </div>
