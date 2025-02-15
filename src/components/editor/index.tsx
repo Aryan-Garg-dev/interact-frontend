@@ -1,6 +1,6 @@
 'use client';
 import { useEditor, EditorContent } from '@tiptap/react';
-import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import Text from '@tiptap/extension-text';
 import Paragraph from '@tiptap/extension-paragraph';
 import Document from '@tiptap/extension-document';
@@ -162,7 +162,7 @@ const Editor = ({
   const [URL, setURL] = useState<string>('');
   const [expanded, setExpanded] = useState(!truncate);
   const [isOverflowing, setIsOverflowing] = useState(false);
-  const editorContainerRef = useRef<HTMLDivElement>(null);
+  const editorContainerRef = useRef<HTMLDivElement | null>(null);
 
   const onSubmitURL = () => {
     if (!editor) return;
