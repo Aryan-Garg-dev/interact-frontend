@@ -271,7 +271,7 @@ const PostComponent = ({
             </div>
           </>
         ) : (
-          <Editor className="w-full text-sm mb-2" content={post.content} editable={false} truncate maxHeight={80} />
+          <Editor className="w-full text-sm mb-2" content={post.content} editable={false} />
         )}
         {showLowerPost && (
           <LowerPost

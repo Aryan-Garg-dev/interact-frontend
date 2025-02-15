@@ -186,26 +186,7 @@ const ProjectComponent = ({
                   <div className="font-semibold text-lg">{project.tagline}</div>
                   <Tags tags={project.tags} displayAll />
                   <div className="whitespace-pre-line">
-                    <Editor editable={false} content={project.description} />
-                    {/* TODO: Add read more functionality to editor */}
-                    {/*{project.description.length > 200 ? (*/}
-                    {/*  clickedOnReadMore ? (*/}
-                    {/*    project.description*/}
-                    {/*  ) : (*/}
-                    {/*    <>*/}
-                    {/*      {project.description.substring(0, 200)}*/}
-                    {/*      <span*/}
-                    {/*        onClick={() => setClickedOnReadMore(true)}*/}
-                    {/*        className="text-xs italic opacity-60 cursor-pointer"*/}
-                    {/*      >*/}
-                    {/*        {' '}*/}
-                    {/*        Read More...*/}
-                    {/*      </span>*/}
-                    {/*    </>*/}
-                    {/*  )*/}
-                    {/*) : (*/}
-                    {/*  renderContentWithLinks(project.description)*/}
-                    {/*)}*/}
+                    <Editor editable={false} content={project.description} truncate maxHeight={200} />
                   </div>
                   <Links links={project.links} />
                 </div>
