@@ -33,13 +33,13 @@ const EditorInput = ({ label, editable = true, val, setVal, maxLength, placehold
           setContent={setVal}
           limit={maxLength}
           placeholder={placeholder}
-          className={cn('w-full min-h-[80px] max-h-80 dark:text-white bg-transparent focus:outline-none border-[1px] border-gray-400 dark:border-dark_primary_btn rounded-lg px-2 py-2')}
+          className={cn('w-full min-h-[80px] max-h-80 overflow-y-scroll dark:text-white bg-transparent focus:outline-none border-[1px] border-gray-400 dark:border-dark_primary_btn rounded-lg px-2 py-2')}
           enableMentions={false}
         /> :
         <Editor
           editable={false}
           content={val}
-          className={cn('w-full min-h-[80px] max-h-80 dark:text-white bg-transparent focus:outline-none border-[1px] border-gray-400 dark:border-dark_primary_btn rounded-lg px-2 py-2')}
+          className={cn('w-full min-h-[80px] max-h-80 overflow-y-scroll dark:text-white bg-transparent focus:outline-none border-[1px] border-gray-400 dark:border-dark_primary_btn rounded-lg px-2 py-2')}
         />
       }
     </div>

@@ -72,24 +72,9 @@ const ProjectView = ({ project, setProject, openInNewTab }: Props) => {
           >
             Open Project <ArrowUpRight size={20} weight="bold" />
           </Link>
-          {project.description && <Editor content={project.description} editable={false} />}
-          {/* <div className="text-sm whitespace-pre-line">
-            {project.description.length > 200 ? (
-              clickedOnReadMore ? (
-                project.description
-              ) : (
-                <>
-                  {project.description.substring(0, 200)}
-                  <span onClick={() => setClickedOnReadMore(true)} className="text-xs italic opacity-60 cursor-pointer">
-                    {' '}
-                    Read More...
-                  </span>
-                </>
-              )
-            ) : (
-              renderContentWithLinks(project.description)
-            )}
-          </div> */}
+          <div className="text-sm whitespace-pre-line">
+            <Editor editable={false} content={project.description} truncate maxHeight={120} />
+          </div>
           <div className="w-full flex flex-wrap gap-2">
             {project.tags &&
               project.tags.map(tag => {
