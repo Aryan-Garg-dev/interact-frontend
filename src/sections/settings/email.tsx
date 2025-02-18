@@ -110,60 +110,62 @@ const Email = () => {
           <div>{user.email}</div>
         )}
       </div>
-      <div>
-        {showSecondaryEmailInput ? (
-          <div className="w-full h-full flex flex-row gap-2">
-            {showEmailInput && (
-              <>
-                <input
-                  value={secondaryEmail}
-                  onChange={e => setLocalSecondaryEmail(e.target.value)}
-                  placeholder="Enter your secondary email"
-                  type="email"
-                  className="w-full bg-white dark:bg-dark_primary_comp focus:outline-none rounded-lg p-2"
-                />
+      {!user.isOrganization && (
+        <div>
+          {showSecondaryEmailInput ? (
+            <div className="w-full h-full flex flex-row gap-2">
+              {showEmailInput && (
+                <>
+                  <input
+                    value={secondaryEmail}
+                    onChange={e => setLocalSecondaryEmail(e.target.value)}
+                    placeholder="Enter your secondary email"
+                    type="email"
+                    className="w-full bg-white dark:bg-dark_primary_comp focus:outline-none rounded-lg p-2"
+                  />
+                  <Button
+                    onClick={handleSecondaryEmailSubmit}
+                    disabled={isLoading || !isEmail(secondaryEmail || '')}
+                    className={`bg-primary_black text-white w-32 h-full rounded-lg p-2 ${
+                      isLoading || !secondaryEmail ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+                    } transition-ease-300`}
+                  >
+                    Verify
+                  </Button>
+                  <Button onClick={() => setShowSecondaryEmailInput(false)} className="h-full" variant="destructive">
+                    Cancel
+                  </Button>
+                </>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center">
+              {user.secondaryEmail ? (
+                <div className="w-full text-xl flex flex-row justify-between items-center">
+                  <div className="flex flex-col">
+                    <div className="text-lg font-semibold">Your secondary email address</div>
+                    <div className="text-base">{user.secondaryEmail}</div>
+                  </div>
+                  <div
+                    onClick={() => setShowSecondaryEmailInput(true)}
+                    className="bg-white flex dark:bg-dark_primary_comp h-fit flex-center text-primary_black dark:text-white text-sm font-medium px-3 py-1 rounded-xl border-[1px] cursor-pointer"
+                  >
+                    Edit
+                  </div>
+                </div>
+              ) : (
                 <Button
-                  onClick={handleSecondaryEmailSubmit}
-                  disabled={isLoading || !isEmail(secondaryEmail || '')}
-                  className={`bg-primary_black text-white w-32 h-full rounded-lg p-2 ${
-                    isLoading || !secondaryEmail ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
-                  } transition-ease-300`}
-                >
-                  Verify
-                </Button>
-                <Button onClick={() => setShowSecondaryEmailInput(false)} className="h-full" variant="destructive">
-                  Cancel
-                </Button>
-              </>
-            )}
-          </div>
-        ) : (
-          <div className="flex items-center">
-            {user.secondaryEmail ? (
-              <div className="w-full text-xl flex flex-row justify-between items-center">
-                <div className="flex flex-col">
-                  <div className="text-lg font-semibold">Your secondary email address</div>
-                  <div className="text-base">{user.secondaryEmail}</div>
-                </div>
-                <div
                   onClick={() => setShowSecondaryEmailInput(true)}
-                  className="bg-white flex dark:bg-dark_primary_comp h-fit flex-center text-primary_black dark:text-white text-sm font-medium px-3 py-1 rounded-xl border-[1px] cursor-pointer"
+                  className="w-full flex items-center cursor-pointer transition-ease-300"
                 >
-                  Edit
-                </div>
-              </div>
-            ) : (
-              <Button
-                onClick={() => setShowSecondaryEmailInput(true)}
-                className="w-full flex items-center cursor-pointer transition-ease-300"
-              >
-                <Plus size={20} weight="bold" />
-                <span className="ml-2">Add a Secondary Email</span>
-              </Button>
-            )}
-          </div>
-        )}
-      </div>
+                  <Plus size={20} weight="bold" />
+                  <span className="ml-2">Add a Secondary Email</span>
+                </Button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

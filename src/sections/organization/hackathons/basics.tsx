@@ -31,7 +31,7 @@ interface BasicsProps {
   setLinks?: (links: string[]) => void;
   isRestricted: boolean;
   setIsRestricted?: (isRestricted: boolean) => void;
-  entryPassword: string;
+  entryPassword?: string;
   setEntryPassword?: (entryPassword: string) => void;
   coverPic?: string;
   setCoverPic: (file: File | null) => void;
@@ -72,7 +72,6 @@ const Basics: React.FC<BasicsProps> = ({
   const [localTags, setLocalTags] = useState(tags);
   const [localLinks, setLocalLinks] = useState(links);
   const [localIsRestricted, setLocalIsRestricted] = useState(isRestricted);
-  const [localEntryPassword, setLocalEntryPassword] = useState(entryPassword);
   const [coverPicView, setCoverPicView] = useState(`${EVENT_PIC_URL}/${coverPic || 'default.jpg'}`);
 
   const handleSave = () => {
@@ -84,7 +83,6 @@ const Basics: React.FC<BasicsProps> = ({
       tags: localTags,
       links: localLinks,
       isRestricted: localIsRestricted,
-      entryPassword: localEntryPassword,
     };
 
     if (onSave) onSave(updatedData);
@@ -155,25 +153,13 @@ const Basics: React.FC<BasicsProps> = ({
           <Time label="End Time" val={endTime} setVal={setEndTime} required={true} includeDate={true} />
         </div>
       </div>
-      {isEditMode ?
-        <EditorInput
-          label={"Description"}
-          val={localDescription}
-          setVal={setLocalDescription}
-          maxLength={2500}
-        /> :
-        setDescription ? 
-          <EditorInput
-            label={"Description"}
-            val={description} 
-            setVal={setDescription} 
-            maxLength={2500} 
-          /> :
-          <EditorInput
-            editable={false}
-            val={description}
-          />
-      }
+      {isEditMode ? (
+        <EditorInput label={'Description'} val={localDescription} setVal={setLocalDescription} maxLength={2500} />
+      ) : setDescription ? (
+        <EditorInput label={'Description'} val={description} setVal={setDescription} maxLength={2500} />
+      ) : (
+        <EditorInput editable={false} val={description} />
+      )}
       <Tags
         label="Tags"
         tags={isEditMode ? localTags : tags}
@@ -197,14 +183,8 @@ const Basics: React.FC<BasicsProps> = ({
             : 'The Hackathon is open to all users.'
         }
       />
-      {(isEditMode ? localIsRestricted : isRestricted) && (
-        <Input
-          label="Entry Password"
-          val={isEditMode ? localEntryPassword : entryPassword}
-          setVal={isEditMode ? setLocalEntryPassword : setEntryPassword ? setEntryPassword : () => {}}
-          maxLength={25}
-          required={true}
-        />
+      {isRestricted && !isEditMode && entryPassword != undefined && setEntryPassword && (
+        <Input label="Entry Password" val={entryPassword} setVal={setEntryPassword} maxLength={25} required={true} />
       )}
 
       {isEditMode && (

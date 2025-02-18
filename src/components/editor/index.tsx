@@ -84,7 +84,6 @@ const Editor = ({
   truncate = false,
   maxHeight = 80,
 }: EditorProps) => {
-
   let extensions = [
     // StarterKit.configure({}),
     Document,
@@ -315,7 +314,7 @@ const Editor = ({
 
 const BubbleMenuIcon = ({ icon, isActive, onClick }: { icon: ReactNode; isActive: boolean; onClick?: () => void }) => (
   <button onClick={onClick} className={isActive ? 'is-active' : ''}>
-  {React.cloneElement(icon as React.ReactElement, {
+    {React.cloneElement(icon as React.ReactElement, {
       weight: isActive ? 'bold' : 'regular',
     })}
   </button>

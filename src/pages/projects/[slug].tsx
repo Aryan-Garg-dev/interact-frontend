@@ -13,7 +13,6 @@ import { GetServerSidePropsContext } from 'next';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-import renderContentWithLinks from '@/utils/funcs/render_content_with_links';
 import CommentProject from '@/sections/lowers/comment_project';
 import UserSideCard from '@/components/explore/user_side_card';
 import SimilarProjects from '@/sides/project/similar_projects';
@@ -44,6 +43,7 @@ import ProjectChats from '@/sides/project/chats';
 import nookies from 'nookies';
 import { EyeSlash, Warning } from '@phosphor-icons/react';
 import Editor from '@/components/editor';
+import { orgSelector } from '@/slices/orgSlice';
 
 const ProjectComponent = ({
   initialProject,
@@ -61,6 +61,7 @@ const ProjectComponent = ({
   const [clickedOnEditProjectImages, setClickedOnEditProjectImages] = useState(false);
 
   const user = useSelector(userSelector);
+  const org = useSelector(orgSelector);
 
   const dispatch = useDispatch();
 
@@ -71,7 +72,7 @@ const ProjectComponent = ({
     if (res.statusCode == 200) {
       setProject(res.data.project);
       const membership = res.data.membership;
-      if (membership && !checkProjectAccess(PROJECT_MEMBER, project.id)) {
+      if (membership && !checkProjectAccess(user, PROJECT_MEMBER, project.id)) {
         if (membership.role === PROJECT_MEMBER) dispatch(setMemberProjects([...user.memberProjects, project.id]));
         else if (membership.role === PROJECT_EDITOR) dispatch(setEditorProjects([...user.editorProjects, project.id]));
         else if (membership.role === PROJECT_MANAGER)
@@ -100,6 +101,7 @@ const ProjectComponent = ({
               <div className="w-full flex flex-col gap-6">
                 <div className="w-full relative group">
                   {checkOrgProjectAccess(
+                    { user, organization: org },
                     PROJECT_EDITOR,
                     project.id,
                     ORG_SENIOR,
@@ -194,7 +196,7 @@ const ProjectComponent = ({
               </div>
             )}
           </PrimeWrapper>
-          {checkProjectAccess(PROJECT_MEMBER, project.id) && <ProjectChats projectID={project.id} />}
+          {checkProjectAccess(user, PROJECT_MEMBER, project.id) && <ProjectChats projectID={project.id} />}
         </div>
         <SideBarWrapper>
           {loading ? (
@@ -220,7 +222,7 @@ const ProjectComponent = ({
           )}
           {!err && project.id && !loading && (
             <>
-              {!checkProjectAccess(PROJECT_MEMBER, project.id) ? (
+              {!checkProjectAccess(user, PROJECT_MEMBER, project.id) ? (
                 <>
                   <UserProjects user={project.user} projectID={project.id} />
                   <SimilarProjects slug={project.slug} />
