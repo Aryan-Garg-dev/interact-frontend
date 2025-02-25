@@ -50,6 +50,10 @@
   @apply text-transparent bg-clip-text bg-gradient-to-r from-dark_secondary_gradient_start dark:from-[#9DBDFF] to-dark_secondary_gradient_end dark:to-[#9cbfe2];
 }
 
+.active-item-gradient {
+    @apply bg-gradient-to-r from-[#4B9EFF] via-[#5977E3] to-[#607EE7];
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -156,6 +160,17 @@
 @layer base {
   * {
     @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;

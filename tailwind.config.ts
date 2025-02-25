@@ -53,6 +53,7 @@ const config: Config = {
         dark_primary_btn: '#4B4A4A',
         primary_comp: '#478eeb18',
         dark_primary_comp: '#1c1c1c',
+        dark_sidebar: "#121212",
         primary_comp_hover: '#478eeb38',
         dark_primary_comp_hover: '#2e2e2e',
         primary_comp_active: '#478eeb86',
@@ -111,12 +112,13 @@ const config: Config = {
         main: '#e5e7eb',
         dark_main: '#252525',
         sidebar: '#ffffff',
-        dark_sidebar: '#1b1b1b',
+        dark_sidebar: '#121212'
       },
       fontFamily: {
         primary: ['var(--inter-font)'],
         title: ['var(--fraunces-font)'],
         cursive: ['var(--great-vibes-font)'],
+        dm_sans: ['var(--dm-sans)'],
       },
       fontSize: {
         xxs: '0.5rem',
