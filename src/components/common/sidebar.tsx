@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import SidebarItem from './sidebar_item';
 import {
   Buildings,
@@ -31,7 +31,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
 } from '@/components/ui/dialog';
 
 interface Props {
@@ -171,7 +170,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
 import { CircularProgress, Progress } from '@/components/ui/progress';
@@ -319,7 +317,7 @@ const Logout = (props: LogoutProps) => {
               </div>
             }
           </div>
-          <TooltipContent align={'center'} side={'right'} hidden={open} sideOffset={15} className={'font-dm_sans'}>
+          <TooltipContent align={'center'} side={'right'} hidden={open} sideOffset={15} className={'font-primary'}>
             Logout
           </TooltipContent>
         </Tooltip>
@@ -368,7 +366,7 @@ const ProfileView = () => {
   }, [user]);
 
   return (
-    <div className={`${open ? 'font-dm_sans flex flex-col gap-2 px-1' : 'w-full flex items-start'}`}>
+    <div className={`${open ? 'font-primary flex flex-col gap-2 px-1' : 'w-full flex items-start'}`}>
       {open ? (
         <div className={'flex gap-2'}>
           <Image
@@ -400,7 +398,7 @@ const ProfileView = () => {
               src={`${USER_PROFILE_PIC_URL}/${user.profilePic || 'default.jpg'}`}
             />
           </CircularProgress>
-          <div className="dark:text-neutral-200 text-neutral-800 text-xs font-dm_sans">{profileCompletionPercentage}%</div>
+          <div className="dark:text-neutral-200 text-neutral-800 text-xs font-primary">{profileCompletionPercentage}%</div>
         </div>
       )}
       {open && (
@@ -415,28 +413,3 @@ const ProfileView = () => {
     </div>
   );
 };
-
-function Separator(props: { turns: number; className?: string; style: CSSProperties | undefined }) {
-  return (
-    <div
-      style={{
-        position: 'absolute',
-        height: '100%',
-        transform: `rotate(${props.turns}turn)`,
-      }}
-    >
-      <div style={props.style} className={props.className} />
-    </div>
-  );
-}
-
-function RadialSeparators(props: { count: number; className?: string; style?: CSSProperties | undefined }) {
-  const turns = 1 / props.count;
-  return (
-    <>
-      {Array.from({ length: props.count }).map((_, index) => (
-        <Separator turns={index * turns} style={props.style} className={props.className} key={index} />
-      ))}
-    </>
-  );
-}

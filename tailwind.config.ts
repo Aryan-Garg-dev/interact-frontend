@@ -115,10 +115,9 @@ const config: Config = {
         dark_sidebar: '#121212'
       },
       fontFamily: {
-        primary: ['var(--inter-font)'],
+        primary: ['var(--dm-sans)'],
         title: ['var(--fraunces-font)'],
-        cursive: ['var(--great-vibes-font)'],
-        dm_sans: ['var(--dm-sans)'],
+        cursive: ['var(--great-vibes-font)']
       },
       fontSize: {
         xxs: '0.5rem',

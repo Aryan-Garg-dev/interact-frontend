@@ -33,7 +33,7 @@ const SidebarItem = ({ title, icon, active, setActive, index, org = false, url =
               setActive(index);
               if (onClick) onClick();
             }}
-            className={`${open ? 'w-[220px]' : 'w-12 '} h-10 p-[8.5px] px-3 rounded-lg font-dm_sans text-lg ${
+            className={`${open ? 'w-[220px]' : 'w-12 '} h-10 p-[8.5px] px-3 rounded-lg font-primary text-lg ${
               active == index
                 ? 'active-item-gradient text-white'
                 : 'hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover text-gray-600 dark:text-white'
@@ -52,7 +52,7 @@ const SidebarItem = ({ title, icon, active, setActive, index, org = false, url =
               </div>
             }
           </Link>
-        <TooltipContent align={'center'} side={'right'} hidden={open} sideOffset={15} className={'font-dm_sans'}>
+        <TooltipContent align={'center'} side={'right'} hidden={open} sideOffset={15} className={'font-primary'}>
           {title}
         </TooltipContent>
       </Tooltip>

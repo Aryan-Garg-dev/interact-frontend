@@ -37,10 +37,10 @@ const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
 Progress.displayName = "Progress"
 
 interface CircularProgressProps {
-  value: number; // Progress percentage (0-100)
-  size?: number; // Diameter of the circle
-  strokeWidth?: number; // Thickness of the stroke
-  children?: React.ReactNode; // Content inside the circle
+  value: number;
+  size?: number;
+  strokeWidth?: number;
+  children?: React.ReactNode;
 }
 
 const CircularProgress: React.FC<CircularProgressProps> = ({
@@ -55,24 +55,23 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
 
   return (
     <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
-      {/* SVG Circular Progress Bar */}
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-        {/* Background Circle */}
+
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="transparent"
-          stroke="rgba(255, 255, 255, 0.2)" // Background stroke color
+          stroke="rgba(255, 255, 255, 0.2)"
           strokeWidth={strokeWidth}
         />
-        {/* Animated Progress Circle */}
+
         <motion.circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
           fill="transparent"
-          stroke="url(#gradient)" // Gradient stroke
+          stroke="url(#gradient)"
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={offset}
@@ -80,9 +79,9 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
           initial={{ strokeDashoffset: circumference }}
           animate={{ strokeDashoffset: offset }}
           transition={{ duration: 1, ease: "easeInOut" }}
-          style={{ transform: "rotate(-90deg)", transformOrigin: "50% 50%" }} // 🔥 Rotates from top
+          style={{ transform: "rotate(-90deg)", transformOrigin: "50% 50%" }}
         />
-        {/* Gradient Definition */}
+
         <defs>
           <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#4B9EFF" />
@@ -91,7 +90,6 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
         </defs>
       </svg>
 
-      {/* Children (e.g., icon or text inside the circle) */}
       <div className="absolute text-white text-xl font-semibold">{children}</div>
     </div>
   );
