@@ -1,26 +1,100 @@
 import * as React from "react"
-import * as ProgressPrimitive from "@radix-ui/react-progress"
+import { motion } from "framer-motion"
 
 import { cn } from "@/lib/utils"
 
-const Progress = React.forwardRef<
-  React.ElementRef<typeof ProgressPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
->(({ className, value, ...props }, ref) => (
-  <ProgressPrimitive.Root
-    ref={ref}
-    className={cn(
-      "relative h-2 w-full overflow-hidden rounded-full bg-primary/20",
-      className
-    )}
-    {...props}
-  >
-    <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 active-item-gradient transition-all"
-      style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
-    />
-  </ProgressPrimitive.Root>
-))
-Progress.displayName = ProgressPrimitive.Root.displayName
+interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: number
+}
 
-export { Progress }
+const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
+  ({ className, value, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "relative h-2 w-full overflow-hidden rounded-full bg-primary/20",
+          className
+        )}
+        {...props}
+      >
+        <motion.div
+          className="h-full active-item-gradient rounded-full"
+          initial={{ width: "0%" }}
+          animate={{ width: `${value}%` }}
+          transition={{
+            type: "spring",
+            stiffness: 50,
+            damping: 15,
+            duration: 1,
+          }}
+        />
+      </div>
+    )
+  }
+)
+
+Progress.displayName = "Progress"
+
+interface CircularProgressProps {
+  value: number; // Progress percentage (0-100)
+  size?: number; // Diameter of the circle
+  strokeWidth?: number; // Thickness of the stroke
+  children?: React.ReactNode; // Content inside the circle
+}
+
+const CircularProgress: React.FC<CircularProgressProps> = ({
+ value,
+ size = 100,
+ strokeWidth = 8,
+ children,
+}) => {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const offset = circumference - (value / 100) * circumference;
+
+  return (
+    <div className="relative flex items-center justify-center" style={{ width: size, height: size }}>
+      {/* SVG Circular Progress Bar */}
+      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        {/* Background Circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="transparent"
+          stroke="rgba(255, 255, 255, 0.2)" // Background stroke color
+          strokeWidth={strokeWidth}
+        />
+        {/* Animated Progress Circle */}
+        <motion.circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          fill="transparent"
+          stroke="url(#gradient)" // Gradient stroke
+          strokeWidth={strokeWidth}
+          strokeDasharray={circumference}
+          strokeDashoffset={offset}
+          strokeLinecap="round"
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset: offset }}
+          transition={{ duration: 1, ease: "easeInOut" }}
+          style={{ transform: "rotate(-90deg)", transformOrigin: "50% 50%" }} // 🔥 Rotates from top
+        />
+        {/* Gradient Definition */}
+        <defs>
+          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#4B9EFF" />
+            <stop offset="100%" stopColor="#607EE7" />
+          </linearGradient>
+        </defs>
+      </svg>
+
+      {/* Children (e.g., icon or text inside the circle) */}
+      <div className="absolute text-white text-xl font-semibold">{children}</div>
+    </div>
+  );
+};
+
+export { CircularProgress, Progress };
