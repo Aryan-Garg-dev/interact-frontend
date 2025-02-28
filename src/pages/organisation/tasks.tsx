@@ -22,6 +22,7 @@ import Select from '@/components/filters/select';
 import Tags from '@/components/filters/tags';
 import Users from '@/components/filters/users';
 import Order from '@/components/filters/order';
+import { Trash } from 'lucide-react';
 
 const Tasks = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -30,6 +31,7 @@ const Tasks = () => {
 
   const [clickedOnTask, setClickedOnTask] = useState(false);
   const [clickedTaskID, setClickedTaskID] = useState(-1);
+  const [selectedTasks, setSelectedTasks] = useState<string[]>([]);
 
   const [clickedOnInfo, setClickedOnInfo] = useState(false);
 
@@ -122,6 +124,12 @@ const Tasks = () => {
     getOrg();
   }, []);
 
+  const handleRemoveTasks = ()=>{
+    if (!selectedTasks || selectedTasks.length === 0) return;
+    // remove tasks (delete call)
+    setSelectedTasks([]);
+  }
+
   return (
     <BaseWrapper title={`Tasks | ${currentOrg.title}`}>
       <OrgSidebar index={4} />
@@ -168,8 +176,13 @@ const Tasks = () => {
               <Info
                 onClick={() => setClickedOnInfo(true)}
                 size={42}
-                className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
+                className="flex-center rounded-full hover:bg-white hover:text-dark_primary_comp_hover p-2 transition-ease-300 cursor-pointer"
                 weight="regular"
+              />
+              <Trash
+                onClick={handleRemoveTasks}
+                size={40}
+                className={"max-md:hidden flex-center rounded-full hover:bg-white hover:text-dark_primary_comp_hover p-2 transition-ease-300 cursor-pointer stroke-[1.5]"}
               />
             </div>
           </div>
@@ -194,6 +207,8 @@ const Tasks = () => {
                   hasMore={hasMore}
                   setClickedOnTask={setClickedOnTask}
                   setClickedTaskID={setClickedTaskID}
+                  selectedTasks={selectedTasks}
+                  setSelectedTasks={setSelectedTasks}
                 />
               </div>
             ) : (

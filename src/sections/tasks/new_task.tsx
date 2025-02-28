@@ -144,6 +144,21 @@ const NewTask = ({
     return true;
   };
 
+  const clearState = ()=>{
+    setStatus(()=>{
+      setTitle("");
+      setDescription("");
+      setTags([]);
+      setDeadline("");
+      setPriority("low");
+      setDifficulty("easy");
+      setSelectedTeams([]);
+      setSelectedUsers([]);
+      return 0;
+    })
+    return;
+  }
+
   const handleSubmit = async () => {
     if (title.trim().length == 0) {
       Toaster.error('Title cannot be empty');
@@ -177,6 +192,7 @@ const NewTask = ({
 
       setIsDialogOpen(false);
       if (setShowTasks) setShowTasks(true);
+      clearState();
       Toaster.stopLoad(toaster, 'New Task Added!', 1);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);
@@ -195,7 +211,7 @@ const NewTask = ({
         ) : (
           <Plus
             size={42}
-            className="flex-center rounded-full hover:bg-white p-2 transition-ease-300 cursor-pointer"
+            className="flex-center rounded-full hover:bg-white hover:text-dark_primary_comp_hover p-2 transition-ease-300 cursor-pointer"
             weight="regular"
           />
         )}

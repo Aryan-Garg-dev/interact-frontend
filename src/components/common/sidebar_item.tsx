@@ -34,10 +34,10 @@ const SidebarItem = ({ title, icon, active, setActive, index, org = false, url =
               if (onClick) onClick();
             }}
             className={`${open ? 'w-[220px]' : 'w-12 '} h-10 p-[8.5px] px-3 rounded-lg font-primary text-lg ${
-              active == index
+              active == index 
                 ? 'active-item-gradient text-white'
                 : 'hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover text-gray-600 dark:text-white'
-            } relative font-primary font-medium items-center transition-ease-500`}
+            } relative font-primary font-medium items-center transition-ease-out-500`}
           >
           <TooltipTrigger>
             {icon}

@@ -54,6 +54,7 @@ const config: Config = {
         primary_comp: '#478eeb18',
         dark_primary_comp: '#1c1c1c',
         dark_sidebar: "#121212",
+        progress: '#2FB0F6',
         primary_comp_hover: '#478eeb38',
         dark_primary_comp_hover: '#2e2e2e',
         primary_comp_active: '#478eeb86',
@@ -113,6 +114,9 @@ const config: Config = {
         dark_main: '#252525',
         sidebar: '#ffffff',
         dark_sidebar: '#121212'
+      },
+      borderColor: {
+        dark_grey: "#525252"
       },
       fontFamily: {
         primary: ['var(--dm-sans)'],

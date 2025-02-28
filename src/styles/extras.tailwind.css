@@ -42,6 +42,14 @@
   @apply transition-all ease-out duration-500;
 }
 
+.transition-except-colors-ease-out-500 {
+  @apply transition-[width,height,padding,margin,transform,opacity,box-shadow] ease-out duration-500;
+}
+
+.no-color-transition {
+  transition: none !important;
+}
+
 .flex-center {
   @apply flex items-center justify-center;
 }

@@ -67,6 +67,19 @@ const NewSubTask = ({ setShow, task, setTasks, byOrgManager = false }: Props) =>
     }
   };
 
+  const clearState = ()=>{
+    setStatus(()=>{
+      setTitle("");
+      setDescription("");
+      setTags([]);
+      setDeadline("");
+      setPriority("low");
+      setSelectedUsers([]);
+      return 0;
+    })
+    return;
+  }
+
   const handleSubmit = async () => {
     if (title.trim().length == 0) {
       Toaster.error('Title cannot be empty');
@@ -103,6 +116,7 @@ const NewSubTask = ({ setShow, task, setTasks, byOrgManager = false }: Props) =>
         );
 
       setShow(false);
+      clearState();
       Toaster.stopLoad(toaster, 'New Sub Task Added!', 1);
     } else {
       if (res.data.message) Toaster.stopLoad(toaster, res.data.message, 0);

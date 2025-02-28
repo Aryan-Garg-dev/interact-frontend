@@ -9,13 +9,15 @@ interface Props {
   border?: boolean;
 }
 
+export const handleCopyLink = (url: string)=>{
+  navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/${url}`);
+  Toaster.success('Copied to Clipboard!');
+}
+
 const CopyClipboardButton = ({ url, size = 24, iconOnly = false }: Props) => {
   return (
     <div
-      onClick={() => {
-        navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/${url}`);
-        Toaster.success('Copied to Clipboard!');
-      }}
+      onClick={handleCopyLink.bind(null, url)}
       className={`${
         !iconOnly &&
         'w-full text-center flex justify-center gap-2 rounded-lg border-[1px] border-primary_btn dark:border-dark_primary_btn hover:bg-primary_comp dark:hover:bg-dark_primary_comp_hover py-2'

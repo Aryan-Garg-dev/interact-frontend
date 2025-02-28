@@ -1,11 +1,13 @@
 import React from 'react';
+import { Tooltip, TooltipProvider, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 interface Props {
   content: string;
   styles?: React.CSSProperties;
 }
 
-const ToolTip = ({ content, styles }: Props) => {
+const CustomTooltip = ({ content, styles }: Props) => {
   return (
     <div
       style={styles}
@@ -16,4 +18,19 @@ const ToolTip = ({ content, styles }: Props) => {
   );
 };
 
-export default ToolTip;
+export const TooltipWrapper = ({title, children, className}: {title: string, children: React.ReactNode, className?: string}) => {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          {children}
+        </TooltipTrigger>
+        <TooltipContent className={cn("font-primary", className)}>
+          <p>{title}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+export default CustomTooltip;

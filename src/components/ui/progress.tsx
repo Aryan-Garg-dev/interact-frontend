@@ -8,7 +8,7 @@ interface ProgressProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Progress = React.forwardRef<HTMLDivElement, ProgressProps>(
-  ({ className, value, ...props }, ref) => {
+  ({ className, children, value, ...props }, ref) => {
     return (
       <div
         ref={ref}
