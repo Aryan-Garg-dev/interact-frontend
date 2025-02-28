@@ -24,14 +24,6 @@ import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, Command
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import Image from 'next/image';
 import { USER_PROFILE_PIC_URL } from '@/config/routes';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 
 interface Props {
   index: number;
@@ -67,24 +59,13 @@ const Sidebar = ({ index }: Props) => {
   return (
     <>
       {clickedOnLogout && (
-        <Dialog open={clickedOnLogout} onOpenChange={setClickedOnLogout}>
-          <DialogContent className={'space-y-4'}>
-            <DialogHeader className={'-space-y-1'}>
-              <DialogTitle>Leaving so soon?</DialogTitle>
-              <DialogDescription>Your session will end, but you can log in anytime.</DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <div className={'w-full flex justify-center gap-8 max-md:flex-col max-md:gap-2'}>
-                <Button variant={'destructive'} onClick={handleLogout} className={'w-full'}>
-                  Confirm
-                </Button>
-                <Button variant={'secondary'} onClick={setClickedOnLogout.bind(null, false)} className={'w-full'}>
-                  Cancel
-                </Button>
-              </div>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <ConfirmDelete
+          setShow={setClickedOnLogout}
+          handleDelete={handleLogout}
+          title="Logout?"
+          subtitle="sad to see you go :("
+          titleSize="6xl"
+        />
       )}
       <div
         className={`${
@@ -129,7 +110,6 @@ const Sidebar = ({ index }: Props) => {
               setActive={setActive}
             />
           </div>
-          {/* {user.id != '' && user.organizationMemberships && user.organizationMemberships.length > 0 && <Organisations />} */}
           {user.id != '' && (
             <div className="w-fit py-4 border-y-2 border-gray-300 dark:border-dark_primary_btn flex flex-col gap-2">
               <SidebarItem
@@ -148,7 +128,6 @@ const Sidebar = ({ index }: Props) => {
                 setActive={setActive}
               />
               <SidebarItem index={9} title="Settings" icon={<Gear size={24} />} active={active} setActive={setActive} />
-              {/* {open && <Theme />} */}
             </div>
           )}
         </div>
